@@ -1,0 +1,16 @@
+<ion-content padding>
+  <ion-slides pager (ionSlideDidChange)="slideChanged()">
+    <ion-slide>
+      <h1>Slide 1</h1>
+    </ion-slide>
+    <ion-slide>
+      <h1>Slide 2</h1>
+    </ion-slide>
+    <ion-slide>
+      <h1>Slide 3</h1>
+    </ion-slide>
+  </ion-slides>
+  <div class="_flex-box _justify-content-center skipBtn fullWidth">
+    <button ion-button full (click)="navigateTo()">{{skipMsg}}</button>
+  </div>
+</ion-content>

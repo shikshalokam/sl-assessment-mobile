@@ -1,0 +1,9 @@
+page-welcome {
+    .fullWidth {
+        width: 100%;
+    }
+
+    ion-slides {
+        height: calc(100% - 45px) !important;
+    }
+}

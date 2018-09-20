@@ -1,0 +1,11 @@
+
+<ion-header>
+  <ion-navbar hideBackButton="true">
+    <ion-title>{{header}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-tabs selectedIndex="1">
+  <ion-tab (ionSelect)="selectedTab(1)" [root]="tab2Root" tabTitle="About" tabIcon="information-circle"></ion-tab>
+  <ion-tab (ionSelect)="selectedTab(2)" [root]="tab1Root" tabTitle="My Schools" tabIcon="home"></ion-tab>
+  <ion-tab (ionSelect)="selectedTab(3)" [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>
+</ion-tabs>
