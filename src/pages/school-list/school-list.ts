@@ -36,6 +36,7 @@ export class SchoolListPage {
     this.utils.startLoader();
     this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors, response => {
       this.schoolList = response.data.schools;
+      console.log(JSON.stringify(this.schoolList));
       this.storage.set('schools', this.schoolList);
       this.utils.stopLoader();
     }, error => {

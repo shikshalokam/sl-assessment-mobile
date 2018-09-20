@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, Tab } from 'ionic-angular';
+import { Platform, Tab, App, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -18,7 +18,7 @@ export class MyApp {
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,
     private currentUser: CurrentUserProvider,
-    private storage: Storage) {
+    private storage: Storage, private app: App, private alertCtrl: AlertController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -51,5 +51,32 @@ export class MyApp {
       // });
 
     });
+
+    platform.registerBackButtonAction(() => {
+      let nav = app.getActiveNavs()[0];
+      let activeView = nav.getActive();
+      
+      switch (activeView.name) {
+        case "SchoolListPage": case "AboutPage":
+          const alert = this.alertCtrl.create({
+            title: 'App termination',
+            message: 'Do you want to close the app?',
+            buttons: [{
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                console.log('Application exit prevented!');
+              }
+            }, {
+              text: 'Close App',
+              handler: () => {
+                platform.exitApp(); // Close this application
+              }
+            }]
+          });
+          alert.present();
+      }
+
+    })
   }
 }

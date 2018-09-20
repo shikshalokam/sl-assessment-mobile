@@ -15,21 +15,17 @@ export class AuthProvider {
 
   base_url: string;
 
+  logout_redirect_url: string;
+
   constructor(public http: Http, public iab: InAppBrowser, private currentUser: CurrentUserProvider) { }
 
   doOAuthStepOne(): Promise<any> {
 
 
     this.base_url = AppConfigs.app_url;
-    // this.redirect_url = this.base_url + "/oauth2callback";
     this.redirect_url = AppConfigs.keyCloak.redirection_url;
-
-    // this.auth_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/auth?redirect_uri=" +
-    // this.redirect_url + "&response_type=id_token%20token&client_id=sl-ionic-connect&nonce=sl";
     this.auth_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/auth?response_type=code&scope=openid&client_id=sl-ionic-connect&redirect_uri=" +
       this.redirect_url;
-    // this.auth_url = this.auth_url.replace("${CID}", this.platform.is("android") ? "android" : "ios");
-    this.logout_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/logout?redirect_uri=" + this.redirect_url;
 
     let that = this;
     return new Promise(function (resolve, reject) {
@@ -82,8 +78,8 @@ export class AuthProvider {
     });
   }
 
-  getRefreshToken() : Promise<any> {
-  
+  getRefreshToken(): Promise<any> {
+
     return new Promise(function (resolve, reject) {
       console.log("Refres token function");
       const body = new URLSearchParams();
@@ -91,29 +87,52 @@ export class AuthProvider {
       body.set('client_id', "sl-ionic-connect");
       body.set('refresh_token', this.currentUser.curretUser.refreshToken);
       // body.set('scope', "offline_access");
-      console.log('refresh_token '+ this.currentUser.curretUser)
+      console.log('refresh_token ' + this.currentUser.curretUser)
       console.log(this.currentUser.curretUser.refreshToken);
       console.log(AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken);
 
       this.http.post(AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken, body)
-      .subscribe((data: any) => {
-        console.log(JSON.stringify(data))
-        console.log(JSON.parse(data._data));
-        let parsedData = JSON.parse(data._body);
+        .subscribe((data: any) => {
+          console.log(JSON.stringify(data))
+          console.log(JSON.parse(data._data));
+          let parsedData = JSON.parse(data._body);
 
-        let userTokens = {
-          accessToken: parsedData.access_token,
-          refreshToken: parsedData.refresh_token,
-          idToken: parsedData.id_token
-        };
-        this.currentUser.setCurrentUserDetails(userTokens);
-        resolve(userTokens)
-      }, error => {
-        console.log('error '+JSON.stringify(error));
-        reject();
-      })
+          let userTokens = {
+            accessToken: parsedData.access_token,
+            refreshToken: parsedData.refresh_token,
+            idToken: parsedData.id_token
+          };
+          this.currentUser.setCurrentUserDetails(userTokens);
+          resolve(userTokens)
+        }, error => {
+          console.log('error ' + JSON.stringify(error));
+          reject();
+        })
     })
 
+  }
+
+  doLogout(): Promise<any> {
+    return new Promise(function(resolve) {
+      let logout_redirect_url = AppConfigs.keyCloak.logout_redirect_url;
+      let logout_url = AppConfigs.app_url + "/auth/realms/sunbird/protocol/openid-connect/logout?redirect_uri=" + logout_redirect_url;
+      console.log(logout_url);
+
+        let closeCallback = function (event) {
+        };
+
+      let browserRef = (<any>window).cordova.InAppBrowser.open(logout_url, "_blank", "zoom=no");
+      browserRef.addEventListener('loadstop', function (event) {
+        console.log('in listener')
+        if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
+          browserRef.removeEventListener("exit", closeCallback);
+          browserRef.close();
+          console.log(event.url);
+          resolve()
+        }
+      });
+
+    });
   }
 
 }

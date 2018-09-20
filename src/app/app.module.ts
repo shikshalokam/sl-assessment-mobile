@@ -25,6 +25,7 @@ import { SchoolListProvider } from '../providers/school-list/school-list';
 import { HttpInterceptorProvider } from '../providers/http-interceptor/http-interceptor';
 import { UtilsProvider } from '../providers/utils/utils';
 import { ApiProvider } from '../providers/api/api';
+import { SchoolProfilePageModule } from '../pages/school-profile/school-profile.module';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { ApiProvider } from '../providers/api/api';
     IonicStorageModule.forRoot(),
     LoginPageModule,
     HttpModule,
-    HttpClientModule
+    HttpClientModule,
+    SchoolProfilePageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

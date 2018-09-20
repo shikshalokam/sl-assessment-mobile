@@ -4,6 +4,9 @@ import { AboutPage } from '../about/about';
 import { ContactPage } from '../contact/contact';
 import { HomePage } from '../home/home';
 import { SchoolListPage } from '../school-list/school-list';
+import { AuthProvider } from '../../providers/auth/auth';
+import { CurrentUserProvider } from '../../providers/current-user/current-user';
+import { App , NavController} from 'ionic-angular';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -16,7 +19,8 @@ export class TabsPage {
 
   header: string = 'Schools';
 
-  constructor() {
+  constructor(private auth: AuthProvider, private navCtrl: NavController,
+    private currentUser: CurrentUserProvider, private app: App) {
 
   }
 
@@ -32,5 +36,16 @@ export class TabsPage {
         this.header = "FAQs";
         break;
     }
+  }
+
+  logout() {
+    this.auth.doLogout().then(response => {
+      this.currentUser.removeUser();
+      this.app.getRootNav().push('LoginPage')
+    })
+  }
+
+  goToProfile() {
+    this.navCtrl.push('SchoolProfilePage');
   }
 }

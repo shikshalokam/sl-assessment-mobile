@@ -1,10 +1,27 @@
-
 <ion-header>
   <ion-navbar hideBackButton="true">
-    <ion-title>{{header}}</ion-title>
+
+
+
+
+
+    <!-- <ion-grid> -->
+      <!-- <ion-row> -->
+        <!-- <ion-col col-10>{{header}}</ion-col>
+
+        <ion-col col-2>
+          <ion-icon name="log-out" isActive="true" (click)="logout()" float-right></ion-icon>
+        </ion-col> -->
+      <!-- </ion-row>
+    </ion-grid> -->
+    <div class="_flex-box">
+        <ion-title (click)="goToProfile()">{{header}}</ion-title> 
+        <ion-icon name="log-out" isActive="true" style="font-size: 24px;padding-right: 10px" (click)="logout()" float-right></ion-icon>
+    </div>
+   
   </ion-navbar>
 </ion-header>
-<ion-tabs selectedIndex="1">
+<ion-tabs selectedIndex="0">
   <ion-tab (ionSelect)="selectedTab(1)" [root]="tab2Root" tabTitle="About" tabIcon="information-circle"></ion-tab>
   <ion-tab (ionSelect)="selectedTab(2)" [root]="tab1Root" tabTitle="My Schools" tabIcon="home"></ion-tab>
   <ion-tab (ionSelect)="selectedTab(3)" [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>
