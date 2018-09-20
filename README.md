@@ -1,2 +1,3 @@
 # sl-assessment-mobile
-Assessment mobile app
+
+ShikshaLokam Assessment App
