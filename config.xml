@@ -3,7 +3,7 @@
     <name>Assessment</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.43.119:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -85,6 +85,7 @@
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <plugin name="cordova-sqlite-storage" spec="^2.4.0" />
     <allow-navigation href="http://172.16.10.196:8100" sessionid="afa235cf" />
+    <allow-navigation href="http://192.168.43.119:8100" sessionid="056086a2" />
     <engine name="browser" spec="5.0.4" />
-    <engine name="android" spec="7.0.0" />
+    <engine name="android" spec="^7.1.1" />
 </widget>

@@ -1,5 +1,5 @@
 import { NgModule, ErrorHandler } from '@angular/core';
-import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { HttpClientModule} from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
 import { BrowserModule } from '@angular/platform-browser';
@@ -26,7 +26,11 @@ import { HttpInterceptorProvider } from '../providers/http-interceptor/http-inte
 import { UtilsProvider } from '../providers/utils/utils';
 import { ApiProvider } from '../providers/api/api';
 import { SchoolProfilePageModule } from '../pages/school-profile/school-profile.module';
-
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Geolocation } from '@ionic-native/geolocation';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { EvidenceListPageModule } from '../pages/evidence-list/evidence-list.module';
+import { SectionListPageModule } from '../pages/section-list/section-list.module';
 
 @NgModule({
   declarations: [
@@ -45,7 +49,9 @@ import { SchoolProfilePageModule } from '../pages/school-profile/school-profile.
     LoginPageModule,
     HttpModule,
     HttpClientModule,
-    SchoolProfilePageModule
+    SchoolProfilePageModule,
+    EvidenceListPageModule,
+    SectionListPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -69,7 +75,11 @@ import { SchoolProfilePageModule } from '../pages/school-profile/school-profile.
     HttpInterceptorProvider,
     // {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorProvider, multi: true},
     UtilsProvider,
-    ApiProvider
+    ApiProvider,
+    AndroidPermissions,
+    Geolocation,
+    Diagnostic,
+    
   ]
 })
 export class AppModule { }

@@ -5,6 +5,7 @@ import { SchoolConfig } from '../../providers/school-list/schoolConfig';
 import { ApiProvider } from '../../providers/api/api';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { AppConfigs } from '../../providers/appConfig';
 
 @Component({
   selector: 'page-school-list',
@@ -13,6 +14,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 export class SchoolListPage {
 
   schoolList: Array<object>;
+  schoolDetails = [];
   constructor(public navCtrl: NavController, public navParams: NavParams
     , private storage: Storage, private apiService: ApiProvider, private appCtrl: App,
     private currentUser: CurrentUserProvider, private utils: UtilsProvider) {
@@ -35,9 +37,10 @@ export class SchoolListPage {
     console.log('School list')
     this.utils.startLoader();
     this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors, response => {
-      this.schoolList = response.data.schools;
-      console.log(JSON.stringify(this.schoolList));
+      this.schoolList = response.result;
+      // console.log(JSON.stringify(this.schoolList));
       this.storage.set('schools', this.schoolList);
+      this.getSchoolDetails();
       this.utils.stopLoader();
     }, error => {
       this.utils.stopLoader();
@@ -47,6 +50,56 @@ export class SchoolListPage {
         // this.navCtrl.setRoot('LoginPage');
       }
     })
+  }
+
+  getSchoolDetails(): void {
+    let schoolDetails = [];
+    // this.utils.startLoader();
+    for (const school of this.schoolList) {
+      console.log(school['_id']);
+      this.apiService.httpGet(SchoolConfig.getSchoolDetails + school['_id'], this.successCallback, error => {
+
+      })
+    }
+    // const urls = [];
+    // for (const school of this.schoolList) {
+    //   let url = SchoolConfig.getSchoolDetails + school['_id'];
+    //   urls.push(url)
+    // }
+    // this.utils.startLoader();
+
+    // this.apiService.httpGetJoin(urls, response => {
+    //   this.utils.stopLoader();
+    //   console.log(JSON.stringify(response));
+    //   const schoolDetailsObj = {};
+    //   for (const school of response.result) {
+    // schoolDetailsObj[school._id] = school;
+    //   }
+    // this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
+    // })
+  }
+
+  successCallback = (response) => {
+    // console.log('school details')
+    // console.log(JSON.stringify(response));
+    this.schoolDetails.push(response.result);
+    if (this.schoolDetails.length === this.schoolList.length) {
+      // console.log(JSON.stringify(this.schoolDetails));
+      // console.log("in")
+      const schoolDetailsObj = {}
+      for (const school of this.schoolDetails) {
+        console.log(school['SchoolProfile']._id +' 2nd');
+        schoolDetailsObj[school['SchoolProfile']._id] = school;
+      }
+      this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
+      // this.utils.stopLoader();
+    }
+  }
+
+  goToDetails(index): void {
+    this.appCtrl.getRootNav().push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
+
+    // this.navCtrl.push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
   }
 
 }

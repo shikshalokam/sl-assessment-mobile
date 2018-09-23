@@ -1,3 +1,4 @@
 export const SchoolConfig = {
-    getSchoolsOfAssessors: '/assessors/schools'
+    getSchoolsOfAssessors: '/assessors/schools',
+    getSchoolDetails:'/schools/assessments/'
 }   

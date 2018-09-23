@@ -1,8 +1,10 @@
-import { Http ,URLSearchParams , Headers} from '@angular/http';
+import { Http, URLSearchParams, Headers } from '@angular/http';
 
 import { Injectable } from '@angular/core';
 import { CurrentUserProvider } from '../current-user/current-user';
 import { AppConfigs } from '../appConfig';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
 
 @Injectable()
 export class ApiProvider {
@@ -26,22 +28,22 @@ export class ApiProvider {
         console.log(url)
 
         this.http.post(url, body).subscribe((data: any) => {
-            console.log("Utils: received validated token")
-            console.log(data._body)
-            let parsedData = JSON.parse(data._body);
-            let userTokens = {
-              accessToken: parsedData.access_token,
-              refreshToken: parsedData.refresh_token,
-              idToken: parsedData.id_token
-            };
-            this.currentUser.setCurrentUserDetails(userTokens);
-            resolve()
-          }, error => {
-            this.currentUser.removeUser();
-            console.log('Utils: Logout,token invalid');
-            console.log('error ' + JSON.stringify(error));
-            reject({status: '401'});
-          });
+          console.log("Utils: received validated token")
+          console.log(data._body)
+          let parsedData = JSON.parse(data._body);
+          let userTokens = {
+            accessToken: parsedData.access_token,
+            refreshToken: parsedData.refresh_token,
+            idToken: parsedData.id_token
+          };
+          this.currentUser.setCurrentUserDetails(userTokens);
+          resolve()
+        }, error => {
+          this.currentUser.removeUser();
+          console.log('Utils: Logout,token invalid');
+          console.log('error ' + JSON.stringify(error));
+          reject({ status: '401' });
+        });
       } else {
         console.log("Utils: valid token")
         resolve();
@@ -54,7 +56,7 @@ export class ApiProvider {
     let headers = new Headers();
     headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken)
     this.validateApiToken().then(response => {
-      return this.http.post(url, payload, {headers: headers})
+      return this.http.post(url, payload, { headers: headers })
     }).catch(error => {
 
     })
@@ -67,7 +69,7 @@ export class ApiProvider {
       headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
       console.log(AppConfigs.api_base_url + url)
       const apiUrl = AppConfigs.api_base_url + url;
-      this.http.get(apiUrl, {headers: headers}).subscribe(data => {
+      this.http.get(apiUrl, { headers: headers }).subscribe(data => {
         console.log('API service success')
         successCallback(JSON.parse(data['_body']));
       })
@@ -78,4 +80,25 @@ export class ApiProvider {
     })
   }
 
-}
+  httpGetJoin(urls, successCallback) {
+    console.log('Joiin');
+    let requests = [];
+    for (const url of urls) {
+    console.log('url append');
+
+      let req = this.http.get(AppConfigs.api_base_url + url);
+      requests.push(req);
+    }
+    console.log(requests)
+    this.validateApiToken().then(response => {
+      Observable.forkJoin(requests).subscribe(response => {
+        successCallback(response);
+      })
+    }).catch(error => {
+
+    })
+
+  }
+
+
+} 
