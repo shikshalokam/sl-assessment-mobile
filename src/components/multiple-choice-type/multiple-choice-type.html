@@ -1,0 +1,31 @@
+<!-- Generated template for the InputTypeComponent component -->
+<ion-col class="_flex-box _justify-content-center _flex-direction-column ">
+    <h4 *ngFor="let question of data.questions">{{question}}</h4>
+  </ion-col>
+<div>
+  <ion-list>
+
+    <ion-item *ngFor="let option of data?.options">
+      <ion-label>{{option.label}}</ion-label>
+      <ion-checkbox [checked]="data.value.includes(option.value)" (ionChange)="updateModelValue(option.value)"></ion-checkbox>
+    </ion-item>
+
+  </ion-list>
+  <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
+
+</div>
+<!-- <button ion-button block (click)="change()">input</button> -->
+<ion-footer no-shadow>
+  <ion-toolbar position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button float-left block (click)="back()">Back</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button float-right block (click)="next()" *ngIf="!isLast">Next</button>
+        <button ion-button float-right block (click)="next('completed')" *ngIf="isLast">Save</button>
+      </ion-col>
+    </ion-row>
+    <!-- <button ion-button full>Button</button> -->
+  </ion-toolbar>
+</ion-footer>

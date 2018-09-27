@@ -1,0 +1,47 @@
+<!--
+  Generated template for the QuestionerPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Questioner</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ng-container  *ngFor="let question of questions| slice:start:end; let i=index">
+    <!-- <ng-template switchTemplate margin-top [type]="question.responseType" [data]="question">
+
+    </ng-template> -->
+    <ng-container [ngSwitch]="question.responseType">
+      <input-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'text'"></input-type>
+      <input-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'number'"></input-type>
+      <radio-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'radio'"></radio-type>
+      <date-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'date'"></date-type>
+      <multiple-choice-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+    </ng-container>
+  </ng-container>
+  <!-- <input-type></input-type>
+  <radio-type></radio-type> -->
+<!-- <button ion-button block (click)="change()">input</button> -->
+
+</ion-content>
+
+<!-- <ion-footer no-shadow >
+    <ion-toolbar position="bottom">
+      <ion-row>
+        <ion-col>
+          <button ion-button float-left block (click)="back()">Back</button>
+        </ion-col>
+        <ion-col>
+          <button ion-button float-right block (click)="next()">Next</button>
+        </ion-col>
+      </ion-row>
+      <!-- <button ion-button full>Button</button> -->
+    <!-- </ion-toolbar> -->
+  <!-- </ion-footer> --> 

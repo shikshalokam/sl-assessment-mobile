@@ -7,16 +7,34 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{schoolName}}</ion-title>
+    <ion-title>Survey</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-    <ion-list>
-        <button ion-item *ngFor="let section of schoolSections; let i= index">
+<ion-content>
+  <!-- <ion-list>
+        <button ion-item *ngFor="let section of schoolSections; let i= index " (click)="goToQuestioner(i)">
           {{ section?.name }}
         </button>  
-      </ion-list>
+      </ion-list> -->
+
+  <ion-item-group>
+    <ion-item-divider color="light">{{schoolName}}</ion-item-divider>
+    <ion-item *ngFor="let section of evidenceSections; let i= index" (click)="goToQuestioner(i)">
+      {{ section?.name }}
+    </ion-item>
+  </ion-item-group>
+  <div padding class="_tips">Tip: Please select a section to continue.</div>
+
 </ion-content>
+
+<ion-footer no-shadow *ngIf="allAnsweredForEvidence">
+    <ion-toolbar position="bottom">
+      <ion-row>
+          <button ion-button full (click)="next()">Submit {{selectedEvidenceName}}</button>
+      </ion-row>
+      <!-- <button ion-button full>Button</button> -->
+    </ion-toolbar>
+  </ion-footer>

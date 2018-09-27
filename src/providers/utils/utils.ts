@@ -2,16 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
-/*
-  Generated class for the UtilsProvider provider.
+import { Storage } from '@ionic/storage';
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
+
 @Injectable()
 export class UtilsProvider {
 
-  constructor(public http: HttpClient, public loadingCtrl: LoadingController, private toastCtrl: ToastController) {
+  constructor(public http: HttpClient, public loadingCtrl: LoadingController,
+     private toastCtrl: ToastController, private storage: Storage) {
     console.log('Hello UtilsProvider Provider');
   }
   loading: any;
@@ -39,6 +37,10 @@ export class UtilsProvider {
     });
   
     toast.present();
+  }
+
+  setLocalSchoolData(data) {
+    this.storage.set('schoolsDetails', JSON.stringify(data));
   }
 
 }

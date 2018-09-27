@@ -2,4 +2,15 @@ page-school-profile {
     .adjust {
         padding-left: 0px !important;
     }
+    .customLabel {
+        // font-size: 1.2rem !important;
+        color: #969696 !important;
+    }
+    .clearBorder {
+        border-color: transparent !important;
+    }
+    .item-md.item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner, .item-md.item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner {
+        border-bottom-color: transparent !important;
+        box-shadow: inset 0 -1px 0 0 transparent !important;
+    }
 }

@@ -6,6 +6,7 @@ import { ApiProvider } from '../../providers/api/api';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { AppConfigs } from '../../providers/appConfig';
+import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
 
 @Component({
   selector: 'page-school-list',
@@ -88,9 +89,10 @@ export class SchoolListPage {
       // console.log("in")
       const schoolDetailsObj = {}
       for (const school of this.schoolDetails) {
-        console.log(school['SchoolProfile']._id +' 2nd');
-        schoolDetailsObj[school['SchoolProfile']._id] = school;
+        console.log(school['schoolProfile']._id +' 2nd');
+        schoolDetailsObj[school['schoolProfile']._id] = school;
       }
+      console.log(JSON.stringify(this.schoolDetails));
       this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
       // this.utils.stopLoader();
     }

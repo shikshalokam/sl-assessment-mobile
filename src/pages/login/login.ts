@@ -85,7 +85,7 @@ export class LoginPage {
   getCurrentLocation(): void {
     console.log('getting current location')
     this.geolocation.getCurrentPosition({timeout:5000, enableHighAccuracy: true}).then((resp) => {
-      this.utils.openToast(JSON.stringify(resp))
+      // this.utils.openToast(JSON.stringify(resp))
       console.log('Current location is' + JSON.stringify(resp));
       // resp.coords.latitude
       // resp.coords.longitude

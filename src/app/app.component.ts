@@ -55,10 +55,11 @@ export class MyApp {
     platform.registerBackButtonAction(() => {
       let nav = app.getActiveNavs()[0];
       let activeView = nav.getActive();
-      
+      let alert;
+
       switch (activeView.name) {
-        case "SchoolListPage": case "AboutPage":
-          const alert = this.alertCtrl.create({
+        case "SchoolListPage": case "AboutPage": case 'FaqPage': case 'LoginPage': case 'WelcomePage': case 'HomePage':
+          alert = this.alertCtrl.create({
             title: 'App termination',
             message: 'Do you want to close the app?',
             buttons: [{
@@ -75,6 +76,9 @@ export class MyApp {
             }]
           });
           alert.present();
+
+        default:
+          nav.pop();
       }
 
     })

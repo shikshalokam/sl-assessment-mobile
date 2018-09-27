@@ -21,8 +21,10 @@
    
   </ion-navbar>
 </ion-header>
+
 <ion-tabs selectedIndex="0">
-  <ion-tab (ionSelect)="selectedTab(1)" [root]="tab2Root" tabTitle="About" tabIcon="information-circle"></ion-tab>
-  <ion-tab (ionSelect)="selectedTab(2)" [root]="tab1Root" tabTitle="My Schools" tabIcon="home"></ion-tab>
-  <ion-tab (ionSelect)="selectedTab(3)" [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>
+  <ion-tab (ionSelect)="selectedTab(0)" [root]="tab0Root" tabTitle="Home" tabIcon="home"></ion-tab>
+  <ion-tab (ionSelect)="selectedTab(1)" [root]="tab1Root" tabTitle="My Schools" tabIcon="md-book"></ion-tab>
+  <ion-tab (ionSelect)="selectedTab(2)" [root]="tab2Root" tabTitle="FAQs" tabIcon="help"></ion-tab>
+  <ion-tab (ionSelect)="selectedTab(3)" [root]="tab3Root" tabTitle="About" tabIcon="information-circle"></ion-tab>
 </ion-tabs>

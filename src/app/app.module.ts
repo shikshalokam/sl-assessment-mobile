@@ -31,6 +31,11 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { EvidenceListPageModule } from '../pages/evidence-list/evidence-list.module';
 import { SectionListPageModule } from '../pages/section-list/section-list.module';
+import { QuestionerPageModule } from '../pages/questioner/questioner.module';
+import { ComponentsModule } from '../components/components.module';
+import { DirectivesModule } from '../directives/directives.module';
+import { FaqPage } from '../pages/faq/faq';
+import { SchoolProfileEditPage } from '../pages/school-profile-edit/school-profile-edit';
 
 @NgModule({
   declarations: [
@@ -40,7 +45,9 @@ import { SectionListPageModule } from '../pages/section-list/section-list.module
     HomePage,
     TabsPage,
     WelcomePage,
-    SchoolListPage
+    SchoolListPage,
+    FaqPage,
+    SchoolProfileEditPage
   ],
   imports: [
     BrowserModule,
@@ -51,7 +58,10 @@ import { SectionListPageModule } from '../pages/section-list/section-list.module
     HttpClientModule,
     SchoolProfilePageModule,
     EvidenceListPageModule,
-    SectionListPageModule
+    SectionListPageModule,
+    QuestionerPageModule,
+    ComponentsModule,
+    DirectivesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -61,7 +71,9 @@ import { SectionListPageModule } from '../pages/section-list/section-list.module
     HomePage,
     TabsPage,
     WelcomePage,
-    SchoolListPage
+    SchoolListPage,
+    FaqPage,
+    SchoolProfileEditPage
   ],
   providers: [
     StatusBar,

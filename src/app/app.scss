@@ -14,6 +14,20 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+$green-color: green;
+$grey-color: #FAFAFA;
+$font-size-base: 14px;
+$font-size-large: 18px;
+$white-color : #fff;
+$blue-color: #488aff;
+
+ion-content {
+    background: $grey-color !important;
+}
+
+.tabs-md .tabbar, ion-navbar .toolbar-background-md {
+    background: $white-color !important;
+}
 
 ._flex-box {
     display: flex;
@@ -23,6 +37,15 @@
 ._justify-content-center {
     justify-content: center;
 }
+
 ._flex-direction-column {
     flex-direction: column;
+}
+
+._tips {
+    color: $blue-color;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    // font-size: $font-size-large;
 }

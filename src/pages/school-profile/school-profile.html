@@ -1,20 +1,24 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{schoolName}}</ion-title>
+    <ion-title>School Profile</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content >
   <ion-card>
-    <!-- <ion-card-header>
-      
-    </ion-card-header> -->
+    <ion-card-header>
+      {{schoolName}}
+      <button ion-button icon-only  margin-left clear *ngIf="isEditable" (click)="goToEditProfile()">
+        <ion-icon name="create"></ion-icon>
+      </button>
+      <!-- <ion-icon name="create" ></ion-icon> -->
+    </ion-card-header>
     <ion-card-content>
       <ion-list>
         <ng-container *ngFor="let field of schoolProfile">
           <ion-item class="adjust" *ngIf="field?.field != 'gpsLocation'">
-            <ion-label color="primary" floating>{{field?.label}}</ion-label>
-            <ion-input type="field?.input" [(ngModel)]="field.value" readonly="{{!field?.editable}}"></ion-input>
+            <ion-label class="customLabel" floating>{{field?.label}}</ion-label>
+            <ion-input type="field?.input" [(ngModel)]="field.value" class="clearBorder" readonly="{{!field?.editable}}"></ion-input>
           </ion-item>
         </ng-container>
       </ion-list>
@@ -22,15 +26,15 @@
   </ion-card>
 </ion-content>
 
-<ion-footer no-shadow >
+<ion-footer no-shadow>
   <ion-toolbar position="bottom">
     <ion-row>
       <ion-col>
-        <button ion-button float-left block outline (click)="goToPage()">Start Survey</button>
+        <button ion-button   full (click)="goToPage()">Start Survey</button>
       </ion-col>
-      <ion-col>
+      <!-- <ion-col>
         <button ion-button float-right block outline>Rating</button>
-      </ion-col>
+      </ion-col> -->
     </ion-row>
     <!-- <button ion-button full>Button</button> -->
   </ion-toolbar>

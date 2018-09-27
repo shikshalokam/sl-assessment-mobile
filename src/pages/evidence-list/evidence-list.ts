@@ -30,7 +30,7 @@ export class EvidenceListPage {
     this.schoolName = this.navParams.get('name');
     this.storage.get('schoolsDetails').then(data => {
       const schoolData = JSON.parse(data);
-      this.schoolEvidences = schoolData[this.schoolId]['assessments'];
+      this.schoolEvidences = schoolData[this.schoolId]['assessments'][0]['evidences'];
     }).catch(error => {
 
     })
