@@ -8,6 +8,7 @@ export class InputTypeComponent {
 
   @Input() data: any;
   @Input() isLast: boolean;
+  @Input() isFirst: boolean;
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
 

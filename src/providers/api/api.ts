@@ -53,12 +53,20 @@ export class ApiProvider {
   }
 
   httpPost(url, payload, successCallback, errorCallback) {
-    let headers = new Headers();
-    headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken)
     this.validateApiToken().then(response => {
-      return this.http.post(url, payload, { headers: headers })
+      console.log('SUCcess');
+      let headers = new Headers();
+      headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
+      console.log(AppConfigs.api_base_url + url)
+      const apiUrl = AppConfigs.api_base_url + url;
+      this.http.post(apiUrl, payload, { headers: headers }).subscribe(data => {
+        console.log('API service success')
+        successCallback(JSON.parse(data['_body']));
+      })
     }).catch(error => {
-
+      console.log('ERRor')
+      console.log(JSON.stringify(error))
+      errorCallback(error);
     })
   }
 

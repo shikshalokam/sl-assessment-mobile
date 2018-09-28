@@ -14,6 +14,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class DateTypeComponent {
   @Input() data: any;
   @Input() isLast: boolean;
+  @Input() isFirst: boolean;
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
 

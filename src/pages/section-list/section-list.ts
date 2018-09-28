@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { CurrentUserProvider } from '../../providers/current-user/current-user';
+import { ApiProvider } from '../../providers/api/api';
+import { AppConfigs } from '../../providers/appConfig';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 /**
  * Generated class for the SectionListPage page.
@@ -23,32 +27,41 @@ export class SectionListPage {
   selectedEvidenceName: string;
   schoolData: any;
   allAnsweredForEvidence: boolean;
+  userData: any;
+  currentEvidence: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage, private appCtrl: App) {
+    private storage: Storage, private appCtrl: App, private currentUser: CurrentUserProvider,
+    private apiService: ApiProvider, private utils: UtilsProvider) {
   }
-
-  ionViewDidLoad() {
+  ionViewWillEnter() {
+    console.log('Entered')
+    console.log(JSON.stringify(this.userData))
     console.log('ionViewDidLoad SectionListPage');
+    this.userData = this.currentUser.getCurrentUserData();
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
+      this.currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex];
       this.evidenceSections = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
       this.selectedEvidenceName = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
       this.checkForEvidenceCompletion();
-      // console.log(JSON.stringify(this.evidenceSections))
     }).catch(error => {
 
     })
   }
 
-  checkForEvidenceCompletion() : void {
+  ionViewDidLoad() {
+  }
+
+
+  checkForEvidenceCompletion(): void {
     let allAnswered = true;
     for (const section of this.evidenceSections) {
-      for(const question of section.questions) {
-        if(!question.isCompleted) {
+      for (const question of section.questions) {
+        if (!question.isCompleted) {
           allAnswered = false;
           break;
         }
@@ -64,7 +77,61 @@ export class SectionListPage {
       selectedEvidence: this.selectedEvidenceIndex,
       selectedSection: selectedSection
     };
-    this.appCtrl.getRootNav().push('QuestionerPage', params)
+    // this.appCtrl.getRootNav().push('QuestionerPage', params);
+    this.navCtrl.push('QuestionerPage', params);
+  }
+
+  submitEvidence() {
+    const payload = this.constructPayload();
+    console.log(JSON.stringify(payload));
+
+    const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
+    const url = AppConfigs.survey.submission + submissionId;
+    this.apiService.httpPost(url, payload, response => {
+      this.utils.openToast(response.message);
+      this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+      this.utils.setLocalSchoolData(this.schoolData);
+      // console.log(JSON.stringify(response))
+    }, error => {
+      console.log(JSON.stringify(error))
+    })
+    // console.log(JSON.stringify(this.constructPayload()));
+
+  }
+
+  constructPayload() {
+    const payload = {
+      'schoolProfile': {},
+      'evidence': {}
+    }
+    const schoolProfile = {};
+    const evidence = {
+      id: "",
+      externalId: "",
+      answers: []
+    };
+    for (const field of this.schoolData[this.schoolId]['schoolProfile']['form']) {
+      schoolProfile[field.field] = field.value
+    }
+    // schoolProfile['updatedBy'] =  this.userData.sub;
+    schoolProfile['updatedDate'] = Date.now();
+
+    evidence.id = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]._id;
+    evidence.externalId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
+
+    for (const section of this.evidenceSections) {
+      for (const question of section.questions) {
+        const obj = {
+          qid: question._id,
+          value: question.value,
+          remarks: question.remarks
+        };
+        evidence.answers.push(obj);
+      }
+    }
+    payload.schoolProfile = schoolProfile;
+    payload.evidence = evidence;
+    return payload
   }
 
 }

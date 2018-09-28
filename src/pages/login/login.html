@@ -16,6 +16,7 @@
 <ion-content>
   <!-- class="_flex-box _justify-content-center full-height" -->
   <div class="_flex-box _justify-content-center _flex-direction-column full-height">
+    <div><img src="assets/imgs/just-logo.png" margin-bottom ></div>
     <button ion-button round (click)="signIn()" [disabled]="!networkAvailable">Login</button>
     <div class="_flex-box _justify-content-center full-width margin" *ngIf="!networkAvailable">No internet connection. Please try after sometime </div>
   </div>

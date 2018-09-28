@@ -4,33 +4,51 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content >
-  <ion-card>
-    <ion-card-header>
-      {{schoolName}}
-      <button ion-button icon-only  margin-left clear *ngIf="isEditable" (click)="goToEditProfile()">
-        <ion-icon name="create"></ion-icon>
-      </button>
-      <!-- <ion-icon name="create" ></ion-icon> -->
-    </ion-card-header>
+<!-- <div>
+  <h3>{{schoolName}}</h3>
+
+</div> -->
+<ion-content>
+  <ion-item-group>
+    <ion-item-divider color="light">
+      <h3>{{schoolName}}</h3>
+    </ion-item-divider>
+
+  </ion-item-group>
+
+  <ion-item-group>
+    <ng-container *ngFor="let field of schoolProfile">
+      <ion-item *ngIf="field?.field != 'gpsLocation'">
+        <div class="customLabel">{{field?.label}}</div>
+        <div class="_pt-5">{{field?.value}}</div>
+      </ion-item>
+
+    </ng-container>
+    <!-- <ion-item>as</ion-item>
+    <ion-item>as</ion-item>
+    <ion-item>as</ion-item> -->
+  </ion-item-group>
+  <!-- <ion-card>
+
     <ion-card-content>
-      <ion-list>
+      <ion-item-group>
         <ng-container *ngFor="let field of schoolProfile">
           <ion-item class="adjust" *ngIf="field?.field != 'gpsLocation'">
-            <ion-label class="customLabel" floating>{{field?.label}}</ion-label>
-            <ion-input type="field?.input" [(ngModel)]="field.value" class="clearBorder" readonly="{{!field?.editable}}"></ion-input>
+            <div class="customLabel">{{field?.label}} </div>
+            <div> {{field?.value}}</div> 
+           <ion-input type="field?.input" [(ngModel)]="field.value" class="clearBorder" readonly="{{!field?.editable}}"></ion-input>
           </ion-item>
         </ng-container>
-      </ion-list>
+      </ion-item-group>
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
 </ion-content>
 
 <ion-footer no-shadow>
   <ion-toolbar position="bottom">
     <ion-row>
       <ion-col>
-        <button ion-button   full (click)="goToPage()">Start Survey</button>
+        <button ion-button full (click)="goToPage()">Start Survey</button>
       </ion-col>
       <!-- <ion-col>
         <button ion-button float-right block outline>Rating</button>

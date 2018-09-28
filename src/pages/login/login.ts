@@ -90,7 +90,7 @@ export class LoginPage {
       // resp.coords.latitude
       // resp.coords.longitude
     }).catch((error) => {
-      this.utils.openToast('Error getting location' + JSON.stringify(error))
+      // this.utils.openToast('Error getting location' + JSON.stringify(error))
 
       console.log('Error getting location', JSON.stringify(error));
     });

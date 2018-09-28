@@ -11,7 +11,7 @@ import { SectionListPage } from '../section-list/section-list';
 })
 export class QuestionerPage {
   @ViewChild('sample') nameInputRef: ElementRef;
-  
+
   questions: any;
   schoolName: string;
   schoolId: any;
@@ -20,7 +20,8 @@ export class QuestionerPage {
   start: number = 0;
   end: number = 1;
   schoolData: any;
-  isLast: boolean
+  isLast: boolean;
+  isFirst: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private cfr: ComponentFactoryResolver,
@@ -42,7 +43,7 @@ export class QuestionerPage {
     })
   }
 
-  next(status?:string) {
+  next(status?: string) {
     console.log(status)
     // console.log(JSON.stringify(this.schoolData))
     if (this.end < this.questions.length && !status) {
@@ -50,8 +51,24 @@ export class QuestionerPage {
       this.start++;
       this.end++;
     } else if (status === 'completed') {
-      this.utils.setLocalSchoolData(this.schoolData)
-      this.navCtrl.push(SectionListPage, {_id:this.schoolId, name: this.schoolName, selectedEvidence: this.selectedEvidenceIndex})
+      this.utils.setLocalSchoolData(this.schoolData);
+      // this.navCtrl.popToRoot()
+      const opt = {
+        _id: this.schoolId,
+        name: this.schoolName,
+        selectedEvidence: this.selectedEvidenceIndex
+      }
+      this.navCtrl.pop()
+      // this.navCtrl.push(SectionListPage, {_id:this.schoolId, name: this.schoolName, selectedEvidence: this.selectedEvidenceIndex}).then(() => {
+      //   const index = this.navCtrl.getActive;
+      //   console.log(index)
+      //   // this.nav.remove(0, index);
+      //   // console.log("hiiiiiiiiiiiiiiiiiiiii");
+      //   // this.navCtrl.remove(0);
+
+      //   // this.navCtrl.remove(1);
+      // });;
+
     }
   }
 

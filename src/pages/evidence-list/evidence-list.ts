@@ -37,7 +37,8 @@ export class EvidenceListPage {
   }
 
   navigateToEvidence(index) : void {
-    this.appCtrl.getRootNav().push('SectionListPage', {_id:this.schoolId, name: this.schoolName, selectedEvidence: index})
+    // this.navCtrl.setRoot('SectionListPage');
+    this.navCtrl.push('SectionListPage', {_id:this.schoolId, name: this.schoolName, selectedEvidence: index})
   }
 
 }

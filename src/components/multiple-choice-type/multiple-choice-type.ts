@@ -9,6 +9,7 @@ export class MultipleChoiceTypeComponent implements OnInit {
   text: string;
   @Input() data:any;
   @Input() isLast: boolean;
+  @Input() isFirst: boolean;
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
 

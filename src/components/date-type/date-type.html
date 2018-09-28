@@ -1,26 +1,27 @@
 <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
-  <h4 *ngFor="let question of data.questions">{{question}}</h4>
+  <h4 *ngFor="let question of data.question">{{question}}</h4>
 </ion-col>
 <div>
   <ion-item text-center no-padding>
     <ion-label>Date</ion-label>
-    <ion-datetime displayFormat="MM/DD/YYYY" (ionCancel)="canceled()" [(ngModel)]="data.value"></ion-datetime>
+    <ion-datetime displayFormat="DD/MM/YYYY" (ionCancel)="canceled()" [(ngModel)]="data.value"></ion-datetime>
   </ion-item>
   <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
 
 </div>
 
 <ion-footer no-shadow>
-  <ion-toolbar position="bottom">
-    <ion-row>
-      <ion-col>
-        <button ion-button float-left block (click)="back()">Back</button>
-      </ion-col>
-      <ion-col>
-        <button ion-button float-right block (click)="next()" *ngIf="!isLast">Next</button>
-        <button ion-button float-right block (click)="next('completed')" *ngIf="isLast">Save</button>
-
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>
+    <ion-toolbar position="bottom">
+      <ion-row>
+        <ion-col>
+          <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">
+            <ion-icon name="arrow-back"></ion-icon>Back
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button>
+          <button ion-button icon-start float-right color="primary" (click)="next('completed')" *ngIf="isLast"><ion-icon name="filing"></ion-icon>Save</button>
+        </ion-col>
+      </ion-row>
+    </ion-toolbar>
+  </ion-footer>

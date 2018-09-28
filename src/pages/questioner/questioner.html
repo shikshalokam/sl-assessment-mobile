@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Questioner</ion-title>
+    <ion-title>Questionnaire</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -19,11 +19,11 @@
 
     </ng-template> -->
     <ng-container [ngSwitch]="question.responseType">
-      <input-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'text'"></input-type>
-      <input-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'number'"></input-type>
-      <radio-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'radio'"></radio-type>
-      <date-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'date'"></date-type>
-      <multiple-choice-type [data]="question" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+      <input-type [data]="question" [isFirst]="!start" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'text'"></input-type>
+      <input-type [data]="question" [isFirst]="!start" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'number'"></input-type>
+      <radio-type [data]="question" [isFirst]="!start" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'radio'"></radio-type>
+      <date-type [data]="question" [isFirst]="!start" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'date'"></date-type>
+      <multiple-choice-type [data]="question" [isFirst]="!start" [isLast]="questions.length === end" (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'multiselect'"></multiple-choice-type>
     </ng-container>
   </ng-container>
   <!-- <input-type></input-type>

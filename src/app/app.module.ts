@@ -36,6 +36,7 @@ import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
 import { FaqPage } from '../pages/faq/faq';
 import { SchoolProfileEditPage } from '../pages/school-profile-edit/school-profile-edit';
+import { Camera } from '@ionic-native/camera';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { SchoolProfileEditPage } from '../pages/school-profile-edit/school-profi
     AndroidPermissions,
     Geolocation,
     Diagnostic,
+    Camera
     
   ]
 })
