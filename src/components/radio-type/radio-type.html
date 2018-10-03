@@ -8,8 +8,8 @@
   </ion-item>
 </ion-list>
 <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
-
-<ion-footer no-shadow>
+<image-upload></image-upload>
+<!-- <ion-footer no-shadow>
   <ion-toolbar position="bottom">
     <ion-row>
       <ion-col>
@@ -23,4 +23,20 @@
       </ion-col>
     </ion-row>
   </ion-toolbar>
-</ion-footer>
+</ion-footer> -->
+
+<div class="footer">
+  <ion-row>
+    <ion-col>
+      <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">
+        <ion-icon name="arrow-back"></ion-icon>Back
+      </button>
+    </ion-col>
+    <ion-col>
+      <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button>
+      <button ion-button icon-start float-right color="primary" (click)="next('completed')" *ngIf="isLast">
+        <ion-icon name="filing"></ion-icon>Save
+      </button>
+    </ion-col>
+  </ion-row>
+</div>

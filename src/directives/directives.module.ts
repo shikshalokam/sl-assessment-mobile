@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { SwitchTemplateDirective } from './switch-template/switch-template';
+import { ImageResolverDirective } from './image-resolver/image-resolver';
 @NgModule({
-	declarations: [SwitchTemplateDirective],
+	declarations: [SwitchTemplateDirective,
+    ImageResolverDirective],
 	imports: [],
-	exports: [SwitchTemplateDirective]
+	exports: [SwitchTemplateDirective,
+    ImageResolverDirective]
 })
 export class DirectivesModule {}

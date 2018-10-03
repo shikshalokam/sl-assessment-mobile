@@ -5,7 +5,14 @@
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome {{userData?.name}}!</h2>
-  
-  <!-- <button ion-button full (click)="getPicture()">Take a pic</button> -->
+ <h2>Welcome {{userData?.name}}!</h2>
+   <!-- <img src="{{currentImage}}">{{lastImage}}
+  <button ion-button full (click)="getPicture()">Take a pic</button>
+  <button ion-button full (click)="checkForFile()">get a pic</button>
+{{isFileExist}}
+<div>{{uploaded}}</div> -->
+
+<div>
+  <image-upload></image-upload>
+</div>
 </ion-content>

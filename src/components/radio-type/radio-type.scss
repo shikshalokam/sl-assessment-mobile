@@ -1,3 +1,10 @@
 radio-type {
-
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: $white-color;
+        z-index: 10;
+        padding: 5px 16px;
+    }
 }

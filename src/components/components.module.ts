@@ -5,6 +5,8 @@ import { IonicModule } from 'ionic-angular';
 import { MultipleChoiceTypeComponent } from './multiple-choice-type/multiple-choice-type';
 import { DateTypeComponent } from './date-type/date-type';
 import { RemarksComponent } from './remarks/remarks';
+import { ImageUploadComponent } from './image-upload/image-upload';
+import { DirectivesModule } from '../directives/directives.module';
 
 @NgModule({
 	declarations: [
@@ -12,16 +14,19 @@ import { RemarksComponent } from './remarks/remarks';
 		RadioTypeComponent,
     MultipleChoiceTypeComponent,
     DateTypeComponent,
-    RemarksComponent],
+    RemarksComponent,
+    ImageUploadComponent],
 	imports: [
-		IonicModule
+		IonicModule,
+		DirectivesModule
 	],
 	exports: [
 		InputTypeComponent,
 		RadioTypeComponent,
     MultipleChoiceTypeComponent,
     DateTypeComponent,
-    RemarksComponent
+    RemarksComponent,
+    ImageUploadComponent
 	],
 	entryComponents: [
 		InputTypeComponent,

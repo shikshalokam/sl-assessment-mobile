@@ -37,6 +37,10 @@ import { DirectivesModule } from '../directives/directives.module';
 import { FaqPage } from '../pages/faq/faq';
 import { SchoolProfileEditPage } from '../pages/school-profile-edit/school-profile-edit';
 import { Camera } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { ImagePicker } from '@ionic-native/image-picker';
 
 @NgModule({
   declarations: [
@@ -92,8 +96,11 @@ import { Camera } from '@ionic-native/camera';
     AndroidPermissions,
     Geolocation,
     Diagnostic,
-    Camera
-    
+    Camera,
+    File,
+    FilePath,
+    FileTransfer,
+    ImagePicker
   ]
 })
 export class AppModule { }

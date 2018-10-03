@@ -20,6 +20,7 @@ $font-size-base: 14px;
 $font-size-large: 18px;
 $white-color : #fff;
 $blue-color: #488aff;
+$red-color: #DC143C;
 
 ion-content {
     background: $grey-color !important;
@@ -42,6 +43,10 @@ ion-content {
     flex-direction: column;
 }
 
+._justify-content-space-between{
+    justify-content: space-between
+}
+
 ._tips {
     color: $blue-color;
     position: absolute;
@@ -52,4 +57,8 @@ ion-content {
 
 ._pt-5 {
     padding-top: 5px;
+}
+
+._questioner-padding {
+    padding-bottom: 60px;
 }

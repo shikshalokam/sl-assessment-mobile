@@ -1,0 +1,14 @@
+<div class="_flex-box _justify-content-space-between container">
+
+  <div class="cards _flex-box _justify-content-center _flex-direction-column" padding >
+    <ion-icon name="add" class="iconAdj"></ion-icon>
+    <div>Attach Image</div>
+    <div class="overlay" (click)="openActionSheet()"></div>
+  </div>
+
+  <div class="cards _flex-box  _justify-content-center" *ngFor="let image of imageList; let i = index">
+      <ion-icon name="trash" class="closeBtn" (click)="removeImgFromList(i)"></ion-icon>
+      <div class="overlay"></div>
+    <img src="{{image}}">
+  </div>
+</div>

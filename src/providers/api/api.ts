@@ -70,6 +70,25 @@ export class ApiProvider {
     })
   }
 
+  httpPut(url, payload, successCallback, errorCallback) {
+    // this.validateApiToken().then(response => {
+      console.log('SUCcess');
+      let headers = new Headers();
+      headers.append("Content-type", 'image/jpeg');
+      console.log(url)
+      const apiUrl = url;
+      this.http.put(apiUrl, payload, { headers: headers }).subscribe(data => {
+        console.log('API service success')
+        successCallback(JSON.parse(data['_body']));
+      })
+    // }).catch(error => {
+    //   console.log('ERRor')
+    //   console.log(JSON.stringify(error))
+    //   errorCallback(error);
+    // })
+  }
+
+
   httpGet(url, successCallback, errorCallback) {
     this.validateApiToken().then(response => {
       console.log('SUCcess');
