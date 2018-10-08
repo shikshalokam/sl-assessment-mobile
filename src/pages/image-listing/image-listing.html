@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Upload Images</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="_flex-box  _container" margin-top>
+
+    <div class="_cards _flex-box  _justify-content-center" *ngFor="let image of imageList; let i = index">
+      <div class="_overlay"></div>
+      <img src="{{image?.data}}">
+      <span class="doneMark _flex-box _justify-content-center" *ngIf="image.uploaded">
+        <ion-icon name="checkmark" ></ion-icon>
+      </span>
+      <ion-spinner name="crescent" *ngIf="!image.uploaded" class="customSpin"></ion-spinner>
+
+    </div>
+  </div>
+
+</ion-content>

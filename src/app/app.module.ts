@@ -14,6 +14,7 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
+
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginPageModule } from '../pages/login/login.module';
@@ -41,6 +42,7 @@ import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { ImagePicker } from '@ionic-native/image-picker';
+import { ImageListingPage } from '../pages/image-listing/image-listing';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,8 @@ import { ImagePicker } from '@ionic-native/image-picker';
     WelcomePage,
     SchoolListPage,
     FaqPage,
-    SchoolProfileEditPage
+    SchoolProfileEditPage,
+    ImageListingPage
   ],
   imports: [
     BrowserModule,
@@ -78,7 +81,8 @@ import { ImagePicker } from '@ionic-native/image-picker';
     WelcomePage,
     SchoolListPage,
     FaqPage,
-    SchoolProfileEditPage
+    SchoolProfileEditPage,
+    ImageListingPage
   ],
   providers: [
     StatusBar,

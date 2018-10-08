@@ -1,6 +1,11 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Survey - Sections</ion-title>
+  <ion-navbar color="primary">
+    <div class="_flex-box">
+      <ion-title>Survey - Sections</ion-title>
+
+      <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px"
+        (click)="feedBack()" margin-right float-right></ion-icon>
+    </div>
   </ion-navbar>
 </ion-header>
 
@@ -13,9 +18,15 @@
       </ion-list> -->
 
   <ion-item-group>
-    <ion-item-divider color="light"><h3>{{schoolName}}</h3></ion-item-divider>
+    <ion-item-divider color="light">
+      <h3 class="headerText">
+        <ion-icon name="book" margin-right></ion-icon> {{schoolName}}
+      </h3>
+    </ion-item-divider>
     <ion-item *ngFor="let section of evidenceSections; let i= index" (click)="goToQuestioner(i)">
-      <ion-icon name="list-box" margin-right></ion-icon> {{ section?.name }}
+      <h3>
+        <ion-icon name="list-box" margin-right></ion-icon> {{ section?.name }}
+      </h3>
     </ion-item>
   </ion-item-group>
 </ion-content>
@@ -23,7 +34,9 @@
 <ion-footer no-shadow *ngIf="allAnsweredForEvidence && !currentEvidence.isSubmitted">
   <ion-toolbar position="bottom">
     <ion-row>
-      <button ion-button full (click)="submitEvidence()">Submit {{selectedEvidenceName}}</button>
+      <button ion-button full (click)="goToImageListing()">Upload and submit</button>
+
+      <!-- <button ion-button full (click)="submitEvidence()">Submit {{selectedEvidenceName}}</button> -->
     </ion-row>
   </ion-toolbar>
 </ion-footer>

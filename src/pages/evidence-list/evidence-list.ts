@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams ,App} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 /**
  * Generated class for the EvidenceListPage page.
@@ -21,10 +22,10 @@ export class EvidenceListPage {
   schoolEvidences: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, 
-    private storage: Storage, private appCtrl: App) {
+    private storage: Storage, private appCtrl: App, private utils: UtilsProvider) {
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     console.log('ionViewDidLoad EvidenceListPage');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
@@ -38,7 +39,11 @@ export class EvidenceListPage {
 
   navigateToEvidence(index) : void {
     // this.navCtrl.setRoot('SectionListPage');
+    // this.appCtrl.getRootNav().push('SectionListPage', {_id:this.schoolId, name: this.schoolName, selectedEvidence: index})
     this.navCtrl.push('SectionListPage', {_id:this.schoolId, name: this.schoolName, selectedEvidence: index})
+  }
+  feedBack() {
+    this.utils.sendFeedback()
   }
 
 }

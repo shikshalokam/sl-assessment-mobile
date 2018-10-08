@@ -12,6 +12,7 @@ export class MultipleChoiceTypeComponent implements OnInit {
   @Input() isFirst: boolean;
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
+  @Input() evidenceId: string;
 
   constructor() {
     console.log('Hello checkboxTypeComponent Component');
@@ -21,7 +22,7 @@ export class MultipleChoiceTypeComponent implements OnInit {
     // }
   }
   ngOnInit() {
-    // console.log(JSON.stringify(this.data))
+    console.log(JSON.stringify(this.evidenceId))
     // this.data.value = ['R1']
     this.data.value = this.data.value ? this.data.value : [];
 

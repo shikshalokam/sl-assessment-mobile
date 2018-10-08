@@ -22,6 +22,7 @@ export class QuestionerPage {
   schoolData: any;
   isLast: boolean;
   isFirst: boolean;
+  selectedEvidenceId: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private cfr: ComponentFactoryResolver,
@@ -37,6 +38,7 @@ export class QuestionerPage {
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
       this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
+      this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]._id;
       console.log(JSON.stringify(this.questions))
     }).catch(error => {
 
@@ -46,10 +48,19 @@ export class QuestionerPage {
   next(status?: string) {
     console.log(status)
     // console.log(JSON.stringify(this.schoolData))
+    console.log(this.start);
+    if(this.questions[this.start].children.length) {
+      this.updateTheChildrenQuestions(this.questions[this.start])
+    }
     if (this.end < this.questions.length && !status) {
       this.utils.setLocalSchoolData(this.schoolData)
       this.start++;
       this.end++;
+      console.log("check for question")
+      if(this.questions[this.start].visibleIf && !this.checkForQuestionDisplay(this.questions[this.start])) {
+        this.questions[this.start].isCompleted = true;
+        this.next();
+      }
     } else if (status === 'completed') {
       this.utils.setLocalSchoolData(this.schoolData);
       // this.navCtrl.popToRoot()
@@ -59,24 +70,52 @@ export class QuestionerPage {
         selectedEvidence: this.selectedEvidenceIndex
       }
       this.navCtrl.pop()
-      // this.navCtrl.push(SectionListPage, {_id:this.schoolId, name: this.schoolName, selectedEvidence: this.selectedEvidenceIndex}).then(() => {
-      //   const index = this.navCtrl.getActive;
-      //   console.log(index)
-      //   // this.nav.remove(0, index);
-      //   // console.log("hiiiiiiiiiiiiiiiiiiiii");
-      //   // this.navCtrl.remove(0);
+    } else {
+      // console.log('hiiii')
+      this.next('completed')
+    }
+  }
 
-      //   // this.navCtrl.remove(1);
-      // });;
+  checkForQuestionDisplay(qst): boolean {
+    console.log('checkcondition')
+    
+    let display = false;
+    for (const question of this.questions) {
+      if((question._id === qst.visibleIf[0]._id) && (question.value === qst.visibleIf[0].value)) {
+          
+        display =  true;
+      } 
+    }
+    return display
+  }
 
+  updateTheChildrenQuestions(parentQuestion) {
+    for (const child of parentQuestion.children) {
+      for (const question of this.questions) {
+        if(child === question._id && parentQuestion.value === question.visibleIf[0].value && !question.value){
+          question.isCompleted = false;
+        } else if(child === question._id && parentQuestion.value !== question.visibleIf[0].value) {
+          question.isCompleted = true;
+        }
+      }
     }
   }
 
   back() {
+    if(this.questions[this.start].children.length) {
+      this.updateTheChildrenQuestions(this.questions[this.start])
+    }
     if (this.start > 0) {
       this.utils.setLocalSchoolData(this.schoolData)
       this.start--;
       this.end--;
+      if(this.questions[this.start].visibleIf && !this.checkForQuestionDisplay(this.questions[this.start])) {
+        this.back();
+      }
     }
+  }
+
+  feedBack() {
+    this.utils.sendFeedback()
   }
 }

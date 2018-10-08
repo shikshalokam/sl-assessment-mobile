@@ -1,6 +1,12 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>School Profile</ion-title>
+  <ion-navbar color="primary">
+    <div class="_flex-box">
+      <ion-title>School Profile</ion-title>
+      <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px"
+        (click)="feedBack()" margin-right float-right></ion-icon>
+    </div>
+
+
   </ion-navbar>
 </ion-header>
 
@@ -11,14 +17,16 @@
 <ion-content>
   <ion-item-group>
     <ion-item-divider color="light">
-      <h3>{{schoolName}}</h3>
+      <h3 class="headerText">
+        <ion-icon name="book" margin-right></ion-icon> {{schoolName}}
+      </h3>
     </ion-item-divider>
 
   </ion-item-group>
 
   <ion-item-group>
     <ng-container *ngFor="let field of schoolProfile">
-      <ion-item *ngIf="field?.field != 'gpsLocation'">
+      <ion-item *ngIf="field?.field != 'gpsLocation' && field?.visible && field?.field != 'name'">
         <div class="customLabel">{{field?.label}}</div>
         <div class="_pt-5">{{field?.value}}</div>
       </ion-item>
@@ -48,7 +56,10 @@
   <ion-toolbar position="bottom">
     <ion-row>
       <ion-col>
-        <button ion-button full (click)="goToPage()">Start Survey</button>
+        <button ion-button full (click)="goToPage()" class="btnText">
+          Start Survey
+          <ion-icon name="arrow-forward" margin-left></ion-icon>
+        </button>
       </ion-col>
       <!-- <ion-col>
         <button ion-button float-right block outline>Rating</button>

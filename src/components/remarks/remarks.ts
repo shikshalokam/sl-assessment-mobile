@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
 })
 export class RemarksComponent {
 
-  @Input() data: string;
+  @Input() data: any;
 
   constructor() {
     console.log('Hello RemarksComponent Component');

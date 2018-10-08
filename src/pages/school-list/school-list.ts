@@ -7,6 +7,7 @@ import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { AppConfigs } from '../../providers/appConfig';
 import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
+import { WelcomePage } from '../welcome/welcome';
 
 @Component({
   selector: 'page-school-list',
@@ -47,8 +48,7 @@ export class SchoolListPage {
       this.utils.stopLoader();
       if (error.status == '401') {
         this.currentUser.removeUser();
-        this.appCtrl.getRootNav().push('LoginPage');
-        // this.navCtrl.setRoot('LoginPage');
+        this.appCtrl.getRootNav().push(WelcomePage);
       }
     })
   }

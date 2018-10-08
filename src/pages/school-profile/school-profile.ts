@@ -63,5 +63,7 @@ export class SchoolProfilePage {
 
     // this.navCtrl.push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
   }
-
+  feedBack() {
+    this.utils.sendFeedback()
+  }
 }

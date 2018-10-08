@@ -6,8 +6,12 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Survey - Evidence methods</ion-title>
+  <ion-navbar color="primary">
+    <div class="_flex-box">
+      <ion-title>Survey - Evidence methods</ion-title>
+      <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px"
+        (click)="feedBack()" margin-right float-right></ion-icon>
+    </div>
   </ion-navbar>
 
 </ion-header>
@@ -21,9 +25,16 @@
   </ion-list> -->
 
   <ion-item-group>
-    <ion-item-divider color="light">{{schoolName}}</ion-item-divider>
+    <ion-item-divider color="light">
+      <h3 class="headerText">
+        <ion-icon name="book" margin-right></ion-icon> {{schoolName}}
+      </h3>
+    </ion-item-divider>
     <ion-item *ngFor="let evidence of schoolEvidences; let i= index" (click)="navigateToEvidence(i)">
-      <h3><ion-icon name="albums" margin-right></ion-icon>{{ evidence?.name }}</h3>
+      <h3>
+        <ion-icon name="albums" margin-right></ion-icon>{{ evidence?.name }}
+        <ion-icon name="checkmark" class="doneIcon" float-right *ngIf="evidence.isSubmitted"></ion-icon>
+      </h3>
     </ion-item>
   </ion-item-group>
 

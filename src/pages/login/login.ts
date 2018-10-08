@@ -45,22 +45,8 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    // this.presentToast(this.network.type)
-    // console.log(this.network.type);
     this.checkForLocationPermissions();
-    // this.checkForCurrentLocation();
-    // console.log(JSON.stringify(this.diagnostic.permissionGroups))
-    // console.log(JSON.stringify(this.diagnostic.permission))
-    // console.log(JSON.stringify(this.diagnostic.permissionStatus))
-    // this.diagnostic.isLocationAuthorized().then(response => {
-    //   console.log('isLocationAuthorized '+JSON.stringify(response))
-    // })
-    // this.diagnostic.isLocationAvailable().then(response => {
-    //   console.log('isLocationAvailable '+ JSON.stringify(response))
-    // })
-    // this.diagnostic.isLocationEnabled().then(response =>{
-    //   console.log('isLocationEnabled' + JSON.stringify(response))
-    // })
+    
 
     if (this.network.type != 'none') {
       this.networkAvailable = true;
@@ -71,28 +57,14 @@ export class LoginPage {
     this.subscription.unsubscribe();
   }
 
-  watchLocation() {
-    console.log('Watch location')
-    let watch = this.geolocation.watchPosition();
-    watch.subscribe((data) => {
-      console.log('location' + JSON.stringify(data))
-      // data can be a set of coordinates, or an error (if an error occurred).
-      // data.coords.latitude
-      // data.coords.longitude
-    });
-  }
   
   getCurrentLocation(): void {
     console.log('getting current location')
-    this.geolocation.getCurrentPosition({timeout:5000, enableHighAccuracy: true}).then((resp) => {
-      // this.utils.openToast(JSON.stringify(resp))
-      console.log('Current location is' + JSON.stringify(resp));
-      // resp.coords.latitude
-      // resp.coords.longitude
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.utils.openToast(JSON.stringify(resp))
+  
     }).catch((error) => {
-      // this.utils.openToast('Error getting location' + JSON.stringify(error))
-
-      console.log('Error getting location', JSON.stringify(error));
+      this.utils.openToast('Error getting location' + JSON.stringify(error))
     });
   }
 
@@ -117,7 +89,13 @@ export class LoginPage {
         console.log('Has permission?', result.hasPermission)
         if (!result.hasPermission) {
           console.log("ask permission");
-          this.permissions.requestPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION)
+          this.permissions.requestPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(result => {
+            if(result.hasPermission) {
+              this.isLocationEnabled();
+            }
+          }).catch(error => {
+            console.log('error')
+          })
         } else {
           console.log('yes, Has permission');
           this.isLocationEnabled();
@@ -125,7 +103,6 @@ export class LoginPage {
       }).catch(error => {
         console.log("Error check for permission" + JSON.stringify(error))
       });
-    // err => this.permissions.requestPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION)
   }
 
   presentToast(msg) {

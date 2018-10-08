@@ -50,6 +50,7 @@ export class CurrentUserProvider {
   removeUser() {
     this.storage.remove('tokens');
     this.storage.remove('schools');
+    this.storage.remove('images');
   }
 
   fetchUser(): void {

@@ -1,9 +1,22 @@
 page-welcome {
-    .fullWidth {
-        width: 100%;
+    // .fullWidth {
+    //     width: 100%;
+    // }
+
+    // ion-slides {
+    //     height: calc(100% - 45px) !important;
+    // }
+    .toolbar-background {
+        background: $grey-color !important;
     }
 
-    ion-slides {
-        height: calc(100% - 45px) !important;
+    ion-toolbar {
+        position: absolute;
+        top: 0;
+
+    }
+
+    .imageAdj {
+        width: 50%;
     }
 }

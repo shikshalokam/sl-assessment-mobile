@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar hideBackButton="true">
+  <ion-navbar color="primary" hideBackButton="true">
 
 
 
@@ -16,7 +16,8 @@
     </ion-grid> -->
     <div class="_flex-box">
         <ion-title (click)="goToProfile()">{{header}}</ion-title> 
-        <ion-icon name="log-out" isActive="true" style="font-size: 24px;padding-right: 10px" (click)="logout()" float-right></ion-icon>
+        <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px" (click)="feedBack()" margin-right float-right></ion-icon>
+        <ion-icon name="log-out" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px" (click)="logout()" float-right></ion-icon>
     </div>
    
   </ion-navbar>

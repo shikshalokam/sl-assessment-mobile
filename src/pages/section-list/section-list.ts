@@ -5,6 +5,7 @@ import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { ImageListingPage } from '../image-listing/image-listing';
 
 /**
  * Generated class for the SectionListPage page.
@@ -81,6 +82,16 @@ export class SectionListPage {
     this.navCtrl.push('QuestionerPage', params);
   }
 
+  goToImageListing() {
+    const params = {
+      selectedEvidenceId: this.currentEvidence._id,
+      _id: this.schoolId,
+      name: this.schoolName,
+      selectedEvidence: this.selectedEvidenceIndex,
+    }
+    this.navCtrl.push(ImageListingPage, params);
+  }
+
   submitEvidence() {
     const payload = this.constructPayload();
     console.log(JSON.stringify(payload));
@@ -132,6 +143,10 @@ export class SectionListPage {
     payload.schoolProfile = schoolProfile;
     payload.evidence = evidence;
     return payload
+  }
+
+  feedBack() {
+    this.utils.sendFeedback()
   }
 
 }

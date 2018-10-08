@@ -14,6 +14,7 @@ import { WelcomePage } from '../pages/welcome/welcome';
 })
 export class MyApp {
   rootPage: any;
+  isAlertPresent: boolean = false;
   // rootPage: any = "LoginPage";
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,
@@ -58,27 +59,34 @@ export class MyApp {
       let alert;
 
       switch (activeView.name) {
-        case "SchoolListPage": case "AboutPage": case 'FaqPage': case 'LoginPage': case 'WelcomePage': case 'HomePage':
-          alert = this.alertCtrl.create({
-            title: 'App termination',
-            message: 'Do you want to close the app?',
-            buttons: [{
-              text: 'Cancel',
-              role: 'cancel',
-              handler: () => {
-                console.log('Application exit prevented!');
-              }
-            }, {
-              text: 'Close App',
-              handler: () => {
-                platform.exitApp(); // Close this application
-              }
-            }]
-          });
-          alert.present();
+        case "SchoolListPage": case "AboutPage": case 'FaqPage': case 'WelcomePage': case 'HomePage':
+          if (!this.isAlertPresent) {
+            this.isAlertPresent = true;
+            alert = this.alertCtrl.create({
+              title: 'App termination',
+              message: 'Do you want to close the app?',
+              enableBackdropDismiss: false,
+              buttons: [{
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Application exit prevented!');
+                  this.isAlertPresent = false;
 
-        default:
-          nav.pop();
+                }
+              }, {
+                text: 'Close App',
+                handler: () => {
+
+                  platform.exitApp(); // Close this application
+                }
+              }]
+            });
+            alert.present()
+          };
+
+        // default:
+        //   nav.pop();
       }
 
     })

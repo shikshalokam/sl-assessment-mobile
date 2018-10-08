@@ -7,6 +7,8 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { App, NavController } from 'ionic-angular';
 import { FaqPage } from '../faq/faq';
+import { WelcomePage } from '../welcome/welcome';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -20,7 +22,7 @@ export class TabsPage {
   header: string = 'Schools';
 
   constructor(private auth: AuthProvider, private navCtrl: NavController,
-    private currentUser: CurrentUserProvider, private app: App) {
+    private currentUser: CurrentUserProvider, private app: App, private utils: UtilsProvider) {
     this.selectedTab(0);
   }
 
@@ -41,10 +43,14 @@ export class TabsPage {
     }
   }
 
+  feedBack() {
+    this.utils.sendFeedback()
+  }
+
   logout() {
     this.auth.doLogout().then(response => {
       this.currentUser.removeUser();
-      this.app.getRootNav().push('LoginPage')
+      this.app.getRootNav().push(WelcomePage)
     })
   }
 

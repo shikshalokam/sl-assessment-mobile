@@ -17,7 +17,8 @@ export class DateTypeComponent {
   @Input() isFirst: boolean;
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
-
+  @Input() evidenceId: string;
+  
   constructor() {
     console.log('Hello DateTypeComponent Component');
   }
