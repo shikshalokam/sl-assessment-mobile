@@ -26,6 +26,21 @@
     <ion-item *ngFor="let section of evidenceSections; let i= index" (click)="goToQuestioner(i)">
       <h3>
         <ion-icon name="list-box" margin-right></ion-icon> {{ section?.name }}
+        <span float-right *ngIf="section.progressStatus === 'completed'" class="_completed _flex-box">
+          Completed <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
+        </span>
+        <span float-right *ngIf="!section.progressStatus" class="_completed _flex-box">
+          Start <ion-icon name="arrow-dropright-circle" class="_progressIcon" margin-left></ion-icon>
+        </span>
+        <span float-right *ngIf="section.progressStatus === 'inProgress'" class="_inProgress _flex-box">
+          In Progress <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
+        </span>
+        <span float-right *ngIf="section.progressStatus === 'submitted'" class="_submitted _flex-box">
+          Submitted <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
+        </span>
+        <!-- <span float-right *ngIf="section.progressSatatus === 'inProgress'" class="completed _flex-box">
+            In Progress <ion-icon name="contrast" margin-left></ion-icon>
+          </span> -->
       </h3>
     </ion-item>
   </ion-item-group>

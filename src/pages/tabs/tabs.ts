@@ -5,7 +5,7 @@ import { HomePage } from '../home/home';
 import { SchoolListPage } from '../school-list/school-list';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
-import { App, NavController } from 'ionic-angular';
+import { App, NavController, AlertController } from 'ionic-angular';
 import { FaqPage } from '../faq/faq';
 import { WelcomePage } from '../welcome/welcome';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -20,9 +20,11 @@ export class TabsPage {
   tab3Root = AboutPage;
 
   header: string = 'Schools';
+  captcha: string;
 
   constructor(private auth: AuthProvider, private navCtrl: NavController,
-    private currentUser: CurrentUserProvider, private app: App, private utils: UtilsProvider) {
+    private currentUser: CurrentUserProvider, private app: App,
+    private utils: UtilsProvider, private alertCntrl: AlertController) {
     this.selectedTab(0);
   }
 
@@ -30,6 +32,7 @@ export class TabsPage {
     switch (index) {
       case 0: default:
         this.header = "Home";
+        this.generateCaptcha();
         break;
       case 1:
         this.header = "My Schools";
@@ -48,13 +51,82 @@ export class TabsPage {
   }
 
   logout() {
-    this.auth.doLogout().then(response => {
-      this.currentUser.removeUser();
-      this.app.getRootNav().push(WelcomePage)
-    })
+    const logoutConfirmAlert = this.alertCntrl.create({
+      title: 'Logout',
+      message: '<ion-icon name="hand"></ion-icon> You will loose all the data saved locally.Do you really want to logout?',
+      enableBackdropDismiss: false,
+      buttons: [{
+        text: 'No',
+        role: 'cancel',
+        handler: () => {
+        }
+      }, {
+        text: 'Yes',
+        handler: () => {
+          this.generateCaptcha();
+          this.logoutConfirm()
+        }
+      }]
+    });
+    logoutConfirmAlert.present()
+    // this.auth.doLogout().then(response => {
+    //   this.currentUser.removeUser();
+    //   this.app.getRootNav().push(WelcomePage)
+    // })
+  }
+
+  logoutConfirm() {
+    const logoutVerifyAlert = this.alertCntrl.create({
+      title: 'Confirm Logout',
+      subTitle: "Please enter the code to confirm. ",
+      message: this.captcha,
+      enableBackdropDismiss: false,
+      inputs: [
+        {
+          name: 'captcha',
+          placeholder: 'Captcha',
+        }
+      ],
+      cssClass: '_alertCustomCss',
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel',
+        handler: () => {
+        }
+      }, {
+        text: 'Confirm',
+        handler: data => {
+          if (data.captcha === this.captcha) {
+            this.auth.doLogout().then(response => {
+              this.currentUser.removeUser();
+              this.app.getRootNav().push(WelcomePage)
+            })
+          } else {
+            this.utils.openToast('Logout code miss match.Please try to logout again.', 'Ok')
+          }
+
+        }
+      }]
+    });
+    logoutVerifyAlert.present()
   }
 
   goToProfile() {
     this.navCtrl.push('SchoolProfilePage');
+  }
+
+  generateCaptcha() {
+    let alpha = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+    for (let i = 0; i < 6; i++) {
+      var a = alpha[Math.floor(Math.random() * alpha.length)];
+      var b = alpha[Math.floor(Math.random() * alpha.length)];
+      var c = alpha[Math.floor(Math.random() * alpha.length)];
+      var d = alpha[Math.floor(Math.random() * alpha.length)];
+      var e = alpha[Math.floor(Math.random() * alpha.length)];
+      var f = alpha[Math.floor(Math.random() * alpha.length)];
+      // var g = alpha[Math.floor(Math.random() * alpha.length)];
+    }
+    this.captcha = a + b + c + d + e + f;
+    console.log(this.captcha)
   }
 }

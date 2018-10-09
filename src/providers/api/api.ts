@@ -5,6 +5,9 @@ import { CurrentUserProvider } from '../current-user/current-user';
 import { AppConfigs } from '../appConfig';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ApiProvider {
@@ -59,7 +62,9 @@ export class ApiProvider {
       headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
       console.log(AppConfigs.api_base_url + url)
       const apiUrl = AppConfigs.api_base_url + url;
-      this.http.post(apiUrl, payload, { headers: headers }).subscribe(data => {
+      this.http.post(apiUrl, payload, { headers: headers })
+      .pipe(catchError(this.handleError))
+      .subscribe(data => {
         console.log('API service success')
         successCallback(JSON.parse(data['_body']));
       })
@@ -72,15 +77,15 @@ export class ApiProvider {
 
   httpPut(url, payload, successCallback, errorCallback) {
     // this.validateApiToken().then(response => {
-      console.log('SUCcess');
-      let headers = new Headers();
-      headers.append("Content-type", 'image/jpeg');
-      console.log(url)
-      const apiUrl = url;
-      this.http.put(apiUrl, payload, { headers: headers }).subscribe(data => {
-        console.log('API service success')
-        successCallback(JSON.parse(data['_body']));
-      })
+    console.log('SUCcess');
+    let headers = new Headers();
+    headers.append("Content-type", 'image/jpeg');
+    console.log(url)
+    const apiUrl = url;
+    this.http.put(apiUrl, payload, { headers: headers }).subscribe(data => {
+      console.log('API service success')
+      successCallback(JSON.parse(data['_body']));
+    })
     // }).catch(error => {
     //   console.log('ERRor')
     //   console.log(JSON.stringify(error))
@@ -96,10 +101,12 @@ export class ApiProvider {
       headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
       console.log(AppConfigs.api_base_url + url)
       const apiUrl = AppConfigs.api_base_url + url;
-      this.http.get(apiUrl, { headers: headers }).subscribe(data => {
-        console.log('API service success')
-        successCallback(JSON.parse(data['_body']));
-      })
+      this.http.get(apiUrl, { headers: headers })
+        .pipe(catchError(this.handleError))
+        .subscribe(data => {
+          console.log('API service success')
+          successCallback(JSON.parse(data['_body']));
+        })
     }).catch(error => {
       console.log('ERRor')
       console.log(JSON.stringify(error))
@@ -111,7 +118,7 @@ export class ApiProvider {
     console.log('Joiin');
     let requests = [];
     for (const url of urls) {
-    console.log('url append');
+      console.log('url append');
 
       let req = this.http.get(AppConfigs.api_base_url + url);
       requests.push(req);
@@ -126,6 +133,23 @@ export class ApiProvider {
     })
 
   }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    
+    return new ErrorObservable(
+      'Something bad happened; please try again later.');
+  };
 
 
 } 

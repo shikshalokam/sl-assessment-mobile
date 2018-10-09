@@ -60,11 +60,17 @@ export class SectionListPage {
 
   checkForEvidenceCompletion(): void {
     let allAnswered = true;
+    console.log(JSON.stringify(this.currentEvidence))
     for (const section of this.evidenceSections) {
       for (const question of section.questions) {
         if (!question.isCompleted) {
           allAnswered = false;
           break;
+        }
+        if(this.currentEvidence.isSubmitted){
+          section.progressStatus = 'submitted';
+        } else {
+          section.progressStatus = allAnswered ? 'completed' : section.progressStatus;
         }
       }
     }
@@ -79,6 +85,10 @@ export class SectionListPage {
       selectedSection: selectedSection
     };
     // this.appCtrl.getRootNav().push('QuestionerPage', params);
+    if(!this.evidenceSections[selectedSection].progressStatus) {
+      this.evidenceSections[selectedSection].progressStatus = 'inProgress';
+      this.utils.setLocalSchoolData(this.schoolData)
+    }
     this.navCtrl.push('QuestionerPage', params);
   }
 

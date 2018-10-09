@@ -45,8 +45,6 @@ export class ImageListingPage {
       this.currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex];
       this.evidenceSections = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
       this.selectedEvidenceName = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
-      // this.checkForEvidenceCompletion();
-      // this.submitEvidence()
     }).catch(error => {
 
     })
@@ -81,6 +79,7 @@ export class ImageListingPage {
       this.cloudImageUpload();
       this.fileTransfer.create()
     }, error => {
+      this.utils.openToast('Unable to get google urls')
       this.utils.stopLoader();
     })
   }

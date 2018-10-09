@@ -23,6 +23,7 @@ export class QuestionerPage {
   isLast: boolean;
   isFirst: boolean;
   selectedEvidenceId: string;
+  isCurrentEvidenceSubmitted: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private cfr: ComponentFactoryResolver,
@@ -35,10 +36,12 @@ export class QuestionerPage {
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.selectedSectionIndex = this.navParams.get('selectedSection');
+    this
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
       this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
       this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]._id;
+      this.isCurrentEvidenceSubmitted = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted 
       console.log(JSON.stringify(this.questions))
     }).catch(error => {
 

@@ -27,11 +27,13 @@ export class UtilsProvider {
     this.loading.dismiss();
   }
 
-  openToast(msg) {
+  openToast(msg, closeBtn?: string) {
     let toast = this.toastCtrl.create({
       message: msg,
-      duration: 3000,
-      position: 'top'
+      duration: closeBtn ? 0 : 3000 ,
+      position: 'bottom',
+      closeButtonText: closeBtn,
+      showCloseButton: closeBtn ? true : false
     });
 
     toast.onDidDismiss(() => {
@@ -74,7 +76,7 @@ export class UtilsProvider {
           text: 'Send',
           role: 'role',
           handler: data => {
-            if(data.name && data.feedback ) {
+            if (data.name && data.feedback) {
               data.type = 'Suggestion';
               this.apiService.httpPost(AppConfigs.survey.feedback, data, success => {
                 this.openToast(success.message);
@@ -94,6 +96,10 @@ export class UtilsProvider {
       ]
     });
     alert.present();
+  }
+
+  progressCalculate() {
+
   }
 
 }
