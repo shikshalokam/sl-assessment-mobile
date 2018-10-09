@@ -1,0 +1,34 @@
+<div>
+  <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
+    <h4 *ngFor="let question of data.question">{{question}}</h4>
+  </ion-col>
+  <div>
+    <ng-container *ngFor="let question of data?.instanceQuestions">
+      <ion-card>
+        <ng-container [ngSwitch]="question.responseType">
+          <input-type [data]="question" *ngSwitchCase="'text'"></input-type>
+          <input-type [data]="question" *ngSwitchCase="'number'"></input-type>
+          <radio-type [data]="question" *ngSwitchCase="'radio'"></radio-type>
+          <date-type [data]="question" *ngSwitchCase="'date'"></date-type>
+          <multiple-choice-type [data]="question" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+        </ng-container>
+      </ion-card>
+    </ng-container>
+  </div>
+</div>
+
+<div class="_footer">
+  <ion-row>
+    <ion-col>
+      <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">
+        <ion-icon name="arrow-back"></ion-icon>Back
+      </button>
+    </ion-col>
+    <ion-col>
+      <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button>
+      <button ion-button icon-start float-right color="primary" (click)="next('completed')" *ngIf="isLast">
+        <ion-icon name="filing"></ion-icon>Save
+      </button>
+    </ion-col>
+  </ion-row>
+</div>
