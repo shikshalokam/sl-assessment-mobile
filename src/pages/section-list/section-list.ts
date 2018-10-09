@@ -37,7 +37,7 @@ export class SectionListPage {
   }
   ionViewWillEnter() {
     console.log('Entered')
-    console.log(JSON.stringify(this.userData))
+    // console.log(JSON.stringify(this.userData))
     console.log('ionViewDidLoad SectionListPage');
     this.userData = this.currentUser.getCurrentUserData();
     this.schoolId = this.navParams.get('_id');
@@ -59,22 +59,42 @@ export class SectionListPage {
 
 
   checkForEvidenceCompletion(): void {
-    let allAnswered = true;
-    console.log(JSON.stringify(this.currentEvidence))
+    let allAnswered;
     for (const section of this.evidenceSections) {
+      allAnswered = true;
       for (const question of section.questions) {
+        // console.log("is completed: " + question.isCompleted)
         if (!question.isCompleted) {
           allAnswered = false;
           break;
         }
-        if(this.currentEvidence.isSubmitted){
-          section.progressStatus = 'submitted';
-        } else {
-          section.progressStatus = allAnswered ? 'completed' : section.progressStatus;
-        }
+      }
+      // console.log("All answere: "+ allAnswered)
+      if (this.currentEvidence.isSubmitted) {
+        section.progressStatus = 'submitted';
+      } else if (allAnswered) {
+        // console.log("hiiiii")
+        section.progressStatus = 'completed';
+      } else if (!allAnswered && section.progressStatus) {
+        section.progressStatus = 'inProgress';
+      } else if (!section.progressStatus) {
+        section.progressStatus = '';
+      }
+      // console.log("Progress status " + section.progressStatus)
+      // section.progressStatus = allAnswered ? 'completed' : section.progressStatus;
+    }
+    this.allAnsweredForEvidence = true;
+    // console.log(JSON.stringify(this.evidenceSections))
+
+    for (const section of this.evidenceSections) {
+      if (section.progressStatus !== 'completed') {
+        this.allAnsweredForEvidence = false;
+        break;
       }
     }
-    this.allAnsweredForEvidence = allAnswered;
+
+    this.utils.setLocalSchoolData(this.schoolData);
+    // this.allAnsweredForEvidence = allAnswered;
   }
 
   goToQuestioner(selectedSection): void {
@@ -85,7 +105,7 @@ export class SectionListPage {
       selectedSection: selectedSection
     };
     // this.appCtrl.getRootNav().push('QuestionerPage', params);
-    if(!this.evidenceSections[selectedSection].progressStatus) {
+    if (!this.evidenceSections[selectedSection].progressStatus) {
       this.evidenceSections[selectedSection].progressStatus = 'inProgress';
       this.utils.setLocalSchoolData(this.schoolData)
     }
