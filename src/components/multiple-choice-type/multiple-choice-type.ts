@@ -13,6 +13,7 @@ export class MultipleChoiceTypeComponent implements OnInit {
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
+  @Input() hideButton: boolean
 
   constructor() {
     console.log('Hello checkboxTypeComponent Component');

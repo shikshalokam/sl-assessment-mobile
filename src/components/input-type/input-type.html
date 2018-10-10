@@ -4,13 +4,13 @@
   </ion-col>
 <div>
   <ion-item text-center no-padding>
-    <ion-input type="{{data?.responseType}}" placeholder="{{data?.tip}}" [(ngModel)]="data.value"></ion-input>
+    <ion-input type="{{data?.responseType}}" placeholder="{{data?.question}}" [(ngModel)]="data.value"></ion-input>
   </ion-item>
   <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
   <image-upload *ngIf="data?.file" [data]="data" [evidenceId]="evidenceId"></image-upload>
 
 </div>
-<div class="_footer">
+<div class="_footer" *ngIf="!hideButton">
   <ion-row>
     <ion-col>
       <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">

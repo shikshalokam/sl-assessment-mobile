@@ -11,7 +11,7 @@
 
 </div>
 
-<div class="_footer">
+<div class="_footer" *ngIf="!hideButton">
   <ion-row>
     <ion-col>
       <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">

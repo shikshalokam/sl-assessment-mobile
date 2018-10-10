@@ -8,6 +8,7 @@ import { RemarksComponent } from './remarks/remarks';
 import { ImageUploadComponent } from './image-upload/image-upload';
 import { DirectivesModule } from '../directives/directives.module';
 import { MatrixTypeComponent } from './matrix-type/matrix-type';
+import { MatrixModalComponent } from './matrix-modal/matrix-modal';
 
 @NgModule({
 	declarations: [
@@ -17,7 +18,8 @@ import { MatrixTypeComponent } from './matrix-type/matrix-type';
     DateTypeComponent,
     RemarksComponent,
     ImageUploadComponent,
-    MatrixTypeComponent],
+    MatrixTypeComponent,
+    MatrixModalComponent],
 	imports: [
 		IonicModule,
 		DirectivesModule
@@ -29,11 +31,13 @@ import { MatrixTypeComponent } from './matrix-type/matrix-type';
     DateTypeComponent,
     RemarksComponent,
     ImageUploadComponent,
-    MatrixTypeComponent
+    MatrixTypeComponent,
+    MatrixModalComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
-		RadioTypeComponent
+		RadioTypeComponent,
+		MatrixModalComponent
 	]
 })
 export class ComponentsModule { }

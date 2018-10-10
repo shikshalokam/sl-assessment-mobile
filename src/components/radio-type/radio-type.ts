@@ -18,6 +18,7 @@ export class RadioTypeComponent {
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
+  @Input() hideButton: boolean;
 
   constructor() {
     console.log('Hello RadioTypeComponent Component');

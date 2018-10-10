@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <div class="_flex-box">
+      <ion-title text-capitalize>{{data?.instanceIdentifier}} {{selectedIndex+1 }}</ion-title>
+      <ion-icon name="close" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px"
+           margin-right float-right></ion-icon>
+    </div>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <div class="container">
+    <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
+      <h4 *ngFor="let question of data.question">{{question}}</h4>
+    </ion-col>
+
+    <div *ngFor="let instance of data?.value; let i = index">
+      <ng-container *ngIf="selectedIndex ===i">
+        <!-- <div text-capitalize padding-top padding-bottom>{{datas?.instanceIdentifier}} {{i+1}}</div> -->
+        <div class="_fullScreenCard">
+          <ng-container [ngSwitch]="question?.responseType" *ngFor="let question of instance; let j=index" margin-bottom>
+            <input-type [data]="question" *ngSwitchCase="'text'" [hideButton]="true"></input-type>
+            <input-type [data]="question" *ngSwitchCase="'number'" [hideButton]="true"></input-type>
+            <radio-type [data]="question" *ngSwitchCase="'radio'" [hideButton]="true"></radio-type>
+            <date-type [data]="question" *ngSwitchCase="'date'" [hideButton]="true"></date-type>
+            <multiple-choice-type [data]="question" *ngSwitchCase="'multiselect'" [hideButton]="true"></multiple-choice-type>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+
+  </div>
+</ion-content>
+<div class="_footer">
+  <ion-row>
+    <!-- <ion-col>
+        <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">
+          <ion-icon name="arrow-back"></ion-icon>Close
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button>
+        <button ion-button icon-start float-right color="primary" (click)="next('completed')" *ngIf="isLast">
+          <ion-icon name="filing"></ion-icon>Save
+        </button>
+      </ion-col> -->
+    <button ion-button icon-start full color="primary" (click)="update()" *ngIf="!isLast">
+      <ion-icon name="filing"></ion-icon>Save
+    </button>
+
+  </ion-row>
+</div>

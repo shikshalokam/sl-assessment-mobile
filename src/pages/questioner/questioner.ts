@@ -63,6 +63,8 @@ export class QuestionerPage {
       if (this.questions[this.start].visibleIf && !this.checkForQuestionDisplay(this.questions[this.start])) {
         this.questions[this.start].isCompleted = true;
         this.next();
+      } else if(this.questions[this.start].visibleIf && this.checkForQuestionDisplay(this.questions[this.start])) {
+        // if()
       }
     } else if (status === 'completed') {
       this.utils.setLocalSchoolData(this.schoolData);
@@ -84,8 +86,12 @@ export class QuestionerPage {
 
     let display = false;
     for (const question of this.questions) {
-      if ((question._id === qst.visibleIf[0]._id) && (eval(question.value + qst.visibleIf[0].operator + qst.visibleIf[0].value))) {
+      console.log('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"');
+      if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
         display = true;
+        // if (qst.validation.minNoOfInstance === 'value') {
+        //   qst.validation.minNoOfInstance = question.value;
+        // }
       }
     }
     return display
@@ -94,7 +100,7 @@ export class QuestionerPage {
   updateTheChildrenQuestions(parentQuestion) {
     for (const child of parentQuestion.children) {
       for (const question of this.questions) {
-        if (child === question._id && parentQuestion.value === question.visibleIf[0].value && !question.value) {
+        if (child === question._id && (eval('"' + parentQuestion.value + '"' + question.visibleIf[0].operator + '"' + question.visibleIf[0].value + '"')) && !question.value) {
           question.isCompleted = false;
         } else if (child === question._id && parentQuestion.value !== question.visibleIf[0].value) {
           question.isCompleted = true;

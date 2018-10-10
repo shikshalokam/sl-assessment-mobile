@@ -19,10 +19,7 @@ export class ImageUploadComponent implements OnInit {
   @Input()
   set data(data) {
     this.datas = data;
-    // if (data['imageNames']) {
-    //   console.log(JSON.stringify(data['imageNames']))
-      this.createImageFromName(data['fileName'])
-    // }
+    this.createImageFromName(data['fileName'])
   }
 
   get name() {

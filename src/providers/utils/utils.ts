@@ -30,7 +30,7 @@ export class UtilsProvider {
   openToast(msg, closeBtn?: string) {
     let toast = this.toastCtrl.create({
       message: msg,
-      duration: closeBtn ? 0 : 3000 ,
+      duration: closeBtn ? 0 : 3000,
       position: 'bottom',
       closeButtonText: closeBtn,
       showCloseButton: closeBtn ? true : false
@@ -98,8 +98,37 @@ export class UtilsProvider {
     alert.present();
   }
 
-  progressCalculate() {
+  isQuestionComplete(question): boolean {
+    let isComplete = true;
+    if (question.validation.required && !question.value) {
+      isComplete = false;
+      return isComplete
+    }
+    if (question.file.required && (question.fileName.length <= question.file.minCount)) {
+      isComplete = false;
+      return isComplete
+    }
+    // if(question.validation.regex && !question.value.match(question.validation.regex)){
 
+    // }
+    return isComplete
+  }
+
+  isMatrixQuestionComplete(question): boolean {
+    let isComplete = true;
+    if (question.instanceQuestions.length < question.minNoOfInstance) {
+      isComplete = false;
+      return isComplete
+    }
+    for (const instance of question.instanceQuestions) {
+      for (const question of instance) {
+        if (!this.isQuestionComplete(question)) {
+          isComplete = false;
+          return isComplete
+        }
+      }
+    }
+    return isComplete
   }
 
 }

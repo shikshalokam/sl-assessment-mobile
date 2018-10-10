@@ -43,6 +43,8 @@ import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { ImagePicker } from '@ionic-native/image-picker';
 import { ImageListingPage } from '../pages/image-listing/image-listing';
+import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
+
 
 @NgModule({
   declarations: [
@@ -55,7 +57,8 @@ import { ImageListingPage } from '../pages/image-listing/image-listing';
     SchoolListPage,
     FaqPage,
     SchoolProfileEditPage,
-    ImageListingPage
+    ImageListingPage,
+    MatrixActionModalPage
   ],
   imports: [
     BrowserModule,
@@ -82,7 +85,8 @@ import { ImageListingPage } from '../pages/image-listing/image-listing';
     SchoolListPage,
     FaqPage,
     SchoolProfileEditPage,
-    ImageListingPage
+    ImageListingPage,
+    MatrixActionModalPage
   ],
   providers: [
     StatusBar,
