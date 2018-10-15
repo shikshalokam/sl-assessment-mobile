@@ -11,6 +11,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 @Component({
   selector: 'page-welcome',
@@ -38,7 +39,7 @@ export class WelcomePage {
     private auth: AuthProvider, private currentUser: CurrentUserProvider,
     private toastCtrl: ToastController, private network: Network,
     private permissions: AndroidPermissions, private geolocation: Geolocation,
-    private diagnostic: Diagnostic, private utils: UtilsProvider) {
+    private diagnostic: Diagnostic, private utils: UtilsProvider, private locationAccuracy: LocationAccuracy) {
     this.subscription = this.network.onDisconnect().subscribe(() => {
       // this.presentToast('Network was disconnected :-(');
       this.networkAvailable = false
@@ -60,14 +61,37 @@ export class WelcomePage {
     this.subscription.unsubscribe();
   }
 
+  enableGPSRequest() {
+    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+
+      if (canRequest) {
+        // the accuracy option will be ignored by iOS
+        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+          () => {
+            this.getCurrentLocation();
+          },
+          error => {
+            console.log('Error requesting location permissions', error);
+            this.enableGPSRequest()
+          }
+        );
+      }
+
+    });
+  }
+
 
   getCurrentLocation(): void {
-    console.log('getting current location')
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.utils.openToast(JSON.stringify(resp))
-
+    console.log('getting current location');
+    const options = {
+      timeout: 20000
+    }
+    this.geolocation.getCurrentPosition(options).then((resp) => {
+      this.utils.openToast(resp.coords.latitude + " " + resp.coords.longitude)
+      console.log(JSON.stringify(resp));
     }).catch((error) => {
-      this.utils.openToast('Error getting location' + JSON.stringify(error))
+      this.utils.openToast('Error getting location' + JSON.stringify(error));
+      console.log(error.message + " " + error.code)
     });
   }
 
@@ -94,14 +118,15 @@ export class WelcomePage {
           console.log("ask permission");
           this.permissions.requestPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(result => {
             if (result.hasPermission) {
-              this.isLocationEnabled();
+              this.enableGPSRequest();
             }
           }).catch(error => {
             console.log('error')
           })
         } else {
           console.log('yes, Has permission');
-          this.isLocationEnabled();
+          // this.isLocationEnabled();
+          this.enableGPSRequest();
         }
       }).catch(error => {
         console.log("Error check for permission" + JSON.stringify(error))
@@ -128,7 +153,8 @@ export class WelcomePage {
         this.responseData = JSON.stringify(code);
         return this.auth.doOAuthStepTwo(code);
       }).then(response => {
-        this.navCtrl.push(TabsPage);
+        this.navCtrl.setRoot(TabsPage)
+        // this.navCtrl.push(TabsPage);
         // this.presentToast("Login Successful")
       })
   }
@@ -137,7 +163,7 @@ export class WelcomePage {
     this.skipMsg = "Skip";
     console.log('ionViewDidLoad WelcomePage');
     this.checkForLocationPermissions();
-
+    // this.gelLoc();
 
     if (this.network.type != 'none') {
       this.networkAvailable = true;

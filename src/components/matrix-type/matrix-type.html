@@ -6,7 +6,7 @@
   <ion-list>
     <button ion-item text-capitalize *ngFor="let instance of data?.value; let i = index" (click)="viewInstance(i)">
       {{data?.instanceIdentifier}} {{i+1}}
-      <ion-icon name="trash" item-end margin-right></ion-icon>
+      <ion-icon name="trash" class="deletOption" item-end margin-right (click)="deleteInstance(i)"></ion-icon>
 
     </button>
   </ion-list>

@@ -44,7 +44,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { ImagePicker } from '@ionic-native/image-picker';
 import { ImageListingPage } from '../pages/image-listing/image-listing';
 import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
-
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 @NgModule({
   declarations: [
@@ -108,7 +108,8 @@ import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-actio
     File,
     FilePath,
     FileTransfer,
-    ImagePicker
+    ImagePicker,
+    LocationAccuracy
   ]
 })
 export class AppModule { }

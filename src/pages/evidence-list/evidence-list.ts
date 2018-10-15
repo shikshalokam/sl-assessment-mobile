@@ -67,6 +67,12 @@ export class EvidenceListPage {
     this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
   }
 
+  ionViewWillLeave(){
+    if(this.navParams.get('parent')){
+      this.navParams.get('parent').onInit();
+    }
+  }
+
   feedBack() {
     this.utils.sendFeedback()
   }

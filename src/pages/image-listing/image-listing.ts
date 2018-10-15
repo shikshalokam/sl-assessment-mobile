@@ -39,7 +39,7 @@ export class ImageListingPage {
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
-    
+
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
       this.currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex];
@@ -49,13 +49,13 @@ export class ImageListingPage {
 
     })
     this.storage.get('images').then(data => {
-      console.log(data)
+      // console.log(data)
       this.uploadImages = JSON.parse(data) ? JSON.parse(data)[this.currentEvidenceId] : [];
-      console.log(this.uploadImages)
+      // console.log(this.uploadImages)
       if (this.uploadImages.length) {
         this.createImageFromName(this.uploadImages);
       } else {
-        console.log('Evidence submit');
+        // console.log('Evidence submit');
         this.submitEvidence();
       }
     })
@@ -69,7 +69,7 @@ export class ImageListingPage {
     for (const image of this.uploadImages) {
       files.files.push(image.name)
     }
-    console.log(JSON.stringify(files))
+    // console.log(JSON.stringify(files))
     this.apiService.httpPost(AppConfigs.survey.getImageUploadUr, files, success => {
       console.log(JSON.stringify(success));
       for (let i = 0; i < success.result.length; i++) {
@@ -93,7 +93,7 @@ export class ImageListingPage {
         this.file.readAsDataURL(this.appFolderPath, image.name).then(data => {
           console.log("Done");
           this.imageList.push({ data: data, uploaded: false, file: image.name, url: "" });
-          console.log(this.imageList.length);
+          // console.log(this.imageList.length);
         }).catch(err => {
           console.log('Error ' + JSON.stringify(err))
         })
@@ -123,7 +123,7 @@ export class ImageListingPage {
     // console.log(JSON.stringify(this.file.resolveLocalFilesystemUrl(cordova.file.externalDataDirectory + 'Samiksha/'+image.file)));
     let fileTrns: FileTransferObject = this.fileTransfer.create();
     fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
-      console.log(JSON.stringify(result));
+      // console.log(JSON.stringify(result));
       console.log("Uploaded image" + this.uploadIndex);
       // this.uploaded = "File uploaded";
       this.imageList[this.uploadIndex].uploaded = true;
@@ -148,8 +148,7 @@ export class ImageListingPage {
 
 
   submitEvidence() {
-    // this.utils.startLoader();
-    this.utils.startLoader('Please wait while submitting ...')
+    this.utils.startLoader('Please wait while submitting')
     const payload = this.constructPayload();
     console.log(JSON.stringify(payload));
 
@@ -159,62 +158,83 @@ export class ImageListingPage {
       this.utils.openToast(response.message);
       this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       this.utils.setLocalSchoolData(this.schoolData);
-      // this.navCtrl.setRoot('EvidenceListPage');
-      // this.navCtrl.popToRoot();
       this.utils.stopLoader()
       const options = {
         _id: this.schoolId,
         name: this.schoolName
       }
-      // this.app.push('EvidenceListPage', options);
       this.utils.stopLoader();
       this.navCtrl.popTo('EvidenceListPage');
-      // this.navCtrl.popToRoot()
-
-      // console.log(JSON.stringify(response))
     }, error => {
       this.utils.stopLoader();
-      // console.log(JSON.stringify(error))
     })
-    // console.log(JSON.stringify(this.constructPayload()));
 
   }
 
-  constructPayload() {
+  constructPayload(): any {
     console.log("in construct")
     const payload = {
-      'schoolProfile': {},
+      // 'schoolProfile': {},
       'evidence': {}
     }
-    const schoolProfile = {};
+    // const schoolProfile = {};
     const evidence = {
       id: "",
       externalId: "",
-      answers: []
+      answers: {},
+      startTime: 0,
+      endTime: 0
     };
-    for (const field of this.schoolData[this.schoolId]['schoolProfile']['form']) {
-      schoolProfile[field.field] = field.value
-    }
+    // for (const field of this.schoolData[this.schoolId]['schoolProfile']['form']) {
+    //   schoolProfile[field.field] = field.value
+    // }
     // schoolProfile['updatedBy'] =  this.userData.sub;
-    schoolProfile['updatedDate'] = Date.now();
-
-    evidence.id = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]._id;
-    evidence.externalId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
-
+    // schoolProfile['updatedDate'] = Date.now();
+    const currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]
+    evidence.id = currentEvidence._id;
+    evidence.externalId = currentEvidence.externalId;
+    evidence.startTime = currentEvidence.startTime;
+    evidence.endTime = Date.now();
     for (const section of this.evidenceSections) {
       for (const question of section.questions) {
-        const obj = {
+        let obj = {
           qid: question._id,
-          value: question.value,
+          value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
           remarks: question.remarks,
           fileName: question.fileName
         };
-        evidence.answers.push(obj);
+
+        for (const key of Object.keys(question.payload)) {
+          obj[key] = question.payload[key];
+        }
+        evidence.answers[obj.qid] = obj;
       }
     }
-    payload.schoolProfile = schoolProfile;
+    // payload.schoolProfile = schoolProfile;
     payload.evidence = evidence;
     return payload
+  }
+
+  constructMatrixObject(question) {
+    const value = [];
+    for (const instance of question.value) {
+      let eachInstance = {};
+      for (let qst of instance) {
+
+        const obj1 = {
+          qid: qst._id,
+          value: qst.value,
+          remarks: qst.remarks,
+          fileName: qst.fileName
+        }
+        for (const key of Object.keys(qst.payload)) {
+          obj1[key] = qst.payload[key];
+        }
+        eachInstance[obj1.qid] = obj1;
+      }
+      value.push(eachInstance)
+    }
+    return value
   }
 
 }

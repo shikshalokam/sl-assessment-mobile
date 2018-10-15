@@ -3,4 +3,8 @@ matrix-type {
         bottom: 80px !important;
         position: fixed;
     }
+    .deletOption {
+        color: $red-color;
+        z-index: 1;
+    }
 }

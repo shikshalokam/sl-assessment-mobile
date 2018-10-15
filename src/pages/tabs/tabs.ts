@@ -99,7 +99,8 @@ export class TabsPage {
           if (data.captcha === this.captcha) {
             this.auth.doLogout().then(response => {
               this.currentUser.removeUser();
-              this.app.getRootNav().push(WelcomePage)
+              this.navCtrl.setRoot(WelcomePage);
+              // this.app.getRootNav().push(WelcomePage)
             })
           } else {
             this.utils.openToast('Logout code miss match.Please try to logout again.', 'Ok')

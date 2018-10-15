@@ -40,7 +40,7 @@ export class SectionListPage {
     // console.log(JSON.stringify(this.userData))
     console.log('ionViewDidLoad SectionListPage');
     this.userData = this.currentUser.getCurrentUserData();
-    this.schoolId = this.navParams.get('_id');
+    this.schoolId =  this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.storage.get('schoolsDetails').then(data => {
@@ -179,4 +179,10 @@ export class SectionListPage {
     this.utils.sendFeedback()
   }
 
+
+  ionViewWillLeave(){
+    if(this.navParams.get('parent')){
+      this.navParams.get('parent').onInit();
+    }
+  }
 }

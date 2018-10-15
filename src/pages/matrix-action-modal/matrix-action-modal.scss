@@ -2,4 +2,15 @@ page-matrix-action-modal {
     .container {
         margin-bottom: 60px;
     }
+
+    .closeBtn {
+        color: white !important;
+        font-size: 24px;
+        padding-right: 10px
+    }
+    .customFooter {
+        // border: transparent;
+        // background: transparent;
+        padding: 0;
+    }
 }

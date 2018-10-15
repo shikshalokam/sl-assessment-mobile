@@ -4,15 +4,81 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
- <h2>Welcome {{userData?.name}}!</h2>
-   <!-- <img src="{{currentImage}}">{{lastImage}}
+<ion-content>
+    <ion-card>
+        <!-- 
+            <ion-card-header>
+              Card Header
+            </ion-card-header> -->
+    
+        <ion-card-content>
+          <!-- Add card content here! -->
+          <h2>Welcome {{userData?.name}}!</h2>
+    
+        </ion-card-content>
+    
+      </ion-card>
+      
+  <!-- <h2 padding-left>Welcome {{userData?.name}}!</h2> -->
+  <!-- <img src="{{currentImage}}">{{lastImage}}
   <button ion-button full (click)="getPicture()">Take a pic</button>
   <button ion-button full (click)="checkForFile()">get a pic</button>
 {{isFileExist}}
 <div>{{uploaded}}</div> -->
 
-<!-- <div>
+  <!-- <div>
   <image-upload></image-upload>
 </div> -->
+  <!-- <ng-container *ngFor="let school of schoolList; let i = index">
+  {{school?.name}}
+</ng-container> -->
+  <ion-card *ngFor="let school of schoolList; let i = index">
+    <!-- <ion-card-header>
+      <ion-icon name="book" margin-right></ion-icon>{{school?.name}} - {{school?.externalId}}
+    </ion-card-header> -->
+    <ion-item-group>
+      <ion-item-divider color="light" (click)="goToProfile(school)">
+        <h3 class="headerText">
+          <ion-icon name="book" margin-right></ion-icon>{{school?.name}} - {{school?.externalId}}
+          <!-- <ion-icon name='eye' class="viewIcon" float-right large></ion-icon> -->
+          <span float-right class="more" >View </span>
+        </h3>
+      </ion-item-divider>
+    </ion-item-group>
+
+    <ion-card-content no-padding *ngIf="school && schoolDetails[school._id.toString()]">
+
+      <ion-list>
+        <button ion-item (click)="goToSections(school, j)" *ngFor="let evidence of schoolDetails[school._id.toString()]['assessments'][0]['evidences'] |slice:0:3; let j = index">
+          <ion-icon name="albums" margin-right></ion-icon>{{ evidence?.name }}
+          <span float-right *ngIf="evidence.progressStatus === 'completed'" class="_completed _flex-box">
+            Completed <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
+          </span>
+          <span float-right *ngIf="!evidence.progressStatus" class=" _flex-box">
+            <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
+          </span>
+          <span float-right *ngIf="evidence.progressStatus === 'inProgress'" class="_inProgress _flex-box">
+            In Progress <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
+          </span>
+          <span float-right *ngIf="evidence.progressStatus === 'submitted'" class="_submitted _flex-box">
+            Submitted <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
+          </span>
+
+        </button>
+        <button ion-item class="more" (click)="gotToEvidenceList(school)" *ngIf="schoolDetails[school._id.toString()]['assessments'][0]['evidences'].length > 3">
+          More
+        </button>
+      </ion-list>
+    </ion-card-content>
+
+    <!-- <ion-row no-padding>
+      <ion-col>
+        <button ion-button clear small color="danger" icon-end>
+          <ion-icon name='eye' margin-right></ion-icon>
+          View Profile
+        </button>
+
+      </ion-col>
+    </ion-row> -->
+  </ion-card>
 </ion-content>

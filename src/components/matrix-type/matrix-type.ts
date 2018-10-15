@@ -18,9 +18,9 @@ export class MatrixTypeComponent {
   mainInstance: any;
   constructor(private modalCntrl: ModalController) {
     console.log('Hello MatrixTypeComponent Component');
-    // this.text = 'Hello World';
   }
   next(status?: any) {
+    console.log(JSON.stringify(this.data));
     this.data.isCompleted = (this.data.value && this.data.value.length) ? true : false;
     this.nextCallBack.emit(status);
   }
@@ -29,34 +29,27 @@ export class MatrixTypeComponent {
     this.data.isCompleted = (this.data.value && this.data.value.length) ? true : false;
     this.previousCallBack.emit('previous');
   }
-  addInstances():void {
+  addInstances(): void {
     this.data.value = this.data.value ? this.data.value : [];
-    // this.mainInstance = this.mainInstance ? this.mainInstance: Object.assign([], this.data.instanceQuestions);
-    console.log(JSON.stringify(this.data.instanceQuestions));
-    // console.log(JSON.stringify(this.mainInstance))
-    this.data.value.push( JSON.parse(JSON.stringify(this.data.instanceQuestions)));
+    this.data.value.push(JSON.parse(JSON.stringify(this.data.instanceQuestions)));
   }
 
   viewInstance(i): void {
     console.log("open modal");
     const obj = {
-      selectedIndex :i,
-      data: this.data 
+      selectedIndex: i,
+      data: this.data
     }
     let matrixModal = this.modalCntrl.create(MatrixActionModalPage, obj);
     matrixModal.onDidDismiss(data => {
-      this.data.value[i] = data.value[i];
-      console.log(JSON.stringify(data));
+      if (data) {
+        this.data.value[i] = data.value[i];
+      }
     })
     matrixModal.present();
   }
 
-  resetValaues(questions) {
-    for (const question of questions) {
-      question.value = ""
-    }
-    console.log(questions);
-    return questions
+  deleteInstance(instanceIndex): void {
+    this.data.value.splice(instanceIndex, 1)
   }
-
 }

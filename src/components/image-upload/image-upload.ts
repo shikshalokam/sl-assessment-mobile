@@ -5,6 +5,7 @@ import { File } from '@ionic-native/file';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
+import { imageLocalListName} from "../../providers/appConfig"
 
 declare var cordova: any;
 
@@ -47,6 +48,11 @@ export class ImageUploadComponent implements OnInit {
   //   // this.userData = this.currentUser.getCurrentUserData();
   // }
   ngOnInit() {
+    // let localImageListName: imageLocalListName;
+    // localImageListName = {
+    //   evidenceId:"",
+    //   schoolId:"",
+    // }
     this.storage.get('images').then(data => {
       this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
       this.localEvidenceImageList = (this.allLocalImageList && this.allLocalImageList[this.evidenceId]) ? this.allLocalImageList[this.evidenceId] : [];
@@ -104,9 +110,6 @@ export class ImageUploadComponent implements OnInit {
   checkForLocalFolder(imagePath) {
     let currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
     let currentPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-    // console.log('before')
-    //  const fileName  =  this.createFileName();
-    // console.log('after' )
 
     this.file.checkDir(this.file.externalDataDirectory, 'images').then(success => {
       this.copyFileToLocalDir(currentPath, currentName);
@@ -119,39 +122,13 @@ export class ImageUploadComponent implements OnInit {
 
 
   createFileName() {
-    // let imageName = this.data._id + '_' + this.imageNameCounter;
     let d = new Date(),
       n = d.getTime(),
       newFileName = n + ".jpg";
     return newFileName;
-    // this.isFilePresent(imageName).then(filePresent => {
-    //   console.log("file name" + imageName);
-    //   return imageName
-    // }).catch(fileNotPresent => {
-    //   this.imageNameCounter++;
-    //   this.createFileName()
-    // })
-
-    // if(this.localEvidenceImageList.indexOf(imageName) > -1){
-    //   this.imageNameCounter ++;
-    //   this.createFileName();
-    // } else {
-    //   return imageName
-    // }
   }
 
-  // isFilePresent(fileName): Promise<any> {
-  //   return new Promise((resolve, reject) => {
-  //     this.file.checkFile(this.appFolderPath + '/', fileName).then(response => {
-  //       reject();
-  //     }).catch(error => {
-  //       resolve();
-  //     })
-  //   })
-  // }
-
   copyFileToLocalDir(namePath, currentName) {
-    // console.log(newFileName)
     this.file.copyFile(namePath, currentName, this.appFolderPath, currentName).then(success => {
       console.log(JSON.stringify(success));
       this.pushToImageList(currentName);
@@ -161,7 +138,6 @@ export class ImageUploadComponent implements OnInit {
 
   pushToImageList(fileName) {
     this.file.checkFile(this.appFolderPath + '/', fileName).then(response => {
-      // console.log('Check For file name : ' + response);
       this.file.readAsDataURL(this.appFolderPath, fileName).then(data => {
         this.imageList.push(data);
         this.datas.fileName.push(fileName);

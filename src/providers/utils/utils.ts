@@ -6,11 +6,12 @@ import { Storage } from '@ionic/storage';
 import { AlertController } from 'ionic-angular';
 import { ApiProvider } from '../api/api';
 import { AppConfigs } from '../appConfig';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 @Injectable()
 export class UtilsProvider {
 
-  constructor(public http: HttpClient, public loadingCtrl: LoadingController, private apiService: ApiProvider,
+  constructor(public http: HttpClient, private locationAccuracy: LocationAccuracy, public loadingCtrl: LoadingController, private apiService: ApiProvider,
     private toastCtrl: ToastController, private storage: Storage, private alertCtrl: AlertController) {
     console.log('Hello UtilsProvider Provider');
   }
@@ -131,4 +132,22 @@ export class UtilsProvider {
     return isComplete
   }
 
+  enableGPSRequest(){
+    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+      if (canRequest) {
+        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+          () => {
+            return true;
+          },
+          error => {
+            console.log('Error requesting location permissions', error);
+            this.enableGPSRequest()
+          }
+        );
+      }
+
+    });
+  }
+
 }
+

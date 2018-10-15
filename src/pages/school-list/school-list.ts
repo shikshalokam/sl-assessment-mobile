@@ -43,7 +43,6 @@ export class SchoolListPage {
       // console.log(JSON.stringify(this.schoolList));
       this.storage.set('schools', this.schoolList);
       this.getSchoolDetails();
-      this.utils.stopLoader();
     }, error => {
       this.utils.stopLoader();
       if (error.status == '401') {
@@ -85,6 +84,7 @@ export class SchoolListPage {
     // console.log(JSON.stringify(response));
     this.schoolDetails.push(response.result);
     if (this.schoolDetails.length === this.schoolList.length) {
+      this.utils.stopLoader();
       // console.log(JSON.stringify(this.schoolDetails));
       // console.log("in")
       const schoolDetailsObj = {}
@@ -103,5 +103,10 @@ export class SchoolListPage {
 
     // this.navCtrl.push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
   }
+
+  ionViewWillEnter() {
+    console.log("init")
+  }
+
 
 }

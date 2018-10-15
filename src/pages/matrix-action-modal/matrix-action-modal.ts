@@ -27,8 +27,12 @@ export class MatrixActionModalPage {
     console.log('ionViewDidLoad MatrixActionModalPage');
   }
 
-  update() {
+  update(): void {
     this.viewCntrl.dismiss(this.data)
+  }
+
+  cancel(): void {
+    this.viewCntrl.dismiss();
   }
 
 }

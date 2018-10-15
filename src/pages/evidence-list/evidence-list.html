@@ -36,8 +36,8 @@
         <span float-right *ngIf="evidence.progressStatus === 'completed'" class="_completed _flex-box">
           Completed <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
         </span>
-        <span float-right *ngIf="!evidence.progressStatus" class="_completed _flex-box">
-          Start <ion-icon name="arrow-dropright-circle" class="_progressIcon" margin-left></ion-icon>
+        <span float-right *ngIf="!evidence.progressStatus" class="_flex-box">
+          <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
         </span>
         <span float-right *ngIf="evidence.progressStatus === 'inProgress'" class="_inProgress _flex-box">
           In Progress <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
