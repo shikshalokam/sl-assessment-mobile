@@ -19,7 +19,7 @@
   </div>
 </div>
 
-<div class="_footer">
+<!-- <div class="_footer">
   <ion-row>
     <ion-col>
       <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">
@@ -33,4 +33,6 @@
       </button>
     </ion-col>
   </ion-row>
-</div>
+</div> -->
+
+<footer-buttons  [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons>

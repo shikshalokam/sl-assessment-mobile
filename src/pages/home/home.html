@@ -1,47 +1,25 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>Home</ion-title>
+    <ion-title [translate]="'home'"></ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <ion-card>
-        <!-- 
-            <ion-card-header>
-              Card Header
-            </ion-card-header> -->
-    
-        <ion-card-content>
-          <!-- Add card content here! -->
-          <h2>Welcome {{userData?.name}}!</h2>
-    
-        </ion-card-content>
-    
-      </ion-card>
-      
-  <!-- <h2 padding-left>Welcome {{userData?.name}}!</h2> -->
-  <!-- <img src="{{currentImage}}">{{lastImage}}
-  <button ion-button full (click)="getPicture()">Take a pic</button>
-  <button ion-button full (click)="checkForFile()">get a pic</button>
-{{isFileExist}}
-<div>{{uploaded}}</div> -->
+  <ion-card>
+    <ion-card-content>
+      <!-- Add card content here! -->
+      <h2>{{'labels.welcome'|translate}} {{userData?.name}}!</h2>
+    </ion-card-content>
+  </ion-card>
 
-  <!-- <div>
-  <image-upload></image-upload>
-</div> -->
-  <!-- <ng-container *ngFor="let school of schoolList; let i = index">
-  {{school?.name}}
-</ng-container> -->
   <ion-card *ngFor="let school of schoolList; let i = index">
-    <!-- <ion-card-header>
-      <ion-icon name="book" margin-right></ion-icon>{{school?.name}} - {{school?.externalId}}
-    </ion-card-header> -->
+
     <ion-item-group>
       <ion-item-divider color="light" (click)="goToProfile(school)">
         <h3 class="headerText">
           <ion-icon name="book" margin-right></ion-icon>{{school?.name}} - {{school?.externalId}}
           <!-- <ion-icon name='eye' class="viewIcon" float-right large></ion-icon> -->
-          <span float-right class="more" >View </span>
+          <!-- <span float-right class="more">View </span> -->
         </h3>
       </ion-item-divider>
     </ion-item-group>
@@ -52,16 +30,16 @@
         <button ion-item (click)="goToSections(school, j)" *ngFor="let evidence of schoolDetails[school._id.toString()]['assessments'][0]['evidences'] |slice:0:3; let j = index">
           <ion-icon name="albums" margin-right></ion-icon>{{ evidence?.name }}
           <span float-right *ngIf="evidence.progressStatus === 'completed'" class="_completed _flex-box">
-            Completed <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
+              {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
           </span>
           <span float-right *ngIf="!evidence.progressStatus" class=" _flex-box">
             <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
           </span>
           <span float-right *ngIf="evidence.progressStatus === 'inProgress'" class="_inProgress _flex-box">
-            In Progress <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
+              {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
           </span>
           <span float-right *ngIf="evidence.progressStatus === 'submitted'" class="_submitted _flex-box">
-            Submitted <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
+              {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
           </span>
 
         </button>
@@ -71,14 +49,18 @@
       </ion-list>
     </ion-card-content>
 
-    <!-- <ion-row no-padding>
+    <ion-row no-padding class="separation">
       <ion-col>
-        <button ion-button clear small color="danger" icon-end>
+        <button ion-button clear small color="primary" icon-end (click)="goToProfile(school)" >
           <ion-icon name='eye' margin-right></ion-icon>
-          View Profile
+          {{'buttons.view'|translate}} {{'buttons.profile'|translate}}
         </button>
-
+        <button ion-button clear small color="primary" icon-end float-right (click)="goToRating(school)">
+          <ion-icon name='star' margin-right></ion-icon>
+          {{'buttons.ratings'|translate}}
+        </button>
       </ion-col>
-    </ion-row> -->
+    </ion-row>
+    
   </ion-card>
 </ion-content>

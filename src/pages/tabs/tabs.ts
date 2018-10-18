@@ -31,17 +31,17 @@ export class TabsPage {
   selectedTab(index): void {
     switch (index) {
       case 0: default:
-        this.header = "Home";
+        this.header = "headings.home";
         this.generateCaptcha();
         break;
       case 1:
-        this.header = "My Schools";
+        this.header = "headings.school";
         break;
       case 2:
-        this.header = "FAQs";
+        this.header = "headings.faqs";
         break;
       case 3:
-        this.header = "About";
+        this.header = "headings.about";
         break;
     }
   }
@@ -98,7 +98,7 @@ export class TabsPage {
         handler: data => {
           if (data.captcha === this.captcha) {
             this.auth.doLogout().then(response => {
-              this.currentUser.removeUser();
+              // this.currentUser.removeUser();
               this.navCtrl.setRoot(WelcomePage);
               // this.app.getRootNav().push(WelcomePage)
             })

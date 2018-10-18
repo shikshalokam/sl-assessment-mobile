@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ViewController } from 'ionic-angular';
-/**
- * Generated class for the MatrixActionModalPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { UtilsProvider } from '../../providers/utils/utils';
+
 
 @Component({
   selector: 'page-matrix-action-modal',
@@ -17,7 +13,8 @@ export class MatrixActionModalPage {
   instanceDetails: any;
   selectedIndex: any;
   data: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private viewCntrl: ViewController) {
+  constructor(public navCtrl: NavController, private utils: UtilsProvider,
+    public navParams: NavParams, private viewCntrl: ViewController) {
     this.selectedIndex = navParams.data.selectedIndex;
     const data = navParams.data.data;
     this.data = Object.assign(data);
@@ -28,6 +25,9 @@ export class MatrixActionModalPage {
   }
 
   update(): void {
+    for (const question of this.data.value[this.selectedIndex]) {
+      question.isCompleted = this.utils.isQuestionComplete(question);
+    }
     this.viewCntrl.dismiss(this.data)
   }
 

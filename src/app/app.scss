@@ -23,6 +23,7 @@ $blue-color: #488aff;
 $red-color: #DC143C;
 $orange-color: #FF8C00;
 $toolbar-background: $blue-color;
+$black-color: #222;
 
 ion-content {
     background: $grey-color !important;
@@ -158,4 +159,19 @@ ion-content {
         text-align: center;
         font-size: 4rem;
     }
+}
+
+._multiLineList {
+    overflow: visible;
+    white-space: normal;
+}
+
+._errorBox {
+    height: 50vh;
+}
+
+._errorMsg {
+    color: $red-color;
+    height: 12px;
+    margin-top: 5px;
 }

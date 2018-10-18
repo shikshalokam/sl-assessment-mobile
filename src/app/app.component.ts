@@ -7,6 +7,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { UtilsProvider } from '../providers/utils/utils';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   templateUrl: 'app.html'
@@ -18,22 +19,35 @@ export class MyApp {
   // rootPage: any = "LoginPage";
 
   constructor(
-    private platform: Platform, 
-    private statusBar: StatusBar, 
+    private platform: Platform,
+    private statusBar: StatusBar,
     private splashScreen: SplashScreen,
     private currentUser: CurrentUserProvider,
     private alertCtrl: AlertController,
-    private utils:UtilsProvider
+    private utils: UtilsProvider,
+    private translate: TranslateService
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-
       this.initilaizeApp();
       this.registerBAckButtonAction();
-
+      this.initTranslate();
     });
   }
+
+  initTranslate() {
+    this.translate.setDefaultLang('en');
+
+
+    // if (this.translate.getBrowserLang() !== undefined) {
+    //   console.log("language")
+    //     this.translate.use(this.translate.getBrowserLang());
+    // } else {
+    //     this.translate.use('hi'); // Set your language here
+    // }
+
+}
 
   initilaizeApp(): void {
     this.statusBar.styleDefault();

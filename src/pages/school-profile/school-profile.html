@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="primary">
     <div class="_flex-box">
-      <ion-title>School Profile</ion-title>
+      <ion-title>{{'headings.school' | translate}} {{'headings.profile' | translate}}</ion-title>
       <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px"
         (click)="feedBack()" margin-right float-right></ion-icon>
     </div>
@@ -57,13 +57,15 @@
     <ion-row>
       <ion-col>
         <button ion-button full (click)="goToPage()" class="btnText">
-          Start Survey
+          {{'buttons.start' | translate}} {{'buttons.survey' | translate}}
           <ion-icon name="arrow-forward" margin-left></ion-icon>
         </button>
       </ion-col>
-      <!-- <ion-col>
-        <button ion-button float-right block outline>Rating</button>
-      </ion-col> -->
+      <ion-col>
+        <button ion-button float-right block outline icon-start (click)="goToRating()">
+          <ion-icon name="star" margin-right></ion-icon>{{'buttons.ratings' | translate}}
+        </button>
+      </ion-col>
     </ion-row>
     <!-- <button ion-button full>Button</button> -->
   </ion-toolbar>

@@ -8,7 +8,7 @@
 
   <ion-navbar color="primary">
     <div class="_flex-box">
-      <ion-title>Survey - Evidence methods</ion-title>
+      <ion-title>{{'headings.survey'|translate}} - {{'headings.evidenceMethods'|translate}}</ion-title>
       <ion-icon name="chatboxes" isActive="true" class="feedBack" (click)="feedBack()" margin-right float-right></ion-icon>
 
     </div>
@@ -34,16 +34,16 @@
       <h3>
         <ion-icon name="albums" margin-right></ion-icon>{{ evidence?.name }}
         <span float-right *ngIf="evidence.progressStatus === 'completed'" class="_completed _flex-box">
-          Completed <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
+            {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
         </span>
         <span float-right *ngIf="!evidence.progressStatus" class="_flex-box">
           <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
         </span>
         <span float-right *ngIf="evidence.progressStatus === 'inProgress'" class="_inProgress _flex-box">
-          In Progress <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
+            {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
         </span>
         <span float-right *ngIf="evidence.progressStatus === 'submitted'" class="_submitted _flex-box">
-          Submitted <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
+            {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
         </span>
         <!-- <span float-right *ngIf="!evidence.progressStatus" class="_flex-box doneIcon">
           Start <ion-icon name="arrow-dropright-circle" class="startIcon" margin-left></ion-icon>

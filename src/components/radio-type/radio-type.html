@@ -1,7 +1,7 @@
 <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
   <h4 *ngFor="let question of data.question">{{question}}</h4>
 </ion-col>
-<ion-list radio-group [(ngModel)]="data.value" text-wrap>
+<ion-list radio-group [(ngModel)]="data.value" text-wrap (ionchange)="checkForCompletion()">
   <ion-item *ngFor="let option of data?.options">
     <ion-label>{{option?.label}}</ion-label>
     <ion-radio value="{{option?.value}}"></ion-radio>
@@ -26,7 +26,7 @@
   </ion-toolbar>
 </ion-footer> -->
 
-<div class="_footer" *ngIf="!hideButton">
+<!-- <div class="_footer" *ngIf="!hideButton">
   <ion-row>
     <ion-col>
       <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">
@@ -40,4 +40,6 @@
       </button>
     </ion-col>
   </ion-row>
-</div>
+</div> -->
+
+<footer-buttons *ngIf="!hideButton" [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons>

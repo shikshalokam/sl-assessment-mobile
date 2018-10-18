@@ -150,7 +150,7 @@ export class ImageListingPage {
   submitEvidence() {
     this.utils.startLoader('Please wait while submitting')
     const payload = this.constructPayload();
-    console.log(JSON.stringify(payload));
+    // console.log(JSON.stringify(payload));
 
     const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
@@ -201,8 +201,31 @@ export class ImageListingPage {
           qid: question._id,
           value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
           remarks: question.remarks,
-          fileName: question.fileName
+          fileName: question.fileName,
+          payload: {
+            question: question.question,
+            labels: [],
+            responseType: question.responseType
+          }
         };
+        if (question.responseType === 'multiselect') {
+          for (const val of question.value) {
+            for (const option of question.options) {
+              if (val === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
+                obj.payload.labels.push(option.label);
+              }
+            }
+          }
+
+        } else if (question.responseType === 'radio') {
+          for (const option of question.options) {
+            if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
+              obj.payload.labels.push(option.label);
+            }
+          }
+        } else {
+          obj.payload.labels.push(question.value);
+        }
 
         for (const key of Object.keys(question.payload)) {
           obj[key] = question.payload[key];
@@ -225,8 +248,32 @@ export class ImageListingPage {
           qid: qst._id,
           value: qst.value,
           remarks: qst.remarks,
-          fileName: qst.fileName
+          fileName: qst.fileName,
+          payload: {
+            question: qst.question,
+            labels: [],
+            responseType: qst.responseType
+          }
         }
+        if (qst.responseType === 'multiselect') {
+          for (const val of qst.value) {
+            for (const option of qst.options) {
+              if (val === option.value && obj1.payload.labels.indexOf(option.label) <= 0) {
+                obj1.payload.labels.push(option.label);
+              }
+            }
+          }
+
+        } else if (qst.responseType === 'radio') {
+          for (const option of qst.options) {
+            if (obj1.value === option.value && obj1.payload.labels.indexOf(option.label) <= 0) {
+              obj1.payload.labels.push(option.label);
+            }
+          }
+        } else {
+          obj1.payload.labels.push(qst.value);
+        }
+
         for (const key of Object.keys(qst.payload)) {
           obj1[key] = qst.payload[key];
         }

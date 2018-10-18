@@ -1,0 +1,68 @@
+{
+    "buttons": {
+        "view": "View",
+        "profile": "Profile",
+        "ratings": "Rating",
+        "start": "Start",
+        "survey": "survey",
+        "save": "Save",
+        "next": "Next",
+        "back": "Back",
+        "upload": "Upload",
+        "and": "and",
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "send": "Send",
+        "yes": "Yes",
+        "no": "No",
+        "login": "Login"
+    },
+    "tabs": {
+        "home": "Home",
+        "mySchool": "My Schools",
+        "faqs": "FAQs",
+        "about": "About",
+        "questions": "Questions",
+        "rate": "Rate"
+    },
+    "headings": {
+        "home": "Home",
+        "mySchool": "My Schools",
+        "faqs": "FAQs",
+        "about": "About",
+        "school": "School",
+        "profile": "Profile",
+        "survey": "Survey",
+        "evidenceMethods": "Evidence Methods",
+        "sections": "Sections",
+        "questionnaire": "Questionnaire",
+        "feedback": "Feedback",
+        "logout": "Logout",
+        "criteria": "Criteria",
+        "rate": "Rate",
+        "uplaod": "Upload",
+        "images": "Images"
+    },
+    "labels": {
+        "welcome": "Welcome",
+        "name": "Name",
+        "feedback": "Feedback",
+        "choose": "Choose",
+        "language": "Language",
+        "remarks": "Remarks",
+        "image": "Image",
+        "completed": "Completed",
+        "inprogress":"In Progress",
+        "submitted": "Submitted"
+    },
+    "languages": {
+        "english": "English",
+        "hindi": "हिंदी",
+        "telugu": "తెలుగు",
+        "malayalam": "മലയാളം",
+        "tamil": "தமிழ்",
+        "kannada": "ಕನ್ನಡ",
+        "gujarati": "ગુજરાતી"
+    }
+
+}

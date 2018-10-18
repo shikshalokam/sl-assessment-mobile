@@ -24,6 +24,7 @@ export class QuestionerPage {
   isFirst: boolean;
   selectedEvidenceId: string;
   isCurrentEvidenceSubmitted: any;
+  allQuestionsOfEvidence: Array<any> = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private cfr: ComponentFactoryResolver,
@@ -42,7 +43,7 @@ export class QuestionerPage {
       this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
       this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]._id;
       this.isCurrentEvidenceSubmitted = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
-      console.log(JSON.stringify(this.questions))
+      console.log(this.allQuestionsOfEvidence.length + " length of questions");
     }).catch(error => {
 
     })
@@ -63,7 +64,7 @@ export class QuestionerPage {
       if (this.questions[this.start].visibleIf && !this.checkForQuestionDisplay(this.questions[this.start])) {
         this.questions[this.start].isCompleted = true;
         this.next();
-      } else if(this.questions[this.start].visibleIf && this.checkForQuestionDisplay(this.questions[this.start])) {
+      } else if (this.questions[this.start].visibleIf && this.checkForQuestionDisplay(this.questions[this.start])) {
         // if()
       }
     } else if (status === 'completed') {
@@ -83,10 +84,16 @@ export class QuestionerPage {
 
   checkForQuestionDisplay(qst): boolean {
     console.log('checkcondition')
-
+    // Evidence level check for visible if
+    
+    // for (const section of this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].sections) {
+    //   this.allQuestionsOfEvidence = this.allQuestionsOfEvidence.concat(section.questions);
+    // }
     let display = false;
     for (const question of this.questions) {
-      console.log('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"');
+
+    // for (const question of this.allQuestionsOfEvidence) {
+      // console.log('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"');
       if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
         display = true;
         // if (qst.validation.minNoOfInstance === 'value') {

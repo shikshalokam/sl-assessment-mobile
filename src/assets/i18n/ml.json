@@ -1,0 +1,68 @@
+{
+    "buttons": {
+        "view": "കാണുക",
+        "profile": "പ്രൊഫൈൽ",
+        "ratings": "റേറ്റിംഗുകൾ",
+        "start": "ആരംഭിക്കുക",
+        "survey": "സർവേ",
+        "save": "സന്വാദിക്കുക",
+        "next": "അടുത്തത്",
+        "back": "തിരികെ",
+        "upload": "അപ്ലോഡ് ",
+        "and": "ഒപ്പം",
+        "submit": "സമർപ്പിക്കുക",
+        "cancel": "റദ്ദാക്കുക",
+        "send": "അയയ്ക്കുക",
+        "yes": "അതെ",
+        "no": "ഇല്ല",
+        "login": "ലോഗിൻ"
+    },
+    "tabs": {
+        "home": "വീട്",
+        "mySchool": "എന്റെ സ്കൂളുകൾ",
+        "faqs": "ചോദ്യങ്ങൾ",
+        "about": "കുറിച്ച്",
+        "questions": "ചോദ്യങ്ങൾ",
+        "rate": "നിരക്ക്"
+    },
+    "headings": {
+        "home": "വീട്",
+        "mySchool": "എന്റെ സ്കൂളുകൾ",
+        "faqs": "ചോദ്യങ്ങൾ",
+        "about": "കുറിച്ച്",
+        "school": "സ്കൂളുകൾ",
+        "profile": "പ്രൊഫൈൽ",
+        "survey": "സർവേ",
+        "evidenceMethods": "തെളിവ് രീതികൾ",
+        "sections": "വിഭാഗങ്ങൾ",
+        "questionnaire": "ചോദ്യം ചെയ്യൽ",
+        "feedback": "ഫീഡ്ബാക്ക്",
+        "logout": "പുറത്തുകടക്കുക",
+        "criteria": "മാനദണ്ഡം",
+        "rate": "നിരക്ക്",
+        "uplaod": "അപ്ലോഡ് ചെയ്യുക",
+        "images": "ചിത്രങ്ങൾ"
+    },
+    "labels": {
+        "welcome": "സ്വാഗതം",
+        "name": "പേര്",
+        "feedback": "ഫീഡ്ബാക്ക്",
+        "choose": "Choose",
+        "language": "തിരഞ്ഞെടുക്കുക",
+        "remarks": "പരാമർശത്തെ",
+        "image": "ചിത്രം",
+        "completed": "പൂർത്തിയായി",
+        "inprogress":"പുരോഗതിയിൽ",
+        "submitted": "സമർപ്പിച്ചു"
+    },
+    "languages": {
+        "english": "English",
+        "hindi": "हिंदी",
+        "telugu": "తెలుగు",
+        "malayalam": "മലയാളം",
+        "tamil": "தமிழ்",
+        "kannada": "ಕನ್ನಡ",
+        "gujarati": "ગુજરાતી"
+    }
+
+}

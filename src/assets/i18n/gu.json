@@ -1,0 +1,67 @@
+{
+    "buttons": {
+        "view": "જુઓ",
+        "profile": "પ્રોફાઇલ",
+        "ratings": "રેટિંગ",
+        "start": "પ્રારંભ કરો",
+        "survey": "સર્વેક્ષણ",
+        "save": "સેવ્",
+        "next": "આગામી",
+        "back": "પાછા",
+        "upload": "અપલોડ કરો",
+        "and": "અને",
+        "submit": "સબમિટ કરો",
+        "cancel": "રદ કરો",
+        "send": "મોકલો",
+        "yes": "હા",
+        "ના": "ના",
+        "login": "લૉગિન"
+    },
+    "tabs": {
+        "home": "ઘર",
+        "mySchool": "મારી શાળા",
+        "faqs": "પ્રશ્નો",
+        "about": "અમારા વિશે",
+        "questions": "પ્રશ્નો",
+        "rate": "દર"
+    },
+    "headings": {
+        "home": "ઘર",
+        "mySchool": "મારી શાળા",
+        "faqs": "પ્રશ્નો",
+        "about": "અમારા વિશે",
+        "school": "શાળા",
+        "profile": "પ્રોફાઇલ",
+        "survey": "સર્વેક્ષણ",
+        "evidenceMethods": "પુરાવા પદ્ધતિઓ",
+        "sections": "વિભાગો",
+        "questionnaire": "પ્રશ્નાવલિ",
+        "feedback": "પ્રતિસાદ",
+        "logout": "લૉગ આઉટ",
+        "criteria": "માપદંડ",
+        "rate": "દર",
+        "uplaod": "અપલોડ કરો",
+        "images": "ફોટો"
+    },
+    "labels": {
+        "welcome": "સ્વાગત છે",
+        "name": "નામ",
+        "feedback": "પ્રતિસાદ",
+        "choose": "પસંદ કરો",
+        "language": "ભાષા",
+        "remarks": "રીમાર્કસ",
+        "image": "ફોટો",
+        "completed": "પૂર્ણ થયું",
+        "inprogress": "પ્રગતિમાં",
+        "submitted": "સબમિટ કર્યું"
+    },
+    "languages": {
+        "english": "English",
+        "hindi": "हिंदी",
+        "telugu": "తెలుగు",
+        "malayalam": "മലയാളം",
+        "tamil": "தமிழ்",
+        "kannada": "ಕನ್ನಡ",
+        "gujarati":"ગુજરાતી"
+    }
+ }

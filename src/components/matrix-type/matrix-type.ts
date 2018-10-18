@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatrixModalComponent } from '../matrix-modal/matrix-modal';
 import { ModalController, NavParams } from 'ionic-angular';
 import { MatrixActionModalPage } from '../../pages/matrix-action-modal/matrix-action-modal';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 @Component({
   selector: 'matrix-type',
@@ -16,17 +17,18 @@ export class MatrixTypeComponent {
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
   mainInstance: any;
-  constructor(private modalCntrl: ModalController) {
+
+  constructor(private modalCntrl: ModalController, private utils: UtilsProvider) {
     console.log('Hello MatrixTypeComponent Component');
   }
+
   next(status?: any) {
-    console.log(JSON.stringify(this.data));
-    this.data.isCompleted = (this.data.value && this.data.value.length) ? true : false;
+    this.data.isCompleted = this.utils.isMatrixQuestionComplete(this.data);
     this.nextCallBack.emit(status);
   }
 
   back() {
-    this.data.isCompleted = (this.data.value && this.data.value.length) ? true : false;
+    this.data.isCompleted = this.utils.isMatrixQuestionComplete(this.data);
     this.previousCallBack.emit('previous');
   }
   addInstances(): void {

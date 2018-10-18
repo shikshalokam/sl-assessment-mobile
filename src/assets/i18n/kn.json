@@ -1,0 +1,67 @@
+{
+    "buttons": {
+        "view": "ವೀಕ್ಷಣ",
+        "profile": "ಪ್ರೊಫೈಲ್",
+        "ratings": "ರೇಟಿಂಗ್ಗಳು",
+        "start": "ಪ್ರಾರಂಭಿಸಿ",
+        "survey": "ಸಮೀಕ್ಷೆ",
+        "save": "ರಕ್ಷಿಸು",
+        "next": "ಮುಂದಿನ",
+        "back": "ಹಿಂದೆ",
+        "upload": "ಅಪ್ಲೋಡ್ ಮಾಡಿ",
+        "and": "ಮತ್ತು",
+        "submit": "ಸಲ್ಲಿಸಲು",
+        "cancel": "ರದ್ದುಮಾಡಿ",
+        "send": "ಕಳುಹಿಸು",
+        "yes": "ಹೌದು",
+        "no": "ಇಲ್ಲ",
+        "login": "ಲಾಗಿನ್ ಮಾಡಿ"
+    },
+    "tabs": {
+        "home": "ಮನೆ",
+        "mySchool": "ನನ್ನ ಶಾಲೆಗಳು",
+        "faqs": "ಪ್ರಶ್ನೆಗಳು",
+        "about": "ಬಗ್ಗೆ",
+        "questions": "ಪ್ರಶ್ನೆಗಳು",
+        "rate": "ಬೆಲೆ"
+    },
+    "headings": {
+        "home": "ಮನೆ",
+        "mySchool": "ನನ್ನ ಶಾಲೆಗಳು",
+        "faqs": "ಪ್ರಶ್ನೆಗಳು",
+        "about": "ಬಗ್ಗೆ",
+        "school": "ಶಾಲೆ",
+        "profile": "ಪ್ರೊಫೈಲ್",
+        "survey": "ಸಮೀಕ್ಷೆ",
+        "evidenceMethods": "ಪುರಾವೆ ವಿಧಾನಗಳು",
+        "sections": "ವಿಭಾಗಗಳು",
+        "questionnaire": "ಪ್ರಶ್ನಾವಳಿ",
+        "feedback": "ಪ್ರತಿಕ್ರಿಯೆ",
+        "logout": "ಲಾಗ್ ಔಟ್",
+        "criteria": "ಮಾನದಂಡ",
+        "rate": "ಬೆಲೆ",
+        "images": "ಚಿತ್ರಗಳು",
+        "upload": "ಅಪ್ಲೋಡ್ ಮಾಡಿ"
+    },
+    "labels": {
+        "welcome": "ಸ್ವಾಗತ",
+        "name": "ಹೆಸರು",
+        "feedback": "ಪ್ರತಿಕ್ರಿಯೆ",
+        "choose": "ಆಯ್ಕೆ",
+        "language": "ಭಾಷೆ",
+        "remarks": "ಅಭಿಪ್ರಾಯ",
+        "image": "ಚಿತ್ರ",
+        "completed": "ಪೂರ್ಣಗೊಂಡಿದೆ",
+        "inprogress": "ಪ್ರಗತಿಯಲ್ಲಿದೆ",
+        "submitted": "ಸಲ್ಲಿಸಲಾಗಿದೆ"
+    },
+    "languages": {
+        "english": "English",
+        "hindi": "हिंदी",
+        "telugu": "తెలుగు",
+        "malayalam": "മലയാളം",
+        "tamil": "தமிழ்",
+        "kannada": "ಕನ್ನಡ",
+        "gujarati": "ગુજરાતી"
+    }
+}

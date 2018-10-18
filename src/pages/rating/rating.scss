@@ -1,0 +1,29 @@
+page-rating {
+    .customLabel {
+        color: #969696 !important;
+    }
+    .criteriaName {
+        color: $white-color;
+        text-align: left;
+        font-weight: 500;
+        padding-left: 16px;
+        font-size: 1.7rem;
+        margin-bottom: 10px;
+    }
+    .customH4 {
+        // font-size: 1.7rem !important;
+    }
+    .answer {
+        // font-size: 1.7rem !important;
+        font-weight: 500;
+    }
+    .container {
+        margin-bottom: 60px
+    }
+    .overlay {
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+    }
+}

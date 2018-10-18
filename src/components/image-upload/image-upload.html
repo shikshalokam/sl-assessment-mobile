@@ -2,7 +2,7 @@
 
   <div class="_cards _flex-box _justify-content-center _flex-direction-column" padding>
     <ion-icon name="add" class="_iconAdj"></ion-icon>
-    <div>Image</div>
+    <div>{{'labels.image'|translate}}</div>
     <div class="_overlay" (click)="openActionSheet()"></div>
   </div>
 
@@ -11,4 +11,8 @@
     <div class="_overlay"></div>
     <img src="{{image}}">
   </div>
+
+</div>
+<div *ngIf="imageList?.length <= data?.file?.minCount">
+  Min {{data?.file?.minCount}} images required
 </div>

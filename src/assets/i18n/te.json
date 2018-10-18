@@ -1,0 +1,67 @@
+{
+    "buttons": {
+        "view": "వీక్షణ",
+        "profile": "ప్రొఫైల్",
+        "ratings": "రేటింగ్",
+        "start": "ప్రారంభం",
+        "survey": "సర్వే",
+        "save": "సేవ్",
+        "next": "తరువాత",
+        "back": "తిరిగి",
+        "upload": "అప్లోడ్",
+        "and": "మరియు",
+        "submit": "సబ్మిట",
+        "cancel": "రద్దు చేయు",
+        "send": "పంపించు",
+        "yes": "అవును",
+        "no": "కాదు",
+        "login": "లాగిన్"
+    },
+    "tabs": {
+        "home": "హోమ్",
+        "mySchool": "నా పాఠశాలలు",
+        "faqs": "ప్రశ్నలు",
+        "about": "గురించి",
+        "questions": "ప్రశ్నలు",
+        "rate": "రేటు"
+    },
+    "headings": {
+        "home": "హోమ్",
+        "mySchool": "నా పాఠశాలలు",
+        "faqs": "ప్రశ్నలు",
+        "about": "గురించి",
+        "school": "పాఠశాల",
+        "profile": "ప్రొఫైల్",
+        "survey": "సర్వే",
+        "evidenceMethods": "ఆధారము పద్ధతులు",
+        "sections": "విభాగాలు",
+        "questionnaire": "ప్రశ్నల పట్టీ",
+        "feedback": "చూడు",
+        "logout": "లాగ్అవుట్",
+        "criteria": "ప్రమాణాలు",
+        "rate": "రేటు",
+        "images": "చిత్రాలు",
+        "upload": "అప్లోడ్"
+    },
+    "labels": {
+        "welcome": "స్వాగతం",
+        "name": "పేరు",
+        "feedback": "చూడు",
+        "choose": "ఎంచుకోండి",
+        "language": "భాష",
+        "remarks": "వ్యాఖ్యలు",
+        "image": "చిత్రం",
+        "completed": "పూర్తి",
+        "inprogress": "పురోగతి",
+        "submitted": "సమర్పించినది"
+    },
+    "languages": {
+        "english": "English",
+        "hindi": "हिंदी",
+        "telugu": "తెలుగు",
+        "malayalam": "മലയാളം",
+        "tamil": "தமிழ்",
+        "kannada": "ಕನ್ನಡ",
+        "gujarati": "ગુજરાતી"
+    }
+}

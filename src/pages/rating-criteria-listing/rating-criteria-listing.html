@@ -1,0 +1,41 @@
+<!--
+  Generated template for the RatingCriteriaListingPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{'headings.criteria'|translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-item-group>
+    <ion-item-divider color="light">
+      <h3 class="headerText">
+        <ion-icon name="book" margin-right></ion-icon> {{schoolData?.name}}
+      </h3>
+    </ion-item-divider>
+    <ion-item *ngFor="let criteria of allRatingDetails?.criterias; let i= index" (click)="gotToRatingPage(i)" text-wrap>
+      <div class="_flex-box">
+        <ion-icon name="albums" margin-right></ion-icon>
+        <div style="flex:1">{{ criteria?.name }}</div>
+        <ion-icon class="_progressIcon" *ngIf="allRatingDetails?.isSubmitted" color="primary" name="cloud-done" margin-left float-right></ion-icon>
+      </div>
+    </ion-item>
+  </ion-item-group>
+</ion-content>
+
+<div class="_footer" *ngIf="!allRatingDetails?.isSubmitted">
+  <ion-row>
+    <ion-col>
+      <!-- <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
+      <button ion-button icon-start full color="primary" (click)="submitRating()" [disabled]="!enableSubmit">
+        <ion-icon name="cloud-upload" margin-right></ion-icon>{{'buttons.submit'|translate}}
+        {{'buttons.ratings'|translate}}
+      </button>
+    </ion-col>
+  </ion-row>
+</div>

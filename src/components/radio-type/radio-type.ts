@@ -1,4 +1,5 @@
-import { Component, Input, Output , EventEmitter} from '@angular/core';
+import { Component, Input, Output , EventEmitter, OnInit} from '@angular/core';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 /**
  * Generated class for the RadioTypeComponent component.
@@ -10,7 +11,7 @@ import { Component, Input, Output , EventEmitter} from '@angular/core';
   selector: 'radio-type',
   templateUrl: 'radio-type.html'
 })
-export class RadioTypeComponent {
+export class RadioTypeComponent implements OnInit{
 
   @Input() data:any;
   @Input() isLast: boolean;
@@ -20,17 +21,29 @@ export class RadioTypeComponent {
   @Input() evidenceId: string;
   @Input() hideButton: boolean;
 
-  constructor() {
+  color: string = 'light';
+  isComplete: boolean;
+
+  constructor(private utils: UtilsProvider) {
+
     console.log('Hello RadioTypeComponent Component');
   }
 
+  ngOnInit() {
+    console.log(JSON.stringify(this.data))
+  }
+
+  checkForCompletion() {
+
+  }
+
   next(status?:any) {
-    this.data.isCompleted = this.data.value ? true : false;
+    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.nextCallBack.emit(status);
   }
 
   back() {
-    this.data.isCompleted = this.data.value ? true : false;
+    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.previousCallBack.emit();
   }
 }

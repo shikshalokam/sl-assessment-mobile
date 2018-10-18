@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { SchoolConfig } from '../../providers/school-list/schoolConfig';
 import { WelcomePage } from '../welcome/welcome';
+import { RatingProvider } from '../../providers/rating/rating';
 
 declare var cordova: any;
 
@@ -24,7 +25,8 @@ export class HomePage {
     private currentUser: CurrentUserProvider,
     private apiService: ApiProvider,
     private utils: UtilsProvider, private appCtrl: App,
-    private storage: Storage
+    private storage: Storage,
+    private ratingService: RatingProvider
   ) { }
 
   getSchoolListApi(): void {
@@ -36,7 +38,7 @@ export class HomePage {
     }, error => {
       this.utils.stopLoader();
       if (error.status == '401') {
-        this.currentUser.removeUser();
+        // this.currentUser.removeUser();
         this.appCtrl.getRootNav().push(WelcomePage);
       }
     })
@@ -67,6 +69,11 @@ export class HomePage {
     // })
   }
 
+  goToRating(school): void {
+    const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
+    this.ratingService.checkForRatingDetails(submissionId, school);
+  }
+
   getLocalSchoolDetails(): void {
     console.log('School details')
     this.storage.get('schoolsDetails').then(details => {
@@ -85,16 +92,16 @@ export class HomePage {
       this.utils.setLocalSchoolData(this.schoolDetails)
     }
     this.appCtrl.getRootNav().push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, parent: this });
-    
+
     // this.navCtrl.push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex })
   }
 
   gotToEvidenceList(school) {
-    this.appCtrl.getRootNav().push('EvidenceListPage', { _id: school._id, name: school.name, parent: this})
+    this.appCtrl.getRootNav().push('EvidenceListPage', { _id: school._id, name: school.name, parent: this })
   }
 
-  goToProfile(school) : void {
-    this.appCtrl.getRootNav().push('SchoolProfilePage', { _id: school._id, name: school.name, parent: this})
+  goToProfile(school): void {
+    this.appCtrl.getRootNav().push('SchoolProfilePage', { _id: school._id, name: school.name, parent: this })
   }
 
   successCallback = (response) => {
@@ -132,7 +139,7 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-    this.onInit()   
+    this.onInit()
   }
 
   onInit() {

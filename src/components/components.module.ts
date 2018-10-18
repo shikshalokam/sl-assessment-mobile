@@ -9,6 +9,8 @@ import { ImageUploadComponent } from './image-upload/image-upload';
 import { DirectivesModule } from '../directives/directives.module';
 import { MatrixTypeComponent } from './matrix-type/matrix-type';
 import { MatrixModalComponent } from './matrix-modal/matrix-modal';
+import { TranslateModule } from "@ngx-translate/core";
+import { FooterButtonsComponent } from './footer-buttons/footer-buttons';
 
 @NgModule({
 	declarations: [
@@ -19,10 +21,12 @@ import { MatrixModalComponent } from './matrix-modal/matrix-modal';
     RemarksComponent,
     ImageUploadComponent,
     MatrixTypeComponent,
-    MatrixModalComponent],
+    MatrixModalComponent,
+    FooterButtonsComponent],
 	imports: [
 		IonicModule,
-		DirectivesModule
+		DirectivesModule,
+		TranslateModule
 	],
 	exports: [
 		InputTypeComponent,
@@ -32,7 +36,8 @@ import { MatrixModalComponent } from './matrix-modal/matrix-modal';
     RemarksComponent,
     ImageUploadComponent,
     MatrixTypeComponent,
-    MatrixModalComponent
+    MatrixModalComponent,
+    FooterButtonsComponent
 	],
 	entryComponents: [
 		InputTypeComponent,

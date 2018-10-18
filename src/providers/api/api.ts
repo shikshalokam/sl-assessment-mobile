@@ -42,7 +42,7 @@ export class ApiProvider {
           this.currentUser.setCurrentUserDetails(userTokens);
           resolve()
         }, error => {
-          this.currentUser.removeUser();
+          // this.currentUser.removeUser();
           console.log('Utils: Logout,token invalid');
           console.log('error ' + JSON.stringify(error));
           reject({ status: '401' });

@@ -5,7 +5,7 @@ import { File } from '@ionic-native/file';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
-import { imageLocalListName} from "../../providers/appConfig"
+// import { imageLocalListName} from "../../providers/appConfig"
 
 declare var cordova: any;
 
@@ -56,8 +56,8 @@ export class ImageUploadComponent implements OnInit {
     this.storage.get('images').then(data => {
       this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
       this.localEvidenceImageList = (this.allLocalImageList && this.allLocalImageList[this.evidenceId]) ? this.allLocalImageList[this.evidenceId] : [];
-      console.log('local images' + JSON.stringify(this.allLocalImageList));
-      console.log(JSON.stringify(this.datas));
+      // console.log('local images' + JSON.stringify(this.allLocalImageList));
+      // console.log(JSON.stringify(this.datas));
       // console.log(this.evidenceId)
     })
     // this.imageList.push('1538556284785.jpg')
@@ -155,7 +155,6 @@ export class ImageUploadComponent implements OnInit {
   createImageFromName(imageList) {
     for (const image of imageList) {
       this.file.checkFile(this.appFolderPath + '/', image).then(response => {
-        // console.log('Check For file name : ' + response);
         this.file.readAsDataURL(this.appFolderPath, image).then(data => {
           this.imageList.push(data);
 
@@ -163,6 +162,7 @@ export class ImageUploadComponent implements OnInit {
 
         })
       }).catch(error => {
+        this.imageList.push(image);
         console.log('Error ' + JSON.stringify(error))
       })
     }

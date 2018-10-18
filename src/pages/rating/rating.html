@@ -1,0 +1,67 @@
+<ion-header no-border>
+
+  <ion-navbar color="primary">
+    <ion-title>{{'headings.rate'|translate}} {{'headings.criteria'|translate}}</ion-title>
+  </ion-navbar>
+  <ion-toolbar color="primary">
+    <div class="criteriaName">{{currentCriteria?.name}}</div>
+
+    <ion-segment [(ngModel)]="view" color="light">
+      <ion-segment-button value="question">
+          {{'tabs.questions'|translate}}
+      </ion-segment-button>
+      <ion-segment-button value="rate">
+          {{'tabs.rate'|translate}}
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div [ngSwitch]="view" class="container">
+    <div *ngSwitchCase="'question'">
+      <div class="_errorBox _flex-box _justify-content-center" *ngIf="!currentCriteria?.questions.length">
+        No questions available
+      </div>
+      <ion-card *ngFor="let question of currentCriteria?.questions">
+        <ion-card-header>
+          <h4 class="_multiLineList customH4">{{question?.payload.question}}</h4>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="answer">
+            <span *ngFor="let value of question?.payload?.labels; let l = last"> {{value}}{{l? ' ': ', '}}</span>
+            <!-- {{question?.payload?.labels?.toString()}} -->
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div *ngSwitchCase="'rate'" style="position: relative">
+      <!-- <ion-list-header>Sample</ion-list-header> -->
+      <div class="overlay" *ngIf="allCriterias.isSubmitted"></div>
+      <ion-list radio-group [(ngModel)]="currentCriteria.score" text-wrap>
+        <ion-item *ngFor="let level of currentCriteria?.rubric?.levels">
+          <ion-label> <b>{{level?.label}}</b> - {{level?.description}}</ion-label>
+          <ion-radio value="{{level.level}}"></ion-radio>
+        </ion-item>
+      </ion-list>
+      <div padding-left padding-right>
+        <remarks [data]="currentCriteria"></remarks>
+      </div>
+    </div>
+
+  </div>
+
+</ion-content>
+
+<div class="_footer" *ngIf="view === 'rate' && !allCriterias.isSubmitted">
+  <ion-row>
+    <ion-col>
+      <!-- <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
+      <button ion-button icon-start full color="primary" (click)="saveRating()" [disabled]="!(currentCriteria?.score && currentCriteria?.remarks)">
+        <ion-icon name="filing" margin-right></ion-icon>{{'buttons.save'|translate}} {{'buttons.ratings'|translate}}
+      </button>
+    </ion-col>
+  </ion-row>
+</div>

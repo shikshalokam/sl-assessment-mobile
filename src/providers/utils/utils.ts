@@ -52,6 +52,10 @@ export class UtilsProvider {
     this.storage.set('images', JSON.stringify(images));
   }
 
+  setLocalVariable(key, value) {
+    this.storage.set(key, value);
+  }
+
   sendFeedback() {
     let alert = this.alertCtrl.create({
       title: 'Feedback',
@@ -99,40 +103,43 @@ export class UtilsProvider {
     alert.present();
   }
 
-  isQuestionComplete(question): boolean {
-    let isComplete = true;
-    if (question.validation.required && !question.value) {
-      isComplete = false;
-      return isComplete
-    }
-    if (question.file.required && (question.fileName.length <= question.file.minCount)) {
-      isComplete = false;
-      return isComplete
-    }
-    // if(question.validation.regex && !question.value.match(question.validation.regex)){
+  testRegex(rege, value): boolean {
+    const regex = new RegExp(rege);
+    return regex.test(value)
+  }
 
-    // }
-    return isComplete
+  isQuestionComplete(question): boolean {
+    // console.log(JSON.stringify(question))
+    if (question.validation.required && !question.value && question.responseType !== 'multiselect') {
+      return false
+    }
+    if (question.validation.required && !question.value.length && question.responseType === 'multiselect') {
+      return false
+    }
+    if (question.file.required && (question.fileName.length < question.file.minCount)) {
+      return false
+    }
+    if (question.validation.regex && !this.testRegex(question.validation.regex, question.value)) {
+      return false
+    }
+    return true
   }
 
   isMatrixQuestionComplete(question): boolean {
-    let isComplete = true;
-    if (question.instanceQuestions.length < question.minNoOfInstance) {
-      isComplete = false;
-      return isComplete
+    if (!question.value.length ) {
+      return false
     }
-    for (const instance of question.instanceQuestions) {
+    for (const instance of question.value) {
       for (const question of instance) {
-        if (!this.isQuestionComplete(question)) {
-          isComplete = false;
-          return isComplete
+        if (!question.isCompleted) {
+          return false
         }
       }
     }
-    return isComplete
+    return true
   }
 
-  enableGPSRequest(){
+  enableGPSRequest() {
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if (canRequest) {
         this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(

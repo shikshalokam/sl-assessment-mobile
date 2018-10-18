@@ -1,0 +1,67 @@
+{
+    "buttons": {
+        "view": "देखना",
+        "profile": "प्रोफ़ाइल",
+        "ratings": "रेटिंग्स",
+        "start": "शुरु",
+        "survey": "सर्वेक्षण",
+        "save": "बचत करना",
+        "next": "आगामी",
+        "back": "वापस",
+        "upload": "अपलोड",
+        "and": "तथा",
+        "submit": "जमा करें",
+        "cancel": "रद्द करना",
+        "send": "भेजना",
+        "yes": "हाँ",
+        "no": "नहीं",
+        "login": "लॉग इन करें"
+    },
+    "tabs": {
+        "home": "होम",
+        "mySchool": "मेरे स्कूल",
+        "faqs": "प्रशन",
+        "about": "बारे में",
+        "questions": "प्रशन",
+        "rate": "मूल्य"
+    },
+    "headings": {
+        "home": "होम",
+        "mySchool": "मेरे स्कूल",
+        "faqs": "प्रशन",
+        "about": "बारे में",
+        "school": "स्कूल",
+        "profile": "प्रोफ़ाइल",
+        "survey": "सर्वेक्षण",
+        "evidenceMethods": "साक्ष्य विधियों",
+        "sections": "वर्गों",
+        "questionnaire": "प्रश्नावली",
+        "feedback": "प्रतिक्रिया",
+        "logout": "लोग आउट",
+        "criteria": "मानदंड",
+        "rate": "मूल्य",
+        "images": "इमेजिस",
+        "upload": "अपलोड"
+    },
+    "labels": {
+        "welcome": "स्वागत हे",
+        "name": "नाम",
+        "feedback": "प्रतिक्रिया",
+        "choose": "चुनें",
+        "language": "भाषा",
+        "remarks": "टिप्पणियों",
+        "image": "छवि",
+        "completed": "समाप्त",
+        "inprogress": "चालू",
+        "submitted": "प्रस्तुत"
+    },
+    "languages": {
+        "english": "English",
+        "hindi": "हिंदी",
+        "telugu": "తెలుగు",
+        "malayalam": "മലയാളം",
+        "tamil": "தமிழ்",
+        "kannada": "ಕನ್ನಡ",
+        "gujarati": "ગુજરાતી"
+    }
+}

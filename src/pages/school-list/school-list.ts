@@ -46,7 +46,7 @@ export class SchoolListPage {
     }, error => {
       this.utils.stopLoader();
       if (error.status == '401') {
-        this.currentUser.removeUser();
+        // this.currentUser.removeUser();
         this.appCtrl.getRootNav().push(WelcomePage);
       }
     })

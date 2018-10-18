@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 @Component({
   selector: 'multiple-choice-type',
@@ -15,7 +16,7 @@ export class MultipleChoiceTypeComponent implements OnInit {
   @Input() evidenceId: string;
   @Input() hideButton: boolean
 
-  constructor() {
+  constructor(private utils: UtilsProvider) {
     console.log('Hello checkboxTypeComponent Component');
     this.text = 'Hello World';
     // if(!this.data.value) {
@@ -23,8 +24,6 @@ export class MultipleChoiceTypeComponent implements OnInit {
     // }
   }
   ngOnInit() {
-    console.log(JSON.stringify(this.evidenceId))
-    // this.data.value = ['R1']
     this.data.value = this.data.value ? this.data.value : [];
 
   }
@@ -40,12 +39,14 @@ export class MultipleChoiceTypeComponent implements OnInit {
   }
 
   next(status?:string) {
-    this.data.isCompleted = (this.data.value && this.data.value.length) ? true : false;
+    // this.utils.isQuestionComplete(this.data);
+    console.log(this.utils.isQuestionComplete(this.data))
+    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.nextCallBack.emit(status);
   }
 
   back() {
-    this.data.isCompleted = (this.data.value && this.data.value.length) ? true : false;
+    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.previousCallBack.emit('previous');
   }
 

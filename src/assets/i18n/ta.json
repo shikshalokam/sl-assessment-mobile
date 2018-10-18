@@ -1,0 +1,67 @@
+{
+    "buttons": {
+        "view": "பார்வை",
+        "profile": "சுயவிவர",
+        "ratings": "மதிப்பீடுகள்",
+        "start": "புறப்படு",
+        "survey": "நோக்கு",
+        "save": "காப்பாற்ற",
+        "next": "அடுத்த",
+        "back": "மீண்டும்",
+        "upload": "பதிவேற்ற",
+        "and": "மற்றும்",
+        "submit": "சமர்ப்பிக்க",
+        "cancel": "ரத்து",
+        "send": "அனுப்புக",
+        "yes": "ஆம்",
+        "no": "இல்லை",
+        "login": "புகுபதிகை"
+    },
+    "tabs": {
+        "home": "வீட்டில்",
+        "mySchool": "என் பள்ளிகள்",
+        "faqs": "கேள்விகள்",
+        "about": "பற்றி",
+        "questions": "கேள்விகள்",
+        "rate": "விகிதம்"
+    },
+    "headings": {
+        "home": "வீட்டில்",
+        "mySchool": "என் பள்ளிகள்",
+        "faqs": "கேள்விகள்",
+        "about": "பற்றி",
+        "school": "பள்ளி",
+        "profile": "சுயவிவர",
+        "survey": "கணக்கெடுப்பு",
+        "evidenceMethods": "சான்றுகள் முறைகள்",
+        "sections": "பிரிவுகள்",
+        "questionnaire": "கேள்வித்தாளை",
+        "feedback": "பின்னூட்டம்",
+        "logout": "வெளியேறு",
+        "criteria": "அடிப்படை",
+        "rate": "விகிதம்",
+        "images": "படங்கள்",
+        "upload": "பதிவேற்ற"
+    },
+    "labels": {
+        "welcome": "வரவேற்பு",
+        "name": "பெயர்",
+        "feedback": "பின்னூட்டம்",
+        "choose": "தேர்வு",
+        "language": "மொழி",
+        "remarks": "கருத்துக்கள்",
+        "image": "படத்தை",
+        "completed": "நிறைவு",
+        "inprogress": "முன்னேற்றம்",
+        "submitted": "சமர்ப்பிக்க"
+    },
+    "languages": {
+        "english": "English",
+        "hindi": "हिंदी",
+        "telugu": "తెలుగు",
+        "malayalam": "മലയാളം",
+        "tamil": "தமிழ்",
+        "kannada": "ಕನ್ನಡ",
+        "gujarati": "ગુજરાતી"
+    }
+}

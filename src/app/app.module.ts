@@ -1,6 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
-import { HttpClientModule} from '@angular/common/http';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HttpClient} from '@angular/common/http';
+import { HttpModule, Http } from '@angular/http';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -45,6 +45,11 @@ import { ImagePicker } from '@ionic-native/image-picker';
 import { ImageListingPage } from '../pages/image-listing/image-listing';
 import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { RatingProvider } from '../providers/rating/rating';
+import { RatingCriteriaListingPageModule } from '../pages/rating-criteria-listing/rating-criteria-listing.module';
+import { RatingPageModule } from '../pages/rating/rating.module';
 
 @NgModule({
   declarations: [
@@ -64,6 +69,15 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
+    TranslateModule.forRoot(
+      {
+        loader: {
+         provide: TranslateLoader,
+         useFactory: (setTranslateLoader),
+         deps: [HttpClient]
+       }
+      }
+    ),
     LoginPageModule,
     HttpModule,
     HttpClientModule,
@@ -72,7 +86,9 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
     SectionListPageModule,
     QuestionerPageModule,
     ComponentsModule,
-    DirectivesModule
+    DirectivesModule,
+    RatingCriteriaListingPageModule,
+    RatingPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -109,7 +125,11 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
     FilePath,
     FileTransfer,
     ImagePicker,
-    LocationAccuracy
+    LocationAccuracy,
+    RatingProvider
   ]
 })
 export class AppModule { }
+export function setTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+ }
