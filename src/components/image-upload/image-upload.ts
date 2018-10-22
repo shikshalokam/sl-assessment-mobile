@@ -27,6 +27,7 @@ export class ImageUploadComponent implements OnInit {
     return true
   }
   @Input() evidenceId: string;
+  @Input() schoolId: string;
 
   appFolderPath: string = cordova.file.externalDataDirectory + 'images';
   imageList: Array<any> = [];
@@ -53,7 +54,7 @@ export class ImageUploadComponent implements OnInit {
     //   evidenceId:"",
     //   schoolId:"",
     // }
-    this.storage.get('images').then(data => {
+    this.storage.get(this.utils.imagePath).then(data => {
       this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
       this.localEvidenceImageList = (this.allLocalImageList && this.allLocalImageList[this.evidenceId]) ? this.allLocalImageList[this.evidenceId] : [];
       // console.log('local images' + JSON.stringify(this.allLocalImageList));

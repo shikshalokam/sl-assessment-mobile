@@ -3,6 +3,9 @@ import { Http, URLSearchParams } from '@angular/http';
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AppConfigs } from "../appConfig";
 import { CurrentUserProvider } from "../current-user/current-user";
+import { App, AlertController } from "ionic-angular";
+import { TabsPage } from "../../pages/tabs/tabs";
+import { UtilsProvider } from "../utils/utils";
 
 @Injectable()
 export class AuthProvider {
@@ -17,7 +20,11 @@ export class AuthProvider {
 
   logout_redirect_url: string;
 
-  constructor(public http: Http, public iab: InAppBrowser, private currentUser: CurrentUserProvider) { }
+  constructor(public http: Http,
+    public iab: InAppBrowser,
+    private currentUser: CurrentUserProvider,
+    private app: App, private alertCntrl: AlertController,
+    private utils: UtilsProvider) { }
 
   doOAuthStepOne(): Promise<any> {
 
@@ -68,14 +75,108 @@ export class AuthProvider {
             refreshToken: parsedData.refresh_token,
             idToken: parsedData.id_token
           };
-          console.log(JSON.stringify(userTokens))
-          this.currentUser.setCurrentUserDetails(userTokens);
-          // var userDetails = jwt_decode(parsedData.access_token);
-          resolve(data);
+          resolve(parsedData);
         }, error => {
           resolve(error);
         });
     });
+  }
+
+
+  checkForCurrentUserLocalData(tokens) {
+    const loggedinUserId = this.currentUser.getDecodedAccessToken(tokens.access_token).sub;
+    const currentUserId = this.currentUser.getCurrentUserData() ? this.currentUser.getCurrentUserData().sub : null;
+    if (loggedinUserId === currentUserId || !currentUserId) {
+      let userTokens = {
+        accessToken: tokens.access_token,
+        refreshToken: tokens.refresh_token,
+        idToken: tokens.id_token,
+        isDeactivated: false
+      };
+      this.currentUser.setCurrentUserDetails(userTokens);
+      let nav = this.app.getActiveNav();
+      nav.setRoot(TabsPage);
+      // this.confirmPreviousUserName('as1@shikshalokamdev', tokens);
+
+    } else {
+      this.confirmPreviousUserName(this.currentUser.getCurrentUserData().preferred_username, tokens);
+    }
+  }
+
+  confirmPreviousUserName(previousUserEmail, tokens): void {
+    let alert = this.alertCntrl.create({
+      title: 'Please enter previous username.',
+      inputs: [
+        {
+          name: 'email',
+          placeholder: 'Email',
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+            this.currentUser.deactivateActivateSession(true);
+            this.doLogout();
+          }
+        },
+        {
+          text: 'Send',
+          role: 'role',
+          handler: data => {
+            console.log(data.email + " " +previousUserEmail )
+            if (data.email && (previousUserEmail.toLowerCase() === data.email.toLowerCase())) {
+              this.confirmDataClear(tokens);
+            } else {
+              this.currentUser.deactivateActivateSession(true);
+
+              this.doLogout();
+              this.utils.openToast("Username didnot match. Please login again.", "Ok")
+            }
+
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  confirmDataClear(tokens): void {
+    let alert = this.alertCntrl.create({
+      title: 'All your datas will be lost. Do you want to continue?',
+
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: data => {
+            this.currentUser.deactivateActivateSession(true);
+
+            this.doLogout();
+            this.utils.openToast("Please login again.", "Ok")
+          }
+        },
+        {
+          text: 'yes',
+          role: 'role',
+          handler: data => {
+            this.currentUser.removeUser();
+            let userTokens = {
+              accessToken: tokens.access_token,
+              refreshToken: tokens.refresh_token,
+              idToken: tokens.id_token,
+              isDeactivated: false
+            };
+            this.currentUser.setCurrentUserDetails(userTokens);
+            let nav = this.app.getActiveNav();
+            nav.setRoot(TabsPage);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   getRefreshToken(): Promise<any> {
@@ -113,13 +214,13 @@ export class AuthProvider {
   }
 
   doLogout(): Promise<any> {
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
       let logout_redirect_url = AppConfigs.keyCloak.logout_redirect_url;
       let logout_url = AppConfigs.app_url + "/auth/realms/sunbird/protocol/openid-connect/logout?redirect_uri=" + logout_redirect_url;
       console.log(logout_url);
 
-        let closeCallback = function (event) {
-        };
+      let closeCallback = function (event) {
+      };
 
       let browserRef = (<any>window).cordova.InAppBrowser.open(logout_url, "_blank", "zoom=no");
       browserRef.addEventListener('loadstop', function (event) {

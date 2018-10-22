@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { FeedbackProvider } from '../../providers/feedback/feedback';
 
 /**
  * Generated class for the EvidenceListPage page.
@@ -23,7 +24,8 @@ export class EvidenceListPage {
   schoolData: any;
   currentEvidenceStatus: string;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage, private appCtrl: App, private utils: UtilsProvider) {
+    private storage: Storage, private appCtrl: App, private utils: UtilsProvider,
+    private feedback: FeedbackProvider) {
   }
 
   ionViewWillEnter() {
@@ -64,6 +66,7 @@ export class EvidenceListPage {
       this.schoolEvidences[index].startTime = Date.now();
       this.utils.setLocalSchoolData(this.schoolData)
     }
+    this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
     this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
   }
 
@@ -74,7 +77,8 @@ export class EvidenceListPage {
   }
 
   feedBack() {
-    this.utils.sendFeedback()
+    this.feedback.sendFeedback()
   }
+  
 
 }

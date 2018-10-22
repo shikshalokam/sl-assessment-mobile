@@ -15,7 +15,8 @@ export class MultipleChoiceTypeComponent implements OnInit {
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
   @Input() hideButton: boolean
-
+  @Input() schoolId: string;
+  
   constructor(private utils: UtilsProvider) {
     console.log('Hello checkboxTypeComponent Component');
     this.text = 'Hello World';

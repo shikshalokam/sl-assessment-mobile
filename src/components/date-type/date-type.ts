@@ -13,7 +13,9 @@ export class DateTypeComponent {
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
-  @Input() hideButton: boolean
+  @Input() schoolId: string;
+
+  @Input() hideButton: boolean;
 
   constructor(private utils: UtilsProvider) {
     console.log('Hello DateTypeComponent Component');

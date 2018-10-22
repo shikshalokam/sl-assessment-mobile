@@ -4,18 +4,19 @@ import { LoadingController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { AlertController } from 'ionic-angular';
-import { ApiProvider } from '../api/api';
-import { AppConfigs } from '../appConfig';
+// import { ApiProvider } from '../api/api';
+// import { AppConfigs } from '../appConfig';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 @Injectable()
 export class UtilsProvider {
 
-  constructor(public http: HttpClient, private locationAccuracy: LocationAccuracy, public loadingCtrl: LoadingController, private apiService: ApiProvider,
+  constructor(public http: HttpClient, private locationAccuracy: LocationAccuracy, public loadingCtrl: LoadingController,
     private toastCtrl: ToastController, private storage: Storage, private alertCtrl: AlertController) {
     console.log('Hello UtilsProvider Provider');
   }
   loading: any;
+  imagePath: string;
 
   startLoader(msg: string = 'Please wait..') {
     this.loading = this.loadingCtrl.create({
@@ -48,59 +49,17 @@ export class UtilsProvider {
     this.storage.set('schoolsDetails', JSON.stringify(data));
   }
 
+  setCurrentimageFolderName(evidenceId, schoolId) {
+    this.imagePath = 'images_' + evidenceId + '_' + schoolId;
+    console.log("Image path: " + this.imagePath)
+  }
+
   setLocalImages(images) {
-    this.storage.set('images', JSON.stringify(images));
+    this.storage.set(this.imagePath, JSON.stringify(images));
   }
 
   setLocalVariable(key, value) {
     this.storage.set(key, value);
-  }
-
-  sendFeedback() {
-    let alert = this.alertCtrl.create({
-      title: 'Feedback',
-      inputs: [
-        {
-          name: 'name',
-          placeholder: 'Name',
-        },
-        {
-          name: 'feedback',
-          placeholder: 'Feedback',
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Send',
-          role: 'role',
-          handler: data => {
-            if (data.name && data.feedback) {
-              data.type = 'Suggestion';
-              this.apiService.httpPost(AppConfigs.survey.feedback, data, success => {
-                this.openToast(success.message);
-              }, error => {
-              })
-            } else {
-              this.openToast("Fill both fields")
-            }
-            // if (User.isValid(data.username, data.password)) {
-            //   // logged in!
-            // } else {
-            //   // invalid login
-            //   return false;
-            // }
-          }
-        }
-      ]
-    });
-    alert.present();
   }
 
   testRegex(rege, value): boolean {
@@ -116,17 +75,17 @@ export class UtilsProvider {
     if (question.validation.required && !question.value.length && question.responseType === 'multiselect') {
       return false
     }
-    if (question.file.required && (question.fileName.length < question.file.minCount)) {
-      return false
-    }
-    if (question.validation.regex && !this.testRegex(question.validation.regex, question.value)) {
+    // if (question.file.required && (question.fileName.length < question.file.minCount)) {
+    //   return false
+    // }
+    if (question.validation.regex && question.responseType === 'number' && !this.testRegex(question.validation.regex, question.value)) {
       return false
     }
     return true
   }
 
   isMatrixQuestionComplete(question): boolean {
-    if (!question.value.length ) {
+    if (!question.value.length) {
       return false
     }
     for (const instance of question.value) {

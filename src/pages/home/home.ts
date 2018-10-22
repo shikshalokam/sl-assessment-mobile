@@ -7,6 +7,8 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { SchoolConfig } from '../../providers/school-list/schoolConfig';
 import { WelcomePage } from '../welcome/welcome';
 import { RatingProvider } from '../../providers/rating/rating';
+import { PopoverController } from 'ionic-angular';
+import { MenuItemComponent } from '../../components/menu-item/menu-item';
 
 declare var cordova: any;
 
@@ -26,7 +28,8 @@ export class HomePage {
     private apiService: ApiProvider,
     private utils: UtilsProvider, private appCtrl: App,
     private storage: Storage,
-    private ratingService: RatingProvider
+    private ratingService: RatingProvider,
+    private popoverCtrl: PopoverController
   ) { }
 
   getSchoolListApi(): void {
@@ -91,6 +94,9 @@ export class HomePage {
       this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].startTime = Date.now();
       this.utils.setLocalSchoolData(this.schoolDetails)
     }
+    // console.log(JSON.stringify(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex]._id)
+    this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
+
     this.appCtrl.getRootNav().push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, parent: this });
 
     // this.navCtrl.push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex })
@@ -157,6 +163,23 @@ export class HomePage {
     }).catch(error => {
       this.getSchoolListApi();
     })
+  }
+
+  getRatedQuestions(school): void {
+    const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
+    this.ratingService.fetchRatedQuestions(submissionId, school);
+  }
+
+  openMenu(myEvent,school) {
+    let popover = this.popoverCtrl.create(MenuItemComponent, {
+      submissionId: this.schoolDetails[school._id]['assessments'][0].submissionId,
+      _id: school._id,
+      name: school.name,
+      parent: this
+    });
+    popover.present({
+      ev: myEvent
+    });
   }
 
 

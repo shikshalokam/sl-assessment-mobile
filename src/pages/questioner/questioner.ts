@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { SectionListPage } from '../section-list/section-list';
+import { FeedbackProvider } from '../../providers/feedback/feedback';
 
 @IonicPage()
 @Component({
@@ -28,7 +29,7 @@ export class QuestionerPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private cfr: ComponentFactoryResolver,
-    private utils: UtilsProvider) {
+    private utils: UtilsProvider, private feedback: FeedbackProvider) {
   }
 
   ionViewDidLoad() {
@@ -37,7 +38,6 @@ export class QuestionerPage {
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.selectedSectionIndex = this.navParams.get('selectedSection');
-    this
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
       this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
@@ -50,8 +50,7 @@ export class QuestionerPage {
   }
 
   next(status?: string) {
-    console.log(status)
-    // console.log(JSON.stringify(this.schoolData))
+    console.log(this.questions[this.start].isCompleted)
     console.log(this.start);
     if (this.questions[this.start].children.length) {
       this.updateTheChildrenQuestions(this.questions[this.start])
@@ -65,11 +64,9 @@ export class QuestionerPage {
         this.questions[this.start].isCompleted = true;
         this.next();
       } else if (this.questions[this.start].visibleIf && this.checkForQuestionDisplay(this.questions[this.start])) {
-        // if()
       }
     } else if (status === 'completed') {
       this.utils.setLocalSchoolData(this.schoolData);
-      // this.navCtrl.popToRoot()
       const opt = {
         _id: this.schoolId,
         name: this.schoolName,
@@ -77,7 +74,6 @@ export class QuestionerPage {
       }
       this.navCtrl.pop()
     } else {
-      // console.log('hiiii')
       this.next('completed')
     }
   }
@@ -85,14 +81,14 @@ export class QuestionerPage {
   checkForQuestionDisplay(qst): boolean {
     console.log('checkcondition')
     // Evidence level check for visible if
-    
+
     // for (const section of this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].sections) {
     //   this.allQuestionsOfEvidence = this.allQuestionsOfEvidence.concat(section.questions);
     // }
     let display = false;
     for (const question of this.questions) {
 
-    // for (const question of this.allQuestionsOfEvidence) {
+      // for (const question of this.allQuestionsOfEvidence) {
       // console.log('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"');
       if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
         display = true;
@@ -131,6 +127,6 @@ export class QuestionerPage {
   }
 
   feedBack() {
-    this.utils.sendFeedback()
+    this.feedback.sendFeedback()
   }
 }

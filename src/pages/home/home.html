@@ -1,8 +1,10 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title [translate]="'home'"></ion-title>
-  </ion-navbar>
+  <header [title]="'headings.home'|translate" [hideBack]="true">
+
+  </header>
 </ion-header>
+
+
 
 <ion-content>
   <ion-card>
@@ -15,10 +17,10 @@
   <ion-card *ngFor="let school of schoolList; let i = index">
 
     <ion-item-group>
-      <ion-item-divider color="light" (click)="goToProfile(school)">
+      <ion-item-divider color="light">
         <h3 class="headerText">
           <ion-icon name="book" margin-right></ion-icon>{{school?.name}} - {{school?.externalId}}
-          <!-- <ion-icon name='eye' class="viewIcon" float-right large></ion-icon> -->
+          <ion-icon name='more' class="viewIcon" float-right large (click)="openMenu($event,school)"></ion-icon>
           <!-- <span float-right class="more">View </span> -->
         </h3>
       </ion-item-divider>
@@ -48,19 +50,23 @@
         </button>
       </ion-list>
     </ion-card-content>
-
+<!-- 
     <ion-row no-padding class="separation">
-      <ion-col>
+      <ion-col class="_justify-content-space-between">
         <button ion-button clear small color="primary" icon-end (click)="goToProfile(school)" >
           <ion-icon name='eye' margin-right></ion-icon>
           {{'buttons.view'|translate}} {{'buttons.profile'|translate}}
         </button>
-        <button ion-button clear small color="primary" icon-end float-right (click)="goToRating(school)">
+        <button ion-button clear small color="primary" icon-end (click)="getRatedQuestions(school)">
+            <ion-icon name='flag' margin-right></ion-icon>
+            {{'buttons.flag'|translate}}
+          </button>
+        <button ion-button clear small color="primary" icon-end (click)="goToRating(school)">
           <ion-icon name='star' margin-right></ion-icon>
           {{'buttons.ratings'|translate}}
         </button>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
     
   </ion-card>
 </ion-content>

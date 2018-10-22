@@ -16,6 +16,7 @@
 // automatically applied to the <body> element in the app.
 $green-color: green;
 $grey-color: #FAFAFA;
+$dark-grey-color: #ccc;
 $font-size-base: 14px;
 $font-size-large: 18px;
 $white-color : #fff;
@@ -174,4 +175,14 @@ ion-content {
     color: $red-color;
     height: 12px;
     margin-top: 5px;
+}
+
+._headerIcon {
+    color: white !important ;
+    font-size: 24px;
+    padding-right: 10px;
+}
+
+._disconnectedConnection {
+    color: $red-color !important;
 }

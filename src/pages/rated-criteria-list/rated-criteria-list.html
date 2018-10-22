@@ -1,0 +1,43 @@
+<!--
+  Generated template for the RatedCriteriaListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{'headings.ratedCriterias' |translate}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+  <ion-item-group>
+    <ion-item-divider color="light">
+      <h3 class="headerText">
+        <ion-icon name="book" margin-right></ion-icon> {{schoolData?.name}}
+      </h3>
+    </ion-item-divider>
+    <ion-item *ngFor="let criteria of ratedQuestions?.criterias; let i= index" text-wrap (click)="openFlaggingModal(i)">
+      <div class="_flex-box">
+        <ion-icon name="albums" margin-right></ion-icon>
+        <div style="flex:1">{{ criteria?.name }}</div>
+        <ion-icon color="primary" name="flag" *ngIf="criteria?.isFlagged" margin-left float-right></ion-icon>
+      </div>
+    </ion-item>
+  </ion-item-group>
+</ion-content>
+
+<div class="_footer" *ngIf="!ratedQuestions?.isSubmitted">
+    <ion-row>
+      <ion-col>
+        <!-- <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
+        <button ion-button icon-start full color="primary" (click)="submitFlaging()" [disabled]="!isFlagged">
+          <ion-icon name="cloud-upload" margin-right></ion-icon>{{'buttons.submit'|translate}}
+          {{'buttons.flag'|translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>

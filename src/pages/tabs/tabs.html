@@ -1,27 +1,4 @@
-<ion-header>
-  <ion-navbar color="primary" hideBackButton="true">
 
-
-
-
-
-    <!-- <ion-grid> -->
-      <!-- <ion-row> -->
-        <!-- <ion-col col-10>{{header}}</ion-col>
-
-        <ion-col col-2>
-          <ion-icon name="log-out" isActive="true" (click)="logout()" float-right></ion-icon>
-        </ion-col> -->
-      <!-- </ion-row>
-    </ion-grid> -->
-    <div class="_flex-box">
-        <ion-title (click)="goToProfile()">{{ header | translate }} </ion-title> 
-        <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px" (click)="feedBack()" margin-right float-right></ion-icon>
-        <!-- <ion-icon name="log-out" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px" (click)="logout()" float-right></ion-icon> -->
-    </div>
-   
-  </ion-navbar>
-</ion-header>
 
 <ion-tabs selectedIndex="0">
   <ion-tab (ionSelect)="selectedTab(0)" [root]="tab0Root" tabTitle="{{'tabs.home' | translate}}" tabIcon="home"></ion-tab>

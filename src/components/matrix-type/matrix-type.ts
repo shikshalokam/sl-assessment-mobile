@@ -16,6 +16,8 @@ export class MatrixTypeComponent {
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
+  @Input() schoolId: string;
+  
   mainInstance: any;
 
   constructor(private modalCntrl: ModalController, private utils: UtilsProvider) {

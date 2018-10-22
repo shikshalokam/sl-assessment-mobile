@@ -40,11 +40,14 @@ export class CurrentUserProvider {
   }
 
   getCurrentUserData(): any {
-    // this.storage.get('tokens').then((session) => {
-    //   console.log(session);
-    //   return session
-    // });
-    return jwt_decode(this.curretUser.accessToken)
+    console.log("user")
+    
+    const currentUser = this.curretUser ? jwt_decode(this.curretUser.accessToken) : null
+    return currentUser
+  }
+
+  getDecodedAccessToken(token) {
+    return jwt_decode(token);
   }
 
   removeUser() {
@@ -60,15 +63,20 @@ export class CurrentUserProvider {
     });
   }
 
+  deactivateActivateSession(status): void {
+    this.curretUser.isDeactivated = status;
+    this.setCurrentUserDetails(this.curretUser);
+  }
+
   checkForTokens(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.storage.get('tokens').then((tokens) => {
         console.log("heree")
         if (tokens) {
           this.curretUser = JSON.parse(tokens);
-          resolve();
+          resolve(this.curretUser);
         } else {
-          reject();
+          reject(this.curretUser);
         }
       });
     })

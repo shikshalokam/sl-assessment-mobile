@@ -2,9 +2,9 @@ matrix-type {
     ion-fab {
         bottom: 80px !important;
         position: fixed;
+        z-index: 1;
     }
     .deletOption {
-        color: $red-color;
-        z-index: 1;
+        color: $dark-grey-color;
     }
 }

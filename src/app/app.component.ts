@@ -8,6 +8,8 @@ import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { UtilsProvider } from '../providers/utils/utils';
 import { TranslateService } from '@ngx-translate/core';
+import { Network } from '@ionic-native/network';
+import { NetworkGpsProvider } from '../providers/network-gps/network-gps';
 
 @Component({
   templateUrl: 'app.html'
@@ -16,6 +18,8 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
   rootPage: any;
   isAlertPresent: boolean = false;
+  networkSubscription: any;
+  networkAvailable: boolean;
   // rootPage: any = "LoginPage";
 
   constructor(
@@ -25,7 +29,9 @@ export class MyApp {
     private currentUser: CurrentUserProvider,
     private alertCtrl: AlertController,
     private utils: UtilsProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private network: Network,
+    private networkGpsProvider: NetworkGpsProvider
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -33,27 +39,53 @@ export class MyApp {
       this.initilaizeApp();
       this.registerBAckButtonAction();
       this.initTranslate();
+      this.networkListenerInitialize();
     });
+
+  }
+
+  ionViewWillLeave() {
+    if(this.networkSubscription){
+      this.networkSubscription.unsubscribe();
+    }
   }
 
   initTranslate() {
     this.translate.setDefaultLang('en');
+  }
 
+  networkListenerInitialize(): void {
+    console.log("network listener")
 
-    // if (this.translate.getBrowserLang() !== undefined) {
-    //   console.log("language")
-    //     this.translate.use(this.translate.getBrowserLang());
-    // } else {
-    //     this.translate.use('hi'); // Set your language here
-    // }
+    console.log("Network type " + this.network.type)
+    this.networkSubscription = this.network.onDisconnect().subscribe(() => {
+      this.networkAvailable = false;
+      this.networkGpsProvider.setNetworkStatus(this.networkAvailable);
+    });
 
-}
+    let connectSubscription = this.network.onConnect().subscribe(() => {
+      this.networkAvailable = true;
+      this.networkGpsProvider.setNetworkStatus(this.networkAvailable);
+    });
+
+    this.networkSubscription.add(connectSubscription);
+
+    this.networkAvailable = this.network.type !== 'none' ? true : false;
+    this.networkGpsProvider.setNetworkStatus(this.networkAvailable);
+  }
 
   initilaizeApp(): void {
     this.statusBar.styleDefault();
     this.currentUser.checkForTokens().then(response => {
-      this.rootPage = TabsPage;
-      this.splashScreen.hide()
+      console.log("Deiactivated " + response.isDeactivated)
+      if (response.isDeactivated) {
+        this.rootPage = WelcomePage;
+        this.splashScreen.hide()
+      } else {
+        this.rootPage = TabsPage;
+        this.splashScreen.hide()
+      }
+
     }).catch(error => {
       this.rootPage = WelcomePage;
       this.splashScreen.hide()

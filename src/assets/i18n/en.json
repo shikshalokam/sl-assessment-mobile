@@ -2,7 +2,7 @@
     "buttons": {
         "view": "View",
         "profile": "Profile",
-        "ratings": "Rating",
+        "ratings": "Rate",
         "start": "Start",
         "survey": "survey",
         "save": "Save",
@@ -15,7 +15,8 @@
         "send": "Send",
         "yes": "Yes",
         "no": "No",
-        "login": "Login"
+        "login": "Login",
+        "flag": "Flag"
     },
     "tabs": {
         "home": "Home",
@@ -41,7 +42,9 @@
         "criteria": "Criteria",
         "rate": "Rate",
         "uplaod": "Upload",
-        "images": "Images"
+        "images": "Images",
+        "ratedCriterias": "Rated Criterias",
+        "flagCriteria": "Flag Criteria"
     },
     "labels": {
         "welcome": "Welcome",
@@ -52,7 +55,7 @@
         "remarks": "Remarks",
         "image": "Image",
         "completed": "Completed",
-        "inprogress":"In Progress",
+        "inprogress": "In Progress",
         "submitted": "Submitted"
     },
     "languages": {

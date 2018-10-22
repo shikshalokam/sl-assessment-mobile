@@ -6,7 +6,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
 import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
 import { RatingProvider } from '../../providers/rating/rating';
-
+import { FeedbackProvider } from '../../providers/feedback/feedback';
 
 @IonicPage()
 @Component({
@@ -27,7 +27,8 @@ export class SchoolProfilePage {
     private utils: UtilsProvider,
     private storage: Storage,
     private ratingService: RatingProvider,
-    private app: App) {
+    private app: App,
+    private feedback: FeedbackProvider) {
   }
 
   ionViewDidLoad() {
@@ -77,6 +78,6 @@ export class SchoolProfilePage {
   }
 
   feedBack() {
-    this.utils.sendFeedback()
+    this.feedback.sendFeedback()
   }
 }

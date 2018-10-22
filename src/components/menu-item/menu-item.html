@@ -1,0 +1,14 @@
+<ion-list class="wrapper">
+  <button ion-item clear small icon-end (click)="goToProfile()">
+    <ion-icon name="eye" margin-right></ion-icon>
+    {{'buttons.view'|translate}} {{'buttons.profile'|translate}}
+  </button>
+  <button ion-item clear small icon-end (click)="goToRating()">
+    <ion-icon name="star" margin-right></ion-icon>
+    {{'buttons.ratings'|translate}}
+  </button>
+  <button ion-item clear small icon-end (click)="goToFlaggin()">
+    <ion-icon name="flag" margin-right></ion-icon>
+    {{'buttons.flag'|translate}}
+  </button>
+</ion-list>

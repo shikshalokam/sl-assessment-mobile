@@ -8,6 +8,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { AppConfigs } from '../../providers/appConfig';
 import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
 import { WelcomePage } from '../welcome/welcome';
+import { PopoverController } from 'ionic-angular';
 
 @Component({
   selector: 'page-school-list',
@@ -107,6 +108,5 @@ export class SchoolListPage {
   ionViewWillEnter() {
     console.log("init")
   }
-
 
 }

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <div class="_flex-box">
+      <ion-title>{{'headings.flagCriteria' | translate }}</ion-title>
+      <ion-icon name="close" isActive="true" class="closeBtn" margin-right float-right (click)="cancel()"></ion-icon>
+    </div>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <h4 padding class="_multiLineList customH4">{{currentCriteria?.name}}</h4>
+  <div padding *ngIf="currentCriteria?.remarks"><b>Remarks:</b> {{currentCriteria?.remarks}}</div>
+  <div>
+    <div class="overlay" *ngIf="currentCriteria?.isSubmitted"></div>
+    <div padding margin-top>{{currentCriteria?.flag?.label}}</div>
+    <ion-list radio-group [(ngModel)]="currentCriteria?.flag.value" text-wrap>
+      <ion-item *ngFor="let option of currentCriteria?.flag?.options">
+        <ion-label> {{option?.label}}</ion-label>
+        <ion-radio value="{{option?.value}}"></ion-radio>
+      </ion-item>
+    </ion-list>
+    <div padding-left padding-right *ngIf="currentCriteria?.flag">
+      <remarks [data]="currentCriteria?.flag"></remarks>
+    </div>
+  </div>
+</ion-content>
+
+<div class="_footer customFooter">
+  <ion-row>
+    <ion-col>
+      <button ion-button icon-start full color="light" (click)="cancel()">
+        {{'buttons.cancel'|translate}}
+      </button>
+    </ion-col>
+    <ion-col>
+      <!-- <button ion-button icon-end  full float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
+      <button ion-button icon-start full float-right color="primary" (click)="saveData()">
+        {{'buttons.save'|translate}}
+      </button>
+    </ion-col>
+
+  </ion-row>
+</div>

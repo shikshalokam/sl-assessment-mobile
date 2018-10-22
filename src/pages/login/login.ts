@@ -54,7 +54,9 @@ export class LoginPage {
   }
 
   ionViewWillLeave() {
-    this.subscription.unsubscribe();
+    if(this.subscription){
+      this.subscription.unsubscribe();
+    }
   }
 
   

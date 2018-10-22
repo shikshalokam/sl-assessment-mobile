@@ -12,6 +12,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 
 @Component({
   selector: 'page-welcome',
@@ -37,7 +38,7 @@ export class WelcomePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage,
     private auth: AuthProvider, private currentUser: CurrentUserProvider,
-    private toastCtrl: ToastController, private network: Network,
+    private toastCtrl: ToastController, private network: Network, private netwrkGpsProvider: NetworkGpsProvider,
     private permissions: AndroidPermissions, private geolocation: Geolocation,
     private diagnostic: Diagnostic, private utils: UtilsProvider, private locationAccuracy: LocationAccuracy) {
     this.subscription = this.network.onDisconnect().subscribe(() => {
@@ -58,80 +59,11 @@ export class WelcomePage {
   }
 
   ionViewWillLeave() {
-    this.subscription.unsubscribe();
-  }
-
-  enableGPSRequest() {
-    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-
-      if (canRequest) {
-        // the accuracy option will be ignored by iOS
-        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-          () => {
-            this.getCurrentLocation();
-          },
-          error => {
-            console.log('Error requesting location permissions', error);
-            this.enableGPSRequest()
-          }
-        );
-      }
-
-    });
-  }
-
-
-  getCurrentLocation(): void {
-    console.log('getting current location');
-    const options = {
-      timeout: 20000
+    if(this.subscription){
+      this.subscription.unsubscribe();
     }
-    this.geolocation.getCurrentPosition(options).then((resp) => {
-      this.utils.openToast(resp.coords.latitude + " " + resp.coords.longitude)
-      console.log(JSON.stringify(resp));
-    }).catch((error) => {
-      this.utils.openToast('Error getting location' + JSON.stringify(error));
-      console.log(error.message + " " + error.code)
-    });
   }
 
-  isLocationEnabled() {
-    console.log('Is location enabled');
-    this.diagnostic.isLocationAvailable().then(isAvailable => {
-      console.log("Location enabled" + isAvailable)
-      if (isAvailable) {
-        this.getCurrentLocation();
-      } else {
-        console.log('GPS offf')
-      }
-    }).catch(error => {
-
-    })
-  }
-
-  checkForLocationPermissions(): void {
-    console.log('Check permissions');
-    this.permissions.checkPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(
-      result => {
-        console.log('Has permission?', result.hasPermission)
-        if (!result.hasPermission) {
-          console.log("ask permission");
-          this.permissions.requestPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(result => {
-            if (result.hasPermission) {
-              this.enableGPSRequest();
-            }
-          }).catch(error => {
-            console.log('error')
-          })
-        } else {
-          console.log('yes, Has permission');
-          // this.isLocationEnabled();
-          this.enableGPSRequest();
-        }
-      }).catch(error => {
-        console.log("Error check for permission" + JSON.stringify(error))
-      });
-  }
 
   presentToast(msg) {
     let toast = this.toastCtrl.create({
@@ -148,21 +80,27 @@ export class WelcomePage {
   }
 
   signIn() {
-    this.auth.doOAuthStepOne()
-      .then(code => {
-        this.responseData = JSON.stringify(code);
-        return this.auth.doOAuthStepTwo(code);
-      }).then(response => {
-        this.navCtrl.setRoot(TabsPage)
-        // this.navCtrl.push(TabsPage);
-        // this.presentToast("Login Successful")
-      })
+    this.diagnostic.isLocationEnabled().then(success => {
+      if (success) {
+        this.auth.doOAuthStepOne().then(code => {
+          this.responseData = JSON.stringify(code);
+          return this.auth.doOAuthStepTwo(code);
+        }).then(response => {
+          this.auth.checkForCurrentUserLocalData(response);
+        })
+      } else {
+        this.netwrkGpsProvider.checkForLocationPermissions();
+      }
+    }).catch(error => {
+      this.netwrkGpsProvider.checkForLocationPermissions();
+    })
   }
 
   ionViewDidLoad() {
     this.skipMsg = "Skip";
     console.log('ionViewDidLoad WelcomePage');
-    this.checkForLocationPermissions();
+    this.netwrkGpsProvider.checkForLocationPermissions();
+    // this.checkForLocationPermissions();
     // this.gelLoc();
 
     if (this.network.type != 'none') {

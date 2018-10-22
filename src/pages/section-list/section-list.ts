@@ -6,6 +6,9 @@ import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { ImageListingPage } from '../image-listing/image-listing';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { FeedbackProvider } from '../../providers/feedback/feedback';
 
 /**
  * Generated class for the SectionListPage page.
@@ -32,15 +35,18 @@ export class SectionListPage {
   currentEvidence: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage, private appCtrl: App, private currentUser: CurrentUserProvider,
-    private apiService: ApiProvider, private utils: UtilsProvider) {
+    private storage: Storage, private appCtrl: App,
+    private currentUser: CurrentUserProvider,
+    private apiService: ApiProvider, private utils: UtilsProvider,
+    private diagnostic: Diagnostic, private ngps: NetworkGpsProvider,
+    private feedback: FeedbackProvider) {
   }
   ionViewWillEnter() {
     console.log('Entered')
     // console.log(JSON.stringify(this.userData))
     console.log('ionViewDidLoad SectionListPage');
     this.userData = this.currentUser.getCurrentUserData();
-    this.schoolId =  this.navParams.get('_id');
+    this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.storage.get('schoolsDetails').then(data => {
@@ -113,13 +119,22 @@ export class SectionListPage {
   }
 
   goToImageListing() {
-    const params = {
-      selectedEvidenceId: this.currentEvidence._id,
-      _id: this.schoolId,
-      name: this.schoolName,
-      selectedEvidence: this.selectedEvidenceIndex,
-    }
-    this.navCtrl.push(ImageListingPage, params);
+    this.diagnostic.isLocationEnabled().then(success => {
+      if (success) {
+        const params = {
+          selectedEvidenceId: this.currentEvidence._id,
+          _id: this.schoolId,
+          name: this.schoolName,
+          selectedEvidence: this.selectedEvidenceIndex,
+        }
+        this.navCtrl.push(ImageListingPage, params);
+      } else {
+        this.ngps.checkForLocationPermissions();
+      }
+    }).catch(error => {
+      this.ngps.checkForLocationPermissions();
+    })
+
   }
 
   submitEvidence() {
@@ -176,12 +191,12 @@ export class SectionListPage {
   }
 
   feedBack() {
-    this.utils.sendFeedback()
+    this.feedback.sendFeedback()
   }
 
 
-  ionViewWillLeave(){
-    if(this.navParams.get('parent')){
+  ionViewWillLeave() {
+    if (this.navParams.get('parent')) {
       this.navParams.get('parent').onInit();
     }
   }

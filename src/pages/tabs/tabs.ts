@@ -9,6 +9,8 @@ import { App, NavController, AlertController } from 'ionic-angular';
 import { FaqPage } from '../faq/faq';
 import { WelcomePage } from '../welcome/welcome';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { FeedbackProvider } from '../../providers/feedback/feedback';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -21,11 +23,28 @@ export class TabsPage {
 
   header: string = 'Schools';
   captcha: string;
+  isNetworkAvailabe: any;
+  subscription: any;
 
   constructor(private auth: AuthProvider, private navCtrl: NavController,
     private currentUser: CurrentUserProvider, private app: App,
-    private utils: UtilsProvider, private alertCntrl: AlertController) {
+    private utils: UtilsProvider, private alertCntrl: AlertController,
+    private ngps: NetworkGpsProvider, private feedback: FeedbackProvider) {
     this.selectedTab(0);
+    this.subscription = this.ngps.networkStatus$.subscribe(val => {
+      this.isNetworkAvailabe = val;
+      console.log(val)
+    })
+  }
+
+  ionViewWillLeave() {
+    if(this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  ionViewDidLoad() {
+    this.isNetworkAvailabe = this.ngps.getNetworkStatus();
   }
 
   selectedTab(index): void {
@@ -47,7 +66,7 @@ export class TabsPage {
   }
 
   feedBack() {
-    this.utils.sendFeedback()
+    this.feedback.sendFeedback()
   }
 
   logout() {
@@ -98,8 +117,10 @@ export class TabsPage {
         handler: data => {
           if (data.captcha === this.captcha) {
             this.auth.doLogout().then(response => {
+              this.currentUser.deactivateActivateSession(true);
+              // this.app.getActiveNav().setRoot(WelcomePage);
               // this.currentUser.removeUser();
-              this.navCtrl.setRoot(WelcomePage);
+              // this.navCtrl.setRoot(WelcomePage);
               // this.app.getRootNav().push(WelcomePage)
             })
           } else {

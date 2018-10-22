@@ -20,6 +20,7 @@ export class RadioTypeComponent implements OnInit{
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
   @Input() hideButton: boolean;
+  @Input() schoolId: string;
 
   color: string = 'light';
   isComplete: boolean;
@@ -27,10 +28,12 @@ export class RadioTypeComponent implements OnInit{
   constructor(private utils: UtilsProvider) {
 
     console.log('Hello RadioTypeComponent Component');
+    console.log("Evidence id"+ this.evidenceId)
+
   }
 
   ngOnInit() {
-    console.log(JSON.stringify(this.data))
+    // console.log(JSON.stringify(this.data))
   }
 
   checkForCompletion() {

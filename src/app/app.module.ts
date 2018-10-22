@@ -50,6 +50,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { RatingProvider } from '../providers/rating/rating';
 import { RatingCriteriaListingPageModule } from '../pages/rating-criteria-listing/rating-criteria-listing.module';
 import { RatingPageModule } from '../pages/rating/rating.module';
+import { NetworkGpsProvider } from '../providers/network-gps/network-gps';
+import { RatedCriteriaListPageModule } from '../pages/rated-criteria-list/rated-criteria-list.module';
+import { FeedbackProvider } from '../providers/feedback/feedback';
 
 @NgModule({
   declarations: [
@@ -88,7 +91,8 @@ import { RatingPageModule } from '../pages/rating/rating.module';
     ComponentsModule,
     DirectivesModule,
     RatingCriteriaListingPageModule,
-    RatingPageModule
+    RatingPageModule,
+    RatedCriteriaListPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -126,7 +130,9 @@ import { RatingPageModule } from '../pages/rating/rating.module';
     FileTransfer,
     ImagePicker,
     LocationAccuracy,
-    RatingProvider
+    RatingProvider,
+    NetworkGpsProvider,
+    FeedbackProvider
   ]
 })
 export class AppModule { }

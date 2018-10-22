@@ -48,7 +48,7 @@ export class ImageListingPage {
     }).catch(error => {
 
     })
-    this.storage.get('images').then(data => {
+    this.storage.get(this.utils.imagePath).then(data => {
       // console.log(data)
       this.uploadImages = JSON.parse(data) ? JSON.parse(data)[this.currentEvidenceId] : [];
       // console.log(this.uploadImages)
@@ -75,12 +75,12 @@ export class ImageListingPage {
       for (let i = 0; i < success.result.length; i++) {
         this.imageList[i]['url'] = success.result[i].url;
       }
-      this.utils.stopLoader();
+      // this.utils.stopLoader();
       this.cloudImageUpload();
       this.fileTransfer.create()
     }, error => {
       this.utils.openToast('Unable to get google urls')
-      this.utils.stopLoader();
+      // this.utils.stopLoader();
     })
   }
 
@@ -107,7 +107,10 @@ export class ImageListingPage {
 
 
   cloudImageUpload() {
-    console.log(this.uploadIndex)
+    console.log(this.uploadIndex);
+    // if(!this.uploadIndex) {
+    //   this.utils.startLoader("Image upload in progress");
+    // }
     var options: FileUploadOptions = {
       fileKey: this.imageList[this.uploadIndex].file,
       fileName: this.imageList[this.uploadIndex].file,
@@ -131,6 +134,7 @@ export class ImageListingPage {
         this.uploadIndex++;
         this.cloudImageUpload();
       } else {
+      this.utils.stopLoader();
         this.submitEvidence();
       }
     }).catch(err => {

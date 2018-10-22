@@ -33,6 +33,7 @@ export class RatingCriteriaListingPage {
     this.submissionId = this.navParams.get('submissionId');
     this.schoolData = this.navParams.get('schoolData');
     this.storage.get('rating_' + this.submissionId).then(data => {
+      console.log(JSON.stringify(data))
       if (data) {
         this.allRatingDetails = data;
         this.enableSubmit = this.enableSubmitButton();

@@ -13,7 +13,9 @@ export class InputTypeComponent implements OnInit {
   @Output() nextCallBack = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
-  @Input() hideButton: boolean
+  @Input() hideButton: boolean;
+  @Input() schoolId: string;
+  
   notNumber: boolean;
 
   constructor(private utils: UtilsProvider) {

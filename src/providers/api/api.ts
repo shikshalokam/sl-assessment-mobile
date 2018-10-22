@@ -5,15 +5,22 @@ import { CurrentUserProvider } from '../current-user/current-user';
 import { AppConfigs } from '../appConfig';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import { catchError } from 'rxjs/operators';
+import { App, AlertController } from 'ionic-angular'
+import { WelcomePage } from '../../pages/welcome/welcome';
+import { UtilsProvider } from '../utils/utils';
+import { AuthProvider } from '../auth/auth';
+
 
 @Injectable()
 export class ApiProvider {
 
-  constructor(public http: Http, public currentUser: CurrentUserProvider) {
+  constructor(public http: Http,
+    public currentUser: CurrentUserProvider,
+    private appCtrls: App, private utils: UtilsProvider,
+    private auth: AuthProvider,
+    private alertCntrl: AlertController) {
   }
+
 
   validateApiToken(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -45,6 +52,7 @@ export class ApiProvider {
           // this.currentUser.removeUser();
           console.log('Utils: Logout,token invalid');
           console.log('error ' + JSON.stringify(error));
+          // this.doLogout();
           reject({ status: '401' });
         });
       } else {
@@ -56,6 +64,8 @@ export class ApiProvider {
   }
 
   httpPost(url, payload, successCallback, errorCallback) {
+    let nav = this.appCtrls.getActiveNav();
+
     this.validateApiToken().then(response => {
       console.log('SUCcess');
       let headers = new Headers();
@@ -63,15 +73,25 @@ export class ApiProvider {
       console.log(AppConfigs.api_base_url + url)
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.post(apiUrl, payload, { headers: headers })
-      .pipe(catchError(this.handleError))
-      .subscribe(data => {
-        console.log('API service success')
-        successCallback(JSON.parse(data['_body']));
-      })
+        .subscribe(data => {
+          console.log('API service success')
+          successCallback(JSON.parse(data['_body']));
+        }, error => {
+          this.auth.doLogout().then(success => {
+            nav.setRoot(WelcomePage);
+            this.currentUser.deactivateActivateSession(true);
+            this.utils.openToast('Session expired. Please login again to continue', 'Ok');
+            errorCallback(error);
+
+          }).catch(error => {
+
+          })
+        })
     }).catch(error => {
       console.log('ERRor')
       console.log(JSON.stringify(error))
       errorCallback(error);
+      // this.doLogout();
     })
   }
 
@@ -93,8 +113,27 @@ export class ApiProvider {
     // })
   }
 
+  reLoginAlert() {
+    let alert = this.alertCntrl.create({
+      title: 'Session has expired. Please login again to continue',
+      buttons: [
+        {
+          text: 'Login',
+          role: 'role',
+          handler: data => {
+            this.currentUser.deactivateActivateSession(true);
+            this.appCtrls.getActiveNav().setRoot(WelcomePage);
+          }
+        }
+      ],
+      enableBackdropDismiss: false
+    });
+    alert.present();
+  }
 
   httpGet(url, successCallback, errorCallback) {
+    let nav = this.appCtrls.getActiveNav();
+
     this.validateApiToken().then(response => {
       console.log('SUCcess');
       let headers = new Headers();
@@ -102,13 +141,26 @@ export class ApiProvider {
       console.log(AppConfigs.api_base_url + url)
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.get(apiUrl, { headers: headers })
-        .pipe(catchError(this.handleError))
         .subscribe(data => {
-          console.log('API service success')
+          console.log('API service success');
+          console.log(JSON.stringify(data))
           successCallback(JSON.parse(data['_body']));
+        }, error => {
+
+          this.auth.doLogout().then(success => {
+            this.reLoginAlert();
+            // this.currentUser.deactivateActivateSession(true);
+            // this.utils.openToast('Session has expired. Please login again to continue', 'Ok');
+            // nav.setRoot(WelcomePage);
+
+          }).catch(error => {
+
+          })
+          errorCallback(error);
         })
     }).catch(error => {
-      console.log('ERRor')
+      console.log('ERRor');
+      // this.doLogout();
       console.log(JSON.stringify(error))
       errorCallback(error);
     })
@@ -133,23 +185,6 @@ export class ApiProvider {
     })
 
   }
-
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    // return an observable with a user-facing error message
-    
-    return new ErrorObservable(
-      'Something bad happened; please try again later.');
-  };
 
 
 } 

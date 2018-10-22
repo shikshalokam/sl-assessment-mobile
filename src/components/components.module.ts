@@ -11,6 +11,9 @@ import { MatrixTypeComponent } from './matrix-type/matrix-type';
 import { MatrixModalComponent } from './matrix-modal/matrix-modal';
 import { TranslateModule } from "@ngx-translate/core";
 import { FooterButtonsComponent } from './footer-buttons/footer-buttons';
+import { HeaderComponent } from './header/header';
+import { Network } from '@ionic-native/network';
+import { MenuItemComponent } from './menu-item/menu-item';
 
 @NgModule({
 	declarations: [
@@ -22,7 +25,9 @@ import { FooterButtonsComponent } from './footer-buttons/footer-buttons';
     ImageUploadComponent,
     MatrixTypeComponent,
     MatrixModalComponent,
-    FooterButtonsComponent],
+    FooterButtonsComponent,
+    HeaderComponent,
+    MenuItemComponent],
 	imports: [
 		IonicModule,
 		DirectivesModule,
@@ -37,12 +42,18 @@ import { FooterButtonsComponent } from './footer-buttons/footer-buttons';
     ImageUploadComponent,
     MatrixTypeComponent,
     MatrixModalComponent,
-    FooterButtonsComponent
+    FooterButtonsComponent,
+    HeaderComponent,
+    MenuItemComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
 		RadioTypeComponent,
-		MatrixModalComponent
+		MatrixModalComponent,
+		MenuItemComponent
+	],
+	providers:[
+		Network
 	]
 })
 export class ComponentsModule { }
