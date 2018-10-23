@@ -37,7 +37,13 @@ export class RatedCriteriaListPage {
   }
 
   openFlaggingModal(index): void {
-    let flaggingModal = this.modalCntrl.create(FlaggingModalPage, { currentCriteria: this.ratedQuestions.criterias[index] });
+    const selectedCriteria = this.ratedQuestions.criterias[index];
+    if(selectedCriteria.flagRaised){
+      selectedCriteria.flag.value = selectedCriteria.flagRaised.value;
+      selectedCriteria.flag.remarks = selectedCriteria.flagRaised.remarks;
+      selectedCriteria.isSubmitted = true; 
+    }
+    let flaggingModal = this.modalCntrl.create(FlaggingModalPage, { currentCriteria: selectedCriteria, submissionId: this.submissionId });
     flaggingModal.onDidDismiss(data => {
       this.isFlagged = this.ratedQuestions ? this.checkIfFlagged() : false;
       this.ratedQuestions.criterias[index] = data ? data : this.ratedQuestions.criterias[index];
@@ -55,24 +61,24 @@ export class RatedCriteriaListPage {
     return false
   }
 
-  submitFlaging(): void {
-    this.utils.startLoader()
-    const obj = { flag: {} };
-    for (const criteria of this.ratedQuestions.criterias) {
-      obj.flag[criteria._id] = {
-        value: criteria.flag.value,
-        remarks: criteria.flag.remarks,
-        criteriaId: criteria._id
-      }
-    }
-    console.log(JSON.stringify(obj))
-    this.apiService.httpPost(AppConfigs.flagging.submitFlag + this.submissionId, obj, success => {
-      this.ratedQuestions.isSubmitted = true;
-      this.utils.openToast(success.message)
-      this.utils.stopLoader();
-    }, error => {
-      this.utils.stopLoader();
-    })
-  }
+  // submitFlaging(): void {
+  //   this.utils.startLoader()
+  //   const obj = { flag: {} };
+  //   for (const criteria of this.ratedQuestions.criterias) {
+  //     obj.flag[criteria._id] = {
+  //       value: criteria.flag.value,
+  //       remarks: criteria.flag.remarks,
+  //       criteriaId: criteria._id
+  //     }
+  //   }
+  //   console.log(JSON.stringify(obj))
+  //   this.apiService.httpPost(AppConfigs.flagging.submitFlag + this.submissionId, obj, success => {
+  //     this.ratedQuestions.isSubmitted = true;
+  //     this.utils.openToast(success.message)
+  //     this.utils.stopLoader();
+  //   }, error => {
+  //     this.utils.stopLoader();
+  //   })
+  // }
 
 }

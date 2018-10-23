@@ -24,20 +24,19 @@
       <div class="_flex-box">
         <ion-icon name="albums" margin-right></ion-icon>
         <div style="flex:1">{{ criteria?.name }}</div>
-        <ion-icon color="primary" name="flag" *ngIf="criteria?.isFlagged" margin-left float-right></ion-icon>
+        <ion-icon color="primary" name="flag" *ngIf="criteria?.flagRaised" margin-left float-right></ion-icon>
       </div>
     </ion-item>
   </ion-item-group>
 </ion-content>
 
-<div class="_footer" *ngIf="!ratedQuestions?.isSubmitted">
+<!-- <div class="_footer" *ngIf="!ratedQuestions?.isSubmitted">
     <ion-row>
       <ion-col>
-        <!-- <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
         <button ion-button icon-start full color="primary" (click)="submitFlaging()" [disabled]="!isFlagged">
           <ion-icon name="cloud-upload" margin-right></ion-icon>{{'buttons.submit'|translate}}
           {{'buttons.flag'|translate}}
         </button>
       </ion-col>
     </ion-row>
-  </div>
+  </div> -->

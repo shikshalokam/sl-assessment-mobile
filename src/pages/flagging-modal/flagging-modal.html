@@ -26,7 +26,7 @@
   </div>
 </ion-content>
 
-<div class="_footer customFooter">
+<div class="_footer customFooter" *ngIf="!currentCriteria?.isSubmitted">
   <ion-row>
     <ion-col>
       <button ion-button icon-start full color="light" (click)="cancel()">
@@ -35,7 +35,7 @@
     </ion-col>
     <ion-col>
       <!-- <button ion-button icon-end  full float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
-      <button ion-button icon-start full float-right color="primary" (click)="saveData()">
+      <button ion-button icon-start full float-right color="primary" (click)="saveData()" [disabled]="!currentCriteria?.flag?.value || !currentCriteria?.flag?.remarks">
         {{'buttons.save'|translate}}
       </button>
     </ion-col>

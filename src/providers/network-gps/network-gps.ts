@@ -5,20 +5,30 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UtilsProvider } from '../utils/utils';
 import { Subject } from 'rxjs/Subject';
+import { Network } from '@ionic-native/network';
+import { Events } from 'ionic-angular';
 
+export enum ConnectionStatusEnum {
+  Online,
+  Offline
+}
 
 @Injectable()
 export class NetworkGpsProvider {
 
   networkStatus$ = new Subject();
   networkStatus: boolean;
+  previousStatus: any;
   constructor(
     public http: HttpClient,
     private permissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
-    private utils: UtilsProvider) {
+    private utils: UtilsProvider,
+    private network: Network,
+    private eventCtrl: Events) {
     console.log('Hello NetworkGpsProvider Provider');
+    this.previousStatus = ConnectionStatusEnum.Online;
   }
 
   checkForLocationPermissions(): void {
@@ -87,5 +97,30 @@ export class NetworkGpsProvider {
   getNetworkStatus(): boolean {
     return this.networkStatus
   }
+
+  public initializeNetworkEvents(): void {
+    this.network.onDisconnect().subscribe(() => {
+      if (this.previousStatus === ConnectionStatusEnum.Online) {
+        this.eventCtrl.publish('network:offline');
+      }
+      this.previousStatus = ConnectionStatusEnum.Offline;
+      this.networkStatus = false;
+    });
+    this.network.onConnect().subscribe(() => {
+      if (this.previousStatus === ConnectionStatusEnum.Offline) {
+        this.eventCtrl.publish('network:online');
+      }
+      this.previousStatus = ConnectionStatusEnum.Online;
+      this.networkStatus = true;
+    });
+
+    if (this.network.type !== 'none') {
+      this.networkStatus = true;
+    } else {
+      this.networkStatus = false;
+    }
+
+  }
+
 
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, App } from 'ionic-angular';
+import { NavController, App, Events } from 'ionic-angular';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ApiProvider } from '../../providers/api/api';
 import { Storage } from '@ionic/storage';
@@ -9,6 +9,8 @@ import { WelcomePage } from '../welcome/welcome';
 import { RatingProvider } from '../../providers/rating/rating';
 import { PopoverController } from 'ionic-angular';
 import { MenuItemComponent } from '../../components/menu-item/menu-item';
+import { Network } from '@ionic-native/network';
+import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 
 declare var cordova: any;
 
@@ -22,6 +24,8 @@ export class HomePage {
   schoolList: Array<object>;
   schoolDetails = [];
   evidences: any;
+  subscription: any;
+  networkAvailable: boolean;
 
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
@@ -29,8 +33,19 @@ export class HomePage {
     private utils: UtilsProvider, private appCtrl: App,
     private storage: Storage,
     private ratingService: RatingProvider,
-    private popoverCtrl: PopoverController
-  ) { }
+    private popoverCtrl: PopoverController,
+    private network: Network,
+    private events: Events,
+    private ngps: NetworkGpsProvider
+  ) {
+    // this.events.subscribe('network:offline', () => {
+    // });
+
+    // // Online event
+    // this.events.subscribe('network:online', () => {
+    // });
+    // this.networkAvailable = this.ngps.getNetworkStatus()
+  }
 
   getSchoolListApi(): void {
     this.utils.startLoader();
@@ -78,11 +93,11 @@ export class HomePage {
   }
 
   getLocalSchoolDetails(): void {
-    console.log('School details')
     this.storage.get('schoolsDetails').then(details => {
+    // console.log('School details ' + details)
+
       this.schoolDetails = JSON.parse(details);
       for (const schoolId of Object.keys(this.schoolDetails)) {
-        console.log(schoolId);
         this.checkForProgressStatus(this.schoolDetails[schoolId]['assessments'][0]['evidences'])
       }
     })
@@ -116,10 +131,10 @@ export class HomePage {
       this.utils.stopLoader();
       const schoolDetailsObj = {}
       for (const school of this.schoolDetails) {
-        console.log(school['schoolProfile']._id + ' 2nd');
+        // console.log(school['schoolProfile']._id + ' 2nd');
         schoolDetailsObj[school['schoolProfile']._id] = school;
       }
-      console.log(JSON.stringify(this.schoolDetails));
+      // console.log("Local school data"+JSON.stringify(schoolDetailsObj));
       this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
       this.getLocalSchoolDetails()
     }
@@ -145,7 +160,10 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-    this.onInit()
+    this.onInit();
+    if (this.network.type != 'none') {
+      this.networkAvailable = true;
+    }
   }
 
   onInit() {
@@ -170,16 +188,22 @@ export class HomePage {
     this.ratingService.fetchRatedQuestions(submissionId, school);
   }
 
-  openMenu(myEvent,school) {
+  openMenu(myEvent, school) {
     let popover = this.popoverCtrl.create(MenuItemComponent, {
       submissionId: this.schoolDetails[school._id]['assessments'][0].submissionId,
       _id: school._id,
       name: school.name,
-      parent: this
+      parent: this,
     });
     popover.present({
       ev: myEvent
     });
+  }
+
+  ionViewWillLeave() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Tab, App, AlertController, Nav } from 'ionic-angular';
+import { Platform, Tab, App, AlertController, Nav, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -31,21 +31,32 @@ export class MyApp {
     private utils: UtilsProvider,
     private translate: TranslateService,
     private network: Network,
-    private networkGpsProvider: NetworkGpsProvider
+    private networkGpsProvider: NetworkGpsProvider,
+    private events: Events
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.initilaizeApp();
+      this.networkGpsProvider.initializeNetworkEvents();
       this.registerBAckButtonAction();
       this.initTranslate();
-      this.networkListenerInitialize();
+      // this.networkListenerInitialize();
+      // Offline event
+      // this.events.subscribe('network:offline', () => {
+      //   alert('network:offline ==> ' + this.network.type);
+      // });
+
+      // // Online event
+      // this.events.subscribe('network:online', () => {
+      //   alert('network:online ==> ' + this.network.type);
+      // });
     });
 
   }
 
   ionViewWillLeave() {
-    if(this.networkSubscription){
+    if (this.networkSubscription) {
       this.networkSubscription.unsubscribe();
     }
   }

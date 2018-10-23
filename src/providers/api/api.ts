@@ -143,7 +143,7 @@ export class ApiProvider {
       this.http.get(apiUrl, { headers: headers })
         .subscribe(data => {
           console.log('API service success');
-          console.log(JSON.stringify(data))
+          // console.log(data)
           successCallback(JSON.parse(data['_body']));
         }, error => {
 
