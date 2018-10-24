@@ -3,6 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { SectionListPage } from './section-list';
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
   ],
   imports: [
     IonicPageModule.forChild(SectionListPage),
-    TranslateModule
+    TranslateModule,
+    ComponentsModule
   ],
 })
 export class SectionListPageModule {}

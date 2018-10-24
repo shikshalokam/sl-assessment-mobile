@@ -33,7 +33,7 @@ export class RatingCriteriaListingPage {
     this.submissionId = this.navParams.get('submissionId');
     this.schoolData = this.navParams.get('schoolData');
     this.storage.get('rating_' + this.submissionId).then(data => {
-      console.log(JSON.stringify(data))
+      console.log(data)
       if (data) {
         this.allRatingDetails = data;
         this.enableSubmit = this.enableSubmitButton();
@@ -45,6 +45,13 @@ export class RatingCriteriaListingPage {
   }
 
   gotToRatingPage(index): void {
+    if (this.allRatingDetails.allManualCriteriaRatingSubmitted) {
+      for (const criteria of this.allRatingDetails.criterias) {
+        criteria.isSubmitted = true;
+      }
+    }
+    console.log(JSON.stringify(this.allRatingDetails));
+    this.utils.setLocalVariable('rating_' + this.submissionId, this.allRatingDetails)
     this.navCtrl.push('RatingPage', { 'submissionId': this.submissionId, 'schoolData': this.school, 'selectedCriteriaIndex': index });
   }
 

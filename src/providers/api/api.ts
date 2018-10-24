@@ -9,6 +9,7 @@ import { App, AlertController } from 'ionic-angular'
 import { WelcomePage } from '../../pages/welcome/welcome';
 import { UtilsProvider } from '../utils/utils';
 import { AuthProvider } from '../auth/auth';
+import { NetworkGpsProvider } from '../network-gps/network-gps';
 
 
 @Injectable()
@@ -18,10 +19,13 @@ export class ApiProvider {
     public currentUser: CurrentUserProvider,
     private appCtrls: App, private utils: UtilsProvider,
     private auth: AuthProvider,
-    private alertCntrl: AlertController) {
+    private alertCntrl: AlertController,
+    private ngps: NetworkGpsProvider) {
   }
 
-
+  isNetworkAvailabel(): boolean {
+    return this.ngps.getNetworkStatus()
+  }
   validateApiToken(): Promise<any> {
     return new Promise((resolve, reject) => {
       console.log("Utils: validate token");
@@ -31,7 +35,7 @@ export class ApiProvider {
         console.log("Utils: invalid token")
         const body = new URLSearchParams();
         body.set('grant_type', "refresh_token");
-        body.set('client_id', "sl-ionic-connect");
+        body.set('client_id', AppConfigs.clientId);
         body.set('refresh_token', this.currentUser.curretUser.refreshToken);
         console.log(this.currentUser.curretUser.refreshToken);
         const url = AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken;
@@ -68,8 +72,18 @@ export class ApiProvider {
 
     this.validateApiToken().then(response => {
       console.log('SUCcess');
-      let headers = new Headers();
-      headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
+      const gpsLocation =  this.ngps.getGpsLocation()
+
+      const obj = {
+        'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
+        'gpsLocation': gpsLocation ? gpsLocation : '0,0'
+      }
+      let headers = new Headers(obj);
+      // let headers = new Headers();
+      // const gpsLocation =  this.ngps.getGpsLocation();
+      // headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
+      // headers.append('gpsLocation', gpsLocation);
+
       console.log(AppConfigs.api_base_url + url)
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.post(apiUrl, payload, { headers: headers })
@@ -136,9 +150,18 @@ export class ApiProvider {
 
     this.validateApiToken().then(response => {
       console.log('SUCcess');
-      let headers = new Headers();
-      headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
-      console.log(AppConfigs.api_base_url + url)
+      const gpsLocation =  this.ngps.getGpsLocation()
+
+      const obj = {
+        'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
+        'gpsLocation': gpsLocation ? gpsLocation : '0,0'
+      }
+      let headers = new Headers(obj);
+      console.log(gpsLocation)
+      // headers.append({'x-authenticated-user-token': this.currentUser.curretUser.accessToken});
+      // headers.append('gpsLocation', "test");
+
+      console.log(JSON.stringify(headers))
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.get(apiUrl, { headers: headers })
         .subscribe(data => {
@@ -146,7 +169,7 @@ export class ApiProvider {
           // console.log(data)
           successCallback(JSON.parse(data['_body']));
         }, error => {
-
+            console.log(JSON.stringify(error))
           this.auth.doLogout().then(success => {
             this.reLoginAlert();
             // this.currentUser.deactivateActivateSession(true);

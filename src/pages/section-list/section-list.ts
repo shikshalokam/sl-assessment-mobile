@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ApiProvider } from '../../providers/api/api';
@@ -10,12 +10,6 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 
-/**
- * Generated class for the SectionListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -33,13 +27,23 @@ export class SectionListPage {
   allAnsweredForEvidence: boolean;
   userData: any;
   currentEvidence: any;
+  networkAvailable
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App,
     private currentUser: CurrentUserProvider,
     private apiService: ApiProvider, private utils: UtilsProvider,
     private diagnostic: Diagnostic, private ngps: NetworkGpsProvider,
-    private feedback: FeedbackProvider) {
+    private feedback: FeedbackProvider,
+    private events: Events) {
+
+    this.events.subscribe('network:offline', () => {
+    });
+
+    // Online event
+    this.events.subscribe('network:online', () => {
+    });
+    this.networkAvailable = this.ngps.getNetworkStatus()
   }
   ionViewWillEnter() {
     console.log('Entered')
@@ -119,21 +123,26 @@ export class SectionListPage {
   }
 
   goToImageListing() {
-    this.diagnostic.isLocationEnabled().then(success => {
-      if (success) {
-        const params = {
-          selectedEvidenceId: this.currentEvidence._id,
-          _id: this.schoolId,
-          name: this.schoolName,
-          selectedEvidence: this.selectedEvidenceIndex,
+    if(this.networkAvailable) {
+      this.diagnostic.isLocationEnabled().then(success => {
+        if (success) {
+          const params = {
+            selectedEvidenceId: this.currentEvidence._id,
+            _id: this.schoolId,
+            name: this.schoolName,
+            selectedEvidence: this.selectedEvidenceIndex,
+          }
+          this.navCtrl.push(ImageListingPage, params);
+        } else {
+          this.ngps.checkForLocationPermissions();
         }
-        this.navCtrl.push(ImageListingPage, params);
-      } else {
+      }).catch(error => {
         this.ngps.checkForLocationPermissions();
-      }
-    }).catch(error => {
-      this.ngps.checkForLocationPermissions();
-    })
+      })
+    } else {
+      this.utils.openToast("Please enable network to continue");
+    }
+    
 
   }
 

@@ -81,6 +81,7 @@ export class WelcomePage {
 
   signIn() {
     this.diagnostic.isLocationEnabled().then(success => {
+      console.log(success)
       if (success) {
         this.auth.doOAuthStepOne().then(code => {
           this.responseData = JSON.stringify(code);

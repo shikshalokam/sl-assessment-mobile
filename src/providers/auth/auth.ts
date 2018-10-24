@@ -31,7 +31,7 @@ export class AuthProvider {
 
     this.base_url = AppConfigs.app_url;
     this.redirect_url = AppConfigs.keyCloak.redirection_url;
-    this.auth_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/auth?response_type=code&scope=openid&client_id=sl-ionic-connect&redirect_uri=" +
+    this.auth_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/auth?response_type=code&scope=openid&client_id="+AppConfigs.clientId+"&redirect_uri=" +
       this.redirect_url;
 
     let that = this;
@@ -62,7 +62,7 @@ export class AuthProvider {
   doOAuthStepTwo(token: string): Promise<any> {
     const body = new URLSearchParams();
     body.set('grant_type', "authorization_code");
-    body.set('client_id', "sl-ionic-connect");
+    body.set('client_id', AppConfigs.clientId);
     body.set('code', token);
     body.set('redirect_uri', this.redirect_url);
     body.set('scope', "offline_access");
@@ -185,7 +185,7 @@ export class AuthProvider {
       console.log("Refres token function");
       const body = new URLSearchParams();
       body.set('grant_type', "refresh_token");
-      body.set('client_id', "sl-ionic-connect");
+      body.set('client_id', AppConfigs.clientId);
       body.set('refresh_token', this.currentUser.curretUser.refreshToken);
       // body.set('scope', "offline_access");
       console.log('refresh_token ' + this.currentUser.curretUser)

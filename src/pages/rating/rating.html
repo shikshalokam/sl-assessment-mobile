@@ -39,7 +39,7 @@
 
     <div *ngSwitchCase="'rate'" style="position: relative">
       <!-- <ion-list-header>Sample</ion-list-header> -->
-      <div class="overlay" *ngIf="allCriterias.isSubmitted || !allCriterias?.isEditable"></div>
+      <div class="overlay" *ngIf="allCriterias.isSubmitted || !allCriterias?.isEditable || allCriterias?.allManualCriteriaRatingSubmitted"></div>
       <ion-list radio-group [(ngModel)]="currentCriteria.score" text-wrap>
         <ion-item *ngFor="let level of currentCriteria?.rubric?.levels">
           <ion-label> <b>{{level?.label}}</b> - {{level?.description}}</ion-label>
@@ -55,7 +55,7 @@
 
 </ion-content>
 
-<div class="_footer" *ngIf="view === 'rate' && !allCriterias.isSubmitted && allCriterias?.isEditable">
+<div class="_footer" *ngIf="view === 'rate' && !allCriterias.isSubmitted && allCriterias?.isEditable && !allCriterias.allManualCriteriaRatingSubmitted">
   <ion-row>
     <ion-col>
       <!-- <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->

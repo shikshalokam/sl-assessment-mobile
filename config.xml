@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.shikshalokam.samiksha" version="0.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.shikshalokam.samiksha" version="0.0.16" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Samiksha</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://172.16.20.125:8100" />
+    <content original-src="index.html" src="http://192.168.43.119:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -90,5 +90,5 @@
     <allow-navigation href="http://172.16.20.125:8101" sessionid="7ae943b5" />
     <plugin name="cordova-plugin-request-location-accuracy" spec="^2.2.3" />
     <engine name="browser" spec="5.0.4" />
-    <engine name="android" spec="^7.1.1" />
+    <engine name="android" spec="7.1.1" />
 </widget>

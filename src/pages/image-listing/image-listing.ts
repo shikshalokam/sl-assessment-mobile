@@ -63,8 +63,10 @@ export class ImageListingPage {
   }
 
   getImageUploadUrls() {
+    const submissionId = this.schoolData[this.schoolId]['assessments'][0]['submissionId'];
     const files = {
-      "files": []
+      "files": [],
+      submissionId: submissionId
     }
     for (const image of this.uploadImages) {
       files.files.push(image.name)
@@ -134,7 +136,7 @@ export class ImageListingPage {
         this.uploadIndex++;
         this.cloudImageUpload();
       } else {
-      this.utils.stopLoader();
+        this.utils.stopLoader();
         this.submitEvidence();
       }
     }).catch(err => {
@@ -162,13 +164,14 @@ export class ImageListingPage {
       this.utils.openToast(response.message);
       this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       this.utils.setLocalSchoolData(this.schoolData);
-      this.utils.stopLoader()
       const options = {
         _id: this.schoolId,
         name: this.schoolName
       }
       this.utils.stopLoader();
-      this.navCtrl.popTo('EvidenceListPage');
+      // this.navCtrl.popTo('EvidenceListPage');
+      this.navCtrl.remove(2,1);
+       this.navCtrl.pop();
     }, error => {
       this.utils.stopLoader();
     })

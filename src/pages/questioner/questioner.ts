@@ -60,10 +60,10 @@ export class QuestionerPage {
       this.start++;
       this.end++;
       console.log("check for question")
-      if (this.questions[this.start].visibleIf && !this.checkForQuestionDisplay(this.questions[this.start])) {
+      if (this.questions[this.start].visibleIf.length && this.questions[this.start].visibleIf[0] && !this.checkForQuestionDisplay(this.questions[this.start])) {
         this.questions[this.start].isCompleted = true;
         this.next();
-      } else if (this.questions[this.start].visibleIf && this.checkForQuestionDisplay(this.questions[this.start])) {
+      } else if (this.questions[this.start].visibleIf.length && this.questions[this.start].visibleIf[0] && this.checkForQuestionDisplay(this.questions[this.start])) {
       }
     } else if (status === 'completed') {
       this.utils.setLocalSchoolData(this.schoolData);
@@ -89,6 +89,7 @@ export class QuestionerPage {
     for (const question of this.questions) {
 
       // for (const question of this.allQuestionsOfEvidence) {
+        console.log(question._id)
       // console.log('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"');
       if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
         display = true;
@@ -120,7 +121,7 @@ export class QuestionerPage {
       this.utils.setLocalSchoolData(this.schoolData)
       this.start--;
       this.end--;
-      if (this.questions[this.start].visibleIf && !this.checkForQuestionDisplay(this.questions[this.start])) {
+      if (this.questions[this.start].visibleIf.length && !this.checkForQuestionDisplay(this.questions[this.start])) {
         this.back();
       }
     }

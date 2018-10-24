@@ -7,6 +7,7 @@ import { UtilsProvider } from '../utils/utils';
 import { Subject } from 'rxjs/Subject';
 import { Network } from '@ionic-native/network';
 import { Events } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 export enum ConnectionStatusEnum {
   Online,
@@ -19,6 +20,7 @@ export class NetworkGpsProvider {
   networkStatus$ = new Subject();
   networkStatus: boolean;
   previousStatus: any;
+  gpsLocation : string;
   constructor(
     public http: HttpClient,
     private permissions: AndroidPermissions,
@@ -26,7 +28,7 @@ export class NetworkGpsProvider {
     private geolocation: Geolocation,
     private utils: UtilsProvider,
     private network: Network,
-    private eventCtrl: Events) {
+    private eventCtrl: Events, private storage: Storage) {
     console.log('Hello NetworkGpsProvider Provider');
     this.previousStatus = ConnectionStatusEnum.Online;
   }
@@ -64,7 +66,7 @@ export class NetworkGpsProvider {
             this.getCurrentLocation();
           },
           error => {
-            this.utils.openToast("Location should be turend on for this action", "Ok");
+            this.utils.openToast("Location should be turned on for this action");
             // this.enableGPSRequest()
           }
         );
@@ -73,19 +75,34 @@ export class NetworkGpsProvider {
     });
   }
 
-  getCurrentLocation(): any {
-    console.log('getting current location');
+  getCurrentLocation(){
+
     const options = {
       timeout: 20000
     }
-    this.geolocation.getCurrentPosition(options).then((resp) => {
-      const gpsLocation = resp.coords.latitude + "," + resp.coords.longitude;
-      this.utils.openToast(resp.coords.latitude + " " + resp.coords.longitude);
-      return gpsLocation
-    }).catch((error) => {
-      this.utils.openToast('Error getting location' + JSON.stringify(error));
-      console.log(error.message + " " + error.code)
-    });
+    // return new Promise(resolve => {
+      this.geolocation.getCurrentPosition(options).then((resp) => {
+        this.gpsLocation = resp.coords.latitude + "," + resp.coords.longitude;
+        this.storage.set('gpsLocation',this.gpsLocation )
+        this.utils.openToast(resp.coords.latitude + " " + resp.coords.longitude);
+        // return gpsLocation
+      }).catch((error) => {
+        this.utils.openToast('Error getting location' + JSON.stringify(error));
+        console.log(error.message + " " + error.code);
+
+        this.storage.get('gpsLocation').then(success => {
+          this.gpsLocation = success
+          // resolve(success);
+        }).catch(error => {
+
+        })
+      });
+    // })
+
+  }
+
+   getGpsLocation(): string{
+    return this.gpsLocation
   }
 
   setNetworkStatus(status): void {

@@ -41,7 +41,7 @@ export class RatingProvider {
     this.apiService.httpGet(AppConfigs.rating.fetchRatingQuestions + submissionId,
       success => {
         this.utils.stopLoader();
-        console.log(JSON.stringify(success))
+        // console.log(JSON.stringify(success))
         if (Object.keys(success.result).length) {
           this.storage.set('rating_' + submissionId, success.result);
           this.appCtrl.getRootNav().push('RatingCriteriaListingPage', { 'submissionId': submissionId, 'schoolData': schoolData });
@@ -58,10 +58,12 @@ export class RatingProvider {
     this.utils.startLoader();
     this.apiService.httpGet(AppConfigs.flagging.fetchRatedQuestions + submissionId,
       success => {
-        console.log(JSON.stringify(success));
-        console.log(Object.keys(success.result).length)
-        if (Object.keys(success.result).length) {
+        // console.log(JSON.stringify(success));
+        // console.log(Object.keys(success.result).length)
+        if (Object.keys(success.result).length && success.isEditable) {
           this.appCtrl.getRootNav().push('RatedCriteriaListPage', { "submissionId": submissionId, 'schoolData': schoolData, 'data':success.result })
+        } else if(!success.isEditable) {
+          this.utils.openToast('You dont have permission to view this page.', 'Ok');          
         } else {
           this.utils.openToast(success.message, 'Ok');
         }
