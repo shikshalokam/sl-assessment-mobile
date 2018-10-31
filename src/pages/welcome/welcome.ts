@@ -80,21 +80,21 @@ export class WelcomePage {
   }
 
   signIn() {
-    this.diagnostic.isLocationEnabled().then(success => {
-      console.log(success)
-      if (success) {
+    // this.diagnostic.isLocationEnabled().then(success => {
+    //   console.log(success)
+    //   if (success) {
         this.auth.doOAuthStepOne().then(code => {
           this.responseData = JSON.stringify(code);
           return this.auth.doOAuthStepTwo(code);
         }).then(response => {
           this.auth.checkForCurrentUserLocalData(response);
         })
-      } else {
-        this.netwrkGpsProvider.checkForLocationPermissions();
-      }
-    }).catch(error => {
-      this.netwrkGpsProvider.checkForLocationPermissions();
-    })
+      // } else {
+      //   this.netwrkGpsProvider.checkForLocationPermissions();
+      // }
+    // }).catch(error => {
+    //   this.netwrkGpsProvider.checkForLocationPermissions();
+    // })
   }
 
   ionViewDidLoad() {

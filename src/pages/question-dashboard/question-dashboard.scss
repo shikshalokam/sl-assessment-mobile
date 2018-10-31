@@ -1,0 +1,43 @@
+page-question-dashboard {
+    .container {
+        width: 20%;
+
+        .wrapper {
+            border: 3px solid transparent;
+            // padding: 3px;
+            width: 50px;
+            height: 50px;
+            margin: 10px auto;
+            border-radius: 50px;
+
+            .block {
+                width: 40px;
+                height: 40px;
+                padding: 10px;
+                border-radius: 50px;
+                color: $white-color;
+            }
+        }
+
+    }
+
+    .color-green {
+        color: $white-color !important;
+        font-size: 2.5rem;
+        background: $green-color;
+
+    }
+
+    .pending {
+    }
+
+    .black-color {
+        color: $black-color !important;
+        font-size: 2.5rem;
+        background: #e0e0ee;
+    }
+
+    .currentView {
+        border-color: $blue-color !important;
+    }
+}

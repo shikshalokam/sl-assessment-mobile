@@ -26,6 +26,9 @@ export class QuestionerPage {
   selectedEvidenceId: string;
   isCurrentEvidenceSubmitted: any;
   allQuestionsOfEvidence: Array<any> = [];
+  isViewOnly: boolean;
+  dashbordData: any;
+  modalRefrnc: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private cfr: ComponentFactoryResolver,
@@ -40,25 +43,35 @@ export class QuestionerPage {
     this.selectedSectionIndex = this.navParams.get('selectedSection');
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
+      // console.log("sample " +this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
+      this.isViewOnly = !this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;
       this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
+      // console.log(JSON.stringify(this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name))
+      this.dashbordData = {
+        questions: this.questions,
+        evidenceMethod: this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'],
+        sectionName: this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name,
+        currentViewIndex: this.start
+      }
       this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]._id;
       this.isCurrentEvidenceSubmitted = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
-      console.log(this.allQuestionsOfEvidence.length + " length of questions");
+      // console.log(this.allQuestionsOfEvidence.length + " length of questions");
     }).catch(error => {
 
     })
   }
 
   next(status?: string) {
-    console.log(this.questions[this.start].isCompleted)
-    console.log(this.start);
+    // console.log(this.questions[this.start].isCompleted)
+    // console.log(this.start);
     if (this.questions[this.start].children.length) {
       this.updateTheChildrenQuestions(this.questions[this.start])
     }
     if (this.end < this.questions.length && !status) {
       this.utils.setLocalSchoolData(this.schoolData)
       this.start++;
-      this.end++;
+      this.end++;;
+      this.dashbordData.currentViewIndex = this.start;
       console.log("check for question")
       if (this.questions[this.start].visibleIf.length && this.questions[this.start].visibleIf[0] && !this.checkForQuestionDisplay(this.questions[this.start])) {
         this.questions[this.start].isCompleted = true;
@@ -89,7 +102,7 @@ export class QuestionerPage {
     for (const question of this.questions) {
 
       // for (const question of this.allQuestionsOfEvidence) {
-        console.log(question._id)
+      // console.log(question._id)
       // console.log('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"');
       if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
         display = true;
@@ -120,6 +133,7 @@ export class QuestionerPage {
     if (this.start > 0) {
       this.utils.setLocalSchoolData(this.schoolData)
       this.start--;
+      this.dashbordData.currentViewIndex = this.start;
       this.end--;
       if (this.questions[this.start].visibleIf.length && !this.checkForQuestionDisplay(this.questions[this.start])) {
         this.back();
@@ -129,5 +143,16 @@ export class QuestionerPage {
 
   feedBack() {
     this.feedback.sendFeedback()
+  }
+
+  setModalRefernc(refrc): void {
+    this.modalRefrnc = refrc;
+    this.modalRefrnc.onDidDismiss(data => {
+      if (data >= 0) {
+        this.start = data;
+        this.end = data + 1;
+        this.dashbordData.currentViewIndex = data;
+      }
+    })
   }
 }

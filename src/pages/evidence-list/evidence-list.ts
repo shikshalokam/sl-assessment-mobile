@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
+import { EvidenceProvider } from '../../providers/evidence/evidence';
 
 /**
  * Generated class for the EvidenceListPage page.
@@ -25,7 +26,7 @@ export class EvidenceListPage {
   currentEvidenceStatus: string;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private utils: UtilsProvider,
-    private feedback: FeedbackProvider) {
+    private feedback: FeedbackProvider, private evdnsServ: EvidenceProvider) {
   }
 
   ionViewWillEnter() {
@@ -59,15 +60,28 @@ export class EvidenceListPage {
     }
   }
 
+  openAction(school, evidenceIndex) {
+    this.utils.setCurrentimageFolderName(this.schoolEvidences[evidenceIndex].externalId.externalId, school._id)
+    const options = { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolData };
+    this.evdnsServ.openActionSheet(options);
+  }
+
   navigateToEvidence(index): void {
+    if (this.schoolEvidences[index].startTime) {
+      this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
+      this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
+    } else {
+      const school = {_id: this.schoolId, name: this.schoolName}
+      this.openAction(school, index);
+    }
     // this.navCtrl.setRoot('SectionListPage');
     // this.appCtrl.getRootNav().push('SectionListPage', {_id:this.schoolId, name: this.schoolName, selectedEvidence: index});
-    if (!this.schoolEvidences[index].startTime) {
-      this.schoolEvidences[index].startTime = Date.now();
-      this.utils.setLocalSchoolData(this.schoolData)
-    }
-    this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
-    this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
+    // if (!this.schoolEvidences[index].startTime) {
+    //   this.schoolEvidences[index].startTime = Date.now();
+    //   this.utils.setLocalSchoolData(this.schoolData)
+    // }
+    // this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
+    // this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
   }
 
   ionViewWillLeave(){

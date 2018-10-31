@@ -6,6 +6,7 @@ import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
 // import { imageLocalListName} from "../../providers/appConfig"
+import { PhotoLibrary } from '@ionic-native/photo-library';
 
 declare var cordova: any;
 
@@ -39,7 +40,8 @@ export class ImageUploadComponent implements OnInit {
   constructor(private actionSheet: ActionSheetController,
     private camera: Camera,
     private file: File, private imgPicker: ImagePicker, private utils: UtilsProvider,
-    private storage: Storage) {
+    private storage: Storage,
+    private photoLibrary: PhotoLibrary) {
     console.log('Hello ImageUploadComponent Component');
     this.text = 'Hello World';
   }
@@ -102,9 +104,18 @@ export class ImageUploadComponent implements OnInit {
       sourceType: this.camera.PictureSourceType.CAMERA
     }
     this.camera.getPicture(options).then(imagePath => {
-      this.checkForLocalFolder(imagePath)
+      this.checkForLocalFolder(imagePath);
+      this.saveToLibrary(imagePath);
     }).catch(error => {
 
+    })
+  }
+
+  saveToLibrary(url): void {
+    this.photoLibrary.saveImage(url, 'samiksha').then( data => {
+      console.log("saved " + data)
+    }).catch(error => {
+      console.log("error " +error)
     })
   }
 
@@ -171,7 +182,7 @@ export class ImageUploadComponent implements OnInit {
 
   openLocalLibrary(): void {
     const options: ImagePickerOptions = {
-      maximumImagesCount: 7,
+      maximumImagesCount: 50,
       quality: 10,
     }
     this.imgPicker.getPictures(options).then(imageData => {

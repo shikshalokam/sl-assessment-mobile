@@ -45,7 +45,8 @@
         "uplaod": "Upload",
         "images": "Images",
         "ratedCriterias": "Rated Criterias",
-        "flagCriteria": "Flag Criteria"
+        "flagCriteria": "Flag Criteria",
+        "dashboard": "Dashboard"
     },
     "labels": {
         "welcome": "Welcome",

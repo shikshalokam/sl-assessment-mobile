@@ -53,6 +53,9 @@ import { RatingPageModule } from '../pages/rating/rating.module';
 import { NetworkGpsProvider } from '../providers/network-gps/network-gps';
 import { RatedCriteriaListPageModule } from '../pages/rated-criteria-list/rated-criteria-list.module';
 import { FeedbackProvider } from '../providers/feedback/feedback';
+import { EvidenceProvider } from '../providers/evidence/evidence';
+import { QuestionDashboardPage } from '../pages/question-dashboard/question-dashboard';
+import { PhotoLibrary } from '@ionic-native/photo-library';
 
 @NgModule({
   declarations: [
@@ -66,7 +69,8 @@ import { FeedbackProvider } from '../providers/feedback/feedback';
     FaqPage,
     SchoolProfileEditPage,
     ImageListingPage,
-    MatrixActionModalPage
+    MatrixActionModalPage,
+    QuestionDashboardPage
   ],
   imports: [
     BrowserModule,
@@ -106,7 +110,8 @@ import { FeedbackProvider } from '../providers/feedback/feedback';
     FaqPage,
     SchoolProfileEditPage,
     ImageListingPage,
-    MatrixActionModalPage
+    MatrixActionModalPage,
+    QuestionDashboardPage
   ],
   providers: [
     StatusBar,
@@ -130,9 +135,11 @@ import { FeedbackProvider } from '../providers/feedback/feedback';
     FileTransfer,
     ImagePicker,
     LocationAccuracy,
+    PhotoLibrary,
     RatingProvider,
     NetworkGpsProvider,
-    FeedbackProvider
+    FeedbackProvider,
+    EvidenceProvider
   ]
 })
 export class AppModule { }

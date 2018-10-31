@@ -1,16 +1,19 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <!-- <ion-navbar color="primary">
     <div class="_flex-box">
       <ion-title>{{'headings.questionnaire'|translate}}</ion-title>
       <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px"
         (click)="feedBack()" margin-right float-right></ion-icon>
     </div>
-  </ion-navbar>
+  </ion-navbar> -->
+  <header [title]="'headings.questionnaire'|translate"  [hideBack]="false" [enableDashboard]="true" [dashbordData]="dashbordData" (onDashboardOpen)="setModalRefernc($event)">
+
+  </header>
 </ion-header>
 
 
 <ion-content padding class="_questioner-padding">
-  <div class="disableOverLay" *ngIf="isCurrentEvidenceSubmitted"></div>
+  <div class="disableOverLay" *ngIf="isCurrentEvidenceSubmitted || isViewOnly "></div>
   <div class="_container">
     <ng-container *ngFor="let question of questions| slice:start:end; let i=index">
       <ng-container [ngSwitch]="question.responseType">

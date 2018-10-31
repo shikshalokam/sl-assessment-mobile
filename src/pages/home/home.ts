@@ -11,6 +11,7 @@ import { PopoverController } from 'ionic-angular';
 import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { EvidenceProvider } from '../../providers/evidence/evidence';
 
 declare var cordova: any;
 
@@ -36,7 +37,8 @@ export class HomePage {
     private popoverCtrl: PopoverController,
     private network: Network,
     private events: Events,
-    private ngps: NetworkGpsProvider
+    private ngps: NetworkGpsProvider,
+    private evdnsServ: EvidenceProvider
   ) {
     // this.events.subscribe('network:offline', () => {
     // });
@@ -87,6 +89,14 @@ export class HomePage {
     // })
   }
 
+  openAction(school, evidenceIndex) {
+    this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
+    const options = { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolDetails, parent: this };
+    this.evdnsServ.openActionSheet(options);
+  }
+
+
+
   goToRating(school): void {
     const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
     this.ratingService.checkForRatingDetails(submissionId, school);
@@ -94,8 +104,6 @@ export class HomePage {
 
   getLocalSchoolDetails(): void {
     this.storage.get('schoolsDetails').then(details => {
-    // console.log('School details ' + details)
-
       this.schoolDetails = JSON.parse(details);
       for (const schoolId of Object.keys(this.schoolDetails)) {
         this.checkForProgressStatus(this.schoolDetails[schoolId]['assessments'][0]['evidences'])
@@ -104,17 +112,12 @@ export class HomePage {
   }
 
   goToSections(school, evidenceIndex) {
-    // console.log(JSON.stringify(school));
-    if (!this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].startTime) {
-      this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].startTime = Date.now();
-      this.utils.setLocalSchoolData(this.schoolDetails)
+    if (this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].startTime) {
+      this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
+      this.appCtrl.getRootNav().push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex })
+    } else {
+      this.openAction(school, evidenceIndex);
     }
-    // console.log(JSON.stringify(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex]._id)
-    this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
-
-    this.appCtrl.getRootNav().push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, parent: this });
-
-    // this.navCtrl.push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex })
   }
 
   gotToEvidenceList(school) {
@@ -147,6 +150,7 @@ export class HomePage {
       if (evidence.isSubmitted) {
         evidence.progressStatus = 'submitted';
       } else if (!evidence.startTime) {
+        console.log(evidence.startTime)
         evidence.progressStatus = '';
       } else {
         evidence.progressStatus = 'completed';
