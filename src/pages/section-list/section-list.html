@@ -1,15 +1,7 @@
 <ion-header>
-    <header [title]="'headings.surveySections'|translate" [hideBack]="false">
+  <header [title]="'headings.surveySections'|translate" [hideBack]="false">
 
-      </header>
-  <!-- <ion-navbar color="primary">
-    <div class="_flex-box">
-      <ion-title>{{'headings.surveySections'|translate}}</ion-title>
-
-      <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px"
-        (click)="feedBack()" margin-right float-right></ion-icon>
-    </div>
-  </ion-navbar> -->
+  </header>
 </ion-header>
 
 
@@ -30,16 +22,16 @@
       <h3>
         <ion-icon name="list-box" margin-right></ion-icon> {{ section?.name }}
         <span float-right *ngIf="section.progressStatus === 'completed'" class="_completed _flex-box">
-            {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
+          {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
         </span>
         <span float-right *ngIf="!section.progressStatus" class=" _flex-box">
-           <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
+          <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
         </span>
         <span float-right *ngIf="section.progressStatus === 'inProgress'" class="_inProgress _flex-box">
-            {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
+          {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
         </span>
         <span float-right *ngIf="section.progressStatus === 'submitted'" class="_submitted _flex-box">
-            {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
+          {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
         </span>
         <!-- <span float-right *ngIf="section.progressSatatus === 'inProgress'" class="completed _flex-box">
             In Progress <ion-icon name="contrast" margin-left></ion-icon>
@@ -52,7 +44,8 @@
 <ion-footer no-shadow *ngIf="allAnsweredForEvidence && !currentEvidence.isSubmitted">
   <ion-toolbar position="bottom">
     <ion-row>
-      <button ion-button full (click)="goToImageListing()">{{'buttons.upload'|translate}} {{'buttons.and'|translate}} {{'buttons.submit'|translate}}</button>
+      <button ion-button full (click)="goToImageListing()">{{'buttons.upload'|translate}} {{'buttons.and'|translate}}
+        {{'buttons.submit'|translate}}</button>
 
       <!-- <button ion-button full (click)="submitEvidence()">Submit {{selectedEvidenceName}}</button> -->
     </ion-row>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { UtilsProvider } from '../../providers/utils/utils';
 
 
@@ -6,7 +6,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
   selector: 'date-type',
   templateUrl: 'date-type.html'
 })
-export class DateTypeComponent {
+export class DateTypeComponent implements OnInit{
   @Input() data: any;
   @Input() isLast: boolean;
   @Input() isFirst: boolean;
@@ -16,6 +16,7 @@ export class DateTypeComponent {
   @Input() schoolId: string;
 
   @Input() hideButton: boolean;
+  questionValid: boolean;
 
   constructor(private utils: UtilsProvider) {
     console.log('Hello DateTypeComponent Component');
@@ -33,5 +34,14 @@ export class DateTypeComponent {
 
   canceled() {
     console.log('cancelled')
+  }
+
+  ngOnInit() {
+    this.checkForValidation();
+  }
+
+  checkForValidation(): void {
+    console.log(JSON.stringify(this.data))
+    this.questionValid = this.utils.isQuestionComplete(this.data);
   }
 }

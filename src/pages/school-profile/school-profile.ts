@@ -31,7 +31,7 @@ export class SchoolProfilePage {
     private feedback: FeedbackProvider) {
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     console.log('ionViewDidLoad SchoolProfilePage');
     this.getSchoolDetails();
     this.schoolId = this.navParams.get('_id');
@@ -63,7 +63,7 @@ export class SchoolProfilePage {
     this.app.getRootNav().push('EvidenceListPage', { _id: this.schoolId, name: this.schoolName })
   }
 
-  goToEditProfile(index): void {
+  goToEditProfile(): void {
     this.app.getRootNav().push(SchoolProfileEditPage, { _id: this.schoolId, name: this.schoolName })
 
     // this.navCtrl.push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
@@ -81,7 +81,5 @@ export class SchoolProfilePage {
       
   }
 
-  feedBack() {
-    this.feedback.sendFeedback()
-  }
+  
 }

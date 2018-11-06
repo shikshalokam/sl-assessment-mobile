@@ -1,10 +1,10 @@
 <!-- Generated template for the InputTypeComponent component -->
 <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
-    <h4 *ngFor="let question of data.question">{{question}}</h4>
-  </ion-col>
-<div>
+  <h4 [ngClass]="{'_validQuestion': data?.value}" *ngFor="let question of data.question">{{question}}</h4>
+</ion-col>
+<div margin-top>
   <ion-item text-center no-padding>
-    <ion-input type="{{data?.responseType}}" (input)="isaNumber()" placeholder="{{data?.question}}" [(ngModel)]="data.value"></ion-input>
+    <ion-input type="{{data?.responseType}}" (input)="isaNumber()" placeholder="{{data?.question}}"  [(ngModel)]="data.value"></ion-input>
   </ion-item>
   <div *ngIf="!notNumber" class="_errorMsg">Decimal numbers not allowed</div>
 
@@ -12,36 +12,4 @@
   <image-upload *ngIf="data?.file" [data]="data" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
 
 </div>
-<!-- <div class="_footer" *ngIf="!hideButton">
-  <ion-row>
-    <ion-col>
-      <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">
-        <ion-icon name="arrow-back"></ion-icon>Back
-      </button>
-    </ion-col>
-    <ion-col>
-      <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button>
-      <button ion-button icon-start float-right color="primary" (click)="next('completed')" *ngIf="isLast">
-        <ion-icon name="filing"></ion-icon>Save
-      </button>
-    </ion-col>
-  </ion-row>
-</div> -->
-<!-- <div class="_footer" *ngIf="!hideButton">
-    <ion-row>
-      <ion-col>
-        <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">
-          <ion-icon name="arrow-back"></ion-icon>{{'buttons.back'| translate}}
-        </button>
-      </ion-col>
-      <ion-col>
-        <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">{{'buttons.next'|
-          translate}} <ion-icon name="arrow-forward"></ion-icon></button>
-        <button ion-button icon-start float-right color="primary" (click)="next('completed')" *ngIf="isLast">
-          <ion-icon name="filing"></ion-icon>{{'buttons.save'| translate}}
-        </button>
-      </ion-col>
-    </ion-row>
-  </div> -->
-
-  <footer-buttons *ngIf="!hideButton" [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons>
+<footer-buttons *ngIf="!hideButton" [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons>

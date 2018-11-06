@@ -1,19 +1,8 @@
-
 <ion-header>
-  <ion-header>
-    <!-- <header [title]="hii" [hideBack]="true">
-    </header> -->
-  </ion-header>
-  <ion-navbar color="primary">
-    <div class="_flex-box">
-      <ion-title>{{'headings.survey'|translate}} - {{'headings.evidenceMethods'|translate}}</ion-title>
-      <!-- <ion-icon name="chatboxes" isActive="true" class="feedBack" (click)="feedBack()" margin-right float-right></ion-icon> -->
+  <header [title]="'headings.surveyEcm'|translate" [hideBack]="false">
 
-    </div>
-  </ion-navbar>
-
+  </header>
 </ion-header>
-
 
 <ion-content>
   <!-- <ion-list>
@@ -28,21 +17,24 @@
         <ion-icon name="book" margin-right></ion-icon> {{schoolName}}
       </h3>
     </ion-item-divider>
-    <ion-item *ngFor="let evidence of schoolEvidences; let i= index" (click)="navigateToEvidence(i)">
+    <button ion-item [disabled]="evidence?.isNotApplicable" *ngFor="let evidence of schoolEvidences; let i= index" (click)="navigateToEvidence(i)">
       <h3>
         <ion-icon name="albums" margin-right></ion-icon>{{ evidence?.name }}
-        <span float-right *ngIf="evidence.progressStatus === 'completed'" class="_completed _flex-box">
+        <span float-right *ngIf="evidence.progressStatus === 'completed' && !evidence?.isNotApplicable" class="_completed _flex-box">
             {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
         </span>
-        <span float-right *ngIf="!evidence.progressStatus" class="_flex-box">
+        <span float-right *ngIf="!evidence.progressStatus && !evidence?.isNotApplicable" class="_flex-box">
           <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
         </span>
-        <span float-right *ngIf="evidence.progressStatus === 'inProgress'" class="_inProgress _flex-box">
+        <span float-right *ngIf="evidence.progressStatus === 'inProgress' && !evidence?.isNotApplicable" class="_inProgress _flex-box">
             {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
         </span>
-        <span float-right *ngIf="evidence.progressStatus === 'submitted'" class="_submitted _flex-box">
-            {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
-        </span>
+        <span float-right *ngIf="evidence.progressStatus === 'submitted' && !evidence?.isNotApplicable" class="_submitted _flex-box">
+          {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
+      </span>
+      <span float-right *ngIf="evidence?.isNotApplicable" class="_na _flex-box">
+        {{'labels.notApplicable'|translate}} <ion-icon name="alert" class="_progressIcon" margin-left></ion-icon>
+    </span>
         
         <!-- <span float-right *ngIf="!evidence.progressStatus" class="_flex-box doneIcon">
           Start <ion-icon name="arrow-dropright-circle" class="startIcon" margin-left></ion-icon>
@@ -57,7 +49,7 @@
           Completed <ion-icon name="cloud-done" margin-left></ion-icon>
         </span> -->
       </h3>
-    </ion-item>
+    </button>
   </ion-item-group>
 
 

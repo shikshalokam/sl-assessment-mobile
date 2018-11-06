@@ -1,13 +1,8 @@
+
 <ion-header>
-  <ion-navbar color="primary">
-    <div class="_flex-box">
-      <ion-title>{{'headings.school' | translate}} {{'headings.profile' | translate}}</ion-title>
-      <!-- <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px" -->
-        <!-- (click)="feedBack()" margin-right float-right></ion-icon> -->
-    </div>
+  <header [title]="'headings.schoolProfile'|translate" [hideBack]="false">
 
-
-  </ion-navbar>
+  </header>
 </ion-header>
 
 <!-- <div>
@@ -17,8 +12,10 @@
 <ion-content>
   <ion-item-group>
     <ion-item-divider color="light">
-      <h3 class="headerText">
-        <ion-icon name="book" margin-right></ion-icon> {{schoolName}} 
+      <h3 class="headerText _flex-box">
+        <ion-icon name="book" margin-right></ion-icon>
+        <span class="_ellipsis" style="flex: 1">{{schoolName}} </span>
+        <ion-icon name="create" float-right margin-right (click)="goToEditProfile()"></ion-icon>
       </h3>
     </ion-item-divider>
 
@@ -32,24 +29,8 @@
       </ion-item>
 
     </ng-container>
-    <!-- <ion-item>as</ion-item>
-    <ion-item>as</ion-item>
-    <ion-item>as</ion-item> -->
   </ion-item-group>
-  <!-- <ion-card>
 
-    <ion-card-content>
-      <ion-item-group>
-        <ng-container *ngFor="let field of schoolProfile">
-          <ion-item class="adjust" *ngIf="field?.field != 'gpsLocation'">
-            <div class="customLabel">{{field?.label}} </div>
-            <div> {{field?.value}}</div> 
-           <ion-input type="field?.input" [(ngModel)]="field.value" class="clearBorder" readonly="{{!field?.editable}}"></ion-input>
-          </ion-item>
-        </ng-container>
-      </ion-item-group>
-    </ion-card-content>
-  </ion-card> -->
 </ion-content>
 
 <ion-footer no-shadow>

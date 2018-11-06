@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, App } from 'ionic-angular';
+import { NavController, NavParams, App , Events} from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
+import { AppConfigs } from '../../providers/appConfig';
+import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 
 
 @Component({
@@ -14,13 +16,17 @@ export class SchoolProfileEditPage {
   schoolProfile: Array<string>;
   schoolId: any;
   schoolName: string;
+  schoolData: any;
+  networkConnected: boolean;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private apiService: ApiProvider,
     private utils: UtilsProvider,
     private storage: Storage,
-    private app: App) {
+    private app: App,
+    private ngps: NetworkGpsProvider,
+    private events: Events) {
   }
 
   ionViewDidLoad() {
@@ -30,13 +36,32 @@ export class SchoolProfileEditPage {
     this.schoolName = this.navParams.get('name');
     console.log(this.navParams.get('_id'))
     this.storage.get('schoolsDetails').then(data => {
-      const schoolData = JSON.parse(data);
-      this.schoolProfile = schoolData[this.schoolId]['schoolProfile']['form'];
+      this.schoolData = JSON.parse(data);
+      this.schoolProfile = this.schoolData[this.schoolId]['schoolProfile']['form'];
+      console.log(JSON.stringify(this.schoolProfile));
+
+      this.events.subscribe('network:offline', () => {
+        this.networkConnected = false;
+      });
+  
+      // Online event
+      this.events.subscribe('network:online', () => {
+        this.networkConnected = true;
+      });
+      this.networkConnected = this.ngps.getNetworkStatus()
+
     }).catch(error => {
 
     })
 
   }
+
+  // createFormGroup() {
+  //   let fg  = {};
+  //   this.schoolProfile.forEach(formField => {
+  //     fg[formField['field']] = 
+  //   })
+  // }
 
   getSchoolDetails() {
     // this.utils.startLoader();
@@ -50,6 +75,41 @@ export class SchoolProfileEditPage {
   }
 
   goToPage(): void {
-    this.app.getRootNav().push('EvidenceListPage', { _id: this.schoolId, name: this.schoolName})
+    this.app.getRootNav().push('EvidenceListPage', { _id: this.schoolId, name: this.schoolName })
   }
+
+  updateProfile(): void {
+    if(this.networkConnected) {
+      this.utils.startLoader();
+      const payload = {
+        'schoolProfile': {},
+      }
+      for (const field of this.schoolProfile) {
+        payload.schoolProfile[field['field']] = field['value'];
+      }
+      console.log(JSON.stringify(payload));
+      const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
+      const url = AppConfigs.survey.submission + submissionId;
+      this.apiService.httpPost(url, payload, response => {
+        console.log(JSON.stringify(response));
+        this.utils.openToast(response.message);
+        this.utils.setLocalSchoolData(this.schoolData);
+        this.utils.stopLoader();
+         this.navCtrl.pop();
+      }, error => {
+        this.utils.stopLoader();
+      })
+    } else {
+      this.utils.openToast("Please connect to network.")
+    }
+
+  }
+
+  saveProfile() : void {
+    this.utils.setLocalSchoolData(this.schoolData);
+    this.navCtrl.pop();
+
+  }
+
+
 }

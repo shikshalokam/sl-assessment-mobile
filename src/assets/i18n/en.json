@@ -48,7 +48,10 @@
         "ratedCriterias": "Rated Criterias",
         "flagCriteria": "Flag Criteria",
         "questionMap": "Question Map",
-        "remarks": "Remarks"
+        "remarks": "Remarks",
+        "editSchoolProfile":"Edit School Profile",
+        "schoolProfile": "School Profile",
+        "surveyEcm":"Survey - ECM"
     },
     "labels": {
         "welcome": "Welcome",
@@ -60,7 +63,8 @@
         "image": "Image",
         "completed": "Completed",
         "inprogress": "In Progress",
-        "submitted": "Submitted"
+        "submitted": "Submitted",
+        "notApplicable": "NA"
     },
     "languages": {
         "english": "English",

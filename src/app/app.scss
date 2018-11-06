@@ -156,6 +156,11 @@ ion-content {
     font-size: 1.4rem;
 }
 
+._na {
+    // color: $orange-color;
+    font-size: 1.4rem;
+}
+
 ._submitted {
     color: $blue-color;
     font-size: 1.4rem;
@@ -198,4 +203,8 @@ ion-content {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+._validQuestion {
+    color: $green-color;
 }

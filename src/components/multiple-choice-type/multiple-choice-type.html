@@ -1,8 +1,8 @@
 <!-- Generated template for the InputTypeComponent component -->
 <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
-  <h4 *ngFor="let question of data.question">{{question}}</h4>
+  <h4 [ngClass]="{'_validQuestion': data?.value.length}" *ngFor="let question of data.question">{{question}}</h4>
 </ion-col>
-<div>
+<div margin-top>
   <ion-list>
 
     <ion-item *ngFor="let option of data?.options" text-wrap>

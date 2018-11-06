@@ -1,10 +1,10 @@
 <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
-  <h4 *ngFor="let question of data.question">{{question}}</h4>
+  <h4 [ngClass] = "{'_validQuestion': data?.value}" *ngFor="let question of data.question">{{question}}</h4>
 </ion-col>
-<div>
+<div margin-top>
   <ion-item text-center no-padding>
     <ion-label>Date</ion-label>
-    <ion-datetime displayFormat="DD/MMM/YYYY" (ionCancel)="canceled()" [(ngModel)]="data.value"></ion-datetime>
+    <ion-datetime displayFormat="DD/MMM/YYYY" (ionCancel)="canceled()" [(ngModel)]="data.value" (ngModelChange)="checkForValidation()"></ion-datetime>
   </ion-item>
   <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
   <image-upload *ngIf="data?.file" [data]="data" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
