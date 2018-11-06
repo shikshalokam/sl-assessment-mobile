@@ -14,7 +14,8 @@ export class MatrixTypeComponent {
   @Input() isLast: boolean;
   @Input() isFirst: boolean;
   @Output() nextCallBack = new EventEmitter();
-  @Output() previousCallBack = new EventEmitter()
+  @Output() previousCallBack = new EventEmitter();
+  @Output() updateLocalData = new EventEmitter();
   @Input() evidenceId: string;
   @Input() schoolId: string;
   
@@ -33,6 +34,7 @@ export class MatrixTypeComponent {
     this.data.isCompleted = this.utils.isMatrixQuestionComplete(this.data);
     this.previousCallBack.emit('previous');
   }
+
   addInstances(): void {
     this.data.value = this.data.value ? this.data.value : [];
     this.data.value.push(JSON.parse(JSON.stringify(this.data.instanceQuestions)));
@@ -48,6 +50,7 @@ export class MatrixTypeComponent {
     matrixModal.onDidDismiss(data => {
       if (data) {
         this.data.value[i] = data.value[i];
+        this.updateLocalData.emit();
       }
     })
     matrixModal.present();

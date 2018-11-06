@@ -16,7 +16,8 @@
         "yes": "Yes",
         "no": "No",
         "login": "Login",
-        "flag": "Flag"
+        "flag": "Flag",
+        "parentInfo": "Parent Info"
     },
     "tabs": {
         "home": "Home",
@@ -46,7 +47,8 @@
         "images": "Images",
         "ratedCriterias": "Rated Criterias",
         "flagCriteria": "Flag Criteria",
-        "dashboard": "Dashboard"
+        "questionMap": "Question Map",
+        "remarks": "Remarks"
     },
     "labels": {
         "welcome": "Welcome",

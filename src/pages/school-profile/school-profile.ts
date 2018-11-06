@@ -77,6 +77,10 @@ export class SchoolProfilePage {
     this.ratingService.checkForRatingDetails(this.submissionId, school);
   }
 
+  goToParentInfo(): void {
+      
+  }
+
   feedBack() {
     this.feedback.sendFeedback()
   }

@@ -82,7 +82,9 @@ export class SectionListPage {
       // console.log("All answere: "+ allAnswered)
       if (this.currentEvidence.isSubmitted) {
         section.progressStatus = 'submitted';
-      } else if (allAnswered) {
+      } else if (!this.currentEvidence.startTime) {
+        section.progressStatus = '';
+      }else if (allAnswered) {
         // console.log("hiiiii")
         section.progressStatus = 'completed';
       } else if (!allAnswered && section.progressStatus) {
@@ -116,7 +118,7 @@ export class SectionListPage {
     };
     // this.appCtrl.getRootNav().push('QuestionerPage', params);
     if (!this.evidenceSections[selectedSection].progressStatus) {
-      this.evidenceSections[selectedSection].progressStatus = 'inProgress';
+      this.evidenceSections[selectedSection].progressStatus = this.currentEvidence.startTime ? 'inProgress' : '';
       this.utils.setLocalSchoolData(this.schoolData)
     }
     this.navCtrl.push('QuestionerPage', params);

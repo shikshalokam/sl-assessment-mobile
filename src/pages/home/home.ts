@@ -114,7 +114,7 @@ export class HomePage {
   goToSections(school, evidenceIndex) {
     if (this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].startTime) {
       this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
-      this.appCtrl.getRootNav().push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex })
+      this.appCtrl.getRootNav().push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, parent: this })
     } else {
       this.openAction(school, evidenceIndex);
     }
@@ -164,6 +164,7 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
+    console.log("Inside view will enetr");
     this.onInit();
     if (this.network.type != 'none') {
       this.networkAvailable = true;

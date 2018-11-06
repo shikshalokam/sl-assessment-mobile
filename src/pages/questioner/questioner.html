@@ -16,7 +16,7 @@
   <div class="disableOverLay" *ngIf="isCurrentEvidenceSubmitted || isViewOnly "></div>
   <div class="_container">
     <ng-container *ngFor="let question of questions| slice:start:end; let i=index">
-      <ng-container [ngSwitch]="question.responseType">
+      <ng-container [ngSwitch]="question.responseType.toLowerCase()">
         <input-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
           (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'text'"></input-type>
         <input-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
@@ -28,7 +28,7 @@
         <multiple-choice-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
           (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'multiselect'"></multiple-choice-type>
         <matrix-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
-          (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'matrix'"></matrix-type>
+          (previousCallBack)="back($event)" (updateLocalData)="updateLocalData()" (nextCallBack)="next($event)" *ngSwitchCase="'matrix'"></matrix-type>
       </ng-container>
     </ng-container>
   </div>

@@ -42,7 +42,7 @@ export class AuthProvider {
       };
 
       let browserRef = (<any>window).cordova.InAppBrowser.open(that.auth_url, "_blank", "zoom=no");
-      browserRef.addEventListener('loadstop', function (event) {
+      browserRef.addEventListener('loadstart', function (event) {
         if (event.url && ((event.url).indexOf(that.redirect_url) === 0)) {
           browserRef.removeEventListener("exit", closeCallback);
           browserRef.close();

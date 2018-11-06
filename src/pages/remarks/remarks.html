@@ -1,0 +1,27 @@
+<ion-header>
+  <header [title]="'headings.remarks'|translate" [hideBack]="true" [showClose]="true" [disableNetwork]="true"> 
+
+  </header>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item>
+    <ion-textarea [(ngModel)]="data.remarks" placeholder="Remarks" #remarkInput></ion-textarea>
+  </ion-item>
+</ion-content>
+
+<div class="_footer" no-padding>
+    <ion-row>
+      <ion-col>
+          <button ion-button icon-start full color="light" (click)="close()" >
+              {{'buttons.cancel'|translate}}
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button icon-start full float-right color="primary" (click)="update()">
+              {{'buttons.save'|translate}}
+          </button>
+        </ion-col>
+    </ion-row>
+  </div>

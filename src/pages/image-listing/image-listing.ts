@@ -161,6 +161,7 @@ export class ImageListingPage {
     const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
     this.apiService.httpPost(url, payload, response => {
+      console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
       this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       this.utils.setLocalSchoolData(this.schoolData);

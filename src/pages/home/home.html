@@ -10,7 +10,7 @@
   <ion-card>
     <ion-card-content>
       <!-- Add card content here! -->
-      <h2>{{'labels.welcome'|translate}} {{userData?.name}}!</h2>
+      <h2 >{{'labels.welcome'|translate}} {{userData?.name}}!</h2>
     </ion-card-content>
   </ion-card>
 
@@ -19,7 +19,8 @@
     <ion-item-group>
       <ion-item-divider color="light">
         <h3 class="headerText">
-          <ion-icon name="book" margin-right></ion-icon>{{school?.name}} - {{school?.externalId}}
+          <ion-icon name="book" margin-right float-left></ion-icon>
+          <span class="_ellipsis overflow" float-left >{{school?.name}} - {{school?.externalId}}</span>
           <ion-icon name='more' class="viewIcon" float-right large (click)="openMenu($event,school)"></ion-icon>
           <!-- <span float-right class="more">View </span> -->
         </h3>

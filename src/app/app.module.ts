@@ -56,6 +56,7 @@ import { FeedbackProvider } from '../providers/feedback/feedback';
 import { EvidenceProvider } from '../providers/evidence/evidence';
 import { QuestionDashboardPage } from '../pages/question-dashboard/question-dashboard';
 import { PhotoLibrary } from '@ionic-native/photo-library';
+import { RemarksPage } from '../pages/remarks/remarks';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { PhotoLibrary } from '@ionic-native/photo-library';
     SchoolProfileEditPage,
     ImageListingPage,
     MatrixActionModalPage,
-    QuestionDashboardPage
+    QuestionDashboardPage,
+    RemarksPage
   ],
   imports: [
     BrowserModule,
@@ -111,7 +113,8 @@ import { PhotoLibrary } from '@ionic-native/photo-library';
     SchoolProfileEditPage,
     ImageListingPage,
     MatrixActionModalPage,
-    QuestionDashboardPage
+    QuestionDashboardPage,
+    RemarksPage
   ],
   providers: [
     StatusBar,

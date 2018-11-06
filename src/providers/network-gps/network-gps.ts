@@ -70,13 +70,17 @@ export class NetworkGpsProvider {
             // this.enableGPSRequest()
           }
         );
+      } else {
+        //For ios devices
+        this.getCurrentLocation();
+
       }
 
     });
   }
 
   getCurrentLocation(){
-
+    console.log("Getting current location");
     const options = {
       timeout: 20000
     }
@@ -85,6 +89,7 @@ export class NetworkGpsProvider {
         this.gpsLocation = resp.coords.latitude + "," + resp.coords.longitude;
         this.storage.set('gpsLocation',this.gpsLocation )
         this.utils.openToast(resp.coords.latitude + " " + resp.coords.longitude);
+        console.log(resp.coords.latitude + " " + resp.coords.longitude)
         // return gpsLocation
       }).catch((error) => {
         this.utils.openToast('Error getting location' + JSON.stringify(error));

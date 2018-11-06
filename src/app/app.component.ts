@@ -101,7 +101,7 @@ export class MyApp {
       this.rootPage = WelcomePage;
       this.splashScreen.hide()
     })
-    this.statusBar.styleDefault();
+    this.statusBar.hide();
   }
 
   registerBAckButtonAction(): void {

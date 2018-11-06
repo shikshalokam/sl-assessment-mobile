@@ -193,3 +193,9 @@ ion-content {
 ._disconnectedConnection {
     color: $red-color !important;
 }
+
+._ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}

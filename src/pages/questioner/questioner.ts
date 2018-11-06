@@ -91,6 +91,10 @@ export class QuestionerPage {
     }
   }
 
+  updateLocalData() : void {
+    this.utils.setLocalSchoolData(this.schoolData);    
+  }
+
   checkForQuestionDisplay(qst): boolean {
     console.log('checkcondition')
     // Evidence level check for visible if

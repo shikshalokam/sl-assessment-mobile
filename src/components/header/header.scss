@@ -1,3 +1,13 @@
 header {
+    .titleAdj {
+        // max-width: calc(100% - 40px) !important;
+        // text-overflow: ellipsis !important;
+        // overflow: hidden !important;
+        // white-space: nowrap !important;
+        flex: 1;
+    }
 
+     .margin {
+        margin: 0 8px !important;
+    }
 }

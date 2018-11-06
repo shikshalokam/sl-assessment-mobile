@@ -1,12 +1,12 @@
   <ion-navbar color="primary" hideBackButton="{{hideBack}}">
     <div class="_flex-box">
-      <ion-title>{{ title  }} </ion-title>
+      <ion-title class="_ellipsis titleAdj">{{ title  }} </ion-title>
       <!-- <ion-icon name="chatboxes" isActive="true" class="_headerIcon" (click)="feedback()" margin-right float-right></ion-icon> -->
-      <ion-icon name="close" isActive="true" class="_headerIcon" (click)="closeDashboard()" *ngIf="showClose" margin-right float-right></ion-icon>
+      <ion-icon name="close" isActive="true" class="_headerIcon margin" (click)="closeDashboard()" *ngIf="showClose" float-right></ion-icon>
 
-      <ion-icon name="map" isActive="true" *ngIf="enableDashboard" class="_headerIcon" (click)="openDashboard()" margin-right float-right></ion-icon>
-      <ion-icon name="wifi" class="_headerIcon" *ngIf="!disableNetwork" [ngClass]="{'_disconnectedConnection': !networkAvailable}"
-        margin-right float-right></ion-icon>
+      <ion-icon name="map" isActive="true" *ngIf="enableDashboard" class="_headerIcon margin" (click)="openDashboard()" float-right></ion-icon>
+      <ion-icon name="wifi" class="_headerIcon margin" *ngIf="!disableNetwork" [ngClass]="{'_disconnectedConnection': !networkAvailable}"
+        float-right></ion-icon>
       <!-- <ion-icon name="log-out" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px" (click)="logout()" float-right></ion-icon> -->
     </div>
   </ion-navbar>
