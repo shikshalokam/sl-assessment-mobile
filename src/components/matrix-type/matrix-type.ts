@@ -49,11 +49,35 @@ export class MatrixTypeComponent {
     let matrixModal = this.modalCntrl.create(MatrixActionModalPage, obj);
     matrixModal.onDidDismiss(data => {
       if (data) {
+        this.data.completedInstance =  this.data.completedInstance ? this.data.completedInstance : [];
         this.data.value[i] = data.value[i];
+        console.log(JSON.stringify(this.data.value[i]));
+        let instanceCompletion = this.checkCompletionOfInstance(this.data.value[i]);
+        if(instanceCompletion) {
+          if(this.data.completedInstance.indexOf(i) < 0) {
+            this.data.completedInstance.push(i);
+          }
+        } else {
+          const index = this.data.completedInstance.indexOf(i);
+          if(index >= 0) {
+            this.data.completedInstance.splice(index, 1);
+          }
+        }
         this.updateLocalData.emit();
       }
     })
     matrixModal.present();
+  }
+
+  checkCompletionOfInstance(data): boolean{
+    let isCompleted = true;
+    for (const question of data) {
+      if(!this.utils.isQuestionComplete(question)){
+        isCompleted = false
+      }
+    }
+    return isCompleted
+
   }
 
   deleteInstance(instanceIndex): void {

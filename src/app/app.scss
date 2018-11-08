@@ -208,3 +208,10 @@ ion-content {
 ._validQuestion {
     color: $green-color;
 }
+
+._tip {
+    text-transform: capitalize;
+    color: #777;
+    font-size: 1.7rem;
+    padding-left: 10px;
+}

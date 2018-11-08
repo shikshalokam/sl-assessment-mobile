@@ -2,6 +2,8 @@
 <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
   <h4 [ngClass]="{'_validQuestion': data?.value}" *ngFor="let question of data.question">{{question}}</h4>
 </ion-col>
+<div class="_tip _flex-box "> {{data?.tip}}</div>
+
 <div margin-top>
   <ion-item text-center no-padding>
     <ion-input type="{{data?.responseType}}" (input)="isaNumber()" placeholder="{{data?.question}}"  [(ngModel)]="data.value"></ion-input>

@@ -136,7 +136,13 @@ export class ApiProvider {
           role: 'role',
           handler: data => {
             this.currentUser.deactivateActivateSession(true);
-            this.appCtrls.getActiveNav().setRoot(WelcomePage);
+            let nav = this.appCtrls.getRootNav();
+            // nav.setRoot(WelcomePage);
+            // nav.push(WelcomePage);
+            // this.appCtrls.getRootNav().push(WelcomePage);
+            nav.setRoot(WelcomePage);
+            // window.location.reload();
+            // this.appCtrls.getActiveNav().setRoot(WelcomePage);
           }
         }
       ],

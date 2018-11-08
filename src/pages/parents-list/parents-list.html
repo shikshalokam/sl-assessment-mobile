@@ -1,0 +1,26 @@
+<ion-header>
+  <header [title]="'headings.parentContact'|translate" [hideBack]="false">
+
+  </header>
+</ion-header>
+
+
+<ion-content padding>
+  <div>
+    <button ion-button icon-start float-right clear color="primary" (click)="addParent()">
+      {{'buttons.add'| translate}} {{'buttons.parent' | translate}}
+    </button>
+  </div>
+
+  <div>
+    <ion-list *ngIf="parentInfoList?.length">
+      <button ion-item *ngFor="let info of parentInfoList">
+        {{ info?.name }} 
+      </button>  
+    </ion-list>
+  </div>
+
+  <div *ngIf="!parentInfoList?.length" class="_flex-box _justify-content-center noInfo">
+    No parent info available
+  </div>
+</ion-content>

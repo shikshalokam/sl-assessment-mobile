@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App , ModalController} from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { schoolProfileConfig } from './school-profile.config';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -7,6 +7,8 @@ import { Storage } from '@ionic/storage';
 import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
 import { RatingProvider } from '../../providers/rating/rating';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
+import { AppConfigs } from '../../providers/appConfig';
+import { ParentsFormPage } from '../parents-form/parents-form';
 
 @IonicPage()
 @Component({
@@ -28,7 +30,8 @@ export class SchoolProfilePage {
     private storage: Storage,
     private ratingService: RatingProvider,
     private app: App,
-    private feedback: FeedbackProvider) {
+    private feedback: FeedbackProvider,
+    private modalCntrl: ModalController) {
   }
 
   ionViewWillEnter() {
@@ -77,8 +80,31 @@ export class SchoolProfilePage {
     this.ratingService.checkForRatingDetails(this.submissionId, school);
   }
 
-  goToParentInfo(): void {
-      
+  addParent(): void {
+    const params = {
+      _id: this.schoolId,
+      name: this.schoolName,
+    }
+    let parentForm = this.modalCntrl.create(ParentsFormPage, params);
+    // parentForm.onDidDismiss(data => {
+    //   if (data) {
+    //     data.programId = this.schoolDetails['program']._id;
+    //     data.schoolId = this.schoolId;
+    //     data.schoolName = this.schoolName;
+    //     this.parentInfoList.push(data)
+    //     this.storage.set('ParentInfo', this.parentInfoList);
+    //   }
+
+    // })
+    parentForm.present();
+  }
+
+  getParentRegistryForm() : void {
+    this.apiService.httpGet(AppConfigs.parentInfo.getParentRegisterForm, success => {
+      this.storage.set('parentRegisterForm', JSON.stringify(success.result));
+    }, error => {
+
+    })
   }
 
   

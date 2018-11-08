@@ -57,6 +57,8 @@ import { EvidenceProvider } from '../providers/evidence/evidence';
 import { QuestionDashboardPage } from '../pages/question-dashboard/question-dashboard';
 import { PhotoLibrary } from '@ionic-native/photo-library';
 import { RemarksPage } from '../pages/remarks/remarks';
+import { ParentsListPageModule } from '../pages/parents-list/parents-list.module';
+
 
 @NgModule({
   declarations: [
@@ -98,7 +100,8 @@ import { RemarksPage } from '../pages/remarks/remarks';
     DirectivesModule,
     RatingCriteriaListingPageModule,
     RatingPageModule,
-    RatedCriteriaListPageModule
+    RatedCriteriaListPageModule,
+    ParentsListPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -1,7 +1,7 @@
 <ion-list class="wrapper">
-  <button ion-item clear small icon-end class="_flex-box _justify-content-center" (click)="goToProfile()">
-    <ion-icon name="eye" margin-right></ion-icon>
-    <span>{{'buttons.view'|translate}} {{'buttons.profile'|translate}}</span>
+  <button ion-item clear small icon-start class="_flex-box _justify-content-center" (click)="goToProfile()">
+    <ion-icon name="eye" margin-left margin-right></ion-icon>
+    {{'buttons.view'|translate}} {{'buttons.profile'|translate}}
   </button>
   <!-- <button ion-item clear small icon-end (click)="goToRating()">
     <ion-icon name="star" margin-right></ion-icon>
@@ -11,4 +11,8 @@
     <ion-icon name="flag" margin-right></ion-icon>
     {{'buttons.flag'|translate}}
   </button> -->
+  <button ion-item clear small icon-start (click)="addParent()">
+    <ion-icon name="contacts" margin-left margin-right></ion-icon>
+    {{'buttons.add'| translate}} {{'buttons.parent' | translate}}
+  </button>
 </ion-list>

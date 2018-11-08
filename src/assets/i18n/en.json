@@ -17,7 +17,9 @@
         "no": "No",
         "login": "Login",
         "flag": "Flag",
-        "parentInfo": "Parent Info"
+        "parentInfo": "Parent Info",
+        "add": "Add",
+        "parent":"Parent"
     },
     "tabs": {
         "home": "Home",
@@ -51,7 +53,9 @@
         "remarks": "Remarks",
         "editSchoolProfile":"Edit School Profile",
         "schoolProfile": "School Profile",
-        "surveyEcm":"Survey - ECM"
+        "surveyEcm":"Survey - ECM",
+        "parentContact": "Parent Contacts",
+        "parentRegistry":"Parent Registry"
     },
     "labels": {
         "welcome": "Welcome",

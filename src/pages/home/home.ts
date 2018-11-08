@@ -12,6 +12,7 @@ import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
+import { AppConfigs } from '../../providers/appConfig';
 
 declare var cordova: any;
 
@@ -102,6 +103,14 @@ export class HomePage {
     this.ratingService.checkForRatingDetails(submissionId, school);
   }
 
+  getParentRegistryForm() : void {
+    this.apiService.httpGet(AppConfigs.parentInfo.getParentRegisterForm, success => {
+      this.storage.set('parentRegisterForm', JSON.stringify(success.result));
+    }, error => {
+
+    })
+  }
+
   getLocalSchoolDetails(): void {
     this.storage.get('schoolsDetails').then(details => {
       this.schoolDetails = JSON.parse(details);
@@ -174,6 +183,11 @@ export class HomePage {
   onInit() {
     this.navCtrl.id = "HomePage";
     console.log('refresh');
+    this.storage.get('parentRegisterForm').then(form => {
+      if(!form){
+        this.getParentRegistryForm();
+      }
+    })
     this.userData = this.currentUser.getCurrentUserData();
     this.storage.get('schools').then(schools => {
       console.log(JSON.stringify(schools))
