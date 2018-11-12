@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.shikshalokam.samiksha" version="0.0.15" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Samiksha</name>
+<widget id="org.shikshalokam.dcpcr" version="0.0.15" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>School Development Index</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.2.174:8101" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -82,7 +82,6 @@
     <allow-navigation href="http://172.16.20.125:8101" sessionid="7ae943b5" />
     <allow-navigation href="http://192.168.43.40:8100" sessionid="056e1009" />
     <allow-navigation href="http://192.168.2.174:8100" sessionid="78c02768" />
-    <allow-navigation href="http://192.168.2.174:8101" sessionid="10d2d3b8" />
     <engine name="browser" spec="5.0.4" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="6.3.0" />
