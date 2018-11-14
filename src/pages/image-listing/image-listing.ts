@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, App } from 'ionic-angular';
+import { NavController, NavParams, App, Platform } from 'ionic-angular';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
 import { File } from '@ionic-native/file';
@@ -18,12 +18,12 @@ export class ImageListingPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private file: File, private fileTransfer: FileTransfer,
     private apiService: ApiProvider, private utils: UtilsProvider,
-    private app: App) {
+    private app: App, private platform: Platform) {
   }
 
   uploadImages: any;
   imageList = [];
-  appFolderPath: string = cordova.file.externalDataDirectory + 'images';
+  appFolderPath: string = this.platform.is('ios')? cordova.file.documentsDirectory + 'images' : cordova.file.externalDataDirectory + 'images';
   schoolId: any;
   schoolName: string
   selectedEvidenceIndex: any;
@@ -148,7 +148,8 @@ export class ImageListingPage {
     if (img === null) {
       return '';
     } else {
-      return cordova.file.externalDataDirectory + 'images/' + img;
+      const path = this.platform.is('ios') ? cordova.file.documentsDirectory: cordova.file.externalDataDirectory
+      return path + 'images/' + img;
     }
   }
 

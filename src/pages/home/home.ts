@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, App, Events } from 'ionic-angular';
+import { NavController, App, Events, Platform } from 'ionic-angular';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ApiProvider } from '../../providers/api/api';
 import { Storage } from '@ionic/storage';
@@ -28,6 +28,7 @@ export class HomePage {
   evidences: any;
   subscription: any;
   networkAvailable: boolean;
+  isIos: boolean = this.platform.is('ios');
 
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
@@ -39,7 +40,8 @@ export class HomePage {
     private network: Network,
     private events: Events,
     private ngps: NetworkGpsProvider,
-    private evdnsServ: EvidenceProvider
+    private evdnsServ: EvidenceProvider,
+    private platform: Platform
   ) {
     // this.events.subscribe('network:offline', () => {
     // });

@@ -23,7 +23,7 @@
         <span float-right *ngIf="evidence.progressStatus === 'completed' && !evidence?.isNotApplicable" class="_completed _flex-box">
             {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
         </span>
-        <span float-right *ngIf="!evidence.progressStatus && !evidence?.isNotApplicable" class="_flex-box">
+        <span float-right *ngIf="!evidence.progressStatus && !evidence?.isNotApplicable && !isIos" class="_flex-box">
           <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
         </span>
         <span float-right *ngIf="evidence.progressStatus === 'inProgress' && !evidence?.isNotApplicable" class="_inProgress _flex-box">

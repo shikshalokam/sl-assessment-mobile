@@ -28,8 +28,8 @@ export class WelcomePage {
       // title: "Slide 1",
       image: "assets/imgs/just-logo.png"
     },
-    { title: "Slide 2" },
-    { title: "Slide 3" }
+    // { title: "Slide 2" },
+    // { title: "Slide 3" }
   ];
   responseData: any;
   token: any;

@@ -6,7 +6,7 @@
 
 <div margin-top>
   <ion-item text-center no-padding>
-    <ion-input type="{{data?.responseType}}" (input)="isaNumber()" placeholder="{{data?.question}}"  [(ngModel)]="data.value"></ion-input>
+    <ion-input type="{{data?.responseType}}" (input)="isaNumber()"  [(ngModel)]="data.value"></ion-input>
   </ion-item>
   <div *ngIf="!notNumber" class="_errorMsg">Decimal numbers not allowed</div>
 

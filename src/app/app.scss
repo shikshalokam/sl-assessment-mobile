@@ -148,22 +148,21 @@ ion-content {
 
 ._completed {
     color: $green-color;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 
 ._inProgress {
     color: $orange-color;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 
 ._na {
-    // color: $orange-color;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 
 ._submitted {
     color: $blue-color;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 
 ._alertCustomCss {
