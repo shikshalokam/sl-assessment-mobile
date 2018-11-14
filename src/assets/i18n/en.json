@@ -19,7 +19,8 @@
         "flag": "Flag",
         "parentInfo": "Parent Info",
         "add": "Add",
-        "parent":"Parent"
+        "parent":"Parent",
+        "capture": "Capture"
     },
     "tabs": {
         "home": "Home",
