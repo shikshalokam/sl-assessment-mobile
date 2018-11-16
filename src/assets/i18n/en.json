@@ -20,7 +20,8 @@
         "parentInfo": "Parent Info",
         "add": "Add",
         "parent":"Parent",
-        "capture": "Capture"
+        "capture": "Capture",
+        "refresh": "Refresh"
     },
     "tabs": {
         "home": "Home",

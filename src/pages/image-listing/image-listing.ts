@@ -161,6 +161,7 @@ export class ImageListingPage {
 
     const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
+    console.log(url)
     this.apiService.httpPost(url, payload, response => {
       console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
@@ -181,7 +182,7 @@ export class ImageListingPage {
   }
 
   constructPayload(): any {
-    console.log("in construct")
+    console.log("in construct payload")
     const payload = {
       // 'schoolProfile': {},
       'evidence': {}
@@ -204,6 +205,7 @@ export class ImageListingPage {
     evidence.externalId = currentEvidence.externalId;
     evidence.startTime = currentEvidence.startTime;
     evidence.endTime = Date.now();
+    console.log("Looping")
     for (const section of this.evidenceSections) {
       for (const question of section.questions) {
         let obj = {
@@ -217,6 +219,8 @@ export class ImageListingPage {
             responseType: question.responseType
           }
         };
+      console.log("In questions " + question._id)
+
         if (question.responseType === 'multiselect') {
           for (const val of question.value) {
             for (const option of question.options) {
@@ -227,27 +231,35 @@ export class ImageListingPage {
           }
 
         } else if (question.responseType === 'radio') {
+    console.log(" in radio payload")
+
           for (const option of question.options) {
             if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
               obj.payload.labels.push(option.label);
             }
           }
+
         } else {
           obj.payload.labels.push(question.value);
         }
-
+        console.log("hiiiii")
+        console.log(JSON.stringify(question.payload))
         for (const key of Object.keys(question.payload)) {
           obj[key] = question.payload[key];
         }
+        // console.log("hiiiii")
         evidence.answers[obj.qid] = obj;
       }
     }
     // payload.schoolProfile = schoolProfile;
     payload.evidence = evidence;
+    console.log("End of construct payload")
+
     return payload
   }
 
   constructMatrixObject(question) {
+    console.log("construct matrix payload");
     const value = [];
     for (const instance of question.value) {
       let eachInstance = {};
@@ -290,6 +302,8 @@ export class ImageListingPage {
       }
       value.push(eachInstance)
     }
+    console.log("end of construct matrix payload");
+
     return value
   }
 

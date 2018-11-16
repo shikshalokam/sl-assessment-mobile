@@ -13,6 +13,7 @@ import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { AppConfigs } from '../../providers/appConfig';
+import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
 
 declare var cordova: any;
 
@@ -41,13 +42,16 @@ export class HomePage {
     private events: Events,
     private ngps: NetworkGpsProvider,
     private evdnsServ: EvidenceProvider,
-    private platform: Platform
+    private platform: Platform,
+    private ulsd: UpdateLocalSchoolDataProvider
   ) {
-    // this.events.subscribe('network:offline', () => {
-    // });
+    this.subscription = this.events.subscribe('localDataUpdated', () => {
+      console.log("Updated")
+      this.getLocalSchoolDetails();
+    });
 
-    // // Online event
-    // this.events.subscribe('network:online', () => {
+    // Online event
+    // constthis.events.subscribe('localDataUpdated', () => {
     // });
     // this.networkAvailable = this.ngps.getNetworkStatus()
   }
@@ -140,6 +144,7 @@ export class HomePage {
   }
 
   successCallback = (response) => {
+    console.log(JSON.stringify(response))
     this.schoolDetails.push(response.result);
     if (this.schoolDetails.length === this.schoolList.length) {
       this.utils.stopLoader();
@@ -150,9 +155,24 @@ export class HomePage {
       }
       // console.log("Local school data"+JSON.stringify(schoolDetailsObj));
       this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
-      this.getLocalSchoolDetails()
+      this.getLocalSchoolDetails();
+      // this.mappSubmissionData(schoolDetailsObj);
     }
   }
+
+
+  // mappSubmissionData(schoolDetailsObj) : void {
+  //   for (const school of this.schoolList ) {
+  //     const obj = {
+  //       _id: school['_id'],
+  //     }
+  //     this.ulsd.getLocalData(obj, schoolDetailsObj[school['_id']])
+  //     // schoolDetailsObj[key];
+  //     // this.u
+
+  //     console.log(JSON.stringify(school))
+  //   }
+  // }
 
   checkForProgressStatus(evidences) {
     console.log("yeee")
