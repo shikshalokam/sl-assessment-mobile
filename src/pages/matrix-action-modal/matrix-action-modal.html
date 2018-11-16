@@ -18,7 +18,7 @@
       <ng-container *ngIf="selectedIndex ===i">
         <!-- <div text-capitalize padding-top padding-bottom>{{datas?.instanceIdentifier}} {{i+1}}</div> -->
         <ng-container [ngSwitch]="question?.responseType" *ngFor="let question of instance; let j=index" margin-bottom>
-          <div class="_fullScreenCard">
+          <div class="_fullScreenCard" *ngIf="checkForVisibility(j)">
             <input-type [data]="question" *ngSwitchCase="'text'" [hideButton]="true"></input-type>
             <input-type [data]="question" *ngSwitchCase="'number'" [hideButton]="true"></input-type>
             <radio-type [data]="question" *ngSwitchCase="'radio'" [hideButton]="true"></radio-type>
@@ -34,16 +34,16 @@
 <div class="_footer customFooter">
   <ion-row>
     <ion-col>
-        <button ion-button icon-start full color="light" (click)="cancel()" >
-            {{'buttons.cancel'|translate}}
-        </button>
-      </ion-col>
-      <ion-col>
-        <!-- <button ion-button icon-end  full float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
-        <button ion-button icon-start full float-right color="primary" (click)="update()">
-            {{'buttons.save'|translate}}
-        </button>
-      </ion-col>
+      <button ion-button icon-start full color="light" (click)="cancel()">
+        {{'buttons.cancel'|translate}}
+      </button>
+    </ion-col>
+    <ion-col>
+      <!-- <button ion-button icon-end  full float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
+      <button ion-button icon-start full float-right color="primary" (click)="update()">
+        {{'buttons.save'|translate}}
+      </button>
+    </ion-col>
     <!-- <button ion-button icon-start full color="primary" (click)="update()" *ngIf="!isLast">
       <ion-icon name="filing"></ion-icon>Save
     </button> -->

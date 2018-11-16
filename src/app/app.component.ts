@@ -87,6 +87,9 @@ export class MyApp {
 
   initilaizeApp(): void {
     this.statusBar.styleDefault();
+    this.statusBar.overlaysWebView(false);
+
+    // this.statusBar.backgroundColorByName(black)
     this.currentUser.checkForTokens().then(response => {
       console.log("Deiactivated " + response.isDeactivated)
       if (response.isDeactivated) {
@@ -94,14 +97,19 @@ export class MyApp {
         this.splashScreen.hide()
       } else {
         this.rootPage = TabsPage;
-        this.splashScreen.hide()
+        // this.splashScreen.hide()
+        // this.statusBar.overlaysWebView(false);
       }
 
     }).catch(error => {
       this.rootPage = WelcomePage;
-      this.splashScreen.hide()
+      // this.splashScreen.hide()
+      // this.statusBar.overlaysWebView(false);
+
     })
-    this.statusBar.hide();
+    // this.statusBar.hide();
+    // this.statusBar.overlaysWebView(false);
+
   }
 
   registerBAckButtonAction(): void {

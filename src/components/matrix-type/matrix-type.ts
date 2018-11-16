@@ -3,6 +3,7 @@ import { MatrixModalComponent } from '../matrix-modal/matrix-modal';
 import { ModalController, NavParams } from 'ionic-angular';
 import { MatrixActionModalPage } from '../../pages/matrix-action-modal/matrix-action-modal';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { QuestionDashboardPage } from '../../pages/question-dashboard/question-dashboard';
 
 @Component({
   selector: 'matrix-type',
@@ -72,7 +73,7 @@ export class MatrixTypeComponent {
   checkCompletionOfInstance(data): boolean{
     let isCompleted = true;
     for (const question of data) {
-      if(!this.utils.isQuestionComplete(question)){
+      if(!question.isCompleted){
         isCompleted = false
       }
     }

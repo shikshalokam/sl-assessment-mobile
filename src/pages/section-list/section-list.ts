@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Events, Platform } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ApiProvider } from '../../providers/api/api';
@@ -27,7 +27,8 @@ export class SectionListPage {
   allAnsweredForEvidence: boolean;
   userData: any;
   currentEvidence: any;
-  networkAvailable
+  networkAvailable: any;
+  isIos: boolean = this.platform.is('ios');
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App,
@@ -35,7 +36,7 @@ export class SectionListPage {
     private apiService: ApiProvider, private utils: UtilsProvider,
     private diagnostic: Diagnostic, private ngps: NetworkGpsProvider,
     private feedback: FeedbackProvider,
-    private events: Events) {
+    private events: Events, private platform: Platform) {
 
     this.events.subscribe('network:offline', () => {
     });

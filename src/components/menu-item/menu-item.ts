@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { NavParams, App, ViewController, Events , ModalController} from 'ionic-angular';
+import { NavParams, App, ViewController, Events , ModalController, Thumbnail} from 'ionic-angular';
 import { RatingProvider } from '../../providers/rating/rating';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { ParentsFormPage } from '../../pages/parents-form/parents-form';
+import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
 
 @Component({
   selector: 'menu-item',
@@ -20,7 +21,8 @@ export class MenuItemComponent {
 
   constructor(private navParams: NavParams, private ratingService: RatingProvider,
     private appCtrl: App, private viewCtrl: ViewController, private utils: UtilsProvider,
-    private events: Events, private ngps: NetworkGpsProvider, private modalCntrl: ModalController) {
+    private events: Events, private ngps: NetworkGpsProvider, private modalCntrl: ModalController,
+    private usld: UpdateLocalSchoolDataProvider) {
     console.log('Hello MenuItemComponent Component');
     console.log(this.navParams.get("value"))
     this.submissionId = this.navParams.get('submissionId');
@@ -90,6 +92,15 @@ export class MenuItemComponent {
 
   close() {
     this.viewCtrl.dismiss();
+  }
+
+  refreshSchoolData(): void {
+    const schoolData = {
+      _id: this.schoolId,
+      name: this.schoolName,
+    };
+    this.usld.getLocalData(schoolData);
+    this.close();
   }
 
   addParent(): void {

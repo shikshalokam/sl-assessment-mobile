@@ -20,7 +20,11 @@ page-home {
     }
 
     .overflow {
-        width: calc(100% - 50px);
+        width: calc(100% - 70px);
+    }
+
+    .homeLi {
+        font-size: 1.5rem !important;
     }
 
 }

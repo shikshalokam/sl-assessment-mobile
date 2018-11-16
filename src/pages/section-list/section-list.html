@@ -24,7 +24,7 @@
         <span float-right *ngIf="section.progressStatus === 'completed'" class="_completed _flex-box">
           {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
         </span>
-        <span float-right *ngIf="!section.progressStatus" class=" _flex-box">
+        <span float-right *ngIf="!section.progressStatus && !isIos" class=" _flex-box">
           <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
         </span>
         <span float-right *ngIf="section.progressStatus === 'inProgress'" class="_inProgress _flex-box">

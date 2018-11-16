@@ -14,6 +14,7 @@ import { FooterButtonsComponent } from './footer-buttons/footer-buttons';
 import { HeaderComponent } from './header/header';
 import { Network } from '@ionic-native/network';
 import { MenuItemComponent } from './menu-item/menu-item';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
 	declarations: [
@@ -53,7 +54,7 @@ import { MenuItemComponent } from './menu-item/menu-item';
 		MenuItemComponent
 	],
 	providers:[
-		Network
+		Network, DatePipe
 	]
 })
 export class ComponentsModule { }

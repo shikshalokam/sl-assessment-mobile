@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActionSheetController } from 'ionic-angular'
+import { ActionSheetController, Platform } from 'ionic-angular'
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
@@ -18,6 +18,9 @@ export class ImageUploadComponent implements OnInit {
 
   text: string;
   datas;
+  isIos: boolean;
+  appFolderPath: string;
+
   @Input()
   set data(data) {
     this.datas = data;
@@ -30,9 +33,7 @@ export class ImageUploadComponent implements OnInit {
   @Input() evidenceId: string;
   @Input() schoolId: string;
 
-  appFolderPath: string = cordova.file.externalDataDirectory + 'images';
   imageList: Array<any> = [];
-
   imageNameCounter: number = 0;
   localEvidenceImageList: any;
   allLocalImageList: any;
@@ -41,7 +42,7 @@ export class ImageUploadComponent implements OnInit {
     private camera: Camera,
     private file: File, private imgPicker: ImagePicker, private utils: UtilsProvider,
     private storage: Storage,
-    private photoLibrary: PhotoLibrary) {
+    private photoLibrary: PhotoLibrary, private platform: Platform) {
     console.log('Hello ImageUploadComponent Component');
     this.text = 'Hello World';
   }
@@ -63,6 +64,9 @@ export class ImageUploadComponent implements OnInit {
       // console.log(JSON.stringify(this.datas));
       // console.log(this.evidenceId)
     })
+    this.isIos = this.platform.is('ios') ? true : false;
+    this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'images' : cordova.file.externalDataDirectory + 'images';
+
     // this.imageList.push('1538556284785.jpg')
   }
 
@@ -103,19 +107,21 @@ export class ImageUploadComponent implements OnInit {
       mediaType: this.camera.MediaType.PICTURE,
       sourceType: this.camera.PictureSourceType.CAMERA
     }
+    console.log("Open Camera");
     this.camera.getPicture(options).then(imagePath => {
+      // con
       this.checkForLocalFolder(imagePath);
       this.saveToLibrary(imagePath);
     }).catch(error => {
-
+      console.log(JSON.stringify(error))
     })
   }
 
   saveToLibrary(url): void {
-    this.photoLibrary.saveImage(url, 'samiksha').then( data => {
+    this.photoLibrary.saveImage(url, 'samiksha').then(data => {
       console.log("saved " + data)
     }).catch(error => {
-      console.log("error " +error)
+      console.log("error " + error)
     })
   }
 
@@ -123,13 +129,31 @@ export class ImageUploadComponent implements OnInit {
     let currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
     let currentPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
 
-    this.file.checkDir(this.file.externalDataDirectory, 'images').then(success => {
-      this.copyFileToLocalDir(currentPath, currentName);
-    }).catch(err => {
-      this.file.createDir(cordova.file.externalDataDirectory, 'images', false).then(success => {
-        this.copyFileToLocalDir(currentPath, currentName)
-      }, error => { })
-    });
+    if (this.isIos) {
+      console.log("Ios ")
+      this.file.checkDir(this.file.documentsDirectory, 'images').then(success => {
+        // console.log("Ios directory present");
+        // console.log("Image details" + currentPath + " " + currentName)
+        this.copyFileToLocalDir(currentPath, currentName);
+      }).catch(err => {
+        // console.log("Ios directory not present")
+
+        this.file.createDir(cordova.file.documentsDirectory, 'images', false).then(success => {
+          // console.log("Ios directory created")
+
+          this.copyFileToLocalDir(currentPath, currentName)
+        }, error => { })
+      });
+    } else {
+      this.file.checkDir(this.file.externalDataDirectory, 'images').then(success => {
+        this.copyFileToLocalDir(currentPath, currentName);
+      }).catch(err => {
+        this.file.createDir(cordova.file.externalDataDirectory, 'images', false).then(success => {
+          this.copyFileToLocalDir(currentPath, currentName)
+        }, error => { })
+      });
+    }
+
   }
 
 
@@ -141,10 +165,21 @@ export class ImageUploadComponent implements OnInit {
   }
 
   copyFileToLocalDir(namePath, currentName) {
+    // console.log("Copy file");
+    // console.log("namePath " + namePath);
+    // console.log("currentname " + currentName);
+    // console.log("destination path " + this.appFolderPath);
+
+    // this.file.resolveLocalFilesystemUrl(namePath).then(succes => {
+    //   console.log("Resolved  path " + JSON.stringify(succes.nativeURL))
+    // }).catch(error => {
+
+    // })
     this.file.copyFile(namePath, currentName, this.appFolderPath, currentName).then(success => {
       console.log(JSON.stringify(success));
       this.pushToImageList(currentName);
     }, error => {
+      console.log("error" + JSON.stringify(error));
     });
   }
 
@@ -165,6 +200,8 @@ export class ImageUploadComponent implements OnInit {
   }
 
   createImageFromName(imageList) {
+    this.isIos = this.platform.is('ios') ? true : false;
+    this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'images' : cordova.file.externalDataDirectory + 'images';
     for (const image of imageList) {
       this.file.checkFile(this.appFolderPath + '/', image).then(response => {
         this.file.readAsDataURL(this.appFolderPath, image).then(data => {

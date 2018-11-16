@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Platform } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
@@ -24,9 +24,10 @@ export class EvidenceListPage {
   schoolEvidences: any;
   schoolData: any;
   currentEvidenceStatus: string;
+  isIos: boolean = this.platform.is('ios');
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private utils: UtilsProvider,
-    private feedback: FeedbackProvider, private evdnsServ: EvidenceProvider) {
+    private feedback: FeedbackProvider, private evdnsServ: EvidenceProvider, private platform: Platform) {
   }
 
   ionViewWillEnter() {

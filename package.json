@@ -98,7 +98,10 @@
         "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
       },
       "cordova.plugins.diagnostic": {},
-      "cordova-plugin-camera": {},
+      "cordova-plugin-camera": {
+        "CAMERA_USAGE_DESCRIPTION": "To get photos",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": "To select photos"
+      },
       "cordova-plugin-file": {},
       "cordova-plugin-filepath": {},
       "cordova-plugin-file-transfer": {},
@@ -116,8 +119,8 @@
     },
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
