@@ -58,6 +58,7 @@ import { QuestionDashboardPage } from '../pages/question-dashboard/question-dash
 import { PhotoLibrary } from '@ionic-native/photo-library';
 import { RemarksPage } from '../pages/remarks/remarks';
 import { ParentsListPageModule } from '../pages/parents-list/parents-list.module';
+import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-data/update-local-school-data';
 
 
 @NgModule({
@@ -145,7 +146,8 @@ import { ParentsListPageModule } from '../pages/parents-list/parents-list.module
     RatingProvider,
     NetworkGpsProvider,
     FeedbackProvider,
-    EvidenceProvider
+    EvidenceProvider,
+    UpdateLocalSchoolDataProvider
   ]
 })
 export class AppModule { }

@@ -11,7 +11,7 @@
 
   </ion-item>
   <!-- <div margin-top margin-bottom style="width: 100%"> -->
-  <button ion-button icon-start float-right clear color="primary" class="capture" (click)="captureTime()" *ngIf="!data?.value">
+  <button ion-button icon-start float-right clear color="primary" class="capture" (click)="captureTime()" *ngIf="!data?.value && data?.autoCapture">
     {{'buttons.capture'| translate}}
   </button>
   <!-- </div> -->

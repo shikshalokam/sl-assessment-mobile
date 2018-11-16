@@ -30,21 +30,21 @@
     <ion-card-content no-padding *ngIf="school && schoolDetails[school._id.toString()]">
 
       <ion-list>
-        <button ion-item   [disabled]="evidence?.isNotApplicable" (click)="goToSections(school, j)" *ngFor="let evidence of schoolDetails[school._id.toString()]['assessments'][0]['evidences'] |slice:0:3; let j = index">
+        <button ion-item   [disabled]="evidence?.notApplicable" (click)="goToSections(school, j)" *ngFor="let evidence of schoolDetails[school._id.toString()]['assessments'][0]['evidences'] |slice:0:3; let j = index">
           <ion-icon name="albums" margin-right></ion-icon> <span class="homeLi">{{ evidence?.name }}</span> 
-          <span float-right *ngIf="evidence.progressStatus === 'completed' && !evidence?.isNotApplicable" class="_completed _flex-box">
+          <span float-right *ngIf="evidence.progressStatus === 'completed' && !evidence?.notApplicable" class="_completed _flex-box">
               {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
           </span>
-          <span float-right *ngIf="!evidence.progressStatus && !evidence?.isNotApplicable && !isIos" class=" _flex-box">
+          <span float-right *ngIf="!evidence.progressStatus && !evidence?.notApplicable && !isIos" class=" _flex-box">
             <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
           </span>
-          <span float-right *ngIf="evidence.progressStatus === 'inProgress' && !evidence?.isNotApplicable" class="_inProgress _flex-box">
+          <span float-right *ngIf="evidence.progressStatus === 'inProgress' && !evidence?.notApplicable" class="_inProgress _flex-box">
               {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
           </span>
-          <span float-right *ngIf="evidence.progressStatus === 'submitted' && !evidence?.isNotApplicable" class="_submitted _flex-box">
+          <span float-right *ngIf="evidence.progressStatus === 'submitted' && !evidence?.notApplicable" class="_submitted _flex-box">
               {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
           </span>
-          <span float-right *ngIf="evidence?.isNotApplicable" class="_na _flex-box">
+          <span float-right *ngIf="evidence?.notApplicable" class="_na _flex-box">
             {{'labels.notApplicable'|translate}} <ion-icon name="alert" class="_progressIcon" margin-left></ion-icon>
         </span>
         </button>

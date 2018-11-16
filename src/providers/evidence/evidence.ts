@@ -127,7 +127,7 @@ export class EvidenceProvider {
       console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
       this.schoolDetails[this.schoolId]['assessments'][0]['evidences'][this.evidenceIndex].isSubmitted = true;
-      this.schoolDetails[this.schoolId]['assessments'][0]['evidences'][this.evidenceIndex].isNotApplicable = true;
+      this.schoolDetails[this.schoolId]['assessments'][0]['evidences'][this.evidenceIndex].notApplicable = true;
       this.utils.setLocalSchoolData(this.schoolDetails);
       this.utils.stopLoader();
 
@@ -148,7 +148,8 @@ export class EvidenceProvider {
       externalId: "",
       answers: {},
       startTime: 0,
-      endTime: 0
+      endTime: 0,
+      notApplicable: true
     };
 
     const currentEvidence = selectedECM;
