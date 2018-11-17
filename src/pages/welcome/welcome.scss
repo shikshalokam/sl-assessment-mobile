@@ -9,6 +9,10 @@ page-welcome {
     .toolbar-background {
         background: $grey-color !important;
     }
+    .swiper-pagination-bullet-active {
+        background: $blue-color;
+        opacity: 1;
+    }
 
     ion-toolbar {
         position: absolute;
