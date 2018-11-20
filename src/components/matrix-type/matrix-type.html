@@ -1,6 +1,6 @@
 <div>
   <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
-    <h4 [ngClass] = "{'_validQuestion': data?.completedInstance?.length === data?.value?.length}" *ngFor="let question of data.question">{{question}}</h4>
+    <h4 [ngClass] = "{'_validQuestion': data?.completedInstance?.length && (data?.completedInstance?.length === data?.value?.length)}" *ngFor="let question of data.question">{{question}}</h4>
   </ion-col>
   <div class="_tip _flex-box "> {{data?.tip}}</div>
   <div>
@@ -40,4 +40,4 @@
   </ion-row>
 </div> -->
 
-<footer-buttons  [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons>
+<!-- <footer-buttons  [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons> -->

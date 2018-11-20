@@ -73,7 +73,7 @@ export class HomePage {
 
   getSchoolDetails(): void {
     for (const school of this.schoolList) {
-      console.log(school['_id']);
+      // console.log(school['_id']);
       this.apiService.httpGet(SchoolConfig.getSchoolDetails + school['_id'], this.successCallback, error => {
 
       })
@@ -144,7 +144,7 @@ export class HomePage {
   }
 
   successCallback = (response) => {
-    console.log(JSON.stringify(response))
+    // console.log(JSON.stringify(response))
     this.schoolDetails.push(response.result);
     if (this.schoolDetails.length === this.schoolList.length) {
       this.utils.stopLoader();
@@ -155,24 +155,31 @@ export class HomePage {
       }
       // console.log("Local school data"+JSON.stringify(schoolDetailsObj));
       this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
-      this.getLocalSchoolDetails();
-      // this.mappSubmissionData(schoolDetailsObj);
+      // this.getLocalSchoolDetails();
+      this.mappSubmissionData(schoolDetailsObj);
     }
   }
 
 
-  // mappSubmissionData(schoolDetailsObj) : void {
-  //   for (const school of this.schoolList ) {
-  //     const obj = {
-  //       _id: school['_id'],
-  //     }
-  //     this.ulsd.getLocalData(obj, schoolDetailsObj[school['_id']])
-  //     // schoolDetailsObj[key];
-  //     // this.u
+  mappSubmissionData(schoolDetailsObj) : void {
+    for (const school of this.schoolList ) {
+      const obj = {
+        _id: school['_id'],
+      }
+      // console.log("School details " +JSON.stringify(schoolDetailsObj[school['_id']]))
+      if(schoolDetailsObj[school['_id']].assessments[0].submissions) {
+      // console.log(JSON.stringify(schoolDetailsObj[school['_id']].assessments[0].submissions));
 
-  //     console.log(JSON.stringify(school))
-  //   }
-  // }
+        this.ulsd.getLocalData(obj, schoolDetailsObj[school['_id']].assessments[0].submissions)
+      }
+      // schoolDetailsObj[key];
+      // this.u
+
+      // console.log(JSON.stringify(school));
+    }
+    this.getLocalSchoolDetails();
+
+  }
 
   checkForProgressStatus(evidences) {
     console.log("yeee")

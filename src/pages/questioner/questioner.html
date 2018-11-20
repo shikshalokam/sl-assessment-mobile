@@ -34,3 +34,4 @@
   </div>
 
 </ion-content>
+<footer-buttons  [isFirst]="!start" [isLast]="questions?.length === end" (nextAction)="next()" (backAction)="back()"></footer-buttons>

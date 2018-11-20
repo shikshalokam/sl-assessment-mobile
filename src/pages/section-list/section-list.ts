@@ -74,6 +74,7 @@ export class SectionListPage {
     for (const section of this.evidenceSections) {
       allAnswered = true;
       for (const question of section.questions) {
+        // console.log(question.isCompleted)
         // console.log("is completed: " + question.isCompleted)
         if (!question.isCompleted) {
           allAnswered = false;
