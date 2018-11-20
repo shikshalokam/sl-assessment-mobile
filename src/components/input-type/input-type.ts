@@ -46,5 +46,9 @@ export class InputTypeComponent implements OnInit {
   // checkForValidation(): void {
   //   this.questionValid = this.utils.isQuestionComplete(this.data);
   // }
+  checkForValidation(): void {
+    console.log("innn");
+    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
+  }
 
 }

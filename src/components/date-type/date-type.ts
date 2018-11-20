@@ -50,7 +50,8 @@ export class DateTypeComponent implements OnInit{
   }
 
   checkForValidation(): void {
-    console.log(JSON.stringify(this.data))
+    // console.log(JSON.stringify(this.data))
+    console.log("innn");
     this.questionValid = this.utils.isQuestionComplete(this.data);
   }
 }
