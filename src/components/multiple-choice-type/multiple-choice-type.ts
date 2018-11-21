@@ -16,6 +16,8 @@ export class MultipleChoiceTypeComponent implements OnInit {
   @Input() evidenceId: string;
   @Input() hideButton: boolean
   @Input() schoolId: string;
+  @Input() imageLocalCopyId: string;
+
   
   constructor(private utils: UtilsProvider) {
     console.log('Hello checkboxTypeComponent Component');
@@ -36,6 +38,7 @@ export class MultipleChoiceTypeComponent implements OnInit {
     } else {
       this.data.value.push(val)
     }
+    this.checkForValidation();
     console.log(this.data.value)
   }
 
@@ -49,6 +52,11 @@ export class MultipleChoiceTypeComponent implements OnInit {
   back() {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.previousCallBack.emit('previous');
+  }
+
+  checkForValidation(): void {
+    console.log("innnn");
+    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
   }
 
 }

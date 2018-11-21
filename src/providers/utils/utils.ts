@@ -55,7 +55,7 @@ export class UtilsProvider {
   }
 
   setLocalImages(images) {
-    this.storage.set(this.imagePath, JSON.stringify(images));
+    this.storage.set('allImageList', JSON.stringify(images));
   }
 
   setLocalVariable(key, value) {

@@ -14,6 +14,8 @@ export class DateTypeComponent implements OnInit{
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
   @Input() schoolId: string;
+  @Input() imageLocalCopyId: string;
+
 
   @Input() hideButton: boolean;
   questionValid: boolean;
@@ -50,7 +52,8 @@ export class DateTypeComponent implements OnInit{
   }
 
   checkForValidation(): void {
-    console.log(JSON.stringify(this.data))
+    // console.log(JSON.stringify(this.data))
+    console.log("innn");
     this.questionValid = this.utils.isQuestionComplete(this.data);
   }
 }

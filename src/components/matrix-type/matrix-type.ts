@@ -19,6 +19,8 @@ export class MatrixTypeComponent {
   @Output() updateLocalData = new EventEmitter();
   @Input() evidenceId: string;
   @Input() schoolId: string;
+  @Input() imageLocalCopyId: string;
+
   
   mainInstance: any;
 
@@ -39,20 +41,23 @@ export class MatrixTypeComponent {
   addInstances(): void {
     this.data.value = this.data.value ? this.data.value : [];
     this.data.value.push(JSON.parse(JSON.stringify(this.data.instanceQuestions)));
+    this.checkForValidation();
   }
 
   viewInstance(i): void {
     console.log("open modal");
     const obj = {
       selectedIndex: i,
-      data: this.data
+      data: JSON.parse(JSON.stringify(this.data)),
+      evidenceId: this.evidenceId,
+      schoolId: this.schoolId,
     }
     let matrixModal = this.modalCntrl.create(MatrixActionModalPage, obj);
-    matrixModal.onDidDismiss(data => {
-      if (data) {
+    matrixModal.onDidDismiss(instanceValue => {
+      if (instanceValue) {
         this.data.completedInstance =  this.data.completedInstance ? this.data.completedInstance : [];
-        this.data.value[i] = data.value[i];
-        console.log(JSON.stringify(this.data.value[i]));
+        this.data.value[i] = instanceValue;
+        console.log("saved isntance"+JSON.stringify(instanceValue));
         let instanceCompletion = this.checkCompletionOfInstance(this.data.value[i]);
         if(instanceCompletion) {
           if(this.data.completedInstance.indexOf(i) < 0) {
@@ -64,7 +69,7 @@ export class MatrixTypeComponent {
             this.data.completedInstance.splice(index, 1);
           }
         }
-        this.updateLocalData.emit();
+        this.checkForValidation();
       }
     })
     matrixModal.present();
@@ -73,8 +78,10 @@ export class MatrixTypeComponent {
   checkCompletionOfInstance(data): boolean{
     let isCompleted = true;
     for (const question of data) {
+      // question.isCompleted = this.utils.isQuestionComplete(question);
       if(!question.isCompleted){
-        isCompleted = false
+        isCompleted = false;
+        return false
       }
     }
     return isCompleted
@@ -82,6 +89,21 @@ export class MatrixTypeComponent {
   }
 
   deleteInstance(instanceIndex): void {
-    this.data.value.splice(instanceIndex, 1)
+    this.data.value.splice(instanceIndex, 1);
+    // let instanceCompletion = this.checkCompletionOfInstance(this.data.value[instanceIndex]);
+    // if(instanceCompletion) {
+      if(this.data.completedInstance.indexOf(instanceIndex) >= 0) {
+        this.data.completedInstance.splice(instanceIndex,1);
+      }
+    this.checkForValidation();
+
+    // }
+  }
+
+  checkForValidation(): void {
+    console.log("innn");
+    this.data.isCompleted = this.utils.isMatrixQuestionComplete(this.data);
+    this.updateLocalData.emit();
+    console.log(this.data.isCompleted)
   }
 }

@@ -21,6 +21,8 @@ export class RadioTypeComponent implements OnInit{
   @Input() evidenceId: string;
   @Input() hideButton: boolean;
   @Input() schoolId: string;
+  @Input() imageLocalCopyId: string;
+
 
   color: string = 'light';
   isComplete: boolean;
@@ -36,9 +38,6 @@ export class RadioTypeComponent implements OnInit{
     // console.log(JSON.stringify(this.data))
   }
 
-  checkForCompletion() {
-
-  }
 
   next(status?:any) {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
@@ -48,5 +47,10 @@ export class RadioTypeComponent implements OnInit{
   back() {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.previousCallBack.emit();
+  }
+
+  checkForValidation(): void {
+    console.log("innn");
+    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
   }
 }

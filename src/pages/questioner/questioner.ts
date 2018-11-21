@@ -29,6 +29,7 @@ export class QuestionerPage {
   isViewOnly: boolean;
   dashbordData: any;
   modalRefrnc: any;
+  localImageListKey: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private cfr: ComponentFactoryResolver,
@@ -36,13 +37,15 @@ export class QuestionerPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SectionListPage');
+    console.log('ionViewDidLoad Questioner');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.selectedSectionIndex = this.navParams.get('selectedSection');
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
+      this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
+      this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId; 
       // console.log("sample " +this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
       this.isViewOnly = !this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;
       this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
@@ -53,13 +56,13 @@ export class QuestionerPage {
         sectionName: this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name,
         currentViewIndex: this.start
       }
-      this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]._id;
       this.isCurrentEvidenceSubmitted = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
       // console.log(this.allQuestionsOfEvidence.length + " length of questions");
     }).catch(error => {
 
     })
   }
+  // images_CO_5bebcfcf92ec921dcf114828
 
   next(status?: string) {
     // console.log(this.questions[this.start].isCompleted)

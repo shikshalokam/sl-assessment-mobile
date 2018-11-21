@@ -3,14 +3,14 @@
 </ion-col>
 <div class="_tip _flex-box "> {{data?.tip}}</div>
 
-<ion-list radio-group margin-top [(ngModel)]="data.value" text-wrap (ionchange)="checkForCompletion()">
+<ion-list radio-group margin-top [(ngModel)]="data.value" text-wrap (ionchange)="checkForCompletion()" (ngModelChange)="checkForValidation()">
   <ion-item *ngFor="let option of data?.options">
     <ion-label>{{option?.label}}</ion-label>
     <ion-radio value="{{option?.value}}"></ion-radio>
   </ion-item>
 </ion-list>
 <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
-<image-upload *ngIf="data?.file" [data]="data" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
+<image-upload *ngIf="data?.file" [data]="data" [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
 
 <!-- <ion-footer no-shadow>
   <ion-toolbar position="bottom">
@@ -44,4 +44,4 @@
   </ion-row>
 </div> -->
 
-<footer-buttons *ngIf="!hideButton" [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons>
+<!-- <footer-buttons *ngIf="!hideButton" [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons> -->

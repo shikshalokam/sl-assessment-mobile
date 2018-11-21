@@ -15,6 +15,8 @@ export class InputTypeComponent implements OnInit {
   @Input() evidenceId: string;
   @Input() hideButton: boolean;
   @Input() schoolId: string;
+  @Input() imageLocalCopyId: string;
+
   
   notNumber: boolean;
   questionValid: boolean;
@@ -23,7 +25,7 @@ export class InputTypeComponent implements OnInit {
     console.log('Hello RadioTypeComponent Component');
   }
   ngOnInit() {
-    console.log(JSON.stringify(this.data));
+    console.log(this.imageLocalCopyId);
     this.isaNumber();
     // this.checkForValidation();
   }
@@ -46,5 +48,9 @@ export class InputTypeComponent implements OnInit {
   // checkForValidation(): void {
   //   this.questionValid = this.utils.isQuestionComplete(this.data);
   // }
+  checkForValidation(): void {
+    console.log("innn");
+    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
+  }
 
 }
