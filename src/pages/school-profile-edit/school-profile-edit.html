@@ -12,10 +12,10 @@
       <ion-card-content>
         <ion-list>
           <ng-container *ngFor="let field of schoolProfile">
-            <ion-item class="adjust" *ngIf="field?.field != 'gpsLocation'">
+            <ion-item class="adjust" *ngIf="field?.field != 'gpsLocation' && field?.visible">
               <ion-label color="primary" floating>{{field?.label}}</ion-label>
               <!-- readonly="{{!field?.editable}}" -->
-              <ion-input type="field?.input" [(ngModel)]="field.value" ></ion-input>
+              <ion-input type="field?.input" [(ngModel)]="field.value" [readonly]="!field.editable"></ion-input>
             </ion-item>
           </ng-container>
         </ion-list>

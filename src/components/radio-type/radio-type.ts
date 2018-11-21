@@ -21,6 +21,8 @@ export class RadioTypeComponent implements OnInit{
   @Input() evidenceId: string;
   @Input() hideButton: boolean;
   @Input() schoolId: string;
+  @Input() imageLocalCopyId: string;
+
 
   color: string = 'light';
   isComplete: boolean;

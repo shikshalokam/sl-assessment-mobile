@@ -32,11 +32,13 @@ export class ImageUploadComponent implements OnInit {
   }
   @Input() evidenceId: string;
   @Input() schoolId: string;
+  @Input() imageLocalCopyId: string;
+
 
   imageList: Array<any> = [];
   imageNameCounter: number = 0;
   localEvidenceImageList: any;
-  allLocalImageList: any;
+  allLocalImageList: any ={};
 
   constructor(private actionSheet: ActionSheetController,
     private camera: Camera,
@@ -57,9 +59,19 @@ export class ImageUploadComponent implements OnInit {
     //   evidenceId:"",
     //   schoolId:"",
     // }
-    this.storage.get(this.utils.imagePath).then(data => {
+    console.log(this.imageLocalCopyId)
+    this.storage.get('allImageList').then(data => {
       this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
-      this.localEvidenceImageList = (this.allLocalImageList && this.allLocalImageList[this.evidenceId]) ? this.allLocalImageList[this.evidenceId] : [];
+      if(this.allLocalImageList[this.schoolId]){
+        this.allLocalImageList[this.schoolId][this.evidenceId] = (this.allLocalImageList[this.schoolId][this.evidenceId] ) ? this.allLocalImageList[this.schoolId][this.evidenceId] : []
+      } else {
+        console.log(this.schoolId + " " + this.evidenceId)
+        this.allLocalImageList[this.schoolId] = {};
+        this.allLocalImageList[this.schoolId][this.evidenceId] = []
+        this.localEvidenceImageList = [];
+      }
+      // this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
+      // this.localEvidenceImageList = (this.allLocalImageList && this.allLocalImageList[this.evidenceId]) ? this.allLocalImageList[this.evidenceId] : [];
       // console.log('local images' + JSON.stringify(this.allLocalImageList));
       // console.log(JSON.stringify(this.datas));
       // console.log(this.evidenceId)
@@ -113,15 +125,15 @@ export class ImageUploadComponent implements OnInit {
       this.checkForLocalFolder(imagePath);
       this.saveToLibrary(imagePath);
     }).catch(error => {
-      console.log(JSON.stringify(error))
+      // console.log(JSON.stringify(error))
     })
   }
 
   saveToLibrary(url): void {
     this.photoLibrary.saveImage(url, 'samiksha').then(data => {
-      console.log("saved " + data)
+      // console.log("saved " + data)
     }).catch(error => {
-      console.log("error " + error)
+      // console.log("error " + error)
     })
   }
 
@@ -176,10 +188,10 @@ export class ImageUploadComponent implements OnInit {
 
     // })
     this.file.copyFile(namePath, currentName, this.appFolderPath, currentName).then(success => {
-      console.log(JSON.stringify(success));
+      // console.log(JSON.stringify(success));
       this.pushToImageList(currentName);
     }, error => {
-      console.log("error" + JSON.stringify(error));
+      // console.log("error" + JSON.stringify(error));
     });
   }
 
@@ -188,14 +200,19 @@ export class ImageUploadComponent implements OnInit {
       this.file.readAsDataURL(this.appFolderPath, fileName).then(data => {
         this.imageList.push(data);
         this.datas.fileName.push(fileName);
-        this.localEvidenceImageList.push({ name: fileName, uploaded: false });
+        console.log("Update local list")
+        console.log(this.schoolId + " " + this.evidenceId)
+
+        console.log(this.localEvidenceImageList)
+        this.allLocalImageList[this.schoolId][this.evidenceId].push({ name: fileName,  uploaded: false});
         this.updateLocalImageList();
+
         // console.log(JSON.stringify(this.data.imageNames))
       }).catch(err => {
 
       })
     }).catch(error => {
-      console.log('Error ' + JSON.stringify(error))
+      // console.log('Error ' + JSON.stringify(error))
     })
   }
 
@@ -212,7 +229,7 @@ export class ImageUploadComponent implements OnInit {
         })
       }).catch(error => {
         this.imageList.push(image);
-        console.log('Error ' + JSON.stringify(error))
+        // console.log('Error ' + JSON.stringify(error))
       })
     }
   }
@@ -226,20 +243,20 @@ export class ImageUploadComponent implements OnInit {
       for (const image of imageData) {
         this.checkForLocalFolder(image);
       }
-      console.log('Image URI: ' + imageData);
+      // console.log('Image URI: ' + imageData);
     })
   }
 
   removeImgFromList(index): void {
-    console.log(this.localEvidenceImageList);
+    // console.log(this.localEvidenceImageList);
     this.file.removeFile(this.appFolderPath + '/', this.datas.fileName[index]).then(success => {
       let indexInLocalList;
-      for (let i = 0; i < this.localEvidenceImageList.length; i++) {
-        if (this.localEvidenceImageList[i].name === this.imageList[i]) {
+      for (let i = 0; i < this.allLocalImageList[this.schoolId][this.evidenceId].length; i++) {
+        if (this.allLocalImageList[this.schoolId][this.evidenceId].name === this.imageList[i]) {
           indexInLocalList = i;
         }
       }
-      this.localEvidenceImageList.splice(indexInLocalList, 1);
+      this.allLocalImageList[this.schoolId][this.evidenceId].splice(indexInLocalList, 1);
       this.datas.fileName.splice(index, 1);
       this.imageList.splice(index, 1);
       this.updateLocalImageList();
@@ -247,8 +264,9 @@ export class ImageUploadComponent implements OnInit {
   }
 
   updateLocalImageList() {
-    this.allLocalImageList[this.evidenceId] = this.localEvidenceImageList;
-    console.log(JSON.stringify(this.allLocalImageList[this.evidenceId]))
+    console.log("Image lsit")
+    // this.allLocalImageList[this.evidenceId] = this.localEvidenceImageList;
+    console.log("LOcal image List" + JSON.stringify(this.allLocalImageList))
     this.utils.setLocalImages(this.allLocalImageList);
   }
 

@@ -14,6 +14,8 @@ export class DateTypeComponent implements OnInit{
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
   @Input() schoolId: string;
+  @Input() imageLocalCopyId: string;
+
 
   @Input() hideButton: boolean;
   questionValid: boolean;

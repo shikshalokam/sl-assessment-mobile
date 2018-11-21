@@ -17,18 +17,12 @@
   <div class="_container">
     <ng-container *ngFor="let question of questions| slice:start:end; let i=index">
       <ng-container [ngSwitch]="question.responseType.toLowerCase()">
-        <input-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
-          (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'text'"></input-type>
-        <input-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
-          (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'number'"></input-type>
-        <radio-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
-          (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'radio'"></radio-type>
-        <date-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
-          (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'date'"></date-type>
-        <multiple-choice-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
-          (previousCallBack)="back($event)" (nextCallBack)="next($event)" *ngSwitchCase="'multiselect'"></multiple-choice-type>
-        <matrix-type [evidenceId]="selectedEvidenceId" [data]="question" [isFirst]="!start" [isLast]="questions.length === end"
-          (previousCallBack)="back($event)" (updateLocalData)="updateLocalData()" (nextCallBack)="next($event)" *ngSwitchCase="'matrix'"></matrix-type>
+        <input-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'"></input-type>
+        <input-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'"></input-type>
+        <radio-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'"></radio-type>
+        <date-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
+        <multiple-choice-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+        <matrix-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'"></matrix-type>
       </ng-container>
     </ng-container>
   </div>

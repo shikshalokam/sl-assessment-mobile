@@ -53,7 +53,6 @@ export class EvidenceProvider {
           icon: 'arrow-forward',
           handler: () => {
             this.diagnostic.isLocationEnabled().then(success => {
-              console.log(success)
               if (success) {
                 params.schoolDetails[params._id]['assessments'][0]['evidences'][params.selectedEvidence].startTime = Date.now();
                 this.utils.setLocalSchoolData(params.schoolDetails);
