@@ -23,7 +23,7 @@ export class ImageListingPage {
 
   uploadImages: any;
   imageList = [];
-  appFolderPath: string = this.platform.is('ios')? cordova.file.documentsDirectory + 'images' : cordova.file.externalDataDirectory + 'images';
+  appFolderPath: string = this.platform.is('ios') ? cordova.file.documentsDirectory + 'images' : cordova.file.externalDataDirectory + 'images';
   schoolId: any;
   schoolName: string
   selectedEvidenceIndex: any;
@@ -33,6 +33,7 @@ export class ImageListingPage {
   currentEvidence: any;
   evidenceSections: any;
   selectedEvidenceName: any;
+  imageLocalCopyId: any;
 
   ionViewDidLoad() {
     this.schoolId = this.navParams.get('_id');
@@ -43,19 +44,22 @@ export class ImageListingPage {
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
       this.currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex];
+      this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.schoolId;
       this.evidenceSections = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
       this.selectedEvidenceName = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
     }).catch(error => {
 
     })
-    this.storage.get(this.utils.imagePath).then(data => {
-      // console.log(data)
-      this.uploadImages = JSON.parse(data) ? JSON.parse(data)[this.currentEvidenceId] : [];
-      // console.log(this.uploadImages)
+    this.storage.get("allImageList").then(data => {
+      //console.log(data)
+      if (JSON.parse(data)[this.schoolId]) {
+        this.uploadImages = (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) : [];
+      }
+      // //console.log(this.uploadImages)
       if (this.uploadImages.length) {
         this.createImageFromName(this.uploadImages);
       } else {
-        // console.log('Evidence submit');
+        // //console.log('Evidence submit');
         this.submitEvidence();
       }
     })
@@ -71,11 +75,12 @@ export class ImageListingPage {
     for (const image of this.uploadImages) {
       files.files.push(image.name)
     }
-    // console.log(JSON.stringify(files))
+    // //console.log(JSON.stringify(files))
     this.apiService.httpPost(AppConfigs.survey.getImageUploadUr, files, success => {
-      console.log(JSON.stringify(success));
+      //console.log(JSON.stringify(success));
       for (let i = 0; i < success.result.length; i++) {
         this.imageList[i]['url'] = success.result[i].url;
+        this.imageList[i]['sourcePath'] = success.result[i].payload.sourcePath;
       }
       // this.utils.stopLoader();
       this.cloudImageUpload();
@@ -89,27 +94,27 @@ export class ImageListingPage {
   createImageFromName(imageList) {
     this.utils.startLoader();
     for (const image of imageList) {
-      // console.log(image.name)
+      // //console.log(image.name)
       this.file.checkFile(this.appFolderPath + '/', image.name).then(response => {
-        // console.log('Check For file name : ' + response);
+        // //console.log('Check For file name : ' + response);
         this.file.readAsDataURL(this.appFolderPath, image.name).then(data => {
-          console.log("Done");
+          //console.log("Done");
           this.imageList.push({ data: data, uploaded: false, file: image.name, url: "" });
-          // console.log(this.imageList.length);
+          // //console.log(this.imageList.length);
         }).catch(err => {
-          console.log('Error ' + JSON.stringify(err))
+          // //console.log('Error ' + JSON.stringify(err))
         })
       }).catch(error => {
-        console.log('Error ' + JSON.stringify(error))
+        // //console.log('Error ' + JSON.stringify(error))
       })
     }
-    console.log('Otside')
+    // //console.log('Otside')
     this.getImageUploadUrls();
   }
 
 
   cloudImageUpload() {
-    console.log(this.uploadIndex);
+    // //console.log(this.uploadIndex);
     // if(!this.uploadIndex) {
     //   this.utils.startLoader("Image upload in progress");
     // }
@@ -125,11 +130,11 @@ export class ImageListingPage {
       httpMethod: 'PUT',
     };
     let targetPath = this.pathForImage(this.imageList[this.uploadIndex].file);
-    // console.log(JSON.stringify(this.file.resolveLocalFilesystemUrl(cordova.file.externalDataDirectory + 'Samiksha/'+image.file)));
+    // //console.log(JSON.stringify(this.file.resolveLocalFilesystemUrl(cordova.file.externalDataDirectory + 'Samiksha/'+image.file)));
     let fileTrns: FileTransferObject = this.fileTransfer.create();
     fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
-      // console.log(JSON.stringify(result));
-      console.log("Uploaded image" + this.uploadIndex);
+      // //console.log(JSON.stringify(result));
+      // //console.log("Uploaded image" + this.uploadIndex);
       // this.uploaded = "File uploaded";
       this.imageList[this.uploadIndex].uploaded = true;
       if (this.uploadIndex < (this.imageList.length - 1)) {
@@ -140,7 +145,7 @@ export class ImageListingPage {
         this.submitEvidence();
       }
     }).catch(err => {
-      console.log(JSON.stringify(err))
+      //console.log(JSON.stringify(err))
     })
   }
 
@@ -148,7 +153,7 @@ export class ImageListingPage {
     if (img === null) {
       return '';
     } else {
-      const path = this.platform.is('ios') ? cordova.file.documentsDirectory: cordova.file.externalDataDirectory
+      const path = this.platform.is('ios') ? cordova.file.documentsDirectory : cordova.file.externalDataDirectory
       return path + 'images/' + img;
     }
   }
@@ -157,13 +162,13 @@ export class ImageListingPage {
   submitEvidence() {
     this.utils.startLoader('Please wait while submitting')
     const payload = this.constructPayload();
-    // console.log(JSON.stringify(payload));
+    // //console.log(JSON.stringify(payload));
 
     const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
-    console.log(url)
+    // console.log(JSON.stringify(payload))
     this.apiService.httpPost(url, payload, response => {
-      console.log(JSON.stringify(response));
+      //console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
       this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       this.utils.setLocalSchoolData(this.schoolData);
@@ -182,7 +187,7 @@ export class ImageListingPage {
   }
 
   constructPayload(): any {
-    console.log("in construct payload")
+    //console.log("in construct payload")
     const payload = {
       // 'schoolProfile': {},
       'evidence': {}
@@ -205,21 +210,37 @@ export class ImageListingPage {
     evidence.externalId = currentEvidence.externalId;
     evidence.startTime = currentEvidence.startTime;
     evidence.endTime = Date.now();
-    console.log("Looping")
+    //console.log("Looping")
     for (const section of this.evidenceSections) {
       for (const question of section.questions) {
         let obj = {
           qid: question._id,
           value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
           remarks: question.remarks,
-          fileName: question.fileName,
+          fileName: [],
           payload: {
             question: question.question,
             labels: [],
             responseType: question.responseType
           }
         };
-      console.log("In questions " + question._id)
+
+        if (question.fileName && question.fileName.length) {
+          const filePaylaod = []
+          for (const fileName of question.fileName) {
+            for (const updatedFileDetails of this.imageList) {
+              if (fileName === updatedFileDetails.file) {
+                const obj = {
+                  name: fileName,
+                  sourcePath: updatedFileDetails.sourcePath
+                }
+                filePaylaod.push(obj);
+              }
+            }
+          }
+          obj.fileName = filePaylaod;
+        }
+        //console.log("In questions " + question._id)
 
         if (question.responseType === 'multiselect') {
           for (const val of question.value) {
@@ -231,7 +252,7 @@ export class ImageListingPage {
           }
 
         } else if (question.responseType === 'radio') {
-    console.log(" in radio payload")
+          //console.log(" in radio payload")
 
           for (const option of question.options) {
             if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
@@ -242,25 +263,27 @@ export class ImageListingPage {
         } else {
           obj.payload.labels.push(question.value);
         }
-        console.log("hiiiii")
-        console.log(JSON.stringify(question.payload))
+        //console.log("hiiiii")
+        //console.log(JSON.stringify(question.payload))
         for (const key of Object.keys(question.payload)) {
           obj[key] = question.payload[key];
         }
-        // console.log("hiiiii")
+        // //console.log("hiiiii")
         evidence.answers[obj.qid] = obj;
       }
     }
     // payload.schoolProfile = schoolProfile;
     payload.evidence = evidence;
-    console.log("End of construct payload")
+    //console.log("End of construct payload")
 
     return payload
   }
 
   constructMatrixObject(question) {
-    console.log("construct matrix payload");
+    //console.log("construct matrix payload");
     const value = [];
+    const currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]
+
     for (const instance of question.value) {
       let eachInstance = {};
       for (let qst of instance) {
@@ -269,12 +292,31 @@ export class ImageListingPage {
           qid: qst._id,
           value: qst.value,
           remarks: qst.remarks,
-          fileName: qst.fileName,
+          fileName: [],
           payload: {
             question: qst.question,
             labels: [],
             responseType: qst.responseType
           }
+        }
+        if (qst.fileName && qst.fileName.length) {
+          const filePaylaod = []
+          // //console.log("in file paylaod " + this.schoolId +  )
+          // //console.log(this.imageList[this.schoolId][currentEvidence.externalId] + " " + currentEvidence.externalId)
+          for (const fileName of qst.fileName) {
+            for (const updatedFileDetails of this.imageList) {
+              //console.log("File details " + JSON.stringify(updatedFileDetails) + " " + fileName)
+              if (fileName === updatedFileDetails.file) {
+                //console.log("innnnn")
+                const fileobj = {
+                  name: fileName,
+                  sourcePath: updatedFileDetails.sourcePath
+                }
+                filePaylaod.push(fileobj);
+              }
+            }
+          }
+          obj1.fileName = filePaylaod;
         }
         if (qst.responseType === 'multiselect') {
           for (const val of qst.value) {
@@ -302,7 +344,7 @@ export class ImageListingPage {
       }
       value.push(eachInstance)
     }
-    console.log("end of construct matrix payload");
+    //console.log("end of construct matrix payload");
 
     return value
   }

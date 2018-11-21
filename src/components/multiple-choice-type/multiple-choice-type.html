@@ -13,8 +13,9 @@
     </ion-item>
 
   </ion-list>
+   <!-- {{schoolId}} - {{evidenceId}} -->
   <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
-  <image-upload *ngIf="data?.file" [data]="data" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
+  <image-upload *ngIf="data?.file" [data]="data" [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
 
 </div>
 

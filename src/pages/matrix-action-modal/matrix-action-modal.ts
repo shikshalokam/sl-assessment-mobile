@@ -14,12 +14,17 @@ export class MatrixActionModalPage {
   instanceDetails: any;
   selectedIndex: any;
   data: any;
+  schoolId: string;
+  evidenceId: string;
+
   constructor(public navCtrl: NavController, private utils: UtilsProvider,
     public navParams: NavParams, private viewCntrl: ViewController) {
     this.selectedIndex = navParams.data.selectedIndex;
     const data = navParams.data.data;
     // this.data = Object.assign(data);
     this.data = navParams.data.data;
+    this.schoolId = navParams.data.schoolId;
+    this.evidenceId = navParams.data.evidenceId;
   }
 
   ionViewDidLoad() {

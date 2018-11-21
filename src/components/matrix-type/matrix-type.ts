@@ -19,6 +19,8 @@ export class MatrixTypeComponent {
   @Output() updateLocalData = new EventEmitter();
   @Input() evidenceId: string;
   @Input() schoolId: string;
+  @Input() imageLocalCopyId: string;
+
   
   mainInstance: any;
 
@@ -46,7 +48,9 @@ export class MatrixTypeComponent {
     console.log("open modal");
     const obj = {
       selectedIndex: i,
-      data: JSON.parse(JSON.stringify(this.data))
+      data: JSON.parse(JSON.stringify(this.data)),
+      evidenceId: this.evidenceId,
+      schoolId: this.schoolId,
     }
     let matrixModal = this.modalCntrl.create(MatrixActionModalPage, obj);
     matrixModal.onDidDismiss(instanceValue => {

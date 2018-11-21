@@ -19,11 +19,11 @@
         <!-- <div text-capitalize padding-top padding-bottom>{{datas?.instanceIdentifier}} {{i+1}}</div> -->
         <ng-container [ngSwitch]="question?.responseType" *ngFor="let question of instance; let j=index" margin-bottom>
           <div class="_fullScreenCard" *ngIf="checkForVisibility(j)">
-            <input-type [data]="question" *ngSwitchCase="'text'" [hideButton]="true"></input-type>
-            <input-type [data]="question" *ngSwitchCase="'number'" [hideButton]="true"></input-type>
-            <radio-type [data]="question" *ngSwitchCase="'radio'" [hideButton]="true"></radio-type>
-            <date-type [data]="question" *ngSwitchCase="'date'" [hideButton]="true"></date-type>
-            <multiple-choice-type [data]="question" *ngSwitchCase="'multiselect'" [hideButton]="true"></multiple-choice-type>
+            <input-type [data]="question" [evidenceId]="evidenceId" [schoolId]="schoolId" *ngSwitchCase="'text'" [hideButton]="true"></input-type>
+            <input-type [data]="question" [evidenceId]="evidenceId" [schoolId]="schoolId"  *ngSwitchCase="'number'" [hideButton]="true"></input-type>
+            <radio-type [data]="question" [evidenceId]="evidenceId" [schoolId]="schoolId"  *ngSwitchCase="'radio'" [hideButton]="true"></radio-type>
+            <date-type [data]="question" [evidenceId]="evidenceId" [schoolId]="schoolId"  *ngSwitchCase="'date'" [hideButton]="true"></date-type>
+            <multiple-choice-type [data]="question" [evidenceId]="evidenceId" [schoolId]="schoolId"  *ngSwitchCase="'multiselect'" [hideButton]="true"></multiple-choice-type>
           </div>
         </ng-container>
       </ng-container>
