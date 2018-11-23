@@ -49,11 +49,13 @@ export class DateTypeComponent implements OnInit{
 
   ngOnInit() {
     this.checkForValidation();
+    this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
   }
 
   checkForValidation(): void {
     // console.log(JSON.stringify(this.data))
     console.log("innn");
     this.questionValid = this.utils.isQuestionComplete(this.data);
+    this.data.endTime = this.questionValid ? Date.now() : "";
   }
 }

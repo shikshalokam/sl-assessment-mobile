@@ -30,12 +30,15 @@ export class RadioTypeComponent implements OnInit{
   constructor(private utils: UtilsProvider) {
 
     console.log('Hello RadioTypeComponent Component');
-    console.log("Evidence id"+ this.evidenceId)
 
   }
 
   ngOnInit() {
     // console.log(JSON.stringify(this.data))
+    this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
+    console.log("Evidence id"+ this.evidenceId)
+
+
   }
 
 
@@ -50,7 +53,7 @@ export class RadioTypeComponent implements OnInit{
   }
 
   checkForValidation(): void {
-    console.log("innn");
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
+    this.data.endTime = this.data.isCompleted ? Date.now() : "";
   }
 }

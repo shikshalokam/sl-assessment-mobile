@@ -7,10 +7,15 @@ import { NavController, NavParams , ViewController} from 'ionic-angular';
 })
 export class RemarksPage {
   @ViewChild('remarkInput') remarkInput;
+
   data: any;
+  button: string;
+  required: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private viewCtrl: ViewController) {
     this.data = this.navParams.get('data');
+    this.button = this.navParams.get('button') ? this.navParams.get('button') : "save";
+    this.required = this.navParams.get('required');
   }
 
   ionViewDidLoad() {
