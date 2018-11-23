@@ -45,6 +45,7 @@ export class QuestionerPage {
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
       this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
+      console.log("Selected Evidence Id = " + this.selectedEvidenceId)
       this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId; 
       // console.log("sample " +this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
       this.isViewOnly = !this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;

@@ -22,12 +22,14 @@ export class MultipleChoiceTypeComponent implements OnInit {
   constructor(private utils: UtilsProvider) {
     console.log('Hello checkboxTypeComponent Component');
     this.text = 'Hello World';
+
     // if(!this.data.value) {
     //   this.data.value = [];
     // }
   }
   ngOnInit() {
     this.data.value = this.data.value ? this.data.value : [];
+    this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
 
   }
 
@@ -57,6 +59,8 @@ export class MultipleChoiceTypeComponent implements OnInit {
   checkForValidation(): void {
     console.log("innnn");
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
+    this.data.endTime = this.data.isCompleted ? Date.now() : "";
+
   }
 
 }

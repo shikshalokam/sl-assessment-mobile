@@ -12,7 +12,7 @@
       <ion-icon name="wifi" class="_headerIcon margin" *ngIf="!disableNetwork" [ngClass]="{'_disconnectedConnection': !networkAvailable}"
         float-right></ion-icon> -->
       <!-- <ion-icon name="log-out" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px" (click)="logout()" float-right></ion-icon> -->
-      <button ion-button icon-start clear color="light" (click)="update()" >
+      <button ion-button icon-start clear color="light" (click)="update()" [disabled]="required ? !data.remarks : false" >
         Done
     </button>
     </div>
@@ -34,8 +34,8 @@
           </button>
         </ion-col>
         <ion-col>
-          <button ion-button icon-start full float-right color="primary" (click)="update()">
-              {{'buttons.save'|translate}}
+          <button ion-button icon-start full float-right color="primary" (click)="update()" [disabled]="required ? !data.remarks : false">
+              {{'buttons.' + button |translate}}
           </button>
         </ion-col>
     </ion-row>

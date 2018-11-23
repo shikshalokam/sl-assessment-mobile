@@ -1,19 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActionSheetController, App, AlertController } from 'ionic-angular';
+import { ActionSheetController, App, AlertController, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../utils/utils';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { AppConfigs } from '../appConfig';
 import { ApiProvider } from '../api/api';
+import { RemarksPage } from '../../pages/remarks/remarks';
 
-/*
-  Generated class for the EvidenceProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class EvidenceProvider {
   schoolData: any;
@@ -24,7 +20,7 @@ export class EvidenceProvider {
   constructor(public http: HttpClient, private actionSheet: ActionSheetController,
     private appCtrl: App, private storage: Storage, private utils: UtilsProvider,
     private diagnostic: Diagnostic, private netwrkGpsProvider: NetworkGpsProvider,
-    private apiService: ApiProvider, private alertCtrl: AlertController) {
+    private apiService: ApiProvider, private alertCtrl: AlertController, private modalCtrl: ModalController) {
     console.log('Hello EvidenceProvider Provider');
     this.storage.get('schools').then(data => {
       this.schoolData = data;
@@ -79,6 +75,18 @@ export class EvidenceProvider {
         }
       ]
     })
+    // console.dir(action);
+     const notAvailable =({
+      text: "ECM Not Allowed",
+      icon: "alert",
+      handler: () => {
+        delete params.schoolDetails;
+        this.openAlert(selectedECM)
+      }
+    })
+    if(selectedECM.canBeNotAllowed) {
+      action.data.buttons.splice(action.data.buttons.length-1, 0, notAvailable);
+    }
     // if(selectedECM.canBeNotApplicable) {
     //   action['buttons'].push(
     // {
@@ -93,10 +101,21 @@ export class EvidenceProvider {
     action.present();
   }
 
+  openRemarksModal(selectedECM): void {
+    const modal = this.modalCtrl.create(RemarksPage, {data: selectedECM, button:"submit", required: true});
+    modal.onDidDismiss( remarks => {
+      if(remarks) {
+        selectedECM.remarks = remarks;
+        this.notApplicable(selectedECM)
+      }
+    })
+    modal.present();
+  }
+
   openAlert(selectedECM): void {
     let alert = this.alertCtrl.create({
       title: 'Confirm ',
-      message: 'Do you want mark ECM as not applicable?',
+      message: 'Do you want mark ECM as not applicable / not allowed?',
       buttons: [
         {
           text: 'Cancel',
@@ -109,7 +128,8 @@ export class EvidenceProvider {
           text: 'Confirm',
           handler: () => {
             // console.log('Buy clicked');
-            this.notApplicable(selectedECM);
+            // this.notApplicable(selectedECM);
+            this.openRemarksModal(selectedECM);
           }
         }
       ]
@@ -154,16 +174,18 @@ export class EvidenceProvider {
     const currentEvidence = selectedECM;
     evidence.id = currentEvidence._id;
     evidence.externalId = currentEvidence.externalId;
-    evidence.startTime = currentEvidence.startTime;
+    evidence.startTime = Date.now();
     evidence.endTime = Date.now();
     for (const section of selectedECM.sections) {
       for (const question of section.questions) {
         let obj = {
           qid: question._id,
-          value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
+          value: question.responseType === 'matrix' ? this.constructMatrixObject(question, evidence.endTime) : question.value,
           remarks: question.remarks,
           fileName: question.fileName,
           notApplicable: true,
+          startTime: evidence.endTime,
+          endTime: evidence.endTime,
           payload: {
             question: question.question,
             labels: [],
@@ -201,7 +223,7 @@ export class EvidenceProvider {
     return payload
   }
 
-  constructMatrixObject(question) {
+  constructMatrixObject(question, evidenceEndTime) {
     const value = [];
     for (const instance of question.value) {
       let eachInstance = {};
@@ -212,6 +234,8 @@ export class EvidenceProvider {
           remarks: qst.remarks,
           fileName: qst.fileName,
           notApplicable: true,
+          startTime: evidenceEndTime,
+          endTime: evidenceEndTime,
           payload: {
             question: qst.question,
             labels: [],

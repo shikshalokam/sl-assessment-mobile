@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { MatrixModalComponent } from '../matrix-modal/matrix-modal';
 import { ModalController, NavParams } from 'ionic-angular';
 import { MatrixActionModalPage } from '../../pages/matrix-action-modal/matrix-action-modal';
@@ -9,7 +9,7 @@ import { QuestionDashboardPage } from '../../pages/question-dashboard/question-d
   selector: 'matrix-type',
   templateUrl: 'matrix-type.html'
 })
-export class MatrixTypeComponent {
+export class MatrixTypeComponent implements OnInit {
 
   @Input() data: any;
   @Input() isLast: boolean;
@@ -26,6 +26,11 @@ export class MatrixTypeComponent {
 
   constructor(private modalCntrl: ModalController, private utils: UtilsProvider) {
     console.log('Hello MatrixTypeComponent Component');
+
+  }
+
+  ngOnInit() {
+    this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
   }
 
   next(status?: any) {
@@ -103,6 +108,8 @@ export class MatrixTypeComponent {
   checkForValidation(): void {
     console.log("innn");
     this.data.isCompleted = this.utils.isMatrixQuestionComplete(this.data);
+    this.data.endTime = this.data.isCompleted ? Date.now() : "";
+
     this.updateLocalData.emit();
     console.log(this.data.isCompleted)
   }
