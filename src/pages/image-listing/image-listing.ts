@@ -52,8 +52,10 @@ export class ImageListingPage {
     })
     this.storage.get("allImageList").then(data => {
       //console.log(data)
-      if (JSON.parse(data)[this.schoolId]) {
+      if (data && JSON.parse(data)[this.schoolId]) {
         this.uploadImages = (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) : [];
+      } else {
+        this.uploadImages = [];
       }
       // //console.log(this.uploadImages)
       if (this.uploadImages.length) {
@@ -166,7 +168,7 @@ export class ImageListingPage {
 
     const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
-    // console.log(JSON.stringify(payload))
+    console.log(JSON.stringify(payload))
     this.apiService.httpPost(url, payload, response => {
       //console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
@@ -222,7 +224,9 @@ export class ImageListingPage {
             question: question.question,
             labels: [],
             responseType: question.responseType
-          }
+          },
+          startTime: question.startTime,
+          endTime: question.endTime
         };
 
         if (question.fileName && question.fileName.length) {
@@ -297,7 +301,9 @@ export class ImageListingPage {
             question: qst.question,
             labels: [],
             responseType: qst.responseType
-          }
+          },
+          startTime: qst.startTime,
+          endTime: qst.endTime
         }
         if (qst.fileName && qst.fileName.length) {
           const filePaylaod = []

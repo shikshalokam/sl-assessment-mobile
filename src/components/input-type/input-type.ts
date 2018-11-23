@@ -23,10 +23,12 @@ export class InputTypeComponent implements OnInit {
 
   constructor(private utils: UtilsProvider) {
     console.log('Hello RadioTypeComponent Component');
+
   }
   ngOnInit() {
     console.log(this.imageLocalCopyId);
     this.isaNumber();
+    this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
     // this.checkForValidation();
   }
 
@@ -51,6 +53,8 @@ export class InputTypeComponent implements OnInit {
   checkForValidation(): void {
     console.log("innn");
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
+    this.data.endTime = this.data.isCompleted ? Date.now() : "";
+
   }
 
 }

@@ -26,13 +26,13 @@ export class QuestionDashboardPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad QuestionDashboardPage');
+    //console.log('ionViewDidLoad QuestionDashboardPage');
     this.questions = this.navParams.get('questions')['questions'];
-    console.log(JSON.stringify(this.navParams.get('questions')['questions']))
+    //console.log(JSON.stringify(this.navParams.get('questions')['questions']))
     this.evidenceMethod = this.navParams.get('questions')['evidenceMethod'];
     this.sectionName = this.navParams.get('questions')['sectionName'];
     this.currentViewIndex = this.navParams.get('questions')['currentViewIndex'];
-    console.log(this.currentViewIndex)
+    //console.log(this.currentViewIndex)
   }
 
   isQuestionComplete(question){
