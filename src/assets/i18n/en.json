@@ -21,7 +21,8 @@
         "add": "Add",
         "parent":"Parent",
         "capture": "Capture",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "feedback": "Feedback"
     },
     "tabs": {
         "home": "Home",
