@@ -56,12 +56,7 @@ export class ParentsFormPage {
         this.schoolName = this.navParams.get('name');
         this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
         this.programId = this.schoolDetails['program']._id;
-        // console.log(JSON.stringify(schoolDet[this.schoolId]['schoolProfile']))
-        // this.programId = schoolDet[this.schoolId]['program'];
-
       }
-      // this.programId = schoolDet[this.schoolId].program._id;
-      // console.log(JSON.stringify(schoolDet[this.schoolId]['program']))
     })
 
     this.storage.get('ParentInfo').then(success => {
@@ -82,7 +77,6 @@ export class ParentsFormPage {
   }
 
   update(): void {
-    // console.log(JSON.stringify(this.form.value));
     const payload = { "parents": [] }
     const obj = this.form.value;
     obj.programId = this.schoolDetails['program']._id;

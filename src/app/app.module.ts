@@ -59,7 +59,7 @@ import { PhotoLibrary } from '@ionic-native/photo-library';
 import { RemarksPage } from '../pages/remarks/remarks';
 import { ParentsListPageModule } from '../pages/parents-list/parents-list.module';
 import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-data/update-local-school-data';
-
+import { FeedbackPage } from '../pages/feedback/feedback';
 
 @NgModule({
   declarations: [
@@ -75,7 +75,8 @@ import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
-    RemarksPage
+    RemarksPage,
+    FeedbackPage
   ],
   imports: [
     BrowserModule,
@@ -118,7 +119,8 @@ import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
-    RemarksPage
+    RemarksPage,
+    FeedbackPage
   ],
   providers: [
     StatusBar,

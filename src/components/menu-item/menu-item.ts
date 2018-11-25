@@ -5,6 +5,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { ParentsFormPage } from '../../pages/parents-form/parents-form';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
+import { FeedbackPage } from '../../pages/feedback/feedback';
 
 @Component({
   selector: 'menu-item',
@@ -121,5 +122,16 @@ export class MenuItemComponent {
     // })
     parentForm.present();
     this.close();
+  }
+
+  feedback(): void {
+    const params = {
+      _id: this.schoolId,
+      name: this.schoolName,
+    }
+    let feedbackModal = this.modalCntrl.create(FeedbackPage, params);
+    feedbackModal.present();
+    this.close();
+
   }
 }
