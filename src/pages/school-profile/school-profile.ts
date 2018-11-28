@@ -107,5 +107,9 @@ export class SchoolProfilePage {
     })
   }
 
+  goToParentList() {
+    this.navCtrl.push('ParentsListPage', { _id: this.schoolId, name: this.schoolName })
+  }
+
   
 }
