@@ -31,7 +31,7 @@ export class AuthProvider {
 
     this.base_url = AppConfigs.app_url;
     this.redirect_url = AppConfigs.keyCloak.redirection_url;
-    this.auth_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/auth?response_type=code&scope=openid&client_id="+AppConfigs.clientId+"&redirect_uri=" +
+    this.auth_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/auth?response_type=code&scope=offline_access&client_id="+AppConfigs.clientId+"&redirect_uri=" +
       this.redirect_url;
 
     let that = this;
@@ -49,6 +49,7 @@ export class AuthProvider {
           let responseParameters = (((event.url).split("?")[1]).split("="))[1];
 
           if (responseParameters !== undefined) {
+            console.log(JSON.stringify(responseParameters))
             resolve(responseParameters);
           } else {
             reject("Problem authenticating with Sunbird");
@@ -69,6 +70,7 @@ export class AuthProvider {
     return new Promise(resolve => {
       this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, body)
         .subscribe((data: any) => {
+          console.log(JSON.stringify(data))
           let parsedData = JSON.parse(data._body);
           let userTokens = {
             accessToken: parsedData.access_token,

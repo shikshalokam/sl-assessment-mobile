@@ -15,6 +15,7 @@ import { HeaderComponent } from './header/header';
 import { Network } from '@ionic-native/network';
 import { MenuItemComponent } from './menu-item/menu-item';
 import { DatePipe } from '@angular/common';
+import { DynamicFormComponent } from './dynamic-form/dynamic-form';
 
 @NgModule({
 	declarations: [
@@ -28,7 +29,8 @@ import { DatePipe } from '@angular/common';
     MatrixModalComponent,
     FooterButtonsComponent,
     HeaderComponent,
-    MenuItemComponent],
+    MenuItemComponent,
+    DynamicFormComponent],
 	imports: [
 		IonicModule,
 		DirectivesModule,
@@ -45,7 +47,8 @@ import { DatePipe } from '@angular/common';
     MatrixModalComponent,
     FooterButtonsComponent,
     HeaderComponent,
-    MenuItemComponent
+    MenuItemComponent,
+    DynamicFormComponent
 	],
 	entryComponents: [
 		InputTypeComponent,

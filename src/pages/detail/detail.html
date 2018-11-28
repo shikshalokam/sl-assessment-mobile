@@ -1,0 +1,35 @@
+<ion-header>
+  <header [title]="header| translate" [hideBack]="false">
+
+  </header>
+</ion-header>
+
+
+<ion-content padding>
+  <h3> {{content?.heading}}</h3>
+  <div *ngIf="content?.heading === 'Patners'" margin-top margin-bottom class="_flex-box _justify-content-space-between">
+      <img src="{{image?.path}}" class="halfImage" margin-top margin-bottom *ngFor="let image of content?.images">
+  </div>
+  <div *ngIf="content?.heading !== 'Patners'">
+      <div class="_flex-box _justify-content-center" margin-top margin-bottom *ngFor="let image of content?.images">
+          <div *ngIf="image?.position === 'top'" style="max-width: 75%">
+            <img src="{{image?.path}}">
+            <div style="text-align: center">
+              <h4>{{image?.title}}</h4>
+            </div>
+          </div>
+        </div>
+      
+        <div [innerHTML]="content?.content"></div>
+      
+        <div class="_flex-box _justify-content-center" margin-top margin-bottom *ngFor="let image of content?.images">
+          <div *ngIf="image?.position === 'bottom'" style="max-width: 75%">
+            <img src="{{image?.path}}">
+            <div style="text-align: center">
+              <h4>{{image?.title}}</h4>
+            </div>
+          </div>
+        </div>
+  </div>
+  
+</ion-content>

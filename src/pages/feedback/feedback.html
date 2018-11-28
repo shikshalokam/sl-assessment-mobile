@@ -19,7 +19,42 @@
 
 
 <ion-content padding>
+  <!-- <dynamic-form [formFields]="feedbackForm"></dynamic-form> -->
+  <div [formGroup]="form" *ngIf="form" style="padding-bottom:60px">
 
+    <div *ngFor="let fromField of feedbackForm">
+      <ion-list text-wrap>
+        <ion-item *ngIf="(fromField?.input === 'text' || fromField?.input === 'number')&& fromField?.visible && checkForVisibility(fromField)">
+          <ion-label floating>{{fromField?.label}}</ion-label>
+          <ion-input [formControlName]="fromField.field" [id]="fromField?.field" [type]="fromField?.input"></ion-input>
+        </ion-item>
+  
+        <ion-item *ngIf="fromField?.input === 'radio' && fromField?.visible && checkForVisibility(fromField)">
+          <ion-label>{{fromField?.label}}</ion-label>
+          <ion-select [formControlName]="fromField.field">
+            <ion-option *ngFor="let opt of fromField.options" value="{{opt?.value}}">{{opt?.label}}</ion-option>
+          </ion-select>
+        </ion-item>
+  
+        <ion-item *ngIf="fromField?.input === 'textarea' && fromField?.visible && checkForVisibility(fromField)">
+          <ion-label floating>{{fromField?.label}}</ion-label>
+          <ion-textarea [formControlName]="fromField.field" [id]="fromField?.field" [type]="fromField?.input"></ion-textarea>
+        </ion-item>
+
+        <ion-item *ngIf="fromField?.input === 'multiselect' && fromField?.visible && checkForVisibility(fromField)">
+          <ion-label floating>{{fromField?.label}} <span class="error">*</span></ion-label>
+          <ion-select [formControlName]="fromField.field" multiple="true">
+            <ion-option *ngFor="let opt of fromField.options" value="{{opt?.value}}">{{opt?.label}}</ion-option>
+          </ion-select>
+          <!-- <div class="error">Required</div> -->
+
+        </ion-item>
+
+
+      </ion-list>
+    </div>
+  
+  </div>
 </ion-content>
 
 <div class="_footer customFooter">
@@ -30,8 +65,8 @@
       </button>
     </ion-col>
     <ion-col>
-      <button ion-button icon-start full float-right color="primary" (click)="update()" [disabled]="!form?.valid">
-        {{'buttons.save'|translate}}
+      <button ion-button icon-start full float-right color="primary" (click)="update()" [disabled]="form?.controls['q2'].value === 'no' && !form?.controls['q3'].value">
+        {{'buttons.submit'|translate}}
       </button>
     </ion-col>
   </ion-row>

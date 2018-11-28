@@ -60,6 +60,8 @@ import { RemarksPage } from '../pages/remarks/remarks';
 import { ParentsListPageModule } from '../pages/parents-list/parents-list.module';
 import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-data/update-local-school-data';
 import { FeedbackPage } from '../pages/feedback/feedback';
+import { DetailPage } from '../pages/detail/detail';
+import { Device } from '@ionic-native/device';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,8 @@ import { FeedbackPage } from '../pages/feedback/feedback';
     MatrixActionModalPage,
     QuestionDashboardPage,
     RemarksPage,
-    FeedbackPage
+    FeedbackPage,
+    DetailPage
   ],
   imports: [
     BrowserModule,
@@ -120,7 +123,8 @@ import { FeedbackPage } from '../pages/feedback/feedback';
     MatrixActionModalPage,
     QuestionDashboardPage,
     RemarksPage,
-    FeedbackPage
+    FeedbackPage,
+    DetailPage
   ],
   providers: [
     StatusBar,
@@ -149,7 +153,8 @@ import { FeedbackPage } from '../pages/feedback/feedback';
     NetworkGpsProvider,
     FeedbackProvider,
     EvidenceProvider,
-    UpdateLocalSchoolDataProvider
+    UpdateLocalSchoolDataProvider,
+    Device
   ]
 })
 export class AppModule { }

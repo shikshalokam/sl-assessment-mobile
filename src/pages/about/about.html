@@ -5,7 +5,12 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list radio-group [(ngModel)]="languageChange" (ionChange)="changeLanguage(languageChange)">
+  <ion-list>
+    <button ion-item *ngFor="let item of aboutContent;let i = index" (click)="goTodetailsPage(i)">
+      {{ item?.heading }}
+    </button>
+  </ion-list>
+  <!-- <ion-list radio-group [(ngModel)]="languageChange" (ionChange)="changeLanguage(languageChange)">
 
     <ion-list-header>
       Change Language
@@ -40,10 +45,10 @@
         <ion-label>{{'languages.gujarati'| translate}} (Gujarathi)</ion-label>
         <ion-radio value="gu"></ion-radio>
       </ion-item>
-  </ion-list>
-  <ion-fab bottom right edge>
+  </ion-list> -->
+  <!-- <ion-fab bottom right edge>
       <button ion-fab color="primary" (click)="feedback()">
           <ion-icon name="chatboxes" isActive="true" ></ion-icon>
       </button>
-    </ion-fab>
+    </ion-fab> -->
 </ion-content>

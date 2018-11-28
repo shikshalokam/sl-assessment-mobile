@@ -7,5 +7,9 @@
 
 
 <ion-content padding>
-
+  <ion-list text-wrap>
+    <button ion-item *ngFor="let item of faqContent;let i = index" (click)="goTodetailsPage(i)">
+      {{ item?.heading }}
+    </button>
+  </ion-list>
 </ion-content>
