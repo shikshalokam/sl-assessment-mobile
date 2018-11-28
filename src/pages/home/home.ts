@@ -176,14 +176,21 @@ export class HomePage {
     if(this.parentList.length === this.schoolList.length) {
     // console.log(JSON.stringify(this.parentList))
 
-    //   const parentDetailsObj = {};
+      const parentDetailsObj = {};
       this.utils.stopLoader();
-      // for (const parentdata of this.parentList) {
-      //   const schoolId = parentdata[0]['schoolId'];
-      //   console.log(schoolId)
-      //   parentDetailsObj[schoolId] = parentdata;
-      // }
-      // this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
+      for (const parentdata of this.parentList) {
+        const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
+        if(schoolId) {
+          for (const parent of parentdata) {
+            if(parent && parent.uploaded){
+              parent.uploaded = true;
+            }
+          }
+          parentDetailsObj[schoolId] = parentdata;
+        }
+      }
+      this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
+      console.log(JSON.stringify(parentDetailsObj))
 
     }
   }

@@ -1,5 +1,5 @@
 <ion-header>
-  <header [title]="'headings.parentContact'|translate" [hideBack]="false">
+  <header [title]="'headings.parentRegistry'|translate" [hideBack]="false">
 
   </header>
 </ion-header>
@@ -24,3 +24,16 @@
     No parent info available
   </div>
 </ion-content>
+
+<ion-footer no-shadow *ngIf="showUploadBtn">
+    <ion-toolbar class="_toolbar-background-md" position="bottom">
+      <ion-row>
+        <ion-col>
+          <button ion-button  block  icon-start (click)="updateAllParents()">
+            <ion-icon name="contacts" ></ion-icon>
+            {{'buttons.parent' | translate}} {{'buttons.registry'| translate}} {{'buttons.update'| translate}}
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-toolbar>
+  </ion-footer>

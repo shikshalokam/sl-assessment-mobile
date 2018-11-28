@@ -129,7 +129,7 @@ export class FaqPage {
       images:[]
     },
     {
-      heading: `Where can I find the training and application manual?(Drop Down)
+      heading: `Where can I find the training and application manual?
       Find the  Assessor Training Manual here-`,
       content: `<p><a href="https://docs.google.com/document/d/1difw6K1mkESMsNGXeWLsfKz_iaWzawI9IEsYBiZJzyM/edit?usp=sharing">https://docs.google.com/document/d/1difw6K1mkESMsNGXeWLsfKz_iaWzawI9IEsYBiZJzyM/edit?usp=sharing</a>
       </p>`,
