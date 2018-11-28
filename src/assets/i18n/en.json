@@ -20,9 +20,11 @@
         "parentInfo": "Parent Info",
         "add": "Add",
         "parent":"Parent",
+        "registry": "Registry",
         "capture": "Capture",
         "refresh": "Refresh",
-        "feedback": "Feedback"
+        "feedback": "Feedback",
+        "update": "Update"
     },
     "tabs": {
         "home": "Home",
