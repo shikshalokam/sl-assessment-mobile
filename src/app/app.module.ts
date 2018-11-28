@@ -59,7 +59,9 @@ import { PhotoLibrary } from '@ionic-native/photo-library';
 import { RemarksPage } from '../pages/remarks/remarks';
 import { ParentsListPageModule } from '../pages/parents-list/parents-list.module';
 import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-data/update-local-school-data';
-
+import { FeedbackPage } from '../pages/feedback/feedback';
+import { DetailPage } from '../pages/detail/detail';
+import { Device } from '@ionic-native/device';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,9 @@ import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
-    RemarksPage
+    RemarksPage,
+    FeedbackPage,
+    DetailPage
   ],
   imports: [
     BrowserModule,
@@ -118,7 +122,9 @@ import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
-    RemarksPage
+    RemarksPage,
+    FeedbackPage,
+    DetailPage
   ],
   providers: [
     StatusBar,
@@ -147,7 +153,8 @@ import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-
     NetworkGpsProvider,
     FeedbackProvider,
     EvidenceProvider,
-    UpdateLocalSchoolDataProvider
+    UpdateLocalSchoolDataProvider,
+    Device
   ]
 })
 export class AppModule { }

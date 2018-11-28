@@ -1,0 +1,73 @@
+<!--
+  Generated template for the FeedbackPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <!-- <ion-navbar color="primary">
+    <div class="_flex-box">
+      <ion-title>{{'headings.questionnaire'|translate}}</ion-title>
+      <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px"
+        (click)="feedBack()" margin-right float-right></ion-icon>
+    </div>
+  </ion-navbar> -->
+  <header [title]="'headings.feedback'|translate" [showClose]="true" [disableNetwork]="true" [hideBack]="true">
+
+  </header>
+</ion-header>
+
+
+<ion-content padding>
+  <!-- <dynamic-form [formFields]="feedbackForm"></dynamic-form> -->
+  <div [formGroup]="form" *ngIf="form" style="padding-bottom:60px">
+
+    <div *ngFor="let fromField of feedbackForm">
+      <ion-list text-wrap>
+        <ion-item *ngIf="(fromField?.input === 'text' || fromField?.input === 'number')&& fromField?.visible && checkForVisibility(fromField)">
+          <ion-label floating>{{fromField?.label}}</ion-label>
+          <ion-input [formControlName]="fromField.field" [id]="fromField?.field" [type]="fromField?.input"></ion-input>
+        </ion-item>
+  
+        <ion-item *ngIf="fromField?.input === 'radio' && fromField?.visible && checkForVisibility(fromField)">
+          <ion-label>{{fromField?.label}}</ion-label>
+          <ion-select [formControlName]="fromField.field">
+            <ion-option *ngFor="let opt of fromField.options" value="{{opt?.value}}">{{opt?.label}}</ion-option>
+          </ion-select>
+        </ion-item>
+  
+        <ion-item *ngIf="fromField?.input === 'textarea' && fromField?.visible && checkForVisibility(fromField)">
+          <ion-label floating>{{fromField?.label}}</ion-label>
+          <ion-textarea [formControlName]="fromField.field" [id]="fromField?.field" [type]="fromField?.input"></ion-textarea>
+        </ion-item>
+
+        <ion-item *ngIf="fromField?.input === 'multiselect' && fromField?.visible && checkForVisibility(fromField)">
+          <ion-label floating>{{fromField?.label}} <span class="error">*</span></ion-label>
+          <ion-select [formControlName]="fromField.field" multiple="true">
+            <ion-option *ngFor="let opt of fromField.options" value="{{opt?.value}}">{{opt?.label}}</ion-option>
+          </ion-select>
+          <!-- <div class="error">Required</div> -->
+
+        </ion-item>
+
+
+      </ion-list>
+    </div>
+  
+  </div>
+</ion-content>
+
+<div class="_footer customFooter">
+  <ion-row>
+    <ion-col>
+      <button ion-button icon-start full color="light" (click)="cancel()">
+        {{'buttons.cancel'|translate}}
+      </button>
+    </ion-col>
+    <ion-col>
+      <button ion-button icon-start full float-right color="primary" (click)="update()" [disabled]="form?.controls['q2'].value === 'no' && !form?.controls['q3'].value">
+        {{'buttons.submit'|translate}}
+      </button>
+    </ion-col>
+  </ion-row>
+</div>

@@ -30,6 +30,7 @@ export class HomePage {
   subscription: any;
   networkAvailable: boolean;
   isIos: boolean = this.platform.is('ios');
+  parentList: any =[];
 
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
@@ -147,7 +148,7 @@ export class HomePage {
     // console.log(JSON.stringify(response))
     this.schoolDetails.push(response.result);
     if (this.schoolDetails.length === this.schoolList.length) {
-      this.utils.stopLoader();
+      // this.utils.stopLoader();
       const schoolDetailsObj = {}
       for (const school of this.schoolDetails) {
         // console.log(school['schoolProfile']._id + ' 2nd');
@@ -157,6 +158,33 @@ export class HomePage {
       this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
       // this.getLocalSchoolDetails();
       this.mappSubmissionData(schoolDetailsObj);
+      this.getParentRegistry();
+    }
+  }
+
+  getParentRegistry() {
+    for (const school of this.schoolList) {
+      // console.log(school['_id']);
+      this.apiService.httpGet(AppConfigs.parentInfo.getParentList + school['_id'], this.parentListSuccessCallback, error => {
+
+      })
+    }
+  }
+
+  parentListSuccessCallback = (data) => {
+    this.parentList.push(data.result);
+    if(this.parentList.length === this.schoolList.length) {
+    // console.log(JSON.stringify(this.parentList))
+
+    //   const parentDetailsObj = {};
+      this.utils.stopLoader();
+      // for (const parentdata of this.parentList) {
+      //   const schoolId = parentdata[0]['schoolId'];
+      //   console.log(schoolId)
+      //   parentDetailsObj[schoolId] = parentdata;
+      // }
+      // this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
+
     }
   }
 
@@ -242,6 +270,7 @@ export class HomePage {
       _id: school._id,
       name: school.name,
       parent: this,
+      programId:this.schoolDetails[school._id].program._id
     });
     popover.present({
       ev: myEvent

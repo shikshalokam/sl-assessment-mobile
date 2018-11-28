@@ -1,0 +1,38 @@
+<div [formGroup]="form" *ngIf="form" style="padding-bottom:60px">
+
+  <div *ngFor="let fromField of formFields">
+    <ion-list>
+      <ion-item *ngIf="(fromField?.input === 'text' || fromField?.input === 'number')&& fromField?.visible && checkForVisibility(fromField)">
+        <ion-label floating>{{fromField?.label}}</ion-label>
+        <ion-input [formControlName]="fromField.field" [id]="fromField?.field" [type]="fromField?.input"></ion-input>
+
+      </ion-item>
+
+      <ion-item *ngIf="fromField?.input === 'radio' && fromField?.visible && checkForVisibility(fromField)">
+        <ion-label>{{fromField?.label}}</ion-label>
+        <ion-select [formControlName]="fromField.field">
+          <ion-option *ngFor="let opt of fromField.options" value="{{opt?.value}}">{{opt?.label}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="fromField?.input === 'textarea' && fromField?.visible && checkForVisibility(fromField)">
+        <ion-label floating>{{fromField?.label}}</ion-label>
+        <ion-textarea [formControlName]="fromField.field" [id]="fromField?.field" [type]="fromField?.input"></ion-textarea>
+      </ion-item>
+        <!-- {{form?.visibleIf && form?.visibleIf.length}} -->
+        <!-- {{fromField?.value}} -->
+          <!-- {{form['controls'][fromField?.field].value}}
+        {{fromField.visibleIf ? eval('"' + form['controls'][fromField?.field].value + '"' + fromField.visibleIf[0].operator + '"' + fromField.visibleIf[0].value + '"') : "nothing"}} -->
+      <!-- {{checkForVisibility(fromField)}} -->
+        <!-- {{eval('"' + fromField.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"')}} -->
+      <ion-item *ngIf="fromField?.input === 'multiselect' && fromField?.visible && checkForVisibility(fromField)">
+        <ion-label floating>{{fromField?.label}}</ion-label>
+        <ion-select [formControlName]="fromField.field" multiple="true">
+          <ion-option *ngFor="let opt of fromField.options" value="{{opt?.value}}">{{opt?.label}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+  </div>
+
+</div>

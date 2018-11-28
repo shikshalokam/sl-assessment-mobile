@@ -5,6 +5,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { ParentsFormPage } from '../../pages/parents-form/parents-form';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
+import { FeedbackPage } from '../../pages/feedback/feedback';
 
 @Component({
   selector: 'menu-item',
@@ -18,6 +19,7 @@ export class MenuItemComponent {
   parent: any;
   networkAvailable: boolean;
   subscription: any;
+  programId: string;
 
   constructor(private navParams: NavParams, private ratingService: RatingProvider,
     private appCtrl: App, private viewCtrl: ViewController, private utils: UtilsProvider,
@@ -29,6 +31,7 @@ export class MenuItemComponent {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.parent = this.navParams.get("parent");
+    this.programId = this.navParams.get("programId")
     this.subscription = this.events.subscribe('network:offline', () => {
       this.utils.openToast("Network disconnected");
       this.networkAvailable = false;
@@ -121,5 +124,18 @@ export class MenuItemComponent {
     // })
     parentForm.present();
     this.close();
+  }
+
+  feedback(): void {
+    const params = {
+      schoolId: this.schoolId,
+      schoolName: this.schoolName,
+      programId: this.programId,
+      submissionId: this.submissionId
+    }
+    let feedbackModal = this.modalCntrl.create(FeedbackPage, params);
+    feedbackModal.present();
+    this.close();
+
   }
 }
