@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, App, Events, Platform } from 'ionic-angular';
+import { NavController, App, Events, Platform , AlertController} from 'ionic-angular';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ApiProvider } from '../../providers/api/api';
 import { Storage } from '@ionic/storage';
@@ -14,6 +14,7 @@ import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { AppConfigs } from '../../providers/appConfig';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
+import { AuthProvider } from '../../providers/auth/auth';
 
 declare var cordova: any;
 
@@ -31,6 +32,7 @@ export class HomePage {
   networkAvailable: boolean;
   isIos: boolean = this.platform.is('ios');
   parentList: any =[];
+  errorMsg: string;
 
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
@@ -44,7 +46,10 @@ export class HomePage {
     private ngps: NetworkGpsProvider,
     private evdnsServ: EvidenceProvider,
     private platform: Platform,
-    private ulsd: UpdateLocalSchoolDataProvider
+    private ulsd: UpdateLocalSchoolDataProvider, 
+    private alertCntrl: AlertController,
+    private app: App,
+    private auth: AuthProvider
   ) {
     this.subscription = this.events.subscribe('localDataUpdated', () => {
       console.log("Updated")
@@ -62,7 +67,13 @@ export class HomePage {
     this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors, response => {
       this.schoolList = response.result;
       this.storage.set('schools', this.schoolList);
-      this.getSchoolDetails();
+      if(!this.schoolList.length){
+        this.errorMsg = response.message;
+        this.unauthorized(response.message);
+        this.utils.stopLoader();
+      } else {
+        this.getSchoolDetails();
+      }
     }, error => {
       this.utils.stopLoader();
       if (error.status == '401') {
@@ -72,11 +83,35 @@ export class HomePage {
     })
   }
 
+  unauthorized(msg) {
+    let alert = this.alertCntrl.create({
+      title:"Unauthorized",
+      subTitle: msg,
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'role',
+          handler: data => {
+            this.auth.doLogout();
+            this.currentUser.removeUser();
+            let nav = this.app.getRootNav();
+            nav.setRoot(WelcomePage);
+          }
+        }
+      ],
+      enableBackdropDismiss: false
+    });
+    alert.present();
+  }
+
+
+
   getSchoolDetails(): void {
     for (const school of this.schoolList) {
       // console.log(school['_id']);
       this.apiService.httpGet(SchoolConfig.getSchoolDetails + school['_id'], this.successCallback, error => {
-
+        // this.utils.stopLoader();
+        // thi
       })
     }
     // const urls = [];
@@ -182,7 +217,7 @@ export class HomePage {
         const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
         if(schoolId) {
           for (const parent of parentdata) {
-            if(parent && parent.uploaded){
+            if(parent){
               parent.uploaded = true;
             }
           }

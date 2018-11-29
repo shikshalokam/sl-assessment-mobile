@@ -107,6 +107,7 @@ export class NetworkGpsProvider {
   }
 
    getGpsLocation(): string{
+     this.getCurrentLocation();
     return this.gpsLocation
   }
 

@@ -83,23 +83,19 @@ export class ParentsFormPage {
     obj.schoolId = this.schoolId;
     obj.schoolName = this.schoolName;
     payload.parents.push(obj)
-    // this.storage.set('ParentInfo', this.parentInfoList);
     if (this.networkConnected) {
       this.utils.startLoader();
       this.apiService.httpPost(AppConfigs.parentInfo.addParentsInfo, payload, success => {
         this.utils.stopLoader();
         this.utils.openToast(success.message);
-        // const obj = this.form.value;
         obj.uploaded = true;
         this.viewCntrl.dismiss(obj);
       }, error => {
         this.utils.stopLoader()
       })
     } else {
-      // const obj = this.form.value;
       obj.uploaded = false;
       this.viewCntrl.dismiss(obj)
-      // this.utils.openToast("Parent details updated");
     }
   }
 

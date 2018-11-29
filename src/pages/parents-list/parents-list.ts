@@ -46,10 +46,10 @@ export class ParentsListPage {
   ionViewDidLoad() {
 
     console.log('ionViewDidLoad ParentsListPage');
+    this.schoolId = this.navParams.get('_id');
+    this.schoolName = this.navParams.get('name');
     this.storage.get('parentRegisterForm').then(form => {
-      this.schoolId = this.navParams.get('_id');
       console.log(this.schoolId)
-      this.schoolName = this.navParams.get('name');
       this.storage.get('schoolsDetails').then(schoolDetails => {
         if (schoolDetails) {
           this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
@@ -68,10 +68,12 @@ export class ParentsListPage {
       console.log(success)
       this.allSchoolParentList = JSON.parse(success);
       if(JSON.parse(success)){
-        this.parentInfoList = this.allSchoolParentList[this.schoolId];
-
+        this.parentInfoList = this.allSchoolParentList[this.schoolId] ? this.allSchoolParentList[this.schoolId] : [];
+        this.showUploadBtn = this.checkForUploadBtn();
       } else {
         this.parentInfoList = [];
+        this.showUploadBtn = false;
+
       }
     })
 

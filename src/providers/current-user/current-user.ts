@@ -51,9 +51,14 @@ export class CurrentUserProvider {
   }
 
   removeUser() {
+    this.curretUser = "";
     this.storage.remove('tokens');
     this.storage.remove('schools');
     this.storage.remove('images');
+    this.storage.remove('parentDetails');
+    this.storage.remove('schoolsDetails');
+    this.storage.remove('allImageList');
+    console.log("alldeleted")
   }
 
   fetchUser(): void {

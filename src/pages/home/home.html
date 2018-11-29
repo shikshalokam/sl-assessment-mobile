@@ -53,6 +53,10 @@
           More
         </button>
       </ion-list>
+
+      <div *ngIf="errorMsg" class="_errorBox">
+         <span class="_errorMsg">{{errorMsg}}</span> 
+      </div>
     </ion-card-content>
 <!-- 
     <ion-row no-padding class="separation">

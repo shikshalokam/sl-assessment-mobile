@@ -53,9 +53,10 @@ export class DateTypeComponent implements OnInit{
   }
 
   checkForValidation(): void {
+    // console.log("in")
     // console.log(JSON.stringify(this.data))
-    console.log("innn");
-    this.questionValid = this.utils.isQuestionComplete(this.data);
+    // console.log("innn");
+    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.data.endTime = this.questionValid ? Date.now() : "";
   }
 }

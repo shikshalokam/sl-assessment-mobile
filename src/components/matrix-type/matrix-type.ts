@@ -97,7 +97,7 @@ export class MatrixTypeComponent implements OnInit {
     this.data.value.splice(instanceIndex, 1);
     // let instanceCompletion = this.checkCompletionOfInstance(this.data.value[instanceIndex]);
     // if(instanceCompletion) {
-      if(this.data.completedInstance.indexOf(instanceIndex) >= 0) {
+      if(this.data.completedInstance && this.data.completedInstance.length && this.data.completedInstance.indexOf(instanceIndex) >= 0) {
         this.data.completedInstance.splice(instanceIndex,1);
       }
     this.checkForValidation();

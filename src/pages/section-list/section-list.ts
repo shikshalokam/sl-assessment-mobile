@@ -77,6 +77,7 @@ export class SectionListPage {
         // console.log(question.isCompleted)
         // console.log("is completed: " + question.isCompleted)
         if (!question.isCompleted) {
+          console.log("not completed " + section.name + "qid " + question._id)
           allAnswered = false;
           break;
         }
