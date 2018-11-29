@@ -7,29 +7,43 @@
 
 <ion-content padding>
   <h3> {{content?.heading}}</h3>
-  <div *ngIf="content?.heading === 'Patners'" margin-top margin-bottom class="_flex-box _justify-content-space-between">
+  <!-- <div *ngIf="content?.heading === 'Patners'" margin-top margin-bottom class="_flex-box _justify-content-space-between">
       <img src="{{image?.path}}" class="halfImage" margin-top margin-bottom *ngFor="let image of content?.images">
-  </div>
-  <div *ngIf="content?.heading !== 'Patners'">
-      <div class="_flex-box _justify-content-center" margin-top margin-bottom *ngFor="let image of content?.images">
+  </div> -->
+  <div >
+      <!-- <div class="_flex-box _justify-content-center" margin-top margin-bottom *ngFor="let image of content?.images">
           <div *ngIf="image?.position === 'top'" style="max-width: 75%">
             <img src="{{image?.path}}">
             <div style="text-align: center">
               <h4>{{image?.title}}</h4>
             </div>
           </div>
-        </div>
+        </div> -->
+        <div *ngIf="content?.images?.length" margin-top margin-bottom class="_flex-box _justify-content-space-between" [ngClass]="{'justify-content-center' : content?.images?.length ===1}">
+          <img src="{{image?.path}}" class="halfImage" margin-top margin-bottom *ngFor="let image of content?.images">
+      </div>
+
+        <div *ngIf="content?.heading === 'Patners'" margin-top margin-bottom class="_flex-box _justify-content-space-between">
+          <img src="{{image?.path}}" class="halfImage" margin-top margin-bottom *ngFor="let image of content?.images">
+      </div>
       
         <div [innerHTML]="content?.content"></div>
       
-        <div class="_flex-box _justify-content-center" margin-top margin-bottom *ngFor="let image of content?.images">
+        <!-- <div class="_flex-box _justify-content-center" margin-top margin-bottom *ngFor="let image of content?.images">
           <div *ngIf="image?.position === 'bottom'" style="max-width: 75%">
             <img src="{{image?.path}}">
             <div style="text-align: center">
               <h4>{{image?.title}}</h4>
             </div>
           </div>
-        </div>
+        </div> -->
   </div>
+
+  <!-- <button ion-item clear small color ="primary" icon-start class="_justify-content-center" (click)="clearData()()">
+    <ion-icon name="trash"></ion-icon> Erase Data</button> -->
+    <button ion-button  block  icon-start color="danger" *ngIf="content?.heading==='App Info'" (click)="clearData()">
+      <ion-icon name="trash" margin-right></ion-icon>
+      Erase Data
+    </button>
   
 </ion-content>

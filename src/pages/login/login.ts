@@ -34,7 +34,7 @@ export class LoginPage {
 
     let connectSubscription = this.network.onConnect().subscribe(() => {
       this.networkAvailable = true;
-      this.presentToast('Network is connected :-(');
+      // this.presentToast('Network is connected :-(');
 
       // We just got a connection but we need to wait briefly
       // before we determine the connection type. Might need to wait.

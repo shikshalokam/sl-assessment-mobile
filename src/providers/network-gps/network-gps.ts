@@ -88,11 +88,11 @@ export class NetworkGpsProvider {
       this.geolocation.getCurrentPosition(options).then((resp) => {
         this.gpsLocation = resp.coords.latitude + "," + resp.coords.longitude;
         this.storage.set('gpsLocation',this.gpsLocation )
-        this.utils.openToast(resp.coords.latitude + " " + resp.coords.longitude);
+        // this.utils.openToast(resp.coords.latitude + " " + resp.coords.longitude);
         console.log(resp.coords.latitude + " " + resp.coords.longitude)
         // return gpsLocation
       }).catch((error) => {
-        this.utils.openToast('Error getting location' + JSON.stringify(error));
+        // this.utils.openToast('Error getting location' + JSON.stringify(error));
         console.log(error.message + " " + error.code);
 
         this.storage.get('gpsLocation').then(success => {
@@ -107,6 +107,7 @@ export class NetworkGpsProvider {
   }
 
    getGpsLocation(): string{
+     this.getCurrentLocation();
     return this.gpsLocation
   }
 

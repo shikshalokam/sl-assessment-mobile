@@ -36,7 +36,11 @@ export class QuestionDashboardPage {
   }
 
   isQuestionComplete(question){
-    return this.utils.isQuestionComplete(question);
+    if(question.responseType.toLowerCase() === 'matrix'){
+      return this.utils.isMatrixQuestionComplete(question);
+    } else {
+      return this.utils.isQuestionComplete(question);
+    }
   }
 
   goToQuestion(index) {

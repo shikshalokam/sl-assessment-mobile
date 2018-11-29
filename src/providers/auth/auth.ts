@@ -88,6 +88,7 @@ export class AuthProvider {
   checkForCurrentUserLocalData(tokens) {
     const loggedinUserId = this.currentUser.getDecodedAccessToken(tokens.access_token).sub;
     const currentUserId = this.currentUser.getCurrentUserData() ? this.currentUser.getCurrentUserData().sub : null;
+    console.log(currentUserId)
     if (loggedinUserId === currentUserId || !currentUserId) {
       let userTokens = {
         accessToken: tokens.access_token,
