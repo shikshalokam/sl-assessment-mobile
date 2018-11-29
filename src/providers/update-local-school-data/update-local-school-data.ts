@@ -19,6 +19,7 @@ export class UpdateLocalSchoolDataProvider {
   }
 
   getSubmissionStatus(): void {
+    console.log(this.currentSchool.assessments[0].submissionId)
     const url = AppConfigs.survey.getSubmissionStatus + this.currentSchool.assessments[0].submissionId;
     // console.log(url)
     this.apiService.httpGet(url, success => {
@@ -54,8 +55,10 @@ export class UpdateLocalSchoolDataProvider {
         for (const section of evidence.sections) {
           for (const question of section.questions) {
             // console.log(question._id)
-            question.value = question.responseType !== 'matrix' ? validSubmission.answers[question._id].value : this.constructMatrixValue(validSubmission, question, evidence.externalId);
-            question.remarks = validSubmission.answers[question._id].remarks;
+            if(validSubmission.answers && validSubmission.answers[question._id]) {
+              question.value = question.responseType !== 'matrix' ? validSubmission.answers[question._id].value : this.constructMatrixValue(validSubmission, question, evidence.externalId);
+              question.remarks = validSubmission.answers[question._id].remarks;
+            }
           }
         }
       }
@@ -115,7 +118,7 @@ export class UpdateLocalSchoolDataProvider {
     // console.log(ecmId);
     matrixQuestion.value = [];
     // console.log(validSubmission.answers[matrixQuestion._id].value)
-    if (validSubmission.answers[matrixQuestion._id].value) {
+    if (validSubmission.answers && validSubmission.answers[matrixQuestion._id] && validSubmission.answers[matrixQuestion._id].value) {
       for (const answer of validSubmission.answers[matrixQuestion._id].value) {
         matrixQuestion.value.push(JSON.parse(JSON.stringify(matrixQuestion.instanceQuestions)));
       }

@@ -62,6 +62,7 @@ import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-
 import { FeedbackPage } from '../pages/feedback/feedback';
 import { DetailPage } from '../pages/detail/detail';
 import { Device } from '@ionic-native/device';
+import { ExtendedDeviceInformation } from '@ionic-native/extended-device-information';
 
 @NgModule({
   declarations: [
@@ -154,7 +155,8 @@ import { Device } from '@ionic-native/device';
     FeedbackProvider,
     EvidenceProvider,
     UpdateLocalSchoolDataProvider,
-    Device
+    Device,
+    ExtendedDeviceInformation
   ]
 })
 export class AppModule { }

@@ -100,6 +100,7 @@ export class ApiProvider {
           // }).catch(error => {
 
           // })
+          this.utils.openToast(error.message, 'Ok');
 
           const errorDetails = JSON.parse(error['_body']);
           if (errorDetails.status === "ERR_TOKEN_INVALID") {
@@ -109,7 +110,7 @@ export class ApiProvider {
             }).catch(error => {
             })
           } else {
-            this.utils.openToast(error.message, 'åOk');
+            this.utils.openToast(error.message, 'Ok');
           }
 
 
@@ -117,6 +118,8 @@ export class ApiProvider {
         })
     }).catch(error => {
       //console.log('ERRor')
+      this.utils.openToast(error.message, 'Ok');
+
       //console.log(JSON.stringify(error))
       errorCallback(error);
       // this.doLogout();
@@ -200,7 +203,7 @@ export class ApiProvider {
           } else {
             this.utils.openToast(error.message, 'Ok');
           }
-
+          this.utils.openToast(error.message, 'Ok');
 
           errorCallback(error);
         })
@@ -208,6 +211,7 @@ export class ApiProvider {
       //console.log('ERRor');
       // this.doLogout();
       //console.log(JSON.stringify(error))
+      this.utils.openToast(error.message, 'Ok');
       errorCallback(error);
     })
   }

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { DetailPage } from '../detail/detail';
 import { Device } from '@ionic-native/device';
 import { AppConfigs } from '../../providers/appConfig';
+import { ExtendedDeviceInformation } from '@ionic-native/extended-device-information';
 
 @Component({
   selector: 'page-about',
@@ -12,6 +13,7 @@ import { AppConfigs } from '../../providers/appConfig';
 })
 export class AboutPage {
   languageChange: string = 'en';
+  isIos: boolean;
 
   aboutContent =[ {
     heading: "Message from Dy CM",
@@ -19,8 +21,8 @@ export class AboutPage {
     <p>My dear friends, I am very appreciative of your commitment for this work, and assure you that my government will do all that it takes to make our nation something to be truly proud of.</p>
     <p>Let’s build our nation together. I and You, together.</p>`,
     images:[
+      {path:"assets/imgs/gnctd.png" , title: "", position: "top"},
       {path:"assets/imgs/Manish_Sisodia.jpg", title:"Manish Sisodia", position: "bottom"}, 
-      {path:"assets/imgs/gnctd.png" , title: "", position: "top"}
     ]
     
   },{
@@ -69,17 +71,23 @@ export class AboutPage {
     ]
   }, {
     heading:"App Info",
+    showEraseBtn: true,
     content:`
     <p>App version ${AppConfigs.appVersion}</p>
-    <p>Device UUID is: ${this.device.uuid}</p>
-    <p>Model: ${this.device.manufacturer}</p>
+    <p>Make/Model:  ${this.device.manufacturer}/ ${this.device.model}</p>
     <p>OS version: ${this.device.platform} ${this.device.version}</p>
-    <p>SL/N: ${this.device.serial}</p>`
+    <p *ngIf="!isIos"> Storage: ${this.edi.freestorage} / ${this.edi.totalstorage}</p>
+    <p *ngIf="!isIos"> CPU: ${this.edi.cpumhz} </p>
+    <p *ngIf="!isIos"> Memory: ${this.edi.memory} </p>`,
+    images: [
+      {path:"assets/imgs/SDI_App_Logo.jpg", position:"top"}
+    ]
   }
 ]
   constructor(public navCtrl: NavController, private translate: TranslateService, 
-    private feedbackService: FeedbackProvider, private device:Device) {
-
+    private feedbackService: FeedbackProvider, private device:Device, private platform: Platform,
+    private edi: ExtendedDeviceInformation) {
+      this.isIos = this.platform.is('ios') ? true : false;
   }
 
   changeLanguage(val): void {
