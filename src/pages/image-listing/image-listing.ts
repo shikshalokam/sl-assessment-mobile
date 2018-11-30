@@ -51,17 +51,14 @@ export class ImageListingPage {
 
     })
     this.storage.get("allImageList").then(data => {
-      //console.log(data)
       if (data && JSON.parse(data)[this.schoolId]) {
         this.uploadImages = (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) : [];
       } else {
         this.uploadImages = [];
       }
-      // //console.log(this.uploadImages)
       if (this.uploadImages.length) {
         this.createImageFromName(this.uploadImages);
       } else {
-        // //console.log('Evidence submit');
         this.submitEvidence();
       }
     })
@@ -77,67 +74,48 @@ export class ImageListingPage {
     for (const image of this.uploadImages) {
       files.files.push(image.name)
     }
-    // //console.log(JSON.stringify(files))
     this.apiService.httpPost(AppConfigs.survey.getImageUploadUr, files, success => {
-      //console.log(JSON.stringify(success));
       for (let i = 0; i < success.result.length; i++) {
         this.imageList[i]['url'] = success.result[i].url;
         this.imageList[i]['sourcePath'] = success.result[i].payload.sourcePath;
       }
-      // this.utils.stopLoader();
       this.cloudImageUpload();
       this.fileTransfer.create()
     }, error => {
+      this.utils.stopLoader();
       this.utils.openToast('Unable to get google urls')
-      // this.utils.stopLoader();
     })
   }
 
   createImageFromName(imageList) {
     this.utils.startLoader();
     for (const image of imageList) {
-      // //console.log(image.name)
       this.file.checkFile(this.appFolderPath + '/', image.name).then(response => {
-        // //console.log('Check For file name : ' + response);
         this.file.readAsDataURL(this.appFolderPath, image.name).then(data => {
-          //console.log("Done");
           this.imageList.push({ data: data, uploaded: false, file: image.name, url: "" });
-          // //console.log(this.imageList.length);
         }).catch(err => {
-          // //console.log('Error ' + JSON.stringify(err))
         })
       }).catch(error => {
-        // //console.log('Error ' + JSON.stringify(error))
       })
     }
-    // //console.log('Otside')
     this.getImageUploadUrls();
   }
 
 
   cloudImageUpload() {
-    // //console.log(this.uploadIndex);
-    // if(!this.uploadIndex) {
-    //   this.utils.startLoader("Image upload in progress");
-    // }
     var options: FileUploadOptions = {
       fileKey: this.imageList[this.uploadIndex].file,
       fileName: this.imageList[this.uploadIndex].file,
       chunkedMode: false,
       mimeType: "image/jpeg",
-      // params: { 'fileName': image.file },
       headers: {
         "Content-Type": 'multipart/form-data'
       },
       httpMethod: 'PUT',
     };
     let targetPath = this.pathForImage(this.imageList[this.uploadIndex].file);
-    // //console.log(JSON.stringify(this.file.resolveLocalFilesystemUrl(cordova.file.externalDataDirectory + 'Samiksha/'+image.file)));
     let fileTrns: FileTransferObject = this.fileTransfer.create();
     fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
-      // //console.log(JSON.stringify(result));
-      // //console.log("Uploaded image" + this.uploadIndex);
-      // this.uploaded = "File uploaded";
       this.imageList[this.uploadIndex].uploaded = true;
       if (this.uploadIndex < (this.imageList.length - 1)) {
         this.uploadIndex++;
@@ -147,7 +125,6 @@ export class ImageListingPage {
         this.submitEvidence();
       }
     }).catch(err => {
-      //console.log(JSON.stringify(err))
     })
   }
 
@@ -164,13 +141,10 @@ export class ImageListingPage {
   submitEvidence() {
     this.utils.startLoader('Please wait while submitting')
     const payload = this.constructPayload();
-    // //console.log(JSON.stringify(payload));
-
     const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
     console.log(JSON.stringify(payload))
     this.apiService.httpPost(url, payload, response => {
-      //console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
       this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       this.utils.setLocalSchoolData(this.schoolData);
@@ -179,9 +153,8 @@ export class ImageListingPage {
         name: this.schoolName
       }
       this.utils.stopLoader();
-      // this.navCtrl.popTo('EvidenceListPage');
-      this.navCtrl.remove(2,1);
-       this.navCtrl.pop();
+      this.navCtrl.remove(2, 1);
+      this.navCtrl.pop();
     }, error => {
       this.utils.stopLoader();
     })
@@ -189,12 +162,9 @@ export class ImageListingPage {
   }
 
   constructPayload(): any {
-    //console.log("in construct payload")
     const payload = {
-      // 'schoolProfile': {},
       'evidence': {}
     }
-    // const schoolProfile = {};
     const evidence = {
       id: "",
       externalId: "",
@@ -202,17 +172,11 @@ export class ImageListingPage {
       startTime: 0,
       endTime: 0
     };
-    // for (const field of this.schoolData[this.schoolId]['schoolProfile']['form']) {
-    //   schoolProfile[field.field] = field.value
-    // }
-    // schoolProfile['updatedBy'] =  this.userData.sub;
-    // schoolProfile['updatedDate'] = Date.now();
     const currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]
     evidence.id = currentEvidence._id;
     evidence.externalId = currentEvidence.externalId;
     evidence.startTime = currentEvidence.startTime;
     evidence.endTime = Date.now();
-    //console.log("Looping")
     for (const section of this.evidenceSections) {
       for (const question of section.questions) {
         let obj = {
@@ -244,7 +208,6 @@ export class ImageListingPage {
           }
           obj.fileName = filePaylaod;
         }
-        //console.log("In questions " + question._id)
 
         if (question.responseType === 'multiselect') {
           for (const val of question.value) {
@@ -256,7 +219,6 @@ export class ImageListingPage {
           }
 
         } else if (question.responseType === 'radio') {
-          //console.log(" in radio payload")
 
           for (const option of question.options) {
             if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
@@ -267,24 +229,17 @@ export class ImageListingPage {
         } else {
           obj.payload.labels.push(question.value);
         }
-        //console.log("hiiiii")
-        //console.log(JSON.stringify(question.payload))
         for (const key of Object.keys(question.payload)) {
           obj[key] = question.payload[key];
         }
-        // //console.log("hiiiii")
         evidence.answers[obj.qid] = obj;
       }
     }
-    // payload.schoolProfile = schoolProfile;
     payload.evidence = evidence;
-    //console.log("End of construct payload")
-
     return payload
   }
 
   constructMatrixObject(question) {
-    //console.log("construct matrix payload");
     const value = [];
     const currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]
 
@@ -307,13 +262,9 @@ export class ImageListingPage {
         }
         if (qst.fileName && qst.fileName.length) {
           const filePaylaod = []
-          // //console.log("in file paylaod " + this.schoolId +  )
-          // //console.log(this.imageList[this.schoolId][currentEvidence.externalId] + " " + currentEvidence.externalId)
           for (const fileName of qst.fileName) {
             for (const updatedFileDetails of this.imageList) {
-              //console.log("File details " + JSON.stringify(updatedFileDetails) + " " + fileName)
               if (fileName === updatedFileDetails.file) {
-                //console.log("innnnn")
                 const fileobj = {
                   name: fileName,
                   sourcePath: updatedFileDetails.sourcePath
@@ -350,7 +301,6 @@ export class ImageListingPage {
       }
       value.push(eachInstance)
     }
-    //console.log("end of construct matrix payload");
 
     return value
   }

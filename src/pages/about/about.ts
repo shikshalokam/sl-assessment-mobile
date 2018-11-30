@@ -54,7 +54,7 @@ export class AboutPage {
     ]
   },
   {
-    heading: "Patners",
+    heading: "Partners",
     images: [
       {path: "assets/imgs/EDMC_Logo.jpg"},
       {path:"assets/imgs/New_Delhi_Municipal_Council_logo.jpg"},
@@ -76,9 +76,9 @@ export class AboutPage {
     <p>App version ${AppConfigs.appVersion}</p>
     <p>Make/Model:  ${this.device.manufacturer}/ ${this.device.model}</p>
     <p>OS version: ${this.device.platform} ${this.device.version}</p>
-    <p *ngIf="!isIos"> Storage: ${this.edi.freestorage} / ${this.edi.totalstorage}</p>
-    <p *ngIf="!isIos"> CPU: ${this.edi.cpumhz} </p>
-    <p *ngIf="!isIos"> Memory: ${this.edi.memory} </p>`,
+    <p *ngIf="!isIos && edi.totalstorage"> Storage: ${this.edi.freestorage} / ${this.edi.totalstorage}</p>
+    <p *ngIf="!isIos && edi.cpumhz"> CPU: ${this.edi.cpumhz} </p>
+    <p *ngIf="!isIos && edi.memory"> Memory: ${this.edi.memory} </p>`,
     images: [
       {path:"assets/imgs/SDI_App_Logo.jpg", position:"top"}
     ]
