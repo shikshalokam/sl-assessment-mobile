@@ -89,6 +89,11 @@ export class UtilsProvider {
     if (!question.value.length) {
       return false
     }
+    const noOfInstanceRequired = question.noOfInstances ? question.noOfInstances : 0;
+    // if(question.ins)
+    // if(noOfInstanceRequired && (question.value.length < noOfInstanceRequired)){
+    //   return false
+    // }
     for (const instance of question.value) {
       for (const question of instance) {
         if (!question.isCompleted) {
