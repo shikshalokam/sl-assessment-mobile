@@ -70,6 +70,10 @@ export class AboutPage {
       {path:"assets/imgs/PrathamLogo.png"},
     ]
   }, {
+    heading:"SDI-In Brief",
+    content: `<p>This app is based on the tool developed by Adhyayan Foundation in collaboration with Teach For India.</p>`
+  },
+  {
     heading:"App Info",
     showEraseBtn: true,
     content:`

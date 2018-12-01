@@ -75,6 +75,7 @@ export class ImageListingPage {
       files.files.push(image.name)
     }
     this.apiService.httpPost(AppConfigs.survey.getImageUploadUr, files, success => {
+      this.utils.stopLoader();
       for (let i = 0; i < success.result.length; i++) {
         this.imageList[i]['url'] = success.result[i].url;
         this.imageList[i]['sourcePath'] = success.result[i].payload.sourcePath;
@@ -89,14 +90,18 @@ export class ImageListingPage {
 
   createImageFromName(imageList) {
     this.utils.startLoader();
+    // for (const image of imageList) {
+    //   this.file.checkFile(this.appFolderPath + '/', image.name).then(response => {
+    //     this.file.readAsDataURL(this.appFolderPath, image.name).then(data => {
+    //       this.imageList.push({ data: data, uploaded: false, file: image.name, url: "" });
+    //     }).catch(err => {
+    //     })
+    //   }).catch(error => {
+    //   })
+    // }
+
     for (const image of imageList) {
-      this.file.checkFile(this.appFolderPath + '/', image.name).then(response => {
-        this.file.readAsDataURL(this.appFolderPath, image.name).then(data => {
-          this.imageList.push({ data: data, uploaded: false, file: image.name, url: "" });
-        }).catch(err => {
-        })
-      }).catch(error => {
-      })
+      this.imageList.push({ uploaded: false, file: image.name, url: "" });
     }
     this.getImageUploadUrls();
   }
@@ -121,7 +126,7 @@ export class ImageListingPage {
         this.uploadIndex++;
         this.cloudImageUpload();
       } else {
-        this.utils.stopLoader();
+        // this.utils.stopLoader();
         this.submitEvidence();
       }
     }).catch(err => {
@@ -143,7 +148,7 @@ export class ImageListingPage {
     const payload = this.constructPayload();
     const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
-    console.log(JSON.stringify(payload))
+    // console.log(JSON.stringify(payload))
     this.apiService.httpPost(url, payload, response => {
       this.utils.openToast(response.message);
       this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
