@@ -27,7 +27,7 @@
     "@ionic-native/diagnostic": "^4.14.0",
     "@ionic-native/extended-device-information": "^4.17.0",
     "@ionic-native/file": "^4.15.0",
-    "@ionic-native/file-path": "^4.15.0",
+    "@ionic-native/file-path": "^4.17.0",
     "@ionic-native/file-transfer": "^4.15.0",
     "@ionic-native/geolocation": "^4.14.0",
     "@ionic-native/http": "^4.13.0",
