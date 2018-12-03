@@ -23,4 +23,19 @@ page-image-listing {
             font-weight: bold;
         }
     }
+
+    .fullContainer {
+        height: 85vh;
+    }
+
+    .uploadIcon {
+        font-size: 30rem;
+        color: $blue-color;
+    }
+
+    .uploadMsg {
+        font-size: 25px;
+        font-weight: 500;
+        // line-height: 20px;
+    }
 }

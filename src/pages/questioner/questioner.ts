@@ -101,22 +101,10 @@ export class QuestionerPage {
 
   checkForQuestionDisplay(qst): boolean {
     console.log('checkcondition')
-    // Evidence level check for visible if
-
-    // for (const section of this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].sections) {
-    //   this.allQuestionsOfEvidence = this.allQuestionsOfEvidence.concat(section.questions);
-    // }
     let display = false;
     for (const question of this.questions) {
-
-      // for (const question of this.allQuestionsOfEvidence) {
-      // console.log(question._id)
-      // console.log('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"');
       if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
         display = true;
-        // if (qst.validation.minNoOfInstance === 'value') {
-        //   qst.validation.minNoOfInstance = question.value;
-        // }
       }
     }
     return display
