@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams , ViewController} from 'ionic-angular';
+import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { UtilsProvider } from '../../providers/utils/utils';
 
 
@@ -35,12 +35,28 @@ export class QuestionDashboardPage {
     //console.log(this.currentViewIndex)
   }
 
-  isQuestionComplete(question){
-    if(question.responseType.toLowerCase() === 'matrix'){
+  isQuestionComplete(question) {
+    if (question.responseType.toLowerCase() === 'matrix') {
       return this.utils.isMatrixQuestionComplete(question);
     } else {
       return this.utils.isQuestionComplete(question);
     }
+  }
+
+  checkForQuestionDisplay(qst): boolean {
+    console.log('checkcondition')
+    let display = false;
+    if (qst.visibleIf && qst.visibleIf.length) {
+      for (const question of this.questions) {
+        if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
+          display = true;
+        }
+      }
+      return display
+    } else {
+      return true
+    }
+
   }
 
   goToQuestion(index) {
