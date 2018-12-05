@@ -7,7 +7,7 @@
 
 
 <ion-content>
-  <div class="_flex-box  fullContainer _justify-content-center _flex-direction-column" margin-top>
+  <div class="_flex-box  fullContainer _justify-content-center _flex-direction-column" margin-top >
 
     <!-- <div class="_cards _flex-box  _justify-content-center" *ngFor="let image of imageList; let i = index">
       <div class="_overlay"></div>
@@ -25,8 +25,8 @@
     <div class="_flex-box uploadMsg">
       Uploading
     </div>
-    <div class="_flex-box uploadMsg" margin-top>
-      {{this.uploadIndex + 1}} of {{this.imageList.length}} images.
+    <div class="_flex-box uploadMsg" margin-top *ngIf="imageList?.length">
+      {{uploadIndex + 1}} of {{imageList.length}} images.
     </div>
     <div class="_flex-box" margin-top>Please don't close the app or go back.</div>
   </div>

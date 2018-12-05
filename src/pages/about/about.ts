@@ -19,7 +19,9 @@ export class AboutPage {
     heading: "Message from Dy CM",
     content: `<p>Three and a half years ago, I began with a dream, simple but overwhelming. A dream to build our nation on strong democratic values. But this is only possible when we have schools that are joyful, inclusive and learning spaces. Today, that dream looks like a possibility.</p> <p>School Development Index (SDI) is an effort to understand our schools better, to celebrate the strengths and to commit to working on the weakness. It is here that I see your role as crucial. Your honest, objective and credible evaluation will guide us to prepare improvement plan that enables our schools, and changes our children’s lives.</p>
     <p>My dear friends, I am very appreciative of your commitment for this work, and assure you that my government will do all that it takes to make our nation something to be truly proud of.</p>
-    <p>Let’s build our nation together. I and You, together.</p>`,
+    <p>Let’s build our nation together. I and You, together.</p>
+    <br>
+    <p><b>Manish Sisodia</b></p>`,
     images:[
       {path:"assets/imgs/gnctd.png" , title: "", position: "top"},
       {path:"assets/imgs/Manish_Sisodia.jpg", title:"Manish Sisodia", position: "bottom"}, 
@@ -48,7 +50,8 @@ export class AboutPage {
     </p>
     <p>The team of assessors will go to each school and collect data. It will be compiled, analysed and presented for all to access.</p>
     <p>This is its first exercise and will be an annual exercise going forward to continuously improve schools.</p>
-    <p>Let’s celebrate this step towards building a better future for our children.</p>`,
+    <p>Let’s celebrate this step towards building a better future for our children.</p>
+    <p>This app is based on the tool developed by Adhyayan Foundation in collaboration with Teach For India.</p>`,
     images: [
       {path:"assets/imgs/SDI_App_Logo.jpg", position:"top"}
     ]
@@ -69,10 +72,7 @@ export class AboutPage {
       {path:"assets/imgs/QCILogo.jpg"},
       {path:"assets/imgs/PrathamLogo.png"},
     ]
-  }, {
-    heading:"SDI-In Brief",
-    content: `<p>This app is based on the tool developed by Adhyayan Foundation in collaboration with Teach For India.</p>`
-  },
+  }, 
   {
     heading:"App Info",
     showEraseBtn: true,

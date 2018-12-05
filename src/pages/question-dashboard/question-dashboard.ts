@@ -59,6 +59,10 @@ export class QuestionDashboardPage {
 
   }
 
+  openToast(): void {
+    this.utils.openToast("This questions response is not required to complete the assessment.")
+  }
+
   goToQuestion(index) {
     this.viewCtrl.dismiss(index);
   }

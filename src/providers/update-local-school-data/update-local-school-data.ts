@@ -39,7 +39,7 @@ export class UpdateLocalSchoolDataProvider {
       this.currentSchool = this.schoolDetails[obj._id];
       if (submissionStatus) {
         this.updatedSubmissionStatus = submissionStatus;
-        this.updateSubmissionsOnLogin();
+        this.updateSubmissionsOnLogin(obj._id);
       } else {
         console.log("Else if")
         this.utils.startLoader();
@@ -48,8 +48,8 @@ export class UpdateLocalSchoolDataProvider {
     })
   }
 
-  updateSubmissionsOnLogin() {
-    for (const evidence of this.currentSchool.assessments[0].evidences) {
+  updateSubmissionsOnLogin(schoolId) {
+    for (const evidence of this.schoolDetails[schoolId].assessments[0].evidences) {
       const validSubmission = this.updatedSubmissionStatus[evidence.externalId];
       if (validSubmission) {
         for (const section of evidence.sections) {
@@ -64,6 +64,7 @@ export class UpdateLocalSchoolDataProvider {
       }
 
     }
+    // console.log(JSON.stringify(this.currentSchool))
     this.storage.set('schoolsDetails', JSON.stringify(this.schoolDetails));
     this.events.publish("localDataUpdated");
 

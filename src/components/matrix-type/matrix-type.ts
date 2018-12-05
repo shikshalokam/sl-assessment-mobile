@@ -20,6 +20,7 @@ export class MatrixTypeComponent implements OnInit {
   @Input() evidenceId: string;
   @Input() schoolId: string;
   @Input() imageLocalCopyId: string;
+  @Input() generalQuestion: boolean;
 
   
   mainInstance: any;
@@ -56,6 +57,7 @@ export class MatrixTypeComponent implements OnInit {
       data: JSON.parse(JSON.stringify(this.data)),
       evidenceId: this.evidenceId,
       schoolId: this.schoolId,
+      generalQuestion: this.generalQuestion
     }
     let matrixModal = this.modalCntrl.create(MatrixActionModalPage, obj);
     matrixModal.onDidDismiss(instanceValue => {

@@ -1,0 +1,23 @@
+<ion-header>
+  <header [title]="'headings.generalQuestions'|translate" [hideBack]="false">
+
+  </header>
+</ion-header>
+
+
+<ion-content>
+  <ion-item-group>
+    <button ion-item text-wrap [ngClass]="{'_validQuestion': qst?.isCompleted}" *ngFor="let qst of generalQuestions; let i= index" (click)="OpenQuestionModal(i)">
+      {{qst?.question[0]}}
+    </button>
+  </ion-item-group>
+</ion-content>
+
+<ion-footer no-shadow *ngIf="enableSubmitBtn">
+  <ion-toolbar position="bottom">
+    <ion-row>
+      <button ion-button full (click)="goToImageListing()">{{'buttons.upload'|translate}} {{'buttons.and'|translate}}
+        {{'buttons.submit'|translate}}</button>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
