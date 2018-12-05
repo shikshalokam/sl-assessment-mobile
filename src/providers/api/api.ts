@@ -84,7 +84,7 @@ export class ApiProvider {
       // headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
       // headers.append('gpsLocation', gpsLocation);
 
-      //console.log(AppConfigs.api_base_url + url)
+      console.log(AppConfigs.api_base_url + url)
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.post(apiUrl, payload, { headers: headers })
         .subscribe(data => {
@@ -100,25 +100,26 @@ export class ApiProvider {
           // }).catch(error => {
 
           // })
-          this.utils.openToast(error.message, 'Ok');
+          console.dir(JSON.stringify(error))
+          this.utils.openToast("Something went wrong.", 'Ok');
 
-          const errorDetails = JSON.parse(error['_body']);
-          if (errorDetails.status === "ERR_TOKEN_INVALID") {
-            //console.log(JSON.stringify(error))
-            this.auth.doLogout().then(success => {
-              this.reLoginAlert();
-            }).catch(error => {
-            })
-          } else {
-            this.utils.openToast(error.message, 'Ok');
-          }
+          // const errorDetails = JSON.parse(error['_body']);
+          // if (errorDetails.status === "ERR_TOKEN_INVALID") {
+          //   //console.log(JSON.stringify(error))
+          //   this.auth.doLogout().then(success => {
+          //     this.reLoginAlert();
+          //   }).catch(error => {
+          //   })
+          // } else {
+          //   this.utils.openToast("Something went wrong.", 'Ok');
+          // }
 
 
           errorCallback(error);
         })
     }).catch(error => {
       //console.log('ERRor')
-      this.utils.openToast(error.message, 'Ok');
+      this.utils.openToast("Something went wrong.", 'Ok');
 
       //console.log(JSON.stringify(error))
       errorCallback(error);
@@ -211,7 +212,7 @@ export class ApiProvider {
       //console.log('ERRor');
       // this.doLogout();
       //console.log(JSON.stringify(error))
-      this.utils.openToast(error.message, 'Ok');
+      this.utils.openToast("Something went wrong.", 'Ok');
       errorCallback(error);
     })
   }

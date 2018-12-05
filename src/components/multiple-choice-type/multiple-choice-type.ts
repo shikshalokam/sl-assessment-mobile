@@ -17,6 +17,7 @@ export class MultipleChoiceTypeComponent implements OnInit {
   @Input() hideButton: boolean
   @Input() schoolId: string;
   @Input() imageLocalCopyId: string;
+  @Input() generalQuestion: boolean;
 
   
   constructor(private utils: UtilsProvider) {

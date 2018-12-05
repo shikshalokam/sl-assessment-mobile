@@ -55,8 +55,8 @@ export class UtilsProvider {
     console.log("Image path: " + this.imagePath)
   }
 
-  setLocalImages(images) {
-    this.storage.set('allImageList', JSON.stringify(images));
+  setLocalImages(images, isGeneralQuestion) {
+    this.storage.set(isGeneralQuestion ?'genericQuestionsImages':'allImageList', JSON.stringify(images));
   }
 
   setLocalVariable(key, value) {

@@ -42,11 +42,12 @@ export class QuestionerPage {
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.selectedSectionIndex = this.navParams.get('selectedSection');
+    this.utils.startLoader();
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
       this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
       console.log("Selected Evidence Id = " + this.selectedEvidenceId)
-      this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId; 
+      this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId;
       // console.log("sample " +this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
       this.isViewOnly = !this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;
       this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
@@ -59,7 +60,10 @@ export class QuestionerPage {
       }
       this.isCurrentEvidenceSubmitted = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
       // console.log(this.allQuestionsOfEvidence.length + " length of questions");
+      this.utils.stopLoader();
+
     }).catch(error => {
+      this.utils.stopLoader();
 
     })
   }
@@ -95,8 +99,8 @@ export class QuestionerPage {
     }
   }
 
-  updateLocalData() : void {
-    this.utils.setLocalSchoolData(this.schoolData);    
+  updateLocalData(): void {
+    this.utils.setLocalSchoolData(this.schoolData);
   }
 
   checkForQuestionDisplay(qst): boolean {

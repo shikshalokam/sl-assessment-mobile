@@ -8,8 +8,10 @@
 
 <ion-content padding-top>
   <ion-list>
-    <ion-item *ngFor="let school of schoolList; let i = index" (click)="goToDetails(i)">
-      <ion-icon name="book" margin-right></ion-icon>{{school?.name}} - {{school?.externalId}}
+    <ion-item text-wrap *ngFor="let school of schoolList; let i = index" (click)="goToDetails(i)">
+      <div class="_flex-box">
+        <ion-icon name="book" margin-right></ion-icon> <div style="flex:1">{{school?.name}} - {{school?.externalId}}</div>
+      </div>
     </ion-item>
   </ion-list>
   <!-- <div padding class="_tips">Tip: Please select a school to continue.</div> -->

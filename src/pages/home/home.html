@@ -49,6 +49,9 @@
             {{'labels.notApplicable'|translate}} <ion-icon name="alert" class="_progressIcon" margin-left></ion-icon>
         </span>
         </button>
+        <button ion-item (click)="goToGeneralQuestionList(school)" *ngIf="generalQuestions && generalQuestions[school?._id]?.length">
+          <ion-icon name="albums" margin-right></ion-icon> <span class="homeLi">General Questions</span>
+        </button>
         <button ion-item class="more" (click)="gotToEvidenceList(school)" *ngIf="schoolDetails[school._id.toString()]['assessments'][0]['evidences'].length > 3">
           More
         </button>

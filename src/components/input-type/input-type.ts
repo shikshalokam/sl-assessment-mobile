@@ -16,6 +16,7 @@ export class InputTypeComponent implements OnInit {
   @Input() hideButton: boolean;
   @Input() schoolId: string;
   @Input() imageLocalCopyId: string;
+  @Input() generalQuestion: boolean;
 
   
   notNumber: boolean;

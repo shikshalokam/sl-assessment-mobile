@@ -16,6 +16,7 @@ export class MatrixActionModalPage {
   data: any;
   schoolId: string;
   evidenceId: string;
+  generalQuestion: boolean;
 
   constructor(public navCtrl: NavController, private utils: UtilsProvider,
     public navParams: NavParams, private viewCntrl: ViewController) {
@@ -25,6 +26,7 @@ export class MatrixActionModalPage {
     this.data = navParams.data.data;
     this.schoolId = navParams.data.schoolId;
     this.evidenceId = navParams.data.evidenceId;
+    this.generalQuestion = navParams.data.generalQuestion;
   }
 
   ionViewDidLoad() {

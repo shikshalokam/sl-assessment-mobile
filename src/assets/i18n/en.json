@@ -60,7 +60,8 @@
         "schoolProfile": "School Profile",
         "surveyEcm":"Survey - ECM",
         "parentContact": "Parent Contacts",
-        "parentRegistry":"Parent Registry"
+        "parentRegistry":"Parent Registry",
+        "generalQuestions": "General Questions"
     },
     "labels": {
         "welcome": "Welcome",
