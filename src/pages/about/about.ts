@@ -6,6 +6,7 @@ import { DetailPage } from '../detail/detail';
 import { Device } from '@ionic-native/device';
 import { AppConfigs } from '../../providers/appConfig';
 import { ExtendedDeviceInformation } from '@ionic-native/extended-device-information';
+import { CurrentUserProvider } from '../../providers/current-user/current-user';
 
 @Component({
   selector: 'page-about',
@@ -80,9 +81,9 @@ export class AboutPage {
     <p>App version ${AppConfigs.appVersion}</p>
     <p>Make/Model:  ${this.device.manufacturer}/ ${this.device.model}</p>
     <p>OS version: ${this.device.platform} ${this.device.version}</p>
-    <p *ngIf="!isIos && edi.totalstorage"> Storage: ${this.edi.freestorage} / ${this.edi.totalstorage}</p>
-    <p *ngIf="!isIos && edi.cpumhz"> CPU: ${this.edi.cpumhz} </p>
-    <p *ngIf="!isIos && edi.memory"> Memory: ${this.edi.memory} </p>`,
+    <p>Name: ${this.currentUSer.getCurrentUserData().name}</p>
+    <p>Email: ${this.currentUSer.getCurrentUserData().email}
+    <p>User Id : ${this.currentUSer.getCurrentUserData().sub}`,
     images: [
       {path:"assets/imgs/SDI_App_Logo.jpg", position:"top"}
     ]
@@ -90,7 +91,7 @@ export class AboutPage {
 ]
   constructor(public navCtrl: NavController, private translate: TranslateService, 
     private feedbackService: FeedbackProvider, private device:Device, private platform: Platform,
-    private edi: ExtendedDeviceInformation) {
+    private edi: ExtendedDeviceInformation, private currentUSer: CurrentUserProvider) {
       this.isIos = this.platform.is('ios') ? true : false;
   }
 

@@ -179,7 +179,10 @@ export class GeneralQuestionSubmitPage {
       this.utils.stopLoader();
       this.navCtrl.pop();
     }, error => {
+      console.dir(error)
       this.utils.stopLoader();
+      this.navCtrl.pop();
+
     })
 
   }
