@@ -50,6 +50,7 @@ export class SectionListPage {
     console.log('Entered')
     // console.log(JSON.stringify(this.userData))
     console.log('ionViewDidLoad SectionListPage');
+    this.utils.startLoader();
     this.userData = this.currentUser.getCurrentUserData();
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
@@ -60,8 +61,9 @@ export class SectionListPage {
       this.evidenceSections = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
       this.selectedEvidenceName = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
       this.checkForEvidenceCompletion();
+      this.utils.stopLoader();
     }).catch(error => {
-
+      this.utils.stopLoader();
     })
   }
 

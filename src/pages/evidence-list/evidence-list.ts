@@ -40,12 +40,14 @@ export class EvidenceListPage {
     }).catch(error => {
 
     })
+    this.utils.startLoader();
     this.storage.get('schoolsDetails').then(data => {
+      this.utils.stopLoader()
       this.schoolData = JSON.parse(data);
       this.schoolEvidences = this.schoolData[this.schoolId]['assessments'][0]['evidences'];
       this.checkForProgressStatus();
     }).catch(error => {
-
+      this.utils.stopLoader()
     })
   }
 

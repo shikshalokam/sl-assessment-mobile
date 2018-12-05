@@ -123,28 +123,45 @@ export class HomePage {
 
   getSchoolDetails(): void {
     for (const school of this.schoolList) {
-      // console.log(school['_id']);
       this.apiService.httpGet(SchoolConfig.getSchoolDetails + school['_id'], this.successCallback, error => {
-        // this.utils.stopLoader();
-        // thi
       })
     }
-    // const urls = [];
-    // for (const school of this.schoolList) {
-    //   let url = SchoolConfig.getSchoolDetails + school['_id'];
-    //   urls.push(url)
-    // }
-    // this.utils.startLoader();
+  }
 
-    // this.apiService.httpGetJoin(urls, response => {
-    //   this.utils.stopLoader();
-    //   console.log(JSON.stringify(response));
-    //   const schoolDetailsObj = {};
-    //   for (const school of response.result) {
-    // schoolDetailsObj[school._id] = school;
+  successCallback = (response) => {
+    this.schoolDetails.push(response.result);
+    if (this.schoolDetails.length === this.schoolList.length) {
+      const schoolDetailsObj = {}
+      const generalQuestions = {}
+      for (const school of this.schoolDetails) {
+        schoolDetailsObj[school['schoolProfile']._id] = school;
+        generalQuestions[school['schoolProfile']._id] = school.assessments[0].generalQuestions;
+      }
+      this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
+      this.storage.set("generalQuestions", JSON.stringify(generalQuestions));
+      this.storage.set("generalQuestionsCopy", JSON.stringify(generalQuestions));
+
+      this.generalQuestions = generalQuestions;
+
+      this.getLocalSchoolDetails();
+      this.mappSubmissionData(schoolDetailsObj);
+      this.getParentRegistry();
+      this.mapGeneralQuesions()
+    }
+  }
+
+  mappSubmissionData(allSchoolDetailsObj) : void {
+    // for (const school of this.schoolList ) {
+    //   const obj = {
+    //     _id: school['_id'],
     //   }
-    // this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
-    // })
+    //   if(schoolDetailsObj[school['_id']].assessments[0].submissions) {
+    //     this.ulsd.getLocalData(obj, schoolDetailsObj[school['_id']].assessments[0].submissions);
+    //   }
+    // }
+    // this.getLocalSchoolDetails();
+    this.ulsd.mapSubmissionDataToQuestion(allSchoolDetailsObj);
+
   }
 
   openAction(school, evidenceIndex) {
@@ -206,32 +223,6 @@ export class HomePage {
     this.appCtrl.getRootNav().push('SchoolProfilePage', { _id: school._id, name: school.name, parent: this })
   }
 
-  successCallback = (response) => {
-    // console.log(JSON.stringify(response))
-    this.schoolDetails.push(response.result);
-    if (this.schoolDetails.length === this.schoolList.length) {
-      // this.utils.stopLoader();
-      const schoolDetailsObj = {}
-      const generalQuestions = {}
-      for (const school of this.schoolDetails) {
-        // console.log(school['schoolProfile']._id + ' 2nd');
-        schoolDetailsObj[school['schoolProfile']._id] = school;
-        generalQuestions[school['schoolProfile']._id] = school.assessments[0].generalQuestions;
-      }
-      // console.log("Local school data"+JSON.stringify(schoolDetailsObj));
-      this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
-      this.storage.set("generalQuestions", JSON.stringify(generalQuestions));
-      this.storage.set("generalQuestionsCopy", JSON.stringify(generalQuestions));
-
-      this.generalQuestions = generalQuestions;
-
-      this.getLocalSchoolDetails();
-      this.mappSubmissionData(schoolDetailsObj);
-      this.getParentRegistry();
-      this.mapGeneralQuesions()
-    }
-  }
-
   getParentRegistry() {
     for (const school of this.schoolList) {
       // console.log(school['_id']);
@@ -265,24 +256,6 @@ export class HomePage {
     }
   }
 
-
-  mappSubmissionData(schoolDetailsObj) : void {
-    for (const school of this.schoolList ) {
-      const obj = {
-        _id: school['_id'],
-      }
-      // console.log("School details " +JSON.stringify(schoolDetailsObj[school['_id']]))
-      if(schoolDetailsObj[school['_id']].assessments[0].submissions) {
-        this.ulsd.getLocalData(obj, schoolDetailsObj[school['_id']].assessments[0].submissions);
-      }
-      // schoolDetailsObj[key];
-      // this.u
-
-      // console.log(JSON.stringify(school));
-    }
-    // this.getLocalSchoolDetails();
-
-  }
 
   checkForProgressStatus(evidences) {
     // console.log("yeee")
