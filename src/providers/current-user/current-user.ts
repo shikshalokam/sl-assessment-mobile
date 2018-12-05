@@ -58,6 +58,8 @@ export class CurrentUserProvider {
     this.storage.remove('parentDetails');
     this.storage.remove('schoolsDetails');
     this.storage.remove('allImageList');
+    this.storage.remove('genericQuestionsImages');
+    this.storage.remove('generalQuestions');
     console.log("alldeleted")
   }
 

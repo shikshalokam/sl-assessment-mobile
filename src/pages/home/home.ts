@@ -33,6 +33,7 @@ export class HomePage {
   isIos: boolean = this.platform.is('ios');
   parentList: any =[];
   errorMsg: string;
+  generalQuestions: any;
 
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
@@ -52,7 +53,7 @@ export class HomePage {
     private auth: AuthProvider
   ) {
     this.subscription = this.events.subscribe('localDataUpdated', () => {
-      console.log("Updated")
+      // console.log("Updated")
       this.getLocalSchoolDetails();
     });
 
@@ -60,6 +61,15 @@ export class HomePage {
     // constthis.events.subscribe('localDataUpdated', () => {
     // });
     // this.networkAvailable = this.ngps.getNetworkStatus()
+  }
+
+
+  ionViewWillEnter() {
+    // console.log("Inside view will enetr");
+    this.onInit();
+    if (this.network.type != 'none') {
+      this.networkAvailable = true;
+    }
   }
 
   getSchoolListApi(): void {
@@ -73,6 +83,7 @@ export class HomePage {
         this.utils.stopLoader();
       } else {
         this.getSchoolDetails();
+
       }
     }, error => {
       this.utils.stopLoader();
@@ -81,6 +92,10 @@ export class HomePage {
         this.appCtrl.getRootNav().push(WelcomePage);
       }
     })
+  }
+
+  mapGeneralQuesions() {
+
   }
 
   unauthorized(msg) {
@@ -160,6 +175,13 @@ export class HomePage {
         this.checkForProgressStatus(this.schoolDetails[schoolId]['assessments'][0]['evidences'])
       }
     })
+    this.storage.get('generalQuestions').then(questions => {
+      if(questions) {
+        // JSON.stringify
+        this.generalQuestions = JSON.parse(questions);
+        // console.log(questions);
+      }
+    })
   }
 
   goToSections(school, evidenceIndex) {
@@ -169,6 +191,11 @@ export class HomePage {
     } else {
       this.openAction(school, evidenceIndex);
     }
+  }
+
+  goToGeneralQuestionList(school) : void {
+    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: school._id, name: school.name})
+
   }
 
   gotToEvidenceList(school) {
@@ -185,15 +212,23 @@ export class HomePage {
     if (this.schoolDetails.length === this.schoolList.length) {
       // this.utils.stopLoader();
       const schoolDetailsObj = {}
+      const generalQuestions = {}
       for (const school of this.schoolDetails) {
         // console.log(school['schoolProfile']._id + ' 2nd');
         schoolDetailsObj[school['schoolProfile']._id] = school;
+        generalQuestions[school['schoolProfile']._id] = school.assessments[0].generalQuestions;
       }
       // console.log("Local school data"+JSON.stringify(schoolDetailsObj));
       this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
-      // this.getLocalSchoolDetails();
+      this.storage.set("generalQuestions", JSON.stringify(generalQuestions));
+      this.storage.set("generalQuestionsCopy", JSON.stringify(generalQuestions));
+
+      this.generalQuestions = generalQuestions;
+
+      this.getLocalSchoolDetails();
       this.mappSubmissionData(schoolDetailsObj);
       this.getParentRegistry();
+      this.mapGeneralQuesions()
     }
   }
 
@@ -225,7 +260,7 @@ export class HomePage {
         }
       }
       this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
-      console.log(JSON.stringify(parentDetailsObj))
+      // console.log(JSON.stringify(parentDetailsObj))
 
     }
   }
@@ -238,27 +273,25 @@ export class HomePage {
       }
       // console.log("School details " +JSON.stringify(schoolDetailsObj[school['_id']]))
       if(schoolDetailsObj[school['_id']].assessments[0].submissions) {
-      // console.log(JSON.stringify(schoolDetailsObj[school['_id']].assessments[0].submissions));
-
-        this.ulsd.getLocalData(obj, schoolDetailsObj[school['_id']].assessments[0].submissions)
+        this.ulsd.getLocalData(obj, schoolDetailsObj[school['_id']].assessments[0].submissions);
       }
       // schoolDetailsObj[key];
       // this.u
 
       // console.log(JSON.stringify(school));
     }
-    this.getLocalSchoolDetails();
+    // this.getLocalSchoolDetails();
 
   }
 
   checkForProgressStatus(evidences) {
-    console.log("yeee")
+    // console.log("yeee")
     for (const evidence of evidences) {
-      console.log(evidence.startTime);
+      // console.log(evidence.startTime);
       if (evidence.isSubmitted) {
         evidence.progressStatus = 'submitted';
       } else if (!evidence.startTime) {
-        console.log(evidence.startTime)
+        // console.log(evidence.startTime)
         evidence.progressStatus = '';
       } else {
         evidence.progressStatus = 'completed';
@@ -271,17 +304,9 @@ export class HomePage {
     }
   }
 
-  ionViewWillEnter() {
-    console.log("Inside view will enetr");
-    this.onInit();
-    if (this.network.type != 'none') {
-      this.networkAvailable = true;
-    }
-  }
-
   onInit() {
     this.navCtrl.id = "HomePage";
-    console.log('refresh');
+    // console.log('refresh');
     this.storage.get('parentRegisterForm').then(form => {
       if(!form){
         this.getParentRegistryForm();
@@ -289,7 +314,7 @@ export class HomePage {
     })
     this.userData = this.currentUser.getCurrentUserData();
     this.storage.get('schools').then(schools => {
-      console.log(JSON.stringify(schools))
+      // console.log(JSON.stringify(schools))
       if (schools) {
         this.schoolList = schools;
         this.getLocalSchoolDetails();

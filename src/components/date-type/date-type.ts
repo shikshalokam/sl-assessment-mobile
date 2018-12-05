@@ -15,7 +15,7 @@ export class DateTypeComponent implements OnInit{
   @Input() evidenceId: string;
   @Input() schoolId: string;
   @Input() imageLocalCopyId: string;
-
+  @Input() generalQuestion: boolean;
 
   @Input() hideButton: boolean;
   questionValid: boolean;

@@ -25,6 +25,7 @@ export class EvidenceListPage {
   schoolData: any;
   currentEvidenceStatus: string;
   isIos: boolean = this.platform.is('ios');
+  generalQuestions: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App, private utils: UtilsProvider,
     private feedback: FeedbackProvider, private evdnsServ: EvidenceProvider, private platform: Platform) {
@@ -34,6 +35,11 @@ export class EvidenceListPage {
     console.log('ionViewDidLoad EvidenceListPage');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
+    this.storage.get('generalQuestions').then(data => {
+      this.generalQuestions = JSON.parse(data)[this.schoolId];
+    }).catch(error => {
+
+    })
     this.storage.get('schoolsDetails').then(data => {
       this.schoolData = JSON.parse(data);
       this.schoolEvidences = this.schoolData[this.schoolId]['assessments'][0]['evidences'];
@@ -41,6 +47,11 @@ export class EvidenceListPage {
     }).catch(error => {
 
     })
+  }
+
+  goToGeneralQuestionList() : void {
+    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: this.schoolId, name: this.schoolName})
+
   }
 
   checkForProgressStatus() {

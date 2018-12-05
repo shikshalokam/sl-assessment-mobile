@@ -11,7 +11,7 @@
   <div *ngIf="!notNumber" class="_errorMsg">Decimal numbers not allowed</div>
 
   <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
-  <image-upload *ngIf="data?.file" [data]="data" [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
+  <image-upload *ngIf="data?.file" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
 
 </div>
 <!-- <footer-buttons *ngIf="!hideButton" [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons> -->

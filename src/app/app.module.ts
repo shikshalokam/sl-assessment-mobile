@@ -63,6 +63,9 @@ import { FeedbackPage } from '../pages/feedback/feedback';
 import { DetailPage } from '../pages/detail/detail';
 import { Device } from '@ionic-native/device';
 import { ExtendedDeviceInformation } from '@ionic-native/extended-device-information';
+import { GeneralQuestionListPageModule } from '../pages/general-question-list/general-question-list.module';
+import { GeneralQuestionPage } from '../pages/general-question/general-question';
+import { GeneralQuestionSubmitPage } from '../pages/general-question-submit/general-question-submit';
 
 @NgModule({
   declarations: [
@@ -80,7 +83,9 @@ import { ExtendedDeviceInformation } from '@ionic-native/extended-device-informa
     QuestionDashboardPage,
     RemarksPage,
     FeedbackPage,
-    DetailPage
+    DetailPage,
+    GeneralQuestionPage,
+    GeneralQuestionSubmitPage
   ],
   imports: [
     BrowserModule,
@@ -107,7 +112,8 @@ import { ExtendedDeviceInformation } from '@ionic-native/extended-device-informa
     RatingCriteriaListingPageModule,
     RatingPageModule,
     RatedCriteriaListPageModule,
-    ParentsListPageModule
+    ParentsListPageModule,
+    GeneralQuestionListPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -125,7 +131,9 @@ import { ExtendedDeviceInformation } from '@ionic-native/extended-device-informa
     QuestionDashboardPage,
     RemarksPage,
     FeedbackPage,
-    DetailPage
+    DetailPage,
+    GeneralQuestionPage,
+    GeneralQuestionSubmitPage
   ],
   providers: [
     StatusBar,

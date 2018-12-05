@@ -50,6 +50,9 @@
         </span> -->
       </h3>
     </button>
+    <button ion-item (click)="goToGeneralQuestionList()" *ngIf="generalQuestions && generalQuestions?.length">
+        <ion-icon name="albums" margin-right></ion-icon> General Questions
+      </button>
   </ion-item-group>
 
 

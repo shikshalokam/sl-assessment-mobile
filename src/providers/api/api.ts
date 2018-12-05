@@ -84,7 +84,7 @@ export class ApiProvider {
       // headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
       // headers.append('gpsLocation', gpsLocation);
 
-      //console.log(AppConfigs.api_base_url + url)
+      console.log(AppConfigs.api_base_url + url)
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.post(apiUrl, payload, { headers: headers })
         .subscribe(data => {
