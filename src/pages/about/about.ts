@@ -70,7 +70,7 @@ export class AboutPage {
       {path:"assets/imgs/AdhyayanLogo.png"},
       {path:"assets/imgs/Mantra_Logo.png"},
       {path:"assets/imgs/ShikshaLokamLogo.png"},
-      {path:"assets/imgs/QCILogo.jpg"},
+      {path:"assets/imgs/QCILogo.png"},
       {path:"assets/imgs/PrathamLogo.png"},
     ]
   }, 
