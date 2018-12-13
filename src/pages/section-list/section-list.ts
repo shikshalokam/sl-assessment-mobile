@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Events, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Events, Platform , AlertController} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ApiProvider } from '../../providers/api/api';
@@ -9,6 +9,7 @@ import { ImageListingPage } from '../image-listing/image-listing';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
+import { Network } from '@ionic-native/network';
 
 
 @IonicPage()
@@ -36,7 +37,8 @@ export class SectionListPage {
     private apiService: ApiProvider, private utils: UtilsProvider,
     private diagnostic: Diagnostic, private ngps: NetworkGpsProvider,
     private feedback: FeedbackProvider,
-    private events: Events, private platform: Platform) {
+    private events: Events, private platform: Platform,
+    private alertCtrl: AlertController, private network: Network) {
 
     this.events.subscribe('network:offline', () => {
     });
@@ -68,6 +70,12 @@ export class SectionListPage {
   }
 
   ionViewDidLoad() {
+    this.diagnostic.isLocationEnabled().then(success => {
+      this.ngps.checkForLocationPermissions();
+    }).catch(error => {
+      
+    })
+
   }
 
 
@@ -128,6 +136,32 @@ export class SectionListPage {
     }
     this.navCtrl.push('QuestionerPage', params);
   }
+
+  checkForNetworkTypeAlert() {
+    if(this.network.type !== ('3g' || '4g' || 'wifi')){
+      let alert = this.alertCtrl.create({
+        title: 'Confirm',
+        message: 'You are connected to a slower data network. Image upload may take longer time. Do you want to continue?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              this.goToImageListing()
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+  }
+
 
   goToImageListing() {
     if(this.networkAvailable) {

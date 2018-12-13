@@ -18,7 +18,7 @@
 <ion-footer no-shadow *ngIf="enableSubmitBtn">
   <ion-toolbar position="bottom">
     <ion-row>
-      <button ion-button full (click)="goToImageListing()">{{'buttons.upload'|translate}} {{'buttons.and'|translate}}
+      <button ion-button full (click)="checkForNetworkTypeAlert()">{{'buttons.upload'|translate}} {{'buttons.and'|translate}}
         {{'buttons.submit'|translate}}</button>
     </ion-row>
   </ion-toolbar>

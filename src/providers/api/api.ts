@@ -10,6 +10,7 @@ import { WelcomePage } from '../../pages/welcome/welcome';
 import { UtilsProvider } from '../utils/utils';
 import { AuthProvider } from '../auth/auth';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
+import { SlackProvider } from '../slack/slack';
 
 
 @Injectable()
@@ -20,7 +21,13 @@ export class ApiProvider {
     private appCtrls: App, private utils: UtilsProvider,
     private auth: AuthProvider,
     private alertCntrl: AlertController,
-    private ngps: NetworkGpsProvider) {
+    private ngps: NetworkGpsProvider, private slack: SlackProvider) {
+  }
+
+  errorObj = {
+    "fallback": "User Details",
+    "title": `Error Details`,
+    "text": ``
   }
 
   isNetworkAvailabel(): boolean {
@@ -91,6 +98,9 @@ export class ApiProvider {
           //console.log('API service success')
           successCallback(JSON.parse(data['_body']));
         }, error => {
+          const errorObject = {...this.errorObj};
+          errorObject.text = `API failed. URL: ${apiUrl}. Details ${JSON.stringify(error)}`;
+          this.slack.pushException(errorObject);
           // this.auth.doLogout().then(success => {
           //   nav.setRoot(WelcomePage);
           //   this.currentUser.deactivateActivateSession(true);
@@ -193,6 +203,9 @@ export class ApiProvider {
           // //console.log(data)
           successCallback(JSON.parse(data['_body']));
         }, error => {
+          const errorObject = {...this.errorObj};
+          errorObject.text = `API failed. URL: ${apiUrl}. Details ${JSON.stringify(error)}`;
+          this.slack.pushException(errorObject);
           //console.log(error.status)
           const errorDetails = JSON.parse(error['_body']);
           if (errorDetails.status === "ERR_TOKEN_INVALID") {

@@ -66,6 +66,7 @@ import { ExtendedDeviceInformation } from '@ionic-native/extended-device-informa
 import { GeneralQuestionListPageModule } from '../pages/general-question-list/general-question-list.module';
 import { GeneralQuestionPage } from '../pages/general-question/general-question';
 import { GeneralQuestionSubmitPage } from '../pages/general-question-submit/general-question-submit';
+import { SlackProvider } from '../providers/slack/slack';
 
 @NgModule({
   declarations: [
@@ -164,7 +165,8 @@ import { GeneralQuestionSubmitPage } from '../pages/general-question-submit/gene
     EvidenceProvider,
     UpdateLocalSchoolDataProvider,
     Device,
-    ExtendedDeviceInformation
+    ExtendedDeviceInformation,
+    SlackProvider
   ]
 })
 export class AppModule { }
