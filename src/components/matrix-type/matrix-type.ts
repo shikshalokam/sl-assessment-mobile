@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { MatrixModalComponent } from '../matrix-modal/matrix-modal';
-import { ModalController, NavParams } from 'ionic-angular';
+import { ModalController, NavParams, AlertController } from 'ionic-angular';
 import { MatrixActionModalPage } from '../../pages/matrix-action-modal/matrix-action-modal';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { QuestionDashboardPage } from '../../pages/question-dashboard/question-dashboard';
@@ -25,7 +25,7 @@ export class MatrixTypeComponent implements OnInit {
   
   mainInstance: any;
 
-  constructor(private modalCntrl: ModalController, private utils: UtilsProvider) {
+  constructor(private modalCntrl: ModalController, private utils: UtilsProvider, private alertCtrl: AlertController) {
     console.log('Hello MatrixTypeComponent Component');
 
   }
@@ -114,5 +114,29 @@ export class MatrixTypeComponent implements OnInit {
 
     this.updateLocalData.emit();
     console.log(this.data.isCompleted)
+  }
+
+
+  deleteInstanceAlert(index) {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm purchase',
+      message: 'Do you want to delete this image?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.deleteInstance(index);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 }

@@ -7,7 +7,7 @@
   </div>
 
   <div class="_cards _flex-box  _justify-content-center" *ngFor="let image of imageList; let i = index">
-    <ion-icon name="trash" class="_closeBtn" (click)="removeImgFromList(i)"></ion-icon>
+    <ion-icon name="trash" class="_closeBtn" (click)="deleteImageAlert(i)"></ion-icon>
     <div class="_overlay"></div>
     <img src="{{image}}">
   </div>

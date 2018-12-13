@@ -7,6 +7,8 @@ import { Device } from '@ionic-native/device';
 import { AppConfigs } from '../../providers/appConfig';
 import { ExtendedDeviceInformation } from '@ionic-native/extended-device-information';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
+import { Network } from '@ionic-native/network';
+
 
 @Component({
   selector: 'page-about',
@@ -15,6 +17,7 @@ import { CurrentUserProvider } from '../../providers/current-user/current-user';
 export class AboutPage {
   languageChange: string = 'en';
   isIos: boolean;
+  networkDetails;
 
   aboutContent =[ {
     heading: "Message from Dy CM",
@@ -83,7 +86,9 @@ export class AboutPage {
     <p>OS version: ${this.device.platform} ${this.device.version}</p>
     <p>Name: ${this.currentUSer.getCurrentUserData().name}</p>
     <p>Email: ${this.currentUSer.getCurrentUserData().email}
-    <p>User Id : ${this.currentUSer.getCurrentUserData().sub}`,
+    <p>User Id : ${this.currentUSer.getCurrentUserData().preferred_username}
+    <p>Network type: ${this.network.type}</p>
+    <p>DownlinkMax: ${this.network.downlinkMax}</p>`,
     images: [
       {path:"assets/imgs/SDI_App_Logo.jpg", position:"top"}
     ]
@@ -91,7 +96,7 @@ export class AboutPage {
 ]
   constructor(public navCtrl: NavController, private translate: TranslateService, 
     private feedbackService: FeedbackProvider, private device:Device, private platform: Platform,
-    private edi: ExtendedDeviceInformation, private currentUSer: CurrentUserProvider) {
+    private edi: ExtendedDeviceInformation, private currentUSer: CurrentUserProvider, private network: Network) {
       this.isIos = this.platform.is('ios') ? true : false;
   }
 
@@ -103,6 +108,9 @@ export class AboutPage {
   feedback() : void {
     console.log("in feedback")
     this.feedbackService.sendFeedback();
+  }
+  ionViewDidLoad() {
+    // this.networkDetails = this.ngpsService.getNetowrkDetails();
   }
 
   goTodetailsPage(i) {

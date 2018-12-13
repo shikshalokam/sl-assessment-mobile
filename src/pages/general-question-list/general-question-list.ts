@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Events, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { GeneralQuestionPage } from '../general-question/general-question';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { GeneralQuestionSubmitPage } from '../general-question-submit/general-question-submit';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { Network } from '@ionic-native/network';
 
 @IonicPage()
 @Component({
@@ -21,7 +22,8 @@ export class GeneralQuestionListPage {
   networkAvailable: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private utils: UtilsProvider,
-    private modal: ModalController, private events: Events, private ngps: NetworkGpsProvider,  private diagnostic: Diagnostic) {
+    private modal: ModalController, private events: Events, private ngps: NetworkGpsProvider,  private diagnostic: Diagnostic,
+    private alertCntrl: AlertController, private network: Network) {
     this.events.subscribe('network:offline', () => {
     });
 
@@ -68,6 +70,32 @@ export class GeneralQuestionListPage {
     }
     return false
   }
+
+  checkForNetworkTypeAlert() {
+    if(this.network.type !== ('3g' || '4g' || 'wifi')){
+      let alert = this.alertCntrl.create({
+        title: 'Confirm',
+        message: 'You are connected to a slower data network. Image upload may take longer time. Do you want to continue?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              this.goToImageListing()
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+  }
+
 
   goToImageListing() {
     this.ngps.checkForLocationPermissions();
