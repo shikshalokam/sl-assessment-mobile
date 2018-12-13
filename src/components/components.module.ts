@@ -16,6 +16,7 @@ import { Network } from '@ionic-native/network';
 import { MenuItemComponent } from './menu-item/menu-item';
 import { DatePipe } from '@angular/common';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form';
+import { SlackProvider } from '../providers/slack/slack';
 
 @NgModule({
 	declarations: [
@@ -57,7 +58,7 @@ import { DynamicFormComponent } from './dynamic-form/dynamic-form';
 		MenuItemComponent
 	],
 	providers:[
-		Network, DatePipe
+		Network, DatePipe, SlackProvider
 	]
 })
 export class ComponentsModule { }

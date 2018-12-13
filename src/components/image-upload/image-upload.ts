@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActionSheetController, Platform } from 'ionic-angular'
+import { ActionSheetController, Platform , AlertController} from 'ionic-angular'
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
@@ -45,7 +45,8 @@ export class ImageUploadComponent implements OnInit {
     private camera: Camera,
     private file: File, private imgPicker: ImagePicker, private utils: UtilsProvider,
     private storage: Storage,
-    private photoLibrary: PhotoLibrary, private platform: Platform) {
+    private photoLibrary: PhotoLibrary, private platform: Platform, 
+    private alertCtrl : AlertController) {
     console.log('Hello ImageUploadComponent Component');
     this.text = 'Hello World';
   }
@@ -265,7 +266,7 @@ export class ImageUploadComponent implements OnInit {
 
   removeImgFromList(index): void {
     // console.log(this.localEvidenceImageList);
-    this.file.removeFile(this.appFolderPath + '/', this.datas.fileName[index]).then(success => {
+    // this.file.removeFile(this.appFolderPath + '/', this.datas.fileName[index]).then(success => {
       let indexInLocalList;
       if(!this.generalQuestion) {
         for (let i = 0; i < this.allLocalImageList[this.schoolId][this.evidenceId].length; i++) {
@@ -286,7 +287,30 @@ export class ImageUploadComponent implements OnInit {
       this.datas.fileName.splice(index, 1);
       this.imageList.splice(index, 1);
       this.updateLocalImageList();
-    })
+    // })
+  }
+
+  deleteImageAlert(index) {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm',
+      message: 'Do you want to delete this image?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.removeImgFromList(index);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   updateLocalImageList() {

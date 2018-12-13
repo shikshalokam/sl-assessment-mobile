@@ -33,6 +33,11 @@ export class NetworkGpsProvider {
     this.previousStatus = ConnectionStatusEnum.Online;
   }
 
+  getNetowrkDetails() {
+    const network = {type:this.network.type, downMax: this.network.downlinkMax};
+    return network
+  }
+
   checkForLocationPermissions(): void {
     console.log('Check permissions');
     this.permissions.checkPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(

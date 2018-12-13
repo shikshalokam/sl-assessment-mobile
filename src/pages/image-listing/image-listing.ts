@@ -6,6 +6,7 @@ import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
+import { SlackProvider } from '../../providers/slack/slack';
 
 declare var cordova: any;
 
@@ -18,7 +19,7 @@ export class ImageListingPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private file: File, private fileTransfer: FileTransfer,
     private apiService: ApiProvider, private utils: UtilsProvider,
-    private app: App, private platform: Platform) {
+    private app: App, private platform: Platform, private slack: SlackProvider) {
   }
 
   uploadImages: any;
@@ -34,6 +35,13 @@ export class ImageListingPage {
   evidenceSections: any;
   selectedEvidenceName: any;
   imageLocalCopyId: any;
+  retryCount: number = 0;
+  page = "ECM submission page"
+  errorObj = {
+    "fallback": "User Details",
+    "title": `Error Details`,
+    "text": ``
+  }
 
   ionViewDidLoad() {
     this.schoolId = this.navParams.get('_id');
@@ -121,15 +129,35 @@ export class ImageListingPage {
     let targetPath = this.pathForImage(this.imageList[this.uploadIndex].file);
     let fileTrns: FileTransferObject = this.fileTransfer.create();
     fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
+      this.retryCount = 0;
+      console.log(JSON.stringify(result))
       this.imageList[this.uploadIndex].uploaded = true;
       if (this.uploadIndex < (this.imageList.length - 1)) {
         this.uploadIndex++;
         this.cloudImageUpload();
+
       } else {
         // this.utils.stopLoader();
         this.submitEvidence();
       }
     }).catch(err => {
+      const errorObject = {... this.errorObj};
+      this.utils.openToast("Something went wrong. Please try afetr 30 mins.")
+      errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
+       Details: ${JSON.stringify(err)}`;
+      this.slack.pushException(errorObject);
+      this.navCtrl.pop();
+      // this.retryCount++;
+      // if(this.retryCount > 3) {
+      //   if (this.uploadIndex < (this.imageList.length - 1)) {
+      //     this.uploadIndex++;
+      //     this.cloudImageUpload();
+      //   } else {
+      //     this.submitEvidence();
+      //   }
+      // } else {
+      //   this.cloudImageUpload();
+      // }
     })
   }
 
