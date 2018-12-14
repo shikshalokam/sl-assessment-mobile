@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { Keyboard } from '@ionic-native/keyboard';
 
 @Component({
   selector: 'input-type',
@@ -22,7 +23,7 @@ export class InputTypeComponent implements OnInit {
   notNumber: boolean;
   questionValid: boolean;
 
-  constructor(private utils: UtilsProvider) {
+  constructor(private utils: UtilsProvider, private keyboard: Keyboard) {
     console.log('Hello RadioTypeComponent Component');
 
   }

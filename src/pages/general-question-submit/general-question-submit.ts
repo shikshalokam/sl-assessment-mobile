@@ -128,12 +128,34 @@ export class GeneralQuestionSubmitPage {
         this.imageList[i]['url'] = success.result[i].url;
         this.imageList[i]['sourcePath'] = success.result[i].payload.sourcePath;
       }
-      this.cloudImageUpload();
-      this.fileTransfer.create()
+      // this.cloudImageUpload();
+      // this.fileTransfer.create()
+      this.checkForLocalFolder();
+
     }, error => {
       this.utils.stopLoader();
       this.utils.openToast('Unable to get google urls')
     })
+  }
+
+  checkForLocalFolder() {
+    if (this.platform.is('ios')) {
+      console.log("Ios ")
+      this.file.checkDir(this.file.documentsDirectory, 'images').then(success => {
+        this.fileTransfer.create()
+        this.cloudImageUpload();
+      }).catch(err => {
+
+      });
+    } else {
+      this.file.checkDir(this.file.externalDataDirectory, 'images').then(success => {
+        this.cloudImageUpload();
+        this.fileTransfer.create()
+      }).catch(err => {
+
+      });
+    }
+
   }
 
   cloudImageUpload() {
@@ -149,37 +171,40 @@ export class GeneralQuestionSubmitPage {
     };
     let targetPath = this.pathForImage(this.imageList[this.uploadIndex].file);
     let fileTrns: FileTransferObject = this.fileTransfer.create();
-    fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url +'1', options).then(result => {
-      this.retryCount = 0;
-      console.log("Uploaded image");
-      this.imageList[this.uploadIndex].uploaded = true;
+    this.file.checkFile((this.platform.is('ios') ? this.file.documentsDirectory : this.file.externalDataDirectory)+'images/', this.imageList[this.uploadIndex].file ).then(success => {
+      fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
+        this.retryCount = 0;
+        console.log("Uploaded image");
+        this.imageList[this.uploadIndex].uploaded = true;
+        if (this.uploadIndex < (this.imageList.length - 1)) {
+          this.uploadIndex++;
+          this.cloudImageUpload();
+        } else {
+          // this.utils.stopLoader();
+          // this.submitEvidence();
+          this.tempSubmit()
+        }
+      }).catch(err => {
+        const errorObject = {... this.errorObj};
+        this.utils.openToast("Something went wrong. Please try afetr 30 mins.")
+        errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}. Details: ${JSON.stringify(err)}`;
+        this.slack.pushException(errorObject);
+        this.navCtrl.pop();
+      })
+    }).catch (error => {
+      console.log("In error Could not find images");
+      // this.failedUploadImageNames.push(this.imageList[this.uploadIndex].url)
       if (this.uploadIndex < (this.imageList.length - 1)) {
         this.uploadIndex++;
+        // this.file.removeFile()
         this.cloudImageUpload();
+
       } else {
         // this.utils.stopLoader();
-        // this.submitEvidence();
-        this.tempSubmit()
+        this.tempSubmit();
       }
-    }).catch(err => {
-      const errorObject = {... this.errorObj};
-      this.utils.openToast("Something went wrong. Please try afetr 30 mins.")
-      errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}. Details: ${JSON.stringify(err)}`;
-      this.slack.pushException(errorObject);
-      this.navCtrl.pop();
-      // this.retryCount++;
-      // console.log("error" + this.retryCount)
-      // if(this.retryCount > 3) {
-      //   if (this.uploadIndex < (this.imageList.length - 1)) {
-      //     this.uploadIndex++;
-      //     this.cloudImageUpload();
-      //   } else {
-      //     this.tempSubmit();
-      //   }
-      // } else {
-      //   this.cloudImageUpload();
-      // }
-    })
+    });
+
   }
 
   pathForImage(img) {

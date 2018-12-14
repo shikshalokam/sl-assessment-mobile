@@ -67,6 +67,7 @@ import { GeneralQuestionListPageModule } from '../pages/general-question-list/ge
 import { GeneralQuestionPage } from '../pages/general-question/general-question';
 import { GeneralQuestionSubmitPage } from '../pages/general-question-submit/general-question-submit';
 import { SlackProvider } from '../providers/slack/slack';
+import { Keyboard } from '@ionic-native/keyboard';
 
 @NgModule({
   declarations: [
@@ -166,7 +167,8 @@ import { SlackProvider } from '../providers/slack/slack';
     UpdateLocalSchoolDataProvider,
     Device,
     ExtendedDeviceInformation,
-    SlackProvider
+    SlackProvider,
+    Keyboard
   ]
 })
 export class AppModule { }
