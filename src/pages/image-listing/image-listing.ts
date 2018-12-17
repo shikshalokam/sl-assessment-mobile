@@ -148,7 +148,7 @@ export class ImageListingPage {
     let targetPath = this.pathForImage(this.imageList[this.uploadIndex].file);
     let fileTrns: FileTransferObject = this.fileTransfer.create();
 
-      this.file.checkFile((this.platform.is('ios') ? this.file.documentsDirectory : this.file.externalDataDirectory)+'images', this.imageList[this.uploadIndex].file ).then(success => {
+      this.file.checkFile((this.platform.is('ios') ? this.file.documentsDirectory : this.file.externalDataDirectory)+'images/', this.imageList[this.uploadIndex].file ).then(success => {
         fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
           this.retryCount = 0;
           console.log(JSON.stringify(result))
