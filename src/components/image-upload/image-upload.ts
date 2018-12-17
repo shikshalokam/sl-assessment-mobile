@@ -211,7 +211,7 @@ export class ImageUploadComponent implements OnInit {
   pushToImageList(fileName) {
     this.file.checkFile(this.appFolderPath + '/', fileName).then(response => {
       this.file.readAsDataURL(this.appFolderPath, fileName).then(data => {
-        this.imageList.push(data);
+        this.imageList.push({data: data, imageName: fileName });
         this.datas.fileName.push(fileName);
         console.log("Update local list")
         console.log(this.schoolId + " " + this.evidenceId)
@@ -239,7 +239,7 @@ export class ImageUploadComponent implements OnInit {
     for (const image of imageList) {
       this.file.checkFile(this.appFolderPath + '/', image).then(response => {
         this.file.readAsDataURL(this.appFolderPath, image).then(data => {
-          this.imageList.push(data);
+          this.imageList.push({data: data, imageName: image});
 
         }).catch(err => {
 
@@ -270,7 +270,7 @@ export class ImageUploadComponent implements OnInit {
       let indexInLocalList;
       if(!this.generalQuestion) {
         for (let i = 0; i < this.allLocalImageList[this.schoolId][this.evidenceId].length; i++) {
-          if (this.allLocalImageList[this.schoolId][this.evidenceId].name === this.imageList[i]) {
+          if (this.allLocalImageList[this.schoolId][this.evidenceId].name === this.imageList[index].imageName) {
             indexInLocalList = i;
           }
         }
@@ -278,7 +278,7 @@ export class ImageUploadComponent implements OnInit {
       } else {
         console.log("remove image else")
         for (let i = 0; i < this.allLocalImageList[this.schoolId].length; i++) {
-          if (this.allLocalImageList[this.schoolId].name === this.imageList[i]) {
+          if (this.allLocalImageList[this.schoolId].name === this.imageList[index].imageName) {
             indexInLocalList = i;
           }
         }
