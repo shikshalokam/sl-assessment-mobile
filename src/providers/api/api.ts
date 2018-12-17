@@ -99,7 +99,7 @@ export class ApiProvider {
           successCallback(JSON.parse(data['_body']));
         }, error => {
           const errorObject = {...this.errorObj};
-          errorObject.text = `API failed. URL: ${apiUrl}. Details ${JSON.stringify(error)}`;
+          errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
           this.slack.pushException(errorObject);
           // this.auth.doLogout().then(success => {
           //   nav.setRoot(WelcomePage);
@@ -181,6 +181,7 @@ export class ApiProvider {
 
   httpGet(url, successCallback, errorCallback) {
     let nav = this.appCtrls.getActiveNav();
+    // this.slack.pushException()
 
     this.validateApiToken().then(response => {
       //console.log('SUCcess');
