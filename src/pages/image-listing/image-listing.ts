@@ -182,7 +182,7 @@ export class ImageListingPage {
         })
       }).catch (error => {
         console.log("In error Could not find images");
-        this.failedUploadImageNames.push(this.imageList[this.uploadIndex].url)
+        this.failedUploadImageNames.push(this.imageList[this.uploadIndex].file)
         if (this.uploadIndex < (this.imageList.length - 1)) {
           this.uploadIndex++;
           // this.file.removeFile()
