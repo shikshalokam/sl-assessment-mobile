@@ -41,6 +41,7 @@ export class GeneralQuestionSubmitPage {
     "title": `Error Details`,
     "text": ``
   }
+  failedUploadImageNames = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private file: File, private fileTransfer: FileTransfer,
@@ -193,7 +194,7 @@ export class GeneralQuestionSubmitPage {
       })
     }).catch (error => {
       console.log("In error Could not find images");
-      // this.failedUploadImageNames.push(this.imageList[this.uploadIndex].url)
+      this.failedUploadImageNames.push(this.imageList[this.uploadIndex].file)
       if (this.uploadIndex < (this.imageList.length - 1)) {
         this.uploadIndex++;
         // this.file.removeFile()
