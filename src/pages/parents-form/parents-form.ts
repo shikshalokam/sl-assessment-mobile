@@ -91,8 +91,11 @@ export class ParentsFormPage {
         obj.uploaded = true;
         this.viewCntrl.dismiss(obj);
       }, error => {
-        this.utils.openToast("Somrthing went wrong", "Ok");
+        this.utils.openToast("Something went wrong. Please try again after sometime.", "Ok");
         this.utils.stopLoader();
+        obj.uploaded = false;
+        this.viewCntrl.dismiss(obj)
+
       })
     } else {
       obj.uploaded = false;
