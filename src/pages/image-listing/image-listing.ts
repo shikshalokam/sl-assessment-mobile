@@ -257,7 +257,7 @@ export class ImageListingPage {
             question: question.question,
             labels: [],
             responseType: question.responseType,
-            filesNotUploaded : this.failedUploadImageNames
+            filesNotUploaded : []
           },
           startTime: question.startTime,
           endTime: question.endTime
