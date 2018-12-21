@@ -25,14 +25,17 @@ export class SchoolListPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SchoolListPage');
+    this.utils.startLoader();
     this.storage.get('schools').then(schools => {
       if (schools) {
         this.schoolList = schools;
       } else {
         this.getSchoolListApi();
       }
+      this.utils.stopLoader();
     }).catch(error => {
       this.getSchoolListApi();
+      this.utils.stopLoader();
     })
   }
 

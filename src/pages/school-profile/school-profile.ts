@@ -39,12 +39,14 @@ export class SchoolProfilePage {
     this.getSchoolDetails();
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
+    this.utils.startLoader()
     console.log(this.navParams.get('_id'))
     this.storage.get('schoolsDetails').then(data => {
       const schoolData = JSON.parse(data);
       this.schoolProfile = schoolData[this.schoolId]['schoolProfile']['form'];
       this.submissionId = schoolData[this.schoolId]['assessments'][0].submissionId;
       this.isEditable = schoolData[this.schoolId]['schoolProfile']['isEditable'];
+      this.utils.stopLoader();
     }).catch(error => {
 
     })
