@@ -163,7 +163,7 @@ export class ImageListingPage {
           }
         }).catch(err => {
           const errorObject = {... this.errorObj};
-          this.utils.openToast("Something went wrong. Please try afetr 30 mins.")
+          this.utils.openToast("Something went wrong. Please try after sometime.")
           errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
            Details: ${JSON.stringify(err)}`;
           this.slack.pushException(errorObject);
@@ -211,7 +211,7 @@ export class ImageListingPage {
     this.utils.startLoader('Please wait while submitting')
     const payload = this.constructPayload();
     const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
-    const url = AppConfigs.survey.submission + submissionId;
+    const url = AppConfigs.survey.submission + submissionId+ '/';
     // console.log(JSON.stringify(payload))
     this.apiService.httpPost(url, payload, response => {
       this.utils.openToast(response.message);

@@ -74,7 +74,7 @@ export class HomePage {
 
   getSchoolListApi(): void {
     this.utils.startLoader();
-    this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors, response => {
+    this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors+'/', response => {
       this.schoolList = response.result;
       this.storage.set('schools', this.schoolList);
       if(!this.schoolList.length){
@@ -123,7 +123,7 @@ export class HomePage {
 
   getSchoolDetails(): void {
     for (const school of this.schoolList) {
-      this.apiService.httpGet(SchoolConfig.getSchoolDetails + school['_id'], this.successCallback, error => {
+      this.apiService.httpGet(SchoolConfig.getSchoolDetails + school['_id']+'/', this.successCallback, error => {
       })
     }
   }
