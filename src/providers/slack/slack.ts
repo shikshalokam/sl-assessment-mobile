@@ -36,6 +36,11 @@ export class SlackProvider {
       "text": "Mobile Exception Log. ",
       "attachments": [
         {
+          "fallback": "Environment",
+          "title": `Environment`,
+          "text": `${AppConfigs.environment}`
+        },
+        {
           "fallback": "Device Details",
           "title": `Device Details`,
           "text": `OS ${this.device.platform} ${this.device.version} , ${this.device.manufacturer}, ${this.device.model}`
@@ -54,6 +59,7 @@ export class SlackProvider {
           "title": `App version`,
           "text": `${AppConfigs.appVersion}`
         }
+
       ]
 
     }

@@ -34,6 +34,7 @@ export class HomePage {
   parentList: any =[];
   errorMsg: string;
   generalQuestions: any;
+  schoolIndex = 0;
 
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
@@ -122,10 +123,15 @@ export class HomePage {
 
 
   getSchoolDetails(): void {
-    for (const school of this.schoolList) {
-      this.apiService.httpGet(SchoolConfig.getSchoolDetails + school['_id']+'/', this.successCallback, error => {
+  if(!this.schoolIndex) {
+    this.utils.stopLoader();
+    this.utils.startLoader(`Please wait while fetching school details.`)
+  }
+  console.log(this.schoolIndex)
+    // for (const school of this.schoolList) {
+      this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[this.schoolIndex]['_id']+'/', this.successCallback, error => {
       })
-    }
+    // }
   }
 
   successCallback = (response) => {
@@ -147,6 +153,12 @@ export class HomePage {
       this.mappSubmissionData(schoolDetailsObj);
       this.getParentRegistry();
       this.mapGeneralQuesions()
+      // this.utils.stopLoader();
+
+    } else {
+      console.log("End of loader")
+      this.schoolIndex++;
+      this.getSchoolDetails();
     }
   }
 
