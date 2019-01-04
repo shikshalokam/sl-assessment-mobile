@@ -2,16 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Slides } from 'ionic-angular';
 // import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
-import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { TabsPage } from '../tabs/tabs';
 import { Network } from '@ionic-native/network';
-import { AndroidPermissions } from '@ionic-native/android-permissions';
-import { Geolocation } from '@ionic-native/geolocation';
-import { Diagnostic } from '@ionic-native/diagnostic';
-import { UtilsProvider } from '../../providers/utils/utils';
-import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 
 @Component({
@@ -37,10 +30,8 @@ export class WelcomePage {
   subscription: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage,
-    private auth: AuthProvider, private currentUser: CurrentUserProvider,
-    private toastCtrl: ToastController, private network: Network, private netwrkGpsProvider: NetworkGpsProvider,
-    private permissions: AndroidPermissions, private geolocation: Geolocation,
-    private diagnostic: Diagnostic, private utils: UtilsProvider, private locationAccuracy: LocationAccuracy) {
+    private auth: AuthProvider,
+    private toastCtrl: ToastController, private network: Network, private netwrkGpsProvider: NetworkGpsProvider) {
     this.subscription = this.network.onDisconnect().subscribe(() => {
       // this.presentToast('Network was disconnected :-(');
       this.networkAvailable = false

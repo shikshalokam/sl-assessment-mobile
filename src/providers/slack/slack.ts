@@ -1,5 +1,5 @@
 // import { HttpClient , HttpHeaders} from '@angular/common/http';
-import { Http, URLSearchParams, Headers } from '@angular/http';
+import { Http } from '@angular/http';
 
 import { Injectable } from '@angular/core';
 import { AppConfigs } from '../appConfig';

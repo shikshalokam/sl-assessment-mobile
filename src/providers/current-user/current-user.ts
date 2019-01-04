@@ -19,7 +19,7 @@ export class CurrentUserProvider {
   }
 
   setCurrentUserDetails(userTokens): void {
-    let userDetails = jwt_decode(userTokens.accessToken);
+    // let userDetails = jwt_decode(userTokens.accessToken);
     // let userId = userDetails.sub;
     // this.sqlite.create({
     //   name: userId+'.db',

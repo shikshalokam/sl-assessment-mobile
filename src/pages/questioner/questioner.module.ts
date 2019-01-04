@@ -3,8 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { QuestionerPage } from './questioner';
 import { ComponentsModule } from '../../components/components.module';
 import { DirectivesModule } from '../../directives/directives.module';
-import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule } from "@ngx-translate/core";
 @NgModule({
   declarations: [
     QuestionerPage,

@@ -5,9 +5,8 @@ import { HomePage } from '../home/home';
 import { SchoolListPage } from '../school-list/school-list';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
-import { App, NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
 import { FaqPage } from '../faq/faq';
-import { WelcomePage } from '../welcome/welcome';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
@@ -27,7 +26,7 @@ export class TabsPage {
   subscription: any;
 
   constructor(private auth: AuthProvider, private navCtrl: NavController,
-    private currentUser: CurrentUserProvider, private app: App,
+    private currentUser: CurrentUserProvider,
     private utils: UtilsProvider, private alertCntrl: AlertController,
     private ngps: NetworkGpsProvider, private feedback: FeedbackProvider) {
     this.selectedTab(0);

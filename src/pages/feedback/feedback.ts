@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController, Events } from 'ionic-angular';
-import { Storage } from "@ionic/storage"
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
@@ -24,7 +23,7 @@ export class FeedbackPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private viewCntrl: ViewController, private ngps: NetworkGpsProvider,
-    private storage: Storage, private events: Events,
+    private events: Events,
     private utils: UtilsProvider, private apiService: ApiProvider) {
       this.events.subscribe('network:offline', () => {
         this.networkConnected = false;

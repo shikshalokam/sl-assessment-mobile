@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { SectionListPage } from './section-list';
-import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule } from "@ngx-translate/core";
 import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({

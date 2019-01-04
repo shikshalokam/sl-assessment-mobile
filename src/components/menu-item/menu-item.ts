@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { NavParams, App, ViewController, Events , ModalController, Thumbnail} from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavParams, App, ViewController, Events , ModalController} from 'ionic-angular';
 import { RatingProvider } from '../../providers/rating/rating';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
