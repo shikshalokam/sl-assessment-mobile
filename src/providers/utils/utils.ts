@@ -13,7 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class UtilsProvider {
 
   constructor(public http: HttpClient, private locationAccuracy: LocationAccuracy, public loadingCtrl: LoadingController,
-    private toastCtrl: ToastController, private storage: Storage, private alertCtrl: AlertController) {
+    private toastCtrl: ToastController, private storage: Storage) {
     console.log('Hello UtilsProvider Provider');
   }
   loading: any;
@@ -89,7 +89,7 @@ export class UtilsProvider {
     if (!question.value.length) {
       return false
     }
-    const noOfInstanceRequired = question.noOfInstances ? question.noOfInstances : 0;
+    // const noOfInstanceRequired = question.noOfInstances ? question.noOfInstances : 0;
     // if(question.ins)
     // if(noOfInstanceRequired && (question.value.length < noOfInstanceRequired)){
     //   return false

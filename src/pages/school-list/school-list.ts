@@ -3,12 +3,8 @@ import { NavController, NavParams, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { SchoolConfig } from '../../providers/school-list/schoolConfig';
 import { ApiProvider } from '../../providers/api/api';
-import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { UtilsProvider } from '../../providers/utils/utils';
-import { AppConfigs } from '../../providers/appConfig';
-import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
 import { WelcomePage } from '../welcome/welcome';
-import { PopoverController } from 'ionic-angular';
 
 @Component({
   selector: 'page-school-list',
@@ -18,9 +14,8 @@ export class SchoolListPage {
 
   schoolList: Array<object>;
   schoolDetails = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams
-    , private storage: Storage, private apiService: ApiProvider, private appCtrl: App,
-    private currentUser: CurrentUserProvider, private utils: UtilsProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private apiService: ApiProvider, private appCtrl: App,
+   private utils: UtilsProvider) {
   }
 
   ionViewDidLoad() {
@@ -57,7 +52,6 @@ export class SchoolListPage {
   }
 
   getSchoolDetails(): void {
-    let schoolDetails = [];
     // this.utils.startLoader();
     for (const school of this.schoolList) {
       console.log(school['_id']);

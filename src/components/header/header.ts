@@ -2,8 +2,6 @@ import { Component, Input, OnDestroy, Output, EventEmitter } from '@angular/core
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { Events, ModalController, ViewController } from 'ionic-angular';
-import { UtilsProvider } from '../../providers/utils/utils';
-import { Network } from '@ionic-native/network';
 import { QuestionDashboardPage } from '../../pages/question-dashboard/question-dashboard';
 
 @Component({
@@ -28,8 +26,8 @@ export class HeaderComponent implements OnDestroy{
 
   constructor(private ngps: NetworkGpsProvider, 
     private feedbackService: FeedbackProvider, 
-    private events: Events, private utils: UtilsProvider,
-    private network: Network, private modalcntrl: ModalController,
+    private events: Events,
+    private modalcntrl: ModalController,
     private viewCtrl: ViewController) {
 
     this.subscription = this.events.subscribe('network:offline', () => {

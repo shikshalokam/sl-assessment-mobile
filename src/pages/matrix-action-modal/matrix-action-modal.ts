@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ViewController } from 'ionic-angular';
 import { UtilsProvider } from '../../providers/utils/utils';
-import { isDefaultChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
 
 
 @Component({
@@ -21,7 +20,6 @@ export class MatrixActionModalPage {
   constructor(public navCtrl: NavController, private utils: UtilsProvider,
     public navParams: NavParams, private viewCntrl: ViewController) {
     this.selectedIndex = navParams.data.selectedIndex;
-    const data = navParams.data.data;
     // this.data = Object.assign(data);
     this.data = navParams.data.data;
     this.schoolId = navParams.data.schoolId;

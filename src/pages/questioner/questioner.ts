@@ -1,8 +1,7 @@
-import { Component, ViewChild, ComponentFactory, ComponentFactoryResolver, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
-import { SectionListPage } from '../section-list/section-list';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 
 @IonicPage()
@@ -32,7 +31,7 @@ export class QuestionerPage {
   localImageListKey: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage, private appCtrl: App, private cfr: ComponentFactoryResolver,
+    private storage: Storage,
     private utils: UtilsProvider, private feedback: FeedbackProvider) {
   }
 
@@ -88,11 +87,11 @@ export class QuestionerPage {
       }
     } else if (status === 'completed') {
       this.utils.setLocalSchoolData(this.schoolData);
-      const opt = {
-        _id: this.schoolId,
-        name: this.schoolName,
-        selectedEvidence: this.selectedEvidenceIndex
-      }
+      // const opt = {
+      //   _id: this.schoolId,
+      //   name: this.schoolName,
+      //   selectedEvidence: this.selectedEvidenceIndex
+      // }
       this.navCtrl.pop()
     } else {
       this.next('completed')

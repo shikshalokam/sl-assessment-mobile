@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App , ModalController} from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
-import { schoolProfileConfig } from './school-profile.config';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
 import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
 import { RatingProvider } from '../../providers/rating/rating';
-import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AppConfigs } from '../../providers/appConfig';
 import { ParentsFormPage } from '../parents-form/parents-form';
 
@@ -30,7 +28,6 @@ export class SchoolProfilePage {
     private storage: Storage,
     private ratingService: RatingProvider,
     private app: App,
-    private feedback: FeedbackProvider,
     private modalCntrl: ModalController) {
   }
 

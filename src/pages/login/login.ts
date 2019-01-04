@@ -23,7 +23,7 @@ export class LoginPage {
   subscription: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage,
-    private auth: AuthProvider, private currentUser: CurrentUserProvider,
+    private auth: AuthProvider,
     private toastCtrl: ToastController, private network: Network,
     private permissions: AndroidPermissions, private geolocation: Geolocation,
     private diagnostic: Diagnostic, private utils: UtilsProvider) {
