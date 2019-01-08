@@ -5,6 +5,7 @@ import { SchoolConfig } from '../../providers/school-list/schoolConfig';
 import { ApiProvider } from '../../providers/api/api';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { WelcomePage } from '../welcome/welcome';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @Component({
   selector: 'page-school-list',
@@ -15,22 +16,30 @@ export class SchoolListPage {
   schoolList: Array<object>;
   schoolDetails = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private apiService: ApiProvider, private appCtrl: App,
-   private utils: UtilsProvider) {
+   private utils: UtilsProvider, private localStotrage: LocalStorageProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SchoolListPage');
     this.utils.startLoader();
-    this.storage.get('schools').then(schools => {
-      if (schools) {
-        this.schoolList = schools;
-      } else {
-        this.getSchoolListApi();
-      }
+    // this.storage.get('schools').then(schools => {
+    //   if (schools) {
+    //     this.schoolList = schools;
+    //   } else {
+    //     this.getSchoolListApi();
+    //   }
+    //   this.utils.stopLoader();
+    // }).catch(error => {
+    //   this.getSchoolListApi();
+    //   this.utils.stopLoader();
+    // })
+    this.localStotrage.getLocalStorage('schools').then(schools => {
+      console.log(JSON.stringify(schools))
+      this.schoolList = schools;
       this.utils.stopLoader();
     }).catch(error => {
-      this.getSchoolListApi();
       this.utils.stopLoader();
+      // this.getSchoolListApi();
     })
   }
 

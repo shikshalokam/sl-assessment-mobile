@@ -6,6 +6,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @Component({
   selector: 'page-parents-form',
@@ -25,8 +26,10 @@ export class ParentsFormPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private viewCntrl: ViewController, private ngps: NetworkGpsProvider,
-    private storage: Storage, private events: Events,
+    private storage: Storage, private events: Events, private localStorage: LocalStorageProvider,
     private utils: UtilsProvider, private apiService: ApiProvider) {
+    this.schoolId = this.navParams.get('_id');
+    this.schoolName = this.navParams.get('name');
     this.events.subscribe('network:offline', () => {
       this.networkConnected = false;
     });
@@ -40,32 +43,62 @@ export class ParentsFormPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ParentsFormPage');
-    this.storage.get("parentRegisterForm").then(formFields => {
+    this.localStorage.getLocalStorage('parentRegisterForm').then(formFields => {
       if (formFields) {
-        for (const formField of JSON.parse(formFields)) {
+        for (const formField of formFields) {
           if (formField.visible) {
             this.formFields.push(formField)
           }
         }
         this.form = this.createFormGroup();
       }
-    })
-    this.storage.get('schoolsDetails').then(schoolDetails => {
-      if (schoolDetails) {
-        this.schoolId = this.navParams.get('_id');
-        this.schoolName = this.navParams.get('name');
-        this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
-        this.programId = this.schoolDetails['program']._id;
-      }
+    }).catch(error => {
     })
 
-    this.storage.get('ParentInfo').then(success => {
-      if (success) {
-        this.parentInfoList = success;
+    this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then(schoolDetails => {
+      if (schoolDetails) {
+        this.schoolDetails = schoolDetails;
+        this.programId = this.schoolDetails['program']._id;
+      }
+    }).catch(error => {
+    })
+
+    this.localStorage.getLocalStorage('ParentInfo').then(data => {
+      if (data) {
+        this.parentInfoList = data;
       } else {
         this.parentInfoList = [];
       }
+    }).catch(error => {
+
     })
+    // this.storage.get("parentRegisterForm").then(formFields => {
+    //   if (formFields) {
+    //     for (const formField of JSON.parse(formFields)) {
+    //       if (formField.visible) {
+    //         this.formFields.push(formField)
+    //       }
+    //     }
+    //     this.form = this.createFormGroup();
+    //   }
+    // })
+
+    // this.storage.get('schoolsDetails').then(schoolDetails => {
+    //   if (schoolDetails) {
+    //     this.schoolId = this.navParams.get('_id');
+    //     this.schoolName = this.navParams.get('name');
+    //     this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
+    //     this.programId = this.schoolDetails['program']._id;
+    //   }
+    // })
+
+    // this.storage.get('ParentInfo').then(success => {
+    //   if (success) {
+    //     this.parentInfoList = success;
+    //   } else {
+    //     this.parentInfoList = [];
+    //   }
+    // })
   }
 
   createFormGroup(): any {

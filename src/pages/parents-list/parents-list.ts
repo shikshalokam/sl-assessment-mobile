@@ -6,6 +6,7 @@ import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @IonicPage()
 @Component({
@@ -30,6 +31,7 @@ export class ParentsListPage {
     private modalCntrl: ModalController, 
     private ngps: NetworkGpsProvider,
     private utils: UtilsProvider,
+    private localStorage: LocalStorageProvider,
     private apiService: ApiProvider,
    private events: Events,) {
       this.events.subscribe('network:offline', () => {
@@ -49,23 +51,29 @@ export class ParentsListPage {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.storage.get('parentRegisterForm').then(form => {
-      console.log(this.schoolId)
-      this.storage.get('schoolsDetails').then(schoolDetails => {
+      // console.log(this.schoolId)
+      this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then(schoolDetails => {
         if (schoolDetails) {
-          this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
+          this.schoolDetails = schoolDetails;
           this.showUploadBtn = this.checkForUploadBtn();
-          // console.log(JSON.stringify(schoolDet[this.schoolId]['schoolProfile']))
-          // this.programId = schoolDet[this.schoolId]['program'];
-
         }
-        // this.programId = schoolDet[this.schoolId].program._id;
-        // console.log(JSON.stringify(schoolDet[this.schoolId]['program']))
+      }).catch(error => {
+
       })
+      // this.storage.get('schoolsDetails').then(schoolDetails => {
+      //   if (schoolDetails) {
+      //     this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
+      //     this.showUploadBtn = this.checkForUploadBtn();
+      //     // console.log(JSON.stringify(schoolDet[this.schoolId]['schoolProfile']))
+      //     // this.programId = schoolDet[this.schoolId]['program'];
+
+      //   }
+      //   // this.programId = schoolDet[this.schoolId].program._id;
+      //   // console.log(JSON.stringify(schoolDet[this.schoolId]['program']))
+      // })
     })
 
     this.storage.get('parentDetails').then(success => {
-      console.log(this.schoolId)
-      console.log(success)
       this.allSchoolParentList = JSON.parse(success);
       if(JSON.parse(success)){
         this.parentInfoList = this.allSchoolParentList[this.schoolId] ? this.allSchoolParentList[this.schoolId] : [];
@@ -92,7 +100,8 @@ export class ParentsListPage {
         data.schoolName = this.schoolName;
         this.parentInfoList.push(data);
         this.showUploadBtn = this.checkForUploadBtn();
-        this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
+        this.localStorage.setLocalStorage('parentDetails', this.allSchoolParentList)
+        // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
       }
 
     })
@@ -130,7 +139,9 @@ export class ParentsListPage {
       parent.uploaded = true;
     }
     this.showUploadBtn = this.checkForUploadBtn();
-    this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
+    this.localStorage.setLocalStorage('parentDetails', this.allSchoolParentList)
+
+    // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
   }
 
   checkForUploadBtn() {
