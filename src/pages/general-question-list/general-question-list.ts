@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, Events, AlertController } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 import { GeneralQuestionPage } from '../general-question/general-question';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
-import { Diagnostic } from '@ionic-native/diagnostic';
 import { GeneralQuestionSubmitPage } from '../general-question-submit/general-question-submit';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Network } from '@ionic-native/network';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @IonicPage()
 @Component({
@@ -21,9 +20,9 @@ export class GeneralQuestionListPage {
   enableSubmitBtn: boolean = false;
   networkAvailable: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private utils: UtilsProvider,
-    private modal: ModalController, private events: Events, private ngps: NetworkGpsProvider,  private diagnostic: Diagnostic,
-    private alertCntrl: AlertController, private network: Network) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private utils: UtilsProvider,
+    private modal: ModalController, private events: Events, private ngps: NetworkGpsProvider,
+    private alertCntrl: AlertController, private network: Network, private localStorage: LocalStorageProvider) {
     this.events.subscribe('network:offline', () => {
     });
 
@@ -35,16 +34,25 @@ export class GeneralQuestionListPage {
 
   ionViewWillEnter() {
     console.log('ionViewDidLoad GeneralQuestionListPage');
-    this.schoolId = this.navParams.get('_id')
-    this.storage.get('generalQuestions').then( data => {
+    this.schoolId = this.navParams.get('_id');
+    this.localStorage.getLocalStorage('generalQuestions').then( data => {
       if(data){
-        this.allGeneralQuestions = JSON.parse(data);
+        this.allGeneralQuestions = data;
         this.generalQuestions = this.allGeneralQuestions[this.schoolId];
         this.enableSubmitBtn = this.enableGeneralaSubmission();
       }
     }).catch(error => {
 
     })
+    // this.storage.get('generalQuestions').then( data => {
+    //   if(data){
+    //     this.allGeneralQuestions = JSON.parse(data);
+    //     this.generalQuestions = this.allGeneralQuestions[this.schoolId];
+    //     this.enableSubmitBtn = this.enableGeneralaSubmission();
+    //   }
+    // }).catch(error => {
+
+    // })
   }
 
   OpenQuestionModal(index) {
@@ -55,7 +63,8 @@ export class GeneralQuestionListPage {
         this.generalQuestions[index] = data;
         console.log(JSON.stringify(data));
         this.enableSubmitBtn = this.enableGeneralaSubmission();
-        this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
+        this.localStorage.setLocalStorage('generalQuestions', this.allGeneralQuestions)
+        // this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
       }
     })
     modal.present();
