@@ -4,13 +4,7 @@ import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
-
-/**
- * Generated class for the EvidenceListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @IonicPage()
 @Component({
@@ -27,28 +21,49 @@ export class EvidenceListPage {
   isIos: boolean = this.platform.is('ios');
   generalQuestions: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage, private appCtrl: App, private utils: UtilsProvider,
+    private storage: Storage, private appCtrl: App, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
     private feedback: FeedbackProvider, private evdnsServ: EvidenceProvider, private platform: Platform) {
+      this.schoolId = this.navParams.get('_id');
+      this.schoolName = this.navParams.get('name');
   }
 
   ionViewWillEnter() {
     console.log('ionViewDidLoad EvidenceListPage');
-    this.schoolId = this.navParams.get('_id');
-    this.schoolName = this.navParams.get('name');
-    this.storage.get('generalQuestions').then(data => {
-      this.generalQuestions = JSON.parse(data)[this.schoolId];
-    }).catch(error => {
 
-    })
+    // this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then(data => {
+    //   this.generalQuestions = data[this.schoolId];
+    // }).catch(error => {
+    // })
+    // this.storage.get('generalQuestions_'+this.schoolId).then(data => {
+    //   this.generalQuestions = JSON.parse(data)[this.schoolId];
+    // }).catch(error => {
+
+    // })
     this.utils.startLoader();
-    this.storage.get('schoolsDetails').then(data => {
-      this.utils.stopLoader()
-      this.schoolData = JSON.parse(data);
-      this.schoolEvidences = this.schoolData[this.schoolId]['assessments'][0]['evidences'];
+
+    this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( successData => {
+      // console.log("general questions")
+      this.generalQuestions = successData;
+    }).then(error => {
+    })
+    this.localStorage.getLocalStorage("schoolDetails_"+this.schoolId).then( successData => {
+      this.utils.stopLoader();
+      console.log(successData)
+      this.schoolData = successData;
+      this.schoolEvidences = this.schoolData['assessments'][0]['evidences'];
       this.checkForProgressStatus();
     }).catch(error => {
-      this.utils.stopLoader()
+      this.utils.stopLoader()      
     })
+
+  //   this.storage.get('schoolsDetails').then(data => {
+  //     // this.utils.stopLoader()
+  //     this.schoolData = JSON.parse(data);
+  //     this.schoolEvidences = this.schoolData[this.schoolId]['assessments'][0]['evidences'];
+  //     this.checkForProgressStatus();
+  //   }).catch(error => {
+  //     // this.utils.stopLoader()
+  //   })
   }
 
   goToGeneralQuestionList() : void {

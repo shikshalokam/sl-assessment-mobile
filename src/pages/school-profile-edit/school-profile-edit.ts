@@ -5,6 +5,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
 import { AppConfigs } from '../../providers/appConfig';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class SchoolProfileEditPage {
     private storage: Storage,
     private app: App,
     private ngps: NetworkGpsProvider,
-    private events: Events) {
+    private events: Events, 
+    private localStorage: LocalStorageProvider) {
   }
 
   ionViewDidLoad() {
@@ -34,12 +36,10 @@ export class SchoolProfileEditPage {
     this.getSchoolDetails();
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
-    console.log(this.navParams.get('_id'))
-    this.storage.get('schoolsDetails').then(data => {
-      this.schoolData = JSON.parse(data);
-      this.schoolProfile = this.schoolData[this.schoolId]['schoolProfile']['form'];
-      console.log(JSON.stringify(this.schoolProfile));
-
+    console.log(this.navParams.get('_id'));
+    this.localStorage.getLocalStorage("schoolDetails_"+this.schoolId).then(data => {
+      this.schoolData = data;
+      this.schoolProfile = this.schoolData['schoolProfile']['form'];
       this.events.subscribe('network:offline', () => {
         this.networkConnected = false;
       });
@@ -49,10 +49,27 @@ export class SchoolProfileEditPage {
         this.networkConnected = true;
       });
       this.networkConnected = this.ngps.getNetworkStatus()
-
     }).catch(error => {
 
     })
+    // this.storage.get('schoolsDetails').then(data => {
+    //   this.schoolData = JSON.parse(data);
+    //   this.schoolProfile = this.schoolData[this.schoolId]['schoolProfile']['form'];
+    //   console.log(JSON.stringify(this.schoolProfile));
+
+      // this.events.subscribe('network:offline', () => {
+      //   this.networkConnected = false;
+      // });
+  
+      // // Online event
+      // this.events.subscribe('network:online', () => {
+      //   this.networkConnected = true;
+      // });
+      // this.networkConnected = this.ngps.getNetworkStatus()
+
+    // }).catch(error => {
+
+    // })
 
   }
 
@@ -88,12 +105,12 @@ export class SchoolProfileEditPage {
         payload.schoolProfile[field['field']] = field['value'];
       }
       console.log(JSON.stringify(payload));
-      const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
+      const submissionId = this.schoolData['assessments'][0].submissionId;
       const url = AppConfigs.survey.submission + submissionId;
       this.apiService.httpPost(url, payload, response => {
         console.log(JSON.stringify(response));
         this.utils.openToast(response.message);
-        this.utils.setLocalSchoolData(this.schoolData);
+        this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
         this.utils.stopLoader();
          this.navCtrl.pop();
       }, error => {
@@ -106,7 +123,8 @@ export class SchoolProfileEditPage {
   }
 
   saveProfile() : void {
-    this.utils.setLocalSchoolData(this.schoolData);
+    this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
+    // this.utils.setLocalSchoolData(this.schoolData);
     this.navCtrl.pop();
 
   }
