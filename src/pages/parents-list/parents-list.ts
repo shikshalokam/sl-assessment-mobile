@@ -73,10 +73,10 @@ export class ParentsListPage {
       // })
     })
 
-    this.storage.get('parentDetails').then(success => {
-      this.allSchoolParentList = JSON.parse(success);
-      if(JSON.parse(success)){
-        this.parentInfoList = this.allSchoolParentList[this.schoolId] ? this.allSchoolParentList[this.schoolId] : [];
+    this.storage.get('parentDetails_'+ this.schoolId).then(parentData => {
+      this.allSchoolParentList = parentData;
+      if(parentData){
+        this.parentInfoList = this.allSchoolParentList ? this.allSchoolParentList : [];
         this.showUploadBtn = this.checkForUploadBtn();
       } else {
         this.parentInfoList = [];
@@ -100,7 +100,7 @@ export class ParentsListPage {
         data.schoolName = this.schoolName;
         this.parentInfoList.push(data);
         this.showUploadBtn = this.checkForUploadBtn();
-        this.localStorage.setLocalStorage('parentDetails', this.allSchoolParentList)
+        this.localStorage.setLocalStorage('parentDetails_'+this.schoolId, this.allSchoolParentList)
         // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
       }
 
@@ -139,7 +139,7 @@ export class ParentsListPage {
       parent.uploaded = true;
     }
     this.showUploadBtn = this.checkForUploadBtn();
-    this.localStorage.setLocalStorage('parentDetails', this.allSchoolParentList)
+    this.localStorage.setLocalStorage('parentDetails_'+this.schoolId, this.allSchoolParentList)
 
     // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
   }
