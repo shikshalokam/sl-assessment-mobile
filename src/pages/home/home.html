@@ -9,26 +9,26 @@
 <ion-content>
   <ion-card>
     <ion-card-content>
-      <!-- Add card content here! -->
       <h2 >{{'labels.welcome'|translate}} !</h2>
-      <!-- {{userData?.name}} -->
     </ion-card-content>
   </ion-card>
 
   <ion-card *ngFor="let school of schoolList; let i = index">
 
     <ion-item-group>
-      <ion-item-divider color="light">
-        <h3 class="headerText">
-          <ion-icon name="book" margin-right float-left></ion-icon>
-          <span class="_ellipsis overflow" float-left >{{school?.name}} - {{school?.externalId}}</span>
-          <ion-icon name='more' class="viewIcon" float-right large (click)="openMenu($event,school)"></ion-icon>
+      <ion-item-divider text-wrap >
+        <h3 class="headerText _flex-box">
+          <div class="_flex-box" style="flex:1" (click)="gotToEvidenceList(school)">
+              <ion-icon name="book" margin-right ></ion-icon>
+              <div style="flex:1" >{{school?.name}} - {{school?.externalId}}</div>
+          </div>
+          <ion-icon name='more' class="viewIcon"  large (click)="openMenu($event,i)"></ion-icon>
           <!-- <span float-right class="more">View </span> -->
         </h3>
       </ion-item-divider>
     </ion-item-group>
 
-    <ion-card-content no-padding *ngIf="school && schoolDetails[school._id.toString()]">
+    <!-- <ion-card-content no-padding *ngIf="school && schoolDetails[school._id.toString()]">
 
       <ion-list>
         <button ion-item   [disabled]="evidence?.notApplicable" (click)="goToSections(school, j)" *ngFor="let evidence of schoolDetails[school._id.toString()]['assessments'][0]['evidences'] |slice:0:3; let j = index">
@@ -60,7 +60,7 @@
       <div *ngIf="errorMsg" class="_errorBox">
          <span class="_errorMsg">{{errorMsg}}</span> 
       </div>
-    </ion-card-content>
+    </ion-card-content> -->
 <!-- 
     <ion-row no-padding class="separation">
       <ion-col class="_justify-content-space-between">

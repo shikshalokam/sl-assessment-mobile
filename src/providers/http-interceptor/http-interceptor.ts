@@ -4,19 +4,15 @@ import {
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Http, URLSearchParams } from '@angular/http';
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { CurrentUserProvider } from '../current-user/current-user';
-import { AppConfigs } from '../appConfig';
-import { AuthProvider } from '../auth/auth';
 
 @Injectable()
 export class HttpInterceptorProvider implements HttpInterceptor {
 
-  constructor(public currentUser: CurrentUserProvider, private auth: AuthProvider,
-    private http: Http) {
+  constructor(public currentUser: CurrentUserProvider) {
 
   }
 

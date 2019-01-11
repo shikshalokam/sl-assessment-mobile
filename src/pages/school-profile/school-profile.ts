@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App , ModalController} from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
-import { schoolProfileConfig } from './school-profile.config';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
 import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
 import { RatingProvider } from '../../providers/rating/rating';
-import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AppConfigs } from '../../providers/appConfig';
 import { ParentsFormPage } from '../parents-form/parents-form';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @IonicPage()
 @Component({
@@ -30,26 +29,34 @@ export class SchoolProfilePage {
     private storage: Storage,
     private ratingService: RatingProvider,
     private app: App,
-    private feedback: FeedbackProvider,
-    private modalCntrl: ModalController) {
+    private modalCntrl: ModalController,
+    private localStorage: LocalStorageProvider) {
   }
 
   ionViewWillEnter() {
     console.log('ionViewDidLoad SchoolProfilePage');
-    this.getSchoolDetails();
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.utils.startLoader()
-    console.log(this.navParams.get('_id'))
-    this.storage.get('schoolsDetails').then(data => {
-      const schoolData = JSON.parse(data);
-      this.schoolProfile = schoolData[this.schoolId]['schoolProfile']['form'];
-      this.submissionId = schoolData[this.schoolId]['assessments'][0].submissionId;
-      this.isEditable = schoolData[this.schoolId]['schoolProfile']['isEditable'];
+    console.log(this.navParams.get('_id'));
+    this.localStorage.getLocalStorage("schoolDetails_"+this.schoolId).then( data => {
+      const schoolData = data;
+      this.schoolProfile = schoolData['schoolProfile']['form'];
+      this.submissionId = schoolData['assessments'][0].submissionId;
+      this.isEditable = schoolData['schoolProfile']['isEditable'];
       this.utils.stopLoader();
     }).catch(error => {
-
+      this.utils.stopLoader();      
     })
+    // this.storage.get('schoolsDetails').then(data => {
+    //   const schoolData = JSON.parse(data);
+    //   this.schoolProfile = schoolData[this.schoolId]['schoolProfile']['form'];
+    //   this.submissionId = schoolData[this.schoolId]['assessments'][0].submissionId;
+    //   this.isEditable = schoolData[this.schoolId]['schoolProfile']['isEditable'];
+    //   this.utils.stopLoader();
+    // }).catch(error => {
+
+    // })
 
   }
 

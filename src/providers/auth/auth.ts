@@ -72,11 +72,11 @@ export class AuthProvider {
         .subscribe((data: any) => {
           console.log(JSON.stringify(data))
           let parsedData = JSON.parse(data._body);
-          let userTokens = {
-            accessToken: parsedData.access_token,
-            refreshToken: parsedData.refresh_token,
-            idToken: parsedData.id_token
-          };
+          // let userTokens = {
+          //   accessToken: parsedData.access_token,
+          //   refreshToken: parsedData.refresh_token,
+          //   idToken: parsedData.id_token
+          // };
           resolve(parsedData);
         }, error => {
           resolve(error);

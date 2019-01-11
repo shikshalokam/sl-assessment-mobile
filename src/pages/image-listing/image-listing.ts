@@ -7,6 +7,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { SlackProvider } from '../../providers/slack/slack';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 declare var cordova: any;
 
@@ -18,7 +19,7 @@ export class ImageListingPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private file: File, private fileTransfer: FileTransfer,
-    private apiService: ApiProvider, private utils: UtilsProvider,
+    private apiService: ApiProvider, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
     private app: App, private platform: Platform, private slack: SlackProvider) {
   }
 
@@ -50,15 +51,25 @@ export class ImageListingPage {
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
 
-    this.storage.get('schoolsDetails').then(data => {
-      this.schoolData = JSON.parse(data);
-      this.currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex];
+    this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then( data => {
+      this.schoolData = data;
+      this.currentEvidence = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex];
       this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.schoolId;
-      this.evidenceSections = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
-      this.selectedEvidenceName = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
+      this.evidenceSections = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
+      this.selectedEvidenceName = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
     }).catch(error => {
 
     })
+
+    // this.storage.get('schoolsDetails').then(data => {
+    //   this.schoolData = JSON.parse(data);
+    //   this.currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex];
+    //   this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.schoolId;
+    //   this.evidenceSections = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
+    //   this.selectedEvidenceName = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
+    // }).catch(error => {
+
+    // })
     this.storage.get("allImageList").then(data => {
       if (data && JSON.parse(data)[this.schoolId]) {
         this.uploadImages = (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) : [];
@@ -75,7 +86,7 @@ export class ImageListingPage {
   }
 
   getImageUploadUrls() {
-    const submissionId = this.schoolData[this.schoolId]['assessments'][0]['submissionId'];
+    const submissionId = this.schoolData['assessments'][0]['submissionId'];
     const files = {
       "files": [],
       submissionId: submissionId
@@ -210,13 +221,14 @@ export class ImageListingPage {
   submitEvidence() {
     this.utils.startLoader('Please wait while submitting')
     const payload = this.constructPayload();
-    const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
+    const submissionId = this.schoolData['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId+ '/';
     // console.log(JSON.stringify(payload))
     this.apiService.httpPost(url, payload, response => {
       this.utils.openToast(response.message);
-      this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
-      this.utils.setLocalSchoolData(this.schoolData);
+      this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+      // this.utils.setLocalSchoolData(this.schoolData);
+      this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData);
       const options = {
         _id: this.schoolId,
         name: this.schoolName
@@ -241,7 +253,7 @@ export class ImageListingPage {
       startTime: 0,
       endTime: 0
     };
-    const currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]
+    const currentEvidence = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]
     evidence.id = currentEvidence._id;
     evidence.externalId = currentEvidence.externalId;
     evidence.startTime = currentEvidence.startTime;
@@ -311,7 +323,7 @@ export class ImageListingPage {
 
   constructMatrixObject(question) {
     const value = [];
-    const currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]
+    const currentEvidence = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]
 
     for (const instance of question.value) {
       let eachInstance = {};

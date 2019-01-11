@@ -1,9 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { MatrixModalComponent } from '../matrix-modal/matrix-modal';
-import { ModalController, NavParams, AlertController } from 'ionic-angular';
+import { ModalController, AlertController } from 'ionic-angular';
 import { MatrixActionModalPage } from '../../pages/matrix-action-modal/matrix-action-modal';
 import { UtilsProvider } from '../../providers/utils/utils';
-import { QuestionDashboardPage } from '../../pages/question-dashboard/question-dashboard';
 
 @Component({
   selector: 'matrix-type',

@@ -8,7 +8,7 @@ import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { AppConfigs } from '../appConfig';
 import { ApiProvider } from '../api/api';
 import { RemarksPage } from '../../pages/remarks/remarks';
-
+import { LocalStorageProvider } from '../local-storage/local-storage';
 
 @Injectable()
 export class EvidenceProvider {
@@ -19,7 +19,7 @@ export class EvidenceProvider {
 
   constructor(public http: HttpClient, private actionSheet: ActionSheetController,
     private appCtrl: App, private storage: Storage, private utils: UtilsProvider,
-    private diagnostic: Diagnostic, private netwrkGpsProvider: NetworkGpsProvider,
+    private diagnostic: Diagnostic, private netwrkGpsProvider: NetworkGpsProvider, private localStorage: LocalStorageProvider,
     private apiService: ApiProvider, private alertCtrl: AlertController, private modalCtrl: ModalController) {
     console.log('Hello EvidenceProvider Provider');
     this.storage.get('schools').then(data => {
@@ -31,7 +31,7 @@ export class EvidenceProvider {
     this.schoolDetails = params.schoolDetails;
     this.schoolId = params._id;
     this.evidenceIndex = params.selectedEvidence;
-    const selectedECM = this.schoolDetails[this.schoolId]['assessments'][0]['evidences'][this.evidenceIndex];
+    const selectedECM = this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex];
 
     let action = this.actionSheet.create({
       title: "Survey actions",
@@ -50,8 +50,9 @@ export class EvidenceProvider {
           handler: () => {
             this.diagnostic.isLocationEnabled().then(success => {
               if (success) {
-                params.schoolDetails[params._id]['assessments'][0]['evidences'][params.selectedEvidence].startTime = Date.now();
-                this.utils.setLocalSchoolData(params.schoolDetails);
+                params.schoolDetails['assessments'][0]['evidences'][params.selectedEvidence].startTime = Date.now();
+                // this.utils.setLocalSchoolData(params.schoolDetails);
+                this.localStorage.setLocalStorage("schoolDetails_"+this.schoolId, params.schoolDetails)
                 delete params.schoolDetails;
                 this.appCtrl.getRootNav().push('SectionListPage', params);
               } else {
@@ -140,14 +141,15 @@ export class EvidenceProvider {
   notApplicable(selectedECM) {
     this.utils.startLoader()
     const payload = this.constructPayload(selectedECM);
-    const submissionId = this.schoolDetails[this.schoolId]['assessments'][0].submissionId;
+    const submissionId = this.schoolDetails['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
     this.apiService.httpPost(url, payload, response => {
       console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
-      this.schoolDetails[this.schoolId]['assessments'][0]['evidences'][this.evidenceIndex].isSubmitted = true;
-      this.schoolDetails[this.schoolId]['assessments'][0]['evidences'][this.evidenceIndex].notApplicable = true;
-      this.utils.setLocalSchoolData(this.schoolDetails);
+      this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].isSubmitted = true;
+      this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].notApplicable = true;
+      this.localStorage.setLocalStorage("schoolDetails_"+this.schoolId, this.schoolDetails)
+      // this.utils.setLocalSchoolData(this.schoolDetails);
       this.utils.stopLoader();
 
     }, error => {
