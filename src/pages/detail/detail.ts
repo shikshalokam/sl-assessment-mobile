@@ -4,6 +4,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { WelcomePage } from '../welcome/welcome';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { AuthProvider } from '../../providers/auth/auth';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 @Component({
   selector: 'page-detail',
@@ -18,7 +20,9 @@ export class DetailPage {
     private app: App,
     private alertctrl: AlertController,
     private currentUser: CurrentUserProvider,
-    private auth: AuthProvider) {
+    private auth: AuthProvider, 
+    private localStorage: LocalStorageProvider,
+    private utils: UtilsProvider) {
   }
 
   content: any;
@@ -53,10 +57,16 @@ export class DetailPage {
           text: 'Yes',
           role: 'role',
           handler: data => {
-            this.auth.doLogout();
-            this.currentUser.removeUser();
-            let nav = this.app.getRootNav();
-            nav.setRoot(WelcomePage);
+            this.utils.startLoader()
+            this.localStorage.deleteAllStorage().then(success => {
+              this.utils.stopLoader();
+              this.auth.doLogout();
+              this.currentUser.removeUser();
+              let nav = this.app.getRootNav();
+              nav.setRoot(WelcomePage);
+            }).catch (error => {
+              this.utils.stopLoader();
+            })
           }
         }
       ],

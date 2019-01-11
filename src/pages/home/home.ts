@@ -138,8 +138,9 @@ export class HomePage {
       // const generalQuestions = {}
 
       this.localStorage.setLocalStorage("schoolDetails_" + this.schoolList[this.schoolIndex]['_id'], response.result);
-      this.localStorage.setLocalStorage("generalQuestions_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
-
+      console.log(response.result['assessments'][0]['generalQuestions'])
+      this.localStorage.setLocalStorage("generalQuestions_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
+      this.localStorage.setLocalStorage("generalQuestionsCopy_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
       this.schoolList[this.schoolIndex]['submissionId'] = response.result['assessments'][0].submissionId;
       this.schoolList[this.schoolIndex]['programId'] = response.result.program._id;
       this.mappSubmissionData(response.result);
@@ -270,31 +271,40 @@ export class HomePage {
   getParentRegistry() {
     for (const school of this.schoolList) {
       // console.log(school['_id']);
-      this.apiService.httpGet(AppConfigs.parentInfo.getParentList + school['_id'], this.parentListSuccessCallback, error => {
+      this.apiService.httpGet(AppConfigs.parentInfo.getParentList + school['_id'], data => {
+        this.parentListSuccessCallback(data.result)
+      }, error => {
 
       })
     }
   }
 
-  parentListSuccessCallback = (data) => {
-    this.parentList.push(data.result);
+  parentListSuccessCallback = (parentdata) => {
+    this.parentList.push(parentdata);
+    for (const parent of parentdata) {
+      if (parent) {
+        parent.uploaded = true;
+      }
+    }
+    const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
+    this.localStorage.setLocalStorage("parentDetails_"+schoolId, parentdata)
     if (this.parentList.length === this.schoolList.length) {
       // console.log(JSON.stringify(this.parentList))
 
-      const parentDetailsObj = {};
+      // const parentDetailsObj = {};
       this.utils.stopLoader();
-      for (const parentdata of this.parentList) {
-        const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
-        if (schoolId) {
+      // for (const parentdata of this.parentList) {
+      //   const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
+      //   if (schoolId) {
           for (const parent of parentdata) {
             if (parent) {
               parent.uploaded = true;
             }
           }
-          parentDetailsObj[schoolId] = parentdata;
-        }
-      }
-      this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
+      //     parentDetailsObj[schoolId] = parentdata;
+      //   }
+      // }
+      // this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
       // console.log(JSON.stringify(parentDetailsObj))
 
     }

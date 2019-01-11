@@ -65,34 +65,41 @@ export class GeneralQuestionSubmitPage {
 
     // })
 
-    this.localStorage.getLocalStorage('generalQuestions').then( data => {
-      this.allGeneralQuestions = data;
-      this.generalQuestions = this.allGeneralQuestions[this.schoolId];
+    this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then( success => {
+        this.submissionId = success['assessments'][0]['submissionId'];
+        this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( data => {
+          this.allGeneralQuestions = data;
+          this.generalQuestions = this.allGeneralQuestions;
+          this.localStorage.getLocalStorage("genericQuestionsImages").then(data => {
+            if (data && data[this.schoolId]) {
+              this.uploadImages = data[this.schoolId] ? data[this.schoolId] : [];
+            } else {
+              this.uploadImages = [];
+            }
+            if (this.uploadImages.length) {
+              this.createImageFromName(this.uploadImages);
+            } else {
+              // this.submitEvidence();
+              this.tempSubmit();
+            }
+          }).catch (error => {
+
+            this.tempSubmit();
+          })
+        }).catch(error => {
+        })
     }).catch(error => {
 
     })
 
-    this.localStorage.getLocalStorage('generalQuestionsCopy').then( data => {
-      this.copyOfOriginalGeneralQuestions = data[this.schoolId];
+
+
+    this.localStorage.getLocalStorage('generalQuestionsCopy_'+this.schoolId).then( data => {
+      this.copyOfOriginalGeneralQuestions = data;
     }).catch(error => {
       
     })
 
-    this.localStorage.getLocalStorage("genericQuestionsImages").then(data => {
-      if (data && data[this.schoolId]) {
-        this.uploadImages = data[this.schoolId] ? data[this.schoolId] : [];
-      } else {
-        this.uploadImages = [];
-      }
-      if (this.uploadImages.length) {
-        this.createImageFromName(this.uploadImages);
-      } else {
-        // this.submitEvidence();
-        this.tempSubmit();
-      }
-    }).catch (error => {
-
-    })
 
     // this.storage.get('generalQuestions').then(data => {
     //   this.allGeneralQuestions = JSON.parse(data)
@@ -255,9 +262,9 @@ export class GeneralQuestionSubmitPage {
       this.utils.openToast(response.message);
       console.log(JSON.stringify(response))
       // if(response.status ===);
-      this.allGeneralQuestions[this.schoolId] = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
+      this.allGeneralQuestions = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
       // this.generalQuestions = this.copyOfOriginalGeneralQuestions;
-      this.localStorage.setLocalStorage('generalQuestions', this.allGeneralQuestions)
+      this.localStorage.setLocalStorage('generalQuestions_'+this.schoolId, this.allGeneralQuestions)
       // this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
       this.storage.remove('genericQuestionsImages');
       this.utils.stopLoader();
@@ -281,7 +288,7 @@ export class GeneralQuestionSubmitPage {
       // }
       console.log(JSON.stringify(response))
       // if(response.status ===);
-      this.allGeneralQuestions[this.schoolId] = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
+      this.allGeneralQuestions = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
       // this.generalQuestions = this.copyOfOriginalGeneralQuestions;
       // this.tempIndex  = this.tempIndex+1
       console.log("success "+this.tempIndex)
@@ -290,7 +297,7 @@ export class GeneralQuestionSubmitPage {
         console.log(this.tempIndex + " " +this.tempPayload.length + " hi")
         this.makeApiCall(this.tempPayload[this.tempIndex])
       } else {
-        this.localStorage.setLocalStorage('generalQuestions', this.allGeneralQuestions);
+        this.localStorage.setLocalStorage('generalQuestions_'+this.schoolId, this.allGeneralQuestions);
         // this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
         this.storage.remove('genericQuestionsImages');
         this.utils.stopLoader();

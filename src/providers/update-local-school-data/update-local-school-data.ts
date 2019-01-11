@@ -102,8 +102,9 @@ export class UpdateLocalSchoolDataProvider {
         }
       }
     }
-    this.storage.set('schoolsDetails', JSON.stringify(this.schoolDetails));
-    this.events.publish("localDataUpdated");
+    this.localStorage.setLocalStorage("schoolDetails_"+this.currentSchool["schoolProfile"]["_id"], this.schoolDetails)
+    // this.storage.set('schoolsDetails', JSON.stringify(this.schoolDetails));
+    // this.events.publish("localDataUpdated");
   }
 
 

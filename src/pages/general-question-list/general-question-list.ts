@@ -35,10 +35,10 @@ export class GeneralQuestionListPage {
   ionViewWillEnter() {
     console.log('ionViewDidLoad GeneralQuestionListPage');
     this.schoolId = this.navParams.get('_id');
-    this.localStorage.getLocalStorage('generalQuestions').then( data => {
+    this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( data => {
       if(data){
         this.allGeneralQuestions = data;
-        this.generalQuestions = this.allGeneralQuestions[this.schoolId];
+        this.generalQuestions = this.allGeneralQuestions;
         this.enableSubmitBtn = this.enableGeneralaSubmission();
       }
     }).catch(error => {
@@ -63,7 +63,7 @@ export class GeneralQuestionListPage {
         this.generalQuestions[index] = data;
         console.log(JSON.stringify(data));
         this.enableSubmitBtn = this.enableGeneralaSubmission();
-        this.localStorage.setLocalStorage('generalQuestions', this.allGeneralQuestions)
+        this.localStorage.setLocalStorage('generalQuestions_'+this.schoolId, this.allGeneralQuestions)
         // this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
       }
     })

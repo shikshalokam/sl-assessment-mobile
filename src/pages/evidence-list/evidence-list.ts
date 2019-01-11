@@ -30,25 +30,30 @@ export class EvidenceListPage {
   ionViewWillEnter() {
     console.log('ionViewDidLoad EvidenceListPage');
 
-    // this.storage.get('generalQuestions').then(data => {
+    // this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then(data => {
+    //   this.generalQuestions = data[this.schoolId];
+    // }).catch(error => {
+    // })
+    // this.storage.get('generalQuestions_'+this.schoolId).then(data => {
     //   this.generalQuestions = JSON.parse(data)[this.schoolId];
     // }).catch(error => {
 
     // })
-    // this.utils.startLoader();
+    this.utils.startLoader();
 
-    // this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( successData => {
-    //   this.generalQuestions = successData;
-    // }).then(error => {
-    // })
+    this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( successData => {
+      // console.log("general questions")
+      this.generalQuestions = successData;
+    }).then(error => {
+    })
     this.localStorage.getLocalStorage("schoolDetails_"+this.schoolId).then( successData => {
-      // this.utils.stopLoader();
+      this.utils.stopLoader();
       console.log(successData)
       this.schoolData = successData;
       this.schoolEvidences = this.schoolData['assessments'][0]['evidences'];
       this.checkForProgressStatus();
-    }).then(error => {
-      // this.utils.stopLoader()      
+    }).catch(error => {
+      this.utils.stopLoader()      
     })
 
   //   this.storage.get('schoolsDetails').then(data => {
