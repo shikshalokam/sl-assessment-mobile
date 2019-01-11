@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @IonicPage()
 @Component({
@@ -31,7 +32,7 @@ export class QuestionerPage {
   localImageListKey: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage,
+    private storage: Storage, private localStorage: LocalStorageProvider,
     private utils: UtilsProvider, private feedback: FeedbackProvider) {
   }
 
@@ -42,29 +43,49 @@ export class QuestionerPage {
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.selectedSectionIndex = this.navParams.get('selectedSection');
     this.utils.startLoader();
-    this.storage.get('schoolsDetails').then(data => {
-      this.schoolData = JSON.parse(data);
-      this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
-      console.log("Selected Evidence Id = " + this.selectedEvidenceId)
+    this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then(data => {
+      this.schoolData = data;
+      this.selectedEvidenceId = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
       this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId;
       // console.log("sample " +this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
-      this.isViewOnly = !this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;
-      this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
+      this.isViewOnly = !this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;
+      this.questions = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
       // console.log(JSON.stringify(this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name))
       this.dashbordData = {
         questions: this.questions,
-        evidenceMethod: this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'],
-        sectionName: this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name,
+        evidenceMethod: this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'],
+        sectionName: this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name,
         currentViewIndex: this.start
       }
-      this.isCurrentEvidenceSubmitted = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
+      this.isCurrentEvidenceSubmitted = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
       // console.log(this.allQuestionsOfEvidence.length + " length of questions");
       this.utils.stopLoader();
-
     }).catch(error => {
       this.utils.stopLoader();
 
     })
+    // this.storage.get('schoolsDetails').then(data => {
+    //   this.schoolData = JSON.parse(data);
+    //   this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
+    //   this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId;
+    //   // console.log("sample " +this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
+    //   this.isViewOnly = !this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;
+    //   this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
+    //   // console.log(JSON.stringify(this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name))
+    //   this.dashbordData = {
+    //     questions: this.questions,
+    //     evidenceMethod: this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'],
+    //     sectionName: this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name,
+    //     currentViewIndex: this.start
+    //   }
+    //   this.isCurrentEvidenceSubmitted = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
+    //   // console.log(this.allQuestionsOfEvidence.length + " length of questions");
+    //   this.utils.stopLoader();
+
+    // }).catch(error => {
+    //   this.utils.stopLoader();
+
+    // })
   }
   // images_CO_5bebcfcf92ec921dcf114828
 
@@ -75,7 +96,9 @@ export class QuestionerPage {
       this.updateTheChildrenQuestions(this.questions[this.start])
     }
     if (this.end < this.questions.length && !status) {
-      this.utils.setLocalSchoolData(this.schoolData)
+      // this.utils.setLocalSchoolData(this.schoolData)
+      this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData)
+
       this.start++;
       this.end++;;
       this.dashbordData.currentViewIndex = this.start;
@@ -86,7 +109,9 @@ export class QuestionerPage {
       } else if (this.questions[this.start].visibleIf.length && this.questions[this.start].visibleIf[0] && this.checkForQuestionDisplay(this.questions[this.start])) {
       }
     } else if (status === 'completed') {
-      this.utils.setLocalSchoolData(this.schoolData);
+      // this.utils.setLocalSchoolData(this.schoolData);
+      this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData)
+
       // const opt = {
       //   _id: this.schoolId,
       //   name: this.schoolName,
@@ -99,7 +124,9 @@ export class QuestionerPage {
   }
 
   updateLocalData(): void {
-    this.utils.setLocalSchoolData(this.schoolData);
+    this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData)
+
+    // this.utils.setLocalSchoolData(this.schoolData);
   }
 
   checkForQuestionDisplay(qst): boolean {
@@ -130,7 +157,9 @@ export class QuestionerPage {
       this.updateTheChildrenQuestions(this.questions[this.start])
     }
     if (this.start > 0) {
-      this.utils.setLocalSchoolData(this.schoolData)
+      this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData)
+
+      // this.utils.setLocalSchoolData(this.schoolData)
       this.start--;
       this.dashbordData.currentViewIndex = this.start;
       this.end--;

@@ -68,6 +68,7 @@ import { GeneralQuestionPage } from '../pages/general-question/general-question'
 import { GeneralQuestionSubmitPage } from '../pages/general-question-submit/general-question-submit';
 import { SlackProvider } from '../providers/slack/slack';
 import { Keyboard } from '@ionic-native/keyboard';
+import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 
 @NgModule({
   declarations: [
@@ -168,7 +169,8 @@ import { Keyboard } from '@ionic-native/keyboard';
     Device,
     ExtendedDeviceInformation,
     SlackProvider,
-    Keyboard
+    Keyboard,
+    LocalStorageProvider
   ]
 })
 export class AppModule { }

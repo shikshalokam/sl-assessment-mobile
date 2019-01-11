@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../utils/utils';
 import { CurrentUserProvider } from '../current-user/current-user';
 import { Events } from 'ionic-angular';
+import { LocalStorageProvider } from '../local-storage/local-storage';
 
 @Injectable()
 export class UpdateLocalSchoolDataProvider {
@@ -14,7 +15,7 @@ export class UpdateLocalSchoolDataProvider {
   updatedSubmissionStatus: any;
 
   constructor(public http: HttpClient, private apiService: ApiProvider, private storage: Storage,
-    private utils: UtilsProvider, private currentUser: CurrentUserProvider, private events: Events) {
+    private localStorage: LocalStorageProvider, private utils: UtilsProvider, private currentUser: CurrentUserProvider, private events: Events) {
   }
 
   getSubmissionStatus(): void {
@@ -30,9 +31,9 @@ export class UpdateLocalSchoolDataProvider {
   }
 
   getLocalData(obj, submissionStatus?: any): void {
-    this.storage.get('schoolsDetails').then(details => {
-      this.schoolDetails = JSON.parse(details);
-      this.currentSchool = this.schoolDetails[obj._id];
+    this.localStorage.getLocalStorage('schoolDetails_'+obj._id).then(data => {
+      this.schoolDetails = data;
+      this.currentSchool = this.schoolDetails;
       if (submissionStatus) {
         this.updatedSubmissionStatus = submissionStatus;
         this.updateSubmissionsOnLogin(obj._id);
@@ -41,17 +42,31 @@ export class UpdateLocalSchoolDataProvider {
         this.getSubmissionStatus();
       }
     })
+    // this.storage.get('schoolsDetails').then(details => {
+    //   this.schoolDetails = JSON.parse(details);
+    //   this.currentSchool = this.schoolDetails[obj._id];
+    //   if (submissionStatus) {
+    //     this.updatedSubmissionStatus = submissionStatus;
+    //     this.updateSubmissionsOnLogin(obj._id);
+    //   } else {
+    //     this.utils.startLoader();
+    //     this.getSubmissionStatus();
+    //   }
+    // })
   }
 
-  mapSubmissionDataToQuestion(allSchoolDetails): void {
-    const schoolObj = {}
-    for (const schoolId of Object.keys(allSchoolDetails)) {
-      const mappedData = this.updateSubmissionsOnLogin(allSchoolDetails[schoolId]);
-      schoolObj[mappedData["schoolProfile"]["_id"]] = mappedData;
+  mapSubmissionDataToQuestion(schoolDetails): void {
+    const schoolObj = {};
+    let mappedData
+    for (const schoolId of Object.keys(schoolDetails)) {
+      mappedData = this.updateSubmissionsOnLogin(schoolDetails);
+      // schoolObj[mappedData["schoolProfile"]["_id"]] = mappedData;
 
     }
-    this.storage.set('schoolsDetails', JSON.stringify(schoolObj));
-    this.events.publish("localDataUpdated");
+    console.log("map on login ")
+    this.localStorage.setLocalStorage('schoolDetails_'+ mappedData["schoolProfile"]["_id"], mappedData)
+    // this.storage.set('schoolsDetails', JSON.stringify(schoolObj));
+    // this.events.publish("localDataUpdated");
   }
   updateSubmissionsOnLogin(schoolData) {
     for (const evidence of schoolData.assessments[0].evidences) {
@@ -87,8 +102,9 @@ export class UpdateLocalSchoolDataProvider {
         }
       }
     }
-    this.storage.set('schoolsDetails', JSON.stringify(this.schoolDetails));
-    this.events.publish("localDataUpdated");
+    this.localStorage.setLocalStorage("schoolDetails_"+this.currentSchool["schoolProfile"]["_id"], this.schoolDetails)
+    // this.storage.set('schoolsDetails', JSON.stringify(this.schoolDetails));
+    // this.events.publish("localDataUpdated");
   }
 
 

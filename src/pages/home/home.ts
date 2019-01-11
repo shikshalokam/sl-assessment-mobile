@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, App, Events, Platform , AlertController} from 'ionic-angular';
+import { NavController, App, Events, Platform, AlertController } from 'ionic-angular';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ApiProvider } from '../../providers/api/api';
 import { Storage } from '@ionic/storage';
@@ -15,6 +15,7 @@ import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { AppConfigs } from '../../providers/appConfig';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
 import { AuthProvider } from '../../providers/auth/auth';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 declare var cordova: any;
 
@@ -31,10 +32,11 @@ export class HomePage {
   subscription: any;
   networkAvailable: boolean;
   isIos: boolean = this.platform.is('ios');
-  parentList: any =[];
+  parentList: any = [];
   errorMsg: string;
   generalQuestions: any;
   schoolIndex = 0;
+  currentProgramId: any;
 
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
@@ -48,10 +50,11 @@ export class HomePage {
     private ngps: NetworkGpsProvider,
     private evdnsServ: EvidenceProvider,
     private platform: Platform,
-    private ulsd: UpdateLocalSchoolDataProvider, 
+    private ulsd: UpdateLocalSchoolDataProvider,
     private alertCntrl: AlertController,
     private app: App,
-    private auth: AuthProvider
+    private auth: AuthProvider,
+    private localStorage: LocalStorageProvider
   ) {
     this.subscription = this.events.subscribe('localDataUpdated', () => {
       // console.log("Updated")
@@ -75,13 +78,13 @@ export class HomePage {
 
   getSchoolListApi(): void {
     this.utils.startLoader();
-    this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors+'/', response => {
+    this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors + '/', response => {
       this.schoolList = response.result;
       this.storage.set('schools', this.schoolList);
-      if(!this.schoolList.length){
+      if (!this.schoolList.length) {
+        this.utils.stopLoader();
         this.errorMsg = response.message;
         this.unauthorized(response.message);
-        this.utils.stopLoader();
       } else {
         this.getSchoolDetails();
 
@@ -101,7 +104,7 @@ export class HomePage {
 
   unauthorized(msg) {
     let alert = this.alertCntrl.create({
-      title:"Unauthorized",
+      title: "Unauthorized",
       subTitle: msg,
       buttons: [
         {
@@ -123,46 +126,66 @@ export class HomePage {
 
 
   getSchoolDetails(): void {
-  if(!this.schoolIndex) {
-    this.utils.stopLoader();
-    this.utils.startLoader(`Please wait while fetching school details.`)
-  }
-  console.log(this.schoolIndex)
+    if (!this.schoolIndex) {
+      this.utils.stopLoader();
+      this.utils.startLoader(`Please wait while fetching school details.`)
+    }
+    // console.log(this.schoolIndex)
     // for (const school of this.schoolList) {
-      this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[this.schoolIndex]['_id']+'/', this.successCallback, error => {
-      })
+    this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[this.schoolIndex]['_id'] + '/', response => {
+      // console.log(this.schoolList[this.schoolIndex]['_id'])
+      // console.log(JSON.stringify(response))
+      // const generalQuestions = {}
+
+      this.localStorage.setLocalStorage("schoolDetails_" + this.schoolList[this.schoolIndex]['_id'], response.result);
+      console.log(response.result['assessments'][0]['generalQuestions'])
+      this.localStorage.setLocalStorage("generalQuestions_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
+      this.localStorage.setLocalStorage("generalQuestionsCopy_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
+      this.schoolList[this.schoolIndex]['submissionId'] = response.result['assessments'][0].submissionId;
+      this.schoolList[this.schoolIndex]['programId'] = response.result.program._id;
+      this.mappSubmissionData(response.result);
+      if (this.schoolIndex === this.schoolList.length - 1) {
+        this.localStorage.setLocalStorage('schools', this.schoolList);
+        this.getParentRegistry();
+      } else {
+        this.schoolIndex++;
+        this.getSchoolDetails();
+      }
+    }, error => {
+    })
     // }
   }
 
-  successCallback = (response) => {
-    this.schoolDetails.push(response.result);
-    if (this.schoolDetails.length === this.schoolList.length) {
-      const schoolDetailsObj = {}
-      const generalQuestions = {}
-      for (const school of this.schoolDetails) {
-        schoolDetailsObj[school['schoolProfile']._id] = school;
-        generalQuestions[school['schoolProfile']._id] = school.assessments[0].generalQuestions;
-      }
-      this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
-      this.storage.set("generalQuestions", JSON.stringify(generalQuestions));
-      this.storage.set("generalQuestionsCopy", JSON.stringify(generalQuestions));
+  // successCallback = (response) => {
+  //   this.localStorage.setLocalStorage("schoolDetails_"+ this.schoolList[this.schoolIndex]['_id'], response)
+  //   this.schoolDetails.push(response.result);
+  //   if (this.schoolDetails.length === this.schoolList.length) {
+  //     const schoolDetailsObj = {}
+  //     const generalQuestions = {}
+  //     for (const school of this.schoolDetails) {
+  //       schoolDetailsObj[school['schoolProfile']._id] = school;
+  //       generalQuestions[school['schoolProfile']._id] = school.assessments[0].generalQuestions;
+  //     }
+  //     this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
+  //     this.storage.set("generalQuestions", JSON.stringify(generalQuestions));
+  //     this.storage.set("generalQuestionsCopy", JSON.stringify(generalQuestions));
 
-      this.generalQuestions = generalQuestions;
+  //     this.generalQuestions = generalQuestions;
 
-      this.getLocalSchoolDetails();
-      this.mappSubmissionData(schoolDetailsObj);
-      this.getParentRegistry();
-      this.mapGeneralQuesions()
-      // this.utils.stopLoader();
+  //     this.getLocalSchoolDetails();
+  //     this.mappSubmissionData(schoolDetailsObj);
+  //     this.getParentRegistry();
+  //     this.mapGeneralQuesions()
+  //     // this.utils.stopLoader();
 
-    } else {
-      console.log("End of loader")
-      this.schoolIndex++;
-      this.getSchoolDetails();
-    }
-  }
+  //   } else {
+  //     console.log("End of loader")
+  //     this.schoolIndex++;
+  //     this.getSchoolDetails();
+  //   }
+  // }
 
-  mappSubmissionData(allSchoolDetailsObj) : void {
+  mappSubmissionData(schoolDetailsObj): void {
     // for (const school of this.schoolList ) {
     //   const obj = {
     //     _id: school['_id'],
@@ -172,7 +195,8 @@ export class HomePage {
     //   }
     // }
     // this.getLocalSchoolDetails();
-    this.ulsd.mapSubmissionDataToQuestion(allSchoolDetailsObj);
+    console.log("in map submissions")
+    this.ulsd.mapSubmissionDataToQuestion(schoolDetailsObj);
 
   }
 
@@ -189,9 +213,10 @@ export class HomePage {
     this.ratingService.checkForRatingDetails(submissionId, school);
   }
 
-  getParentRegistryForm() : void {
+  getParentRegistryForm(): void {
     this.apiService.httpGet(AppConfigs.parentInfo.getParentRegisterForm, success => {
-      this.storage.set('parentRegisterForm', JSON.stringify(success.result));
+      this.localStorage.setLocalStorage('parentRegisterForm', success.result)
+      // this.storage.set('parentRegisterForm', JSON.stringify(success.result));
     }, error => {
 
     })
@@ -204,13 +229,21 @@ export class HomePage {
         this.checkForProgressStatus(this.schoolDetails[schoolId]['assessments'][0]['evidences'])
       }
     })
-    this.storage.get('generalQuestions').then(questions => {
-      if(questions) {
-        // JSON.stringify
-        this.generalQuestions = JSON.parse(questions);
-        // console.log(questions);
+    // this.localStorage.getLocalStorage()
+    this.localStorage.getLocalStorage('generalQuestions').then(questions => {
+      if (questions) {
+        this.generalQuestions = questions;
       }
+    }).catch(error => {
+
     })
+    // this.storage.get('generalQuestions').then(questions => {
+    //   if(questions) {
+    //     // JSON.stringify
+    //     this.generalQuestions = JSON.parse(questions);
+    //     // console.log(questions);
+    //   }
+    // })
   }
 
   goToSections(school, evidenceIndex) {
@@ -222,8 +255,8 @@ export class HomePage {
     }
   }
 
-  goToGeneralQuestionList(school) : void {
-    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: school._id, name: school.name})
+  goToGeneralQuestionList(school): void {
+    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: school._id, name: school.name })
 
   }
 
@@ -238,31 +271,40 @@ export class HomePage {
   getParentRegistry() {
     for (const school of this.schoolList) {
       // console.log(school['_id']);
-      this.apiService.httpGet(AppConfigs.parentInfo.getParentList + school['_id'], this.parentListSuccessCallback, error => {
+      this.apiService.httpGet(AppConfigs.parentInfo.getParentList + school['_id'], data => {
+        this.parentListSuccessCallback(data.result)
+      }, error => {
 
       })
     }
   }
 
-  parentListSuccessCallback = (data) => {
-    this.parentList.push(data.result);
-    if(this.parentList.length === this.schoolList.length) {
-    // console.log(JSON.stringify(this.parentList))
+  parentListSuccessCallback = (parentdata) => {
+    this.parentList.push(parentdata);
+    for (const parent of parentdata) {
+      if (parent) {
+        parent.uploaded = true;
+      }
+    }
+    const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
+    this.localStorage.setLocalStorage("parentDetails_"+schoolId, parentdata)
+    if (this.parentList.length === this.schoolList.length) {
+      // console.log(JSON.stringify(this.parentList))
 
-      const parentDetailsObj = {};
+      // const parentDetailsObj = {};
       this.utils.stopLoader();
-      for (const parentdata of this.parentList) {
-        const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
-        if(schoolId) {
+      // for (const parentdata of this.parentList) {
+      //   const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
+      //   if (schoolId) {
           for (const parent of parentdata) {
-            if(parent){
+            if (parent) {
               parent.uploaded = true;
             }
           }
-          parentDetailsObj[schoolId] = parentdata;
-        }
-      }
-      this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
+      //     parentDetailsObj[schoolId] = parentdata;
+      //   }
+      // }
+      // this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
       // console.log(JSON.stringify(parentDetailsObj))
 
     }
@@ -293,19 +335,26 @@ export class HomePage {
     this.navCtrl.id = "HomePage";
     // console.log('refresh');
     this.storage.get('parentRegisterForm').then(form => {
-      if(!form){
+      if (!form) {
         this.getParentRegistryForm();
       }
     })
     this.userData = this.currentUser.getCurrentUserData();
-    this.storage.get('schools').then(schools => {
-      // console.log(JSON.stringify(schools))
-      if (schools) {
-        this.schoolList = schools;
-        this.getLocalSchoolDetails();
-      } else {
-        this.getSchoolListApi();
-      }
+    // this.storage.get('schools').then(schools => {
+    //   // console.log(JSON.stringify(schools))
+    //   if (schools) {
+    //     this.schoolList = schools;
+    //     this.getLocalSchoolDetails();
+    //   } else {
+    //     this.getSchoolListApi();
+    //   }
+    // }).catch(error => {
+    //   this.getSchoolListApi();
+    // })
+
+    this.localStorage.getLocalStorage('schools').then(schools => {
+      this.schoolList = schools;
+      // this.getLocalSchoolDetails();
     }).catch(error => {
       this.getSchoolListApi();
     })
@@ -316,13 +365,13 @@ export class HomePage {
     this.ratingService.fetchRatedQuestions(submissionId, school);
   }
 
-  openMenu(myEvent, school) {
+  openMenu(myEvent, index) {
     let popover = this.popoverCtrl.create(MenuItemComponent, {
-      submissionId: this.schoolDetails[school._id]['assessments'][0].submissionId,
-      _id: school._id,
-      name: school.name,
+      submissionId: this.schoolList[index]['submissionId'],
+      _id: this.schoolList[index]['_id'],
+      name: this.schoolList[index]['name'],
       parent: this,
-      programId:this.schoolDetails[school._id].program._id
+      programId: this.schoolList['programId']
     });
     popover.present({
       ev: myEvent

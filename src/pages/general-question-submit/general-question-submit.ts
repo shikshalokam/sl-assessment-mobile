@@ -7,6 +7,7 @@ import { File } from '@ionic-native/file';
 import { AppConfigs } from '../../providers/appConfig';
 import { Storage } from '@ionic/storage';
 import { SlackProvider } from '../../providers/slack/slack';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 declare var cordova: any;
 
@@ -45,54 +46,87 @@ export class GeneralQuestionSubmitPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private file: File, private fileTransfer: FileTransfer,
-    private apiService: ApiProvider, private utils: UtilsProvider,
+    private apiService: ApiProvider, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
     private app: App, private platform: Platform, private slack: SlackProvider) {
     this.schoolId = this.navParams.get('_id');
 
   }
 
   ionViewDidLoad() {
-    console.log("in")
-    console.log()
-    console.log(this.schoolId)
+
     // this.schoolName = this.navParams.get('name');
 
-    this.storage.get('schoolsDetails').then(data => {
-      if(data) {
-        this.schoolData = JSON.parse(data);
-        this.submissionId = this.schoolData[this.schoolId]['assessments'][0]['submissionId'];
-      }
+    // this.storage.get('schoolsDetails').then(data => {
+    //   if(data) {
+    //     this.schoolData = JSON.parse(data);
+    //     this.submissionId = this.schoolData[this.schoolId]['assessments'][0]['submissionId'];
+    //   }
+    // }).catch(error => {
+
+    // })
+
+    this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then( success => {
+        this.submissionId = success['assessments'][0]['submissionId'];
+        this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( data => {
+          this.allGeneralQuestions = data;
+          this.generalQuestions = this.allGeneralQuestions;
+          this.localStorage.getLocalStorage("genericQuestionsImages").then(data => {
+            if (data && data[this.schoolId]) {
+              this.uploadImages = data[this.schoolId] ? data[this.schoolId] : [];
+            } else {
+              this.uploadImages = [];
+            }
+            if (this.uploadImages.length) {
+              this.createImageFromName(this.uploadImages);
+            } else {
+              // this.submitEvidence();
+              this.tempSubmit();
+            }
+          }).catch (error => {
+
+            this.tempSubmit();
+          })
+        }).catch(error => {
+        })
     }).catch(error => {
 
     })
 
-    this.storage.get('generalQuestions').then(data => {
-      this.allGeneralQuestions = JSON.parse(data)
-      this.generalQuestions = this.allGeneralQuestions[this.schoolId];
-      // console.log(JSON.stringify(this.generalQuestions))
-    }).catch(error => {
 
-    })
-    this.storage.get('generalQuestionsCopy').then(data => {
-      this.copyOfOriginalGeneralQuestions = JSON.parse(data)[this.schoolId];
-      // console.log(JSON.stringify(this.generalQuestions))
-    }).catch(error => {
 
+    this.localStorage.getLocalStorage('generalQuestionsCopy_'+this.schoolId).then( data => {
+      this.copyOfOriginalGeneralQuestions = data;
+    }).catch(error => {
+      
     })
-    this.storage.get("genericQuestionsImages").then(data => {
-      if (data && JSON.parse(data)[this.schoolId]) {
-        this.uploadImages = (JSON.parse(data)[this.schoolId]) ? (JSON.parse(data)[this.schoolId]) : [];
-      } else {
-        this.uploadImages = [];
-      }
-      console.log(this.uploadImages.length)
-      if (this.uploadImages.length) {
-        this.createImageFromName(this.uploadImages);
-      } else {
-        // this.submitEvidence();
-        this.tempSubmit();
-      }
-    })
+
+
+    // this.storage.get('generalQuestions').then(data => {
+    //   this.allGeneralQuestions = JSON.parse(data)
+    //   this.generalQuestions = this.allGeneralQuestions[this.schoolId];
+    //   // console.log(JSON.stringify(this.generalQuestions))
+    // }).catch(error => {
+
+    // })
+    // this.storage.get('generalQuestionsCopy').then(data => {
+    //   this.copyOfOriginalGeneralQuestions = JSON.parse(data)[this.schoolId];
+    //   // console.log(JSON.stringify(this.generalQuestions))
+    // }).catch(error => {
+
+    // })
+    // this.storage.get("genericQuestionsImages").then(data => {
+    //   if (data && JSON.parse(data)[this.schoolId]) {
+    //     this.uploadImages = (JSON.parse(data)[this.schoolId]) ? (JSON.parse(data)[this.schoolId]) : [];
+    //   } else {
+    //     this.uploadImages = [];
+    //   }
+    //   if (this.uploadImages.length) {
+    //     this.createImageFromName(this.uploadImages);
+    //   } else {
+    //     // this.submitEvidence();
+    //     this.tempSubmit();
+    //   }
+    // })
 
   }
 
@@ -228,9 +262,10 @@ export class GeneralQuestionSubmitPage {
       this.utils.openToast(response.message);
       console.log(JSON.stringify(response))
       // if(response.status ===);
-      this.allGeneralQuestions[this.schoolId] = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
+      this.allGeneralQuestions = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
       // this.generalQuestions = this.copyOfOriginalGeneralQuestions;
-      this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
+      this.localStorage.setLocalStorage('generalQuestions_'+this.schoolId, this.allGeneralQuestions)
+      // this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
       this.storage.remove('genericQuestionsImages');
       this.utils.stopLoader();
       this.navCtrl.pop();
@@ -253,7 +288,7 @@ export class GeneralQuestionSubmitPage {
       // }
       console.log(JSON.stringify(response))
       // if(response.status ===);
-      this.allGeneralQuestions[this.schoolId] = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
+      this.allGeneralQuestions = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
       // this.generalQuestions = this.copyOfOriginalGeneralQuestions;
       // this.tempIndex  = this.tempIndex+1
       console.log("success "+this.tempIndex)
@@ -262,7 +297,8 @@ export class GeneralQuestionSubmitPage {
         console.log(this.tempIndex + " " +this.tempPayload.length + " hi")
         this.makeApiCall(this.tempPayload[this.tempIndex])
       } else {
-        this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
+        this.localStorage.setLocalStorage('generalQuestions_'+this.schoolId, this.allGeneralQuestions);
+        // this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
         this.storage.remove('genericQuestionsImages');
         this.utils.stopLoader();
       this.utils.openToast(response.message);
