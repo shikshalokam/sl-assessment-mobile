@@ -17,6 +17,7 @@ import { MenuItemComponent } from './menu-item/menu-item';
 import { DatePipe } from '@angular/common';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form';
 import { SlackProvider } from '../providers/slack/slack';
+import { SliderComponent } from './slider/slider';
 
 @NgModule({
 	declarations: [
@@ -31,7 +32,8 @@ import { SlackProvider } from '../providers/slack/slack';
     FooterButtonsComponent,
     HeaderComponent,
     MenuItemComponent,
-    DynamicFormComponent],
+    DynamicFormComponent,
+    SliderComponent],
 	imports: [
 		IonicModule,
 		DirectivesModule,
@@ -49,7 +51,8 @@ import { SlackProvider } from '../providers/slack/slack';
     FooterButtonsComponent,
     HeaderComponent,
     MenuItemComponent,
-    DynamicFormComponent
+    DynamicFormComponent,
+    SliderComponent
 	],
 	entryComponents: [
 		InputTypeComponent,

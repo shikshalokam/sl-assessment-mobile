@@ -19,6 +19,7 @@ export class DateTypeComponent implements OnInit{
 
   @Input() hideButton: boolean;
   questionValid: boolean;
+  currentDate;
 
   constructor(private utils: UtilsProvider, private datePipe: DatePipe) {
     console.log('Hello DateTypeComponent Component');
@@ -48,6 +49,16 @@ export class DateTypeComponent implements OnInit{
   }
 
   ngOnInit() {
+    const dateTime = new Date();
+    // this.currentDate = dateTime.split('T')[0];
+    console.log(dateTime);
+    // if(this.data.validation.max === "currentDate") {
+      this.data.validation.max = this.data.validation.max ==='"currentDate"' ? new Date().toISOString().split('T')[0] : this.data.validation.max;
+      this.data.validation.min = this.data.validation.min ==='"currentDate"' ? new Date().toISOString().split('T')[0] : this.data.validation.min;
+
+    // }
+    // this.data.validation.max = this.data.validation.max === "currentDate" ? new Date().toISOString().split('T')[0] : ;
+    console.log(JSON.stringify(this.data.validation))
     this.checkForValidation();
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
   }
