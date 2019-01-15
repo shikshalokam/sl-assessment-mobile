@@ -1,0 +1,23 @@
+<!-- Generated template for the SliderComponent component -->
+<ion-col class="_flex-box _justify-content-center _flex-direction-column ">
+  <h4 [ngClass]="{'_validQuestion': data?.value}" *ngFor="let question of data.question">{{question}}</h4>
+</ion-col>
+<div class="_tip _flex-box "> {{data?.tip}}</div>
+<div class="_flex-box _justify-content-center _full-width" margin-top>
+  <span class="valueBox _flex-box _justify-content-center">{{data?.value}}</span>
+</div>
+<div margin-top>
+
+  <ion-item>
+
+    <ion-range [(ngModel)]="data.value" pin="true" step="1" (ngModelChange)="checkForValidation()" snaps="true" [min]="data?.validation.min"
+      [max]="data?.validation.max">
+      <ion-label range-left>{{data?.validation.min}}</ion-label>
+      <ion-label range-right>{{data?.validation.max}}</ion-label>
+    </ion-range>
+  </ion-item>
+
+  <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
+  <image-upload *ngIf="data?.file" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId"
+    [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
+</div>
