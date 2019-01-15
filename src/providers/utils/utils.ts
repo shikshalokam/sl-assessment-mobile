@@ -70,7 +70,7 @@ export class UtilsProvider {
 
   isQuestionComplete(question): boolean {
     // console.log(JSON.stringify(question))
-    if (question.validation.required && !question.value && question.responseType !== 'multiselect') {
+    if (question.validation.required && question.value=== "" && question.responseType !== 'multiselect') {
       return false
     }
     if (question.validation.required && !question.value.length && question.responseType === 'multiselect') {
@@ -82,6 +82,7 @@ export class UtilsProvider {
     if (question.validation.regex && question.responseType === 'number' && !this.testRegex(question.validation.regex, question.value)) {
       return false
     }
+
     return true
   }
 

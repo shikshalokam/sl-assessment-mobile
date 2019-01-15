@@ -23,6 +23,7 @@
         <date-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
         <multiple-choice-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'multiselect'"></multiple-choice-type>
         <matrix-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'"></matrix-type>
+        <slider [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'slider'"></slider>
       </ng-container>
     </ng-container>
   </div>

@@ -1,25 +1,36 @@
 <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
   <h4 [ngClass]="{'_validQuestion': data?.value}" *ngFor="let question of data.question">{{question}}</h4>
 </ion-col>
+
 <div class="_tip _flex-box "> {{data?.tip}}</div>
 
 <div margin-top style="position: relative">
-  <ion-item >
+  <ion-item>
     <ion-label floating>Date</ion-label>
-    <ion-datetime [disabled]="data?.autoCapture" displayFormat="{{data?.dateFormat}}" (ionCancel)="canceled()"
-      [(ngModel)]="data.value" (ngModelChange)="checkForValidation()"></ion-datetime>
+    <ion-datetime [disabled]="data?.autoCapture" displayFormat="{{data?.dateFormat}}" *ngIf="data?.validation.max && !data?.validation.min"
+      [max]='data?.validation.max ? data?.validation.max : ""' (ionCancel)="canceled()" [(ngModel)]="data.value"
+      (ngModelChange)="checkForValidation()"></ion-datetime>
+
+    <ion-datetime [disabled]="data?.autoCapture" displayFormat="{{data?.dateFormat}}" *ngIf="data?.validation.min && !data?.validation.max"
+      [min]='(data?.validation.min) ? data?.validation.min : ""' (ionCancel)="canceled()" [(ngModel)]="data.value"
+      (ngModelChange)="checkForValidation()"></ion-datetime>
+
+    <ion-datetime [disabled]="data?.autoCapture" displayFormat="{{data?.dateFormat}}" *ngIf="data?.validation.min && data?.validation.max"
+      [min]='(data?.validation.min) ? data?.validation.min : ""' (ionCancel)="canceled()" [(ngModel)]="data.value"
+      (ngModelChange)="checkForValidation()"></ion-datetime>
+
+      <ion-datetime [disabled]="data?.autoCapture" displayFormat="{{data?.dateFormat}}" *ngIf="!data?.validation.min && !data?.validation.max"
+       (ionCancel)="canceled()" [(ngModel)]="data.value"
+      (ngModelChange)="checkForValidation()"></ion-datetime>
 
   </ion-item>
-  <!-- <div margin-top margin-bottom style="width: 100%"> -->
   <button ion-button icon-start float-right clear color="primary" class="capture" (click)="captureTime()" *ngIf="!data?.value && data?.autoCapture">
     {{'buttons.capture'| translate}}
   </button>
-  <!-- </div> -->
   <div style="width: 100%">
     <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
   </div>
-  <image-upload *ngIf="data?.file" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
+  <image-upload *ngIf="data?.file" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId"
+    [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
 
 </div>
-
-<!-- <footer-buttons *ngIf="!hideButton" [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons> -->
