@@ -53,8 +53,8 @@ export class DateTypeComponent implements OnInit{
     // this.currentDate = dateTime.split('T')[0];
     console.log(dateTime);
     // if(this.data.validation.max === "currentDate") {
-      this.data.validation.max = this.data.validation.max ==='"currentDate"' ? new Date().toISOString().split('T')[0] : this.data.validation.max;
-      this.data.validation.min = this.data.validation.min ==='"currentDate"' ? new Date().toISOString().split('T')[0] : this.data.validation.min;
+      this.data.validation.max = this.data.validation.max ==="currentDate" ? new Date().toISOString().split('T')[0] : this.data.validation.max;
+      this.data.validation.min = this.data.validation.min ==="currentDate" ? new Date().toISOString().split('T')[0] : this.data.validation.min;
 
     // }
     // this.data.validation.max = this.data.validation.max === "currentDate" ? new Date().toISOString().split('T')[0] : ;
