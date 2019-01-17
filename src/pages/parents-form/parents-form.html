@@ -23,6 +23,13 @@
           </ion-select>
         </ion-item>
 
+        <ion-item *ngIf="fromField?.input === 'multiselect' && fromField?.visible">
+          <ion-label>{{fromField?.label}}</ion-label>
+          <ion-select [formControlName]="fromField.field"  multiple="true">
+            <ion-option *ngFor="let opt of fromField.options" value="{{opt?.value}}">{{opt?.label}}</ion-option>
+          </ion-select>
+        </ion-item>
+
         <ion-item *ngIf="fromField?.input === 'textarea' && fromField?.visible">
           <ion-label floating>{{fromField?.label}}</ion-label>
           <ion-textarea [formControlName]="fromField.field" [id]="fromField?.field" [type]="fromField?.input"></ion-textarea>
