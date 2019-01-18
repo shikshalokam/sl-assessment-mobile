@@ -43,7 +43,7 @@
   </ion-item-group>
 </ion-content>
 
-<ion-footer no-shadow *ngIf="allAnsweredForEvidence && !currentEvidence.isSubmitted">
+<ion-footer no-shadow *ngIf="(allAnsweredForEvidence && !currentEvidence.isSubmitted) || currentEvidence?.enableSubmit">
   <ion-toolbar position="bottom">
     <ion-row>
       <button ion-button full (click)="checkForNetworkTypeAlert()">{{'buttons.upload'|translate}} {{'buttons.and'|translate}}
