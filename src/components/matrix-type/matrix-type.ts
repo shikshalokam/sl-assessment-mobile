@@ -117,8 +117,8 @@ export class MatrixTypeComponent implements OnInit {
 
   deleteInstanceAlert(index) {
     let alert = this.alertCtrl.create({
-      title: 'Confirm purchase',
-      message: 'Do you want to delete this image?',
+      title: 'Confirm delete',
+      message: 'Do you want to delete this instance?',
       buttons: [
         {
           text: 'No',

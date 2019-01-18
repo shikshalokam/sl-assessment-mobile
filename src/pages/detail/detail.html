@@ -45,5 +45,9 @@
       <ion-icon name="trash" margin-right></ion-icon>
       Erase Data
     </button>
+    <button ion-button margin-top  block  icon-start color="light" *ngIf="content?.heading==='App Info'" (click)="openAlert()">
+        <!-- <ion-icon name="trash" margin-right></ion-icon> -->
+        Access Token
+      </button>
   
 </ion-content>

@@ -8,12 +8,13 @@ import { AlertController } from 'ionic-angular';
 // import { AppConfigs } from '../appConfig';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { LocalStorageProvider } from '../local-storage/local-storage';
 
 @Injectable()
 export class UtilsProvider {
 
   constructor(public http: HttpClient, private locationAccuracy: LocationAccuracy, public loadingCtrl: LoadingController,
-    private toastCtrl: ToastController, private storage: Storage) {
+    private toastCtrl: ToastController, private storage: Storage, private localStorage: LocalStorageProvider) {
     console.log('Hello UtilsProvider Provider');
   }
   loading: any;
@@ -128,6 +129,25 @@ export class UtilsProvider {
       formGrp[formfield.field] = formfield.validation.required ? new FormControl(formfield.value || "", Validators.required) : new FormControl(formfield.value || "");
     });
     return new FormGroup(formGrp)
+  }
+
+  ActionEnableSubmit(actionDetails) {
+    let currentEcm;
+    this.localStorage.getLocalStorage('schoolDetails_'+ actionDetails.schoolId).then( data => {
+      const currentSchoolData = data;
+      for (const evidenc of currentSchoolData.assessments[0].evidences) {
+        if(evidenc.externalId === actionDetails.evidenceCollectionMethod) {
+          currentEcm = evidenc;
+          break;
+        }
+      }
+      if(actionDetails.action[0] === 'enableSubmission') {
+        currentEcm['enableSubmit'] = true;
+      }
+      this.localStorage.setLocalStorage("schoolDetails_"+actionDetails.schoolId, currentSchoolData);
+      this.openToast(actionDetails.successMessage);
+    }).catch(error => {
+    })
   }
 
 }
