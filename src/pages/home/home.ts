@@ -144,8 +144,10 @@ export class HomePage {
       this.schoolList[this.schoolIndex]['submissionId'] = response.result['assessments'][0].submissionId;
       this.schoolList[this.schoolIndex]['programId'] = response.result.program._id;
       this.mappSubmissionData(response.result);
+      this.schoolList[this.schoolIndex]['schoolDetailsFetched'] = true;
+      this.localStorage.setLocalStorage('schools', this.schoolList);
       if (this.schoolIndex === this.schoolList.length - 1) {
-        this.localStorage.setLocalStorage('schools', this.schoolList);
+        // this.localStorage.setLocalStorage('schools', this.schoolList);
         this.getParentRegistry();
       } else {
         this.schoolIndex++;
@@ -354,10 +356,31 @@ export class HomePage {
 
     this.localStorage.getLocalStorage('schools').then(schools => {
       this.schoolList = schools;
+      // console.log("School status list")
       // this.getLocalSchoolDetails();
+      this.checkForAllSchoolDetailsFetchedStatus();
+
     }).catch(error => {
       this.getSchoolListApi();
     })
+  }
+
+  checkForAllSchoolDetailsFetchedStatus() {
+    let index = 0;
+    // console.log(JSON.stringify(this.schoolList))
+    for (const school of this.schoolList) {
+      // console.log("in check mode")
+      if(!school['schoolDetailsFetched']) {
+      // console.log("found incmplete index" + index)
+        this.schoolIndex  = index;
+        this.getSchoolDetails();
+        break;
+      } 
+      index++;
+    }
+    // this.schoolList.forEach((key, value) => {
+
+    // })
   }
 
   getRatedQuestions(school): void {

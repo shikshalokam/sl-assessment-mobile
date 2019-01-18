@@ -6,6 +6,8 @@ import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { ApiProvider } from '../../providers/api/api';
+import { AppConfigs } from '../../providers/appConfig';
 
 @Component({
   selector: 'page-detail',
@@ -22,6 +24,7 @@ export class DetailPage {
     private currentUser: CurrentUserProvider,
     private auth: AuthProvider, 
     private localStorage: LocalStorageProvider,
+    private apiService: ApiProvider,
     private utils: UtilsProvider) {
   }
 
@@ -73,6 +76,50 @@ export class DetailPage {
       enableBackdropDismiss: false
     });
     alert.present();
+  }
+
+  openAlert() {
+    const alert = this.alertctrl.create({
+      title: 'Please enter the passcode.',
+      inputs: [
+        {
+          name: 'passcode',
+          placeholder: 'Passcode'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Submit',
+          handler: data => {
+            this.getAccessTokenForAction(data)
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  getAccessTokenForAction(passcode) {
+    const payload = {
+      "passcode": passcode
+    }
+    let currentEcm = {}
+    this.utils.startLoader();
+    this.apiService.httpPost(AppConfigs.help.getHelpToken , passcode, successData => {
+      this.utils.ActionEnableSubmit(successData.result);
+      this.utils.stopLoader();
+    } , error => {
+      this.utils.stopLoader();
+      this.utils.openToast(error.result.message);
+
+    })
   }
 
 }
