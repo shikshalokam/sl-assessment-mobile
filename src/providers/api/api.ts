@@ -22,8 +22,10 @@ export class ApiProvider {
     private utils: UtilsProvider,
     private auth: AuthProvider,
     private alertCntrl: AlertController,
-    private ngHttp: Http,
-    private ngps: NetworkGpsProvider, private slack: SlackProvider) {
+    private ngps: NetworkGpsProvider, 
+    private slack: SlackProvider,
+    private ngHttp: Http
+    ) {
   }
 
   errorObj = {
