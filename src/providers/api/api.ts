@@ -20,7 +20,6 @@ export class ApiProvider {
     public currentUser: CurrentUserProvider,
     private appCtrls: App, 
     private utils: UtilsProvider,
-    // private auth: AuthProvider,
     private alertCntrl: AlertController,
     private ngps: NetworkGpsProvider, 
     private slack: SlackProvider,
