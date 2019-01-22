@@ -9,6 +9,7 @@ import { CurrentUserProvider } from '../current-user/current-user';
 import { AppConfigs } from '../appConfig';
 import { WelcomePage } from '../../pages/welcome/welcome';
 import { UtilsProvider } from '../utils/utils';
+
 // import { AuthProvider } from '../auth/auth';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { SlackProvider } from '../slack/slack';
