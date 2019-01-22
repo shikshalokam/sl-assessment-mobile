@@ -11,12 +11,12 @@ import { UtilsProvider } from '../utils/utils';
 import { AuthProvider } from '../auth/auth';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { SlackProvider } from '../slack/slack';
-
+import { HTTP } from '@ionic-native/http';
 
 @Injectable()
 export class ApiProvider {
 
-  constructor(public http: Http,
+  constructor(public http: HTTP,
     public currentUser: CurrentUserProvider,
     private appCtrls: App, private utils: UtilsProvider,
     private auth: AuthProvider,
@@ -34,6 +34,7 @@ export class ApiProvider {
     return this.ngps.getNetworkStatus()
   }
   validateApiToken(): Promise<any> {
+    this.http.setDataSerializer('json');
     return new Promise((resolve, reject) => {
       //console.log("Utils: validate token");
       const userDetails = this.currentUser.getCurrentUserData();
@@ -47,11 +48,13 @@ export class ApiProvider {
         //console.log(this.currentUser.curretUser.refreshToken);
         const url = AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken;
         //console.log(url)
-
-        this.http.post(url, body).subscribe((data: any) => {
-          //console.log("Utils: received validated token")
-          //console.log(data._body)
-          let parsedData = JSON.parse(data._body);
+        const header = {
+          'grant_type': "refresh_token",
+          'client_id': AppConfigs.clientId,
+          'refresh_token': this.currentUser.curretUser.refreshToken
+        }
+        this.http.post(url, body, header).then(data => {
+          let parsedData = JSON.parse(data['_body']);
           let userTokens = {
             accessToken: parsedData.access_token,
             refreshToken: parsedData.refresh_token,
@@ -59,13 +62,29 @@ export class ApiProvider {
           };
           this.currentUser.setCurrentUserDetails(userTokens);
           resolve()
-        }, error => {
-          // this.currentUser.removeUser();
-          //console.log('Utils: Logout,token invalid');
-          //console.log('error ' + JSON.stringify(error));
-          // this.doLogout();
+        }).catch( error => {
           reject({ status: '401' });
-        });
+
+        })
+
+        // this.http.post(url, body).subscribe((data: any) => {
+        //   //console.log("Utils: received validated token")
+        //   //console.log(data._body)
+        //   let parsedData = JSON.parse(data._body);
+        //   let userTokens = {
+        //     accessToken: parsedData.access_token,
+        //     refreshToken: parsedData.refresh_token,
+        //     idToken: parsedData.id_token
+        //   };
+        //   this.currentUser.setCurrentUserDetails(userTokens);
+        //   resolve()
+        // }, error => {
+        //   // this.currentUser.removeUser();
+        //   //console.log('Utils: Logout,token invalid');
+        //   //console.log('error ' + JSON.stringify(error));
+        //   // this.doLogout();
+        //   reject({ status: '401' });
+        // });
       } else {
         //console.log("Utils: valid token")
         resolve();
@@ -80,12 +99,14 @@ export class ApiProvider {
     this.validateApiToken().then(response => {
       //console.log('SUCcess');
       const gpsLocation = this.ngps.getGpsLocation()
-
+      // console.log("in post request")
       const obj = {
         'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
         'gpsLocation': gpsLocation ? gpsLocation : '0,0'
+        // 'Content-Type': 'application/json'
+        // "Content-Type": "application/json"
       }
-      let headers = new Headers(obj);
+      // let headers = new Headers(obj);
       // let headers = new Headers();
       // const gpsLocation =  this.ngps.getGpsLocation();
       // headers.append('x-authenticated-user-token', this.currentUser.curretUser.accessToken);
@@ -93,40 +114,54 @@ export class ApiProvider {
 
       console.log(AppConfigs.api_base_url + url)
       const apiUrl = AppConfigs.api_base_url + url;
-      this.http.post(apiUrl, payload, { headers: headers })
-        .subscribe(data => {
-          //console.log('API service success')
-          successCallback(JSON.parse(data['_body']));
-        }, error => {
-          const errorObject = {...this.errorObj};
-          errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
-          this.slack.pushException(errorObject);
-          // this.auth.doLogout().then(success => {
-          //   nav.setRoot(WelcomePage);
-          //   this.currentUser.deactivateActivateSession(true);
-          //   this.utils.openToast('Session expired. Please login again to continue', 'Ok');
-          //   errorCallback(error);
 
-          // }).catch(error => {
+      this.http.setDataSerializer('json');
+      this.http.post(apiUrl, payload, obj).then( data => {
+        successCallback(JSON.parse(data.data));
+        // successCallback(JSON.parse(data['_body']));
 
-          // })
-          console.dir(JSON.stringify(error))
-          this.utils.openToast("Something went wrong.", 'Ok');
+      }).catch(error => {
+        const errorObject = {...this.errorObj};
+        errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
+        this.slack.pushException(errorObject);
+        this.utils.openToast("Something went wrong.", 'Ok');
+        errorCallback(error);
+      })
 
-          // const errorDetails = JSON.parse(error['_body']);
-          // if (errorDetails.status === "ERR_TOKEN_INVALID") {
-          //   //console.log(JSON.stringify(error))
-          //   this.auth.doLogout().then(success => {
-          //     this.reLoginAlert();
-          //   }).catch(error => {
-          //   })
-          // } else {
-          //   this.utils.openToast("Something went wrong.", 'Ok');
-          // }
+      // this.http.post(apiUrl, payload, { headers: headers })
+      //   .subscribe(data => {
+      //     //console.log('API service success')
+      //     successCallback(JSON.parse(data['_body']));
+      //   }, error => {
+      //     const errorObject = {...this.errorObj};
+      //     errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
+      //     this.slack.pushException(errorObject);
+      //     // this.auth.doLogout().then(success => {
+      //     //   nav.setRoot(WelcomePage);
+      //     //   this.currentUser.deactivateActivateSession(true);
+      //     //   this.utils.openToast('Session expired. Please login again to continue', 'Ok');
+      //     //   errorCallback(error);
+
+      //     // }).catch(error => {
+
+      //     // })
+      //     console.dir(JSON.stringify(error))
+      //     this.utils.openToast("Something went wrong.", 'Ok');
+
+      //     // const errorDetails = JSON.parse(error['_body']);
+      //     // if (errorDetails.status === "ERR_TOKEN_INVALID") {
+      //     //   //console.log(JSON.stringify(error))
+      //     //   this.auth.doLogout().then(success => {
+      //     //     this.reLoginAlert();
+      //     //   }).catch(error => {
+      //     //   })
+      //     // } else {
+      //     //   this.utils.openToast("Something went wrong.", 'Ok');
+      //     // }
 
 
-          errorCallback(error);
-        })
+      //     errorCallback(error);
+      //   })
     }).catch(error => {
       //console.log('ERRor')
       this.utils.openToast("Something went wrong.", 'Ok');
@@ -137,23 +172,23 @@ export class ApiProvider {
     })
   }
 
-  httpPut(url, payload, successCallback, errorCallback) {
-    // this.validateApiToken().then(response => {
-    //console.log('SUCcess');
-    let headers = new Headers();
-    headers.append("Content-type", 'image/jpeg');
-    console.log(url)
-    const apiUrl = url;
-    this.http.put(apiUrl, payload, { headers: headers }).subscribe(data => {
-      //console.log('API service success')
-      successCallback(JSON.parse(data['_body']));
-    })
-    // }).catch(error => {
-    //   //console.log('ERRor')
-    //   //console.log(JSON.stringify(error))
-    //   errorCallback(error);
-    // })
-  }
+  // httpPut(url, payload, successCallback, errorCallback) {
+  //   // this.validateApiToken().then(response => {
+  //   //console.log('SUCcess');
+  //   let headers = new Headers();
+  //   headers.append("Content-type", 'image/jpeg');
+  //   console.log(url)
+  //   const apiUrl = url;
+  //   this.http.put(apiUrl, payload, { headers: headers }).subscribe(data => {
+  //     //console.log('API service success')
+  //     successCallback(JSON.parse(data['_body']));
+  //   })
+  //   // }).catch(error => {
+  //   //   //console.log('ERRor')
+  //   //   //console.log(JSON.stringify(error))
+  //   //   errorCallback(error);
+  //   // })
+  // }
 
   reLoginAlert() {
     let alert = this.alertCntrl.create({
@@ -191,6 +226,8 @@ export class ApiProvider {
         'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
         'gpsLocation': gpsLocation ? gpsLocation : '0,0'
       }
+      this.http.setDataSerializer('json');
+
       let headers = new Headers(obj);
       //console.log(gpsLocation)
       // headers.append({'x-authenticated-user-token': this.currentUser.curretUser.accessToken});
@@ -198,30 +235,55 @@ export class ApiProvider {
 
       //console.log(JSON.stringify(headers))
       const apiUrl = AppConfigs.api_base_url + url;
-      this.http.get(apiUrl, { headers: headers })
-        .subscribe(data => {
-          //console.log('API service success');
-          // //console.log(data)
-          successCallback(JSON.parse(data['_body']));
-        }, error => {
-          const errorObject = {...this.errorObj};
-          errorObject.text = `API failed. URL: ${apiUrl}. Details ${JSON.stringify(error)}`;
-          this.slack.pushException(errorObject);
-          //console.log(error.status)
-          const errorDetails = JSON.parse(error['_body']);
-          if (errorDetails.status === "ERR_TOKEN_INVALID") {
-            //console.log(JSON.stringify(error))
-            this.auth.doLogout().then(success => {
-              this.reLoginAlert();
-            }).catch(error => {
-            })
-          } else {
-            this.utils.openToast(error.message, 'Ok');
-          }
-          this.utils.openToast(error.message, 'Ok');
+      this.http.get(apiUrl, {}, obj).then( data => {
+        // console.log(JSON.stringify(data))
+        // const response = JSON.parse(data);
+        successCallback(JSON.parse(data.data));
+      }).catch( error => {
+        // console.log("error get", JSON.stringify(error))
 
-          errorCallback(error);
-        })
+        const errorObject = {...this.errorObj};
+        errorObject.text = `API failed. URL: ${apiUrl}. Details ${JSON.stringify(error)}`;
+        this.slack.pushException(errorObject);
+        //console.log(error.status)
+        const errorDetails = JSON.parse(error['_body']);
+        if (errorDetails.status === "ERR_TOKEN_INVALID") {
+          //console.log(JSON.stringify(error))
+          this.auth.doLogout().then(success => {
+            this.reLoginAlert();
+          }).catch(error => {
+          })
+        } else {
+          this.utils.openToast(error.message, 'Ok');
+        }
+        this.utils.openToast(error.message, 'Ok');
+
+        errorCallback(error);
+      })
+      // this.http.get(apiUrl, { headers: headers })
+      //   .subscribe(data => {
+      //     //console.log('API service success');
+      //     // //console.log(data)
+      //     successCallback(JSON.parse(data['_body']));
+      //   }, error => {
+      //     const errorObject = {...this.errorObj};
+      //     errorObject.text = `API failed. URL: ${apiUrl}. Details ${JSON.stringify(error)}`;
+      //     this.slack.pushException(errorObject);
+      //     //console.log(error.status)
+      //     const errorDetails = JSON.parse(error['_body']);
+      //     if (errorDetails.status === "ERR_TOKEN_INVALID") {
+      //       //console.log(JSON.stringify(error))
+      //       this.auth.doLogout().then(success => {
+      //         this.reLoginAlert();
+      //       }).catch(error => {
+      //       })
+      //     } else {
+      //       this.utils.openToast(error.message, 'Ok');
+      //     }
+      //     this.utils.openToast(error.message, 'Ok');
+
+      //     errorCallback(error);
+      //   })
     }).catch(error => {
       //console.log('ERRor');
       // this.doLogout();
@@ -231,25 +293,25 @@ export class ApiProvider {
     })
   }
 
-  httpGetJoin(urls, successCallback) {
-    //console.log('Joiin');
-    let requests = [];
-    for (const url of urls) {
-      //console.log('url append');
+  // httpGetJoin(urls, successCallback) {
+  //   //console.log('Joiin');
+  //   let requests = [];
+  //   for (const url of urls) {
+  //     //console.log('url append');
 
-      let req = this.http.get(AppConfigs.api_base_url + url);
-      requests.push(req);
-    }
-    //console.log(requests)
-    this.validateApiToken().then(response => {
-      Observable.forkJoin(requests).subscribe(response => {
-        successCallback(response);
-      })
-    }).catch(error => {
+  //     let req = this.http.get(AppConfigs.api_base_url + url);
+  //     requests.push(req);
+  //   }
+  //   //console.log(requests)
+  //   this.validateApiToken().then(response => {
+  //     Observable.forkJoin(requests).subscribe(response => {
+  //       successCallback(response);
+  //     })
+  //   }).catch(error => {
 
-    })
+  //   })
 
-  }
+  // }
 
 
 } 
