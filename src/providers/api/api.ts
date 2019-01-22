@@ -2,26 +2,30 @@
 import { Http, URLSearchParams, Headers } from '@angular/http';
 
 import { Injectable } from '@angular/core';
+import { App, AlertController } from 'ionic-angular';
+import { HTTP } from '@ionic-native/http';
+
 import { CurrentUserProvider } from '../current-user/current-user';
 import { AppConfigs } from '../appConfig';
-import { App, AlertController } from 'ionic-angular'
+
 import { WelcomePage } from '../../pages/welcome/welcome';
 import { UtilsProvider } from '../utils/utils';
 import { AuthProvider } from '../auth/auth';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { SlackProvider } from '../slack/slack';
-import { HTTP } from '@ionic-native/http';
 
 @Injectable()
 export class ApiProvider {
 
   constructor(public http: HTTP,
     public currentUser: CurrentUserProvider,
-    private appCtrls: App, private utils: UtilsProvider,
+    private appCtrls: App, 
+    private utils: UtilsProvider,
     private auth: AuthProvider,
     private alertCntrl: AlertController,
     private ngHttp: Http,
     private ngps: NetworkGpsProvider, private slack: SlackProvider) {
+
   }
 
   errorObj = {
