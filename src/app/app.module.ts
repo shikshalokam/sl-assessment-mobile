@@ -69,6 +69,7 @@ import { GeneralQuestionSubmitPage } from '../pages/general-question-submit/gene
 import { SlackProvider } from '../providers/slack/slack';
 import { Keyboard } from '@ionic-native/keyboard';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
+import { HTTP } from '@ionic-native/http';
 
 @NgModule({
   declarations: [
@@ -170,7 +171,8 @@ import { LocalStorageProvider } from '../providers/local-storage/local-storage';
     ExtendedDeviceInformation,
     SlackProvider,
     Keyboard,
-    LocalStorageProvider
+    LocalStorageProvider,
+    HTTP
   ]
 })
 export class AppModule { }
