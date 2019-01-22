@@ -10,7 +10,6 @@ import { RatingProvider } from '../../providers/rating/rating';
 import { PopoverController } from 'ionic-angular';
 import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { Network } from '@ionic-native/network';
-import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { AppConfigs } from '../../providers/appConfig';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
@@ -47,7 +46,6 @@ export class HomePage {
     private popoverCtrl: PopoverController,
     private network: Network,
     private events: Events,
-    private ngps: NetworkGpsProvider,
     private evdnsServ: EvidenceProvider,
     private platform: Platform,
     private ulsd: UpdateLocalSchoolDataProvider,
