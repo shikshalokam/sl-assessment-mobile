@@ -5,6 +5,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @Component({
   selector: 'page-feedback',
@@ -23,7 +24,7 @@ export class FeedbackPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private viewCntrl: ViewController, private ngps: NetworkGpsProvider,
-    private events: Events,
+    private events: Events, private localStorage: LocalStorageProvider,
     private utils: UtilsProvider, private apiService: ApiProvider) {
       this.events.subscribe('network:offline', () => {
         this.networkConnected = false;
@@ -41,7 +42,13 @@ export class FeedbackPage {
     this.getFeedbackForm();
     this.schoolId = this.navParams.get('schoolId');
     this.schoolName  = this.navParams.get('schoolName');
-    this.programId = this.navParams.get('programId');
+    this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then(schoolDetails => {
+      if (schoolDetails) {
+        this.programId = schoolDetails['program']._id;
+      }
+    }).catch(error => {
+    })
+    // this.programId = this.navParams.get('programId');
     this.submissionId = this.navParams.get('submissionId')
   }
 
