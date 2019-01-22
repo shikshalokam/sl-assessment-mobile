@@ -89,6 +89,8 @@ export class MyApp {
     // this.statusBar.backgroundColorByName(black)
     this.currentUser.checkForTokens().then(response => {
       console.log("Deiactivated " + response.isDeactivated)
+      this.rootPage = WelcomePage;
+
       if (response.isDeactivated) {
         this.rootPage = WelcomePage;
         this.splashScreen.hide()
