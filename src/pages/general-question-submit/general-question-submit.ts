@@ -221,10 +221,16 @@ export class GeneralQuestionSubmitPage {
         }
       }).catch(err => {
         const errorObject = {... this.errorObj};
-        this.utils.openToast("Something went wrong. Please try afetr 30 mins.")
+        // this.utils.openToast("Something went wrong. Please try afetr 30 mins.")
         errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}. Details: ${JSON.stringify(err)}`;
         this.slack.pushException(errorObject);
-        this.navCtrl.pop();
+        // this.navCtrl.pop();
+        if (this.uploadIndex < (this.imageList.length - 1)) {
+          this.uploadIndex++;
+          this.cloudImageUpload();
+        } else {
+          this.tempSubmit();
+        }
       })
     }).catch (error => {
       console.log("In error Could not find images");
