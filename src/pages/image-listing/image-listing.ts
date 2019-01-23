@@ -181,12 +181,12 @@ export class ImageListingPage {
           this.navCtrl.pop();
           // this.retryCount++;
           // if(this.retryCount > 3) {
-          //   if (this.uploadIndex < (this.imageList.length - 1)) {
-          //     this.uploadIndex++;
-          //     this.cloudImageUpload();
-          //   } else {
-          //     this.submitEvidence();
-          //   }
+            // if (this.uploadIndex < (this.imageList.length - 1)) {
+            //   this.uploadIndex++;
+            //   this.cloudImageUpload();
+            // } else {
+            //   this.submitEvidence();
+            // }
           // } else {
           //   this.cloudImageUpload();
           // }

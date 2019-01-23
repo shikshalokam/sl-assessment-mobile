@@ -35,6 +35,7 @@ export class ApiProvider {
   }
   validateApiToken(): Promise<any> {
     this.http.setDataSerializer('json');
+    this.http.setRequestTimeout(300);
     return new Promise((resolve, reject) => {
       //console.log("Utils: validate token");
       const userDetails = this.currentUser.getCurrentUserData();
