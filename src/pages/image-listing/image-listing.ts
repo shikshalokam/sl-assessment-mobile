@@ -51,12 +51,14 @@ export class ImageListingPage {
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
 
-    this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then( data => {
+    this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then(data => {
       this.schoolData = data;
       this.currentEvidence = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex];
       this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.schoolId;
       this.evidenceSections = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
       this.selectedEvidenceName = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
+      this.checkIfEcmSumittedByUser();
+
     }).catch(error => {
 
     })
@@ -70,19 +72,57 @@ export class ImageListingPage {
     // }).catch(error => {
 
     // })
-    this.storage.get("allImageList").then(data => {
-      if (data && JSON.parse(data)[this.schoolId]) {
-        this.uploadImages = (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) : [];
-      } else {
-        this.uploadImages = [];
-      }
-      if (this.uploadImages.length) {
-        this.createImageFromName(this.uploadImages);
-      } else {
-        this.submitEvidence();
-      }
-    })
+    // this.storage.get("allImageList").then(data => {
+    //   if (data && JSON.parse(data)[this.schoolId]) {
+    //     this.uploadImages = (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) : [];
+    //   } else {
+    //     this.uploadImages = [];
+    //   }
+    //   if (this.uploadImages.length) {
+    //     this.createImageFromName(this.uploadImages);
+    //   } else {
+    //     this.submitEvidence();
+    //   }
+    // })
 
+  }
+
+
+  checkIfEcmSumittedByUser() {
+    this.utils.startLoader();
+    const submissionId = this.schoolData['assessments'][0]['submissionId']
+    this.apiService.httpGet(AppConfigs.survey.checkIfSubmitted + submissionId + "?evidenceId=" + this.currentEvidence.externalId, success => {
+      this.utils.stopLoader();
+      console.log(JSON.stringify(success));
+      if (success.result.allowed) {
+        this.storage.get("allImageList").then(data => {
+          if (data && JSON.parse(data)[this.schoolId]) {
+            this.uploadImages = (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) : [];
+          } else {
+            this.uploadImages = [];
+          }
+          if (this.uploadImages.length) {
+            this.createImageFromName(this.uploadImages);
+          } else {
+            this.submitEvidence();
+          }
+        })
+      } else {
+        this.utils.openToast("Submission completed successfully");
+        this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+        // this.utils.setLocalSchoolData(this.schoolData);
+        this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData);
+        const options = {
+          _id: this.schoolId,
+          name: this.schoolName
+        }
+        this.navCtrl.remove(2, 1);
+        this.navCtrl.pop();
+      }
+
+    }, error => {
+      this.utils.stopLoader();
+    })
   }
 
   getImageUploadUrls() {
@@ -159,51 +199,57 @@ export class ImageListingPage {
     let targetPath = this.pathForImage(this.imageList[this.uploadIndex].file);
     let fileTrns: FileTransferObject = this.fileTransfer.create();
 
-      this.file.checkFile((this.platform.is('ios') ? this.file.documentsDirectory : this.file.externalDataDirectory)+'images/', this.imageList[this.uploadIndex].file ).then(success => {
-        fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
-          this.retryCount = 0;
-          console.log(JSON.stringify(result))
-          this.imageList[this.uploadIndex].uploaded = true;
-          if (this.uploadIndex < (this.imageList.length - 1)) {
-            this.uploadIndex++;
-            this.cloudImageUpload();
-    
-          } else {
-            // this.utils.stopLoader();
-            this.submitEvidence();
-          }
-        }).catch(err => {
-          const errorObject = {... this.errorObj};
-          this.utils.openToast("Something went wrong. Please try after sometime.")
-          errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
-           Details: ${JSON.stringify(err)}`;
-          this.slack.pushException(errorObject);
-          this.navCtrl.pop();
-          // this.retryCount++;
-          // if(this.retryCount > 3) {
-            // if (this.uploadIndex < (this.imageList.length - 1)) {
-            //   this.uploadIndex++;
-            //   this.cloudImageUpload();
-            // } else {
-            //   this.submitEvidence();
-            // }
-          // } else {
-          //   this.cloudImageUpload();
-          // }
-        })
-      }).catch (error => {
-        console.log("In error Could not find images");
-        this.failedUploadImageNames.push(this.imageList[this.uploadIndex].file)
+    this.file.checkFile((this.platform.is('ios') ? this.file.documentsDirectory : this.file.externalDataDirectory) + 'images/', this.imageList[this.uploadIndex].file).then(success => {
+      fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
+        this.retryCount = 0;
+        console.log(JSON.stringify(result))
+        this.imageList[this.uploadIndex].uploaded = true;
         if (this.uploadIndex < (this.imageList.length - 1)) {
           this.uploadIndex++;
-          // this.file.removeFile()
           this.cloudImageUpload();
-  
+
         } else {
           // this.utils.stopLoader();
           this.submitEvidence();
         }
-      });
+      }).catch(err => {
+        const errorObject = { ... this.errorObj };
+        // this.utils.openToast("Something went wrong. Please try after sometime.")
+        // errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
+        //  Details: ${JSON.stringify(err)}`;
+        // this.slack.pushException(errorObject);
+        // this.navCtrl.pop();
+        this.retryCount++;
+        if (this.retryCount > 3) {
+          this.utils.openToast("Something went wrong. Please try after sometime.")
+          errorObject.text = `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
+            Details: ${JSON.stringify(err)}`;
+          this.slack.pushException(errorObject);
+          this.navCtrl.pop();
+
+          // if (this.uploadIndex < (this.imageList.length - 1)) {
+          //   this.uploadIndex++;
+          //   this.cloudImageUpload();
+          // } else {
+          //   this.submitEvidence();
+          // }
+        } else {
+          this.cloudImageUpload();
+        }
+      })
+    }).catch(error => {
+      console.log("In error Could not find images");
+      this.failedUploadImageNames.push(this.imageList[this.uploadIndex].file)
+      if (this.uploadIndex < (this.imageList.length - 1)) {
+        this.uploadIndex++;
+        // this.file.removeFile()
+        this.cloudImageUpload();
+
+      } else {
+        // this.utils.stopLoader();
+        this.submitEvidence();
+      }
+    });
 
 
   }
@@ -222,13 +268,13 @@ export class ImageListingPage {
     this.utils.startLoader('Please wait while submitting')
     const payload = this.constructPayload();
     const submissionId = this.schoolData['assessments'][0].submissionId;
-    const url = AppConfigs.survey.submission + submissionId+ '/';
+    const url = AppConfigs.survey.submission + submissionId + '/';
     // console.log(JSON.stringify(payload))
     this.apiService.httpPost(url, payload, response => {
       this.utils.openToast(response.message);
       this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       // this.utils.setLocalSchoolData(this.schoolData);
-      this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData);
+      this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData);
       const options = {
         _id: this.schoolId,
         name: this.schoolName
@@ -269,7 +315,7 @@ export class ImageListingPage {
             question: question.question,
             labels: [],
             responseType: question.responseType,
-            filesNotUploaded : []
+            filesNotUploaded: []
           },
           startTime: question.startTime,
           endTime: question.endTime

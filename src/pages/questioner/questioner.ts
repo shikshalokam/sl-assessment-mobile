@@ -140,6 +140,46 @@ export class QuestionerPage {
     return display
   }
 
+  // checkForDependentVisibility(qst): boolean {
+  //   let display = true;
+  //   for (const question of this.questions) {
+  //     for (const condition of qst.visibleIf) {
+  //       if (condition._id === question._id) {
+  //         let expression = "";
+  //         if(condition.operator != "==="){
+  //           for (const value of condition.value) {
+  //             expression = expression + condition.operator + value
+  //           }
+  //           expression = expression.substring(1, expression.length-1)
+  //         }
+  //         if(!eval(expression)){
+  //           return false
+  //         }
+  //         // if (condition.operator === "||") {
+  //         //   for (const value of condition.value) {
+  //         //     if(question.value.includes(value)) {
+  //         //       return true
+  //         //     } else {
+  //         //       display = false;
+  //         //     }
+  //         //   }
+  //         //   return display
+  //         // } else {
+  //         //   for (const value of question.value) {
+  //         //     if ((eval('"' + value + '"' + condition.operator + '"' + condition.value + '"'))) {
+  //         //       return true
+  //         //     } else {
+  //         //       display = false;
+  //         //     }
+  //         //   }
+  //         //   return display
+  //         // }
+  //       }
+  //     }
+  //   }
+  //   return display
+  // }
+
   updateTheChildrenQuestions(parentQuestion) {
     for (const child of parentQuestion.children) {
       for (const question of this.questions) {

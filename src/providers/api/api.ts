@@ -125,7 +125,7 @@ export class ApiProvider {
         const errorObject = {...this.errorObj};
         errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
         this.slack.pushException(errorObject);
-        this.utils.openToast("Something went wrong.", 'Ok');
+        this.utils.openToast("Something went wrong. Please try again", 'Ok');
         errorCallback(error);
       })
 
@@ -289,7 +289,9 @@ export class ApiProvider {
       //console.log('ERRor');
       // this.doLogout();
       //console.log(JSON.stringify(error))
-      this.utils.openToast("Something went wrong.", 'Ok');
+      this.utils.openToast("Something went wrong. Please try again", 'Ok');
+
+      // this.utils.openToast("Something went wrong.", 'Ok');
       errorCallback(error);
     })
   }
