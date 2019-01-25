@@ -53,24 +53,13 @@ export class GeneralQuestionSubmitPage {
   }
 
   ionViewDidLoad() {
-
-    // this.schoolName = this.navParams.get('name');
-
-    // this.storage.get('schoolsDetails').then(data => {
-    //   if(data) {
-    //     this.schoolData = JSON.parse(data);
-    //     this.submissionId = this.schoolData[this.schoolId]['assessments'][0]['submissionId'];
-    //   }
-    // }).catch(error => {
-
-    // })
-
     this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then( success => {
         this.submissionId = success['assessments'][0]['submissionId'];
         this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( data => {
           this.allGeneralQuestions = data;
           this.generalQuestions = this.allGeneralQuestions;
-          this.localStorage.getLocalStorage("genericQuestionsImages").then(data => {
+          this.localStorage.getLocalStorage("genericQuestionsImages").then(success => {
+            const data = JSON.parse(success)
             if (data && data[this.schoolId]) {
               this.uploadImages = data[this.schoolId] ? data[this.schoolId] : [];
             } else {
@@ -221,10 +210,27 @@ export class GeneralQuestionSubmitPage {
         }
       }).catch(err => {
         const errorObject = {... this.errorObj};
-        this.utils.openToast("Something went wrong. Please try afetr 30 mins.")
-        errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}. Details: ${JSON.stringify(err)}`;
-        this.slack.pushException(errorObject);
-        this.navCtrl.pop();
+        // this.utils.openToast("Something went wrong. Please try afetr 30 mins.")
+        // errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}. Details: ${JSON.stringify(err)}`;
+        // this.slack.pushException(errorObject);
+        // this.navCtrl.pop();
+        this.retryCount++;
+        if(this.retryCount > 3) {
+          this.utils.openToast("Something went wrong. Please try after sometime.")
+          errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
+          Details: ${JSON.stringify(err)}`;
+         this.slack.pushException(errorObject);
+         this.navCtrl.pop();
+
+          // if (this.uploadIndex < (this.imageList.length - 1)) {
+          //   this.uploadIndex++;
+          //   this.cloudImageUpload();
+          // } else {
+          //   this.tempSubmit();
+          // }
+        } else {
+          this.cloudImageUpload();
+        }
         // if (this.uploadIndex < (this.imageList.length - 1)) {
         //   this.uploadIndex++;
         //   this.cloudImageUpload();

@@ -122,4 +122,8 @@ export class DetailPage {
     })
   }
 
+  relogin() {
+    this.auth.reloginEnable();
+  }
+
 }

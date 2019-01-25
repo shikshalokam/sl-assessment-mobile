@@ -6,6 +6,7 @@ import { CurrentUserProvider } from "../current-user/current-user";
 import { App, AlertController } from "ionic-angular";
 import { TabsPage } from "../../pages/tabs/tabs";
 import { UtilsProvider } from "../utils/utils";
+import { WelcomePage } from "../../pages/welcome/welcome";
 
 @Injectable()
 export class AuthProvider {
@@ -237,6 +238,16 @@ export class AuthProvider {
       });
 
     });
+  }
+
+  reloginEnable() {
+    this.doLogout().then( success => {
+      this.currentUser.deactivateActivateSession(true);
+      let nav = this.app.getRootNav();
+      nav.setRoot(WelcomePage);
+    }).catch(error => {
+
+    })
   }
 
 }

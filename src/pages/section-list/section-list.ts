@@ -41,10 +41,13 @@ export class SectionListPage {
     private alertCtrl: AlertController, private network: Network, private localStorage : LocalStorageProvider) {
 
     this.events.subscribe('network:offline', () => {
+      this.networkAvailable = false;
     });
 
     // Online event
     this.events.subscribe('network:online', () => {
+      this.networkAvailable = true;
+
     });
     this.networkAvailable = this.ngps.getNetworkStatus()
   }
@@ -193,7 +196,7 @@ export class SectionListPage {
         this.ngps.checkForLocationPermissions();
       })
     } else {
-      this.utils.openToast("Please enable network to continue");
+      this.utils.openToast("Please enable data to continue.");
     }
     
 
