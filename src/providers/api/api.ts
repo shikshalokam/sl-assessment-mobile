@@ -100,6 +100,10 @@ export class ApiProvider {
         errorCallback(error);
       })
     }).catch(error => {
+      this.auth.doLogout().then(success => {
+        this.reLoginAlert();
+      }).catch(error => {
+      })
       errorCallback(error);
     })
   }
@@ -117,6 +121,7 @@ export class ApiProvider {
       this.http.setDataSerializer('json');
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.get(apiUrl, {}, obj).then(data => {
+        successCallback(JSON.parse(data.data));
       }).catch(error => {
         const errorObject = { ...this.errorObj };
         errorObject.text = `API failed. URL: ${apiUrl}. Details ${JSON.stringify(error)}`;
@@ -136,6 +141,10 @@ export class ApiProvider {
       })
     }).catch(error => {
       this.utils.openToast("Something went wrong. Please try again", 'Ok');
+      this.auth.doLogout().then(success => {
+        this.reLoginAlert();
+      }).catch(error => {
+      })
       errorCallback(error);
     })
   }
