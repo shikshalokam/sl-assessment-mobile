@@ -131,6 +131,31 @@ export class UtilsProvider {
     return new FormGroup(formGrp)
   }
 
+  checkForDependentVisibility(qst, allQuestion): boolean {
+    let display = true;
+    for (const question of allQuestion) {
+      for (const condition of qst.visibleIf) {
+        if (condition._id === question._id) {
+          let expression = [];
+          if(condition.operator != "==="){
+            for (const value of condition.value) {
+              expression.push("(","'"+question.value+"'", "===", "'"+value+"'" ,")", condition.operator)
+            }
+            expression.pop();
+            console.log(expression.join(''))
+            console.log(eval(expression.join('')))
+          } else {
+            expression.push("(","'"+question.value+"'", condition.operator, "'"+condition.value+"'" ,")" )
+          }
+          if(!eval(expression.join(''))) {
+            return false
+          }
+        } 
+      }
+    }
+    return display
+  }
+
   ActionEnableSubmit(actionDetails) {
     let currentEcm;
     this.localStorage.getLocalStorage('schoolDetails_'+ actionDetails.schoolId).then( data => {

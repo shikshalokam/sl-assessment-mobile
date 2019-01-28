@@ -45,17 +45,18 @@ export class QuestionDashboardPage {
 
   checkForQuestionDisplay(qst): boolean {
     console.log('checkcondition')
-    let display = false;
-    if (qst.visibleIf && qst.visibleIf.length) {
-      for (const question of this.questions) {
-        if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
-          display = true;
-        }
-      }
-      return display
-    } else {
-      return true
-    }
+    // let display = false;
+    // if (qst.visibleIf && qst.visibleIf.length) {
+    //   for (const question of this.questions) {
+    //     if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
+    //       display = true;
+    //     }
+    //   }
+    //   return display
+    // } else {
+    //   return true
+    // }
+    return this.utils.checkForDependentVisibility(qst, this.questions)
 
   }
 

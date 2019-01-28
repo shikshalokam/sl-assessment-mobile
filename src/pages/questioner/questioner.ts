@@ -130,14 +130,38 @@ export class QuestionerPage {
   }
 
   checkForQuestionDisplay(qst): boolean {
-    console.log('checkcondition')
-    let display = false;
-    for (const question of this.questions) {
-      if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
-        display = true;
-      }
-    }
-    return display
+    // let display = true;
+    // for (const question of this.questions) {
+    //   for (const condition of qst.visibleIf) {
+    //     if (condition._id === question._id) {
+    //       let expression = [];
+    //       if(condition.operator != "==="){
+    //         for (const value of condition.value) {
+    //           expression.push("(","'"+question.value+"'", "===", "'"+value+"'" ,")", condition.operator)
+    //         }
+    //         expression.pop();
+    //         console.log(expression.join(''))
+    //         console.log(eval(expression.join('')))
+    //       } else {
+    //         expression.push("(","'"+question.value+"'", condition.operator, "'"+condition.value+"'" ,")" )
+    //       }
+    //       if(!eval(expression.join(''))) {
+    //         return false
+    //       }
+    //     } 
+    //   }
+    // }
+    // return display
+    // console.log('checkcondition')
+    // let display = false;
+    // for (const question of this.questions) {
+    //   if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
+    //     display = true;
+    //   }
+    // }
+    // return display
+
+     return this.utils.checkForDependentVisibility(qst, this.questions)
   }
 
   // checkForDependentVisibility(qst): boolean {
