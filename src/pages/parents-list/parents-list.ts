@@ -15,15 +15,14 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class ParentsListPage {
 
-  parentDetails: any;
   schoolId: string;
   schoolName: string;
   programId: string;
   schoolDetails: any;
-  parentInfoList: any;
-  allSchoolParentList: any;
+  registryList: any;
   showUploadBtn: boolean;
   networkConnected: boolean;
+  registryType: string;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -50,6 +49,7 @@ export class ParentsListPage {
     console.log('ionViewDidLoad ParentsListPage');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
+    this.registryType = this.navParams.get('registry');
     this.storage.get('parentRegisterForm').then(form => {
       // console.log(this.schoolId)
       this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then(schoolDetails => {
@@ -73,46 +73,45 @@ export class ParentsListPage {
       // })
     })
 
-    this.storage.get('parentDetails_'+ this.schoolId).then(parentData => {
-      this.allSchoolParentList = parentData;
-      if(parentData){
-        this.parentInfoList = this.allSchoolParentList ? this.allSchoolParentList : [];
+    this.storage.get(this.registryType+'Details_'+ this.schoolId).then(registryData => {
+      if(registryData){
+        this.registryList = registryData ? registryData : [];
         this.showUploadBtn = this.checkForUploadBtn();
       } else {
-        this.parentInfoList = [];
+        this.registryList = [];
         this.showUploadBtn = false;
-
       }
     })
 
   }
 
-  addParent(): void {
+  addRegistryItem(): void {
     const params = {
       _id: this.schoolId,
       name: this.schoolName,
+      registryType: this.registryType
     }
-    let parentForm = this.modalCntrl.create(ParentsFormPage, params);
-    parentForm.onDidDismiss(data => {
+    let registryForm = this.modalCntrl.create(ParentsFormPage, params);
+    registryForm.onDidDismiss(data => {
       if (data) {
         data.programId = this.schoolDetails['program']._id;
         data.schoolId = this.schoolId;
         data.schoolName = this.schoolName;
-        this.parentInfoList.push(data);
+        this.registryList.push(data);
         this.showUploadBtn = this.checkForUploadBtn();
-        this.localStorage.setLocalStorage('parentDetails_'+this.schoolId, this.allSchoolParentList)
+        this.localStorage.setLocalStorage(this.registryType+'Details_'+this.schoolId, this.registryList)
         // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
       }
 
     })
-    parentForm.present();
+    registryForm.present();
   }
 
   updateAllParents() {
     const obj = {
       parents: []
     };
-    for (const parent of this.parentInfoList) {
+    for (const parent of this.registryList) {
       if(!parent.uploaded) {
         delete parent.uploaded;
         obj.parents.push(parent);
@@ -135,18 +134,18 @@ export class ParentsListPage {
   }
 
   makeAllAsUploaded():void {
-    for (const parent of this.parentInfoList) {
+    for (const parent of this.registryList) {
       parent.uploaded = true;
     }
     this.showUploadBtn = this.checkForUploadBtn();
-    this.localStorage.setLocalStorage('parentDetails_'+this.schoolId, this.allSchoolParentList)
+    this.localStorage.setLocalStorage(this.registryType+'Details_'+this.schoolId, this.registryList)
 
     // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
   }
 
   checkForUploadBtn() {
-    if(this.parentInfoList && this.parentInfoList.length){
-      for (const parent of this.parentInfoList) {
+    if(this.registryList && this.registryList.length){
+      for (const parent of this.registryList) {
         if (!parent.uploaded){
           return true
         }
