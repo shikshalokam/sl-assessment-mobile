@@ -88,10 +88,9 @@ export class AboutPage {
     <p>Name: ${this.currentUSer.getCurrentUserData().name}</p>
     <p>Email: ${this.currentUSer.getCurrentUserData().email}
     <p>User Id : ${this.currentUSer.getCurrentUserData().preferred_username}
-    <p>Network type: ${this.network.type}</p>
-    <p>DownlinkMax: ${this.network.downlinkMax}</p>`,
+    <p>Network type: ${this.network.type}</p>`,
     images: [
-      {path:"assets/imgs/SDI_App_Logo.jpg", position:"top"}
+      {path:"assets/imgs/just-logo.png", position:"top"}
     ]
   }
 ]

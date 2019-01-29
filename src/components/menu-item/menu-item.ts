@@ -82,13 +82,14 @@ export class MenuItemComponent {
     this.close();
   }
 
-  goToParentRegistry(): void {
+  goToRegistry(registryType): void {
     console.log(this.schoolId);
     console.log(this.schoolName)
 
     this.appCtrl.getRootNav().push('ParentsListPage', {
       _id: this.schoolId,
       name: this.schoolName,
+      registry: registryType
     })
     this.close();
   }

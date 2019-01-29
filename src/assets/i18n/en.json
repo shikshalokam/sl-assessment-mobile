@@ -24,7 +24,9 @@
         "capture": "Capture",
         "refresh": "Refresh",
         "feedback": "Feedback",
-        "update": "Update"
+        "update": "Update",
+        "Leader": "Leader",
+        "Teacher": "Teacher"
     },
     "tabs": {
         "home": "Home",
@@ -61,6 +63,8 @@
         "surveyEcm":"Survey - ECM",
         "parentContact": "Parent Contacts",
         "parentRegistry":"Parent Registry",
+        "LeaderRegistry": "Leader Registry",
+        "TeacherRegistry": "Teacher Registry",
         "generalQuestions": "General Questions"
     },
     "labels": {

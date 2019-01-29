@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController, Events } from 'ionic-angular';
-import { Storage } from "@ionic/storage"
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
@@ -20,16 +19,18 @@ export class ParentsFormPage {
   schoolId: any;
   schoolName: any;
   programId: string;
-  parentInfoList: any;
+  // parentInfoList: any;
   networkConnected: boolean;
+  registryType: string;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private viewCntrl: ViewController, private ngps: NetworkGpsProvider,
-    private storage: Storage, private events: Events, private localStorage: LocalStorageProvider,
+    private events: Events, private localStorage: LocalStorageProvider,
     private utils: UtilsProvider, private apiService: ApiProvider) {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
+    this.registryType = this.navParams.get('registryType');
     this.events.subscribe('network:offline', () => {
       this.networkConnected = false;
     });
@@ -43,7 +44,7 @@ export class ParentsFormPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ParentsFormPage');
-    this.localStorage.getLocalStorage('parentRegisterForm').then(formFields => {
+    this.localStorage.getLocalStorage(this.registryType+'RegisterForm').then(formFields => {
       if (formFields) {
         for (const formField of formFields) {
           if (formField.visible) {
@@ -63,15 +64,15 @@ export class ParentsFormPage {
     }).catch(error => {
     })
 
-    this.localStorage.getLocalStorage('ParentInfo').then(data => {
-      if (data) {
-        this.parentInfoList = data;
-      } else {
-        this.parentInfoList = [];
-      }
-    }).catch(error => {
+    // this.localStorage.getLocalStorage('ParentInfo').then(data => {
+    //   if (data) {
+    //     this.parentInfoList = data;
+    //   } else {
+    //     this.parentInfoList = [];
+    //   }
+    // }).catch(error => {
 
-    })
+    // })
     // this.storage.get("parentRegisterForm").then(formFields => {
     //   if (formFields) {
     //     for (const formField of JSON.parse(formFields)) {
@@ -118,7 +119,7 @@ export class ParentsFormPage {
     payload.parents.push(obj)
     if (this.networkConnected) {
       this.utils.startLoader();
-      this.apiService.httpPost(AppConfigs.parentInfo.addParentsInfo, payload, success => {
+      this.apiService.httpPost(AppConfigs.registry['add'+this.registryType+'Info'], payload, success => {
         this.utils.stopLoader();
         this.utils.openToast(success.message);
         obj.uploaded = true;
@@ -128,7 +129,6 @@ export class ParentsFormPage {
         this.utils.stopLoader();
         obj.uploaded = false;
         this.viewCntrl.dismiss(obj)
-
       })
     } else {
       obj.uploaded = false;

@@ -11,9 +11,13 @@
     <ion-icon name="flag" margin-right></ion-icon>
     {{'buttons.flag'|translate}}
   </button> -->
-  <button ion-item clear small icon-start (click)="goToParentRegistry()">
+  <button ion-item clear small icon-start (click)="goToRegistry('Leader')">
     <ion-icon name="contacts" margin-left margin-right></ion-icon>
-     {{'buttons.parent' | translate}} {{'buttons.registry'| translate}}
+     {{'buttons.Leader' | translate}} {{'buttons.registry'| translate}}
+  </button>
+  <button ion-item clear small icon-start (click)="goToRegistry('Teacher')">
+    <ion-icon name="contacts" margin-left margin-right></ion-icon>
+     {{'buttons.Teacher' | translate}} {{'buttons.registry'| translate}}
   </button>
   <button ion-item clear small icon-start (click)="refreshSchoolData()">
       <ion-icon name="refresh-circle" margin-left margin-right></ion-icon>
