@@ -10,10 +10,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../providers/network-gps/network-gps';
 import { HomePage } from '../pages/home/home';
+<<<<<<< HEAD
 import { AppConfigs } from '../providers/appConfig';
 import { SchoolListPage } from '../pages/school-list/school-list';
 import { FaqPage } from '../pages/faq/faq';
 import { AboutPage } from '../pages/about/about';
+=======
+>>>>>>> Menu added
 
 @Component({
   templateUrl: 'app.html'
