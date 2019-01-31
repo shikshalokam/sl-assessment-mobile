@@ -26,7 +26,6 @@ export class MenuItemComponent {
     private events: Events, private ngps: NetworkGpsProvider, private modalCntrl: ModalController,
     private usld: UpdateLocalSchoolDataProvider) {
     console.log('Hello MenuItemComponent Component');
-    console.log(this.navParams.get("value"))
     this.submissionId = this.navParams.get('submissionId');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
@@ -83,9 +82,6 @@ export class MenuItemComponent {
   }
 
   goToRegistry(registryType): void {
-    console.log(this.schoolId);
-    console.log(this.schoolName)
-
     this.appCtrl.getRootNav().push('ParentsListPage', {
       _id: this.schoolId,
       name: this.schoolName,
