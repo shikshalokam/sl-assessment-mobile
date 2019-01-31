@@ -3,12 +3,13 @@ import { Platform, AlertController, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { TabsPage } from '../pages/tabs/tabs';
+// import { TabsPage } from '../pages/tabs/tabs';
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { TranslateService } from '@ngx-translate/core';
 import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../providers/network-gps/network-gps';
+import { HomePage } from '../pages/home/home';
 
 @Component({
   templateUrl: 'app.html'
@@ -95,7 +96,7 @@ export class MyApp {
         this.rootPage = WelcomePage;
         this.splashScreen.hide()
       } else {
-        this.rootPage = TabsPage;
+        this.rootPage = HomePage;
         // this.splashScreen.hide()
         // this.statusBar.overlaysWebView(false);
       }
