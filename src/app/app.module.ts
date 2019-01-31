@@ -1,6 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule, HttpClient} from '@angular/common/http';
-import { HttpModule, Http } from '@angular/http';
+import { HttpModule } from '@angular/http';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -12,7 +12,7 @@ import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
+// import { TabsPage } from '../pages/tabs/tabs';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -23,7 +23,7 @@ import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { SchoolListPage } from '../pages/school-list/school-list';
 import { SchoolListProvider } from '../providers/school-list/school-list';
-import { HttpInterceptorProvider } from '../providers/http-interceptor/http-interceptor';
+// import { HttpInterceptorProvider } from '../providers/http-interceptor/http-interceptor';
 import { UtilsProvider } from '../providers/utils/utils';
 import { ApiProvider } from '../providers/api/api';
 import { SchoolProfilePageModule } from '../pages/school-profile/school-profile.module';
@@ -40,7 +40,7 @@ import { SchoolProfileEditPage } from '../pages/school-profile-edit/school-profi
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { FileTransfer} from '@ionic-native/file-transfer';
 import { ImagePicker } from '@ionic-native/image-picker';
 import { ImageListingPage } from '../pages/image-listing/image-listing';
 import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
@@ -77,7 +77,7 @@ import { HTTP } from '@ionic-native/http';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage,
+    // TabsPage,
     WelcomePage,
     SchoolListPage,
     FaqPage,
@@ -125,7 +125,7 @@ import { HTTP } from '@ionic-native/http';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage,
+    // TabsPage,
     WelcomePage,
     SchoolListPage,
     FaqPage,
@@ -148,7 +148,7 @@ import { HTTP } from '@ionic-native/http';
     CurrentUserProvider,
     Network,
     SchoolListProvider,
-    HttpInterceptorProvider,
+    // HttpInterceptorProvider,
     // {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorProvider, multi: true},
     UtilsProvider,
     ApiProvider,
