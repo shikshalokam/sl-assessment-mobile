@@ -13,7 +13,7 @@ import { Network } from '@ionic-native/network';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { AppConfigs } from '../../providers/appConfig';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
-import { AuthProvider } from '../../providers/auth/auth';
+// import { AuthProvider } from '../../providers/auth/auth';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 declare var cordova: any;
@@ -51,7 +51,7 @@ export class HomePage {
     private ulsd: UpdateLocalSchoolDataProvider,
     private alertCntrl: AlertController,
     private app: App,
-    private auth: AuthProvider,
+    // private auth: AuthProvider,
     private localStorage: LocalStorageProvider
   ) {
     this.subscription = this.events.subscribe('localDataUpdated', () => {
@@ -109,10 +109,12 @@ export class HomePage {
           text: 'Ok',
           role: 'role',
           handler: data => {
-            this.auth.doLogout();
-            this.currentUser.removeUser();
-            let nav = this.app.getRootNav();
-            nav.setRoot(WelcomePage);
+            this.apiService.doLogout().then(success => {
+              this.currentUser.removeUser();
+              let nav = this.app.getRootNav();
+              nav.setRoot(WelcomePage);
+            }).then(error => {
+            })
           }
         }
       ],
