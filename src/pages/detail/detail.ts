@@ -63,10 +63,13 @@ export class DetailPage {
             this.utils.startLoader()
             this.localStorage.deleteAllStorage().then(success => {
               this.utils.stopLoader();
-              this.auth.doLogout();
-              this.currentUser.removeUser();
-              let nav = this.app.getRootNav();
-              nav.setRoot(WelcomePage);
+              this.auth.doLogout().then(success => {
+                this.currentUser.removeUser();
+                let nav = this.app.getRootNav();
+                nav.setRoot(WelcomePage);
+              }).catch(error => {
+
+              })
             }).catch (error => {
               this.utils.stopLoader();
             })

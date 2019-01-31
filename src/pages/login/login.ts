@@ -4,12 +4,14 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { TabsPage } from '../tabs/tabs';
+// import { TabsPage } from '../tabs/tabs';
 import { Network } from '@ionic-native/network';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { HomePage } from '../home/home';
+
 
 @IonicPage()
 @Component({
@@ -127,7 +129,7 @@ export class LoginPage {
         this.responseData = JSON.stringify(code);
         return this.auth.doOAuthStepTwo(code);
       }).then(response => {
-        this.navCtrl.push(TabsPage);
+        this.navCtrl.push(HomePage);
         this.presentToast("Login Successful")
       })
   }
