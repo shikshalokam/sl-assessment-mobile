@@ -1,10 +1,9 @@
+
 import { Http, URLSearchParams, Headers } from '@angular/http';
 
 import { Injectable } from '@angular/core';
 import { CurrentUserProvider } from '../current-user/current-user';
 import { AppConfigs } from '../appConfig';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/forkJoin';
 import { App, AlertController } from 'ionic-angular'
 import { WelcomePage } from '../../pages/welcome/welcome';
 import { UtilsProvider } from '../utils/utils';
@@ -21,6 +20,7 @@ export class ApiProvider {
     private appCtrls: App, private utils: UtilsProvider,
     private auth: AuthProvider,
     private alertCntrl: AlertController,
+    private ngHttp: Http,
     private ngps: NetworkGpsProvider, private slack: SlackProvider) {
   }
 
@@ -69,9 +69,55 @@ export class ApiProvider {
     })
   }
 
+  refershToken(): Promise<any> {
+    this.http.setDataSerializer('json');
+    const body = new URLSearchParams();
+    body.set('grant_type', "refresh_token");
+    body.set('refresh_token', this.currentUser.curretUser.refreshToken);
+    body.set('client_id', AppConfigs.clientId);
+    body.set('client_secret', AppConfigs.api_key);
+    return new Promise((resolve, reject) => {
+      const obj = 'grant_type=refresh_token&refresh_token=' + this.currentUser.curretUser.refreshToken + "&client_id=" + AppConfigs.clientId + "&client_secret=" + AppConfigs.api_key
+      const url = AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken;
+      const headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' })
+      this.ngHttp.post(url, obj, { headers: headers }).subscribe(data => {
+        let parsedData = JSON.parse(data['_body']);
+        let userTokens = {
+          accessToken: parsedData.access_token,
+          refreshToken: parsedData.refresh_token,
+        };
+        this.currentUser.setCurrentUserDetails(userTokens);
+        resolve()
+      }, error => {
+        reject();
+      })
+    })
+  }
+
+  OnTokenExpired(url, payload, successCallback, errorCallback, requestType) {
+    const apiUrl = AppConfigs.api_base_url + url;
+    this.refershToken().then(success => {
+      if (requestType === 'post') {
+        this.httpPost(url, payload, successCallback, errorCallback)
+      } else {
+        this.httpGet(url, successCallback, errorCallback)
+      }
+    }).catch(error => {
+      const errorObject = { ...this.errorObj };
+      errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
+      this.slack.pushException(errorObject);
+      this.utils.openToast("Something went wrong. Please try again", 'Ok');
+      errorCallback(error);
+      this.auth.doLogout().then(success => {
+        this.reLoginAlert();
+      }).catch(error => {
+      })
+    })
+  }
+
 
   httpPost(url, payload, successCallback, errorCallback) {
-    let nav = this.appCtrls.getActiveNav();
+    // let nav = this.appCtrls.getActiveNav();
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
       const obj = {
@@ -82,35 +128,26 @@ export class ApiProvider {
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.setDataSerializer('json');
       this.http.post(apiUrl, payload, obj).then(data => {
+
         successCallback(JSON.parse(data.data));
       }).catch(error => {
-        const errorObject = { ...this.errorObj };
-        errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
-        this.slack.pushException(errorObject);
-        this.utils.openToast("Something went wrong. Please try again", 'Ok');
-        const errorDetails = JSON.parse(error['_body']);
+        const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
-          this.auth.doLogout().then(success => {
-            this.reLoginAlert();
-          }).catch(error => {
-          })
+          this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
         } else {
           this.utils.openToast(error.message, 'Ok');
+          const errorObject = { ...this.errorObj };
+          errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
+          this.slack.pushException(errorObject);
         }
-        errorCallback(error);
       })
     }).catch(error => {
-      this.auth.doLogout().then(success => {
-        this.reLoginAlert();
-      }).catch(error => {
-      })
-      errorCallback(error);
+      this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
     })
   }
 
 
   httpGet(url, successCallback, errorCallback) {
-    let nav = this.appCtrls.getActiveNav();
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
       const obj = {
@@ -123,29 +160,18 @@ export class ApiProvider {
       this.http.get(apiUrl, {}, obj).then(data => {
         successCallback(JSON.parse(data.data));
       }).catch(error => {
-        const errorObject = { ...this.errorObj };
-        errorObject.text = `API failed. URL: ${apiUrl}. Details ${JSON.stringify(error)}`;
-        this.slack.pushException(errorObject);
-        const errorDetails = JSON.parse(error['_body']);
+        const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
-          this.auth.doLogout().then(success => {
-            this.reLoginAlert();
-          }).catch(error => {
-          })
+          this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
         } else {
           this.utils.openToast(error.message, 'Ok');
+          const errorObject = { ...this.errorObj };
+          errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}`;
+          this.slack.pushException(errorObject);
         }
-        this.utils.openToast(error.message, 'Ok');
-
-        errorCallback(error);
       })
     }).catch(error => {
-      this.utils.openToast("Something went wrong. Please try again", 'Ok');
-      this.auth.doLogout().then(success => {
-        this.reLoginAlert();
-      }).catch(error => {
-      })
-      errorCallback(error);
+      this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
     })
   }
 
