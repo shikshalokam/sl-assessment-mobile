@@ -9,7 +9,7 @@ import { CurrentUserProvider } from '../current-user/current-user';
 import { AppConfigs } from '../appConfig';
 import { WelcomePage } from '../../pages/welcome/welcome';
 import { UtilsProvider } from '../utils/utils';
-import { AuthProvider } from '../auth/auth';
+// import { AuthProvider } from '../auth/auth';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { SlackProvider } from '../slack/slack';
 
@@ -20,7 +20,7 @@ export class ApiProvider {
     public currentUser: CurrentUserProvider,
     private appCtrls: App, 
     private utils: UtilsProvider,
-    private auth: AuthProvider,
+    // private auth: AuthProvider,
     private alertCntrl: AlertController,
     private ngps: NetworkGpsProvider, 
     private slack: SlackProvider,
@@ -121,8 +121,8 @@ export class ApiProvider {
       const errorObject = { ...this.errorObj };
       errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(errorObject)}.Toke expired. Relogin enabled.`;
       this.slack.pushException(errorObject);
-      this.auth.doLogout().then(success => {
-        this.errorTokenRetryCount = 0;
+      this.utils.openToast("Something went wrong. Please try again", 'Ok');
+      this.doLogout().then(success => {
         this.reLoginAlert();
       }).catch(error => {
       })
@@ -139,7 +139,7 @@ export class ApiProvider {
         this.slack.pushException(errorObject);
         this.utils.openToast("Something went wrong. Please try again", 'Ok');
         errorCallback(error);
-        this.auth.doLogout().then(success => {
+        this.doLogout().then(success => {
           this.reLoginAlert();
         }).catch(error => {
         })
@@ -225,6 +225,29 @@ export class ApiProvider {
       enableBackdropDismiss: false
     });
     alert.present();
+  }
+
+  doLogout(): Promise<any> {
+    return new Promise(function (resolve) {
+      let logout_redirect_url = AppConfigs.keyCloak.logout_redirect_url;
+      let logout_url = AppConfigs.app_url + "/auth/realms/sunbird/protocol/openid-connect/logout?redirect_uri=" + logout_redirect_url;
+      console.log(logout_url);
+
+      let closeCallback = function (event) {
+      };
+
+      let browserRef = (<any>window).cordova.InAppBrowser.open(logout_url, "_blank", "zoom=no");
+      browserRef.addEventListener('loadstart', function (event) {
+        console.log('in listener')
+        if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
+          browserRef.removeEventListener("exit", closeCallback);
+          browserRef.close();
+          console.log(event.url);
+          resolve()
+        }
+      });
+
+    });
   }
 
 } 
