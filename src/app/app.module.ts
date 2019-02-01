@@ -57,7 +57,7 @@ import { EvidenceProvider } from '../providers/evidence/evidence';
 import { QuestionDashboardPage } from '../pages/question-dashboard/question-dashboard';
 import { PhotoLibrary } from '@ionic-native/photo-library';
 import { RemarksPage } from '../pages/remarks/remarks';
-import { ParentsListPageModule } from '../pages/parents-list/parents-list.module';
+import { RegistryListPageModule } from '../pages/registry-list/registry-list.module';
 import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-data/update-local-school-data';
 import { FeedbackPage } from '../pages/feedback/feedback';
 import { DetailPage } from '../pages/detail/detail';
@@ -116,7 +116,7 @@ import { HTTP } from '@ionic-native/http';
     RatingCriteriaListingPageModule,
     RatingPageModule,
     RatedCriteriaListPageModule,
-    ParentsListPageModule,
+    RegistryListPageModule,
     GeneralQuestionListPageModule
   ],
   bootstrap: [IonicApp],

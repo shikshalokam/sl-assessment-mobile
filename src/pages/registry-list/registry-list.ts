@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { ParentsFormPage } from '../parents-form/parents-form';
+import { RegistryFormPage } from '../registry-form/registry-form';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
@@ -10,8 +10,8 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 
 @IonicPage()
 @Component({
-  selector: 'page-parents-list',
-  templateUrl: 'parents-list.html',
+  selector: 'page-registry-list',
+  templateUrl: 'registry-list.html',
 })
 export class ParentsListPage {
 
@@ -50,8 +50,9 @@ export class ParentsListPage {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.registryType = this.navParams.get('registry');
-    this.storage.get('parentRegisterForm').then(form => {
+    // this.storage.get('parentRegisterForm').then(form => {
       // console.log(this.schoolId)
+      this.utils.startLoader();
       this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then(schoolDetails => {
         if (schoolDetails) {
           this.schoolDetails = schoolDetails;
@@ -71,18 +72,36 @@ export class ParentsListPage {
       //   // this.programId = schoolDet[this.schoolId].program._id;
       //   // console.log(JSON.stringify(schoolDet[this.schoolId]['program']))
       // })
-    })
+    // })
 
     this.storage.get(this.registryType+'Details_'+ this.schoolId).then(registryData => {
       if(registryData){
+        this.utils.stopLoader();
         this.registryList = registryData ? registryData : [];
         this.showUploadBtn = this.checkForUploadBtn();
       } else {
-        this.registryList = [];
-        this.showUploadBtn = false;
+        this.getRegistryList();
+        this.getRegistryForm();
       }
     })
 
+  }
+
+  getRegistryList() {
+    this.apiService.httpGet(AppConfigs.registry['get'+this.registryType+'List']+this.schoolId, success => {
+      this.registryList = success.result ?  success.result : [];
+      this.showUploadBtn = false;
+      this.utils.stopLoader();
+    }, error => {
+      this.utils.stopLoader();
+    })
+  }
+
+  getRegistryForm() {
+    this.apiService.httpGet(AppConfigs.registry['get'+this.registryType+'RegisterForm'], success => {
+      this.localStorage.setLocalStorage(this.registryType+'RegisterForm', success.result)
+    }, error => {
+    })
   }
 
   addRegistryItem(): void {
@@ -91,7 +110,7 @@ export class ParentsListPage {
       name: this.schoolName,
       registryType: this.registryType
     }
-    let registryForm = this.modalCntrl.create(ParentsFormPage, params);
+    let registryForm = this.modalCntrl.create(RegistryFormPage, params);
     registryForm.onDidDismiss(data => {
       if (data) {
         data.programId = this.schoolDetails['program']._id;
@@ -108,18 +127,20 @@ export class ParentsListPage {
   }
 
   updateAllParents() {
+    const key = this.registryType === 'Leader' ? 'schoolLeaders': 'teachers'; 
     const obj = {
-      parents: []
+      [key]: []
     };
-    for (const parent of this.registryList) {
-      if(!parent.uploaded) {
-        delete parent.uploaded;
-        obj.parents.push(parent);
+    for (const item of this.registryList) {
+      console.log(JSON.stringify(item))
+      if( item.uploaded === false) {
+        delete item.uploaded;
+        obj[key].push(item);
       }
     }
     if(this.networkConnected){
       this.utils.startLoader();
-      this.apiService.httpPost(AppConfigs.parentInfo.addParentsInfo, obj, success => {
+      this.apiService.httpPost(AppConfigs.registry['add'+this.registryType+'Info'], obj, success => {
         this.utils.stopLoader();
         this.utils.openToast(success.message);
         this.makeAllAsUploaded();
@@ -134,8 +155,8 @@ export class ParentsListPage {
   }
 
   makeAllAsUploaded():void {
-    for (const parent of this.registryList) {
-      parent.uploaded = true;
+    for (const item of this.registryList) {
+      item.uploaded = true;
     }
     this.showUploadBtn = this.checkForUploadBtn();
     this.localStorage.setLocalStorage(this.registryType+'Details_'+this.schoolId, this.registryList)
@@ -145,8 +166,8 @@ export class ParentsListPage {
 
   checkForUploadBtn() {
     if(this.registryList && this.registryList.length){
-      for (const parent of this.registryList) {
-        if (!parent.uploaded){
+      for (const item of this.registryList) {
+        if (!item.uploaded){
           return true
         }
       }
