@@ -82,12 +82,17 @@ export class ApiProvider {
       const headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' })
       this.ngHttp.post(url, obj, { headers: headers }).subscribe(data => {
         let parsedData = JSON.parse(data['_body']);
-        let userTokens = {
-          accessToken: parsedData.access_token,
-          refreshToken: parsedData.refresh_token,
-        };
-        this.currentUser.setCurrentUserDetails(userTokens);
-        resolve()
+        if (parsedData.error === 'invalid_grant') {
+          reject();
+        } else {
+          let userTokens = {
+            accessToken: parsedData.access_token,
+            refreshToken: parsedData.refresh_token,
+          };
+          this.currentUser.setCurrentUserDetails(userTokens);
+          resolve()
+        }
+
       }, error => {
         reject();
       })
