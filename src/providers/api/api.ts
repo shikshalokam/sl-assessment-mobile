@@ -77,17 +77,21 @@ export class ApiProvider {
     body.set('client_id', AppConfigs.clientId);
     body.set('client_secret', AppConfigs.api_key);
     return new Promise((resolve, reject) => {
-      const obj = 'grant_type=refresh_token&refresh_token=' + this.currentUser.curretUser.refreshToken + "&client_id=" + AppConfigs.clientId + "&client_secret=" + AppConfigs.api_key
+      const obj = 'grant_type=refresh_token&refresh_token=' + this.currentUser.curretUser.refreshToken + "&client_id=" + AppConfigs.clientId;
       const url = AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken;
       const headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' })
       this.ngHttp.post(url, obj, { headers: headers }).subscribe(data => {
         let parsedData = JSON.parse(data['_body']);
-        let userTokens = {
-          accessToken: parsedData.access_token,
-          refreshToken: this.currentUser.curretUser.refreshToken,
-        };
-        this.currentUser.setCurrentUserDetails(userTokens);
-        resolve()
+        if(parsedData.error === 'invalid_grant'){
+          reject();
+        } else {
+          let userTokens = {
+            accessToken: parsedData.access_token,
+            refreshToken: this.currentUser.curretUser.refreshToken,
+          };
+          this.currentUser.setCurrentUserDetails(userTokens);
+          resolve()
+        }
       }, error => {
         reject();
       })
