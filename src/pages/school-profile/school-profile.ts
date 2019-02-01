@@ -6,7 +6,7 @@ import { Storage } from '@ionic/storage';
 import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
 import { RatingProvider } from '../../providers/rating/rating';
 import { AppConfigs } from '../../providers/appConfig';
-import { ParentsFormPage } from '../parents-form/parents-form';
+import { RegistryFormPage } from '../registry-form/registry-form';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @IonicPage()
@@ -94,7 +94,7 @@ export class SchoolProfilePage {
       _id: this.schoolId,
       name: this.schoolName,
     }
-    let parentForm = this.modalCntrl.create(ParentsFormPage, params);
+    let parentForm = this.modalCntrl.create(RegistryFormPage, params);
     // parentForm.onDidDismiss(data => {
     //   if (data) {
     //     data.programId = this.schoolDetails['program']._id;

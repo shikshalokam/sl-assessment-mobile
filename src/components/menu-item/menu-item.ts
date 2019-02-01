@@ -3,7 +3,7 @@ import { NavParams, App, ViewController, Events , ModalController} from 'ionic-a
 import { RatingProvider } from '../../providers/rating/rating';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
-import { ParentsFormPage } from '../../pages/parents-form/parents-form';
+import { RegistryFormPage } from '../../pages/registry-form/registry-form';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
 import { FeedbackPage } from '../../pages/feedback/feedback';
 
@@ -108,7 +108,7 @@ export class MenuItemComponent {
       _id: this.schoolId,
       name: this.schoolName,
     }
-    let parentForm = this.modalCntrl.create(ParentsFormPage, params);
+    let parentForm = this.modalCntrl.create(RegistryFormPage, params);
     // parentForm.onDidDismiss(data => {
     //   if (data) {
     //     data.programId = this.schoolDetails['program']._id;

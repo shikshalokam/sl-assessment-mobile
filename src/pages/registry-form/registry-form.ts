@@ -8,10 +8,10 @@ import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @Component({
-  selector: 'page-parents-form',
-  templateUrl: 'parents-form.html',
+  selector: 'page-registry-form',
+  templateUrl: 'registry-form.html',
 })
-export class ParentsFormPage {
+export class RegistryFormPage {
 
   formFields: any = [];
   form: FormGroup;
@@ -111,12 +111,13 @@ export class ParentsFormPage {
   }
 
   update(): void {
-    const payload = { "parents": [] }
+    const key = this.registryType === 'Leader' ? 'schoolLeaders': 'teachers'; 
+    const payload = { [key]: [] }
     const obj = this.form.value;
     obj.programId = this.schoolDetails['program']._id;
     obj.schoolId = this.schoolId;
     obj.schoolName = this.schoolName;
-    payload.parents.push(obj)
+    payload[key].push(obj)
     if (this.networkConnected) {
       this.utils.startLoader();
       this.apiService.httpPost(AppConfigs.registry['add'+this.registryType+'Info'], payload, success => {

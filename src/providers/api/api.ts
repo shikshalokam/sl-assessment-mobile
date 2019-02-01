@@ -70,10 +70,11 @@ export class ApiProvider {
   }
 
   refershToken(): Promise<any> {
+    console.log("inside refresh token")
     this.http.setDataSerializer('json');
     const body = new URLSearchParams();
     body.set('grant_type', "refresh_token");
-    body.set('refresh_token', this.currentUser.curretUser.refreshToken);
+    // body.set('refresh_token', this.currentUser.curretUser.refreshToken);
     body.set('client_id', AppConfigs.clientId);
     body.set('client_secret', AppConfigs.api_key);
     return new Promise((resolve, reject) => {
@@ -152,6 +153,7 @@ export class ApiProvider {
 
 
   httpGet(url, successCallback, errorCallback) {
+    console.log("get list")
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
       const obj = {
@@ -163,7 +165,11 @@ export class ApiProvider {
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.get(apiUrl, {}, obj).then(data => {
         successCallback(JSON.parse(data.data));
+    console.log("get list success")
+
       }).catch(error => {
+    console.log("get list success")
+
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");

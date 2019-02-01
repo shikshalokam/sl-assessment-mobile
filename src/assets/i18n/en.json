@@ -25,7 +25,7 @@
         "refresh": "Refresh",
         "feedback": "Feedback",
         "update": "Update",
-        "Leader": "Leader",
+        "Leader": "School Leader",
         "Teacher": "Teacher"
     },
     "tabs": {
@@ -63,7 +63,7 @@
         "surveyEcm":"Survey - ECM",
         "parentContact": "Parent Contacts",
         "parentRegistry":"Parent Registry",
-        "LeaderRegistry": "Leader Registry",
+        "LeaderRegistry": "School Leader Registry",
         "TeacherRegistry": "Teacher Registry",
         "generalQuestions": "General Questions"
     },

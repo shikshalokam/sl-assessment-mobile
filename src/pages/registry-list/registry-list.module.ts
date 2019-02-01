@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { ParentsListPage } from './parents-list';
+import { ParentsListPage } from './registry-list';
 import { TranslateModule } from "@ngx-translate/core";
 import { ComponentsModule } from '../../components/components.module';
-import { ParentsFormPage } from '../parents-form/parents-form';
+import { RegistryFormPage } from '../registry-form/registry-form';
 
 @NgModule({
   declarations: [
     ParentsListPage,
-    ParentsFormPage
+    RegistryFormPage
   ],
   imports: [
     IonicPageModule.forChild(ParentsListPage),
@@ -16,7 +16,7 @@ import { ParentsFormPage } from '../parents-form/parents-form';
     ComponentsModule
   ],
   entryComponents: [
-    ParentsFormPage
+    RegistryFormPage
   ]
 })
-export class ParentsListPageModule {}
+export class RegistryListPageModule {}
