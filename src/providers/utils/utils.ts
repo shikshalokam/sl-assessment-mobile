@@ -138,12 +138,19 @@ export class UtilsProvider {
         if (condition._id === question._id) {
           let expression = [];
           if(condition.operator != "==="){
-            for (const value of condition.value) {
-              expression.push("(","'"+question.value+"'", "===", "'"+value+"'" ,")", condition.operator)
+            if(question.responseType === 'multiselect'){
+              for (const parentValue of question.value) {
+                for (const value of condition.value) {
+                  expression.push("(","'"+parentValue+"'", "===", "'"+value+"'" ,")", condition.operator);
+                }
+              }
+            } else {
+              for (const value of condition.value) {
+                expression.push("(","'"+question.value+"'", "===", "'"+value+"'" ,")", condition.operator)
+              }
             }
+            
             expression.pop();
-            console.log(expression.join(''))
-            console.log(eval(expression.join('')))
           } else {
             expression.push("(","'"+question.value+"'", condition.operator, "'"+condition.value+"'" ,")" )
           }
