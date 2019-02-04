@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, AlertController, Nav } from 'ionic-angular';
+import { Platform, AlertController, Nav, App, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -10,6 +10,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../providers/network-gps/network-gps';
 import { HomePage } from '../pages/home/home';
+import { AppConfigs } from '../providers/appConfig';
+import { SchoolListPage } from '../pages/school-list/school-list';
+import { FaqPage } from '../pages/faq/faq';
+import { AboutPage } from '../pages/about/about';
 
 @Component({
   templateUrl: 'app.html'
@@ -20,8 +24,36 @@ export class MyApp {
   isAlertPresent: boolean = false;
   networkSubscription: any;
   networkAvailable: boolean;
+  appName: string = AppConfigs.appName;
   // rootPage: any = "LoginPage";
+  allPages: Array<Object> =  [
+    {
+      name: "home",
+      icon:"home",
+      component: HomePage,
+      active: true
+    },
+    {
+      name: "mySchool",
+      icon:"book",
+      component: SchoolListPage,
+      active: false
+    },
+    {
+      name: "faqs",
+      icon: "help",
+      component: FaqPage,
+      active: false
+    },
+    {
+      name: "about",
+      icon: "information-circle",
+      component: AboutPage,
+      active: false
+    }
+  ]
 
+  currentPage;
   constructor(
     private platform: Platform,
     private statusBar: StatusBar,
@@ -31,8 +63,10 @@ export class MyApp {
     private translate: TranslateService,
     private network: Network,
     private networkGpsProvider: NetworkGpsProvider,
+    private menuCntrl: MenuController
   ) {
     platform.ready().then(() => {
+      // this.currentPage = this.nav.getActive();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.initilaizeApp();
@@ -57,6 +91,15 @@ export class MyApp {
     if (this.networkSubscription) {
       this.networkSubscription.unsubscribe();
     }
+  }
+
+  goToPage(index) {
+    this.menuCntrl.close();
+    for (const page of this.allPages) {
+      page['active'] = false;
+    }
+    this.allPages[index]['active'] = true;
+    this.nav.setRoot(this.allPages[index]['component']);
   }
 
   initTranslate() {
