@@ -16,11 +16,12 @@
 // automatically applied to the <body> element in the app.
 $green-color: green;
 $grey-color: #FAFAFA;
-$dark-grey-color: #ccc;
+$dark-grey-color: #808080;
 $font-size-base: 14px;
 $font-size-large: 18px;
 $white-color : #fff;
 $blue-color: #488aff;
+$primary-color: $blue-color;
 $red-color: #DC143C;
 $orange-color: #FF8C00;
 $toolbar-background: $blue-color;
@@ -216,4 +217,26 @@ ion-content {
 
 ._toolbar-background-md {
     background-color:  $white-color !important;
+}
+
+.sizeAdj {
+    min-width: 30px;
+    font-size: 25px;
+}
+.activePage {
+    color: $primary-color;
+    background: $grey-color;
+    font-weight: 500;
+}
+
+.primaryColor {
+    color: $primary-color;
+}
+
+.lightGrey {
+    color: $dark-grey-color;
+}
+
+.whiteBg {
+    background: $white-color !important;
 }
