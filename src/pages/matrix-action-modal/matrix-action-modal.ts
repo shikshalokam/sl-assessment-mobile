@@ -77,29 +77,36 @@ export class MatrixActionModalPage {
       for (const condition of currentQuestion.visibleIf) {
         if (condition._id === question._id) {
           let expression = [];
-          if(condition.operator != "==="){
-            if(question.responseType === 'multiselect'){
+          if (condition.operator != "===") {
+            if (question.responseType === 'multiselect') {
               for (const parentValue of question.value) {
                 for (const value of condition.value) {
-                  expression.push("(","'"+parentValue+"'", "===", "'"+value+"'" ,")", condition.operator);
+                  expression.push("(", "'" + parentValue + "'", "===", "'" + value + "'", ")", condition.operator);
                 }
               }
             } else {
               for (const value of condition.value) {
-                expression.push("(","'"+question.value+"'", "===", "'"+value+"'" ,")", condition.operator)
+                expression.push("(", "'" + question.value + "'", "===", "'" + value + "'", ")", condition.operator)
               }
             }
             expression.pop();
           } else {
-            expression.push("(","'"+question.value+"'", condition.operator, "'"+condition.value+"'" ,")" )
+            if (question.responseType === 'multiselect') {
+              for (const value of question.value) {
+                expression.push("(", "'" + condition.value + "'", "===", "'" + value + "'", ")", "||");
+              }
+              expression.pop();
+            } else {
+              expression.push("(", "'" + question.value + "'", condition.operator, "'" + condition.value + "'", ")")
+            }
           }
-          if(!eval(expression.join(''))) {
+          if (!eval(expression.join(''))) {
             this.data.value[this.selectedIndex][currentQuestionIndex].isCompleted = true;
             return false
           } else {
             this.data.value[this.selectedIndex][currentQuestionIndex].isCompleted = this.utils.isQuestionComplete(currentQuestion);
           }
-        } 
+        }
       }
     }
     return display
@@ -111,35 +118,42 @@ export class MatrixActionModalPage {
       for (const condition of qst.visibleIf) {
         if (condition._id === question._id) {
           let expression = [];
-          if(condition.operator != "==="){
+          if (condition.operator != "===") {
             // for (const value of condition.value) {
             //   expression.push("(","'"+question.value+"'", "===", "'"+value+"'" ,")", condition.operator)
             // }
-            if(question.responseType === 'multiselect'){
+            if (question.responseType === 'multiselect') {
               for (const parentValue of question.value) {
                 for (const value of condition.value) {
-                  expression.push("(","'"+parentValue+"'", "===", "'"+value+"'" ,")", condition.operator);
+                  expression.push("(", "'" + parentValue + "'", "===", "'" + value + "'", ")", condition.operator);
                 }
               }
             } else {
               for (const value of condition.value) {
-                expression.push("(","'"+question.value+"'", "===", "'"+value+"'" ,")", condition.operator)
+                expression.push("(", "'" + question.value + "'", "===", "'" + value + "'", ")", condition.operator)
               }
             }
             expression.pop();
           } else {
-            expression.push("(","'"+question.value+"'", condition.operator, "'"+condition.value+"'" ,")" )
+            if (question.responseType === 'multiselect') {
+              for (const value of question.value) {
+                expression.push("(", "'" + condition.value + "'", "===", "'" + value + "'", ")", "||");
+              }
+              expression.pop();
+            } else {
+              expression.push("(", "'" + question.value + "'", condition.operator, "'" + condition.value + "'", ")")
+            }
           }
-          if(!eval(expression.join(''))) {
+          if (!eval(expression.join(''))) {
             return false
           }
-        } 
+        }
       }
     }
     return display
   }
 
-    // checkForDependentVisibility(qst): boolean {
+  // checkForDependentVisibility(qst): boolean {
   //   let display = true;
   //   for (const question of this.questions) {
   //     for (const condition of qst.visibleIf) {

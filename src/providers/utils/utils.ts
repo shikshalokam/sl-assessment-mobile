@@ -152,7 +152,14 @@ export class UtilsProvider {
             
             expression.pop();
           } else {
-            expression.push("(","'"+question.value+"'", condition.operator, "'"+condition.value+"'" ,")" )
+            if (question.responseType === 'multiselect') {
+              for (const value of question.value) {
+                expression.push("(", "'" + condition.value + "'", "===", "'" + value + "'", ")", "||");
+              }
+              expression.pop();
+            } else {
+              expression.push("(", "'" + question.value + "'", condition.operator, "'" + condition.value + "'", ")")
+            }
           }
           if(!eval(expression.join(''))) {
             return false
