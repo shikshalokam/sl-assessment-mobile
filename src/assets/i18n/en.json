@@ -67,7 +67,8 @@
         "parentRegistry":"Parent Registry",
         "LeaderRegistry": "School Leader Registry",
         "TeacherRegistry": "Teacher Registry",
-        "generalQuestions": "General Questions"
+        "generalQuestions": "General Questions",
+        "individualAssessments": "Individual Assessments"
     },
     "labels": {
         "welcome": "Welcome",
