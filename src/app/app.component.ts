@@ -17,6 +17,7 @@ import { AboutPage } from '../pages/about/about';
 import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
 
 
+
 @Component({
   templateUrl: 'app.html'
 })
