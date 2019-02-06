@@ -70,6 +70,9 @@ import { SlackProvider } from '../providers/slack/slack';
 import { Keyboard } from '@ionic-native/keyboard';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { HTTP } from '@ionic-native/http';
+import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
+
+
 
 @NgModule({
   declarations: [
@@ -89,7 +92,8 @@ import { HTTP } from '@ionic-native/http';
     FeedbackPage,
     DetailPage,
     GeneralQuestionPage,
-    GeneralQuestionSubmitPage
+    GeneralQuestionSubmitPage,
+    IndividualListingPage
   ],
   imports: [
     BrowserModule,
@@ -137,7 +141,8 @@ import { HTTP } from '@ionic-native/http';
     FeedbackPage,
     DetailPage,
     GeneralQuestionPage,
-    GeneralQuestionSubmitPage
+    GeneralQuestionSubmitPage,
+    IndividualListingPage
   ],
   providers: [
     StatusBar,

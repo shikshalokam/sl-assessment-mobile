@@ -1,0 +1,28 @@
+<ion-header>
+  <header [title]="'headings.individualAssessments'|translate" [hideBack]="false">
+
+  </header>
+</ion-header>
+
+
+<ion-content>
+  <ion-card>
+    <ion-item-group *ngFor="let program of programs; let i = index">
+      <ion-item-divider color="light">
+        <h4 class="bold">Program - {{program.name}} ({{program.externalId}})</h4>
+      </ion-item-divider>
+      <ion-item *ngFor="let assessment of program?.assessments; let j = index">
+        <div class="_flex-box">
+          <div style="flex:1">{{assessment.name}} </div>
+          <!-- <button ion-button large color="primary"> -->
+            
+            <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j)" *ngIf="!assessment?.downloaded"></ion-icon>
+            <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"></ion-icon>
+
+          <!-- </button> -->
+        </div>
+      </ion-item>
+    </ion-item-group>
+  </ion-card>
+  <div class="_flex-box msgContainer" *ngIf="!programs?.length">No Assessments</div>
+</ion-content>
