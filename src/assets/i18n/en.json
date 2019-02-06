@@ -34,7 +34,9 @@
         "faqs": "FAQs",
         "about": "About",
         "questions": "Questions",
-        "rate": "Rate"
+        "rate": "Rate",
+        "individual": "Individual",
+        "institutional": "Institutional"
     },
     "headings": {
         "home": "Home",
