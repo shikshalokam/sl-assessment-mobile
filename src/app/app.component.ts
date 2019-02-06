@@ -34,8 +34,14 @@ export class MyApp {
       active: true
     },
     {
-      name: "mySchool",
+      name: "institutional",
       icon:"book",
+      component: SchoolListPage,
+      active: false
+    },
+    {
+      name: "individual",
+      icon:"person",
       component: SchoolListPage,
       active: false
     },
