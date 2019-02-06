@@ -14,6 +14,7 @@ import { AppConfigs } from '../providers/appConfig';
 import { SchoolListPage } from '../pages/school-list/school-list';
 import { FaqPage } from '../pages/faq/faq';
 import { AboutPage } from '../pages/about/about';
+import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
 
 @Component({
   templateUrl: 'app.html'
@@ -42,7 +43,7 @@ export class MyApp {
     {
       name: "individual",
       icon:"person",
-      component: SchoolListPage,
+      component: IndividualListingPage,
       active: false
     },
     {
