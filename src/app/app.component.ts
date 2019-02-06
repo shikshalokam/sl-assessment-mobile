@@ -20,6 +20,7 @@ import { IndividualListingPage } from '../pages/individual-listing/individual-li
 
 @Component({
   templateUrl: 'app.html'
+  
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
