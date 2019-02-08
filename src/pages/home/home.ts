@@ -292,7 +292,7 @@ export class HomePage {
     this.localStorage.setLocalStorage("parentDetails_"+schoolId, parentdata)
     if (this.parentList.length === this.schoolList.length) {
       // console.log(JSON.stringify(this.parentList))
-
+      this.getParentRegistryForm();
       // const parentDetailsObj = {};
       this.utils.stopLoader();
       // for (const parentdata of this.parentList) {
@@ -335,31 +335,15 @@ export class HomePage {
 
   onInit() {
     this.navCtrl.id = "HomePage";
-    // console.log('refresh');
-    this.storage.get('parentRegisterForm').then(form => {
-      if (!form) {
-        this.getParentRegistryForm();
-      }
-    })
-    this.userData = this.currentUser.getCurrentUserData();
-    // this.storage.get('schools').then(schools => {
-    //   // console.log(JSON.stringify(schools))
-    //   if (schools) {
-    //     this.schoolList = schools;
-    //     this.getLocalSchoolDetails();
-    //   } else {
-    //     this.getSchoolListApi();
+    // this.storage.get('parentRegisterForm').then(form => {
+    //   if (!form) {
+    //     this.getParentRegistryForm();
     //   }
-    // }).catch(error => {
-    //   this.getSchoolListApi();
     // })
-
+    this.userData = this.currentUser.getCurrentUserData();
     this.localStorage.getLocalStorage('schools').then(schools => {
       this.schoolList = schools;
-      // console.log("School status list")
-      // this.getLocalSchoolDetails();
       this.checkForAllSchoolDetailsFetchedStatus();
-
     }).catch(error => {
       this.getSchoolListApi();
     })
