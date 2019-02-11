@@ -57,7 +57,7 @@ export class SectionListPage {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
-    this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then(data => {
+    this.localStorage.getLocalStorage('assessmentDetails_'+this.schoolId).then(data => {
       this.schoolData = data;
       this.currentEvidence = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex];
       this.evidenceSections = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
@@ -127,7 +127,7 @@ export class SectionListPage {
         break;
       }
     }
-    this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
+    this.localStorage.setLocalStorage('assessmentDetails_'+this.schoolId, this.schoolData)
     // this.utils.setLocalSchoolData(this.schoolData);
     // this.allAnsweredForEvidence = allAnswered;
   }
@@ -143,7 +143,7 @@ export class SectionListPage {
     if (!this.evidenceSections[selectedSection].progressStatus) {
       this.evidenceSections[selectedSection].progressStatus = this.currentEvidence.startTime ? 'inProgress' : '';
       // this.utils.setLocalSchoolData(this.schoolData)
-    this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
+    this.localStorage.setLocalStorage('assessmentDetails_'+this.schoolId, this.schoolData)
 
     }
     this.navCtrl.push('QuestionerPage', params);
@@ -209,7 +209,7 @@ export class SectionListPage {
       this.utils.openToast(response.message);
       this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       // this.utils.setLocalSchoolData(this.schoolData);
-      this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
+      this.localStorage.setLocalStorage('assessmentDetails_'+this.schoolId, this.schoolData)
 
       // console.log(JSON.stringify(response))
     }, error => {
