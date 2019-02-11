@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, App } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -19,13 +19,14 @@ export class IndividualListingPage {
     public navParams: NavParams,
     private apiService: ApiProvider,
     private localStorage: LocalStorageProvider,
+    private appCntrl: App,
     private utils: UtilsProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad IndividualListingPage');
-    this.localStorage.getLocalStorage('individualAssessmentList').then(data => {
-    console.log("in localstorage")
+    this.localStorage.getLocalStorage('assessmentList').then(data => {
+      console.log("in localstorage")
 
       if (data) {
         this.programs = data;
@@ -44,7 +45,7 @@ export class IndividualListingPage {
     this.apiService.httpGet(url, successData => {
       this.utils.stopLoader();
       this.programs = successData.result;
-      this.localStorage.setLocalStorage("individualAssessmentList", successData.result)
+      this.localStorage.setLocalStorage("assessmentList", successData.result)
     }, error => {
       console.log("error")
       this.utils.stopLoader()
@@ -52,15 +53,30 @@ export class IndividualListingPage {
   }
 
   getAssessmentDetails(programIndex, assessmentIndex) {
-    this.utils.startLoader()
-    this.apiService.httpGet(AppConfigs.survey.fetchAssessmentDetails+this.programs[programIndex].externalId+"?assessmentId="+this.programs[programIndex].assessments[assessmentIndex].id, success => {
-      this.localStorage.setLocalStorage("individualAssessment_"+this.programs[programIndex].externalId +"_"+this.programs[programIndex].assessments[assessmentIndex].id, success.result);
+    this.utils.startLoader();
+    this.apiService.httpGet(AppConfigs.survey.fetchAssessmentDetails + this.programs[programIndex].externalId + "?assessmentId=" + this.programs[programIndex].assessments[assessmentIndex].id, success => {
+      this.localStorage.setLocalStorage("assessmentDetails_" + this.programs[programIndex].assessments[assessmentIndex].id, success.result);
       this.programs[programIndex].assessments[assessmentIndex].downloaded = true;
-      this.localStorage.setLocalStorage("individualAssessmentList", this.programs)
+      this.localStorage.setLocalStorage("assessmentList", this.programs)
       this.utils.stopLoader();
-      console.log("successs")
     }, error => {
       this.utils.stopLoader();
+    })
+  }
+
+  goToEcm(assessmentId) {
+    console.log("goToEcm " + assessmentId)
+    this.localStorage.getLocalStorage("assessmentDetails_" + assessmentId).then(successData => {
+      console.log("innn " + successData.assessments.evidences.length)
+      if (successData.assessments.evidences.length > 1) {
+        this.navCtrl.push('EvidenceListPage', { _id: assessmentId, name: "Example" })
+      } else {
+        console.log("innnnnn hiiiiii")
+        // this.navCtrl.push('SectionListPage', { _id: assessmentId, name: "Example", selectedEvidence: 0 });
+        // this.appCtrl.getRootNav().push('EvidenceListPage', { _id: school._id, name: school.name, parent: this })
+        this.appCntrl.getRootNav().push('EvidenceListPage', { _id: assessmentId, name: "Example", parent: this  })
+      }
+    }).catch(error => {
     })
   }
 

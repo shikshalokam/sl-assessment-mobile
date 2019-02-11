@@ -43,7 +43,7 @@ export class QuestionerPage {
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.selectedSectionIndex = this.navParams.get('selectedSection');
     this.utils.startLoader();
-    this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then(data => {
+    this.localStorage.getLocalStorage('assessmentDetails_' + this.schoolId).then(data => {
       this.schoolData = data;
       this.selectedEvidenceId = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
       this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId;
@@ -97,7 +97,7 @@ export class QuestionerPage {
     }
     if (this.end < this.questions.length && !status) {
       // this.utils.setLocalSchoolData(this.schoolData)
-      this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData)
+      this.localStorage.setLocalStorage('assessmentDetails_' + this.schoolId, this.schoolData)
 
       this.start++;
       this.end++;;
@@ -110,7 +110,7 @@ export class QuestionerPage {
       }
     } else if (status === 'completed') {
       // this.utils.setLocalSchoolData(this.schoolData);
-      this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData)
+      this.localStorage.setLocalStorage('assessmentDetails_' + this.schoolId, this.schoolData)
 
       // const opt = {
       //   _id: this.schoolId,
@@ -124,7 +124,7 @@ export class QuestionerPage {
   }
 
   updateLocalData(): void {
-    this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData)
+    this.localStorage.setLocalStorage('assessmentDetails_' + this.schoolId, this.schoolData)
 
     // this.utils.setLocalSchoolData(this.schoolData);
   }
@@ -221,7 +221,7 @@ export class QuestionerPage {
       this.updateTheChildrenQuestions(this.questions[this.start])
     }
     if (this.start > 0) {
-      this.localStorage.setLocalStorage('schoolDetails_' + this.schoolId, this.schoolData)
+      this.localStorage.setLocalStorage('assessmentDetails_' + this.schoolId, this.schoolData)
 
       // this.utils.setLocalSchoolData(this.schoolData)
       this.start--;
