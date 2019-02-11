@@ -189,7 +189,7 @@ export class ApiProvider {
       this.http.get(apiUrl, {}, obj).then(data => {
         successCallback(JSON.parse(data.data));
       }).catch(error => {
-        const errorDetails = JSON.parse(error['error']);
+        const errorDetails = error['error'] ? JSON.parse(error['error']) : error ;
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
           this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
