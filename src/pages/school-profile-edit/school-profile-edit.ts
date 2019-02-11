@@ -37,7 +37,7 @@ export class SchoolProfileEditPage {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     console.log(this.navParams.get('_id'));
-    this.localStorage.getLocalStorage("schoolDetails_"+this.schoolId).then(data => {
+    this.localStorage.getLocalStorage("assessmentDetails_"+this.schoolId).then(data => {
       this.schoolData = data;
       this.schoolProfile = this.schoolData['schoolProfile']['form'];
       this.events.subscribe('network:offline', () => {
@@ -110,7 +110,7 @@ export class SchoolProfileEditPage {
       this.apiService.httpPost(url, payload, response => {
         console.log(JSON.stringify(response));
         this.utils.openToast(response.message);
-        this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
+        this.localStorage.setLocalStorage('assessmentDetails_'+this.schoolId, this.schoolData)
         this.utils.stopLoader();
          this.navCtrl.pop();
       }, error => {
@@ -123,7 +123,7 @@ export class SchoolProfileEditPage {
   }
 
   saveProfile() : void {
-    this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
+    this.localStorage.setLocalStorage('assessmentDetails_'+this.schoolId, this.schoolData)
     // this.utils.setLocalSchoolData(this.schoolData);
     this.navCtrl.pop();
 

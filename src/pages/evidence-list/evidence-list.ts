@@ -46,11 +46,11 @@ export class EvidenceListPage {
       this.generalQuestions = successData;
     }).then(error => {
     })
-    this.localStorage.getLocalStorage("schoolDetails_"+this.schoolId).then( successData => {
+    this.localStorage.getLocalStorage("assessmentDetails_"+this.schoolId).then( successData => {
       this.utils.stopLoader();
-      console.log(successData)
+      console.log('hiiiiiii' + JSON.stringify(successData))
       this.schoolData = successData;
-      this.schoolEvidences = this.schoolData['assessments'][0]['evidences'];
+      this.schoolEvidences = this.schoolData['assessments']['evidences'];
       this.checkForProgressStatus();
     }).catch(error => {
       this.utils.stopLoader()      

@@ -137,7 +137,7 @@ export class HomePage {
       // console.log(JSON.stringify(response))
       // const generalQuestions = {}
 
-      this.localStorage.setLocalStorage("schoolDetails_" + this.schoolList[this.schoolIndex]['_id'], response.result);
+      this.localStorage.setLocalStorage("assessmentDetails_" + this.schoolList[this.schoolIndex]['_id'], response.result);
       console.log(response.result['assessments'][0]['generalQuestions'])
       this.localStorage.setLocalStorage("generalQuestions_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
       this.localStorage.setLocalStorage("generalQuestionsCopy_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
@@ -159,7 +159,7 @@ export class HomePage {
   }
 
   // successCallback = (response) => {
-  //   this.localStorage.setLocalStorage("schoolDetails_"+ this.schoolList[this.schoolIndex]['_id'], response)
+  //   this.localStorage.setLocalStorage("assessmentDetails_"+ this.schoolList[this.schoolIndex]['_id'], response)
   //   this.schoolDetails.push(response.result);
   //   if (this.schoolDetails.length === this.schoolList.length) {
   //     const schoolDetailsObj = {}

@@ -65,7 +65,7 @@ export class GeneralQuestionSubmitPage {
 
     // })
 
-    this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then( success => {
+    this.localStorage.getLocalStorage('assessmentDetails_'+this.schoolId).then( success => {
         this.submissionId = success['assessments'][0]['submissionId'];
         this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( data => {
           this.allGeneralQuestions = data;
