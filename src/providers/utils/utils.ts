@@ -172,7 +172,7 @@ export class UtilsProvider {
 
   ActionEnableSubmit(actionDetails) {
     let currentEcm;
-    this.localStorage.getLocalStorage('schoolDetails_'+ actionDetails.schoolId).then( data => {
+    this.localStorage.getLocalStorage('assessmentDetails_'+ actionDetails.schoolId).then( data => {
       const currentSchoolData = data;
       for (const evidenc of currentSchoolData.assessments[0].evidences) {
         if(evidenc.externalId === actionDetails.evidenceCollectionMethod) {
@@ -183,7 +183,7 @@ export class UtilsProvider {
       if(actionDetails.action[0] === 'enableSubmission') {
         currentEcm['enableSubmit'] = true;
       }
-      this.localStorage.setLocalStorage("schoolDetails_"+actionDetails.schoolId, currentSchoolData);
+      this.localStorage.setLocalStorage("assessmentDetails_"+actionDetails.schoolId, currentSchoolData);
       this.openToast(actionDetails.successMessage);
     }).catch(error => {
     })

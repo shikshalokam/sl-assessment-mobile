@@ -11,7 +11,7 @@
       <ion-item-divider color="light">
         <h4 class="bold">Program - {{program.name}} ({{program.externalId}})</h4>
       </ion-item-divider>
-      <ion-item *ngFor="let assessment of program?.assessments; let j = index">
+      <ion-item *ngFor="let assessment of program?.assessments; let j = index" text-wrap (click)="assessment?.downloaded ? goToEcm(assessment.id) : getAssessmentDetails(i, j) "> 
         <div class="_flex-box">
           <div style="flex:1">{{assessment.name}} </div>
           <!-- <button ion-button large color="primary"> -->
