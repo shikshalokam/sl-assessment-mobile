@@ -30,6 +30,8 @@ export class ApiProvider {
     "text": ``
   }
 
+  errorTokenRetryCount: number = 0;
+
   isNetworkAvailabel(): boolean {
     return this.ngps.getNetworkStatus()
   }
@@ -70,7 +72,6 @@ export class ApiProvider {
   }
 
   refershToken(): Promise<any> {
-    console.log("inside refresh token")
     this.http.setDataSerializer('json');
     const body = new URLSearchParams();
     body.set('grant_type', "refresh_token");
@@ -83,7 +84,7 @@ export class ApiProvider {
       const headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' })
       this.ngHttp.post(url, obj, { headers: headers }).subscribe(data => {
         let parsedData = JSON.parse(data['_body']);
-        if(parsedData && parsedData.access_token){
+        if (parsedData && parsedData.access_token) {
           let userTokens = {
             accessToken: parsedData.access_token,
             refreshToken: this.currentUser.curretUser.refreshToken,
@@ -111,23 +112,35 @@ export class ApiProvider {
 
   OnTokenExpired(url, payload, successCallback, errorCallback, requestType) {
     const apiUrl = AppConfigs.api_base_url + url;
-    this.refershToken().then(success => {
-      if (requestType === 'post') {
-        this.httpPost(url, payload, successCallback, errorCallback)
-      } else {
-        this.httpGet(url, successCallback, errorCallback)
-      }
-    }).catch(error => {
+    if (this.errorTokenRetryCount >= 3) {
+      errorCallback({});
       const errorObject = { ...this.errorObj };
-      errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
+      errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(errorObject)}.Toke expired. Relogin enabled.`;
       this.slack.pushException(errorObject);
-      this.utils.openToast("Something went wrong. Please try again", 'Ok');
-      errorCallback(error);
       this.auth.doLogout().then(success => {
+        this.errorTokenRetryCount = 0;
         this.reLoginAlert();
       }).catch(error => {
       })
-    })
+    } else {
+      this.refershToken().then(success => {
+        if (requestType === 'post') {
+          this.httpPost(url, payload, successCallback, errorCallback)
+        } else {
+          this.httpGet(url, successCallback, errorCallback)
+        }
+      }).catch(error => {
+        const errorObject = { ...this.errorObj };
+        errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
+        this.slack.pushException(errorObject);
+        this.utils.openToast("Something went wrong. Please try again", 'Ok');
+        errorCallback(error);
+        this.auth.doLogout().then(success => {
+          this.reLoginAlert();
+        }).catch(error => {
+        })
+      })
+    }
   }
 
 
@@ -148,6 +161,7 @@ export class ApiProvider {
       }).catch(error => {
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
+          this.errorTokenRetryCount++;
           this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
         } else {
           this.utils.openToast(error.message, 'Ok');
@@ -163,7 +177,6 @@ export class ApiProvider {
 
 
   httpGet(url, successCallback, errorCallback) {
-    console.log("get list")
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
       const obj = {
@@ -175,13 +188,10 @@ export class ApiProvider {
       const apiUrl = AppConfigs.api_base_url + url;
       this.http.get(apiUrl, {}, obj).then(data => {
         successCallback(JSON.parse(data.data));
-    console.log("get list success")
-
       }).catch(error => {
-    console.log("get list success")
-
-        const errorDetails = JSON.parse(error['error']);
+        const errorDetails = error['error'] ? JSON.parse(error['error']) : error ;
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
+          this.errorTokenRetryCount++;
           this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
         } else {
           this.utils.openToast(error.message, 'Ok');
@@ -196,17 +206,16 @@ export class ApiProvider {
   }
 
   reLoginAlert() {
+    this.currentUser.deactivateActivateSession(true);
+    let nav = this.appCtrls.getRootNav();
+    nav.setRoot(WelcomePage);
     let alert = this.alertCntrl.create({
       title: 'Session has expired. Please login again to continue',
       buttons: [
         {
           text: 'Login',
           role: 'role',
-          handler: data => {
-            this.currentUser.deactivateActivateSession(true);
-            let nav = this.appCtrls.getRootNav();
-            nav.setRoot(WelcomePage);
-          }
+          handler: data => {}
         }
       ],
       enableBackdropDismiss: false
