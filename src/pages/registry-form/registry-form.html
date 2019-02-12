@@ -10,7 +10,7 @@
 
     <div *ngFor="let fromField of formFields">
       <ion-list>
-        <ion-item *ngIf="(fromField?.input === 'text' || fromField?.input === 'number')&& fromField?.visible">
+        <ion-item *ngIf="(fromField?.input === 'text' || fromField?.input === 'number')&& fromField?.visible" text-wrap>
           <ion-label floating>{{fromField?.label}}</ion-label>
           <ion-input [formControlName]="fromField.field" [id]="fromField?.field" [type]="fromField?.input"></ion-input>
 
