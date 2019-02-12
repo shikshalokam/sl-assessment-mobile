@@ -71,6 +71,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { HTTP } from '@ionic-native/http';
 import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
+import { ProgramDetailsPage } from '../pages/program-details/program-details';
 
 
 
@@ -93,7 +94,8 @@ import { IndividualListingPage } from '../pages/individual-listing/individual-li
     DetailPage,
     GeneralQuestionPage,
     GeneralQuestionSubmitPage,
-    IndividualListingPage
+    IndividualListingPage,
+    ProgramDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -142,7 +144,8 @@ import { IndividualListingPage } from '../pages/individual-listing/individual-li
     DetailPage,
     GeneralQuestionPage,
     GeneralQuestionSubmitPage,
-    IndividualListingPage
+    IndividualListingPage,
+    ProgramDetailsPage
   ],
   providers: [
     StatusBar,
