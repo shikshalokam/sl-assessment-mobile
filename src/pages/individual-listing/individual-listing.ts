@@ -5,6 +5,7 @@ import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
+import { ProgramDetailsPage } from '../program-details/program-details';
 
 // @IonicPage()
 @Component({
@@ -70,6 +71,10 @@ export class IndividualListingPage {
     this.utils.setCurrentimageFolderName(aseessmemtData.assessments.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: aseessmemtData };
     this.evdnsServ.openActionSheet(options);
+  }
+
+  goToParentDetails() {
+    this.navCtrl.push(ProgramDetailsPage)
   }
 
 
