@@ -29,41 +29,19 @@ export class EvidenceListPage {
 
   ionViewWillEnter() {
     console.log('ionViewDidLoad EvidenceListPage');
-
-    // this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then(data => {
-    //   this.generalQuestions = data[this.schoolId];
-    // }).catch(error => {
-    // })
-    // this.storage.get('generalQuestions_'+this.schoolId).then(data => {
-    //   this.generalQuestions = JSON.parse(data)[this.schoolId];
-    // }).catch(error => {
-
-    // })
     this.utils.startLoader();
-
-    this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( successData => {
-      // console.log("general questions")
-      this.generalQuestions = successData;
-    }).then(error => {
-    })
     this.localStorage.getLocalStorage("assessmentDetails_"+this.schoolId).then( successData => {
-      this.utils.stopLoader();
-      console.log('hiiiiiii' + JSON.stringify(successData))
       this.schoolData = successData;
-      this.schoolEvidences = this.schoolData['assessments']['evidences'];
+      this.schoolEvidences = this.schoolData['assessments'][0] ?  this.schoolData['assessments'][0]['evidences'] : this.schoolData['assessments']['evidences'];
+      this.utils.stopLoader();
       this.checkForProgressStatus();
+      this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( successData => {
+        this.generalQuestions = successData;
+      }).then(error => {
+      })
     }).catch(error => {
       this.utils.stopLoader()      
     })
-
-  //   this.storage.get('schoolsDetails').then(data => {
-  //     // this.utils.stopLoader()
-  //     this.schoolData = JSON.parse(data);
-  //     this.schoolEvidences = this.schoolData[this.schoolId]['assessments'][0]['evidences'];
-  //     this.checkForProgressStatus();
-  //   }).catch(error => {
-  //     // this.utils.stopLoader()
-  //   })
   }
 
   goToGeneralQuestionList() : void {
@@ -73,7 +51,6 @@ export class EvidenceListPage {
 
   checkForProgressStatus() {
     for (const evidence of this.schoolEvidences) {
-      // console.log(evidence.startTime);
       if (evidence.isSubmitted) {
         evidence.progressStatus = 'submitted';
       } else if (!evidence.startTime) {
@@ -89,13 +66,14 @@ export class EvidenceListPage {
     }
   }
 
-  openAction(school, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(this.schoolEvidences[evidenceIndex].externalId.externalId, school._id)
-    const options = { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolData };
+  openAction(assessment, evidenceIndex) {
+    this.utils.setCurrentimageFolderName(this.schoolEvidences[evidenceIndex].externalId, assessment._id)
+    const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolData };
     this.evdnsServ.openActionSheet(options);
   }
 
   navigateToEvidence(index): void {
+    console.log("hiiii")
     if (this.schoolEvidences[index].startTime) {
       this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
       this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
