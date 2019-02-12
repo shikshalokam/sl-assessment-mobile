@@ -91,6 +91,9 @@ export class ParentsListPage {
     this.apiService.httpGet(AppConfigs.registry['get'+this.registryType+'List']+this.schoolId, success => {
       this.registryList = success.result ?  success.result : [];
       this.showUploadBtn = false;
+      for (const item of success.result) {
+        item.uploaded = true;
+      }
       this.utils.stopLoader();
     }, error => {
       this.utils.stopLoader();
