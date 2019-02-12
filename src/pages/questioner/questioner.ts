@@ -45,19 +45,20 @@ export class QuestionerPage {
     this.utils.startLoader();
     this.localStorage.getLocalStorage('assessmentDetails_' + this.schoolId).then(data => {
       this.schoolData = data;
-      this.selectedEvidenceId = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
+      const currentEvidences = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences']: this.schoolData['assessments']['evidences']
+      this.selectedEvidenceId = currentEvidences[this.selectedEvidenceIndex].externalId;
       this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId;
       // console.log("sample " +this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
-      this.isViewOnly = !this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;
-      this.questions = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
+      this.isViewOnly = !currentEvidences[this.selectedEvidenceIndex]['startTime'] ? true : false;
+      this.questions = currentEvidences[this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
       // console.log(JSON.stringify(this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name))
       this.dashbordData = {
         questions: this.questions,
-        evidenceMethod: this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'],
-        sectionName: this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name,
+        evidenceMethod: currentEvidences[this.selectedEvidenceIndex]['name'],
+        sectionName: currentEvidences[this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name,
         currentViewIndex: this.start
       }
-      this.isCurrentEvidenceSubmitted = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
+      this.isCurrentEvidenceSubmitted = currentEvidences[this.selectedEvidenceIndex].isSubmitted
       // console.log(this.allQuestionsOfEvidence.length + " length of questions");
       this.utils.stopLoader();
     }).catch(error => {

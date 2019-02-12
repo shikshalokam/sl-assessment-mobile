@@ -49,7 +49,7 @@ export class SectionListPage {
     this.networkAvailable = this.ngps.getNetworkStatus()
   }
   ionViewWillEnter() {
-    console.log('Entered')
+    // console.log('Entered')
     // console.log(JSON.stringify(this.userData))
     console.log('ionViewDidLoad SectionListPage');
     this.utils.startLoader();
@@ -58,10 +58,16 @@ export class SectionListPage {
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.localStorage.getLocalStorage('assessmentDetails_'+this.schoolId).then(data => {
+      // console.log("in data")
+      // console.log(JSON.stringify(data))
+
       this.schoolData = data;
-      this.currentEvidence = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex];
-      this.evidenceSections = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
-      this.selectedEvidenceName = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
+      this.currentEvidence = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex] : this.schoolData['assessments']['evidences'][this.selectedEvidenceIndex];
+      // console.log("current evidence")
+      // console.log(this.currentEvidence)
+
+      this.evidenceSections = this.currentEvidence['sections'];
+      this.selectedEvidenceName = this.currentEvidence['name'];
       this.checkForEvidenceCompletion();
       this.utils.stopLoader();
     }).catch( error => {
@@ -90,19 +96,21 @@ export class SectionListPage {
 
 
   checkForEvidenceCompletion(): void {
+    console.log("in ")
     let allAnswered;
     for (const section of this.evidenceSections) {
+      console.log("sectionnnn")
       allAnswered = true;
       for (const question of section.questions) {
         // console.log(question.isCompleted)
-        // console.log("is completed: " + question.isCompleted)
+        console.log("is completed: " + question.isCompleted)
         if (!question.isCompleted) {
           console.log("not completed " + section.name + "qid " + question._id)
           allAnswered = false;
           break;
         }
       }
-      // console.log("All answere: "+ allAnswered)
+      console.log("All answere: "+ allAnswered)
       if (this.currentEvidence.isSubmitted) {
         section.progressStatus = 'submitted';
       } else if (!this.currentEvidence.startTime) {

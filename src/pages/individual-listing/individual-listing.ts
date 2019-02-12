@@ -4,6 +4,7 @@ import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { EvidenceProvider } from '../../providers/evidence/evidence';
 
 // @IonicPage()
 @Component({
@@ -20,6 +21,7 @@ export class IndividualListingPage {
     private apiService: ApiProvider,
     private localStorage: LocalStorageProvider,
     private appCntrl: App,
+    private evdnsServ:EvidenceProvider,
     private utils: UtilsProvider) {
   }
 
@@ -64,17 +66,32 @@ export class IndividualListingPage {
     })
   }
 
-  goToEcm(assessmentId) {
+  openAction(assessment,aseessmemtData, evidenceIndex) {
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessments.evidences[evidenceIndex].externalId, assessment._id)
+    const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: aseessmemtData };
+    this.evdnsServ.openActionSheet(options);
+  }
+
+
+  goToEcm(assessmentId, heading) {
     console.log("goToEcm " + assessmentId)
     this.localStorage.getLocalStorage("assessmentDetails_" + assessmentId).then(successData => {
       console.log("innn " + successData.assessments.evidences.length)
       if (successData.assessments.evidences.length > 1) {
-        this.navCtrl.push('EvidenceListPage', { _id: assessmentId, name: "Example" })
+        this.navCtrl.push('EvidenceListPage', { _id: assessmentId, name: heading })
+
       } else {
         console.log("innnnnn hiiiiii")
-        // this.navCtrl.push('SectionListPage', { _id: assessmentId, name: "Example", selectedEvidence: 0 });
+        if (successData.assessments.evidences[0].startTime) {
+          this.utils.setCurrentimageFolderName(successData.assessments.evidences[0].externalId, assessmentId)
+          this.navCtrl.push('SectionListPage', { _id: assessmentId, name: heading, selectedEvidence: 0 })
+        } else {
+          const assessment = {_id: assessmentId, name: heading}
+          this.openAction(assessment, successData, 0);
+        }
+        // this.navCtrl.push('SectionListPage', { _id: assessmentId, name: heading, selectedEvidence: 0 });
         // this.appCtrl.getRootNav().push('EvidenceListPage', { _id: school._id, name: school.name, parent: this })
-        this.appCntrl.getRootNav().push('EvidenceListPage', { _id: assessmentId, name: "Example", parent: this  })
+        // this.appCntrl.getRootNav().push('EvidenceListPage', { _id: assessmentId, name: "Example", parent: this  })
       }
     }).catch(error => {
     })
