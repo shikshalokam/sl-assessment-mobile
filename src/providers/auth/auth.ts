@@ -3,7 +3,6 @@ import { Http, URLSearchParams } from '@angular/http';
 import { AppConfigs } from "../appConfig";
 import { CurrentUserProvider } from "../current-user/current-user";
 import { App, AlertController } from "ionic-angular";
-// import { TabsPage } from "../../pages/tabs/tabs";
 
 import { UtilsProvider } from "../utils/utils";
 import { HomePage } from "../../pages/home/home";

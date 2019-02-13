@@ -121,6 +121,10 @@ export class ApiProvider {
       errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(errorObject)}.Toke expired. Relogin enabled.`;
       this.slack.pushException(errorObject);
       this.utils.openToast("Something went wrong. Please try again", 'Ok');
+<<<<<<< HEAD
+=======
+      errorCallback(error);
+>>>>>>> 53097e6b86da11e196ab5d7a6ee373e8a9dd4d23
       this.doLogout().then(success => {
         this.reLoginAlert();
       }).catch(error => {
