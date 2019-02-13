@@ -4,7 +4,6 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-// import { TabsPage } from '../tabs/tabs';
 import { Network } from '@ionic-native/network';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Geolocation } from '@ionic-native/geolocation';

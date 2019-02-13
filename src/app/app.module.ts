@@ -12,8 +12,6 @@ import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
-// import { TabsPage } from '../pages/tabs/tabs';
-
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -23,7 +21,6 @@ import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { SchoolListPage } from '../pages/school-list/school-list';
 import { SchoolListProvider } from '../providers/school-list/school-list';
-// import { HttpInterceptorProvider } from '../providers/http-interceptor/http-interceptor';
 import { UtilsProvider } from '../providers/utils/utils';
 import { ApiProvider } from '../providers/api/api';
 import { SchoolProfilePageModule } from '../pages/school-profile/school-profile.module';
@@ -81,7 +78,6 @@ import { ProgramDetailsPage } from '../pages/program-details/program-details';
     AboutPage,
     ContactPage,
     HomePage,
-    // TabsPage,
     WelcomePage,
     SchoolListPage,
     FaqPage,
@@ -131,7 +127,6 @@ import { ProgramDetailsPage } from '../pages/program-details/program-details';
     AboutPage,
     ContactPage,
     HomePage,
-    // TabsPage,
     WelcomePage,
     SchoolListPage,
     FaqPage,

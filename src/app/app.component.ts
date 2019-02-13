@@ -2,8 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, AlertController, Nav, App, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-// import { TabsPage } from '../pages/tabs/tabs';
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,11 +14,9 @@ import { FaqPage } from '../pages/faq/faq';
 import { AboutPage } from '../pages/about/about';
 import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
 
-
-
 @Component({
   templateUrl: 'app.html'
-  
+
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
