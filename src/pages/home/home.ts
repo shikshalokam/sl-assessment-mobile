@@ -291,24 +291,13 @@ export class HomePage {
     const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
     this.localStorage.setLocalStorage("parentDetails_"+schoolId, parentdata)
     if (this.parentList.length === this.schoolList.length) {
-      // console.log(JSON.stringify(this.parentList))
       this.getParentRegistryForm();
-      // const parentDetailsObj = {};
       this.utils.stopLoader();
-      // for (const parentdata of this.parentList) {
-      //   const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
-      //   if (schoolId) {
           for (const parent of parentdata) {
             if (parent) {
               parent.uploaded = true;
             }
           }
-      //     parentDetailsObj[schoolId] = parentdata;
-      //   }
-      // }
-      // this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
-      // console.log(JSON.stringify(parentDetailsObj))
-
     }
   }
 

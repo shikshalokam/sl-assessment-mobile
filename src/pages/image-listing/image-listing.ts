@@ -307,7 +307,7 @@ export class ImageListingPage {
       for (const question of section.questions) {
         let obj = {
           qid: question._id,
-          value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
+          value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : (question.value ? question.value :"NA"),
           remarks: question.remarks,
           fileName: [],
           payload: {
@@ -376,7 +376,7 @@ export class ImageListingPage {
 
         const obj1 = {
           qid: qst._id,
-          value: qst.value,
+          value: (qst.value ? qst.value :"NA"),
           remarks: qst.remarks,
           fileName: [],
           payload: {
