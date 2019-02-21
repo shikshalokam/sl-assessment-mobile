@@ -45,20 +45,22 @@ export class AccessActionsProvider {
           _id: actionDetails.schoolId,
           name: "",
           selectedEvidence: null,
-          
         }
         if (success) {
           this.localStorage.getLocalStorage("schoolDetails_"+actionDetails.schoolId).then( successData => {
             const evidences = successData['assessments'][0] ? successData['assessments'][0]['evidences'] : successData['assessments']['evidences'];
             let index = 0;
-            for (const evidence of successData) {
+            for (const evidence of evidences) {
+              console.log(evidence.externalId + " " + actionDetails.evidenceCollectionMethod)
               if(evidence.externalId === actionDetails.evidenceCollectionMethod) {
                 params.selectedEvidenceId = index;
                 break
               }
               index ++;
             }
-          this.app.getActiveNav().push(ImageListingPage, params);
+            // console.log(JSON.stringify(successData))
+            console.log(JSON.stringify(params))
+          this.app.getRootNav().push(ImageListingPage, params);
 
           }).catch (error => {
 
