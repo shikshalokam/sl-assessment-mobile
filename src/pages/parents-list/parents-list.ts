@@ -87,6 +87,24 @@ export class ParentsListPage {
 
   }
 
+  editParent(index) {
+    const params = {
+      _id: this.schoolId,
+      name: this.schoolName,
+      isEdit: true,
+      selectedParent: this.parentInfoList[index]
+    }
+    let parentForm = this.modalCntrl.create(ParentsFormPage, params);
+    parentForm.onDidDismiss(data => {
+      if (data) {
+        this.parentInfoList[index] = data;
+        this.localStorage.setLocalStorage('parentDetails_'+this.schoolId, this.allSchoolParentList)
+      }
+    })
+    parentForm.present();
+
+  }
+
   addParent(): void {
     const params = {
       _id: this.schoolId,

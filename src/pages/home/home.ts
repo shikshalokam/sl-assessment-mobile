@@ -10,14 +10,11 @@ import { RatingProvider } from '../../providers/rating/rating';
 import { PopoverController } from 'ionic-angular';
 import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { Network } from '@ionic-native/network';
-import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { AppConfigs } from '../../providers/appConfig';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
-
-declare var cordova: any;
 
 @Component({
   selector: 'page-home',
@@ -47,7 +44,6 @@ export class HomePage {
     private popoverCtrl: PopoverController,
     private network: Network,
     private events: Events,
-    private ngps: NetworkGpsProvider,
     private evdnsServ: EvidenceProvider,
     private platform: Platform,
     private ulsd: UpdateLocalSchoolDataProvider,
@@ -139,8 +135,8 @@ export class HomePage {
 
       this.localStorage.setLocalStorage("schoolDetails_" + this.schoolList[this.schoolIndex]['_id'], response.result);
       console.log(response.result['assessments'][0]['generalQuestions'])
-      this.localStorage.setLocalStorage("generalQuestions_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
-      this.localStorage.setLocalStorage("generalQuestionsCopy_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
+      this.localStorage.setLocalStorage("generalQuestions_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
+      this.localStorage.setLocalStorage("generalQuestionsCopy_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
       this.schoolList[this.schoolIndex]['submissionId'] = response.result['assessments'][0].submissionId;
       this.schoolList[this.schoolIndex]['programId'] = response.result.program._id;
       this.mappSubmissionData(response.result);
@@ -289,15 +285,15 @@ export class HomePage {
       }
     }
     const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
-    this.localStorage.setLocalStorage("parentDetails_"+schoolId, parentdata)
+    this.localStorage.setLocalStorage("parentDetails_" + schoolId, parentdata)
     if (this.parentList.length === this.schoolList.length) {
       this.getParentRegistryForm();
       this.utils.stopLoader();
-          for (const parent of parentdata) {
-            if (parent) {
-              parent.uploaded = true;
-            }
-          }
+      for (const parent of parentdata) {
+        if (parent) {
+          parent.uploaded = true;
+        }
+      }
     }
   }
 
@@ -343,12 +339,12 @@ export class HomePage {
     // console.log(JSON.stringify(this.schoolList))
     for (const school of this.schoolList) {
       // console.log("in check mode")
-      if(!school['schoolDetailsFetched']) {
-      // console.log("found incmplete index" + index)
-        this.schoolIndex  = index;
+      if (!school['schoolDetailsFetched']) {
+        // console.log("found incmplete index" + index)
+        this.schoolIndex = index;
         this.getSchoolDetails();
         break;
-      } 
+      }
       index++;
     }
     // this.schoolList.forEach((key, value) => {
