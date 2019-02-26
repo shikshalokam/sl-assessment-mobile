@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { Geolocation } from '@ionic-native/geolocation';
-import { UtilsProvider } from '../utils/utils';
+// import { UtilsProvider } from '../utils/utils';
 import { Subject } from 'rxjs/Subject';
 import { Network } from '@ionic-native/network';
-import { Events } from 'ionic-angular';
+import { Events , ToastController} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 export enum ConnectionStatusEnum {
@@ -26,8 +26,9 @@ export class NetworkGpsProvider {
     private permissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
-    private utils: UtilsProvider,
+    // private utils: UtilsProvider,
     private network: Network,
+    private toastCntrl: ToastController,
     private eventCtrl: Events, private storage: Storage) {
     console.log('Hello NetworkGpsProvider Provider');
     this.previousStatus = ConnectionStatusEnum.Online;
@@ -71,7 +72,15 @@ export class NetworkGpsProvider {
             this.getCurrentLocation();
           },
           error => {
-            this.utils.openToast("Location should be turned on for this action");
+            // this.utils.openToast("Location should be turned on for this action");
+            let toast = this.toastCntrl.create({
+              message: "Location should be turned on for this action",
+              duration:  3000,
+              position: 'bottom',
+              showCloseButton: false
+            });
+          toast.present();
+
             // this.enableGPSRequest()
           }
         );
