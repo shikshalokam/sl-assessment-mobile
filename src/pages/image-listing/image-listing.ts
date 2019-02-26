@@ -50,17 +50,14 @@ export class ImageListingPage {
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
-    console.log(this.schoolId + " hi")
     this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then(data => {
       this.schoolData = data;
       this.currentEvidence = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex];
       this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.schoolId;
       this.evidenceSections = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
       this.selectedEvidenceName = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
-      console.log("check for permission")
       this.checkIfEcmSumittedByUser();
     }).catch(error => {
-      console.log("errorrrrr")
     })
 
     // this.storage.get('schoolsDetails').then(data => {

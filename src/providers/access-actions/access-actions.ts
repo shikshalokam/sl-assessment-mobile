@@ -53,13 +53,11 @@ export class AccessActionsProvider {
             for (const evidence of evidences) {
               console.log(evidence.externalId + " " + actionDetails.evidenceCollectionMethod)
               if(evidence.externalId === actionDetails.evidenceCollectionMethod) {
-                params.selectedEvidenceId = index;
+                params.selectedEvidence = index;
                 break
               }
               index ++;
             }
-            // console.log(JSON.stringify(successData))
-            console.log(JSON.stringify(params))
           this.app.getRootNav().push(ImageListingPage, params);
 
           }).catch (error => {
