@@ -16,7 +16,7 @@ export class SchoolListPage {
   schoolList: Array<object>;
   schoolDetails = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private apiService: ApiProvider, private appCtrl: App,
-   private utils: UtilsProvider, private localStotrage: LocalStorageProvider) {
+    private utils: UtilsProvider, private localStotrage: LocalStorageProvider) {
   }
 
   ionViewDidLoad() {
@@ -86,6 +86,20 @@ export class SchoolListPage {
     // })
   }
 
+  getAssessmentDetails(schoolIndex) {
+    this.utils.startLoader('Fetching school details.');
+    this.schoolList[schoolIndex]['downloaded'] = true;
+    this.localStotrage.setLocalStorage('schools', this.schoolList);
+    this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[schoolIndex]['_id'], successData => {
+      this.schoolList[schoolIndex]['downloaded'] = true;
+      this.localStotrage.setLocalStorage("assessmentDetails_" + this.schoolList[schoolIndex]['_id'], successData.result);
+      this.utils.stopLoader();
+    }, errorData => {
+      this.utils.stopLoader();
+
+    })
+  }
+
   successCallback = (response) => {
     // console.log('school details')
     // console.log(JSON.stringify(response));
@@ -96,7 +110,7 @@ export class SchoolListPage {
       // console.log("in")
       const schoolDetailsObj = {}
       for (const school of this.schoolDetails) {
-        console.log(school['schoolProfile']._id +' 2nd');
+        console.log(school['schoolProfile']._id + ' 2nd');
         schoolDetailsObj[school['schoolProfile']._id] = school;
       }
       console.log(JSON.stringify(this.schoolDetails));
@@ -106,7 +120,7 @@ export class SchoolListPage {
   }
 
   goToDetails(index): void {
-    this.appCtrl.getRootNav().push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
+    this.appCtrl.getRootNav().push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name'] })
 
     // this.navCtrl.push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
   }

@@ -84,7 +84,8 @@ export class HomePage {
         this.errorMsg = response.message;
         this.unauthorized(response.message);
       } else {
-        this.getSchoolDetails();
+        this.utils.stopLoader();
+        // this.getSchoolDetails();
 
       }
     }, error => {
