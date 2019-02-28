@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <header [title]="'headings.mySchool'| translate" [hideBack]="true">
 
   </header>
@@ -14,5 +14,52 @@
       </div>
     </ion-item>
   </ion-list>
-  <!-- <div padding class="_tips">Tip: Please select a school to continue.</div> -->
+  <div padding class="_tips">Tip: Please select a school to continue.</div>
+</ion-content> -->
+
+
+
+
+
+<ion-header>
+  <header [title]="'headings.mySchool'|translate" [hideBack]="true">
+
+  </header>
+</ion-header>
+
+
+<ion-content>
+  <ion-card text-wrap *ngFor="let assessment of schoolList; let i = index" style="margin-top: 5px">
+    <ion-item-group>
+      <!-- <ion-item-divider color="light" >
+        <h4 class="bold">Program - {{program.name}} ({{program.externalId}})</h4>
+      </ion-item-divider> -->
+      <!-- <ion-item *ngFor="let assessment of program?.assessments; let j = index" text-wrap> 
+        <div class="_flex-box">
+          <div style="flex:1" (click)="assessment?.downloaded ? goToEcm(assessment.id,assessment?.name ) : getAssessmentDetails(i, j) ">{{assessment.name}} </div>
+            <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j)" *ngIf="!assessment?.downloaded"></ion-icon>
+            <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded" (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon>
+        </div>
+      </ion-item> -->
+      <!-- <ion-list> -->
+      <ion-item >
+        <div class="_flex-box">
+            <ion-icon name="book" margin-right></ion-icon>
+          <div style="flex:1"
+            (click)="assessment?.downloaded ? goToDetails(i) : getAssessmentDetails(i, j) ">
+            {{assessment.name}} - {{assessment?.externalId}}
+          </div>
+          <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j)"
+            *ngIf="!assessment?.downloaded"></ion-icon>
+          <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
+            (click)="goToDetails(i)"></ion-icon>
+        </div>
+        <!-- <ion-icon name="book" margin-right></ion-icon> <div style="flex:1">{{school?.name}} - {{school?.externalId}}</div> -->
+        <!-- </div> -->
+      </ion-item>
+
+      <!-- </ion-list> -->
+    </ion-item-group>
+  </ion-card>
+  <div class="_flex-box msgContainer" *ngIf="!schoolList?.length">No Assessments</div>
 </ion-content>
