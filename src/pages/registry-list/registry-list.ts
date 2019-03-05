@@ -27,21 +27,21 @@ export class ParentsListPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private storage: Storage,
-    private modalCntrl: ModalController, 
+    private modalCntrl: ModalController,
     private ngps: NetworkGpsProvider,
     private utils: UtilsProvider,
     private localStorage: LocalStorageProvider,
     private apiService: ApiProvider,
-   private events: Events,) {
-      this.events.subscribe('network:offline', () => {
-        this.networkConnected = false;
-      });
-  
-      // Online event
-      this.events.subscribe('network:online', () => {
-        this.networkConnected = true;
-      });
-      this.networkConnected = this.ngps.getNetworkStatus()
+    private events: Events, ) {
+    this.events.subscribe('network:offline', () => {
+      this.networkConnected = false;
+    });
+
+    // Online event
+    this.events.subscribe('network:online', () => {
+      this.networkConnected = true;
+    });
+    this.networkConnected = this.ngps.getNetworkStatus()
   }
 
   ionViewDidLoad() {
@@ -60,22 +60,22 @@ export class ParentsListPage {
         }
       }).catch(error => {
 
-      })
-      // this.storage.get('schoolsDetails').then(schoolDetails => {
-      //   if (schoolDetails) {
-      //     this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
-      //     this.showUploadBtn = this.checkForUploadBtn();
-      //     // console.log(JSON.stringify(schoolDet[this.schoolId]['schoolProfile']))
-      //     // this.programId = schoolDet[this.schoolId]['program'];
+    })
+    // this.storage.get('schoolsDetails').then(schoolDetails => {
+    //   if (schoolDetails) {
+    //     this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
+    //     this.showUploadBtn = this.checkForUploadBtn();
+    //     // console.log(JSON.stringify(schoolDet[this.schoolId]['schoolProfile']))
+    //     // this.programId = schoolDet[this.schoolId]['program'];
 
-      //   }
-      //   // this.programId = schoolDet[this.schoolId].program._id;
-      //   // console.log(JSON.stringify(schoolDet[this.schoolId]['program']))
-      // })
+    //   }
+    //   // this.programId = schoolDet[this.schoolId].program._id;
+    //   // console.log(JSON.stringify(schoolDet[this.schoolId]['program']))
+    // })
     // })
 
-    this.storage.get(this.registryType+'Details_'+ this.schoolId).then(registryData => {
-      if(registryData){
+    this.storage.get(this.registryType + 'Details_' + this.schoolId).then(registryData => {
+      if (registryData) {
         this.utils.stopLoader();
         this.registryList = registryData ? registryData : [];
         this.showUploadBtn = this.checkForUploadBtn();
@@ -87,9 +87,87 @@ export class ParentsListPage {
 
   }
 
-  getRegistryList() {
-    this.apiService.httpGet(AppConfigs.registry['get'+this.registryType+'List']+this.schoolId, success => {
-      this.registryList = success.result ?  success.result : [];
+  refreshParentListClick(event) {
+    if (this.networkConnected) {
+      // this.utils.startLoader()
+      if (this.showUploadBtn) {
+        this.uploadAndRefresh(event);
+      } else {
+        this.utils.startLoader("Please wait while refreshing");
+        this.apiService.httpGet(AppConfigs.registry['get' + this.registryType + 'List'] + this.schoolId, success => {
+          this.registryList = success.result ? success.result : [];
+          this.showUploadBtn = false;
+          for (const item of success.result) {
+            item.uploaded = true;
+          }
+          if(event) {
+            event.complete();
+          }
+          this.utils.stopLoader();
+        }, error => {
+          if(event) {
+            event.complete();
+          }
+          this.utils.stopLoader();
+        })
+      }
+    } else {
+      event.complete();
+      this.utils.openToast("You need network connection for this action.");
+    }
+  }
+
+
+  uploadAndRefresh(event?: any) {
+    const key = this.registryType === 'Leader' ? 'schoolLeaders' : 'teachers';
+    const obj = {
+      [key]: []
+    };
+    for (const item of this.registryList) {
+      if (item.uploaded === false) {
+        delete item.uploaded;
+        obj[key].push(item);
+      }
+    }
+    this.utils.startLoader('Please wait while refreshing');
+    if (this.networkConnected) {
+      this.apiService.httpPost(AppConfigs.registry['add' + this.registryType + 'Info'], obj, success => {
+        // this.makeAllAsUploaded();
+        this.apiService.httpGet(AppConfigs.registry['get' + this.registryType + 'List'] + this.schoolId, success => {
+          this.registryList = success.result ? success.result : [];
+          this.showUploadBtn = false;
+          for (const item of success.result) {
+            item.uploaded = true;
+          }
+          this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.schoolId, this.registryList);
+          this.utils.stopLoader();
+          if(event) {
+            event.complete();
+          }
+        }, error => {
+          this.utils.stopLoader();
+          if(event) {
+            event.complete();
+          }
+        })
+      }, error => {
+        if(event) {
+          event.complete();
+        }
+        this.utils.stopLoader();
+        this.utils.openToast(error.message);
+      })
+    } else {
+      this.utils.openToast("You need network connection for this action.");
+    }
+  }
+
+
+
+  getRegistryList(event?: any) {
+    this.apiService.httpGet(AppConfigs.registry['get' + this.registryType + 'List'] + this.schoolId, success => {
+      this.registryList = success.result ? success.result : [];
+      this.localStorage.setLocalStorage(AppConfigs.registry['get' + this.registryType + 'List'] + this.schoolId, this.registryList)
       this.showUploadBtn = false;
       for (const item of success.result) {
         item.uploaded = true;
@@ -101,8 +179,8 @@ export class ParentsListPage {
   }
 
   getRegistryForm() {
-    this.apiService.httpGet(AppConfigs.registry['get'+this.registryType+'RegisterForm'], success => {
-      this.localStorage.setLocalStorage(this.registryType+'RegisterForm', success.result)
+    this.apiService.httpGet(AppConfigs.registry['get' + this.registryType + 'RegisterForm'], success => {
+      this.localStorage.setLocalStorage(this.registryType + 'RegisterForm', success.result)
     }, error => {
     })
   }
@@ -121,29 +199,28 @@ export class ParentsListPage {
         data.schoolName = this.schoolName;
         this.registryList.push(data);
         this.showUploadBtn = this.checkForUploadBtn();
-        this.localStorage.setLocalStorage(this.registryType+'Details_'+this.schoolId, this.registryList)
+        this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.schoolId, this.registryList)
         // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
       }
-
     })
     registryForm.present();
   }
 
   updateAllParents() {
-    const key = this.registryType === 'Leader' ? 'schoolLeaders': 'teachers'; 
+    const key = this.registryType === 'Leader' ? 'schoolLeaders' : 'teachers';
     const obj = {
       [key]: []
     };
     for (const item of this.registryList) {
       console.log(JSON.stringify(item))
-      if( item.uploaded === false) {
+      if (item.uploaded === false) {
         delete item.uploaded;
         obj[key].push(item);
       }
     }
-    if(this.networkConnected){
+    if (this.networkConnected) {
       this.utils.startLoader();
-      this.apiService.httpPost(AppConfigs.registry['add'+this.registryType+'Info'], obj, success => {
+      this.apiService.httpPost(AppConfigs.registry['add' + this.registryType + 'Info'], obj, success => {
         this.utils.stopLoader();
         this.utils.openToast(success.message);
         this.makeAllAsUploaded();
@@ -157,20 +234,20 @@ export class ParentsListPage {
     }
   }
 
-  makeAllAsUploaded():void {
+  makeAllAsUploaded(): void {
     for (const item of this.registryList) {
       item.uploaded = true;
     }
     this.showUploadBtn = this.checkForUploadBtn();
-    this.localStorage.setLocalStorage(this.registryType+'Details_'+this.schoolId, this.registryList)
+    this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.schoolId, this.registryList)
 
     // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
   }
 
   checkForUploadBtn() {
-    if(this.registryList && this.registryList.length){
+    if (this.registryList && this.registryList.length) {
       for (const item of this.registryList) {
-        if (!item.uploaded){
+        if (!item.uploaded) {
           return true
         }
       }
