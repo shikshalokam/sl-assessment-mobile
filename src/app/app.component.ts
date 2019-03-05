@@ -13,6 +13,7 @@ import { SchoolListPage } from '../pages/school-list/school-list';
 import { FaqPage } from '../pages/faq/faq';
 import { AboutPage } from '../pages/about/about';
 import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
+import { UtilsProvider } from '../providers/utils/utils';
 
 @Component({
   templateUrl: 'app.html'
@@ -69,7 +70,8 @@ export class MyApp {
     private translate: TranslateService,
     private network: Network,
     private networkGpsProvider: NetworkGpsProvider,
-    private menuCntrl: MenuController
+    private menuCntrl: MenuController,
+    private utils: UtilsProvider
   ) {
     platform.ready().then(() => {
       // this.currentPage = this.nav.getActive();
@@ -105,6 +107,7 @@ export class MyApp {
       page['active'] = false;
     }
     this.allPages[index]['active'] = true;
+    this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name']=== "individual"? "assessmentDetails_": "schoolDetails_")
     this.nav.setRoot(this.allPages[index]['component']);
   }
 
@@ -143,9 +146,17 @@ export class MyApp {
 
       if (response.isDeactivated) {
         this.rootPage = WelcomePage;
+        this.allPages[0]['active'] = true;
+        for (const page of this.allPages) {
+          page['active'] = false;
+        }
         this.splashScreen.hide()
       } else {
         this.rootPage = HomePage;
+        for (const page of this.allPages) {
+          page['active'] = false;
+        }
+        this.allPages[0]['active'] = true;
         // this.splashScreen.hide()
         // this.statusBar.overlaysWebView(false);
       }

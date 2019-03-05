@@ -53,7 +53,7 @@ export class ParentsListPage {
     // this.storage.get('parentRegisterForm').then(form => {
       // console.log(this.schoolId)
       this.utils.startLoader();
-      this.localStorage.getLocalStorage('assessmentDetails_'+this.schoolId).then(schoolDetails => {
+      this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(schoolDetails => {
         if (schoolDetails) {
           this.schoolDetails = schoolDetails;
           this.showUploadBtn = this.checkForUploadBtn();

@@ -56,7 +56,7 @@ export class RegistryFormPage {
     }).catch(error => {
     })
 
-    this.localStorage.getLocalStorage('assessmentDetails_' + this.schoolId).then(schoolDetails => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(schoolDetails => {
       if (schoolDetails) {
         this.schoolDetails = schoolDetails;
         this.programId = this.schoolDetails['program']._id;

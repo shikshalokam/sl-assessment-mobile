@@ -29,7 +29,7 @@ export class MenuItemComponent {
     this.submissionId = this.navParams.get('submissionId');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
-    this.parent = this.navParams.get("parent");
+    // this.parent = this.navParams.get("parent");
     this.programId = this.navParams.get("programId")
     this.subscription = this.events.subscribe('network:offline', () => {
       this.utils.openToast("Network disconnected");
@@ -76,7 +76,7 @@ export class MenuItemComponent {
     this.appCtrl.getRootNav().push('SchoolProfilePage', {
       _id: this.schoolId,
       name: this.schoolName,
-      parent: this.parent
+      // parent: this.parent
     })
     this.close();
   }

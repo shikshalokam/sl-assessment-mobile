@@ -39,7 +39,7 @@ export class SchoolProfilePage {
     this.schoolName = this.navParams.get('name');
     this.utils.startLoader()
     console.log(this.navParams.get('_id'));
-    this.localStorage.getLocalStorage("assessmentDetails_"+this.schoolId).then( data => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then( data => {
       const schoolData = data;
       this.schoolProfile = schoolData['schoolProfile']['form'];
       this.submissionId = schoolData['assessments'][0].submissionId;

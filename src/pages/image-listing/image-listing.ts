@@ -51,7 +51,7 @@ export class ImageListingPage {
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
 
-    this.localStorage.getLocalStorage('assessmentDetails_' + this.schoolId).then(data => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
       this.schoolData = data;
       this.currentEvidence = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex] : this.schoolData['assessments']['evidences'][this.selectedEvidenceIndex];
       this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.schoolId;
@@ -115,7 +115,7 @@ export class ImageListingPage {
           this.schoolData['assessments']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
         }
         // this.utils.setLocalSchoolData(this.schoolData);
-        this.localStorage.setLocalStorage('assessmentDetails_' + this.schoolId, this.schoolData);
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData);
         const options = {
           _id: this.schoolId,
           name: this.schoolName
@@ -284,7 +284,7 @@ export class ImageListingPage {
       }
       // this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       // this.utils.setLocalSchoolData(this.schoolData);
-      this.localStorage.setLocalStorage('assessmentDetails_' + this.schoolId, this.schoolData);
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData);
       const options = {
         _id: this.schoolId,
         name: this.schoolName

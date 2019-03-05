@@ -30,7 +30,8 @@ export class EvidenceListPage {
   ionViewWillEnter() {
     console.log('ionViewDidLoad EvidenceListPage');
     this.utils.startLoader();
-    this.localStorage.getLocalStorage("assessmentDetails_"+this.schoolId).then( successData => {
+    console.log("Localstorage " + this.utils.getAssessmentLocalStorageKey(this.schoolId))
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then( successData => {
       this.schoolData = successData;
       this.schoolEvidences = this.schoolData['assessments'][0] ?  this.schoolData['assessments'][0]['evidences'] : this.schoolData['assessments']['evidences'];
       this.utils.stopLoader();
@@ -92,9 +93,9 @@ export class EvidenceListPage {
   }
 
   ionViewWillLeave(){
-    if(this.navParams.get('parent')){
-      this.navParams.get('parent').onInit();
-    }
+    // if(this.navParams.get('parent')){
+    //   this.navParams.get('parent').onInit();
+    // }
   }
 
   feedBack() {

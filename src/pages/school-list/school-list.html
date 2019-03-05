@@ -46,16 +46,13 @@
         <div class="_flex-box">
             <ion-icon name="book" margin-right></ion-icon>
           <div style="flex:1"
-            (click)="assessment?.downloaded ? goToDetails(i) : getAssessmentDetails(i, j) ">
-            {{assessment.name}} - {{assessment?.externalId}}
+            (click)="assessment?.downloaded ? gotToEvidenceList(assessment) : getAssessmentDetails(i, j) ">
+            {{assessment.name}} - {{assessment?.externalId}} 
           </div>
           <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j)"
             *ngIf="!assessment?.downloaded"></ion-icon>
-          <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
-            (click)="goToDetails(i)"></ion-icon>
+          <ion-icon name="more" class="menuIcon" (click)="openMenu($event,i)" *ngIf="assessment?.downloaded"></ion-icon>
         </div>
-        <!-- <ion-icon name="book" margin-right></ion-icon> <div style="flex:1">{{school?.name}} - {{school?.externalId}}</div> -->
-        <!-- </div> -->
       </ion-item>
 
       <!-- </ion-list> -->
