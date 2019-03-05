@@ -57,7 +57,7 @@ export class EvidenceProvider {
                 }
                 //  ?  :  = ;
                 // this.utils.setLocalSchoolData(params.schoolDetails);
-                this.localStorage.setLocalStorage("assessmentDetails_"+this.schoolId, params.schoolDetails)
+                this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), params.schoolDetails)
                 delete params.schoolDetails;
                 this.appCtrl.getRootNav().push('SectionListPage', params);
               } else {
@@ -153,7 +153,7 @@ export class EvidenceProvider {
       this.utils.openToast(response.message);
       this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].isSubmitted = true;
       this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].notApplicable = true;
-      this.localStorage.setLocalStorage("assessmentDetails_"+this.schoolId, this.schoolDetails)
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolDetails)
       // this.utils.setLocalSchoolData(this.schoolDetails);
       this.utils.stopLoader();
 

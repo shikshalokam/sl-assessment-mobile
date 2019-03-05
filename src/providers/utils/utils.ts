@@ -19,6 +19,7 @@ export class UtilsProvider {
   }
   loading: any;
   imagePath: string;
+  currentAssessmentType: string = "";
 
   startLoader(msg: string = 'Please wait..') {
     this.loading = this.loadingCtrl.create({
@@ -57,7 +58,7 @@ export class UtilsProvider {
   }
 
   setLocalImages(images, isGeneralQuestion) {
-    this.storage.set(isGeneralQuestion ?'genericQuestionsImages':'allImageList', JSON.stringify(images));
+    this.storage.set(isGeneralQuestion ? 'genericQuestionsImages' : 'allImageList', JSON.stringify(images));
   }
 
   setLocalVariable(key, value) {
@@ -71,7 +72,7 @@ export class UtilsProvider {
 
   isQuestionComplete(question): boolean {
     // console.log(JSON.stringify(question))
-    if (question.validation.required && question.value=== "" && question.responseType !== 'multiselect') {
+    if (question.validation.required && question.value === "" && question.responseType !== 'multiselect') {
       return false
     }
     if (question.validation.required && !question.value.length && question.responseType === 'multiselect') {
@@ -137,19 +138,19 @@ export class UtilsProvider {
       for (const condition of qst.visibleIf) {
         if (condition._id === question._id) {
           let expression = [];
-          if(condition.operator != "==="){
-            if(question.responseType === 'multiselect'){
+          if (condition.operator != "===") {
+            if (question.responseType === 'multiselect') {
               for (const parentValue of question.value) {
                 for (const value of condition.value) {
-                  expression.push("(","'"+parentValue+"'", "===", "'"+value+"'" ,")", condition.operator);
+                  expression.push("(", "'" + parentValue + "'", "===", "'" + value + "'", ")", condition.operator);
                 }
               }
             } else {
               for (const value of condition.value) {
-                expression.push("(","'"+question.value+"'", "===", "'"+value+"'" ,")", condition.operator)
+                expression.push("(", "'" + question.value + "'", "===", "'" + value + "'", ")", condition.operator)
               }
             }
-            
+
             expression.pop();
           } else {
             if (question.responseType === 'multiselect') {
@@ -161,10 +162,10 @@ export class UtilsProvider {
               expression.push("(", "'" + question.value + "'", condition.operator, "'" + condition.value + "'", ")")
             }
           }
-          if(!eval(expression.join(''))) {
+          if (!eval(expression.join(''))) {
             return false
           }
-        } 
+        }
       }
     }
     return display
@@ -172,21 +173,29 @@ export class UtilsProvider {
 
   ActionEnableSubmit(actionDetails) {
     let currentEcm;
-    this.localStorage.getLocalStorage('assessmentDetails_'+ actionDetails.schoolId).then( data => {
+    this.localStorage.getLocalStorage(this.getAssessmentLocalStorageKey(actionDetails.schoolId)).then(data => {
       const currentSchoolData = data;
       for (const evidenc of currentSchoolData.assessments[0].evidences) {
-        if(evidenc.externalId === actionDetails.evidenceCollectionMethod) {
+        if (evidenc.externalId === actionDetails.evidenceCollectionMethod) {
           currentEcm = evidenc;
           break;
         }
       }
-      if(actionDetails.action[0] === 'enableSubmission') {
+      if (actionDetails.action[0] === 'enableSubmission') {
         currentEcm['enableSubmit'] = true;
       }
-      this.localStorage.setLocalStorage("assessmentDetails_"+actionDetails.schoolId, currentSchoolData);
+      this.localStorage.setLocalStorage(this.getAssessmentLocalStorageKey(actionDetails.schoolId), currentSchoolData);
       this.openToast(actionDetails.successMessage);
     }).catch(error => {
     })
+  }
+
+  setAssessmentLocalStorageKey(baseKey) {
+    this.currentAssessmentType = baseKey;
+  }
+
+  getAssessmentLocalStorageKey(schoolId) {
+    return this.currentAssessmentType ? this.currentAssessmentType + schoolId : "schoolDetails_" + schoolId
   }
 
 }

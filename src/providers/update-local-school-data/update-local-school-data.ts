@@ -31,7 +31,7 @@ export class UpdateLocalSchoolDataProvider {
   }
 
   getLocalData(obj, submissionStatus?: any): void {
-    this.localStorage.getLocalStorage('assessmentDetails_'+obj._id).then(data => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(obj._id)).then(data => {
       this.schoolDetails = data;
       this.currentSchool = this.schoolDetails;
       if (submissionStatus) {
@@ -64,7 +64,7 @@ export class UpdateLocalSchoolDataProvider {
 
     }
     console.log("map on login ")
-    this.localStorage.setLocalStorage('assessmentDetails_'+ mappedData["schoolProfile"]["_id"], mappedData)
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(mappedData["schoolProfile"]["_id"]), mappedData)
     // this.storage.set('schoolsDetails', JSON.stringify(schoolObj));
     // this.events.publish("localDataUpdated");
   }
@@ -102,7 +102,7 @@ export class UpdateLocalSchoolDataProvider {
         }
       }
     }
-    this.localStorage.setLocalStorage("assessmentDetails_"+this.currentSchool["schoolProfile"]["_id"], this.schoolDetails)
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.currentSchool["schoolProfile"]["_id"]), this.schoolDetails)
     // this.storage.set('schoolsDetails', JSON.stringify(this.schoolDetails));
     // this.events.publish("localDataUpdated");
   }

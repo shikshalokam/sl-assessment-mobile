@@ -42,7 +42,7 @@ export class FeedbackPage {
     this.getFeedbackForm();
     this.schoolId = this.navParams.get('schoolId');
     this.schoolName  = this.navParams.get('schoolName');
-    this.localStorage.getLocalStorage('assessmentDetails_' + this.schoolId).then(schoolDetails => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(schoolDetails => {
       if (schoolDetails) {
         this.programId = schoolDetails['program']._id;
       }

@@ -58,7 +58,7 @@ export class IndividualListingPage {
   getAssessmentDetails(programIndex, assessmentIndex) {
     this.utils.startLoader();
     this.apiService.httpGet(AppConfigs.survey.fetchAssessmentDetails + this.programs[programIndex].externalId + "?assessmentId=" + this.programs[programIndex].assessments[assessmentIndex].id, success => {
-      this.localStorage.setLocalStorage("assessmentDetails_" + this.programs[programIndex].assessments[assessmentIndex].id, success.result);
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.programs[programIndex].assessments[assessmentIndex].id), success.result);
       this.programs[programIndex].assessments[assessmentIndex].downloaded = true;
       this.localStorage.setLocalStorage("assessmentList", this.programs)
       this.utils.stopLoader();
@@ -80,7 +80,7 @@ export class IndividualListingPage {
 
   goToEcm(assessmentId, heading) {
     console.log("goToEcm " + assessmentId)
-    this.localStorage.getLocalStorage("assessmentDetails_" + assessmentId).then(successData => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(assessmentId)).then(successData => {
       console.log("innn " + successData.assessments.evidences.length)
       if (successData.assessments.evidences.length > 1) {
         this.navCtrl.push('EvidenceListPage', { _id: assessmentId, name: heading })

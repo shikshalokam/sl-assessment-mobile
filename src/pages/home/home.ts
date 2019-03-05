@@ -138,7 +138,7 @@ export class HomePage {
       // console.log(JSON.stringify(response))
       // const generalQuestions = {}
 
-      this.localStorage.setLocalStorage("assessmentDetails_" + this.schoolList[this.schoolIndex]['_id'], response.result);
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolList[this.schoolIndex]['_id']), response.result);
       console.log(response.result['assessments'][0]['generalQuestions'])
       this.localStorage.setLocalStorage("generalQuestions_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
       this.localStorage.setLocalStorage("generalQuestionsCopy_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
@@ -359,7 +359,7 @@ export class HomePage {
       this.schoolList = schools;
       // console.log("School status list")
       // this.getLocalSchoolDetails();
-      this.checkForAllSchoolDetailsFetchedStatus();
+      // this.checkForAllSchoolDetailsFetchedStatus();
 
     }).catch(error => {
       this.getSchoolListApi();
