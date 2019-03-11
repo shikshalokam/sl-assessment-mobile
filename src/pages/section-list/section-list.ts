@@ -41,10 +41,12 @@ export class SectionListPage {
     private alertCtrl: AlertController, private network: Network, private localStorage : LocalStorageProvider) {
 
     this.events.subscribe('network:offline', () => {
+      this.networkAvailable = false;
     });
 
     // Online event
     this.events.subscribe('network:online', () => {
+      this.networkAvailable = true;
     });
     this.networkAvailable = this.ngps.getNetworkStatus()
   }
@@ -213,16 +215,21 @@ export class SectionListPage {
 
     const submissionId = this.schoolData['assessments'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
-    this.apiService.httpPost(url, payload, response => {
-      this.utils.openToast(response.message);
-      this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
-      // this.utils.setLocalSchoolData(this.schoolData);
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+    if(this.networkAvailable){
+      this.apiService.httpPost(url, payload, response => {
+        this.utils.openToast(response.message);
+        this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+        // this.utils.setLocalSchoolData(this.schoolData);
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+  
+        // console.log(JSON.stringify(response))
+      }, error => {
+        console.log(JSON.stringify(error))
+      })
+    } else {
+      this.utils.openToast("Please enable network connection for this action.");
+    }
 
-      // console.log(JSON.stringify(response))
-    }, error => {
-      console.log(JSON.stringify(error))
-    })
     // console.log(JSON.stringify(this.constructPayload()));
 
   }

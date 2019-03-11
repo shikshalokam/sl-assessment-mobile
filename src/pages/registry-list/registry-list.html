@@ -5,7 +5,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding >
     <ion-refresher slot="fixed" (ionRefresh)="refreshParentListClick($event)" >
         <ion-refresher-content
           pullingIcon="arrow-dropdown"
@@ -23,7 +23,7 @@
     </button>
   </div>
 
-  <div>
+  <div style="margin-bottom: 60px !important"> 
     <ion-list *ngIf="registryList?.length">
       <button ion-item *ngFor="let info of registryList">
         {{ info?.name }}
@@ -40,7 +40,7 @@
 </ion-content>
 
 <ion-footer no-shadow *ngIf="showUploadBtn">
-  <ion-toolbar class="_toolbar-background-md" position="bottom">
+  <ion-toolbar position="bottom">
     <ion-row>
       <ion-col>
         <button ion-button block icon-start (click)="updateAllParents()">
