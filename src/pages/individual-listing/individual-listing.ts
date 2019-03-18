@@ -6,6 +6,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { ProgramDetailsPage } from '../program-details/program-details';
+import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
 
 // @IonicPage()
 @Component({
@@ -21,7 +22,7 @@ export class IndividualListingPage {
     public navParams: NavParams,
     private apiService: ApiProvider,
     private localStorage: LocalStorageProvider,
-    private appCntrl: App,
+    private ulsd: UpdateLocalSchoolDataProvider,
     private evdnsServ:EvidenceProvider,
     private utils: UtilsProvider) {
   }
@@ -48,7 +49,7 @@ export class IndividualListingPage {
     this.apiService.httpGet(url, successData => {
       this.utils.stopLoader();
       this.programs = successData.result;
-      this.localStorage.setLocalStorage("assessmentList", successData.result)
+      this.localStorage.setLocalStorage("assessmentList", successData.result);
     }, error => {
       console.log("error")
       this.utils.stopLoader()
@@ -60,7 +61,9 @@ export class IndividualListingPage {
     this.apiService.httpGet(AppConfigs.survey.fetchAssessmentDetails + this.programs[programIndex].externalId + "?assessmentId=" + this.programs[programIndex].assessments[assessmentIndex].id, success => {
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.programs[programIndex].assessments[assessmentIndex].id), success.result);
       this.programs[programIndex].assessments[assessmentIndex].downloaded = true;
-      this.localStorage.setLocalStorage("assessmentList", this.programs)
+      this.localStorage.setLocalStorage("assessmentList", this.programs);
+      // console.log(JSON.stringify(success.result))
+      this.ulsd.mapSubmissionDataToQuestion(success.result);
       this.utils.stopLoader();
     }, error => {
       this.utils.stopLoader();

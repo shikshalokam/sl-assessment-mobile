@@ -27,22 +27,22 @@ export class MyApp {
   networkAvailable: boolean;
   appName: string = AppConfigs.appName;
   // rootPage: any = "LoginPage";
-  allPages: Array<Object> =  [
+  allPages: Array<Object> = [
     {
       name: "home",
-      icon:"home",
+      icon: "home",
       component: HomePage,
       active: true
     },
     {
       name: "institutional",
-      icon:"book",
+      icon: "book",
       component: SchoolListPage,
       active: false
     },
     {
       name: "individual",
-      icon:"person",
+      icon: "person",
       component: IndividualListingPage,
       active: false
     },
@@ -107,7 +107,7 @@ export class MyApp {
       page['active'] = false;
     }
     this.allPages[index]['active'] = true;
-    this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name']=== "individual"? "assessmentDetails_": "schoolDetails_")
+    this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name'] === "individual" ? "assessmentDetails_" : "schoolDetails_")
     this.nav.setRoot(this.allPages[index]['component']);
   }
 

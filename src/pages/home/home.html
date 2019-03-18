@@ -9,9 +9,25 @@
 <ion-content>
   <ion-card>
     <ion-card-content>
-      <h2 >{{'labels.welcome'|translate}} !</h2>
+      <h2>{{'labels.welcome'|translate}} !</h2>
     </ion-card-content>
   </ion-card>
+
+  <!-- <div padding>
+    <div>
+      <h4>Assessments</h4>
+    </div>
+    <div class="_flex-box">
+      <ion-card  padding class="_flex-box _justify-content-center" style="flex:1">
+        <ion-icon name="person" class="sizeAdj" margin-right></ion-icon>
+        <div>Individual</div>
+      </ion-card>
+      <ion-card padding class="_flex-box _justify-content-center" style="flex:1; margin-top: 10px">
+        <ion-icon name="book" class="sizeAdj" margin-right></ion-icon>
+        <div>Institutional</div>
+      </ion-card>
+    </div>
+  </div> -->
 
   <!-- <ion-card *ngFor="let school of schoolList; let i = index">
 
@@ -28,7 +44,7 @@
       </ion-item-divider>
     </ion-item-group> -->
 
-    <!-- <ion-card-content no-padding *ngIf="school && schoolDetails[school._id.toString()]">
+  <!-- <ion-card-content no-padding *ngIf="school && schoolDetails[school._id.toString()]">
 
       <ion-list>
         <button ion-item   [disabled]="evidence?.notApplicable" (click)="goToSections(school, j)" *ngFor="let evidence of schoolDetails[school._id.toString()]['assessments'][0]['evidences'] |slice:0:3; let j = index">
@@ -61,7 +77,7 @@
          <span class="_errorMsg">{{errorMsg}}</span> 
       </div>
     </ion-card-content> -->
-<!-- 
+  <!-- 
     <ion-row no-padding class="separation">
       <ion-col class="_justify-content-space-between">
         <button ion-button clear small color="primary" icon-end (click)="goToProfile(school)" >
@@ -78,6 +94,6 @@
         </button>
       </ion-col>
     </ion-row> -->
-    
+
   <!-- </ion-card> -->
 </ion-content>
