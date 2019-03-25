@@ -6,6 +6,15 @@
 
 
 <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" >
+        <ion-refresher-content
+          pullingIcon="arrow-dropdown"
+          pullingText="Pull to refresh"
+          refreshingSpinner="circles"
+          refreshingText="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
+
   <ion-card>
     <ion-item-group *ngFor="let program of programs; let i = index">
       <ion-item-divider color="light" >

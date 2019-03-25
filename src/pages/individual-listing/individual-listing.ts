@@ -33,6 +33,7 @@ export class IndividualListingPage {
       console.log("in localstorage")
 
       if (data) {
+        console.log(JSON.stringify(data));
         this.programs = data;
       } else {
         this.getAssessmentsApi();
@@ -53,6 +54,34 @@ export class IndividualListingPage {
     }, error => {
       console.log("error")
       this.utils.stopLoader()
+    })
+  }
+
+  refresh(event) {
+    const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
+    // this.utils.startLoader()
+    this.apiService.httpGet(url, successData => {
+      // this.utils.stopLoader();
+      // this.programs = successData.result;
+      let isAnydowmloaded = false;
+      const currentPrograms = successData.result;
+      for (const program of successData.result) {
+        for (const assessment of program.assessments) {
+          if(assessment.downloaded) {
+            isAnydowmloaded = true;
+            break
+          }
+        }
+      }
+      if(!isAnydowmloaded) {
+        this.localStorage.setLocalStorage("assessmentList", successData.result);
+        event.complete();
+      } else {
+
+      }
+    }, error => {
+      console.log("error")
+      // this.utils.stopLoader()
     })
   }
 
