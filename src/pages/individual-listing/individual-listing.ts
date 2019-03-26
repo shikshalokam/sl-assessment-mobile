@@ -16,6 +16,7 @@ import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-scho
 export class IndividualListingPage {
 
   programs: any;
+  enableRefresh = AppConfigs.configuration.enableAssessmentListRefresh;
 
   constructor(
     public navCtrl: NavController,
@@ -23,7 +24,7 @@ export class IndividualListingPage {
     private apiService: ApiProvider,
     private localStorage: LocalStorageProvider,
     private ulsd: UpdateLocalSchoolDataProvider,
-    private evdnsServ:EvidenceProvider,
+    private evdnsServ: EvidenceProvider,
     private utils: UtilsProvider) {
   }
 
@@ -59,31 +60,34 @@ export class IndividualListingPage {
 
   refresh(event) {
     const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
-    // this.utils.startLoader()
     this.apiService.httpGet(url, successData => {
-      // this.utils.stopLoader();
-      // this.programs = successData.result;
-      let isAnydowmloaded = false;
+      const downloadedAssessments = []
       const currentPrograms = successData.result;
-      for (const program of successData.result) {
+      for (const program of this.programs) {
         for (const assessment of program.assessments) {
-          if(assessment.downloaded) {
-            isAnydowmloaded = true;
-            break
+          if (assessment.downloaded) {
+            downloadedAssessments.push(assessment.id);
           }
         }
       }
-      if(!isAnydowmloaded) {
+      if (!downloadedAssessments.length) {
         this.localStorage.setLocalStorage("assessmentList", successData.result);
         event.complete();
       } else {
-
+        for (const program of currentPrograms) {
+          for (const assessment of program.assessments) {
+            if (downloadedAssessments.indexOf(assessment.id) >= 0) {
+              assessment.downloaded = true;
+            }
+          }
+        }
+        this.localStorage.setLocalStorage("assessmentList", currentPrograms);
+        event.complete();
       }
     }, error => {
-      console.log("error")
-      // this.utils.stopLoader()
     })
   }
+
 
   getAssessmentDetails(programIndex, assessmentIndex) {
     this.utils.startLoader();
@@ -99,7 +103,7 @@ export class IndividualListingPage {
     })
   }
 
-  openAction(assessment,aseessmemtData, evidenceIndex) {
+  openAction(assessment, aseessmemtData, evidenceIndex) {
     this.utils.setCurrentimageFolderName(aseessmemtData.assessments.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: aseessmemtData };
     this.evdnsServ.openActionSheet(options);
@@ -123,7 +127,7 @@ export class IndividualListingPage {
           this.utils.setCurrentimageFolderName(successData.assessments.evidences[0].externalId, assessmentId)
           this.navCtrl.push('SectionListPage', { _id: assessmentId, name: heading, selectedEvidence: 0 })
         } else {
-          const assessment = {_id: assessmentId, name: heading}
+          const assessment = { _id: assessmentId, name: heading }
           this.openAction(assessment, successData, 0);
         }
         // this.navCtrl.push('SectionListPage', { _id: assessmentId, name: heading, selectedEvidence: 0 });
