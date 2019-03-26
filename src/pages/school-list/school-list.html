@@ -29,6 +29,14 @@
 
 
 <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
+        <ion-refresher-content
+          pullingIcon="arrow-dropdown"
+          pullingText="Pull to refresh"
+          refreshingSpinner="circles"
+          refreshingText="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
   <ion-card text-wrap *ngFor="let assessment of schoolList; let i = index" style="margin-top: 5px">
     <ion-item-group>
       <!-- <ion-item-divider color="light" >

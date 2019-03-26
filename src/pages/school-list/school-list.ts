@@ -8,6 +8,7 @@ import { WelcomePage } from '../welcome/welcome';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
+import { AppConfigs } from '../../providers/appConfig';
 
 @Component({
   selector: 'page-school-list',
@@ -15,16 +16,18 @@ import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-scho
 })
 export class SchoolListPage {
 
+
   schoolList: Array<object>;
   schoolDetails = [];
+  enableRefresh = AppConfigs.configuration.enableAssessmentListRefresh;
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams, 
-    private storage: Storage, 
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private storage: Storage,
     private apiService: ApiProvider, private appCtrl: App,
-    private utils: UtilsProvider, 
-    private localStotrage: LocalStorageProvider, 
-    private popoverCtrl : PopoverController,
+    private utils: UtilsProvider,
+    private localStotrage: LocalStorageProvider,
+    private popoverCtrl: PopoverController,
     private ulsd: UpdateLocalSchoolDataProvider) {
   }
 
@@ -45,6 +48,7 @@ export class SchoolListPage {
     this.localStotrage.getLocalStorage('schools').then(schools => {
       console.log(JSON.stringify(schools))
       this.schoolList = schools;
+      console.log(JSON.stringify(this.schoolList))
       this.utils.stopLoader();
     }).catch(error => {
       this.utils.stopLoader();
@@ -59,7 +63,7 @@ export class SchoolListPage {
       this.schoolList = response.result;
       // console.log(JSON.stringify(this.schoolList));
       this.storage.set('schools', this.schoolList);
-      this.getSchoolDetails();
+      // this.getSchoolDetails();
     }, error => {
       this.utils.stopLoader();
       if (error.status == '401') {
@@ -100,14 +104,40 @@ export class SchoolListPage {
     this.schoolList[schoolIndex]['downloaded'] = true;
     this.localStotrage.setLocalStorage('schools', this.schoolList);
     this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[schoolIndex]['_id'], successData => {
-      this.localStotrage.setLocalStorage("generalQuestions_"+this.schoolList[schoolIndex]['_id'], successData.result['assessments'][0]['generalQuestions']);
-      this.localStotrage.setLocalStorage("generalQuestionsCopy_"+this.schoolList[schoolIndex]['_id'], successData.result['assessments'][0]['generalQuestions']);
+      this.localStotrage.setLocalStorage("generalQuestions_" + this.schoolList[schoolIndex]['_id'], successData.result['assessments'][0]['generalQuestions']);
+      this.localStotrage.setLocalStorage("generalQuestionsCopy_" + this.schoolList[schoolIndex]['_id'], successData.result['assessments'][0]['generalQuestions']);
       this.schoolList[schoolIndex]['downloaded'] = true;
       this.localStotrage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolList[schoolIndex]['_id']), successData.result);
       this.ulsd.mapSubmissionDataToQuestion(successData.result);
       this.utils.stopLoader();
     }, errorData => {
       this.utils.stopLoader();
+
+    })
+  }
+
+  refresh(event) {
+    this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors, response => {
+      const downloadedAssessments = []
+      const currentAssessments = response.result;
+      for (const school of this.schoolList) {
+        if (school['downloaded']) {
+          downloadedAssessments.push(school['_id']);
+        }
+      }
+      if (!downloadedAssessments.length) {
+        this.localStotrage.setLocalStorage("schools", response.result);
+        event.complete();
+      } else {
+        for (const assessment of currentAssessments) {
+          if (downloadedAssessments.indexOf(assessment._id) >= 0) {
+            assessment.downloaded = true;
+          }
+        }
+        this.localStotrage.setLocalStorage("schools", currentAssessments);
+        event.complete();
+      }
+    }, error => {
 
     })
   }
