@@ -8,7 +8,7 @@
   <ion-item text-center no-padding>
     <ion-input type="{{data?.responseType}}" (input)="isaNumber()" (keyup.enter) = "keyboard.hide()" [(ngModel)]="data.value" (ngModelChange)="checkForValidation()"></ion-input>
   </ion-item>
-  <div *ngIf="!notNumber" class="_errorMsg">Decimal numbers not allowed</div>
+  <div *ngIf="!notNumber" class="_errorMsg">{{getErrorMsg()}}</div>
 
   <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
   <image-upload *ngIf="data?.file" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
