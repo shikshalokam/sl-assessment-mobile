@@ -149,7 +149,7 @@ export class ParentsFormPage {
     if (this.networkConnected) {
       this.utils.startLoader();
       console.log("Payload " + JSON.stringify(payload))
-      this.apiService.httpPost(AppConfigs.registry.parentUpdate+ this.selectedParent._id, payload, success => {
+      this.apiService.httpPost(AppConfigs.registry['parentUpdate']+ this.selectedParent._id, payload, success => {
         console.log("updated parent registry" +  JSON.stringify(success))
         this.utils.openToast(success.message);
         obj.uploaded = true;
