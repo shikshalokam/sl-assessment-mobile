@@ -50,7 +50,6 @@ export class ImageListingPage {
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
-
     this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then(data => {
       this.schoolData = data;
       this.currentEvidence = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex];
@@ -59,7 +58,6 @@ export class ImageListingPage {
       this.selectedEvidenceName = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
       this.checkIfEcmSumittedByUser();
     }).catch(error => {
-
     })
 
     // this.storage.get('schoolsDetails').then(data => {
@@ -92,7 +90,7 @@ export class ImageListingPage {
     const submissionId = this.schoolData['assessments'][0]['submissionId']
     this.apiService.httpGet(AppConfigs.survey.checkIfSubmitted + submissionId + "?evidenceId=" + this.currentEvidence.externalId, success => {
       this.utils.stopLoader();
-      console.log(JSON.stringify(success));
+      // console.log(JSON.stringify(success));
       if (success.result.allowed) {
         this.storage.get("allImageList").then(data => {
           if (data && JSON.parse(data)[this.schoolId]) {
@@ -201,7 +199,7 @@ export class ImageListingPage {
     this.file.checkFile((this.platform.is('ios') ? this.file.documentsDirectory : this.file.externalDataDirectory) + 'images/', this.imageList[this.uploadIndex].file).then(success => {
       fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
         this.retryCount = 0;
-        console.log(JSON.stringify(result))
+        // console.log(JSON.stringify(result))
         this.imageList[this.uploadIndex].uploaded = true;
         if (this.uploadIndex < (this.imageList.length - 1)) {
           this.uploadIndex++;
@@ -307,7 +305,7 @@ export class ImageListingPage {
       for (const question of section.questions) {
         let obj = {
           qid: question._id,
-          value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
+          value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : (question.value ? question.value :"NA"),
           remarks: question.remarks,
           fileName: [],
           payload: {
@@ -376,7 +374,7 @@ export class ImageListingPage {
 
         const obj1 = {
           qid: qst._id,
-          value: qst.value,
+          value: (qst.value ? qst.value :"NA"),
           remarks: qst.remarks,
           fileName: [],
           payload: {

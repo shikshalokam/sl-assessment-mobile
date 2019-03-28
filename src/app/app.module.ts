@@ -70,6 +70,7 @@ import { SlackProvider } from '../providers/slack/slack';
 import { Keyboard } from '@ionic-native/keyboard';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { HTTP } from '@ionic-native/http';
+import { AccessActionsProvider } from '../providers/access-actions/access-actions';
 
 @NgModule({
   declarations: [
@@ -172,7 +173,8 @@ import { HTTP } from '@ionic-native/http';
     SlackProvider,
     Keyboard,
     LocalStorageProvider,
-    HTTP
+    HTTP,
+    AccessActionsProvider
   ]
 })
 export class AppModule { }

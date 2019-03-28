@@ -13,8 +13,8 @@
   </div>
 
   <div>
-    <ion-list *ngIf="parentInfoList?.length">
-      <button ion-item *ngFor="let info of parentInfoList">
+    <ion-list *ngIf="parentInfoList?.length" >
+      <button ion-item *ngFor="let info of parentInfoList; let i= index" (click)="editParent(i)">
         {{ info?.name }} 
       </button>  
     </ion-list>

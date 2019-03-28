@@ -22,6 +22,8 @@ export class ParentsFormPage {
   programId: string;
   parentInfoList: any;
   networkConnected: boolean;
+  isEdit: boolean;
+  selectedParent: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -30,6 +32,9 @@ export class ParentsFormPage {
     private utils: UtilsProvider, private apiService: ApiProvider) {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
+    this.isEdit = this.navParams.get('isEdit');
+    this.selectedParent = this.navParams.get("selectedParent");
+
     this.events.subscribe('network:offline', () => {
       this.networkConnected = false;
     });
@@ -47,6 +52,7 @@ export class ParentsFormPage {
       if (formFields) {
         for (const formField of formFields) {
           if (formField.visible) {
+            formField.value = this.isEdit ? this.selectedParent[formField.field] : formField.value;
             this.formFields.push(formField)
           }
         }
@@ -109,9 +115,9 @@ export class ParentsFormPage {
     return new FormGroup(formGrp)
   }
 
-  update(): void {
+  createParent(): void {
     const payload = { "parents": [] }
-    const obj = this.form.value;
+    let obj = this.form.value;
     obj.programId = this.schoolDetails['program']._id;
     obj.schoolId = this.schoolId;
     obj.schoolName = this.schoolName;
@@ -121,6 +127,7 @@ export class ParentsFormPage {
       this.apiService.httpPost(AppConfigs.parentInfo.addParentsInfo, payload, success => {
         this.utils.stopLoader();
         this.utils.openToast(success.message);
+        obj = success["result"][0];
         obj.uploaded = true;
         this.viewCntrl.dismiss(obj);
       }, error => {
@@ -133,6 +140,28 @@ export class ParentsFormPage {
     } else {
       obj.uploaded = false;
       this.viewCntrl.dismiss(obj)
+    }
+  }
+
+  parentUpdate() {
+    const payload = this.form.value;
+    const obj = this.form.value;
+    if (this.networkConnected) {
+      this.utils.startLoader();
+      console.log("Payload " + JSON.stringify(payload))
+      this.apiService.httpPost(AppConfigs.registry.parentUpdate+ this.selectedParent._id, payload, success => {
+        console.log("updated parent registry" +  JSON.stringify(success))
+        this.utils.openToast(success.message);
+        obj.uploaded = true;
+        this.viewCntrl.dismiss(obj);
+        this.utils.stopLoader();
+
+      }, error => {
+        this.utils.openToast("Something went wrong. Please try again after sometime.", "Ok");
+        this.utils.stopLoader();
+      })
+    } else {
+      this.utils.openToast("Please enable data connection to continue", "Ok");
     }
   }
 

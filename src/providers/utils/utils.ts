@@ -131,24 +131,5 @@ export class UtilsProvider {
     return new FormGroup(formGrp)
   }
 
-  ActionEnableSubmit(actionDetails) {
-    let currentEcm;
-    this.localStorage.getLocalStorage('schoolDetails_'+ actionDetails.schoolId).then( data => {
-      const currentSchoolData = data;
-      for (const evidenc of currentSchoolData.assessments[0].evidences) {
-        if(evidenc.externalId === actionDetails.evidenceCollectionMethod) {
-          currentEcm = evidenc;
-          break;
-        }
-      }
-      if(actionDetails.action[0] === 'enableSubmission') {
-        currentEcm['enableSubmit'] = true;
-      }
-      this.localStorage.setLocalStorage("schoolDetails_"+actionDetails.schoolId, currentSchoolData);
-      this.openToast(actionDetails.successMessage);
-    }).catch(error => {
-    })
-  }
-
 }
 

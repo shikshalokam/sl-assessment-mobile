@@ -49,7 +49,7 @@
       </button>
     </ion-col>
     <ion-col>
-      <button ion-button icon-start full float-right color="primary" (click)="update()" [disabled]="!form?.valid">
+      <button ion-button icon-start full float-right color="primary" (click)="isEdit ? parentUpdate():createParent()" [disabled]="!form?.valid">
         {{'buttons.save'|translate}}
       </button>
     </ion-col>
