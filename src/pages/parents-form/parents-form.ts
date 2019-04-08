@@ -153,8 +153,8 @@ export class ParentsFormPage {
         console.log("updated parent registry" +  JSON.stringify(success))
         this.utils.openToast(success.message);
         obj.uploaded = true;
-        obj._id= this.selectedParent._id;
-        this.viewCntrl.dismiss(obj);
+        // obj._id= this.selectedParent._id;
+        this.viewCntrl.dismiss(success.result);
         this.utils.stopLoader();
 
       }, error => {
