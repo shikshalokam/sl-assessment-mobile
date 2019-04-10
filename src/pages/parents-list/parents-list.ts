@@ -131,7 +131,7 @@ export class ParentsListPage {
       parents: []
     };
     for (const parent of this.parentInfoList) {
-      if(!parent.uploaded) {
+      if(parent.uploaded === false && !parent._id) {
         delete parent.uploaded;
         obj.parents.push(parent);
       }
