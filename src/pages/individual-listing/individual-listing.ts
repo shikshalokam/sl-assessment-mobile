@@ -58,8 +58,9 @@ export class IndividualListingPage {
     })
   }
 
-  refresh(event) {
+  refresh(event?: any) {
     const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
+    event ? "" : this.utils.startLoader();
     this.apiService.httpGet(url, successData => {
       const downloadedAssessments = []
       const currentPrograms = successData.result;
@@ -71,8 +72,9 @@ export class IndividualListingPage {
         }
       }
       if (!downloadedAssessments.length) {
+        this.programs = successData.result;
         this.localStorage.setLocalStorage("assessmentList", successData.result);
-        event.complete();
+        event ? event.complete() : this.utils.stopLoader();
       } else {
         for (const program of currentPrograms) {
           for (const assessment of program.assessments) {
@@ -81,8 +83,9 @@ export class IndividualListingPage {
             }
           }
         }
+        this.programs = currentPrograms;
         this.localStorage.setLocalStorage("assessmentList", currentPrograms);
-        event.complete();
+        event ? event.complete() : this.utils.stopLoader();
       }
     }, error => {
     })
