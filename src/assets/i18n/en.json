@@ -36,10 +36,11 @@
         "questions": "Questions",
         "rate": "Rate",
         "individual": "Individual",
-        "institutional": "Institutional"
+        "institutional": "Institutions"
     },
     "headings": {
         "home": "Home",
+        "myInstitutions":"My Institutions",
         "mySchool": "My Schools",
         "faqs": "FAQs",
         "about": "About",
