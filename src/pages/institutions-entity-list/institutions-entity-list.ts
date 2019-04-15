@@ -11,10 +11,10 @@ import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-scho
 import { AppConfigs } from '../../providers/appConfig';
 
 @Component({
-  selector: 'page-school-list',
-  templateUrl: 'school-list.html',
+  selector: 'institutions-entity-list',
+  templateUrl: 'institutions-entity-list.html',
 })
-export class SchoolListPage {
+export class InstitutionsEntityList {
 
 
   schoolList: Array<object>;
@@ -32,7 +32,7 @@ export class SchoolListPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SchoolListPage');
+    console.log('ionViewDidLoad InstitutionsEntityList');
     this.utils.startLoader();
     // this.storage.get('schools').then(schools => {
     //   if (schools) {
@@ -77,7 +77,7 @@ export class SchoolListPage {
     // this.utils.startLoader();
     for (const school of this.schoolList) {
       console.log(school['_id']);
-      this.apiService.httpGet(SchoolConfig.getSchoolDetails + school['_id'], this.successCallback, error => {
+      this.apiService.httpGet(SchoolConfig.getSchoolDetails + school['_id']+'?assessmentType=institutional', this.successCallback, error => {
 
       })
     }
