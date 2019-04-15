@@ -19,7 +19,6 @@ import { LoginPageModule } from '../pages/login/login.module';
 import { AuthProvider } from '../providers/auth/auth';
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
-import { SchoolListPage } from '../pages/school-list/school-list';
 import { SchoolListProvider } from '../providers/school-list/school-list';
 import { UtilsProvider } from '../providers/utils/utils';
 import { ApiProvider } from '../providers/api/api';
@@ -69,8 +68,7 @@ import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { HTTP } from '@ionic-native/http';
 import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
 import { ProgramDetailsPage } from '../pages/program-details/program-details';
-
-
+import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
 
 @NgModule({
   declarations: [
@@ -79,7 +77,7 @@ import { ProgramDetailsPage } from '../pages/program-details/program-details';
     ContactPage,
     HomePage,
     WelcomePage,
-    SchoolListPage,
+    InstitutionsEntityList,
     FaqPage,
     SchoolProfileEditPage,
     ImageListingPage,
@@ -128,7 +126,7 @@ import { ProgramDetailsPage } from '../pages/program-details/program-details';
     ContactPage,
     HomePage,
     WelcomePage,
-    SchoolListPage,
+    InstitutionsEntityList,
     FaqPage,
     SchoolProfileEditPage,
     ImageListingPage,

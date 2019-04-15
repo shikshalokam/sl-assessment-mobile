@@ -9,7 +9,7 @@ import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../providers/network-gps/network-gps';
 import { HomePage } from '../pages/home/home';
 import { AppConfigs } from '../providers/appConfig';
-import { SchoolListPage } from '../pages/school-list/school-list';
+import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
 import { FaqPage } from '../pages/faq/faq';
 import { AboutPage } from '../pages/about/about';
 import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
@@ -37,7 +37,7 @@ export class MyApp {
     {
       name: "institutional",
       icon: "book",
-      component: SchoolListPage,
+      component: InstitutionsEntityList,
       active: false
     },
     {
