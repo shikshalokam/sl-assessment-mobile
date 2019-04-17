@@ -268,7 +268,7 @@ export class HomePage {
   }
 
   goToProfile(school): void {
-    this.appCtrl.getRootNav().push('SchoolProfilePage', { _id: school._id, name: school.name, parent: this })
+    this.appCtrl.getRootNav().push('EntityProfilePage', { _id: school._id, name: school.name, parent: this })
   }
 
   getParentRegistry() {

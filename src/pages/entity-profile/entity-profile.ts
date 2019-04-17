@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, App , ModalController} from 'ionic
 import { ApiProvider } from '../../providers/api/api';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
-import { SchoolProfileEditPage } from '../school-profile-edit/school-profile-edit';
+import { EntityProfileEditPage } from '../entity-profile-edit/entity-profile-edit';
 import { RatingProvider } from '../../providers/rating/rating';
 import { AppConfigs } from '../../providers/appConfig';
 import { RegistryFormPage } from '../registry-form/registry-form';
@@ -11,10 +11,10 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 
 @IonicPage()
 @Component({
-  selector: 'page-school-profile',
-  templateUrl: 'school-profile.html',
+  selector: 'page-entity-profile',
+  templateUrl: 'entity-profile.html',
 })
-export class SchoolProfilePage {
+export class EntityProfilePage {
 
   schoolProfile: Array<string>;
   schoolId: any;
@@ -34,7 +34,7 @@ export class SchoolProfilePage {
   }
 
   ionViewWillEnter() {
-    console.log('ionViewDidLoad SchoolProfilePage');
+    console.log('ionViewDidLoad EntityProfilePage');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.utils.startLoader()
@@ -76,9 +76,9 @@ export class SchoolProfilePage {
   }
 
   goToEditProfile(): void {
-    this.app.getRootNav().push(SchoolProfileEditPage, { _id: this.schoolId, name: this.schoolName })
+    this.app.getRootNav().push(EntityProfileEditPage, { _id: this.schoolId, name: this.schoolName })
 
-    // this.navCtrl.push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
+    // this.navCtrl.push('EntityProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
   }
 
   goToRating() {

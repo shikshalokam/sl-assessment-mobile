@@ -9,10 +9,10 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 
 
 @Component({
-  selector: 'page-school-profile-edit',
-  templateUrl: 'school-profile-edit.html',
+  selector: 'page-entity-profile-edit',
+  templateUrl: 'entity-profile-edit.html',
 })
-export class SchoolProfileEditPage {
+export class EntityProfileEditPage {
 
   schoolProfile: Array<string>;
   schoolId: any;
@@ -32,7 +32,7 @@ export class SchoolProfileEditPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SchoolProfilePage');
+    console.log('ionViewDidLoad EntityProfilePage');
     this.getSchoolDetails();
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');

@@ -191,11 +191,12 @@ export class UtilsProvider {
   }
 
   setAssessmentLocalStorageKey(baseKey) {
-    this.currentAssessmentType = baseKey;
+    // this.currentAssessmentType = baseKey;
   }
 
-  getAssessmentLocalStorageKey(schoolId) {
-    return this.currentAssessmentType ? this.currentAssessmentType + schoolId : "schoolDetails_" + schoolId
+  getAssessmentLocalStorageKey(entityId) {
+    // return this.currentAssessmentType ? this.currentAssessmentType + schoolId : "schoolDetails_" + schoolId
+    return 'assessmentDetails_'+entityId
   }
 
 }

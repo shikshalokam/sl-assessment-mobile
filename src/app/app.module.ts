@@ -22,7 +22,6 @@ import { WelcomePage } from '../pages/welcome/welcome';
 import { SchoolListProvider } from '../providers/school-list/school-list';
 import { UtilsProvider } from '../providers/utils/utils';
 import { ApiProvider } from '../providers/api/api';
-import { SchoolProfilePageModule } from '../pages/school-profile/school-profile.module';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -32,7 +31,7 @@ import { QuestionerPageModule } from '../pages/questioner/questioner.module';
 import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
 import { FaqPage } from '../pages/faq/faq';
-import { SchoolProfileEditPage } from '../pages/school-profile-edit/school-profile-edit';
+import { EntityProfileEditPage } from '../pages/entity-profile-edit/entity-profile-edit';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
@@ -69,6 +68,7 @@ import { HTTP } from '@ionic-native/http';
 import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
 import { ProgramDetailsPage } from '../pages/program-details/program-details';
 import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
+import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.module';
 
 @NgModule({
   declarations: [
@@ -79,7 +79,7 @@ import { InstitutionsEntityList } from '../pages/institutions-entity-list/instit
     WelcomePage,
     InstitutionsEntityList,
     FaqPage,
-    SchoolProfileEditPage,
+    EntityProfileEditPage,
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
@@ -107,7 +107,7 @@ import { InstitutionsEntityList } from '../pages/institutions-entity-list/instit
     LoginPageModule,
     HttpModule,
     HttpClientModule,
-    SchoolProfilePageModule,
+    EntityProfilePageModule,
     EvidenceListPageModule,
     SectionListPageModule,
     QuestionerPageModule,
@@ -128,7 +128,7 @@ import { InstitutionsEntityList } from '../pages/institutions-entity-list/instit
     WelcomePage,
     InstitutionsEntityList,
     FaqPage,
-    SchoolProfileEditPage,
+    EntityProfileEditPage,
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
