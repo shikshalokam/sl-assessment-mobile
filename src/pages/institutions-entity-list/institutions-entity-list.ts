@@ -107,6 +107,7 @@ export class InstitutionsEntityList {
       this.localStotrage.setLocalStorage("generalQuestions_" + this.schoolList[schoolIndex]['_id'], successData.result['assessments'][0]['generalQuestions']);
       this.localStotrage.setLocalStorage("generalQuestionsCopy_" + this.schoolList[schoolIndex]['_id'], successData.result['assessments'][0]['generalQuestions']);
       this.schoolList[schoolIndex]['downloaded'] = true;
+      console.log(this.utils.getAssessmentLocalStorageKey(this.schoolList[schoolIndex]['_id']));
       this.localStotrage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolList[schoolIndex]['_id']), successData.result);
       this.ulsd.mapSubmissionDataToQuestion(successData.result);
       this.utils.stopLoader();
@@ -160,7 +161,7 @@ export class InstitutionsEntityList {
   }
 
   goToDetails(index): void {
-    this.appCtrl.getRootNav().push('SchoolProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name'] })
+    this.appCtrl.getRootNav().push('EntityProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name'] })
   }
 
 

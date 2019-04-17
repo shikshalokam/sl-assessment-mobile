@@ -73,7 +73,7 @@ export class MenuItemComponent {
   }
 
   goToProfile(): void {
-    this.appCtrl.getRootNav().push('SchoolProfilePage', {
+    this.appCtrl.getRootNav().push('EntityProfilePage', {
       _id: this.schoolId,
       name: this.schoolName,
       // parent: this.parent
