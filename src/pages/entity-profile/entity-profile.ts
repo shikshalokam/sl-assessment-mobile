@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App , ModalController} from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ModalController } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
@@ -38,37 +38,15 @@ export class EntityProfilePage {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.utils.startLoader()
-    console.log(this.navParams.get('_id'));
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then( data => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
       const schoolData = data;
       this.schoolProfile = schoolData['schoolProfile']['form'];
       this.submissionId = schoolData['assessments'][0].submissionId;
       this.isEditable = schoolData['schoolProfile']['isEditable'];
       this.utils.stopLoader();
     }).catch(error => {
-      this.utils.stopLoader();      
+      this.utils.stopLoader();
     })
-    // this.storage.get('schoolsDetails').then(data => {
-    //   const schoolData = JSON.parse(data);
-    //   this.schoolProfile = schoolData[this.schoolId]['schoolProfile']['form'];
-    //   this.submissionId = schoolData[this.schoolId]['assessments'][0].submissionId;
-    //   this.isEditable = schoolData[this.schoolId]['schoolProfile']['isEditable'];
-    //   this.utils.stopLoader();
-    // }).catch(error => {
-
-    // })
-
-  }
-
-  getSchoolDetails() {
-    // this.utils.startLoader();
-    // this.apiService.httpGet(schoolProfileConfig.getSchoolDetails, response => {
-    //   console.log(JSON.stringify(response));
-    //   this.schoolProfile = response.result.schoolProfile.formFields;
-    //   this.utils.stopLoader();
-    // }, error => {
-    //   this.utils.stopLoader();
-    // })
   }
 
   goToPage(): void {
@@ -77,8 +55,6 @@ export class EntityProfilePage {
 
   goToEditProfile(): void {
     this.app.getRootNav().push(EntityProfileEditPage, { _id: this.schoolId, name: this.schoolName })
-
-    // this.navCtrl.push('EntityProfilePage', { _id: this.schoolList[index]['_id'], name: this.schoolList[index]['name']})
   }
 
   goToRating() {
@@ -95,20 +71,10 @@ export class EntityProfilePage {
       name: this.schoolName,
     }
     let parentForm = this.modalCntrl.create(RegistryFormPage, params);
-    // parentForm.onDidDismiss(data => {
-    //   if (data) {
-    //     data.programId = this.schoolDetails['program']._id;
-    //     data.schoolId = this.schoolId;
-    //     data.schoolName = this.schoolName;
-    //     this.parentInfoList.push(data)
-    //     this.storage.set('ParentInfo', this.parentInfoList);
-    //   }
-
-    // })
     parentForm.present();
   }
 
-  getParentRegistryForm() : void {
+  getParentRegistryForm(): void {
     this.apiService.httpGet(AppConfigs.parentInfo.getParentRegisterForm, success => {
       this.storage.set('parentRegisterForm', JSON.stringify(success.result));
     }, error => {
@@ -120,5 +86,5 @@ export class EntityProfilePage {
     this.navCtrl.push('ParentsListPage', { _id: this.schoolId, name: this.schoolName })
   }
 
-  
+
 }

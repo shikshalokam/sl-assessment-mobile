@@ -10,7 +10,6 @@ import { Network} from '@ionic-native/network';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -74,7 +73,6 @@ import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.
   declarations: [
     MyApp,
     AboutPage,
-    ContactPage,
     HomePage,
     WelcomePage,
     InstitutionsEntityList,
@@ -123,7 +121,6 @@ import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.
   entryComponents: [
     MyApp,
     AboutPage,
-    ContactPage,
     HomePage,
     WelcomePage,
     InstitutionsEntityList,

@@ -21,33 +21,31 @@ export class EvidenceListPage {
   isIos: boolean = this.platform.is('ios');
   generalQuestions: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage, private appCtrl: App, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
+    private appCtrl: App, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
     private feedback: FeedbackProvider, private evdnsServ: EvidenceProvider, private platform: Platform) {
-      this.schoolId = this.navParams.get('_id');
-      this.schoolName = this.navParams.get('name');
+    this.schoolId = this.navParams.get('_id');
+    this.schoolName = this.navParams.get('name');
   }
 
   ionViewWillEnter() {
     console.log('ionViewDidLoad EvidenceListPage');
     this.utils.startLoader();
-    console.log("Localstorage " + this.utils.getAssessmentLocalStorageKey(this.schoolId))
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then( successData => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(successData => {
       this.schoolData = successData;
-      this.schoolEvidences = this.schoolData['assessments'][0] ?  this.schoolData['assessments'][0]['evidences'] : this.schoolData['assessments']['evidences'];
+      this.schoolEvidences = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'] : this.schoolData['assessments']['evidences'];
       this.utils.stopLoader();
       this.checkForProgressStatus();
-      this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( successData => {
+      this.localStorage.getLocalStorage('generalQuestions_' + this.schoolId).then(successData => {
         this.generalQuestions = successData;
       }).then(error => {
       })
     }).catch(error => {
-      this.utils.stopLoader()      
+      this.utils.stopLoader()
     })
   }
 
-  goToGeneralQuestionList() : void {
-    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: this.schoolId, name: this.schoolName})
-
+  goToGeneralQuestionList(): void {
+    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: this.schoolId, name: this.schoolName })
   }
 
   checkForProgressStatus() {
@@ -74,33 +72,21 @@ export class EvidenceListPage {
   }
 
   navigateToEvidence(index): void {
-    console.log("hiiii")
     if (this.schoolEvidences[index].startTime) {
       this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
       this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
     } else {
-      const school = {_id: this.schoolId, name: this.schoolName}
+      const school = { _id: this.schoolId, name: this.schoolName }
       this.openAction(school, index);
     }
-    // this.navCtrl.setRoot('SectionListPage');
-    // this.appCtrl.getRootNav().push('SectionListPage', {_id:this.schoolId, name: this.schoolName, selectedEvidence: index});
-    // if (!this.schoolEvidences[index].startTime) {
-    //   this.schoolEvidences[index].startTime = Date.now();
-    //   this.utils.setLocalSchoolData(this.schoolData)
-    // }
-    // this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
-    // this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
   }
 
-  ionViewWillLeave(){
-    // if(this.navParams.get('parent')){
-    //   this.navParams.get('parent').onInit();
-    // }
+  ionViewWillLeave() {
   }
 
   feedBack() {
     this.feedback.sendFeedback()
   }
-  
+
 
 }
