@@ -5,15 +5,12 @@
 </ion-header>
 
 
-<ion-content padding >
-    <ion-refresher slot="fixed" (ionRefresh)="refreshParentListClick($event)" >
-        <ion-refresher-content
-          pullingIcon="arrow-dropdown"
-          pullingText="Pull to refresh"
-          refreshingSpinner="circles"
-          refreshingText="Refreshing...">
-        </ion-refresher-content>
-      </ion-refresher>
+<ion-content padding>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshParentListClick($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
   <div>
     <button ion-button icon-start float-right color="primary" (click)="refreshParentListClick()">
       Refresh
@@ -23,7 +20,7 @@
     </button>
   </div>
 
-  <div style="margin-bottom: 60px !important"> 
+  <div style="margin-bottom: 60px !important">
     <ion-list *ngIf="registryList?.length">
       <button ion-item *ngFor="let info of registryList">
         {{ info?.name }}
@@ -34,9 +31,6 @@
   <div *ngIf="!registryList?.length" class="_flex-box _justify-content-center noInfo">
     No data available
   </div>
-  <!-- <ion-fab bottom right>
-    <button ion-fab mini (click)="refreshParentListClick()"><ion-icon name="refresh"></ion-icon></button>
-    </ion-fab> -->
 </ion-content>
 
 <ion-footer no-shadow *ngIf="showUploadBtn">

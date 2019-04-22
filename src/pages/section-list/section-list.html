@@ -34,9 +34,6 @@
           <span float-right *ngIf="section.progressStatus === 'submitted'" class="_submitted _flex-box">
             {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
           </span>
-          <!-- <span float-right *ngIf="section.progressSatatus === 'inProgress'" class="completed _flex-box">
-              In Progress <ion-icon name="contrast" margin-left></ion-icon>
-            </span> -->
         </h3>
       </ion-item>
     </ng-container>
@@ -48,8 +45,6 @@
     <ion-row>
       <button ion-button full (click)="checkForNetworkTypeAlert()">{{'buttons.upload'|translate}} {{'buttons.and'|translate}}
         {{'buttons.submit'|translate}}</button>
-
-      <!-- <button ion-button full (click)="submitEvidence()">Submit {{selectedEvidenceName}}</button> -->
     </ion-row>
   </ion-toolbar>
 </ion-footer>

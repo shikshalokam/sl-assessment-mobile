@@ -13,7 +13,6 @@ import { Network } from '@ionic-native/network';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { AppConfigs } from '../../providers/appConfig';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
-// import { AuthProvider } from '../../providers/auth/auth';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 declare var cordova: any;
@@ -51,23 +50,14 @@ export class HomePage {
     private ulsd: UpdateLocalSchoolDataProvider,
     private alertCntrl: AlertController,
     private app: App,
-    // private auth: AuthProvider,
     private localStorage: LocalStorageProvider
   ) {
     this.subscription = this.events.subscribe('localDataUpdated', () => {
-      // console.log("Updated")
       this.getLocalSchoolDetails();
     });
-
-    // Online event
-    // constthis.events.subscribe('localDataUpdated', () => {
-    // });
-    // this.networkAvailable = this.ngps.getNetworkStatus()
   }
 
-
   ionViewWillEnter() {
-    // console.log("Inside view will enetr");
     this.onInit();
     if (this.network.type != 'none') {
       this.networkAvailable = true;
@@ -85,20 +75,13 @@ export class HomePage {
         this.unauthorized(response.message);
       } else {
         this.utils.stopLoader();
-        // this.getSchoolDetails();
-
       }
     }, error => {
       this.utils.stopLoader();
       if (error.status == '401') {
-        // this.currentUser.removeUser();
         this.appCtrl.getRootNav().push(WelcomePage);
       }
     })
-  }
-
-  mapGeneralQuesions() {
-
   }
 
   unauthorized(msg) {
@@ -131,24 +114,16 @@ export class HomePage {
       this.utils.stopLoader();
       this.utils.startLoader(`Please wait while fetching school details.`)
     }
-    // console.log(this.schoolIndex)
-    // for (const school of this.schoolList) {
     this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[this.schoolIndex]['_id'] + '/', response => {
-      // console.log(this.schoolList[this.schoolIndex]['_id'])
-      // console.log(JSON.stringify(response))
-      // const generalQuestions = {}
-
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolList[this.schoolIndex]['_id']), response.result);
-      console.log(response.result['assessments'][0]['generalQuestions'])
-      this.localStorage.setLocalStorage("generalQuestions_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
-      this.localStorage.setLocalStorage("generalQuestionsCopy_"+this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
+      this.localStorage.setLocalStorage("generalQuestions_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
+      this.localStorage.setLocalStorage("generalQuestionsCopy_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
       this.schoolList[this.schoolIndex]['submissionId'] = response.result['assessments'][0].submissionId;
       this.schoolList[this.schoolIndex]['programId'] = response.result.program._id;
       this.mappSubmissionData(response.result);
       this.schoolList[this.schoolIndex]['schoolDetailsFetched'] = true;
       this.localStorage.setLocalStorage('schools', this.schoolList);
       if (this.schoolIndex === this.schoolList.length - 1) {
-        // this.localStorage.setLocalStorage('schools', this.schoolList);
         this.getParentRegistry();
       } else {
         this.schoolIndex++;
@@ -156,51 +131,10 @@ export class HomePage {
       }
     }, error => {
     })
-    // }
   }
 
-  // successCallback = (response) => {
-  //   this.localStorage.setLocalStorage("assessmentDetails_"+ this.schoolList[this.schoolIndex]['_id'], response)
-  //   this.schoolDetails.push(response.result);
-  //   if (this.schoolDetails.length === this.schoolList.length) {
-  //     const schoolDetailsObj = {}
-  //     const generalQuestions = {}
-  //     for (const school of this.schoolDetails) {
-  //       schoolDetailsObj[school['schoolProfile']._id] = school;
-  //       generalQuestions[school['schoolProfile']._id] = school.assessments[0].generalQuestions;
-  //     }
-  //     this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
-  //     this.storage.set("generalQuestions", JSON.stringify(generalQuestions));
-  //     this.storage.set("generalQuestionsCopy", JSON.stringify(generalQuestions));
-
-  //     this.generalQuestions = generalQuestions;
-
-  //     this.getLocalSchoolDetails();
-  //     this.mappSubmissionData(schoolDetailsObj);
-  //     this.getParentRegistry();
-  //     this.mapGeneralQuesions()
-  //     // this.utils.stopLoader();
-
-  //   } else {
-  //     console.log("End of loader")
-  //     this.schoolIndex++;
-  //     this.getSchoolDetails();
-  //   }
-  // }
-
   mappSubmissionData(schoolDetailsObj): void {
-    // for (const school of this.schoolList ) {
-    //   const obj = {
-    //     _id: school['_id'],
-    //   }
-    //   if(schoolDetailsObj[school['_id']].assessments[0].submissions) {
-    //     this.ulsd.getLocalData(obj, schoolDetailsObj[school['_id']].assessments[0].submissions);
-    //   }
-    // }
-    // this.getLocalSchoolDetails();
-    console.log("in map submissions")
     this.ulsd.mapSubmissionDataToQuestion(schoolDetailsObj);
-
   }
 
   openAction(school, evidenceIndex) {
@@ -208,8 +142,6 @@ export class HomePage {
     const options = { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolDetails, parent: this };
     this.evdnsServ.openActionSheet(options);
   }
-
-
 
   goToRating(school): void {
     const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
@@ -219,9 +151,7 @@ export class HomePage {
   getParentRegistryForm(): void {
     this.apiService.httpGet(AppConfigs.parentInfo.getParentRegisterForm, success => {
       this.localStorage.setLocalStorage('parentRegisterForm', success.result)
-      // this.storage.set('parentRegisterForm', JSON.stringify(success.result));
     }, error => {
-
     })
   }
 
@@ -232,7 +162,6 @@ export class HomePage {
         this.checkForProgressStatus(this.schoolDetails[schoolId]['assessments'][0]['evidences'])
       }
     })
-    // this.localStorage.getLocalStorage()
     this.localStorage.getLocalStorage('generalQuestions').then(questions => {
       if (questions) {
         this.generalQuestions = questions;
@@ -240,13 +169,6 @@ export class HomePage {
     }).catch(error => {
 
     })
-    // this.storage.get('generalQuestions').then(questions => {
-    //   if(questions) {
-    //     // JSON.stringify
-    //     this.generalQuestions = JSON.parse(questions);
-    //     // console.log(questions);
-    //   }
-    // })
   }
 
   goToSections(school, evidenceIndex) {
@@ -260,7 +182,6 @@ export class HomePage {
 
   goToGeneralQuestionList(school): void {
     this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: school._id, name: school.name })
-
   }
 
   gotToEvidenceList(school) {
@@ -273,7 +194,6 @@ export class HomePage {
 
   getParentRegistry() {
     for (const school of this.schoolList) {
-      // console.log(school['_id']);
       this.apiService.httpGet(AppConfigs.parentInfo.getParentList + school['_id'], data => {
         this.parentListSuccessCallback(data.result)
       }, error => {
@@ -290,38 +210,23 @@ export class HomePage {
       }
     }
     const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
-    this.localStorage.setLocalStorage("parentDetails_"+schoolId, parentdata)
+    this.localStorage.setLocalStorage("parentDetails_" + schoolId, parentdata)
     if (this.parentList.length === this.schoolList.length) {
-      // console.log(JSON.stringify(this.parentList))
-
-      // const parentDetailsObj = {};
       this.utils.stopLoader();
-      // for (const parentdata of this.parentList) {
-      //   const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
-      //   if (schoolId) {
-          for (const parent of parentdata) {
-            if (parent) {
-              parent.uploaded = true;
-            }
-          }
-      //     parentDetailsObj[schoolId] = parentdata;
-      //   }
-      // }
-      // this.storage.set('parentDetails', JSON.stringify(parentDetailsObj));
-      // console.log(JSON.stringify(parentDetailsObj))
-
+      for (const parent of parentdata) {
+        if (parent) {
+          parent.uploaded = true;
+        }
+      }
     }
   }
 
 
   checkForProgressStatus(evidences) {
-    // console.log("yeee")
     for (const evidence of evidences) {
-      // console.log(evidence.startTime);
       if (evidence.isSubmitted) {
         evidence.progressStatus = 'submitted';
       } else if (!evidence.startTime) {
-        // console.log(evidence.startTime)
         evidence.progressStatus = '';
       } else {
         evidence.progressStatus = 'completed';
@@ -336,31 +241,14 @@ export class HomePage {
 
   onInit() {
     this.navCtrl.id = "HomePage";
-    // console.log('refresh');
     this.storage.get('parentRegisterForm').then(form => {
       if (!form) {
         this.getParentRegistryForm();
       }
     })
     this.userData = this.currentUser.getCurrentUserData();
-    // this.storage.get('schools').then(schools => {
-    //   // console.log(JSON.stringify(schools))
-    //   if (schools) {
-    //     this.schoolList = schools;
-    //     this.getLocalSchoolDetails();
-    //   } else {
-    //     this.getSchoolListApi();
-    //   }
-    // }).catch(error => {
-    //   this.getSchoolListApi();
-    // })
-
     this.localStorage.getLocalStorage('schools').then(schools => {
       this.schoolList = schools;
-      // console.log("School status list")
-      // this.getLocalSchoolDetails();
-      // this.checkForAllSchoolDetailsFetchedStatus();
-
     }).catch(error => {
       this.getSchoolListApi();
     })
@@ -368,20 +256,14 @@ export class HomePage {
 
   checkForAllSchoolDetailsFetchedStatus() {
     let index = 0;
-    // console.log(JSON.stringify(this.schoolList))
     for (const school of this.schoolList) {
-      // console.log("in check mode")
-      if(!school['schoolDetailsFetched']) {
-      // console.log("found incmplete index" + index)
-        this.schoolIndex  = index;
+      if (!school['schoolDetailsFetched']) {
+        this.schoolIndex = index;
         this.getSchoolDetails();
         break;
-      } 
+      }
       index++;
     }
-    // this.schoolList.forEach((key, value) => {
-
-    // })
   }
 
   getRatedQuestions(school): void {

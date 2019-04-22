@@ -29,12 +29,8 @@ export class IndividualListingPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad IndividualListingPage');
     this.localStorage.getLocalStorage('assessmentList').then(data => {
-      console.log("in localstorage")
-
       if (data) {
-        console.log(JSON.stringify(data));
         this.programs = data;
       } else {
         this.getAssessmentsApi();
@@ -45,7 +41,6 @@ export class IndividualListingPage {
   }
 
   getAssessmentsApi() {
-    console.log("in api")
     const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
     this.utils.startLoader()
     this.apiService.httpGet(url, successData => {
@@ -53,7 +48,6 @@ export class IndividualListingPage {
       this.programs = successData.result;
       this.localStorage.setLocalStorage("assessmentList", successData.result);
     }, error => {
-      console.log("error")
       this.utils.stopLoader()
     })
   }
@@ -98,7 +92,6 @@ export class IndividualListingPage {
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.programs[programIndex].assessments[assessmentIndex].id), success.result);
       this.programs[programIndex].assessments[assessmentIndex].downloaded = true;
       this.localStorage.setLocalStorage("assessmentList", this.programs);
-      // console.log(JSON.stringify(success.result))
       this.ulsd.mapSubmissionDataToQuestion(success.result);
       this.utils.stopLoader();
     }, error => {
@@ -118,14 +111,11 @@ export class IndividualListingPage {
 
 
   goToEcm(assessmentId, heading) {
-    console.log("goToEcm " + assessmentId)
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(assessmentId)).then(successData => {
-      console.log("innn " + successData.assessments.evidences.length)
       if (successData.assessments.evidences.length > 1) {
         this.navCtrl.push('EvidenceListPage', { _id: assessmentId, name: heading })
 
       } else {
-        console.log("innnnnn hiiiiii")
         if (successData.assessments.evidences[0].startTime) {
           this.utils.setCurrentimageFolderName(successData.assessments.evidences[0].externalId, assessmentId)
           this.navCtrl.push('SectionListPage', { _id: assessmentId, name: heading, selectedEvidence: 0 })
@@ -133,9 +123,6 @@ export class IndividualListingPage {
           const assessment = { _id: assessmentId, name: heading }
           this.openAction(assessment, successData, 0);
         }
-        // this.navCtrl.push('SectionListPage', { _id: assessmentId, name: heading, selectedEvidence: 0 });
-        // this.appCtrl.getRootNav().push('EvidenceListPage', { _id: school._id, name: school.name, parent: this })
-        // this.appCntrl.getRootNav().push('EvidenceListPage', { _id: assessmentId, name: "Example", parent: this  })
       }
     }).catch(error => {
     })

@@ -1,6 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
@@ -31,9 +30,11 @@ export class QuestionerPage {
   modalRefrnc: any;
   localImageListKey: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage, private localStorage: LocalStorageProvider,
-    private utils: UtilsProvider, private feedback: FeedbackProvider) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    private localStorage: LocalStorageProvider,
+    private utils: UtilsProvider,
+    private feedback: FeedbackProvider) {
   }
 
   ionViewDidLoad() {
@@ -45,13 +46,11 @@ export class QuestionerPage {
     this.utils.startLoader();
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
       this.schoolData = data;
-      const currentEvidences = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences']: this.schoolData['assessments']['evidences']
+      const currentEvidences = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'] : this.schoolData['assessments']['evidences']
       this.selectedEvidenceId = currentEvidences[this.selectedEvidenceIndex].externalId;
       this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId;
-      // console.log("sample " +this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
       this.isViewOnly = !currentEvidences[this.selectedEvidenceIndex]['startTime'] ? true : false;
       this.questions = currentEvidences[this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
-      // console.log(JSON.stringify(this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name))
       this.dashbordData = {
         questions: this.questions,
         evidenceMethod: currentEvidences[this.selectedEvidenceIndex]['name'],
@@ -59,7 +58,6 @@ export class QuestionerPage {
         currentViewIndex: this.start
       }
       this.isCurrentEvidenceSubmitted = currentEvidences[this.selectedEvidenceIndex].isSubmitted
-      // console.log(this.allQuestionsOfEvidence.length + " length of questions");
       this.utils.stopLoader();
     }).catch(error => {
       this.utils.stopLoader();
@@ -91,33 +89,21 @@ export class QuestionerPage {
   // images_CO_5bebcfcf92ec921dcf114828
 
   next(status?: string) {
-    // console.log(this.questions[this.start].isCompleted)
-    // console.log(this.start);
     if (this.questions[this.start].children.length) {
       this.updateTheChildrenQuestions(this.questions[this.start])
     }
     if (this.end < this.questions.length && !status) {
-      // this.utils.setLocalSchoolData(this.schoolData)
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
-
       this.start++;
       this.end++;;
       this.dashbordData.currentViewIndex = this.start;
-      console.log("check for question")
       if (this.questions[this.start].visibleIf.length && this.questions[this.start].visibleIf[0] && !this.checkForQuestionDisplay(this.questions[this.start])) {
         this.questions[this.start].isCompleted = true;
         this.next();
       } else if (this.questions[this.start].visibleIf.length && this.questions[this.start].visibleIf[0] && this.checkForQuestionDisplay(this.questions[this.start])) {
       }
     } else if (status === 'completed') {
-      // this.utils.setLocalSchoolData(this.schoolData);
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
-
-      // const opt = {
-      //   _id: this.schoolId,
-      //   name: this.schoolName,
-      //   selectedEvidence: this.selectedEvidenceIndex
-      // }
       this.navCtrl.pop()
     } else {
       this.next('completed')
@@ -126,84 +112,11 @@ export class QuestionerPage {
 
   updateLocalData(): void {
     this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
-
-    // this.utils.setLocalSchoolData(this.schoolData);
   }
 
   checkForQuestionDisplay(qst): boolean {
-    // let display = true;
-    // for (const question of this.questions) {
-    //   for (const condition of qst.visibleIf) {
-    //     if (condition._id === question._id) {
-    //       let expression = [];
-    //       if(condition.operator != "==="){
-    //         for (const value of condition.value) {
-    //           expression.push("(","'"+question.value+"'", "===", "'"+value+"'" ,")", condition.operator)
-    //         }
-    //         expression.pop();
-    //         console.log(expression.join(''))
-    //         console.log(eval(expression.join('')))
-    //       } else {
-    //         expression.push("(","'"+question.value+"'", condition.operator, "'"+condition.value+"'" ,")" )
-    //       }
-    //       if(!eval(expression.join(''))) {
-    //         return false
-    //       }
-    //     } 
-    //   }
-    // }
-    // return display
-    // console.log('checkcondition')
-    // let display = false;
-    // for (const question of this.questions) {
-    //   if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
-    //     display = true;
-    //   }
-    // }
-    // return display
-
-     return this.utils.checkForDependentVisibility(qst, this.questions)
+    return this.utils.checkForDependentVisibility(qst, this.questions)
   }
-
-  // checkForDependentVisibility(qst): boolean {
-  //   let display = true;
-  //   for (const question of this.questions) {
-  //     for (const condition of qst.visibleIf) {
-  //       if (condition._id === question._id) {
-  //         let expression = "";
-  //         if(condition.operator != "==="){
-  //           for (const value of condition.value) {
-  //             expression = expression + condition.operator + value
-  //           }
-  //           expression = expression.substring(1, expression.length-1)
-  //         }
-  //         if(!eval(expression)){
-  //           return false
-  //         }
-  //         // if (condition.operator === "||") {
-  //         //   for (const value of condition.value) {
-  //         //     if(question.value.includes(value)) {
-  //         //       return true
-  //         //     } else {
-  //         //       display = false;
-  //         //     }
-  //         //   }
-  //         //   return display
-  //         // } else {
-  //         //   for (const value of question.value) {
-  //         //     if ((eval('"' + value + '"' + condition.operator + '"' + condition.value + '"'))) {
-  //         //       return true
-  //         //     } else {
-  //         //       display = false;
-  //         //     }
-  //         //   }
-  //         //   return display
-  //         // }
-  //       }
-  //     }
-  //   }
-  //   return display
-  // }
 
   updateTheChildrenQuestions(parentQuestion) {
     for (const child of parentQuestion.children) {
@@ -223,8 +136,6 @@ export class QuestionerPage {
     }
     if (this.start > 0) {
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
-
-      // this.utils.setLocalSchoolData(this.schoolData)
       this.start--;
       this.dashbordData.currentViewIndex = this.start;
       this.end--;
