@@ -116,9 +116,9 @@ export class UpdateLocalSchoolDataProvider {
       }
       matrixQuestion.value.forEach((instance, index) => {
         instance.forEach(question => {
-          if(validSubmission.answers[matrixQuestion._id] && validSubmission.answers[matrixQuestion._id].value[index][question._id]) {
-            question.value = validSubmission.answers[matrixQuestion._id].value[index][question._id].value;
-            question.remarks = validSubmission.answers[matrixQuestion._id].value[index][question._id].remarks;
+          if(validSubmission.answers[matrixQuestion._id] && validSubmission.answers[matrixQuestion._id].value[index] && validSubmission.answers[matrixQuestion._id].value[index][question._id]) {
+            question.value = validSubmission.answers[matrixQuestion._id].value[index] ? validSubmission.answers[matrixQuestion._id].value[index][question._id].value : "";
+            question.remarks = validSubmission.answers[matrixQuestion._id].value[index] ? validSubmission.answers[matrixQuestion._id].value[index][question._id].remarks: "";
           }
         });
       });
