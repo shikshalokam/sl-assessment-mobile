@@ -94,6 +94,9 @@ export class ParentsListPage {
       isEdit: true,
       selectedParent: this.parentInfoList[index]
     }
+    // if(!this.parentInfoList[index]._id) {
+    //   params.isEdit = false;
+    // }
     let parentForm = this.modalCntrl.create(ParentsFormPage, params);
     parentForm.onDidDismiss(data => {
       if (data) {
@@ -130,23 +133,29 @@ export class ParentsListPage {
     const obj = {
       parents: []
     };
-    for (const parent of this.parentInfoList) {
-      if(parent.uploaded === false && !parent._id) {
-        delete parent.uploaded;
-        obj.parents.push(parent);
-      }
-    }
+    const parentList = JSON.parse(JSON.stringify(this.parentInfoList))
     if(this.networkConnected){
-      this.utils.startLoader();
-      this.apiService.httpPost(AppConfigs.parentInfo.addParentsInfo, obj, success => {
-        this.utils.stopLoader();
-        this.utils.openToast(success.message);
+      for (const parent of parentList) {
+        if(!parent.uploaded && !parent._id) {
+          delete parent.uploaded;
+          obj.parents.push(parent);
+        }
+      }
+      if(obj.parents.length){
+        this.utils.startLoader();
+        this.apiService.httpPost(AppConfigs.parentInfo.addParentsInfo, obj, success => {
+          this.utils.stopLoader();
+          this.utils.openToast(success.message);
+          this.makeAllAsUploaded();
+        }, error => {
+          this.utils.stopLoader();
+          this.utils.openToast(error.message);
+  
+        })
+      } else {
         this.makeAllAsUploaded();
-      }, error => {
-        this.utils.stopLoader();
-        this.utils.openToast(error.message);
+      }
 
-      })
     } else {
       this.utils.openToast("You need network connection for this action.");
     }
