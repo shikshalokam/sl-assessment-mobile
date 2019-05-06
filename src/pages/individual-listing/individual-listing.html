@@ -23,8 +23,8 @@
             {{assessment.name}} </div>
           <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j)"
             *ngIf="!assessment?.downloaded"></ion-icon>
-          <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
-            (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon>
+          <!-- <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
+            (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon> -->
         </div>
       </ion-item>
     </ion-item-group>

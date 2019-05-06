@@ -80,6 +80,7 @@ export class InstitutionsEntityList {
   }
 
   refresh(event) {
+    event ?" " : this.utils.startLoader();
     this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors, response => {
       const downloadedAssessments = []
       const currentAssessments = response.result;
@@ -90,7 +91,7 @@ export class InstitutionsEntityList {
       }
       if (!downloadedAssessments.length) {
         this.localStotrage.setLocalStorage("schools", response.result);
-        event.complete();
+        event ? event.complete() : this.utils.stopLoader();
       } else {
         for (const assessment of currentAssessments) {
           if (downloadedAssessments.indexOf(assessment._id) >= 0) {
@@ -98,7 +99,7 @@ export class InstitutionsEntityList {
           }
         }
         this.localStotrage.setLocalStorage("schools", currentAssessments);
-        event.complete();
+        event ? event.complete() : this.utils.stopLoader();
       }
     }, error => {
 
