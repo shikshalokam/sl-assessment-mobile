@@ -22,7 +22,7 @@
 
 
 <ion-header>
-  <header [title]="'headings.mySchool'|translate" [hideBack]="true">
+  <header [title]="'headings.myInstitutions'|translate" [hideBack]="true">
 
   </header>
 </ion-header>
@@ -68,3 +68,17 @@
   </ion-card>
   <div class="_flex-box msgContainer" *ngIf="!schoolList?.length">No Assessments</div>
 </ion-content>
+
+
+<ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button full (click)="refresh()" class="btnText">
+          <ion-icon name="refresh" margin-right></ion-icon>
+          {{'buttons.refresh' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
