@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, AlertController, Nav, App, MenuController } from 'ionic-angular';
+import { Platform, AlertController, Nav, App, MenuController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { CurrentUserProvider } from '../providers/current-user/current-user';
@@ -14,6 +14,7 @@ import { FaqPage } from '../pages/faq/faq';
 import { AboutPage } from '../pages/about/about';
 import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
 import { UtilsProvider } from '../providers/utils/utils';
+import { ObservationsPage } from '../pages/observations/observations';
 
 @Component({
   templateUrl: 'app.html'
@@ -47,6 +48,12 @@ export class MyApp {
       active: false
     },
     {
+      name: "observations",
+      icon: "eye",
+      component: ObservationsPage,
+      active: false
+    },
+    {
       name: "faqs",
       icon: "help",
       component: FaqPage,
@@ -69,11 +76,32 @@ export class MyApp {
     private alertCtrl: AlertController,
     private translate: TranslateService,
     private network: Network,
+    private app: App,
+    private events :Events,
     private networkGpsProvider: NetworkGpsProvider,
     private menuCntrl: MenuController,
     private utils: UtilsProvider
   ) {
+    this.events.subscribe('navigateTab',data=>{
+      console.log(data);
+      let index : number = this.findIndex(data);
+      this.goToPage(index);
+    })
+    this.events.subscribe('loginSuccess', data =>{
+      if(data == true){
+      // this.goToPage(0);
+      for (const page of this.allPages) {
+        page['active'] = false;
+      }
+      this.allPages[0]['active']= true;
+
+      }
+    })
+
     platform.ready().then(() => {
+      // this.goToPage(0);
+      console.log("go to page")
+
       // this.currentPage = this.nav.getActive();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -204,6 +232,15 @@ export class MyApp {
         }
       }
     })
+  }
+  findIndex(componentName){
+    let currentIndex ;
+    this.allPages.forEach((page,index) =>{
+      if(componentName == page['name']){
+        currentIndex = index;
+      }
+    } );
+    return currentIndex;
   }
 
 }

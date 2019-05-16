@@ -20,6 +20,9 @@ export class MenuItemComponent {
   networkAvailable: boolean;
   subscription: any;
   programId: string;
+  hideTeacherRegistry = true;
+  hideLeaderRegistry=true;
+  hideFeedback= true;
 
   constructor(private navParams: NavParams, private ratingService: RatingProvider,
     private appCtrl: App, private viewCtrl: ViewController, private utils: UtilsProvider,
@@ -29,6 +32,9 @@ export class MenuItemComponent {
     this.submissionId = this.navParams.get('submissionId');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
+    this.hideTeacherRegistry = this.navParams.get('hideTeacherRegistry');
+    this.hideLeaderRegistry=this.navParams.get('hideLeaderRegistry');
+    this.hideFeedback= this.navParams.get('hideFeedback');
     // this.parent = this.navParams.get("parent");
     this.programId = this.navParams.get("programId")
     this.subscription = this.events.subscribe('network:offline', () => {

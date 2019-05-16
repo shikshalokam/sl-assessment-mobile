@@ -6,23 +6,23 @@
 <ion-content>
   <ion-card>
     <ion-card-content>
-      <h2>{{'labels.welcome'|translate}} !</h2>
+      <h2 class="bold">{{'labels.welcome'|translate}} {{userData?.name}}! </h2>
     </ion-card-content>
   </ion-card>
 
-  <!-- <div padding>
+  <div padding>
     <div>
-      <h4>Assessments</h4>
+      <h4>{{'labels.goTo'| translate}}</h4>
     </div>
-    <div class="_flex-box">
-      <ion-card  padding class="_flex-box _justify-content-center" style="flex:1">
-        <ion-icon name="person" class="sizeAdj" margin-right></ion-icon>
-        <div>Individual</div>
-      </ion-card>
-      <ion-card padding class="_flex-box _justify-content-center" style="flex:1; margin-top: 10px">
-        <ion-icon name="book" class="sizeAdj" margin-right></ion-icon>
-        <div>Institutional</div>
+    <div class="_flex-box ">
+      <ion-card  class="_flex-box _justify-content-space-between"  *ngFor="let page of allPages;let i = index" (click)="goToPage(i)">
+        <div padding class="_flex-box _justify-content-center" >
+            <ion-icon name="{{page.icon}}" class="sizeAdj" ></ion-icon>
+            <div margin-left>{{'tabs.'+page.name|translate}} <span *ngIf="page.subName">{{'labels.'+page.subName | translate}}</span></div>
+        </div>
+        <ion-icon  *ngIf="!isIos" name="arrow-forward" margin-right></ion-icon>
+        
       </ion-card>
     </div>
-  </div> -->
+  </div>
 </ion-content>

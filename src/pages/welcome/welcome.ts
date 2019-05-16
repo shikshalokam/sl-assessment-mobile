@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, Slides } from 'ionic-angular';
+import { NavController, NavParams, Slides, Events } from 'ionic-angular';
 // import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { ToastController } from 'ionic-angular';
@@ -31,6 +31,7 @@ export class WelcomePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage,
     private auth: AuthProvider,
+    private events : Events,
     private toastCtrl: ToastController, private network: Network, private netwrkGpsProvider: NetworkGpsProvider) {
     this.subscription = this.network.onDisconnect().subscribe(() => {
       // this.presentToast('Network was disconnected :-(');
@@ -89,6 +90,7 @@ export class WelcomePage {
   }
 
   ionViewDidLoad() {
+    this.events.publish('loginSuccess' , true);
     this.skipMsg = "Skip";
     console.log('ionViewDidLoad WelcomePage');
     this.netwrkGpsProvider.checkForLocationPermissions();
