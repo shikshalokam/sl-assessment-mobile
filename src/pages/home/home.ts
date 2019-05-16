@@ -14,6 +14,9 @@ import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { AppConfigs } from '../../providers/appConfig';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { InstitutionsEntityList } from '../institutions-entity-list/institutions-entity-list';
+import { IndividualListingPage } from '../individual-listing/individual-listing';
+import { ObservationsPage } from '../observations/observations';
 
 declare var cordova: any;
 
@@ -36,6 +39,32 @@ export class HomePage {
   schoolIndex = 0;
   currentProgramId: any;
 
+  allPages: Array<Object> = [
+   
+    {
+      name: "institutional",
+      subName: 'assessments',
+      icon: "book",
+      component: InstitutionsEntityList,
+      active: false
+    },
+    {
+      name: "individual",
+      subName: 'assessments',
+      icon: "person",
+      component: IndividualListingPage,
+      active: false
+    },
+    {
+      name: "observations",
+      subName: '',
+      icon: "eye",
+      component: ObservationsPage,
+      active: false
+    },
+   
+  ]
+
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
     private apiService: ApiProvider,
@@ -55,6 +84,9 @@ export class HomePage {
     this.subscription = this.events.subscribe('localDataUpdated', () => {
       this.getLocalSchoolDetails();
     });
+
+    this.isIos = this.platform.is('ios') ? true : false;
+
   }
 
   ionViewWillEnter() {
@@ -72,7 +104,7 @@ export class HomePage {
       if (!this.schoolList.length) {
         this.utils.stopLoader();
         this.errorMsg = response.message;
-        this.unauthorized(response.message);
+        // this.unauthorized(response.message);
       } else {
         this.utils.stopLoader();
       }
@@ -83,7 +115,9 @@ export class HomePage {
       }
     })
   }
-
+  goToPage(index) {
+    this.events.publish('navigateTab',this.allPages[index]['name'])
+  }
   unauthorized(msg) {
     let alert = this.alertCntrl.create({
       title: "Unauthorized",
@@ -116,7 +150,7 @@ export class HomePage {
     }
     this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[this.schoolIndex]['_id'] + '/', response => {
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolList[this.schoolIndex]['_id']), response.result);
-      this.localStorage.setLocalStorage("generalQuestions_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
+      this.localStorage.setLocalStorage("generalQuestions_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions'] ? response.result['assessments'][0]['generalQuestions'] : null);
       this.localStorage.setLocalStorage("generalQuestionsCopy_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
       this.schoolList[this.schoolIndex]['submissionId'] = response.result['assessments'][0].submissionId;
       this.schoolList[this.schoolIndex]['programId'] = response.result.program._id;

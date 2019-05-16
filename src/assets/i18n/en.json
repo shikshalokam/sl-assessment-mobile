@@ -36,10 +36,13 @@
         "questions": "Questions",
         "rate": "Rate",
         "individual": "Individual",
-        "institutional": "Institutions"
+        "institutional": "Institutions",
+        "observations":"Observations"
+
     },
     "headings": {
         "home": "Home",
+        "observations":"Observations",
         "myInstitutions":"My Institutions",
         "mySchool": "My Schools",
         "faqs": "FAQs",
@@ -73,6 +76,8 @@
     },
     "labels": {
         "welcome": "Welcome",
+        "assessments":"Assessments",
+        "goTo":"Goto",
         "name": "Name",
         "feedback": "Feedback",
         "choose": "Choose",

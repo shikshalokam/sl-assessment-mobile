@@ -26,19 +26,19 @@ export class EvidenceListPage {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
   }
-
+ 
   ionViewWillEnter() {
     console.log('ionViewDidLoad EvidenceListPage');
     this.utils.startLoader();
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(successData => {
+      this.utils.stopLoader();
       this.schoolData = successData;
       this.schoolEvidences = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'] : this.schoolData['assessments']['evidences'];
-      this.utils.stopLoader();
       this.checkForProgressStatus();
       this.localStorage.getLocalStorage('generalQuestions_' + this.schoolId).then(successData => {
         this.generalQuestions = successData;
       }).then(error => {
-      })
+      });
     }).catch(error => {
       this.utils.stopLoader()
     })

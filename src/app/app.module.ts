@@ -68,6 +68,7 @@ import { IndividualListingPage } from '../pages/individual-listing/individual-li
 import { ProgramDetailsPage } from '../pages/program-details/program-details';
 import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
 import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.module';
+import { ObservationsPageModule } from '../pages/observations/observations.module';
 
 @NgModule({
   declarations: [
@@ -115,7 +116,8 @@ import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.
     RatingPageModule,
     RatedCriteriaListPageModule,
     RegistryListPageModule,
-    GeneralQuestionListPageModule
+    GeneralQuestionListPageModule,
+    ObservationsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

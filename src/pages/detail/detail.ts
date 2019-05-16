@@ -77,6 +77,7 @@ export class DetailPage {
       enableBackdropDismiss: false
     });
     alert.present();
+    
   }
 
   openAlert() {
