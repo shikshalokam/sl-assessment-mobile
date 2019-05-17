@@ -109,7 +109,11 @@ export class ObservationsPage {
   }
 
 
-  getAssessmentDetails(programIndex, assessmentIndex, schoolIndex) {
+  getAssessmentDetails(event) {
+    let programIndex = event.programIndex;
+    let assessmentIndex = event.assessmentIndex ;
+    let schoolIndex = event.entityIndex;
+
     console.log(programIndex + " " + assessmentIndex + " " + schoolIndex)
     this.utils.startLoader();
     const url = AppConfigs.cro.getObservationsDetails+this.programs[programIndex]._id+"?assessmentId="+ this.programs[programIndex].assessments[assessmentIndex].id +"&schoolId="+this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]._id;
@@ -138,7 +142,9 @@ export class ObservationsPage {
   }
 
 
-  goToEcm(assessmentId, heading) {
+  goToEcm(event) {
+    let assessmentId = event.id;
+    let heading = event.name;
 
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(assessmentId)).then(successData => {
       
@@ -162,10 +168,20 @@ export class ObservationsPage {
     }).catch(error => {
     })
   }
-  openMenu(myEvent, programIndex , assessmentIndex ,schoolIndex) {
+  openMenu(event) {
+    var myEvent = event.event;
+    var  programIndex =  event.programIndex;
+    var assessmentIndex = event.assessmentIndex ;
+    var schoolIndex = event.entityIndex;
+    console.log(JSON.stringify(this.programs));
+    // console.log(programIndex + " "+ assessmentIndex+" "+schoolIndex)
+    // console.log(JSON.stringify(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id']));
+    // console.log(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name']);
+    // console.log(this.programs[programIndex]._id);
+  
     let popover = this.popoverCtrl.create(MenuItemComponent, {
       submissionId: "",
-      _id:this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]._id,
+      _id:this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id'],
       name: this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name'],
       programId: this.programs[programIndex]._id,
       hideTeacherRegistry : false,
