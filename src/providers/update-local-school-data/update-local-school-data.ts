@@ -2,10 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiProvider } from '../api/api';
 import { AppConfigs } from '../appConfig';
-import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../utils/utils';
 import { CurrentUserProvider } from '../current-user/current-user';
-import { Events } from 'ionic-angular';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 
 @Injectable()
@@ -14,8 +12,8 @@ export class UpdateLocalSchoolDataProvider {
   currentSchool: any;
   updatedSubmissionStatus: any;
 
-  constructor(public http: HttpClient, private apiService: ApiProvider, private storage: Storage,
-    private localStorage: LocalStorageProvider, private utils: UtilsProvider, private currentUser: CurrentUserProvider, private events: Events) {
+  constructor(public http: HttpClient, private apiService: ApiProvider,
+    private localStorage: LocalStorageProvider, private utils: UtilsProvider, private currentUser: CurrentUserProvider) {
   }
 
   getSubmissionStatus(): void {
@@ -31,7 +29,7 @@ export class UpdateLocalSchoolDataProvider {
   }
 
   getLocalData(obj, submissionStatus?: any): void {
-    this.localStorage.getLocalStorage('schoolDetails_'+obj._id).then(data => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(obj._id)).then(data => {
       this.schoolDetails = data;
       this.currentSchool = this.schoolDetails;
       if (submissionStatus) {
@@ -63,14 +61,16 @@ export class UpdateLocalSchoolDataProvider {
       // schoolObj[mappedData["schoolProfile"]["_id"]] = mappedData;
 
     }
-    console.log("map on login ")
-    this.localStorage.setLocalStorage('schoolDetails_'+ mappedData["schoolProfile"]["_id"], mappedData)
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(mappedData["schoolProfile"] ? mappedData["schoolProfile"]["_id"] :mappedData["entityProfile"]["_id"]), mappedData)
     // this.storage.set('schoolsDetails', JSON.stringify(schoolObj));
     // this.events.publish("localDataUpdated");
   }
   updateSubmissionsOnLogin(schoolData) {
-    for (const evidence of schoolData.assessments[0].evidences) {
-      const validSubmission = schoolData.assessments[0].submissions[evidence.externalId];
+    const assessment = schoolData.assessments[0] ? schoolData.assessments[0] : schoolData.assessments;
+    // const assessmentEvidence = schoolData.assessments[0] ? schoolData.assessments[0] : schoolData.assessments.evidences;
+    for (const evidence of assessment.evidences) {
+
+      const validSubmission = assessment.submissions[evidence.externalId];
       if (validSubmission) {
         for (const section of evidence.sections) {
           for (const question of section.questions) {
@@ -102,7 +102,7 @@ export class UpdateLocalSchoolDataProvider {
         }
       }
     }
-    this.localStorage.setLocalStorage("schoolDetails_"+this.currentSchool["schoolProfile"]["_id"], this.schoolDetails)
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.currentSchool["schoolProfile"]["_id"]), this.schoolDetails)
     // this.storage.set('schoolsDetails', JSON.stringify(this.schoolDetails));
     // this.events.publish("localDataUpdated");
   }
