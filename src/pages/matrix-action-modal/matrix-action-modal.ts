@@ -20,7 +20,6 @@ export class MatrixActionModalPage {
   constructor(public navCtrl: NavController, private utils: UtilsProvider,
     public navParams: NavParams, private viewCntrl: ViewController) {
     this.selectedIndex = navParams.data.selectedIndex;
-    // this.data = Object.assign(data);
     this.data = navParams.data.data;
     this.schoolId = navParams.data.schoolId;
     this.evidenceId = navParams.data.evidenceId;
@@ -33,15 +32,12 @@ export class MatrixActionModalPage {
 
   update(): void {
     for (const question of this.data.value[this.selectedIndex]) {
-      // console.log("sample" + question.isCompleted);
       // Do check only for questions without visibleif. For visibleIf questions isCompleted property is set in  checkForVisibility()
       if (!question.visibleIf) {
-        // console.log(this.utils.isQuestionComplete(question))
         question.isCompleted = this.utils.isQuestionComplete(question);
       }
     }
     const instanceValue = JSON.parse(JSON.stringify(this.data.value[this.selectedIndex]))
-    // console.log(JSON.stringify(instanceValue))
     this.viewCntrl.dismiss(instanceValue)
   }
 

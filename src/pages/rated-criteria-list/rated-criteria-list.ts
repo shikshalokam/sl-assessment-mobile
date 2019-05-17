@@ -1,16 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { FlaggingModalPage } from '../flagging-modal/flagging-modal';
-import { AppConfigs } from '../../providers/appConfig';
-import { ApiProvider } from '../../providers/api/api';
-import { UtilsProvider } from '../../providers/utils/utils';
-
-/**
- * Generated class for the RatedCriteriaListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -24,24 +14,21 @@ export class RatedCriteriaListPage {
   isFlagged: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private modalCntrl: ModalController,
-    private apiService: ApiProvider,
-    private utils: UtilsProvider) {
+    private modalCntrl: ModalController) {
   }
 
   ionViewWillEnter() {
     this.submissionId = this.navParams.get('submissionId');
     this.schoolData = this.navParams.get('schoolData');
     this.ratedQuestions = this.navParams.get('data');
-    // this.isFlagged = this.ratedQuestions ? this.checkIfFlagged(): false;
   }
 
   openFlaggingModal(index): void {
     const selectedCriteria = this.ratedQuestions.criterias[index];
-    if(selectedCriteria.flagRaised){
+    if (selectedCriteria.flagRaised) {
       selectedCriteria.flag.value = selectedCriteria.flagRaised.value;
       selectedCriteria.flag.remarks = selectedCriteria.flagRaised.remarks;
-      selectedCriteria.isSubmitted = true; 
+      selectedCriteria.isSubmitted = true;
     }
     let flaggingModal = this.modalCntrl.create(FlaggingModalPage, { currentCriteria: selectedCriteria, submissionId: this.submissionId });
     flaggingModal.onDidDismiss(data => {

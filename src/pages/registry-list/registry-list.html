@@ -6,17 +6,25 @@
 
 
 <ion-content padding>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshParentListClick($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
   <div>
-    <button ion-button icon-start float-right  color="primary" (click)="addRegistryItem()">
+    <button ion-button icon-start float-right color="primary" (click)="refreshParentListClick()">
+      Refresh
+    </button>
+    <button ion-button icon-start float-right color="primary" (click)="addRegistryItem()">
       {{'buttons.add'| translate}} {{'buttons.'+registryType | translate}}
     </button>
   </div>
 
-  <div>
+  <div style="margin-bottom: 60px !important">
     <ion-list *ngIf="registryList?.length">
       <button ion-item *ngFor="let info of registryList">
-        {{ info?.name }} 
-      </button>  
+        {{ info?.name }}
+      </button>
     </ion-list>
   </div>
 
@@ -26,14 +34,14 @@
 </ion-content>
 
 <ion-footer no-shadow *ngIf="showUploadBtn">
-    <ion-toolbar class="_toolbar-background-md" position="bottom">
-      <ion-row>
-        <ion-col>
-          <button ion-button  block  icon-start (click)="updateAllParents()">
-            <ion-icon name="contacts" ></ion-icon>
-            {{'buttons.'+registryType | translate}} {{'buttons.registry'| translate}} {{'buttons.update'| translate}}
-          </button>
-        </ion-col>
-      </ion-row>
-    </ion-toolbar>
-  </ion-footer>
+  <ion-toolbar position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button block icon-start (click)="updateAllParents()">
+          <ion-icon name="contacts"></ion-icon>
+          {{'buttons.'+registryType | translate}} {{'buttons.registry'| translate}} {{'buttons.update'| translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

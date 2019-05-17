@@ -1,6 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule, HttpClient} from '@angular/common/http';
-import { HttpModule, Http } from '@angular/http';
+import { HttpModule } from '@angular/http';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -10,10 +10,7 @@ import { Network} from '@ionic-native/network';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
-
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -21,12 +18,9 @@ import { LoginPageModule } from '../pages/login/login.module';
 import { AuthProvider } from '../providers/auth/auth';
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
-import { SchoolListPage } from '../pages/school-list/school-list';
 import { SchoolListProvider } from '../providers/school-list/school-list';
-import { HttpInterceptorProvider } from '../providers/http-interceptor/http-interceptor';
 import { UtilsProvider } from '../providers/utils/utils';
 import { ApiProvider } from '../providers/api/api';
-import { SchoolProfilePageModule } from '../pages/school-profile/school-profile.module';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -36,11 +30,11 @@ import { QuestionerPageModule } from '../pages/questioner/questioner.module';
 import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
 import { FaqPage } from '../pages/faq/faq';
-import { SchoolProfileEditPage } from '../pages/school-profile-edit/school-profile-edit';
+import { EntityProfileEditPage } from '../pages/entity-profile-edit/entity-profile-edit';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { FileTransfer} from '@ionic-native/file-transfer';
 import { ImagePicker } from '@ionic-native/image-picker';
 import { ImageListingPage } from '../pages/image-listing/image-listing';
 import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
@@ -70,18 +64,21 @@ import { SlackProvider } from '../providers/slack/slack';
 import { Keyboard } from '@ionic-native/keyboard';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { HTTP } from '@ionic-native/http';
+import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
+import { ProgramDetailsPage } from '../pages/program-details/program-details';
+import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
+import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.module';
+import { ObservationsPageModule } from '../pages/observations/observations.module';
 
 @NgModule({
   declarations: [
     MyApp,
     AboutPage,
-    ContactPage,
     HomePage,
-    TabsPage,
     WelcomePage,
-    SchoolListPage,
+    InstitutionsEntityList,
     FaqPage,
-    SchoolProfileEditPage,
+    EntityProfileEditPage,
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
@@ -89,7 +86,9 @@ import { HTTP } from '@ionic-native/http';
     FeedbackPage,
     DetailPage,
     GeneralQuestionPage,
-    GeneralQuestionSubmitPage
+    GeneralQuestionSubmitPage,
+    IndividualListingPage,
+    ProgramDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -107,7 +106,7 @@ import { HTTP } from '@ionic-native/http';
     LoginPageModule,
     HttpModule,
     HttpClientModule,
-    SchoolProfilePageModule,
+    EntityProfilePageModule,
     EvidenceListPageModule,
     SectionListPageModule,
     QuestionerPageModule,
@@ -117,19 +116,18 @@ import { HTTP } from '@ionic-native/http';
     RatingPageModule,
     RatedCriteriaListPageModule,
     RegistryListPageModule,
-    GeneralQuestionListPageModule
+    GeneralQuestionListPageModule,
+    ObservationsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     AboutPage,
-    ContactPage,
     HomePage,
-    TabsPage,
     WelcomePage,
-    SchoolListPage,
+    InstitutionsEntityList,
     FaqPage,
-    SchoolProfileEditPage,
+    EntityProfileEditPage,
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
@@ -137,7 +135,9 @@ import { HTTP } from '@ionic-native/http';
     FeedbackPage,
     DetailPage,
     GeneralQuestionPage,
-    GeneralQuestionSubmitPage
+    GeneralQuestionSubmitPage,
+    IndividualListingPage,
+    ProgramDetailsPage
   ],
   providers: [
     StatusBar,
@@ -148,7 +148,7 @@ import { HTTP } from '@ionic-native/http';
     CurrentUserProvider,
     Network,
     SchoolListProvider,
-    HttpInterceptorProvider,
+    // HttpInterceptorProvider,
     // {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorProvider, multi: true},
     UtilsProvider,
     ApiProvider,
