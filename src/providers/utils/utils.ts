@@ -75,7 +75,7 @@ export class UtilsProvider {
     if (question.validation.required && question.value === "" && question.responseType !== 'multiselect') {
       return false
     }
-    if (question.validation.required && !question.value.length && question.responseType === 'multiselect') {
+    if (question.validation.required && question.value && !question.value.length && question.responseType === 'multiselect') {
       return false
     }
     // if (question.file.required && (question.fileName.length < question.file.minCount)) {
