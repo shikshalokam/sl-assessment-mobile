@@ -38,7 +38,7 @@ export class ObservationsPage {
   }
 
   ionViewDidLoad() {
-    this.localStorage.getLocalStorage('observationsList').then(data => {
+    this.localStorage.getLocalStorage('observationsList').then(data => { 
       if (data) {
         this.programs = data;
       } else {
@@ -63,8 +63,6 @@ export class ObservationsPage {
       }
       this.programs = successData.result;
       this.localStorage.setLocalStorage("observationsList", successData.result);
-      console.log(JSON.stringify(successData));
-      console.log("hello")
     }, error => {
       this.utils.stopLoader()
     })
@@ -130,7 +128,7 @@ export class ObservationsPage {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(aseessmemtData.assessments.evidences[evidenceIndex].externalId, assessment._id)
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessments[0].evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: aseessmemtData };
     this.evdnsServ.openActionSheet(options);
   }
@@ -147,15 +145,14 @@ export class ObservationsPage {
       console.log(successData.assessments[0].evidences.length )
     // console.log("go to ecm called");
 
-      // console.log(JSON.stringify(successData.assessments[0].evidences.))
 
       if (successData.assessments[0].evidences.length > 1) {
 
         this.navCtrl.push('EvidenceListPage', { _id: assessmentId, name: heading })
 
       } else {
-        if (successData.assessments.evidences[0].startTime) {
-          this.utils.setCurrentimageFolderName(successData.assessments.evidences[0].externalId, assessmentId)
+        if (successData.assessments[0].evidences[0].startTime) {
+          this.utils.setCurrentimageFolderName(successData.assessments[0].evidences[0].externalId, assessmentId)
           this.navCtrl.push('SectionListPage', { _id: assessmentId, name: heading, selectedEvidence: 0 })
         } else {
           const assessment = { _id: assessmentId, name: heading }
