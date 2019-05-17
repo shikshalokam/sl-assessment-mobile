@@ -34,10 +34,16 @@
         "faqs": "FAQs",
         "about": "About",
         "questions": "Questions",
-        "rate": "Rate"
+        "rate": "Rate",
+        "individual": "Individual",
+        "institutional": "Institutions",
+        "observations":"Observations"
+
     },
     "headings": {
         "home": "Home",
+        "observations":"Observations",
+        "myInstitutions":"My Institutions",
         "mySchool": "My Schools",
         "faqs": "FAQs",
         "about": "About",
@@ -65,10 +71,13 @@
         "parentRegistry":"Parent Registry",
         "LeaderRegistry": "School Leader Registry",
         "TeacherRegistry": "Teacher Registry",
-        "generalQuestions": "General Questions"
+        "generalQuestions": "General Questions",
+        "individualAssessments": "Individual Assessments"
     },
     "labels": {
         "welcome": "Welcome",
+        "assessments":"Assessments",
+        "goTo":"Goto",
         "name": "Name",
         "feedback": "Feedback",
         "choose": "Choose",

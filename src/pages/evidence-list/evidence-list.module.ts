@@ -15,4 +15,4 @@ import { ComponentsModule } from '../../components/components.module';
     ComponentsModule
   ],
 })
-export class EvidenceListPageModule {}
+export class EvidenceListPageModule { }
