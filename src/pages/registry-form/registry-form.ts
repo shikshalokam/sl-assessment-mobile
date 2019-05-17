@@ -19,7 +19,6 @@ export class RegistryFormPage {
   schoolId: any;
   schoolName: any;
   programId: string;
-  // parentInfoList: any;
   networkConnected: boolean;
   registryType: string;
 
@@ -44,7 +43,7 @@ export class RegistryFormPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ParentsFormPage');
-    this.localStorage.getLocalStorage(this.registryType+'RegisterForm').then(formFields => {
+    this.localStorage.getLocalStorage(this.registryType + 'RegisterForm').then(formFields => {
       if (formFields) {
         for (const formField of formFields) {
           if (formField.visible) {
@@ -56,50 +55,13 @@ export class RegistryFormPage {
     }).catch(error => {
     })
 
-    this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then(schoolDetails => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(schoolDetails => {
       if (schoolDetails) {
         this.schoolDetails = schoolDetails;
         this.programId = this.schoolDetails['program']._id;
       }
     }).catch(error => {
     })
-
-    // this.localStorage.getLocalStorage('ParentInfo').then(data => {
-    //   if (data) {
-    //     this.parentInfoList = data;
-    //   } else {
-    //     this.parentInfoList = [];
-    //   }
-    // }).catch(error => {
-
-    // })
-    // this.storage.get("parentRegisterForm").then(formFields => {
-    //   if (formFields) {
-    //     for (const formField of JSON.parse(formFields)) {
-    //       if (formField.visible) {
-    //         this.formFields.push(formField)
-    //       }
-    //     }
-    //     this.form = this.createFormGroup();
-    //   }
-    // })
-
-    // this.storage.get('schoolsDetails').then(schoolDetails => {
-    //   if (schoolDetails) {
-    //     this.schoolId = this.navParams.get('_id');
-    //     this.schoolName = this.navParams.get('name');
-    //     this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
-    //     this.programId = this.schoolDetails['program']._id;
-    //   }
-    // })
-
-    // this.storage.get('ParentInfo').then(success => {
-    //   if (success) {
-    //     this.parentInfoList = success;
-    //   } else {
-    //     this.parentInfoList = [];
-    //   }
-    // })
   }
 
   createFormGroup(): any {
@@ -111,7 +73,7 @@ export class RegistryFormPage {
   }
 
   update(): void {
-    const key = this.registryType === 'Leader' ? 'schoolLeaders': 'teachers'; 
+    const key = this.registryType === 'Leader' ? 'schoolLeaders' : 'teachers';
     const payload = { [key]: [] }
     const obj = this.form.value;
     obj.programId = this.schoolDetails['program']._id;
@@ -120,7 +82,7 @@ export class RegistryFormPage {
     payload[key].push(obj)
     if (this.networkConnected) {
       this.utils.startLoader();
-      this.apiService.httpPost(AppConfigs.registry['add'+this.registryType+'Info'], payload, success => {
+      this.apiService.httpPost(AppConfigs.registry['add' + this.registryType + 'Info'], payload, success => {
         this.utils.stopLoader();
         this.utils.openToast(success.message);
         obj.uploaded = true;

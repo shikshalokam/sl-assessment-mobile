@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Http, URLSearchParams } from '@angular/http';
-import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AppConfigs } from "../appConfig";
 import { CurrentUserProvider } from "../current-user/current-user";
 import { App, AlertController } from "ionic-angular";
-import { TabsPage } from "../../pages/tabs/tabs";
+
 import { UtilsProvider } from "../utils/utils";
+import { HomePage } from "../../pages/home/home";
 
 @Injectable()
 export class AuthProvider {
@@ -21,7 +21,6 @@ export class AuthProvider {
   logout_redirect_url: string;
 
   constructor(public http: Http,
-    public iab: InAppBrowser,
     private currentUser: CurrentUserProvider,
     private app: App, private alertCntrl: AlertController,
     private utils: UtilsProvider) { }
@@ -98,7 +97,7 @@ export class AuthProvider {
       };
       this.currentUser.setCurrentUserDetails(userTokens);
       let nav = this.app.getActiveNav();
-      nav.setRoot(TabsPage);
+      nav.setRoot(HomePage);
       // this.confirmPreviousUserName('as1@shikshalokamdev', tokens);
 
     } else {
@@ -174,7 +173,7 @@ export class AuthProvider {
             };
             this.currentUser.setCurrentUserDetails(userTokens);
             let nav = this.app.getActiveNav();
-            nav.setRoot(TabsPage);
+            nav.setRoot(HomePage);
           }
         }
       ]

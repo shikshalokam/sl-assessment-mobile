@@ -11,11 +11,11 @@
     <ion-icon name="flag" margin-right></ion-icon>
     {{'buttons.flag'|translate}}
   </button> -->
-  <button ion-item clear small padding-left (click)="goToRegistry('Leader')">
+  <button ion-item clear small padding-left (click)="goToRegistry('Leader')" *ngIf="hideLeaderRegistry">
     <!-- <ion-icon name="contacts" margin-left margin-right></ion-icon> -->
      {{'buttons.Leader' | translate}} {{'buttons.registry'| translate}}
   </button>
-  <button ion-item clear small padding-left (click)="goToRegistry('Teacher')">
+  <button ion-item clear small padding-left (click)="goToRegistry('Teacher')" *ngIf="hideTeacherRegistry">
     <!-- <ion-icon name="contacts" margin-left margin-right></ion-icon> -->
      {{'buttons.Teacher' | translate}} {{'buttons.registry'| translate}}
   </button>
@@ -23,7 +23,7 @@
       <!-- <ion-icon name="refresh-circle" margin-left margin-right></ion-icon> -->
       {{'buttons.refresh'| translate}} 
     </button>
-    <button ion-item clear small padding-left (click)="feedback()">
+    <button ion-item clear small padding-left (click)="feedback()" *ngIf="hideFeedback">
       <!-- <ion-icon name="chatboxes" margin-left margin-right></ion-icon> -->
       {{'buttons.feedback'| translate}} 
     </button>

@@ -1,12 +1,10 @@
 page-image-listing {
     ion-spinner {
-        // stroke: $white-color !important;
         position: absolute;
         top: 39%;
         left: 39%;
         z-index: 2;
         background: $white-color;
-        // color: $red-color;
     }
 
     .doneMark {
@@ -36,6 +34,5 @@ page-image-listing {
     .uploadMsg {
         font-size: 25px;
         font-weight: 500;
-        // line-height: 20px;
     }
 }

@@ -50,10 +50,9 @@ export class ParentsListPage {
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.registryType = this.navParams.get('registry');
-    // this.storage.get('parentRegisterForm').then(form => {
-    // console.log(this.schoolId)
+
     this.utils.startLoader();
-    this.localStorage.getLocalStorage('schoolDetails_' + this.schoolId).then(schoolDetails => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(schoolDetails => {
       if (schoolDetails) {
         this.schoolDetails = schoolDetails;
         this.showUploadBtn = this.checkForUploadBtn();
@@ -61,18 +60,6 @@ export class ParentsListPage {
     }).catch(error => {
 
     })
-    // this.storage.get('schoolsDetails').then(schoolDetails => {
-    //   if (schoolDetails) {
-    //     this.schoolDetails = JSON.parse(schoolDetails)[this.schoolId];
-    //     this.showUploadBtn = this.checkForUploadBtn();
-    //     // console.log(JSON.stringify(schoolDet[this.schoolId]['schoolProfile']))
-    //     // this.programId = schoolDet[this.schoolId]['program'];
-
-    //   }
-    //   // this.programId = schoolDet[this.schoolId].program._id;
-    //   // console.log(JSON.stringify(schoolDet[this.schoolId]['program']))
-    // })
-    // })
 
     this.storage.get(this.registryType + 'Details_' + this.schoolId).then(registryData => {
       if (registryData) {
@@ -89,7 +76,6 @@ export class ParentsListPage {
 
   refreshParentListClick(event) {
     if (this.networkConnected) {
-      // this.utils.startLoader()
       if (this.showUploadBtn) {
         this.uploadAndRefresh(event);
       } else {
@@ -100,12 +86,12 @@ export class ParentsListPage {
           for (const item of success.result) {
             item.uploaded = true;
           }
-          if(event) {
+          if (event) {
             event.complete();
           }
           this.utils.stopLoader();
         }, error => {
-          if(event) {
+          if (event) {
             event.complete();
           }
           this.utils.stopLoader();
@@ -141,17 +127,17 @@ export class ParentsListPage {
           }
           this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.schoolId, this.registryList);
           this.utils.stopLoader();
-          if(event) {
+          if (event) {
             event.complete();
           }
         }, error => {
           this.utils.stopLoader();
-          if(event) {
+          if (event) {
             event.complete();
           }
         })
       }, error => {
-        if(event) {
+        if (event) {
           event.complete();
         }
         this.utils.stopLoader();
@@ -200,7 +186,6 @@ export class ParentsListPage {
         this.registryList.push(data);
         this.showUploadBtn = this.checkForUploadBtn();
         this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.schoolId, this.registryList)
-        // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
       }
     })
     registryForm.present();
@@ -212,7 +197,6 @@ export class ParentsListPage {
       [key]: []
     };
     for (const item of this.registryList) {
-      console.log(JSON.stringify(item))
       if (item.uploaded === false) {
         delete item.uploaded;
         obj[key].push(item);
@@ -240,8 +224,6 @@ export class ParentsListPage {
     }
     this.showUploadBtn = this.checkForUploadBtn();
     this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.schoolId, this.registryList)
-
-    // this.storage.set('parentDetails', JSON.stringify(this.allSchoolParentList));
   }
 
   checkForUploadBtn() {

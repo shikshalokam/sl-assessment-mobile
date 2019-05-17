@@ -15,4 +15,4 @@ import { TranslateModule } from "@ngx-translate/core";
     DirectivesModule
   ],
 })
-export class QuestionerPageModule {}
+export class QuestionerPageModule { }

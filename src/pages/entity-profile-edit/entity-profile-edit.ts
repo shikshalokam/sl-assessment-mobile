@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, App , Events} from 'ionic-angular';
+import { NavController, NavParams, App, Events } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
@@ -9,10 +9,10 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 
 
 @Component({
-  selector: 'page-school-profile-edit',
-  templateUrl: 'school-profile-edit.html',
+  selector: 'page-entity-profile-edit',
+  templateUrl: 'entity-profile-edit.html',
 })
-export class SchoolProfileEditPage {
+export class EntityProfileEditPage {
 
   schoolProfile: Array<string>;
   schoolId: any;
@@ -27,68 +27,27 @@ export class SchoolProfileEditPage {
     private storage: Storage,
     private app: App,
     private ngps: NetworkGpsProvider,
-    private events: Events, 
+    private events: Events,
     private localStorage: LocalStorageProvider) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SchoolProfilePage');
-    this.getSchoolDetails();
+    console.log('ionViewDidLoad EntityProfilePage');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
-    console.log(this.navParams.get('_id'));
-    this.localStorage.getLocalStorage("schoolDetails_"+this.schoolId).then(data => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
       this.schoolData = data;
       this.schoolProfile = this.schoolData['schoolProfile']['form'];
       this.events.subscribe('network:offline', () => {
         this.networkConnected = false;
       });
-  
       // Online event
       this.events.subscribe('network:online', () => {
         this.networkConnected = true;
       });
       this.networkConnected = this.ngps.getNetworkStatus()
     }).catch(error => {
-
     })
-    // this.storage.get('schoolsDetails').then(data => {
-    //   this.schoolData = JSON.parse(data);
-    //   this.schoolProfile = this.schoolData[this.schoolId]['schoolProfile']['form'];
-    //   console.log(JSON.stringify(this.schoolProfile));
-
-      // this.events.subscribe('network:offline', () => {
-      //   this.networkConnected = false;
-      // });
-  
-      // // Online event
-      // this.events.subscribe('network:online', () => {
-      //   this.networkConnected = true;
-      // });
-      // this.networkConnected = this.ngps.getNetworkStatus()
-
-    // }).catch(error => {
-
-    // })
-
-  }
-
-  // createFormGroup() {
-  //   let fg  = {};
-  //   this.schoolProfile.forEach(formField => {
-  //     fg[formField['field']] = 
-  //   })
-  // }
-
-  getSchoolDetails() {
-    // this.utils.startLoader();
-    // this.apiService.httpGet(schoolProfileConfig.getSchoolDetails, response => {
-    //   console.log(JSON.stringify(response));
-    //   this.schoolProfile = response.result.schoolProfile.formFields;
-    //   this.utils.stopLoader();
-    // }, error => {
-    //   this.utils.stopLoader();
-    // })
   }
 
   goToPage(): void {
@@ -96,7 +55,7 @@ export class SchoolProfileEditPage {
   }
 
   updateProfile(): void {
-    if(this.networkConnected) {
+    if (this.networkConnected) {
       this.utils.startLoader();
       const payload = {
         'schoolProfile': {},
@@ -104,29 +63,24 @@ export class SchoolProfileEditPage {
       for (const field of this.schoolProfile) {
         payload.schoolProfile[field['field']] = field['value'];
       }
-      console.log(JSON.stringify(payload));
       const submissionId = this.schoolData['assessments'][0].submissionId;
       const url = AppConfigs.survey.submission + submissionId;
       this.apiService.httpPost(url, payload, response => {
-        console.log(JSON.stringify(response));
         this.utils.openToast(response.message);
-        this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
         this.utils.stopLoader();
-         this.navCtrl.pop();
+        this.navCtrl.pop();
       }, error => {
         this.utils.stopLoader();
       })
     } else {
       this.utils.openToast("Please connect to network.")
     }
-
   }
 
-  saveProfile() : void {
-    this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
-    // this.utils.setLocalSchoolData(this.schoolData);
+  saveProfile(): void {
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
     this.navCtrl.pop();
-
   }
 
 
