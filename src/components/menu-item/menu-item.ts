@@ -29,13 +29,16 @@ export class MenuItemComponent {
     private events: Events, private ngps: NetworkGpsProvider, private modalCntrl: ModalController,
     private usld: UpdateLocalSchoolDataProvider) {
     console.log('Hello MenuItemComponent Component');
+    // console.log(this.navParams.get('hideTeacherRegistry') + "hide feedback");
     this.submissionId = this.navParams.get('submissionId');
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
-    this.hideTeacherRegistry = this.navParams.get('hideTeacherRegistry');
-    this.hideLeaderRegistry=this.navParams.get('hideLeaderRegistry');
-    this.hideFeedback= this.navParams.get('hideFeedback');
+    this.hideTeacherRegistry = this.navParams.get('hideTeacherRegistry') === null  ||this.navParams.get('hideTeacherRegistry') === undefined ? true : this.navParams.get('hideTeacherRegistry')  ;
+    this.hideLeaderRegistry=this.navParams.get('hideLeaderRegistry') === null || this.navParams.get('hideLeaderRegistry') === undefined  ?  true : this.navParams.get('hideLeaderRegistry');
+    this.hideFeedback= this.navParams.get('hideFeedback') === null ||this.navParams.get('hideFeedback') === undefined  ?  true : this.navParams.get('hideFeedback') ;
     // this.parent = this.navParams.get("parent");
+    // console.log(this.hideFeedback + "hide feedback");
+
     this.programId = this.navParams.get("programId")
     this.subscription = this.events.subscribe('network:offline', () => {
       this.utils.openToast("Network disconnected");

@@ -15,22 +15,22 @@
 
   <ion-card>
 
-    <ion-item-group *ngFor="let assessment of entity?.assessments; let j = index" >
+    <ion-item-group *ngFor="let solution of entity?.solutions; let j = index" >
       <ion-item-divider color="light">
         <!-- <h4 > {{assessment.name}}</h4> -->
       <h4  class="bold"  text-wrap>Program - {{entity.name}} ({{entity.externalId}})</h4>
 
       </ion-item-divider>
-      <ion-item *ngFor="let school of assessment.schools; let k = index" text-wrap>
+      <ion-item *ngFor="let entity of solution.entities; let k = index" text-wrap>
         <!-- <h3>{{assessment.type}} </h3> -->
         <div class="_flex-box" >
           <div style="flex:1" 
-            (click)="school?.downloaded ? goToEcm(school?._id,school?.name ) : getAssessmentDetails(i, j,k) ">
-            {{school.name}} 
+            (click)="entity?.downloaded ? goToEcm(entity?.submissionId,entity?.name ) : getAssessmentDetails(i, j,k) ">
+            {{entity.name}} {{entity?.submissionId}} 
           </div>
           <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j, k)"
-            *ngIf="!school?.downloaded"></ion-icon>
-          <ion-icon name="more" class="menuIcon" (click)="openMenu($event,i,j,k)" *ngIf="school?.downloaded"></ion-icon>
+            *ngIf="!entity?.downloaded"></ion-icon>
+          <ion-icon name="more" class="menuIcon" (click)="openMenu($event,i,j,k)" *ngIf="entity?.downloaded"></ion-icon>
 
           <!-- <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
             (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon> -->
@@ -42,7 +42,7 @@
   </ion-card>
 </div>
 
-  <div class="_flex-box msgContainer" *ngIf="!entityList?.length">No{{ EntityType}}</div>
+  <div class="_flex-box msgContainer" *ngIf="!entityList?.length">No {{entityType}}</div>
 </ion-content>
 
 

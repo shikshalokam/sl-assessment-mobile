@@ -33,11 +33,11 @@ export class EvidenceListPage {
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(successData => {
       this.utils.stopLoader();
       this.schoolData = successData;
-      this.schoolEvidences = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'] : this.schoolData['assessments']['evidences'];
+      this.schoolEvidences = this.schoolData['assessment']['evidences'] ;
       this.checkForProgressStatus();
       this.localStorage.getLocalStorage('generalQuestions_' + this.schoolId).then(successData => {
         this.generalQuestions = successData;
-      }).then(error => {
+      }).catch(error => {
       });
     }).catch(error => {
       this.utils.stopLoader()
@@ -72,10 +72,14 @@ export class EvidenceListPage {
   }
 
   navigateToEvidence(index): void {
+    console.log(JSON.stringify(this.schoolId))
     if (this.schoolEvidences[index].startTime) {
+      console.log("if loop")
       this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
       this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
     } else {
+      console.log("else loop")
+
       const school = { _id: this.schoolId, name: this.schoolName }
       this.openAction(school, index);
     }

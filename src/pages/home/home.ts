@@ -81,6 +81,7 @@ export class HomePage {
     private app: App,
     private localStorage: LocalStorageProvider
   ) {
+    console.log("Home page called");
     this.subscription = this.events.subscribe('localDataUpdated', () => {
       this.getLocalSchoolDetails();
     });
@@ -190,6 +191,7 @@ export class HomePage {
   }
 
   getLocalSchoolDetails(): void {
+    console.log("get local school details");
     this.storage.get('schoolsDetails').then(details => {
       this.schoolDetails = JSON.parse(details);
       for (const schoolId of Object.keys(this.schoolDetails)) {
@@ -275,17 +277,17 @@ export class HomePage {
 
   onInit() {
     this.navCtrl.id = "HomePage";
-    this.storage.get('parentRegisterForm').then(form => {
-      if (!form) {
-        this.getParentRegistryForm();
-      }
-    })
-    this.userData = this.currentUser.getCurrentUserData();
-    this.localStorage.getLocalStorage('schools').then(schools => {
-      this.schoolList = schools;
-    }).catch(error => {
-      this.getSchoolListApi();
-    })
+    // this.storage.get('parentRegisterForm').then(form => {
+    //   if (!form) {
+    //     this.getParentRegistryForm();
+    //   }
+    // })
+    // this.userData = this.currentUser.getCurrentUserData();
+    // this.localStorage.getLocalStorage('schools').then(schools => {
+    //   this.schoolList = schools;
+    // }).catch(error => {
+    //   this.getSchoolListApi();
+    // })
   }
 
   checkForAllSchoolDetailsFetchedStatus() {
