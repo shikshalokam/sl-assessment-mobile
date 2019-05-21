@@ -31,7 +31,7 @@ export class EvidenceProvider {
     this.schoolDetails = params.schoolDetails;
     this.schoolId = params._id;
     this.evidenceIndex = params.selectedEvidence;
-    const selectedECM = this.schoolDetails['assessments'][0] ? this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex] : this.schoolDetails['assessments']['evidences'][this.evidenceIndex];
+    const selectedECM =  this.schoolDetails['assessment']['evidences'][this.evidenceIndex] ;
 
     let action = this.actionSheet.create({
       title: "Survey actions",
@@ -50,11 +50,11 @@ export class EvidenceProvider {
           handler: () => {
             this.diagnostic.isLocationEnabled().then(success => {
               if (success) {
-                if(params.schoolDetails['assessments'][0]) {
-                  params.schoolDetails['assessments'][0]['evidences'][params.selectedEvidence].startTime = Date.now();
-                } else {
-                  params.schoolDetails['assessments']['evidences'][params.selectedEvidence].startTime = Date.now();
-                }
+                // if(params.schoolDetails['assessment']) {
+                //   params.schoolDetails['assessments']['evidences'][params.selectedEvidence].startTime = Date.now();
+                // } else {
+                  params.schoolDetails['assessment']['evidences'][params.selectedEvidence].startTime = Date.now();
+                // }
                 //  ?  :  = ;
                 // this.utils.setLocalSchoolData(params.schoolDetails);
                 this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), params.schoolDetails)
@@ -146,13 +146,13 @@ export class EvidenceProvider {
   notApplicable(selectedECM) {
     this.utils.startLoader()
     const payload = this.constructPayload(selectedECM);
-    const submissionId = this.schoolDetails['assessments'][0].submissionId;
+    const submissionId = this.schoolDetails['assessment'].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
     this.apiService.httpPost(url, payload, response => {
       console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
-      this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].isSubmitted = true;
-      this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].notApplicable = true;
+      this.schoolDetails['assessment']['evidences'][this.evidenceIndex].isSubmitted = true;
+      this.schoolDetails['assessment']['evidences'][this.evidenceIndex].notApplicable = true;
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolDetails)
       // this.utils.setLocalSchoolData(this.schoolDetails);
       this.utils.stopLoader();

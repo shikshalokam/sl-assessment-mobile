@@ -38,6 +38,7 @@ export class ObservationsPage {
   }
 
   ionViewDidLoad() {
+    console.log("observation page called");
     this.localStorage.getLocalStorage('observationsList').then(data => { 
       if (data) {
         this.programs = data;
@@ -50,53 +51,72 @@ export class ObservationsPage {
   }
 
   getObservationsApi() {
-    const url = AppConfigs.cro.getObservationsList ;
+    const url = AppConfigs.assessmentsList.listOfAssessment + "cro";
+    console.log(url)
     this.utils.startLoader()
+    console.log("List api called ")
     this.apiService.httpGet(url, successData => {
+      console.log("success data")
       this.utils.stopLoader();
+      console.log(JSON.stringify(successData))
       for (const program of successData.result) {
-        for (const assessment of program.assessments) {
-          for (const school of assessment.schools) {
-            school.downloaded = false;
+        for (const solution of program.solutions) {
+          for (const entity of solution.entities) {
+            entity.downloaded = false;
+            entity.submissionId= null;
           }
         }
       }
       this.programs = successData.result;
       this.localStorage.setLocalStorage("observationsList", successData.result);
     }, error => {
+      console.log("error in list of assessment")
       this.utils.stopLoader()
     })
+
+    console.log("function end")
   }
 
   refresh(event?: any) {
-    const url = AppConfigs.cro.getObservationsList ;
+    const url = AppConfigs.assessmentsList.listOfAssessment + "cro" ;
     // const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
     event ? "" : this.utils.startLoader();
     this.apiService.httpGet(url, successData => {
       const downloadedAssessments = []
       const currentPrograms = successData.result;
       for (const program of this.programs) {
-        for (const assessment of program.assessments) {
-          for(const school of assessment.schools){
-            if (school.downloaded) {
-              downloadedAssessments.push(school.id);
+        for (const solution of program.solutions) {
+          for(const entity of solution.entities){
+            if (entity.downloaded) {
+              downloadedAssessments.push({
+                 id : entity._id , 
+                 submissionId : entity.submissionId }
+                 );
             }
           }
          
         }
       }
+
+    console.log(JSON.stringify(downloadedAssessments))
+
       if (!downloadedAssessments.length) {
         this.programs = successData.result;
         this.localStorage.setLocalStorage("observationsList", successData.result);
         event ? event.complete() : this.utils.stopLoader();
       } else {
         for (const program of currentPrograms) {
-          for (const assessment of program.assessments) {
-          for (const school of assessment.schools) {
-            
-            if (downloadedAssessments.indexOf(school.id) >= 0) {
-              school.downloaded = true;
-            }
+          for (const solution of program.solutions) {
+          for (const entity of solution.entities) {
+            downloadedAssessments.forEach(  element =>{
+              if(element.id === entity._id){
+                entity.downloaded = true;
+                entity.submissionId = element.submissionId;
+              }
+            } )
+            // if (downloadedAssessments.indexOf(entity._id) >= 0) {
+            //   entity.downloaded = true;
+            // }
           }
           }
         }
@@ -105,7 +125,10 @@ export class ObservationsPage {
         event ? event.complete() : this.utils.stopLoader();
       }
     }, error => {
-    })
+    });
+
+    console.log(JSON.stringify(this.programs))
+
   }
 
 
@@ -114,25 +137,32 @@ export class ObservationsPage {
     let assessmentIndex = event.assessmentIndex ;
     let schoolIndex = event.entityIndex;
 
-    console.log(programIndex + " " + assessmentIndex + " " + schoolIndex)
+    // console.log(programIndex + " " + assessmentIndex + " " + schoolIndex)
     this.utils.startLoader();
-    const url = AppConfigs.cro.getObservationsDetails+this.programs[programIndex]._id+"?assessmentId="+ this.programs[programIndex].assessments[assessmentIndex].id +"&schoolId="+this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]._id;
+    const url = AppConfigs.assessmentsList.detailsOfAssessment+this.programs[programIndex]._id+"?solutionId="+ this.programs[programIndex].solutions[assessmentIndex]._id +"&entityId="+this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]._id;
     console.log(url);
     this.apiService.httpGet( url, success => {
-      console.log(JSON.stringify(success));
-      this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex].downloaded = true;
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]._id), success.result);
+      // console.log(JSON.stringify(success.result));
+      this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].downloaded = true;
+      // add submission id to assesment list local storage
+      this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId = success.result.assessment.submissionId;
+      // console.log(JSON.stringify(success))
+      console.log(this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId+"          Submission id =             "+ success.result.assessment.submissionId)
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId), success.result);
       // this.programs[programIndex].assessments[assessmentIndex].downloaded = true;
       this.localStorage.setLocalStorage("observationsList", this.programs);
       // this.ulsd.mapSubmissionDataToQuestion(success.result);
       this.utils.stopLoader();
     }, error => {
+      console.log("error details api")
       this.utils.stopLoader();
-    })
+    });
+
+
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(aseessmemtData.assessments[0].evidences[evidenceIndex].externalId, assessment._id)
+    this.utils.setCurrentimageFolderName(aseessmemtData.solutions[0].evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: aseessmemtData };
     this.evdnsServ.openActionSheet(options);
   }
@@ -143,25 +173,27 @@ export class ObservationsPage {
 
 
   goToEcm(event) {
-    let assessmentId = event.id;
+
+    let submissionId = event.submissionId;
     let heading = event.name;
+    console.log(JSON.stringify(event) )
 
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(assessmentId)).then(successData => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
-      console.log(successData.assessments[0].evidences.length )
-    // console.log("go to ecm called");
+      // console.log(JSON.stringify(successData));
+    console.log("go to ecm called");
 
 
-      if (successData.assessments[0].evidences.length > 1) {
+      if (successData.assessment.evidences.length > 1) {
 
-        this.navCtrl.push('EvidenceListPage', { _id: assessmentId, name: heading })
+        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
 
       } else {
-        if (successData.assessments[0].evidences[0].startTime) {
-          this.utils.setCurrentimageFolderName(successData.assessments[0].evidences[0].externalId, assessmentId)
-          this.navCtrl.push('SectionListPage', { _id: assessmentId, name: heading, selectedEvidence: 0 })
+        if (successData.assessment.evidences[0].startTime) {
+          this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
+          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
         } else {
-          const assessment = { _id: assessmentId, name: heading }
+          const assessment = { _id: submissionId, name: heading }
           this.openAction(assessment, successData, 0);
         }
       }
@@ -169,6 +201,7 @@ export class ObservationsPage {
     })
   }
   openMenu(event) {
+
     var myEvent = event.event;
     var  programIndex =  event.programIndex;
     var assessmentIndex = event.assessmentIndex ;
@@ -181,8 +214,8 @@ export class ObservationsPage {
   
     let popover = this.popoverCtrl.create(MenuItemComponent, {
       submissionId: "",
-      _id:this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id'],
-      name: this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name'],
+      _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
+      name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
       programId: this.programs[programIndex]._id,
       hideTeacherRegistry : false,
       hideLeaderRegistry:false,

@@ -27,8 +27,9 @@ export class EntityListingComponent {
   }
 
   goToEcm(id , name){
+    console.log(JSON.stringify(id))
     this.goToEcmEvent.emit({
-      id:id,
+      submissionId:id,
       name:name
     })
   }

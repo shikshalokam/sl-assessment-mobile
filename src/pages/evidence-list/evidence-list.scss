@@ -15,7 +15,10 @@ page-evidence-list {
 
     .headerText {
         font-weight: 500 !important;
-        font-size: 2rem !important;
+        font-size: 1.5rem !important;
+        display: flex;
+        align-items: center;
+        
     }
 
     .feedBack {
