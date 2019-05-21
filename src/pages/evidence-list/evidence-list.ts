@@ -37,7 +37,7 @@ export class EvidenceListPage {
       this.checkForProgressStatus();
       this.localStorage.getLocalStorage('generalQuestions_' + this.schoolId).then(successData => {
         this.generalQuestions = successData;
-      }).then(error => {
+      }).catch(error => {
       });
     }).catch(error => {
       this.utils.stopLoader()
