@@ -7,6 +7,7 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { ProgramDetailsPage } from '../program-details/program-details';
 import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
+import { stringify } from '@angular/compiler/src/util';
 import { MenuItemComponent } from '../../components/menu-item/menu-item';
 
 // @IonicPage()
@@ -250,8 +251,17 @@ export class IndividualListingPage {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(aseessmemtData.solutions[0].evidences[evidenceIndex].externalId, assessment._id)
+    console.log(JSON.stringify(aseessmemtData));
+    // console.log("open action");
+
+    // console.log(aseessmemtData.solutions[0].evidences[evidenceIndex].externalId);
+    // console.log(JSON.stringify(aseessmemtData.solutions[0].evidences[evidenceIndex].externalId))
+    // console.log(JSON.stringify(aseessmemtData))
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
+    // console.log("open action");
+
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: aseessmemtData };
+    // console.log(JSON.stringify(options))
     this.evdnsServ.openActionSheet(options);
   }
 
@@ -268,7 +278,7 @@ export class IndividualListingPage {
 
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
-      // console.log(JSON.stringify(successData));
+      console.log(JSON.stringify(successData));
     console.log("go to ecm called");
 
 
@@ -278,11 +288,15 @@ export class IndividualListingPage {
 
       } else {
         if (successData.assessment.evidences[0].startTime) {
+          console.log("if loop " + successData.assessment.evidences[0].externalId)
           this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
           this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
         } else {
+
           const assessment = { _id: submissionId, name: heading }
           this.openAction(assessment, successData, 0);
+          console.log("else loop");
+
         }
       }
     }).catch(error => {
