@@ -30,7 +30,7 @@
           </div>
           <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j, k)"
             *ngIf="!entity?.downloaded"></ion-icon>
-          <ion-icon name="more" class="menuIcon" (click)="openMenu($event,i,j,k)" *ngIf="entity?.downloaded"></ion-icon>
+          <ion-icon name="more"  class="menuIcon" (click)="openMenu($event,i,j,k)" *ngIf="entity?.downloaded && showMenu"></ion-icon>
 
           <!-- <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
             (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon> -->

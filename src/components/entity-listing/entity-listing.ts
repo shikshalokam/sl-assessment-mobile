@@ -11,13 +11,14 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: 'entity-listing.html'
 })
 export class EntityListingComponent {
- 
+
   @Input() heading;
   @Input() entityList;
   @Input() entityType;
+  @Input() showMenu = true;
   @Output() goToEcmEvent = new EventEmitter();
   @Output() getAssessmentDetailsEvent = new EventEmitter();
-  @Output() openMenuEvent  = new EventEmitter();
+  @Output() openMenuEvent = new EventEmitter();
 
   text: string;
 
@@ -26,28 +27,28 @@ export class EntityListingComponent {
     this.text = 'Hello World';
   }
 
-  goToEcm(id , name){
+  goToEcm(id, name) {
     console.log(JSON.stringify(id))
     this.goToEcmEvent.emit({
-      submissionId:id,
-      name:name
+      submissionId: id,
+      name: name
     })
   }
-  getAssessmentDetails( programIndex , assessmentIndex , entityIndex){
+  getAssessmentDetails(programIndex, assessmentIndex, entityIndex) {
     this.getAssessmentDetailsEvent.emit({
-      programIndex: programIndex , 
-      assessmentIndex:assessmentIndex ,
-      entityIndex:entityIndex
+      programIndex: programIndex,
+      assessmentIndex: assessmentIndex,
+      entityIndex: entityIndex
     })
   }
-  
-  openMenu(event , programIndex , assessmentIndex , entityIndex){
+
+  openMenu(event, programIndex, assessmentIndex, entityIndex) {
     console.log("emitting")
     this.openMenuEvent.emit({
-      event:event,
-      programIndex: programIndex , 
-      assessmentIndex:assessmentIndex ,
-      entityIndex:entityIndex
+      event: event,
+      programIndex: programIndex,
+      assessmentIndex: assessmentIndex,
+      entityIndex: entityIndex
     })
   }
 }
