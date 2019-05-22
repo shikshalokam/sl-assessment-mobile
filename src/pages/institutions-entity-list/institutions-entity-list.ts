@@ -344,13 +344,11 @@ export class InstitutionsEntityList {
     // console.log(this.programs[programIndex]._id);
   
     let popover = this.popoverCtrl.create(MenuItemComponent, {
-      submissionId: "",
+      submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
       _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
       name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
       programId: this.programs[programIndex]._id,
-      hideTeacherRegistry : false,
-      hideLeaderRegistry:false,
-      hideFeedback:false
+     
     });
     popover.present({
       ev: myEvent

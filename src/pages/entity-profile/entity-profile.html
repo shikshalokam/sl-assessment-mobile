@@ -8,8 +8,8 @@
     <ion-item-divider color="light">
       <h3 class="headerText _flex-box">
         <ion-icon name="book" margin-right></ion-icon>
-        <span class="_ellipsis" style="flex: 1">{{schoolName}} </span>
-        <ion-icon name="create" float-right margin-right (click)="goToEditProfile()"></ion-icon>
+        <span text-wrap style="flex: 1">{{schoolName}} </span>
+        <ion-icon name="create" float-right margin-right margin-left  (click)="goToEditProfile()"></ion-icon>
       </h3>
     </ion-item-divider>
 
@@ -20,8 +20,26 @@
       <ion-item *ngIf="field?.field != 'gpsLocation' && field?.visible && field?.field != 'name'">
         <div class="customLabel">{{field?.label}}</div>
         <div class="_pt-5">{{field?.value}}</div>
+        <!-- <ng-container *ngFor="let field of fields| slice:start:end; let i=index">
+            <ng-container [ngSwitch]="field.input.toLowerCase()">
+              <input-type   [data]="field"
+              *ngSwitchCase="'text'"></input-type>
+              <input-type  [data]="field"
+                 *ngSwitchCase="'number'"></input-type>
+              <radio-type  [data]="field"
+                 *ngSwitchCase="'radio'"></radio-type>
+              <date-type  [data]="field"
+                 *ngSwitchCase="'date'"></date-type>
+              <multiple-choice-type  [data]="field"
+                 *ngSwitchCase="'multiselect'"></multiple-choice-type>
+              <matrix-type  [data]="field"
+                 (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'">
+              </matrix-type>
+              <slider  [data]="field"
+                 *ngSwitchCase="'slider'"></slider>
+            </ng-container>
+          </ng-container> -->
       </ion-item>
-
     </ng-container>
   </ion-item-group>
 

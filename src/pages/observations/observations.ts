@@ -51,7 +51,7 @@ export class ObservationsPage {
   }
 
   getObservationsApi() {
-    const url = AppConfigs.assessmentsList.listOfAssessment + "cro";
+    const url = AppConfigs.assessmentsList.listOfAssessment + "observation";
     console.log(url)
     this.utils.startLoader()
     console.log("List api called ")
@@ -78,7 +78,7 @@ export class ObservationsPage {
   }
 
   refresh(event?: any) {
-    const url = AppConfigs.assessmentsList.listOfAssessment + "cro" ;
+    const url = AppConfigs.assessmentsList.listOfAssessment + "observation" ;
     // const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
     event ? "" : this.utils.startLoader();
     this.apiService.httpGet(url, successData => {
@@ -213,7 +213,7 @@ export class ObservationsPage {
     // console.log(this.programs[programIndex]._id);
   
     let popover = this.popoverCtrl.create(MenuItemComponent, {
-      submissionId: "",
+      submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
       _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
       name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
       programId: this.programs[programIndex]._id,

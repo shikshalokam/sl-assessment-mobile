@@ -40,8 +40,9 @@ export class EntityProfilePage {
     this.utils.startLoader()
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
       const schoolData = data;
-      this.schoolProfile = schoolData['schoolProfile']['form'];
-      this.submissionId = schoolData['assessments'][0].submissionId;
+      console.log(JSON.stringify(data))
+      this.schoolProfile = schoolData['entityProfile']['form'];
+      this.submissionId = schoolData['assessments'].submissionId;
       this.isEditable = schoolData['schoolProfile']['isEditable'];
       this.utils.stopLoader();
     }).catch(error => {
