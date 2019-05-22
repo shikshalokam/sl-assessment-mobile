@@ -162,7 +162,7 @@ export class ObservationsPage {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(aseessmemtData.solutions[0].evidences[evidenceIndex].externalId, assessment._id)
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: aseessmemtData };
     this.evdnsServ.openActionSheet(options);
   }

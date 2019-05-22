@@ -286,7 +286,13 @@ export class InstitutionsEntityList {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(aseessmemtData.solutions[0].evidences[evidenceIndex].externalId, assessment._id)
+  //   console.log("open action");
+
+  //   console.log(aseessmemtData.assessment.evidences[evidenceIndex].externalId);
+  //   console.log(JSON.stringify(aseessmemtData.solutions[0].evidences[evidenceIndex].externalId))
+  // console.log(JSON.stringify(aseessmemtData));
+
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: aseessmemtData };
     this.evdnsServ.openActionSheet(options);
   }
@@ -304,7 +310,7 @@ export class InstitutionsEntityList {
 
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
-      // console.log(JSON.stringify(successData));
+      console.log(JSON.stringify(successData));
     console.log("go to ecm called");
 
 
@@ -318,6 +324,7 @@ export class InstitutionsEntityList {
           this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
         } else {
           const assessment = { _id: submissionId, name: heading }
+          console.log(successData)
           this.openAction(assessment, successData, 0);
         }
       }
