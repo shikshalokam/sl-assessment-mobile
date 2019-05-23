@@ -37,7 +37,7 @@ export class EntityProfileEditPage {
     this.schoolName = this.navParams.get('name');
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
       this.schoolData = data;
-      this.schoolProfile = this.schoolData['schoolProfile']['form'];
+      this.schoolProfile = this.schoolData['entityProfile']['form'];
       this.events.subscribe('network:offline', () => {
         this.networkConnected = false;
       });

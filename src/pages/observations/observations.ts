@@ -180,7 +180,7 @@ export class ObservationsPage {
 
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
-      // console.log(JSON.stringify(successData));
+      console.log(JSON.stringify(successData));
     console.log("go to ecm called");
 
 

@@ -22,7 +22,7 @@
     <ng-container *ngFor="let section of evidenceSections; let i= index">
       <ion-item  (click)="goToQuestioner(i)" *ngIf="section?.questions?.length">
         <h3>
-          <ion-icon name="list-box" margin-right></ion-icon> {{ section?.name }}
+          <ion-icon name="list-box" margin-right></ion-icon> {{ currentEvidence.code }}
           <span float-right *ngIf="section.progressStatus === 'completed'" class="_completed _flex-box">
             {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
           </span>
