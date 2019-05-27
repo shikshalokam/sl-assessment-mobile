@@ -31,6 +31,7 @@ export class RegistryFormPage {
     this.schoolId = this.navParams.get('_id');
     this.submissionId = this.navParams.get('submissionId');
     this.schoolName = this.navParams.get('name');
+    console.log(this.navParams.get('name'));
     this.registryType = this.navParams.get('registryType');
     this.events.subscribe('network:offline', () => {
       this.networkConnected = false;
@@ -60,7 +61,7 @@ export class RegistryFormPage {
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(schoolDetails => {
       if (schoolDetails) {
         this.schoolDetails = schoolDetails;
-        console.log(JSON.stringify(this.schoolDetails));
+        // console.log(JSON.stringify(this.schoolDetails));
         this.programId = this.schoolDetails['program']._id;
       }
     }).catch(error => {
@@ -76,31 +77,41 @@ export class RegistryFormPage {
   }
 
   update(): void {
-    console.log(JSON.stringify(this.schoolDetails));
+    // console.log(JSON.stringify(this.schoolDetails));
 
-    const key = this.registryType === 'schoolLeaders' ? 'schoolLeaders' : 'teachers';
-    const payload = { [key]: [] }
+    const key = this.registryType ;
+    const payload = { data : [] }
     const obj = this.form.value;
     obj.programId = this.schoolDetails['program']._id;
     obj.schoolId = this.schoolId;
     obj.schoolName = this.schoolName;
     // console.log(JSON.stringify(this.schoolDetails));
 
-    payload[key].push(obj)
+    payload['data'].push(obj)
+    console.log(JSON.stringify(payload));
+    console.log("api calling");
+
     if (this.networkConnected) {
       this.utils.startLoader();
-      this.apiService.httpPost(AppConfigs.registry['add' + this.registryType + 'Info'], payload, success => {
+      
+      this.apiService.httpPost(AppConfigs.registry.addEntityInfo+this.registryType, payload, success => {
+
+        console.log("successfully uploaded");
         this.utils.stopLoader();
         this.utils.openToast(success.message);
         obj.uploaded = true;
         this.viewCntrl.dismiss(obj);
       }, error => {
+        console.log(" uploaded api error");
+
         this.utils.openToast("Something went wrong. Please try again after sometime.", "Ok");
         this.utils.stopLoader();
         obj.uploaded = false;
         this.viewCntrl.dismiss(obj)
       })
     } else {
+      console.log("network else");
+
       obj.uploaded = false;
       this.viewCntrl.dismiss(obj)
     }
