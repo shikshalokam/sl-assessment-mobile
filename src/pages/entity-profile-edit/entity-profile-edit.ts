@@ -14,10 +14,10 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class EntityProfileEditPage {
 
-  schoolProfile: Array<string>;
-  schoolId: any;
-  schoolName: string;
-  schoolData: any;
+  entityProfile: Array<string>;
+  entityId: any;
+  entityName: string;
+  entityData: any;
   networkConnected: boolean;
 
   constructor(public navCtrl: NavController,
@@ -33,15 +33,11 @@ export class EntityProfileEditPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EntityProfilePage');
-    this.schoolId = this.navParams.get('_id');
-    this.schoolName = this.navParams.get('name');
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
-      this.schoolData = data;
-      this.schoolData['entityProfile']['form'].forEach(element => {
-        element.editable = true;
-      });
-      this.schoolProfile = this.schoolData['entityProfile']['form'];
-
+    this.entityId = this.navParams.get('_id');
+    this.entityName = this.navParams.get('name');
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(data => {
+      this.entityData = data;
+      this.entityProfile = this.entityData['entityProfile']['form'];
       this.events.subscribe('network:offline', () => {
         this.networkConnected = false;
       });
@@ -55,38 +51,35 @@ export class EntityProfileEditPage {
   }
 
   goToPage(): void {
-    this.app.getRootNav().push('EvidenceListPage', { _id: this.schoolId, name: this.schoolName })
+    this.app.getRootNav().push('EvidenceListPage', { _id: this.entityId, name: this.entityName })
   }
 
   updateProfile(): void {
     if (this.networkConnected) {
       // this.utils.startLoader();
       const payload = {
-        'schoolProfile': {},
+        'entityProfile': {},
       }
-      for (const field of this.schoolProfile) {
-        payload.schoolProfile[field['field']] = field['value'];
+      for (const field of this.entityProfile) {
+        payload.entityProfile[field['field']] = field['value'];
       }
-
-
-      console.log(JSON.stringify(payload));
-      const submissionId = this.schoolData['assessment'].submissionId;
+      const submissionId = this.entityData['assessments'][0].submissionId;
       const url = AppConfigs.survey.submission + submissionId;
-      // this.apiService.httpPost(url, payload, response => {
-      //   this.utils.openToast(response.message);
-      //   this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
-      //   this.utils.stopLoader();
-      //   this.navCtrl.pop();
-      // }, error => {
-      //   this.utils.stopLoader();
-      // })
+      this.apiService.httpPost(url, payload, response => {
+        this.utils.openToast(response.message);
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId), this.entityData)
+        this.utils.stopLoader();
+        this.navCtrl.pop();
+      }, error => {
+        this.utils.stopLoader();
+      })
     } else {
       this.utils.openToast("Please connect to network.")
     }
   }
 
   saveProfile(): void {
-    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId), this.entityData)
     this.navCtrl.pop();
   }
 

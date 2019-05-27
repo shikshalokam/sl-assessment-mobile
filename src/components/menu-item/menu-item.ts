@@ -32,13 +32,14 @@ export class MenuItemComponent {
     private usld: UpdateLocalSchoolDataProvider) {
     console.log('Hello MenuItemComponent Component');
     this.showMenuArray =  this.navParams.get('showMenuArray');
-    console.log(JSON.stringify(this.showMenuArray) + "REGISTERY ARRAY");
-
-    // this.showMenuItems(this.navParams.get('showMenuArray'));
     this.submissionId = this.navParams.get('submissionId');
     this.entityId = this.navParams.get('entityId') ? this.navParams.get('entityId') : null;
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
+    console.log(JSON.stringify(this.showMenuArray) + this.entityId );
+
+    // this.showMenuItems(this.navParams.get('showMenuArray'));
+   
    
     // this.parent = this.navParams.get("parent");
     // console.log(this.hideFeedback + "hide feedback");
@@ -100,7 +101,7 @@ export class MenuItemComponent {
       name: this.schoolName,
       registry: registryType,
       submissionId:this.submissionId,
-      entityId:this.entityId
+      entityId:this.schoolId
 
     })
     this.close();

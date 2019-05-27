@@ -18,7 +18,7 @@
     <ion-item-group *ngFor="let solution of entity?.solutions; let j = index" >
       <ion-item-divider color="light">
         <!-- <h4 > {{assessment.name}}</h4> -->
-      <h4  class="bold"  text-wrap>Program - {{entity.name}} ({{entity.externalId}})</h4>
+      <h4  class="bold"  text-wrap> {{entity.name}} </h4>
 
       </ion-item-divider>
       <ion-item *ngFor="let entity of solution.entities; let k = index" text-wrap>

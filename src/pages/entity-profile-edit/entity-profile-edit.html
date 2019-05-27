@@ -7,12 +7,11 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      {{schoolName}}
+      {{entityName}}
     </ion-card-header>
     <ion-card-content>
-        <ng-container *ngFor="let field of schoolProfile">
-
-      <ion-list radio-group [(ngModel)]="field.value">
+      <ion-list radio-group>
+        <ng-container *ngFor="let field of entityProfile">
           <ion-item class="adjust"
             *ngIf="field?.field != 'gpsLocation' && field?.visible && ( field?.input === 'text' || field?.input === 'number' || field?.input === 'date' || field?.input === 'textarea' || field?.input === 'slider')">
             <ion-label color="primary" floating>{{field?.label}}</ion-label>
@@ -34,8 +33,9 @@
             </ion-item>
           <!-- <div class="_pt-5"  *ngIf=" field?.input === 'radio' || field?.input === 'select' || field?.input === 'multiselect' ||field?.input === 'checkbox' "> -->
         </ng-container>
-      </ion-list>
     </ng-container>
+
+      </ion-list>
 
 
       
