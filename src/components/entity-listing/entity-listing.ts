@@ -19,7 +19,7 @@ export class EntityListingComponent {
   @Input() entityList;
   @Input() entityType;
   @Input() showMenu = true;
-  @Output() goToEcmEvent = new EventEmitter();
+  // @Output() goToEcmEvent = new EventEmitter();
   @Output() getAssessmentDetailsEvent = new EventEmitter();
   @Output() openMenuEvent = new EventEmitter();
 
