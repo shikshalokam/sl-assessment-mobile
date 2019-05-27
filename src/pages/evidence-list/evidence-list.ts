@@ -13,31 +13,34 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class EvidenceListPage {
 
-  schoolId: any;
-  schoolName: string;
-  schoolEvidences: any;
-  schoolData: any;
+  entityId: any;
+  entityName: string;
+  entityEvidences: any;
+  entityData: any;
   currentEvidenceStatus: string;
   isIos: boolean = this.platform.is('ios');
   generalQuestions: any;
+  submissionId: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private appCtrl: App, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
     private feedback: FeedbackProvider, private evdnsServ: EvidenceProvider, private platform: Platform) {
-    this.schoolId = this.navParams.get('_id');
-    this.schoolName = this.navParams.get('name');
+    this.entityId = this.navParams.get('_id');
+    this.entityName = this.navParams.get('name');
+    this.submissionId = this.navParams.get('submissionId');
   }
  
   ionViewWillEnter() {
     console.log('ionViewDidLoad EvidenceListPage');
     this.utils.startLoader();
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(successData => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(successData => {
       this.utils.stopLoader();
-      this.schoolData = successData;
-      this.schoolEvidences = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'] : this.schoolData['assessments']['evidences'];
+      this.entityData = successData;
+      console.log(JSON.stringify(successData));
+      this.entityEvidences = this.entityData['assessment']['evidences'] ;
       this.checkForProgressStatus();
-      this.localStorage.getLocalStorage('generalQuestions_' + this.schoolId).then(successData => {
+      this.localStorage.getLocalStorage('generalQuestions_' + this.entityId).then(successData => {
         this.generalQuestions = successData;
-      }).then(error => {
+      }).catch(error => {
       });
     }).catch(error => {
       this.utils.stopLoader()
@@ -45,11 +48,11 @@ export class EvidenceListPage {
   }
 
   goToGeneralQuestionList(): void {
-    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: this.schoolId, name: this.schoolName })
+    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: this.entityId, name: this.entityName })
   }
 
   checkForProgressStatus() {
-    for (const evidence of this.schoolEvidences) {
+    for (const evidence of this.entityEvidences) {
       if (evidence.isSubmitted) {
         evidence.progressStatus = 'submitted';
       } else if (!evidence.startTime) {
@@ -66,18 +69,25 @@ export class EvidenceListPage {
   }
 
   openAction(assessment, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(this.schoolEvidences[evidenceIndex].externalId, assessment._id)
-    const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolData };
+    this.utils.setCurrentimageFolderName(this.entityEvidences[evidenceIndex].externalId, assessment._id)
+    const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: this.entityData };
+    console.log("testing 1")
     this.evdnsServ.openActionSheet(options);
+    console.log("testing 2")
+
   }
 
   navigateToEvidence(index): void {
-    if (this.schoolEvidences[index].startTime) {
-      this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
-      this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
+    console.log(JSON.stringify(this.entityId))
+    if (this.entityEvidences[index].startTime) {
+      console.log("if loop")
+      this.utils.setCurrentimageFolderName(this.entityEvidences[index].externalId, this.entityId)
+      this.navCtrl.push('SectionListPage', { _id: this.entityId, name: this.entityName, selectedEvidence: index })
     } else {
-      const school = { _id: this.schoolId, name: this.schoolName }
-      this.openAction(school, index);
+      console.log("else loop")
+
+      const entity = { _id: this.entityId, name: this.entityName }
+      this.openAction(entity, index);
     }
   }
 

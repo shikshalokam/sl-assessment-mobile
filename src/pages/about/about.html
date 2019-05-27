@@ -5,9 +5,12 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <button ion-item *ngFor="let item of aboutContent;let i = index" (click)="goTodetailsPage(i)">
-      {{ item?.heading }}
-    </button>
-  </ion-list>
+    <ion-card class="_flex-box _justify-content-space-between" padding *ngFor="let item of aboutContent;let i = index" (click)="goTodetailsPage(i)">
+      {{ item?.heading }} 
+      
+      <ion-icon  name="arrow-forward"></ion-icon>
+      
+    </ion-card>
+  
+  
 </ion-content>

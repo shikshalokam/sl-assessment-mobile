@@ -16,9 +16,9 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class EntityProfilePage {
 
-  schoolProfile: Array<string>;
-  schoolId: any;
-  schoolName: string;
+  entityProfile: Array<string>;
+  entityId: any;
+  entityName: string;
   isEditable: boolean;
   submissionId: string;
 
@@ -35,14 +35,15 @@ export class EntityProfilePage {
 
   ionViewWillEnter() {
     console.log('ionViewDidLoad EntityProfilePage');
-    this.schoolId = this.navParams.get('_id');
-    this.schoolName = this.navParams.get('name');
+    this.entityId = this.navParams.get('_id');
+    this.entityName = this.navParams.get('name');
     this.utils.startLoader()
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
-      const schoolData = data;
-      this.schoolProfile = schoolData['schoolProfile']['form'];
-      this.submissionId = schoolData['assessments'][0].submissionId;
-      this.isEditable = schoolData['schoolProfile']['isEditable'];
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(data => {
+      const entityData = data;
+      console.log(JSON.stringify(data))
+      this.entityProfile = entityData['entityProfile']['form'];
+      this.submissionId = entityData['assessments'].submissionId;
+      this.isEditable = entityData['entityProfile']['isEditable'];
       this.utils.stopLoader();
     }).catch(error => {
       this.utils.stopLoader();
@@ -50,25 +51,25 @@ export class EntityProfilePage {
   }
 
   goToPage(): void {
-    this.app.getRootNav().push('EvidenceListPage', { _id: this.schoolId, name: this.schoolName })
+    this.app.getRootNav().push('EvidenceListPage', { _id: this.entityId, name: this.entityName })
   }
 
   goToEditProfile(): void {
-    this.app.getRootNav().push(EntityProfileEditPage, { _id: this.schoolId, name: this.schoolName })
+    this.app.getRootNav().push(EntityProfileEditPage, { _id: this.entityId, name: this.entityName })
   }
 
   goToRating() {
-    const school = {
-      _id: this.schoolId,
-      name: this.schoolName
+    const entity = {
+      _id: this.entityId,
+      name: this.entityName
     }
-    this.ratingService.checkForRatingDetails(this.submissionId, school);
+    this.ratingService.checkForRatingDetails(this.submissionId, entity);
   }
 
   addParent(): void {
     const params = {
-      _id: this.schoolId,
-      name: this.schoolName,
+      _id: this.entityId,
+      name: this.entityName,
     }
     let parentForm = this.modalCntrl.create(RegistryFormPage, params);
     parentForm.present();
@@ -83,7 +84,7 @@ export class EntityProfilePage {
   }
 
   goToParentList() {
-    this.navCtrl.push('ParentsListPage', { _id: this.schoolId, name: this.schoolName })
+    this.navCtrl.push('ParentsListPage', { _id: this.entityId, name: this.entityName })
   }
 
 

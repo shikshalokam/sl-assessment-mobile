@@ -16,6 +16,7 @@ export class HeaderComponent implements OnDestroy{
   @Input() enableDashboard: boolean;
   @Input() disableNetwork: boolean;
   @Input() showClose: boolean;
+  @Input() showMenu: boolean = true;
   @Output() onDashboardOpen = new EventEmitter();
   
   text: string;
