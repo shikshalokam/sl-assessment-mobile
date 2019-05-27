@@ -69,6 +69,7 @@ import { ProgramDetailsPage } from '../pages/program-details/program-details';
 import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
 import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.module';
 import { ObservationsPageModule } from '../pages/observations/observations.module';
+import { AssessmentServiceProvider } from '../providers/assessment-service/assessment-service';
 
 @NgModule({
   declarations: [
@@ -172,7 +173,8 @@ import { ObservationsPageModule } from '../pages/observations/observations.modul
     SlackProvider,
     Keyboard,
     LocalStorageProvider,
-    HTTP
+    HTTP,
+    AssessmentServiceProvider
   ]
 })
 export class AppModule { }

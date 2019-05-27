@@ -20,11 +20,11 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 export class SectionListPage {
 
   evidenceSections: any;
-  schoolName: string;
-  schoolId: any;
+  entityName: string;
+  submissionId: any;
   selectedEvidenceIndex: any;
   selectedEvidenceName: string;
-  schoolData: any;
+  sectionData: any;
   allAnsweredForEvidence: boolean;
   userData: any;
   currentEvidence: any;
@@ -56,15 +56,15 @@ export class SectionListPage {
     console.log('ionViewDidLoad SectionListPage');
     this.utils.startLoader();
     this.userData = this.currentUser.getCurrentUserData();
-    this.schoolId = this.navParams.get('_id');
-    this.schoolName = this.navParams.get('name');
+    this.submissionId = this.navParams.get('_id');
+    this.entityName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       // console.log("in data")
       // console.log(JSON.stringify(data))
 
-      this.schoolData = data;
-      this.currentEvidence = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex] : this.schoolData['assessments']['evidences'][this.selectedEvidenceIndex];
+      this.sectionData = data;
+      this.currentEvidence = this.sectionData['assessment']['evidences'][this.selectedEvidenceIndex] ;
       // console.log("current evidence")
       // console.log(this.currentEvidence)
 
@@ -137,15 +137,15 @@ export class SectionListPage {
         break;
       }
     }
-    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.sectionData)
     // this.utils.setLocalSchoolData(this.schoolData);
     // this.allAnsweredForEvidence = allAnswered;
   }
 
   goToQuestioner(selectedSection): void {
     const params = {
-      _id: this.schoolId,
-      name: this.schoolName,
+      _id: this.submissionId,
+      name: this.entityName,
       selectedEvidence: this.selectedEvidenceIndex,
       selectedSection: selectedSection
     };
@@ -153,7 +153,7 @@ export class SectionListPage {
     if (!this.evidenceSections[selectedSection].progressStatus) {
       this.evidenceSections[selectedSection].progressStatus = this.currentEvidence.startTime ? 'inProgress' : '';
       // this.utils.setLocalSchoolData(this.schoolData)
-    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.sectionData)
 
     }
     this.navCtrl.push('QuestionerPage', params);
@@ -191,8 +191,8 @@ export class SectionListPage {
         if (success) {
           const params = {
             selectedEvidenceId: this.currentEvidence._id,
-            _id: this.schoolId,
-            name: this.schoolName,
+            _id: this.submissionId,
+            name: this.entityName,
             selectedEvidence: this.selectedEvidenceIndex,
           }
           this.navCtrl.push(ImageListingPage, params);
@@ -213,14 +213,14 @@ export class SectionListPage {
     const payload = this.constructPayload();
     console.log(JSON.stringify(payload));
 
-    const submissionId = this.schoolData['assessments'][0].submissionId;
+    const submissionId = this.sectionData['assessment'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
     if(this.networkAvailable){
       this.apiService.httpPost(url, payload, response => {
         this.utils.openToast(response.message);
-        this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+        this.sectionData['assessment'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
         // this.utils.setLocalSchoolData(this.schoolData);
-        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.sectionData)
   
         // console.log(JSON.stringify(response))
       }, error => {
@@ -245,14 +245,14 @@ export class SectionListPage {
       externalId: "",
       answers: []
     };
-    for (const field of this.schoolData['schoolProfile']['form']) {
+    for (const field of this.sectionData['schoolProfile']['form']) {
       schoolProfile[field.field] = field.value
     }
     // schoolProfile['updatedBy'] =  this.userData.sub;
     schoolProfile['updatedDate'] = Date.now();
 
-    evidence.id = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]._id;
-    evidence.externalId = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
+    evidence.id = this.sectionData['assessment']['evidences'][this.selectedEvidenceIndex]._id;
+    evidence.externalId = this.sectionData['assessment']['evidences'][this.selectedEvidenceIndex].externalId;
 
     for (const section of this.evidenceSections) {
       for (const question of section.questions) {
