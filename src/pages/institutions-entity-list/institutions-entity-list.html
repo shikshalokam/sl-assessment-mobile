@@ -91,10 +91,9 @@
         refreshingText="Refreshing...">
       </ion-refresher-content>
     </ion-refresher>
-<entity-listing
+<entity-listing *ngIf="programs"
 [entityList]="programs"  
 [entityType]="'observations'" 
-(goToEcmEvent)="goToEcm($event)"
 (getAssessmentDetailsEvent)="getAssessmentDetails($event)"
 (refreshEvent)="refresh($event)"
 (openMenuEvent)="openMenu($event)"
