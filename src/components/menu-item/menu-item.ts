@@ -23,19 +23,23 @@ export class MenuItemComponent {
   hideTeacherRegistry = true;
   hideLeaderRegistry=true;
   hideFeedback= true;
+  entityId: any;
+  showMenuArray: any;
 
   constructor(private navParams: NavParams, private ratingService: RatingProvider,
     private appCtrl: App, private viewCtrl: ViewController, private utils: UtilsProvider,
     private events: Events, private ngps: NetworkGpsProvider, private modalCntrl: ModalController,
     private usld: UpdateLocalSchoolDataProvider) {
     console.log('Hello MenuItemComponent Component');
-    // console.log(this.navParams.get('hideTeacherRegistry') + "hide feedback");
+    this.showMenuArray =  this.navParams.get('showMenuArray');
+    console.log(JSON.stringify(this.showMenuArray) + "REGISTERY ARRAY");
+
+    // this.showMenuItems(this.navParams.get('showMenuArray'));
     this.submissionId = this.navParams.get('submissionId');
+    this.entityId = this.navParams.get('entityId') ? this.navParams.get('entityId') : null;
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
-    this.hideTeacherRegistry = this.navParams.get('hideTeacherRegistry') === null  ||this.navParams.get('hideTeacherRegistry') === undefined ? true : this.navParams.get('hideTeacherRegistry')  ;
-    this.hideLeaderRegistry=this.navParams.get('hideLeaderRegistry') === null || this.navParams.get('hideLeaderRegistry') === undefined  ?  true : this.navParams.get('hideLeaderRegistry');
-    this.hideFeedback= this.navParams.get('hideFeedback') === null ||this.navParams.get('hideFeedback') === undefined  ?  true : this.navParams.get('hideFeedback') ;
+   
     // this.parent = this.navParams.get("parent");
     // console.log(this.hideFeedback + "hide feedback");
 
@@ -94,7 +98,10 @@ export class MenuItemComponent {
     this.appCtrl.getRootNav().push('ParentsListPage', {
       _id: this.schoolId,
       name: this.schoolName,
-      registry: registryType
+      registry: registryType,
+      submissionId:this.submissionId,
+      entityId:this.entityId
+
     })
     this.close();
   }
@@ -144,4 +151,15 @@ export class MenuItemComponent {
     this.close();
 
   }
+
+
+  // showMenuItems(showMenuitemsArray ){
+  //   console.log(JSON.stringify(showMenuitemsArray))
+  //   // this.hideTeacherRegistry = this.navParams.get('hideTeacherRegistry') === null  ||this.navParams.get('hideTeacherRegistry') === undefined ? true : this.navParams.get('hideTeacherRegistry')  ;
+  //   // this.hideLeaderRegistry=this.navParams.get('hideLeaderRegistry') === null || this.navParams.get('hideLeaderRegistry') === undefined  ?  true : this.navParams.get('hideLeaderRegistry');
+  //   // this.hideFeedback= this.navParams.get('hideFeedback') === null ||this.navParams.get('hideFeedback') === undefined  ?  true : this.navParams.get('hideFeedback') ;
+  //   this.hideTeacherRegistry = showMenuitemsArray.indexOf("teacher") >= 0 ? true :false;
+  //   this.hideLeaderRegistry = showMenuitemsArray.indexOf("shcoolLeader") >= 0 ? true :false;
+  //   this.hideFeedback = showMenuitemsArray.indexOf("feedback") >= 0 ? true :false;
+  // }
 }

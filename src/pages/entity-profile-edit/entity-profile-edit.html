@@ -10,12 +10,13 @@
       {{schoolName}}
     </ion-card-header>
     <ion-card-content>
-      <ion-list radio-group>
         <ng-container *ngFor="let field of schoolProfile">
+
+      <ion-list radio-group [(ngModel)]="field.value">
           <ion-item class="adjust"
             *ngIf="field?.field != 'gpsLocation' && field?.visible && ( field?.input === 'text' || field?.input === 'number' || field?.input === 'date' || field?.input === 'textarea' || field?.input === 'slider')">
             <ion-label color="primary" floating>{{field?.label}}</ion-label>
-            <ion-input type="field?.input" [(ngModel)]="field.value" [readonly]="!field.editable"></ion-input>
+            <ion-input type="field?.input" [(ngModel)]="field.value"  [readonly]="!field.editable"></ion-input>
           </ion-item>
           <ion-item class="adjust"
             *ngIf="field?.field != 'gpsLocation' && field?.visible && ( field?.input === 'select' || field?.input === 'multiselect' )">
@@ -31,10 +32,11 @@
               <ion-label>{{option?.label}}</ion-label>
               <ion-radio  name="start" value="{{option?.value}}"></ion-radio>
             </ion-item>
-          </ng-container>
           <!-- <div class="_pt-5"  *ngIf=" field?.input === 'radio' || field?.input === 'select' || field?.input === 'multiselect' ||field?.input === 'checkbox' "> -->
         </ng-container>
       </ion-list>
+    </ng-container>
+
 
       
       <!-- <ion-list>

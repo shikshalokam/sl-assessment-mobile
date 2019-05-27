@@ -23,6 +23,8 @@ export class ParentsListPage {
   showUploadBtn: boolean;
   networkConnected: boolean;
   registryType: string;
+  submissionId: any;
+  entityId: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -48,9 +50,10 @@ export class ParentsListPage {
 
     console.log('ionViewDidLoad ParentsListPage');
     this.schoolId = this.navParams.get('_id');
+    this.submissionId = this.navParams.get('submissionId');
     this.schoolName = this.navParams.get('name');
     this.registryType = this.navParams.get('registry');
-
+    this.entityId = this.navParams.get('entityId');
     this.utils.startLoader();
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(schoolDetails => {
       if (schoolDetails) {
@@ -80,7 +83,7 @@ export class ParentsListPage {
         this.uploadAndRefresh(event);
       } else {
         this.utils.startLoader("Please wait while refreshing");
-        this.apiService.httpGet(AppConfigs.registry['get' + this.registryType + 'List'] + this.schoolId, success => {
+        this.apiService.httpGet(AppConfigs.registry.getRegisterList+this.entityId+"?type="+this.registryType, success => {
           this.registryList = success.result ? success.result : [];
           this.showUploadBtn = false;
           for (const item of success.result) {
@@ -105,7 +108,7 @@ export class ParentsListPage {
 
 
   uploadAndRefresh(event?: any) {
-    const key = this.registryType === 'Leader' ? 'schoolLeaders' : 'teachers';
+    const key = this.registryType === 'schoolLeader' ? 'schoolLeaders' : 'teachers';
     const obj = {
       [key]: []
     };
@@ -117,7 +120,7 @@ export class ParentsListPage {
     }
     this.utils.startLoader('Please wait while refreshing');
     if (this.networkConnected) {
-      this.apiService.httpPost(AppConfigs.registry['add' + this.registryType + 'Info'], obj, success => {
+      this.apiService.httpPost(AppConfigs.registry.addEntityInfo+key , obj, success => {
         // this.makeAllAsUploaded();
         this.apiService.httpGet(AppConfigs.registry['get' + this.registryType + 'List'] + this.schoolId, success => {
           this.registryList = success.result ? success.result : [];
@@ -151,9 +154,10 @@ export class ParentsListPage {
 
 
   getRegistryList(event?: any) {
-    this.apiService.httpGet(AppConfigs.registry['get' + this.registryType + 'List'] + this.schoolId, success => {
+    this.apiService.httpGet(AppConfigs.registry.getRegisterList+this.entityId+"?type="+this.registryType , success => {
+      console.log("registery list function called");
       this.registryList = success.result ? success.result : [];
-      this.localStorage.setLocalStorage(AppConfigs.registry['get' + this.registryType + 'List'] + this.schoolId, this.registryList)
+      this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.schoolId, this.registryList)
       this.showUploadBtn = false;
       for (const item of success.result) {
         item.uploaded = true;
@@ -165,7 +169,7 @@ export class ParentsListPage {
   }
 
   getRegistryForm() {
-    this.apiService.httpGet(AppConfigs.registry['get' + this.registryType + 'RegisterForm'], success => {
+    this.apiService.httpGet(AppConfigs.registry.getRegisterForm+this.registryType, success => {
       this.localStorage.setLocalStorage(this.registryType + 'RegisterForm', success.result)
     }, error => {
     })
@@ -173,6 +177,7 @@ export class ParentsListPage {
 
   addRegistryItem(): void {
     const params = {
+      submissionId : this.submissionId,
       _id: this.schoolId,
       name: this.schoolName,
       registryType: this.registryType
@@ -180,7 +185,7 @@ export class ParentsListPage {
     let registryForm = this.modalCntrl.create(RegistryFormPage, params);
     registryForm.onDidDismiss(data => {
       if (data) {
-        data.programId = this.schoolDetails['program']._id;
+        // data.programId = this.schoolDetails['program']._id;
         data.schoolId = this.schoolId;
         data.schoolName = this.schoolName;
         this.registryList.push(data);
