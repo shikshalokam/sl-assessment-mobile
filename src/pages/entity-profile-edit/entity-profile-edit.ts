@@ -37,7 +37,11 @@ export class EntityProfileEditPage {
     this.schoolName = this.navParams.get('name');
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
       this.schoolData = data;
+      this.schoolData['entityProfile']['form'].forEach(element => {
+        element.editable = true;
+      });
       this.schoolProfile = this.schoolData['entityProfile']['form'];
+
       this.events.subscribe('network:offline', () => {
         this.networkConnected = false;
       });
@@ -56,23 +60,26 @@ export class EntityProfileEditPage {
 
   updateProfile(): void {
     if (this.networkConnected) {
-      this.utils.startLoader();
+      // this.utils.startLoader();
       const payload = {
         'schoolProfile': {},
       }
       for (const field of this.schoolProfile) {
         payload.schoolProfile[field['field']] = field['value'];
       }
-      const submissionId = this.schoolData['assessments'][0].submissionId;
+
+
+      console.log(JSON.stringify(payload));
+      const submissionId = this.schoolData['assessment'].submissionId;
       const url = AppConfigs.survey.submission + submissionId;
-      this.apiService.httpPost(url, payload, response => {
-        this.utils.openToast(response.message);
-        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
-        this.utils.stopLoader();
-        this.navCtrl.pop();
-      }, error => {
-        this.utils.stopLoader();
-      })
+      // this.apiService.httpPost(url, payload, response => {
+      //   this.utils.openToast(response.message);
+      //   this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+      //   this.utils.stopLoader();
+      //   this.navCtrl.pop();
+      // }, error => {
+      //   this.utils.stopLoader();
+      // })
     } else {
       this.utils.openToast("Please connect to network.")
     }

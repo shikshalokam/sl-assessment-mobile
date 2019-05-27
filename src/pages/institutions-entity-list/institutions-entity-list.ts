@@ -145,6 +145,7 @@ export class InstitutionsEntityList {
 
   programs: any;
   enableRefresh = AppConfigs.configuration.enableAssessmentListRefresh;
+  entityprofileId: any;
 
   constructor(
     public navCtrl: NavController,
@@ -266,6 +267,8 @@ export class InstitutionsEntityList {
     const url = AppConfigs.assessmentsList.detailsOfAssessment+this.programs[programIndex]._id+"?solutionId="+ this.programs[programIndex].solutions[assessmentIndex]._id +"&entityId="+this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]._id;
     console.log(url);
     this.apiService.httpGet( url, success => {
+      this.entityprofileId = success.result.entityProfile['_id'];
+      console.log(JSON.stringify(this.entityprofileId))
       // console.log(JSON.stringify(success.result));
       this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].downloaded = true;
       // add submission id to assesment list local storage
@@ -312,8 +315,9 @@ export class InstitutionsEntityList {
       
       console.log(JSON.stringify(successData));
     console.log("go to ecm called");
+    this.entityprofileId = successData.entityProfile['_id'];
 
-
+      
       if (successData.assessment.evidences.length > 1) {
 
         this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
@@ -337,21 +341,36 @@ export class InstitutionsEntityList {
     var  programIndex =  event.programIndex;
     var assessmentIndex = event.assessmentIndex ;
     var schoolIndex = event.entityIndex;
-    console.log(JSON.stringify(this.programs));
+    // console.log(JSON.stringify(this.programs));
+    var submissionId = event.submissionId;
+    let showMenuArray;
+    console.log(submissionId)
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
+      showMenuArray= successData.solution.registry ;
+      console.log(JSON.stringify(successData.solution.registry ) + "         REGISTERY ARRAY     " + submissionId);
+      let popover = this.popoverCtrl.create(MenuItemComponent, {
+        submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
+        _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
+        name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
+        programId: this.programs[programIndex]._id,
+        entityId : this.entityprofileId,
+         // hideTeacherRegistry : false,
+        // hideLeaderRegistry:false,
+        // hideFeedback:false
+        showMenuArray : showMenuArray
+      });
+      popover.present({
+        ev: myEvent
+      });
+    }).catch( error =>{
+
+    })
+    
     // console.log(programIndex + " "+ assessmentIndex+" "+schoolIndex)
     // console.log(JSON.stringify(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id']));
     // console.log(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name']);
     // console.log(this.programs[programIndex]._id);
   
-    let popover = this.popoverCtrl.create(MenuItemComponent, {
-      submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
-      _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
-      name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
-      programId: this.programs[programIndex]._id,
-     
-    });
-    popover.present({
-      ev: myEvent
-    });
+   
   }
 }

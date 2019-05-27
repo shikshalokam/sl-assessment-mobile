@@ -42,13 +42,17 @@ export class EntityListingComponent {
     })
   }
 
-  openMenu(event, programIndex, assessmentIndex, entityIndex) {
-    console.log("emitting")
+  openMenu(event, programIndex, assessmentIndex, entityIndex , submissionId) {
+    
+
     this.openMenuEvent.emit({
       event: event,
       programIndex: programIndex,
       assessmentIndex: assessmentIndex,
-      entityIndex: entityIndex
-    })
+      entityIndex: entityIndex,
+      submissionId : submissionId
+    });
+    console.log("emitting")
+
   }
 }

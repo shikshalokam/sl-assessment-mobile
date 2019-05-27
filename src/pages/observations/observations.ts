@@ -206,23 +206,35 @@ export class ObservationsPage {
     var  programIndex =  event.programIndex;
     var assessmentIndex = event.assessmentIndex ;
     var schoolIndex = event.entityIndex;
-    console.log(JSON.stringify(this.programs));
+    var submissionId = event.submissionId;
+    let showMenuArray;
+    
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
+      showMenuArray= successData.solution.registry ;
+      console.log(JSON.stringify(successData.solution.registry ));
+      let popover = this.popoverCtrl.create(MenuItemComponent, {
+        submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
+        _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
+        name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
+        programId: this.programs[programIndex]._id,
+        // hideTeacherRegistry : false,
+        // hideLeaderRegistry:false,
+        // hideFeedback:false
+        showMenuArray : showMenuArray
+      });
+      popover.present({
+        ev: myEvent
+      });
+    }).catch( error =>{
+
+    })
+
+    // console.log(JSON.stringify(this.programs));
     // console.log(programIndex + " "+ assessmentIndex+" "+schoolIndex)
     // console.log(JSON.stringify(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id']));
     // console.log(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name']);
     // console.log(this.programs[programIndex]._id);
   
-    let popover = this.popoverCtrl.create(MenuItemComponent, {
-      submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
-      _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
-      name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
-      programId: this.programs[programIndex]._id,
-      hideTeacherRegistry : false,
-      hideLeaderRegistry:false,
-      hideFeedback:false
-    });
-    popover.present({
-      ev: myEvent
-    });
+   
   }
 }

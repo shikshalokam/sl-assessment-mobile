@@ -21,6 +21,7 @@ export class RegistryFormPage {
   programId: string;
   networkConnected: boolean;
   registryType: string;
+  submissionId: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -28,6 +29,7 @@ export class RegistryFormPage {
     private events: Events, private localStorage: LocalStorageProvider,
     private utils: UtilsProvider, private apiService: ApiProvider) {
     this.schoolId = this.navParams.get('_id');
+    this.submissionId = this.navParams.get('submissionId');
     this.schoolName = this.navParams.get('name');
     this.registryType = this.navParams.get('registryType');
     this.events.subscribe('network:offline', () => {
@@ -55,9 +57,10 @@ export class RegistryFormPage {
     }).catch(error => {
     })
 
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(schoolDetails => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(schoolDetails => {
       if (schoolDetails) {
         this.schoolDetails = schoolDetails;
+        console.log(JSON.stringify(this.schoolDetails));
         this.programId = this.schoolDetails['program']._id;
       }
     }).catch(error => {
@@ -73,12 +76,16 @@ export class RegistryFormPage {
   }
 
   update(): void {
-    const key = this.registryType === 'Leader' ? 'schoolLeaders' : 'teachers';
+    console.log(JSON.stringify(this.schoolDetails));
+
+    const key = this.registryType === 'schoolLeaders' ? 'schoolLeaders' : 'teachers';
     const payload = { [key]: [] }
     const obj = this.form.value;
     obj.programId = this.schoolDetails['program']._id;
     obj.schoolId = this.schoolId;
     obj.schoolName = this.schoolName;
+    // console.log(JSON.stringify(this.schoolDetails));
+
     payload[key].push(obj)
     if (this.networkConnected) {
       this.utils.startLoader();

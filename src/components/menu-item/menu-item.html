@@ -11,13 +11,17 @@
     <ion-icon name="flag" margin-right></ion-icon>
     {{'buttons.flag'|translate}}
   </button> -->
-  <button ion-item clear small padding-left (click)="goToRegistry('Leader')" *ngIf="hideLeaderRegistry">
-    <!-- <ion-icon name="contacts" margin-left margin-right></ion-icon> -->
+  <!-- <button ion-item clear small padding-left (click)="goToRegistry('schoolLeader')" *ngIf="hideLeaderRegistry">
+    <ion-icon name="contacts" margin-left margin-right></ion-icon>
      {{'buttons.Leader' | translate}} {{'buttons.registry'| translate}} 
   </button>
-  <button ion-item clear small padding-left (click)="goToRegistry('Teacher')" *ngIf="hideTeacherRegistry">
-    <!-- <ion-icon name="contacts" margin-left margin-right></ion-icon> -->
+  <button ion-item clear small padding-left (click)="goToRegistry('teacher')" *ngIf="hideTeacherRegistry">
+    <ion-icon name="contacts" margin-left margin-right></ion-icon>
      {{'buttons.Teacher' | translate}} {{'buttons.registry'| translate}}
+  </button> -->
+  <button *ngFor="let menuItem of showMenuArray" ion-item clear small padding-left (click)="goToRegistry(menuItem)" >
+    <!-- <ion-icon name="contacts" margin-left margin-right></ion-icon> -->
+     {{menuItem }} {{'buttons.registry'| translate}}
   </button>
   <button ion-item clear small padding-left (click)="refreshSchoolData()">
       <!-- <ion-icon name="refresh-circle" margin-left margin-right></ion-icon> -->
