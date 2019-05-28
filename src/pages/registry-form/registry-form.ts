@@ -104,14 +104,16 @@ export class RegistryFormPage {
     payload['data'].push(obj)
     console.log(JSON.stringify(payload));
     console.log("api calling");
-
+    const url =AppConfigs.registry.addEntityInfo+this.registryType+"&programId="+this.createdByProgramId+"&solutionId="+this.solutionId+"&parentEntityId="+this.parentEntityId;
+    console.log(url);
     if (this.networkConnected) {
       this.utils.startLoader();
       
-      this.apiService.httpPost(AppConfigs.registry.addEntityInfo+this.registryType, payload, success => {
+      this.apiService.httpPost(url, payload, success => {
 
         console.log("successfully uploaded");
         this.utils.stopLoader();
+        console.log(JSON.stringify(success));
         this.utils.openToast(success.message);
         obj.uploaded = true;
         this.viewCntrl.dismiss(obj);

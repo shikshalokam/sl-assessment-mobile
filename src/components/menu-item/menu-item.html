@@ -21,7 +21,7 @@
   </button> -->
   <button *ngFor="let menuItem of showMenuArray" ion-item clear small padding-left (click)="goToRegistry(menuItem)" >
     <!-- <ion-icon name="contacts" margin-left margin-right></ion-icon> -->
-     {{menuItem }} {{'buttons.registry'| translate}}
+     {{menuItem | camelcase }} {{'buttons.registry'| translate}}
   </button>
   <button ion-item clear small padding-left (click)="refreshSchoolData()">
       <!-- <ion-icon name="refresh-circle" margin-left margin-right></ion-icon> -->

@@ -15,7 +15,7 @@
           <ion-item class="adjust"
             *ngIf="field?.field != 'gpsLocation' && field?.visible && ( field?.input === 'text' || field?.input === 'number' || field?.input === 'date' || field?.input === 'textarea' || field?.input === 'slider')">
             <ion-label color="primary" floating>{{field?.label}}</ion-label>
-            <ion-input type="field?.input" [(ngModel)]="field.value"  [readonly]="field.editable"></ion-input>
+            <ion-input type="field?.input" [(ngModel)]="field.value"  [readonly]="!field.editable"></ion-input>
           </ion-item>
           <ion-item class="adjust"
             *ngIf="field?.field != 'gpsLocation' && field?.visible && ( field?.input === 'select' || field?.input === 'multiselect' )">
@@ -31,8 +31,21 @@
               <ion-label>{{option?.label}}</ion-label>
               <ion-radio  name="start" value="{{option?.value}}"></ion-radio>
             </ion-item>
+            <ion-item *ngIf="field?.field != 'gpsLocation' && field?.visible && ( field?.input === 'data')">
+                <ion-label floating>Date</ion-label>
+                <ion-input type="field?.input" [(ngModel)]="field.value"  [readonly]="!field.editable"></ion-input>
+                  <ion-datetime [disabled]="field?.autoCapture" displayFormat="{{field?.dateFormat}}" 
+                  [max]='field?.validation.max ? field?.validation.max : ""'  [(ngModel)]="field.value"
+                  (ngModelChange)="checkForValidation()"></ion-datetime>
+            </ion-item>
           <!-- <div class="_pt-5"  *ngIf=" field?.input === 'radio' || field?.input === 'select' || field?.input === 'multiselect' ||field?.input === 'checkbox' "> -->
+
+
+              <!-- <input-type [data]="field" *ngIf="(field?.input === 'text' || field?.input === 'number')&& field?.visible"></input-type> -->
+
         </ng-container>
+
+
     </ng-container>
 
       </ion-list>

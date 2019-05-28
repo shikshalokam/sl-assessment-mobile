@@ -96,6 +96,7 @@ export class ParentsListPage {
         this.utils.startLoader("Please wait while refreshing");
         this.apiService.httpGet(AppConfigs.registry.getRegisterList+this.entityId+"?type="+this.registryType, success => {
           this.registryList = success.result ? success.result : [];
+          console.log(JSON.stringify(this.registryList));
 
           this.showUploadBtn = false;
           for (const item of success.result) {
@@ -139,6 +140,7 @@ export class ParentsListPage {
         // this.makeAllAsUploaded();
         this.apiService.httpGet(AppConfigs.registry.getRegisterList+this.entityId+"?type="+this.registryType , success => {
           this.registryList = success.result ? success.result : [];
+          console.log(JSON.stringify(this.registryList));
           this.showUploadBtn = false;
           for (const item of success.result) {
             item.uploaded = true;
