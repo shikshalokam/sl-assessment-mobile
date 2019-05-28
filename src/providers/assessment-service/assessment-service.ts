@@ -28,12 +28,12 @@ export class AssessmentServiceProvider {
   getAssessmentsApi(assessmentType) {
     return new Promise((resolve, reject) =>{
 
-    console.log(assessmentType + " list api called");
+    // console.log(assessmentType + " list api called");
     const url = AppConfigs.assessmentsList.listOfAssessment + assessmentType;
     // let programs;
     // console.log(url)
     this.utils.startLoader()
-    console.log("List api called ")
+    //console.log("List api called ")
     this.apiService.httpGet(url, successData => {
       // console.log("success data")
       this.utils.stopLoader();
@@ -52,13 +52,13 @@ export class AssessmentServiceProvider {
     // console.log(JSON.stringify(programs))
       resolve(successData.result)
     }, error => {
-      console.log("error in list of assessment")
+      //console.log("error in list of assessment")
       this.utils.stopLoader();
       reject();
 
     });
 
-    console.log("function end")
+    //console.log("function end")
 
 
   });
@@ -87,7 +87,7 @@ export class AssessmentServiceProvider {
         }
       }
 
-      console.log(JSON.stringify(downloadedAssessments))
+      //console.log(JSON.stringify(downloadedAssessments))
 
       if (!downloadedAssessments.length) {
         programs = successData.result;
@@ -134,18 +134,18 @@ export class AssessmentServiceProvider {
     // console.log(programIndex + " " + assessmentIndex + " " + schoolIndex)
     this.utils.startLoader();
     const url = AppConfigs.assessmentsList.detailsOfAssessment + programs[programIndex]._id + "?solutionId=" + programs[programIndex].solutions[assessmentIndex]._id + "&entityId=" + programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]._id;
-    console.log(url);
+    //console.log(url);
     this.apiService.httpGet(url, success => {
       programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].downloaded = true;
       programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId = success.result.assessment.submissionId;
-      console.log(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId + "          Submission id =             " + success.result.assessment.submissionId)
+      //console.log(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId + "          Submission id =             " + success.result.assessment.submissionId)
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId), success.result);
       this.localStorage.setLocalStorage(`${assessmentType}List`, programs);
       this.utils.stopLoader();
       
       resolve(programs);
     }, error => {
-      console.log("error details api")
+      //console.log("error details api")
       this.utils.stopLoader();
       reject();
     });
@@ -162,10 +162,10 @@ openMenu(event , programs , showMenu?:any) {
   let solutionId = event.solutionId;
   let parentEntityId = event.parentEntityId;
   let createdByProgramId = event.createdByProgramId;
-  console.log(" id related to this page");
-    console.log(solutionId);
-    console.log(parentEntityId);
-    console.log(createdByProgramId);
+  //console.log(" id related to this page");
+    //console.log(solutionId);
+    //console.log(parentEntityId);
+    //console.log(createdByProgramId);
 
   this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
     if(showMenu){
