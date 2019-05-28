@@ -81,17 +81,18 @@ export class HomePage {
     private app: App,
     private localStorage: LocalStorageProvider
   ) {
-    console.log("Home page called");
+    //console.log("Home page called");
     // this.subscription = this.events.subscribe('localDataUpdated', () => {
     //   this.getLocalSchoolDetails();
     // });
+    // this.userData = this.currentUser.getCurrentUserData();
 
     this.isIos = this.platform.is('ios') ? true : false;
 
   }
 
-  ionViewWillEnter() {
-         this.userData = this.currentUser.getCurrentUserData();
+  ionViewDidLoad() {
+    this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
 
     if (this.network.type != 'none') {
@@ -193,7 +194,7 @@ export class HomePage {
   // }
 
   // getLocalSchoolDetails(): void {
-  //   console.log("get local school details");
+  //   //console.log("get local school details");
   //   this.storage.get('schoolsDetails').then(details => {
   //     this.schoolDetails = JSON.parse(details);
   //     for (const schoolId of Object.keys(this.schoolDetails)) {

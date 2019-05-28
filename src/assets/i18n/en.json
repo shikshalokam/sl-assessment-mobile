@@ -69,8 +69,8 @@
         "surveyEcm":"Survey - ECM",
         "parentContact": "Parent Contacts",
         "parentRegistry":"Parent Registry",
-        "LeaderRegistry": "School Leader Registry",
-        "TeacherRegistry": "Teacher Registry",
+        "schoolLeaderRegistry": "School Leader Registry",
+        "teacherRegistry": "Teacher Registry",
         "generalQuestions": "General Questions",
         "individualAssessments": "Individual Assessments"
     },
