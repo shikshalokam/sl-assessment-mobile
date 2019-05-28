@@ -157,11 +157,14 @@ export class ApiProvider {
         'appVersion': AppConfigs.appVersion
       }
       const apiUrl = AppConfigs.api_base_url + url;
+      console.log(apiUrl)
+
       this.http.setDataSerializer('json');
       this.http.post(apiUrl, payload, obj).then(data => {
 
         successCallback(JSON.parse(data.data));
       }).catch(error => {
+        console.log(JSON.stringify(error));
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
