@@ -125,32 +125,33 @@ export class InstitutionsEntityList {
   //   })
   // }
   openMenu(event) {
-    var myEvent = event.event;
-    var  programIndex =  event.programIndex;
-    var assessmentIndex = event.assessmentIndex ;
-    var schoolIndex = event.entityIndex;
-    var submissionId = event.submissionId;
-    let showMenuArray;
+    this.assessmentService.openMenu(event,this.programs);
+    // var myEvent = event.event;
+    // var  programIndex =  event.programIndex;
+    // var assessmentIndex = event.assessmentIndex ;
+    // var schoolIndex = event.entityIndex;
+    // var submissionId = event.submissionId;
+    // let showMenuArray;
     
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
-      showMenuArray= successData.solution.registry ;
-      console.log(JSON.stringify(this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id']));
-      let popover = this.popoverCtrl.create(MenuItemComponent, {
-        submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
-        _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
-        name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
-        programId: this.programs[programIndex]._id,
-        // hideTeacherRegistry : false,
-        // hideLeaderRegistry:false,
-        // hideFeedback:false
-        showMenuArray : showMenuArray
-      });
-      popover.present({
-        ev: myEvent
-      });
-    }).catch( error =>{
+    // this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
+    //   showMenuArray= successData.solution.registry ;
+    //   console.log(JSON.stringify(this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id']));
+    //   let popover = this.popoverCtrl.create(MenuItemComponent, {
+    //     submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
+    //     _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
+    //     name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
+    //     programId: this.programs[programIndex]._id,
+    //     // hideTeacherRegistry : false,
+    //     // hideLeaderRegistry:false,
+    //     // hideFeedback:false
+    //     showMenuArray : showMenuArray
+    //   });
+    //   popover.present({
+    //     ev: myEvent
+    //   });
+    // }).catch( error =>{
 
-    })
+    // })
 
   }
 }

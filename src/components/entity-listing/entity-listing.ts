@@ -104,13 +104,18 @@ export class EntityListingComponent {
 
   openMenu(event, programIndex, assessmentIndex, entityIndex , submissionId) {
     
-
+    const solutionId = this.entityList[programIndex].solutions[assessmentIndex]._id;
+    const parentEntityId = this.entityList[programIndex].solutions[assessmentIndex].entities[entityIndex]._id;
+    const createdByProgramId = this.entityList[programIndex]._id;
     this.openMenuEvent.emit({
       event: event,
       programIndex: programIndex,
       assessmentIndex: assessmentIndex,
       entityIndex: entityIndex,
-      submissionId : submissionId
+      submissionId : submissionId,
+      solutionId :solutionId,
+      parentEntityId : parentEntityId,
+      createdByProgramId :createdByProgramId
     });
     console.log("emitting")
 
