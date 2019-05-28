@@ -32,11 +32,11 @@ export class EntityListingComponent {
     private evdnsServ: EvidenceProvider,
     private utils: UtilsProvider) {
   
-    console.log('Hello EntityListingComponent Component');
+    //console.log('Hello EntityListingComponent Component');
   }
 
   // goToEcm(id, name) {
-  //   console.log(JSON.stringify(id))
+  //   //console.log(JSON.stringify(id))
   //   this.goToEcmEvent.emit({
   //     submissionId: id,
   //     name: name
@@ -45,7 +45,7 @@ export class EntityListingComponent {
 
 
   goToEcm(id, name) {
-    console.log("go to ecm called");
+    //console.log("go to ecm called");
     let submissionId = id
     let heading = name;
 
@@ -53,8 +53,8 @@ export class EntityListingComponent {
 
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
-      // console.log(JSON.stringify(successData));
-    console.log("go to ecm called");
+      // //console.log(JSON.stringify(successData));
+    //console.log("go to ecm called");
 
 
       if (successData.assessment.evidences.length > 1) {
@@ -63,14 +63,14 @@ export class EntityListingComponent {
 
       } else {
         if (successData.assessment.evidences[0].startTime) {
-          console.log("if loop " + successData.assessment.evidences[0].externalId)
+          //console.log("if loop " + successData.assessment.evidences[0].externalId)
           this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
           this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
         } else {
 
           const assessment = { _id: submissionId, name: heading }
           this.openAction(assessment, successData, 0);
-          console.log("else loop");
+          //console.log("else loop");
 
         }
       }
@@ -79,17 +79,12 @@ export class EntityListingComponent {
 
   }
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    console.log(JSON.stringify(aseessmemtData));
-    // console.log("open action");
-
-    // console.log(aseessmemtData.solutions[0].evidences[evidenceIndex].externalId);
-    // console.log(JSON.stringify(aseessmemtData.solutions[0].evidences[evidenceIndex].externalId))
-    // console.log(JSON.stringify(aseessmemtData))
+    
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
-    // console.log("open action");
+    // //console.log("open action");
 
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
-    // console.log(JSON.stringify(options))
+    // //console.log(JSON.stringify(options))
     this.evdnsServ.openActionSheet(options);
   }
 
@@ -117,7 +112,7 @@ export class EntityListingComponent {
       parentEntityId : parentEntityId,
       createdByProgramId :createdByProgramId
     });
-    console.log("emitting")
+    //console.log("emitting")
 
   }
 }

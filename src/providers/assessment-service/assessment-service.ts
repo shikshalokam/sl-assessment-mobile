@@ -30,7 +30,7 @@ export class AssessmentServiceProvider {
 
     console.log(assessmentType + " list api called");
     const url = AppConfigs.assessmentsList.listOfAssessment + assessmentType;
-    // var programs;
+    // let programs;
     // console.log(url)
     this.utils.startLoader()
     console.log("List api called ")
@@ -152,23 +152,30 @@ export class AssessmentServiceProvider {
 
   });
 }
-openMenu(event , programs) {
-  var myEvent = event.event;
-  var  programIndex =  event.programIndex;
-  var assessmentIndex = event.assessmentIndex ;
-  var schoolIndex = event.entityIndex;
-  var submissionId = event.submissionId;
+openMenu(event , programs , showMenu?:any) {
+  let myEvent = event.event;
+  let  programIndex =  event.programIndex;
+  let assessmentIndex = event.assessmentIndex ;
+  let schoolIndex = event.entityIndex;
+  let submissionId = event.submissionId;
   let showMenuArray;
-  var solutionId = event.solutionId;
-  var parentEntityId = event.parentEntityId;
-  var createdByProgramId = event.createdByProgramId;
+  let solutionId = event.solutionId;
+  let parentEntityId = event.parentEntityId;
+  let createdByProgramId = event.createdByProgramId;
   console.log(" id related to this page");
     console.log(solutionId);
     console.log(parentEntityId);
     console.log(createdByProgramId);
 
   this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
-    showMenuArray= successData.solution.registry ;
+    if(showMenu){
+      showMenuArray= successData.solution.registry ;
+    }
+    else{
+      showMenuArray = []
+    }
+
+
     console.log(JSON.stringify(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id']));
     let popover = this.popoverCtrl.create(MenuItemComponent, {
       submissionId:programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
