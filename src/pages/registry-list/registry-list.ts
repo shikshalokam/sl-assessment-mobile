@@ -13,7 +13,7 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
   selector: 'page-registry-list',
   templateUrl: 'registry-list.html',
 })
-export class ParentsListPage {
+export class RegistryListPage {
 
   entityId: string;
   entityName: string;
@@ -50,7 +50,7 @@ export class ParentsListPage {
 
   ionViewDidLoad() {
 
-    console.log('ionViewDidLoad ParentsListPage');
+    //console.log('ionViewDidLoad RegistryListPage');
     this.entityId = this.navParams.get('_id');
     this.submissionId = this.navParams.get('submissionId');
     this.entityName = this.navParams.get('name');
@@ -58,14 +58,14 @@ export class ParentsListPage {
     this.solutionId = this.navParams.get('solutionId');
     this.parentEntityId = this.navParams.get('parentEntityId');
     this.createdByProgramId = this.navParams.get('createdByProgramId');
-    console.log(" id related to this page");
-    console.log(this.navParams.get('solutionId'));
-    console.log(this.navParams.get('parentEntityId'));
-    console.log(this.navParams.get('createdByProgramId'));
+    //console.log(" id related to this page");
+    //console.log(this.navParams.get('solutionId'));
+    //console.log(this.navParams.get('parentEntityId'));
+    //console.log(this.navParams.get('createdByProgramId'));
 
     // this.entityId = this.navParams.get('entityId');
     this.utils.startLoader();
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(entityDetails => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(entityDetails => {
       if (entityDetails) {
         this.entityDetails = entityDetails;
         this.showUploadBtn = this.checkForUploadBtn();
@@ -74,7 +74,7 @@ export class ParentsListPage {
 
     })
 
-    this.storage.get(this.registryType + 'Details_' + this.entityId).then(registryData => {
+    this.storage.get(this.registryType + 'Details_' + this.submissionId).then(registryData => {
       if (registryData) {
         this.utils.stopLoader();
         this.registryList = registryData ? registryData : [];
@@ -96,7 +96,7 @@ export class ParentsListPage {
         this.utils.startLoader("Please wait while refreshing");
         this.apiService.httpGet(AppConfigs.registry.getRegisterList+this.entityId+"?type="+this.registryType, success => {
           this.registryList = success.result ? success.result : [];
-          console.log(JSON.stringify(this.registryList));
+          //console.log(JSON.stringify(this.registryList));
 
           this.showUploadBtn = false;
           for (const item of success.result) {
@@ -105,7 +105,7 @@ export class ParentsListPage {
           if (event) {
             event.complete();
           }
-          this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.entityId, this.registryList);
+          this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.submissionId, this.registryList);
 
           this.utils.stopLoader();
 
@@ -140,12 +140,12 @@ export class ParentsListPage {
         // this.makeAllAsUploaded();
         this.apiService.httpGet(AppConfigs.registry.getRegisterList+this.entityId+"?type="+this.registryType , success => {
           this.registryList = success.result ? success.result : [];
-          console.log(JSON.stringify(this.registryList));
+          //console.log(JSON.stringify(this.registryList));
           this.showUploadBtn = false;
           for (const item of success.result) {
             item.uploaded = true;
           }
-          this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.entityId, this.registryList);
+          this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.submissionId, this.registryList);
           this.utils.stopLoader();
           if (event) {
             event.complete();
@@ -172,12 +172,12 @@ export class ParentsListPage {
 
   getRegistryList(event?: any) {
     const url =AppConfigs.registry.getRegisterList+this.entityId+"?type="+this.registryType ;
-    console.log(url);
+    //console.log(url);
 
     this.apiService.httpGet(url, success => {
-      console.log("registery list function called");
+      //console.log("registery list function called");
       this.registryList = success.result ? success.result : [];
-      this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.entityId, this.registryList)
+      this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.submissionId, this.registryList)
       this.showUploadBtn = false;
       for (const item of success.result) {
         item.uploaded = true;
@@ -190,7 +190,7 @@ export class ParentsListPage {
 
   getRegistryForm() {
     const url = AppConfigs.registry.getRegisterForm+this.registryType;
-    console.log(url);
+    //console.log(url);
     this.apiService.httpGet(url, success => {
       this.localStorage.setLocalStorage(this.registryType + 'RegisterForm', success.result)
     }, error => {
@@ -198,7 +198,7 @@ export class ParentsListPage {
   }
 
   addRegistryItem(): void {
-    console.log(this.entityName + "entity name")
+    //console.log(this.entityName + "entity name")
     const params = {
       submissionId : this.submissionId,
       _id: this.entityId,
@@ -213,12 +213,12 @@ export class ParentsListPage {
     registryForm.onDidDismiss(data => {
       if (data) {
         // data.programId = this.entityDetails['program']._id;
-        console.log("Dismiss with valid data")
+        //console.log("Dismiss with valid data")
         data.entityId = this.entityId;
         data.entityName = this.entityName;
         this.registryList.push(data);
         this.showUploadBtn = this.checkForUploadBtn();
-        this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.entityId, this.registryList)
+        this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.submissionId, this.registryList)
       }
     })
     registryForm.present();
@@ -256,7 +256,7 @@ export class ParentsListPage {
       item.uploaded = true;
     }
     this.showUploadBtn = this.checkForUploadBtn();
-    this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.entityId, this.registryList)
+    this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.submissionId, this.registryList)
   }
 
   checkForUploadBtn() {

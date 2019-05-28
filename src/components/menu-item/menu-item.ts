@@ -33,7 +33,7 @@ export class MenuItemComponent {
     private appCtrl: App, private viewCtrl: ViewController, private utils: UtilsProvider,
     private events: Events, private ngps: NetworkGpsProvider, private modalCntrl: ModalController,
     private usld: UpdateLocalSchoolDataProvider) {
-    console.log('Hello MenuItemComponent Component');
+    //console.log('Hello MenuItemComponent Component');
     this.showMenuArray =  this.navParams.get('showMenuArray');
     this.submissionId = this.navParams.get('submissionId');
     this.entityId = this.navParams.get('entityId') ? this.navParams.get('entityId') : null;
@@ -42,13 +42,13 @@ export class MenuItemComponent {
     this.solutionId = this.navParams.get('solutionId');
     this.parentEntityId = this.navParams.get('parentEntityId');
     this.createdByProgramId = this.navParams.get('createdByProgramId');
-    console.log(JSON.stringify(this.showMenuArray) + this.entityId );
+    //console.log(JSON.stringify(this.showMenuArray) + this.entityId );
 
     // this.showMenuItems(this.navParams.get('showMenuArray'));
    
    
     // this.parent = this.navParams.get("parent");
-    // console.log(this.hideFeedback + "hide feedback");
+    // //console.log(this.hideFeedback + "hide feedback");
 
     this.programId = this.navParams.get("programId")
     this.subscription = this.events.subscribe('network:offline', () => {
@@ -102,7 +102,7 @@ export class MenuItemComponent {
   }
 
   goToRegistry(registryType): void {
-    this.appCtrl.getRootNav().push('ParentsListPage', {
+    this.appCtrl.getRootNav().push('RegistryListPage', {
       _id: this.schoolId,
       name: this.schoolName,
       registry: registryType,
@@ -163,7 +163,7 @@ export class MenuItemComponent {
 
 
   // showMenuItems(showMenuitemsArray ){
-  //   console.log(JSON.stringify(showMenuitemsArray))
+  //   //console.log(JSON.stringify(showMenuitemsArray))
   //   // this.hideTeacherRegistry = this.navParams.get('hideTeacherRegistry') === null  ||this.navParams.get('hideTeacherRegistry') === undefined ? true : this.navParams.get('hideTeacherRegistry')  ;
   //   // this.hideLeaderRegistry=this.navParams.get('hideLeaderRegistry') === null || this.navParams.get('hideLeaderRegistry') === undefined  ?  true : this.navParams.get('hideLeaderRegistry');
   //   // this.hideFeedback= this.navParams.get('hideFeedback') === null ||this.navParams.get('hideFeedback') === undefined  ?  true : this.navParams.get('hideFeedback') ;

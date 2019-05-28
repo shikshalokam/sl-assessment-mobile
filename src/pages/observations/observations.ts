@@ -34,7 +34,7 @@ export class ObservationsPage {
   }
 
   ionViewDidLoad() {
-    console.log("observation page called");
+    //console.log("observation page called");
     this.localStorage.getLocalStorage('observationList').then(data => { 
       if (data) {
         this.programs = data;
@@ -51,10 +51,10 @@ export class ObservationsPage {
   getAssessmentsApi() {
     this.assessmentService.getAssessmentsApi ('observation').then(programs =>{
       this.programs = programs;
-      console.log("success in observations list api function");
+      //console.log("success in observations list api function");
 
     }).catch(error=>{
-      console.log("error in observations list api function");
+      //console.log("error in observations list api function");
     })
     
 
@@ -63,7 +63,7 @@ export class ObservationsPage {
   refresh(event?: any) {
    event ? this.assessmentService.refresh(this.programs ,'observation', event).then( program =>{
      this.programs = program;
-     console.log(program);
+     //console.log(program);
    }).catch( error=>{})
    : 
    this.assessmentService.refresh(this.programs,'observation').then(program =>{
@@ -97,12 +97,12 @@ export class ObservationsPage {
 
   //   let submissionId = event.submissionId;
   //   let heading = event.name;
-  //   console.log(JSON.stringify(event) )
+  //   //console.log(JSON.stringify(event) )
 
   //   this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
-  //     console.log(JSON.stringify(successData));
-  //   console.log("go to ecm called");
+  //     //console.log(JSON.stringify(successData));
+  //   //console.log("go to ecm called");
 
 
   //     if (successData.assessment.evidences.length > 1) {
@@ -122,39 +122,39 @@ export class ObservationsPage {
   //   })
   // }
   openMenu(event) {
-
-    var myEvent = event.event;
-    var  programIndex =  event.programIndex;
-    var assessmentIndex = event.assessmentIndex ;
-    var schoolIndex = event.entityIndex;
-    var submissionId = event.submissionId;
-    let showMenuArray;
+    this.assessmentService.openMenu(event,this.programs , false);
+    // var myEvent = event.event;
+    // var  programIndex =  event.programIndex;
+    // var assessmentIndex = event.assessmentIndex ;
+    // var schoolIndex = event.entityIndex;
+    // var submissionId = event.submissionId;
+    // let showMenuArray;
     
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
-      showMenuArray= successData.solution.registry ;
-      console.log(JSON.stringify(successData.solution.registry ));
-      let popover = this.popoverCtrl.create(MenuItemComponent, {
-        submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
-        _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
-        name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
-        programId: this.programs[programIndex]._id,
-        // hideTeacherRegistry : false,
-        // hideLeaderRegistry:false,
-        // hideFeedback:false
-        showMenuArray : showMenuArray
-      });
-      popover.present({
-        ev: myEvent
-      });
-    }).catch( error =>{
+    // this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
+    //   showMenuArray= successData.solution.registry ;
+    //   //console.log(JSON.stringify(successData.solution.registry ));
+    //   let popover = this.popoverCtrl.create(MenuItemComponent, {
+    //     submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
+    //     _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
+    //     name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
+    //     programId: this.programs[programIndex]._id,
+    //     // hideTeacherRegistry : false,
+    //     // hideLeaderRegistry:false,
+    //     // hideFeedback:false
+    //     showMenuArray : showMenuArray
+    //   });
+    //   popover.present({
+    //     ev: myEvent
+    //   });
+    // }).catch( error =>{
 
-    })
+    // })
 
-    // console.log(JSON.stringify(this.programs));
-    // console.log(programIndex + " "+ assessmentIndex+" "+schoolIndex)
-    // console.log(JSON.stringify(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id']));
-    // console.log(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name']);
-    // console.log(this.programs[programIndex]._id);
+    // //console.log(JSON.stringify(this.programs));
+    // //console.log(programIndex + " "+ assessmentIndex+" "+schoolIndex)
+    // //console.log(JSON.stringify(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id']));
+    // //console.log(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name']);
+    // //console.log(this.programs[programIndex]._id);
   
    
   }

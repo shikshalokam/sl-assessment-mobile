@@ -34,11 +34,11 @@ export class RegistryFormPage {
     this.schoolId = this.navParams.get('_id');
     this.submissionId = this.navParams.get('submissionId');
     this.schoolName = this.navParams.get('name');
-    console.log(this.navParams.get('name'));
-    console.log(" id related to this page");
-    console.log(this.navParams.get('solutionId'));
-    console.log(this.navParams.get('parentEntityId'));
-    console.log(this.navParams.get('createdByProgramId'));
+    //console.log(this.navParams.get('name'));
+    //console.log(" id related to this page");
+    //console.log(this.navParams.get('solutionId'));
+    //console.log(this.navParams.get('parentEntityId'));
+    //console.log(this.navParams.get('createdByProgramId'));
 
     this.registryType = this.navParams.get('registryType');
     this.solutionId = this.navParams.get('solutionId');
@@ -56,7 +56,7 @@ export class RegistryFormPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ParentsFormPage');
+    //console.log('ionViewDidLoad ParentsFormPage');
     this.localStorage.getLocalStorage(this.registryType + 'RegisterForm').then(formFields => {
       if (formFields) {
         for (const formField of formFields) {
@@ -72,7 +72,7 @@ export class RegistryFormPage {
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(schoolDetails => {
       if (schoolDetails) {
         this.schoolDetails = schoolDetails;
-        // console.log(JSON.stringify(this.schoolDetails));
+        // //console.log(JSON.stringify(this.schoolDetails));
         this.programId = this.schoolDetails['program']._id;
       }
     }).catch(error => {
@@ -88,7 +88,7 @@ export class RegistryFormPage {
   }
 
   update(): void {
-    // console.log(JSON.stringify(this.schoolDetails));
+    // //console.log(JSON.stringify(this.schoolDetails));
 
     const key = this.registryType ;
     const payload = { data : [] }
@@ -99,26 +99,26 @@ export class RegistryFormPage {
     obj.solutionId = this.solutionId;
     obj.parentEntityId = this.parentEntityId;
     obj.createdByProgramId = this.createdByProgramId;
-    // console.log(JSON.stringify(this.schoolDetails));
+    // //console.log(JSON.stringify(this.schoolDetails));
 
     payload['data'].push(obj)
-    console.log(JSON.stringify(payload));
-    console.log("api calling");
+    //console.log(JSON.stringify(payload));
+    //console.log("api calling");
     const url =AppConfigs.registry.addEntityInfo+this.registryType+"&programId="+this.createdByProgramId+"&solutionId="+this.solutionId+"&parentEntityId="+this.parentEntityId;
-    console.log(url);
+    //console.log(url);
     if (this.networkConnected) {
       this.utils.startLoader();
       
       this.apiService.httpPost(url, payload, success => {
 
-        console.log("successfully uploaded");
+        //console.log("successfully uploaded");
         this.utils.stopLoader();
-        console.log(JSON.stringify(success));
+        //console.log(JSON.stringify(success));
         this.utils.openToast(success.message);
         obj.uploaded = true;
         this.viewCntrl.dismiss(obj);
       }, error => {
-        console.log(" uploaded api error");
+        //console.log(" uploaded api error");
 
         this.utils.openToast("Something went wrong. Please try again after sometime.", "Ok");
         this.utils.stopLoader();
@@ -126,7 +126,7 @@ export class RegistryFormPage {
         this.viewCntrl.dismiss(obj)
       })
     } else {
-      console.log("network else");
+      //console.log("network else");
 
       obj.uploaded = false;
       this.viewCntrl.dismiss(obj)

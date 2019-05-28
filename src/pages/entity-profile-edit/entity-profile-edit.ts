@@ -32,7 +32,7 @@ export class EntityProfileEditPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EntityProfilePage');
+    //console.log('ionViewDidLoad EntityProfilePage');
     this.entityId = this.navParams.get('_id');
     this.entityName = this.navParams.get('name');
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(data => {
@@ -57,7 +57,7 @@ export class EntityProfileEditPage {
 
   updateProfile(): void {
     if (this.networkConnected) {
-      // this.utils.startLoader();
+       this.utils.startLoader();
       const payload = {
         'entityProfile': {},
       }
@@ -65,7 +65,7 @@ export class EntityProfileEditPage {
         payload.entityProfile[field['field']] = field['value'];
       }
 
-      console.log(JSON.stringify(payload));
+      //console.log(JSON.stringify(payload));
       const submissionId = this.entityData['assessment'].submissionId;
       const url = AppConfigs.survey.submission + submissionId;
 
