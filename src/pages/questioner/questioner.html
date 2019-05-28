@@ -14,16 +14,16 @@
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'"></input-type>
         <input-type [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'"></input-type>
-        <radio-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+        <radio-type [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'"></radio-type>
-        <date-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+        <date-type [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
         <multiple-choice-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+          [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'multiselect'"></multiple-choice-type>
         <matrix-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'">
         </matrix-type>
-        <slider [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+        <slider [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'slider'"></slider>
       </ng-container>
     </ng-container>

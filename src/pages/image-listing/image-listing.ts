@@ -227,20 +227,20 @@ export class ImageListingPage {
     const payload = this.constructPayload();
     const submissionId = this.submissionId;
     const url = AppConfigs.survey.submission + submissionId + '/';
-    // this.apiService.httpPost(url, payload, response => {
-    //   this.utils.openToast(response.message);
-    //     this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
-    //   this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
-    //   const options = {
-    //     _id: this.submissionId,
-    //     name: this.schoolName
-    //   }
-    //   this.utils.stopLoader();
-    //   this.navCtrl.remove(2, 1);
-    //   this.navCtrl.pop();
-    // }, error => {
-    //   this.utils.stopLoader();
-    // })
+    this.apiService.httpPost(url, payload, response => {
+      this.utils.openToast(response.message);
+        this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
+      const options = {
+        _id: this.submissionId,
+        name: this.schoolName
+      }
+      this.utils.stopLoader();
+      this.navCtrl.remove(2, 1);
+      this.navCtrl.pop();
+    }, error => {
+      this.utils.stopLoader();
+    })
 
   }
 
