@@ -3,6 +3,8 @@ import { AppConfigs } from '../appConfig';
 import { ApiProvider } from '../api/api';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { UtilsProvider } from '../utils/utils';
+import { MenuItemComponent } from '../../components/menu-item/menu-item';
+import { PopoverController } from 'ionic-angular';
 
 /*
   Generated class for the AssessmentServiceProvider provider.
@@ -16,6 +18,7 @@ export class AssessmentServiceProvider {
   constructor(
     private apiService: ApiProvider,
     private localStorage: LocalStorageProvider,
+    private popoverCtrl: PopoverController,
     private utils: UtilsProvider) {
     console.log('Hello AssessmentServiceProvider Provider');
   }
@@ -149,7 +152,42 @@ export class AssessmentServiceProvider {
 
   });
 }
+openMenu(event , programs) {
+  var myEvent = event.event;
+  var  programIndex =  event.programIndex;
+  var assessmentIndex = event.assessmentIndex ;
+  var schoolIndex = event.entityIndex;
+  var submissionId = event.submissionId;
+  let showMenuArray;
+  var solutionId = event.solutionId;
+  var parentEntityId = event.parentEntityId;
+  var createdByProgramId = event.createdByProgramId;
+  console.log(" id related to this page");
+    console.log(solutionId);
+    console.log(parentEntityId);
+    console.log(createdByProgramId);
 
+  this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
+    showMenuArray= successData.solution.registry ;
+    console.log(JSON.stringify(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id']));
+    let popover = this.popoverCtrl.create(MenuItemComponent, {
+      submissionId:programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
+      _id:programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
+      name: programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
+      programId: programs[programIndex]._id,
+      showMenuArray : showMenuArray,
+      solutionId :solutionId,
+      parentEntityId : parentEntityId,
+      createdByProgramId :createdByProgramId
+    });
+    popover.present({
+      ev: myEvent
+    });
+  }).catch( error =>{
+
+  })
+
+}
 
 
 }

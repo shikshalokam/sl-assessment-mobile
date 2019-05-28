@@ -24,6 +24,9 @@ export class ParentsListPage {
   networkConnected: boolean;
   registryType: string;
   submissionId: any;
+  solutionId: any;
+  parentEntityId: any;
+  createdByProgramId: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -52,6 +55,14 @@ export class ParentsListPage {
     this.submissionId = this.navParams.get('submissionId');
     this.entityName = this.navParams.get('name');
     this.registryType = this.navParams.get('registry');
+    this.solutionId = this.navParams.get('solutionId');
+    this.parentEntityId = this.navParams.get('parentEntityId');
+    this.createdByProgramId = this.navParams.get('createdByProgramId');
+    console.log(" id related to this page");
+    console.log(this.navParams.get('solutionId'));
+    console.log(this.navParams.get('parentEntityId'));
+    console.log(this.navParams.get('createdByProgramId'));
+
     // this.entityId = this.navParams.get('entityId');
     this.utils.startLoader();
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(entityDetails => {
@@ -191,6 +202,9 @@ export class ParentsListPage {
       _id: this.entityId,
       name: this.entityName,
       registryType: this.registryType,
+      solutionId :this.solutionId,
+      parentEntityId : this.parentEntityId,
+      createdByProgramId :this.createdByProgramId
       
     }
     let registryForm = this.modalCntrl.create(RegistryFormPage, params);

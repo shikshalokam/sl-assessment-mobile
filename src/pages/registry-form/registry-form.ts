@@ -22,6 +22,9 @@ export class RegistryFormPage {
   networkConnected: boolean;
   registryType: string;
   submissionId: any;
+  solutionId: any;
+  parentEntityId: any;
+  createdByProgramId: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -32,7 +35,15 @@ export class RegistryFormPage {
     this.submissionId = this.navParams.get('submissionId');
     this.schoolName = this.navParams.get('name');
     console.log(this.navParams.get('name'));
+    console.log(" id related to this page");
+    console.log(this.navParams.get('solutionId'));
+    console.log(this.navParams.get('parentEntityId'));
+    console.log(this.navParams.get('createdByProgramId'));
+
     this.registryType = this.navParams.get('registryType');
+    this.solutionId = this.navParams.get('solutionId');
+    this.parentEntityId = this.navParams.get('parentEntityId');
+    this.createdByProgramId = this.navParams.get('createdByProgramId');
     this.events.subscribe('network:offline', () => {
       this.networkConnected = false;
     });
@@ -85,6 +96,9 @@ export class RegistryFormPage {
     obj.programId = this.schoolDetails['program']._id;
     obj.schoolId = this.schoolId;
     obj.schoolName = this.schoolName;
+    obj.solutionId = this.solutionId;
+    obj.parentEntityId = this.parentEntityId;
+    obj.createdByProgramId = this.createdByProgramId;
     // console.log(JSON.stringify(this.schoolDetails));
 
     payload['data'].push(obj)

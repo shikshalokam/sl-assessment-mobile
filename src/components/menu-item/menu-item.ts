@@ -25,6 +25,9 @@ export class MenuItemComponent {
   hideFeedback= true;
   entityId: any;
   showMenuArray: any;
+  solutionId: any;
+  parentEntityId: any;
+  createdByProgramId: any;
 
   constructor(private navParams: NavParams, private ratingService: RatingProvider,
     private appCtrl: App, private viewCtrl: ViewController, private utils: UtilsProvider,
@@ -36,6 +39,9 @@ export class MenuItemComponent {
     this.entityId = this.navParams.get('entityId') ? this.navParams.get('entityId') : null;
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
+    this.solutionId = this.navParams.get('solutionId');
+    this.parentEntityId = this.navParams.get('parentEntityId');
+    this.createdByProgramId = this.navParams.get('createdByProgramId');
     console.log(JSON.stringify(this.showMenuArray) + this.entityId );
 
     // this.showMenuItems(this.navParams.get('showMenuArray'));
@@ -101,8 +107,10 @@ export class MenuItemComponent {
       name: this.schoolName,
       registry: registryType,
       submissionId:this.submissionId,
-      entityId:this.schoolId
-
+      entityId:this.schoolId,
+      solutionId :this.solutionId,
+      parentEntityId : this.parentEntityId,
+      createdByProgramId :this.createdByProgramId
     })
     this.close();
   }

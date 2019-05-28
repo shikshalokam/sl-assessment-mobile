@@ -38,6 +38,7 @@ export class EntityProfileEditPage {
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(data => {
       this.entityData = data;
       this.entityProfile = this.entityData['entityProfile']['form'];
+      
       this.events.subscribe('network:offline', () => {
         this.networkConnected = false;
       });
@@ -63,8 +64,11 @@ export class EntityProfileEditPage {
       for (const field of this.entityProfile) {
         payload.entityProfile[field['field']] = field['value'];
       }
-      const submissionId = this.entityData['assessments'][0].submissionId;
+
+      console.log(JSON.stringify(payload));
+      const submissionId = this.entityData['assessment'].submissionId;
       const url = AppConfigs.survey.submission + submissionId;
+
       this.apiService.httpPost(url, payload, response => {
         this.utils.openToast(response.message);
         this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId), this.entityData)
