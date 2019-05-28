@@ -79,12 +79,8 @@ export class EntityListingComponent {
 
   }
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
-    // //console.log("open action");
-
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
-    // //console.log(JSON.stringify(options))
     this.evdnsServ.openActionSheet(options);
   }
 
@@ -97,22 +93,20 @@ export class EntityListingComponent {
     })
   }
 
-  openMenu(event, programIndex, assessmentIndex, entityIndex , submissionId) {
-    
-    const solutionId = this.entityList[programIndex].solutions[assessmentIndex]._id;
-    const parentEntityId = this.entityList[programIndex].solutions[assessmentIndex].entities[entityIndex]._id;
-    const createdByProgramId = this.entityList[programIndex]._id;
+  openMenu(...params) {
+    const solutionId = this.entityList[params[1]].solutions[params[2]]._id;
+    const parentEntityId = this.entityList[params[1]].solutions[params[2]].entities[params[3]]._id;
+    const createdByProgramId = this.entityList[params[1]]._id;
     this.openMenuEvent.emit({
-      event: event,
-      programIndex: programIndex,
-      assessmentIndex: assessmentIndex,
-      entityIndex: entityIndex,
-      submissionId : submissionId,
+      event: params[0],
+      programIndex: params[1],
+      assessmentIndex: params[2],
+      entityIndex: params[3],
+      submissionId : params[4],
       solutionId :solutionId,
       parentEntityId : parentEntityId,
       createdByProgramId :createdByProgramId
     });
-    //console.log("emitting")
 
   }
 }
