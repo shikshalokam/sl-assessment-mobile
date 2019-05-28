@@ -3,6 +3,7 @@ import { AppConfigs } from '../appConfig';
 import { ApiProvider } from '../api/api';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { UtilsProvider } from '../utils/utils';
+import { UpdateLocalSchoolDataProvider } from '../update-local-school-data/update-local-school-data';
 import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { PopoverController } from 'ionic-angular';
 
@@ -18,6 +19,7 @@ export class AssessmentServiceProvider {
   constructor(
     private apiService: ApiProvider,
     private localStorage: LocalStorageProvider,
+    private ulsdp: UpdateLocalSchoolDataProvider,
     private popoverCtrl: PopoverController,
     private utils: UtilsProvider) {
     console.log('Hello AssessmentServiceProvider Provider');
@@ -136,10 +138,13 @@ export class AssessmentServiceProvider {
     const url = AppConfigs.assessmentsList.detailsOfAssessment + programs[programIndex]._id + "?solutionId=" + programs[programIndex].solutions[assessmentIndex]._id + "&entityId=" + programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]._id;
     //console.log(url);
     this.apiService.httpGet(url, success => {
+      this.ulsdp.mapSubmissionDataToQuestion(success.result);
+      const generalQuestions = success.result['assessment']['generalQuestions'] ? success.result['assessment']['generalQuestions'] : null;
+      this.localStorage.setLocalStorage("generalQuestions_" + success.result['assessment']["submissionId"], generalQuestions);
+      this.localStorage.setLocalStorage("generalQuestionsCopy_" + success.result['assessment']["submissionId"], generalQuestions);
       programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].downloaded = true;
       programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId = success.result.assessment.submissionId;
-      //console.log(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId + "          Submission id =             " + success.result.assessment.submissionId)
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId), success.result);
+      // this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId), success.result);
       this.localStorage.setLocalStorage(`${assessmentType}List`, programs);
       this.utils.stopLoader();
       

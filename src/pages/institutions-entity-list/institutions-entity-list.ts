@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, App, PopoverController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
-import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { AppConfigs } from '../../providers/appConfig';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -45,35 +44,36 @@ export class InstitutionsEntityList {
 
 
   getAssessmentsApi() {
-    this.assessmentService.getAssessmentsApi ('institutional').then(programs =>{
+    this.assessmentService.getAssessmentsApi('institutional').then(programs => {
       this.programs = programs;
       //console.log("success in institutional list api function");
+
 
     }).catch(error=>{
       //console.log("error in institutional list api function");
     })
-    
+
 
   }
 
   refresh(event?: any) {
-   event ? this.assessmentService.refresh(this.programs ,'institutional', event).then( program =>{
-     this.programs = program;
-   }).catch( error=>{})
-   : 
-   this.assessmentService.refresh(this.programs,'institutional').then(program =>{
-    this.programs = program;
-   }
-   ).catch( error =>{
+    event ? this.assessmentService.refresh(this.programs, 'institutional', event).then(program => {
+      this.programs = program;
+    }).catch(error => { })
+      :
+      this.assessmentService.refresh(this.programs, 'institutional').then(program => {
+        this.programs = program;
+      }
+      ).catch(error => {
 
-   });
+      });
   }
 
 
   getAssessmentDetails(event) {
-    this.assessmentService.getAssessmentDetails(event,this.programs ,'institutional').then(program=>{
-    this.programs = program;
-    }).catch(error=>{
+    this.assessmentService.getAssessmentDetails(event, this.programs, 'institutional').then(program => {
+      this.programs = program;
+    }).catch(error => {
 
     })
   }
@@ -102,9 +102,6 @@ export class InstitutionsEntityList {
   //   //console.log(JSON.stringify(event) )
 
   //   this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
-      
-  //     //console.log(JSON.stringify(successData));
-  //   //console.log("go to ecm called");
 
 
   //     if (successData.assessment.evidences.length > 1) {

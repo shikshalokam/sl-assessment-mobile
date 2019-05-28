@@ -143,6 +143,7 @@ export class SectionListPage {
   }
 
   goToQuestioner(selectedSection): void {
+    console.log(this.submissionId +  "sectionlist")
     const params = {
       _id: this.submissionId,
       name: this.entityName,
