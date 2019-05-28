@@ -71,6 +71,7 @@ export class UpdateLocalSchoolDataProvider {
   updateSubmissionsOnLogin(schoolData) {
     for (const evidence of schoolData.assessments[0].evidences) {
       const validSubmission = schoolData.assessments[0].submissions[evidence.externalId];
+      evidence.notApplicable = validSubmission? validSubmission.notApplicable: false;
       if (validSubmission) {
         for (const section of evidence.sections) {
           for (const question of section.questions) {
