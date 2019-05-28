@@ -26,7 +26,7 @@ export class EvidenceListPage {
     private feedback: FeedbackProvider, private evdnsServ: EvidenceProvider, private platform: Platform) {
     this.entityId = this.navParams.get('_id');
     this.entityName = this.navParams.get('name');
-    this.submissionId = this.navParams.get('submissionId');
+    // this.submissionId = this.navParams.get('submissionId');
   }
  
   ionViewWillEnter() {

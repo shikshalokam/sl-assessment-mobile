@@ -20,8 +20,8 @@ export class InstitutionsEntityList {
     public navParams: NavParams,
     private popoverCtrl: PopoverController,
     private localStorage: LocalStorageProvider,
-    private assessmentService : AssessmentServiceProvider,
-    ) {
+    private assessmentService: AssessmentServiceProvider,
+  ) {
   }
 
   ionViewDidLoad() {
@@ -42,35 +42,35 @@ export class InstitutionsEntityList {
 
 
   getAssessmentsApi() {
-    this.assessmentService.getAssessmentsApi ('institutional').then(programs =>{
+    this.assessmentService.getAssessmentsApi('institutional').then(programs => {
       this.programs = programs;
       console.log("success in institutional list api function");
 
-    }).catch(error=>{
+    }).catch(error => {
       console.log("error in institutional list api function");
     })
-    
+
 
   }
 
   refresh(event?: any) {
-   event ? this.assessmentService.refresh(this.programs ,'institutional', event).then( program =>{
-     this.programs = program;
-   }).catch( error=>{})
-   : 
-   this.assessmentService.refresh(this.programs,'institutional').then(program =>{
-    this.programs = program;
-   }
-   ).catch( error =>{
+    event ? this.assessmentService.refresh(this.programs, 'institutional', event).then(program => {
+      this.programs = program;
+    }).catch(error => { })
+      :
+      this.assessmentService.refresh(this.programs, 'institutional').then(program => {
+        this.programs = program;
+      }
+      ).catch(error => {
 
-   });
+      });
   }
 
 
   getAssessmentDetails(event) {
-    this.assessmentService.getAssessmentDetails(event,this.programs ,'institutional').then(program=>{
-    this.programs = program;
-    }).catch(error=>{
+    this.assessmentService.getAssessmentDetails(event, this.programs, 'institutional').then(program => {
+      this.programs = program;
+    }).catch(error => {
 
     })
   }
@@ -99,7 +99,7 @@ export class InstitutionsEntityList {
   //   console.log(JSON.stringify(event) )
 
   //   this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
-      
+
   //     console.log(JSON.stringify(successData));
   //   console.log("go to ecm called");
 
@@ -124,21 +124,21 @@ export class InstitutionsEntityList {
   openMenu(event) {
 
     var myEvent = event.event;
-    var  programIndex =  event.programIndex;
-    var assessmentIndex = event.assessmentIndex ;
+    var programIndex = event.programIndex;
+    var assessmentIndex = event.assessmentIndex;
     var schoolIndex = event.entityIndex;
-    console.log(JSON.stringify(this.programs) +"programs");
+    console.log(JSON.stringify(this.programs) + "programs");
     // console.log(programIndex + " "+ assessmentIndex+" "+schoolIndex)
     // console.log(JSON.stringify(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id']));
     // console.log(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name']);
     // console.log(this.programs[programIndex]._id);
-  
+
     let popover = this.popoverCtrl.create(MenuItemComponent, {
-      submissionId:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
-      _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
+      submissionId: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId,
+      _id: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
       name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
       programId: this.programs[programIndex]._id,
-     
+
     });
     popover.present({
       ev: myEvent
