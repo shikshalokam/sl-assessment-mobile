@@ -7,23 +7,23 @@
 
 <ion-content padding class="_questioner-padding">
   <div class="disableOverLay" *ngIf="isCurrentEvidenceSubmitted || isViewOnly "></div>
-  <div class="_container">
+  <div class="_container" *ngIf="submissionId">
     <ng-container *ngFor="let question of questions| slice:start:end; let i=index">
       <ng-container [ngSwitch]="question.responseType.toLowerCase()">
-        <input-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+        <input-type [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [data]="question"
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'"></input-type>
-        <input-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+        <input-type [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'"></input-type>
-        <radio-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+        <radio-type [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'"></radio-type>
-        <date-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+        <date-type [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
         <multiple-choice-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+          [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'multiselect'"></multiple-choice-type>
         <matrix-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'">
+          [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'">
         </matrix-type>
-        <slider [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+        <slider [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'slider'"></slider>
       </ng-container>
     </ng-container>

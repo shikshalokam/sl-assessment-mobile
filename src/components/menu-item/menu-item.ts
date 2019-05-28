@@ -121,7 +121,7 @@ export class MenuItemComponent {
 
   refreshSchoolData(): void {
     const schoolData = {
-      _id: this.schoolId,
+      _id: this.submissionId,
       name: this.schoolName,
     };
     this.usld.getLocalData(schoolData);
