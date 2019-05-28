@@ -40,6 +40,7 @@ export class QuestionerPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad Questioner');
     this.submissionId = this.navParams.get('_id');
+    console.log(this.submissionId)
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.selectedSectionIndex = this.navParams.get('selectedSection');
