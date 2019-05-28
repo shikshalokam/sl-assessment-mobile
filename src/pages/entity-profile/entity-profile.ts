@@ -34,13 +34,13 @@ export class EntityProfilePage {
   }
 
   ionViewWillEnter() {
-    console.log('ionViewDidLoad EntityProfilePage');
+    //console.log('ionViewDidLoad EntityProfilePage');
     this.entityId = this.navParams.get('_id');
     this.entityName = this.navParams.get('name');
     this.utils.startLoader()
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(data => {
       const entityData = data;
-      console.log(JSON.stringify(data))
+      //console.log(JSON.stringify(data))
       this.entityProfile = entityData['entityProfile']['form'];
       this.submissionId = entityData['assessments'].submissionId;
       this.isEditable = entityData['entityProfile']['isEditable'];
@@ -84,7 +84,7 @@ export class EntityProfilePage {
   }
 
   goToParentList() {
-    this.navCtrl.push('ParentsListPage', { _id: this.entityId, name: this.entityName })
+    this.navCtrl.push('RegistryListPage', { _id: this.entityId, name: this.entityName })
   }
 
 

@@ -4,6 +4,7 @@ import { AppConfigs } from '../../providers/appConfig';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 // @IonicPage()
 @Component({
@@ -21,6 +22,7 @@ export class IndividualListingPage {
     private popoverCtrl: PopoverController,
     private localStorage: LocalStorageProvider,
     private assessmentService :AssessmentServiceProvider,
+    private utils : UtilsProvider
     ) {
   }
 
@@ -124,31 +126,46 @@ export class IndividualListingPage {
   //   }).catch(error => {
   //   })
   // }
-  openMenu(event) {
+  // openMenu(event) {
+    
+  //   var myEvent = event.event;
+  //   var  programIndex =  event.programIndex;
+  //   var assessmentIndex = event.assessmentIndex ;
+  //   var schoolIndex = event.entityIndex;
+  //   var submissionId = event.submissionId;
+  //   let showMenuArray;
+  //     console.log(submissionId + "submissionid");
+  //   this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => { 
+  //     showMenuArray= successData.solution.registry ;
+  //     console.log("success data")
+  //     console.log(JSON.stringify(successData.solution.registry ) + "         REGISTERY ARRAY     " + submissionId)
+  //     let popover = this.popoverCtrl.create(MenuItemComponent, {
+  //       submissionId: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId,
+        
+  //       _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
+  //       name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
+  //       programId: this.programs[programIndex]._id,
+  //       // hideTeacherRegistry : false,
+  //       // hideLeaderRegistry:false,
+  //       // hideFeedback:false,
+  //        // hideTeacherRegistry : false,
+  //       // hideLeaderRegistry:false,
+  //       // hideFeedback:false
+  //       showMenuArray : showMenuArray
+  //     });
+  //     popover.present({
+  //       ev: myEvent
+  //     });
+  //   }).catch( error =>{
 
-    var myEvent = event.event;
-    var  programIndex =  event.programIndex;
-    var assessmentIndex = event.assessmentIndex ;
-    var schoolIndex = event.entityIndex;
-    console.log(JSON.stringify(this.programs));
-    // console.log(programIndex + " "+ assessmentIndex+" "+schoolIndex)
-    // console.log(JSON.stringify(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id']));
-    // console.log(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name']);
-    // console.log(this.programs[programIndex]._id);
+  //   })
+
+  //   // console.log(programIndex + " "+ assessmentIndex+" "+schoolIndex)
+  //   // console.log(JSON.stringify(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['_id']));
+  //   // console.log(this.programs[programIndex].assessments[assessmentIndex].schools[schoolIndex]['name']);
+  //   // console.log(this.programs[programIndex]._id);
   
-    let popover = this.popoverCtrl.create(MenuItemComponent, {
-      submissionId: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId,
-      
-      _id:this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
-      name: this.programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['name'],
-      programId: this.programs[programIndex]._id,
-      hideTeacherRegistry : false,
-      hideLeaderRegistry:false,
-      hideFeedback:false
-    });
-    popover.present({
-      ev: myEvent
-    });
-  }
+ 
+  // }
 
 }

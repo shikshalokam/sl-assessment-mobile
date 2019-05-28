@@ -19,6 +19,7 @@ import { DynamicFormComponent } from './dynamic-form/dynamic-form';
 import { SlackProvider } from '../providers/slack/slack';
 import { SliderComponent } from './slider/slider';
 import { EntityListingComponent } from './entity-listing/entity-listing';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
 	declarations: [
@@ -39,7 +40,8 @@ import { EntityListingComponent } from './entity-listing/entity-listing';
   ],
 	imports: [
 		IonicModule,
-		DirectivesModule,
+    DirectivesModule,
+    PipesModule,
     TranslateModule,
   
 	],
