@@ -79,7 +79,7 @@ export class ObservationsPage {
         for (const assessment of program.assessments) {
           for(const school of assessment.schools){
             if (school.downloaded) {
-              downloadedAssessments.push(school.id);
+              downloadedAssessments.push(school._id);
             }
           }
          
@@ -94,7 +94,7 @@ export class ObservationsPage {
           for (const assessment of program.assessments) {
           for (const school of assessment.schools) {
             
-            if (downloadedAssessments.indexOf(school.id) >= 0) {
+            if (downloadedAssessments.indexOf(school._id) >= 0) {
               school.downloaded = true;
             }
           }
