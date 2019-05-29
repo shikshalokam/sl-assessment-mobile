@@ -70,6 +70,7 @@ import { InstitutionsEntityList } from '../pages/institutions-entity-list/instit
 import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.module';
 import { ObservationsPageModule } from '../pages/observations/observations.module';
 import { AssessmentServiceProvider } from '../providers/assessment-service/assessment-service';
+import { Deeplinks } from '@ionic-native/deeplinks';
 
 @NgModule({
   declarations: [
@@ -118,8 +119,7 @@ import { AssessmentServiceProvider } from '../providers/assessment-service/asses
     RatedCriteriaListPageModule,
     RegistryListPageModule,
     GeneralQuestionListPageModule,
-    ObservationsPageModule
-  ],
+    ObservationsPageModule  ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
@@ -174,7 +174,9 @@ import { AssessmentServiceProvider } from '../providers/assessment-service/asses
     Keyboard,
     LocalStorageProvider,
     HTTP,
-    AssessmentServiceProvider
+    AssessmentServiceProvider,
+    Deeplinks
+
   ]
 })
 export class AppModule { }
