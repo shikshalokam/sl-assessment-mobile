@@ -15,6 +15,7 @@ import { AboutPage } from '../pages/about/about';
 import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
 import { UtilsProvider } from '../providers/utils/utils';
 import { ObservationsPage } from '../pages/observations/observations';
+import { Deeplinks } from '@ionic-native/deeplinks';
 
 @Component({
   templateUrl: 'app.html'
@@ -76,31 +77,36 @@ export class MyApp {
     private alertCtrl: AlertController,
     private translate: TranslateService,
     private network: Network,
-    private app: App,
-    private events :Events,
+    private events: Events,
     private networkGpsProvider: NetworkGpsProvider,
     private menuCntrl: MenuController,
-    private utils: UtilsProvider
+    private deepLinks: Deeplinks,
   ) {
-    this.events.subscribe('navigateTab',data=>{
+
+
+
+
+
+    this.events.subscribe('navigateTab', data => {
       console.log(data);
-      let index : number = this.findIndex(data);
+      let index: number = this.findIndex(data);
       this.goToPage(index);
     })
-    this.events.subscribe('loginSuccess', data =>{
-      if(data == true){
-      // this.goToPage(0);
-      for (const page of this.allPages) {
-        page['active'] = false;
-      }
-      this.allPages[0]['active']= true;
+    this.events.subscribe('loginSuccess', data => {
+      if (data == true) {
+        // this.goToPage(0);
+        for (const page of this.allPages) {
+          page['active'] = false;
+        }
+        this.allPages[0]['active'] = true;
 
       }
     })
 
     platform.ready().then(() => {
+
       // this.goToPage(0);
-      console.log("go to page")
+      // console.log("go to page")
 
       // this.currentPage = this.nav.getActive();
       // Okay, so the platform is ready and our plugins are available.
@@ -119,6 +125,7 @@ export class MyApp {
       // this.events.subscribe('network:online', () => {
       //   alert('network:online ==> ' + this.network.type);
       // });
+
     });
 
   }
@@ -166,12 +173,8 @@ export class MyApp {
   initilaizeApp(): void {
     this.statusBar.styleDefault();
     this.statusBar.overlaysWebView(false);
-
-    // this.statusBar.backgroundColorByName(black)
     this.currentUser.checkForTokens().then(response => {
-      console.log("Deiactivated " + response.isDeactivated)
       this.rootPage = WelcomePage;
-
       if (response.isDeactivated) {
         this.rootPage = WelcomePage;
         this.allPages[0]['active'] = true;
@@ -185,8 +188,21 @@ export class MyApp {
           page['active'] = false;
         }
         this.allPages[0]['active'] = true;
-        // this.splashScreen.hide()
-        // this.statusBar.overlaysWebView(false);
+        const paths = {
+          '/about-us': AboutPage,
+          '/home': HomePage,
+          '/individual': IndividualListingPage,
+          '/institutional': InstitutionsEntityList,
+          '/faq': FaqPage,
+        }
+        this.deepLinks.route( paths ).subscribe(match => {
+          this.rootPage = paths[match['$link']['path']];
+          console.log(JSON.stringify(match))
+          console.log('Successfully matched route', match);
+        }, nomatch => {
+          console.log(JSON.stringify(nomatch))
+          console.error('Got a deeplink that didn\'t match', nomatch);
+        });
       }
 
     }).catch(error => {
@@ -233,13 +249,13 @@ export class MyApp {
       }
     })
   }
-  findIndex(componentName){
-    let currentIndex ;
-    this.allPages.forEach((page,index) =>{
-      if(componentName == page['name']){
+  findIndex(componentName) {
+    let currentIndex;
+    this.allPages.forEach((page, index) => {
+      if (componentName == page['name']) {
         currentIndex = index;
       }
-    } );
+    });
     return currentIndex;
   }
 
