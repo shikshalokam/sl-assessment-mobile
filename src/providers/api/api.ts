@@ -255,4 +255,33 @@ export class ApiProvider {
     });
   }
 
+  getLocalJson(url ){
+    console.log(url);
+   return this.ngHttp.get("assets/addObservation.json");
+    // this.ngHttp.get("assets/addObservation.json").subscribe(data => {
+    // }).catch(error => {
+
+    //   console.log(JSON.stringify(error));
+    //   const errorDetails = error['error'] ? JSON.parse(error['error']) : error ;
+    //   if (errorDetails.status === "ERR_TOKEN_INVALID") {
+    //     this.errorTokenRetryCount++;
+    //   } else {
+    //     this.utils.openToast(error.message, 'Ok');
+    //     const errorObject = { ...this.errorObj };
+    //     errorObject.text = `API failed. URL: ${url}. Error  Details ${JSON.stringify(error)}`;
+    //     this.slack.pushException(errorObject);
+    //   }
+    // })
+    // console.log(url);
+
+    // this.http.get(url , { } , {}).then(data => 
+    //   {
+    //     console.log("function sucess");
+    //     console.log(JSON.stringify(data.data));
+    //   successCallback(JSON.parse(data.data));
+
+    //   }).catch( error =>{
+
+    //   });  
+  }
 } 

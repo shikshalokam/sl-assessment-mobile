@@ -8,7 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class DynamicFormComponent implements OnChanges {
 
   @Input() formFields: any;
-  form: FormGroup;
+  @Input() form: FormGroup;
 
   constructor() {
     console.log('Hello DynamicFormComponent Component');
@@ -33,7 +33,7 @@ export class DynamicFormComponent implements OnChanges {
     const changesCount = (changes && changes['formFields']['currentValue'] && changes['formFields']['currentValue'].length) ? changes['formFields']['currentValue'].length : 0;
     if (changes && changesCount > 0) {
       this.formFields = changes['formFields']['currentValue'];
-      this.form = this.createFormGroup();
+      this.form = this.form ? this.form : this.createFormGroup();
       console.dir(this.form);
     }
   }
