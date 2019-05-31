@@ -9,7 +9,8 @@ import { TranslateModule } from '@ngx-translate/core';
     AddObservationPage,
   ],
   imports: [
-    ComponentsModule,TranslateModule,
+    ComponentsModule,
+    TranslateModule,
     IonicPageModule.forChild(AddObservationPage),
   ],
 })

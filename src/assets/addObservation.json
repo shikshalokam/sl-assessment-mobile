@@ -1,0 +1,137 @@
+{
+    "form" : [
+        {
+            "field": "programName",
+            "label": "program Name",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "text",
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "programDesc",
+            "label": "program Desc",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "text",
+            "validation":{
+                "required":true
+            }
+        },
+      
+        {
+            "field": "keywords",
+            "label": "Keywords",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "text",
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "language",
+            "label": "Language",
+            "value": "1412153",
+            "visible": true,
+            "editable": true,
+            "input": "select",
+            "options": [
+                {
+                    "value": "en",
+                    "label": "English"
+                },
+                {
+                    "value": "kn",
+                    "label": "Kannada"
+                },
+                {
+                    "value": "te",
+                    "label": "Telugu"
+                },
+                {
+                    "value": "hi",
+                    "label": "Hindi"
+                },
+                {
+                    "value": "ml",
+                    "label": "Malayalam"
+                }
+            ],
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "status",
+            "label": "Status",
+            "value": "Draft",
+            "visible": true,
+            "editable": true,
+            "input": "text",
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "startDate",
+            "label": "Start Date",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "date",
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "endDate",
+            "label": "End Date",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "date",
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "schools",
+            "label": "Schools",
+            "value": [],
+            "visible": true,
+            "editable": true,
+            "input": "multiselect",
+            "validation":{
+                "requireds":true
+            }
+        },
+        {
+            "field": "category",
+            "label": "Category",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "select",
+            "options": [
+                {
+                    "label": "Classroom  Observation",
+                    "value": "CO"
+                },
+                {
+                    "label": "Teacher Observation",
+                    "value": "TO"
+                }
+            ],
+            "validation":{
+                "required":true
+            }
+        }
+
+    ]
+}

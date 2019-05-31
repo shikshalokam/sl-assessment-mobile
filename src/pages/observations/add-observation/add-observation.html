@@ -1,11 +1,69 @@
-
-
 <ion-header>
-    <header [title]="'headings.observations'|translate" [hideBack]="false">
-    </header>
-  </ion-header>
-  
+  <header [title]="'headings.observations'|translate" [hideBack]="false">
+  </header>
+</ion-header>
 
-<ion-content padding>
 
+
+<ion-content   *ngIf="addObservationForm">
+  <div style="padding-bottom:60px">
+  <dynamic-form [formFields]="addObservationData" [form]="addObservationForm"></dynamic-form>
+  <span *ngIf="addObservationForm.controls.category.value"   >
+    <span *ngIf = "addObservationForm.controls.category.value === 'CO'; else TO">
+      <ion-card *ngFor="let frameWork of listOfFrameWork[0]">
+          <ion-card-header>
+            <!-- {{frameWork}} -->
+            FrameWork {{frameWork}}          
+          </ion-card-header>
+        
+          <ion-list>
+            
+          </ion-list>
+        </ion-card>
+    </span> 
+    <ng-template #TO>
+        <ion-card *ngFor="let frameWork of listOfFrameWork[1]">
+            <ion-card-header>
+              <!-- {{frameWork}} -->
+              FrameWork {{frameWork}}
+            </ion-card-header>
+          
+            <ion-list>
+              
+            </ion-list>
+          </ion-card>
+    </ng-template>
+  <ion-row>
+    <ion-col>
+  <button ion-button full  (click)="saveDraft()" class="btnText">
+      <ion-icon name="md-bookmark" margin-right></ion-icon>
+      {{'buttons.save' | translate}}
+    </button>
+  </ion-col>
+<ion-col>
+    <button ion-button full (click)="addObservation()" class="btnText">
+      <ion-icon name="cloud-upload" margin-right></ion-icon>
+      {{'buttons.add' | translate}}
+    </button>
+  </ion-col>
+  </ion-row>
+</span>
+</div>
 </ion-content>
+
+<!-- <ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col class="_flex-box">
+        <button ion-button full  (click)="saveDraft()" class="btnText">
+          <ion-icon name="md-bookmark" margin-right></ion-icon>
+          {{'buttons.save' | translate}}
+        </button>
+        <button ion-button full (click)="addObservation()" class="btnText">
+          <ion-icon name="cloud-upload" margin-right></ion-icon>
+          {{'buttons.add' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer> -->
