@@ -37,7 +37,10 @@
         "rate": "Rate",
         "individual": "Individual",
         "institutional": "Institutions",
-        "observations":"Observations"
+        "observations":"Observations",
+        "myObservation":"My Observation",
+        "draftObservation":"Draft Observation",
+        "addObservation":"Add Observation"
 
     },
     "headings": {
