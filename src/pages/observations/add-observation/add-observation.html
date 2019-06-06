@@ -10,28 +10,54 @@
   <dynamic-form [formFields]="addObservationData" [form]="addObservationForm"></dynamic-form>
   <span *ngIf="addObservationForm.controls.category.value"   >
     <span *ngIf = "addObservationForm.controls.category.value === 'CO'; else TO">
-      <ion-card *ngFor="let frameWork of listOfFrameWork[0]">
+      <!-- <ion-card *ngFor="let frameWork of listOfFrameWork[0]">
           <ion-card-header>
-            <!-- {{frameWork}} -->
+            {{frameWork}}
             FrameWork {{frameWork}}          
           </ion-card-header>
         
           <ion-list>
             
           </ion-list>
-        </ion-card>
+        </ion-card> -->
+
+        <ion-list *ngFor="let frameWork of listOfFrameWork[0]">
+          <ion-item  (click)="selectSolution(frameWork)" [ngClass]="{'active': frameWork === selectedFrameWork}">
+            <!-- <ion-thumbnail item-start> -->
+              <!-- <img src="img/thumbnail-totoro.png"> -->
+              <ion-icon name="list-box"item-start></ion-icon>
+            <!-- </ion-thumbnail> -->
+            <h2>{{frameWork.name}}  </h2>
+            <p>{{frameWork.programId}}</p>
+            <button ion-button clear item-end (click)="showDetails(frameWork)">View</button>
+          </ion-item>
+        </ion-list>
+
     </span> 
     <ng-template #TO>
-        <ion-card *ngFor="let frameWork of listOfFrameWork[1]">
+        <!-- <ion-card *ngFor="let frameWork of listOfFrameWork[1]">
             <ion-card-header>
-              <!-- {{frameWork}} -->
+              {{frameWork}}
               FrameWork {{frameWork}}
             </ion-card-header>
           
             <ion-list>
               
             </ion-list>
-          </ion-card>
+          </ion-card> -->
+
+          <ion-list *ngFor="let frameWork of listOfFrameWork[1]">
+            <ion-item class="frameWorkList"  (click)="selectSolution(frameWork)" [ngClass]="{'active': frameWork === selectedFrameWork}">
+              <!-- <ion-thumbnail item-start> -->
+                <!-- <img src="img/thumbnail-totoro.png"> -->
+                <ion-icon name="list-box"item-start></ion-icon>
+              <!-- </ion-thumbnail> -->
+              <h2 text-wrap>{{frameWork.name}}  </h2>
+            <p text-wrap>{{frameWork.description}}</p>
+              <button ion-button clear item-end (click)="showDetails(frameWork);$event.stopPropagation() ">View</button>
+            </ion-item>
+          </ion-list>
+
     </ng-template>
   <ion-row>
     <ion-col>
