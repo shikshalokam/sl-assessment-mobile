@@ -71,6 +71,7 @@ import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.
 import { ObservationsPageModule } from '../pages/observations/observations.module';
 import { AssessmentServiceProvider } from '../providers/assessment-service/assessment-service';
 import { Deeplinks } from '@ionic-native/deeplinks';
+import { SolutionDetailsPage } from '../pages/solution-details/solution-details';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { Deeplinks } from '@ionic-native/deeplinks';
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
+    SolutionDetailsPage,
     RemarksPage,
     FeedbackPage,
     DetailPage,
@@ -130,6 +132,7 @@ import { Deeplinks } from '@ionic-native/deeplinks';
     FaqPage,
     EntityProfileEditPage,
     ImageListingPage,
+    SolutionDetailsPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
     RemarksPage,
