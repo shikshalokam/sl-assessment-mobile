@@ -1,25 +1,45 @@
-
 <ion-header>
-    <header [title]="'headings.observations'|translate" [hideBack]="false">
-    </header>
-  </ion-header>
-  
+  <header [title]="'headings.observations'|translate" [hideBack]="false">
+  </header>
+</ion-header>
+
+
+
 <ion-content>
-    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
-        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
-          refreshingText="Refreshing...">
-        </ion-refresher-content>
-      </ion-refresher>
-  <entity-listing
-  [entityList]="programs"  
-  [entityType]="'observations'" 
-  (getAssessmentDetailsEvent)="getAssessmentDetails($event)"
-  (refreshEvent)="refresh($event)"
-  (openMenuEvent)="openMenu($event)"
-  >
-</entity-listing>
-</ion-content>
-<ion-footer no-shadow>
+
+<div top class="_flex-box">
+
+      <ion-item>
+        <ion-input type="text" placeholder="Search observation"></ion-input>
+     
+          <!-- <ion-label>Tyoe</ion-label> -->
+          <ion-select [(ngModel)]="observationStatus">
+            
+            <ion-option *ngFor="let status of statusOption" value="{{status.value}}">{{status.label}}</ion-option>
+          </ion-select>
+        </ion-item>
+    
+</div>
+
+<!-- <div style="padding:60px 0 0 0;">
+  <ion-segment [(ngModel)]="actionType">
+    <ion-segment-button value="assignedToMe">
+      Assigned To Me
+    </ion-segment-button>
+    <ion-segment-button value="createdByMe">
+     Created By Me
+    </ion-segment-button>
+  </ion-segment>
+</div>
+
+<div [ngSwitch]="actionType" style="padding-bottom:160px;">
+  <div *ngSwitchCase="'assignedToMe'">
+    <ion-item>
+      <ion-thumbnail item-start>
+        <img src="img/thumbnail-puppy-1.jpg">
+      </ion-thumbnail>
+      <h2>Ruby</h2>
+    </ion-item>
     <ion-toolbar class="_toolbar-background-md" position="bottom">
       <ion-row>
         <ion-col>
@@ -30,6 +50,56 @@
         </ion-col>
       </ion-row>
     </ion-toolbar>
-</ion-footer>
+  </div>
+
+  <div *ngSwitchCase="'createdByMe'">
+    <ion-item>
+      <ion-thumbnail item-start>
+        <img src="img/thumbnail-kitten-1.jpg">
+      </ion-thumbnail>
+      <h2>Luna</h2>
+    </ion-item>
+    
+  
+</div>
+</div>
+ -->
 
 
+
+<ion-fab bottom right>
+  <button ion-fab mini (click)="addObservation()">
+    <ion-icon name="add"></ion-icon>
+  </button>
+</ion-fab>
+</ion-content>
+
+<!-- <ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button full (click)="refresh()" class="btnText">
+          <ion-icon name="refresh" margin-right></ion-icon>
+          {{'buttons.refresh' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer> -->
+
+<!-- <ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col class="_flex-box">
+        <button ion-button full  (click)="saveDraft()" class="btnText">
+          <ion-icon name="md-bookmark" margin-right></ion-icon>
+          {{'buttons.save' | translate}}
+        </button>
+        <button ion-button full (click)="addObservation()" class="btnText">
+          <ion-icon name="cloud-upload" margin-right></ion-icon>
+          {{'buttons.add' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer> -->

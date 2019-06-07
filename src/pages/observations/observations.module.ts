@@ -4,8 +4,8 @@ import { ObservationsPage } from './observations';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '../../components/components.module';
 import { DraftObservationPageModule } from './draft-observation/draft-observation.module';
-import { AddObservationPageModule } from './add-observation/add-observation.module';
 import { MyObservationPageModule } from './my-observation/my-observation.module';
+import { ViewObservationPageModule } from './view-observation/view-observation.module';
 
 @NgModule({
   declarations: [
@@ -16,8 +16,8 @@ import { MyObservationPageModule } from './my-observation/my-observation.module'
     TranslateModule,
     ComponentsModule,
     DraftObservationPageModule,
-    AddObservationPageModule,
     MyObservationPageModule,
+    ViewObservationPageModule,
     IonicPageModule.forChild(ObservationsPage),
   ],
 })

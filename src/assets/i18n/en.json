@@ -5,6 +5,7 @@
         "ratings": "Rate",
         "start": "Start",
         "survey": "survey",
+        "previous":"Previous",
         "save": "Save",
         "next": "Next",
         "back": "Back",
@@ -30,6 +31,7 @@
     },
     "tabs": {
         "home": "Home",
+        "view":"All",
         "mySchool": "My Schools",
         "faqs": "FAQs",
         "about": "About",
@@ -44,6 +46,7 @@
 
     },
     "headings": {
+        "addObservation":"Add Observation",
         "solutionDetails":"Solution Details",
         "home": "Home",
         "observations":"Observations",

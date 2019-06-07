@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import { ViewObservationPage } from './view-observation/view-observation';
 import { MyObservationPage } from './my-observation/my-observation';
-import { AddObservationPage } from './add-observation/add-observation';
 import { DraftObservationPage } from './draft-observation/draft-observation';
 
 /**
@@ -18,8 +18,8 @@ import { DraftObservationPage } from './draft-observation/draft-observation';
 })
 export class ObservationsPage {
 
+  viewObservationPage = ViewObservationPage;
   myObservationPage = MyObservationPage;
-  addObservationPage = AddObservationPage;
   draftObservationPage = DraftObservationPage;
   constructor(
     public navCtrl: NavController,
