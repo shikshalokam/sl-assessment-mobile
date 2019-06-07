@@ -1,8 +1,8 @@
 {
     "form" : [
         {
-            "field": "programName",
-            "label": "program Name",
+            "field": "name",
+            "label": " Name",
             "value": "",
             "visible": true,
             "editable": true,
@@ -12,8 +12,8 @@
             }
         },
         {
-            "field": "programDesc",
-            "label": "program Desc",
+            "field": "description",
+            "label": " Description",
             "value": "",
             "visible": true,
             "editable": true,
@@ -70,10 +70,20 @@
         {
             "field": "status",
             "label": "Status",
-            "value": "Draft",
+            "value": "draft",
             "visible": true,
             "editable": true,
-            "input": "text",
+            "input": "select",
+            "options":[
+                {
+                    "label":"Draft",
+                    "value":"draft"
+                },
+                {
+                    "label":"Active",
+                    "value":"active"
+                }
+            ],
             "validation":{
                 "required":true
             }
@@ -100,17 +110,7 @@
                 "required":true
             }
         },
-        {
-            "field": "schools",
-            "label": "Schools",
-            "value": [],
-            "visible": true,
-            "editable": true,
-            "input": "multiselect",
-            "validation":{
-                "requireds":true
-            }
-        },
+       
         {
             "field": "category",
             "label": "Category",

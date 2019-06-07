@@ -257,7 +257,7 @@ export class ApiProvider {
 
   getLocalJson(url ){
     console.log(url);
-   return this.ngHttp.get("assets/addObservation.json");
+   return this.ngHttp.get(url);
     // this.ngHttp.get("assets/addObservation.json").subscribe(data => {
     // }).catch(error => {
 

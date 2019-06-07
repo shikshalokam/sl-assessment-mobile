@@ -3,6 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { MyObservationPage } from './my-observation';
 import { ComponentsModule } from '../../../components/components.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { AddObservationFormPageModule } from '../add-observation-form/add-observation-form.module';
 
 @NgModule({
   declarations: [
@@ -10,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   imports: [
     ComponentsModule,
+    AddObservationFormPageModule,
     TranslateModule,
     IonicPageModule.forChild(MyObservationPage),
   ],

@@ -1,19 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
-import { ApiProvider } from '../../../providers/api/api';
 import { FormGroup } from '@angular/forms';
+import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
 import { SolutionDetailsPage } from '../../solution-details/solution-details';
 
+/**
+ * Generated class for the AddObservationFormPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
 @IonicPage()
 @Component({
-  selector: 'page-add-observation',
-  templateUrl: 'add-observation.html',
+  selector: 'page-add-observation-form',
+  templateUrl: 'add-observation-form.html',
 })
-export class AddObservationPage {
+export class AddObservationFormPage {
   addObservationData: {};
   addObservationForm: FormGroup;
   selectedFrameWork;
+  schoolList = [];
+  schools = [];
+  index =0;
+  @ViewChild('stepper') stepper1 : ElementRef;
   listOfFrameWork = [
     [
       {
@@ -433,6 +444,7 @@ export class AddObservationPage {
     ]
     
   ]
+  selectedIndex: any = 0;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -446,15 +458,57 @@ export class AddObservationPage {
     console.log('ionViewDidLoad AddObservationPage');
     this.apiProviders.getLocalJson('assets/addObservation.json').subscribe(successData => {
       this.addObservationData = JSON.parse(successData['_body']).form;
-      console.log(JSON.stringify(this.addObservationData));
+      // console.log(JSON.stringify(this.addObservationData['_body']));
 
       this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
     },
+
       error => {
 
-      })
+      });
+      this.apiProviders.getLocalJson('assets/schoolList.json').subscribe(schoolLists => {
+      // console.log(JSON.stringify(schoolLists['_body']));
+
+        this.schools = JSON.parse(schoolLists['_body']).form;
+      // console.log(JSON.stringify(this.schools));
+
+        this.schools.forEach(element => {
+          element.selected = false;
+        });
+       if(this.schools){
+        for (; (this.index < 10 )&& (this.index < this.schools.length); ) {
+          // console.log(this.schools[this.index].name)
+          this.schoolList.push( this.schools[this.index++]);
+        }
+       }
+       console.log(this.stepper1 );
+       console.log("stepper")
+       
+        // this.schoolList=schools;
+      },
+  
+        error => {
+  
+        });
+
+  }
+  doInfinite(infiniteScroll) {
+    // console.log('Begin async operation');
+
+    setTimeout(() => {
+      for (let i=0 ; ( i < 10 ) &&( this.index < this.schools.length); i++ ) {
+        this.schoolList.push( this.schools[this.index++] );
+      }
+
+      // console.log('Async operation has ended');
+      infiniteScroll.complete();
+    }, 500);
   }
 
+  selectChange(e) {
+    console.log(e);
+    this.selectedIndex = e ;
+  }
   saveDraft() {
 
   }

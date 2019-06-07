@@ -72,6 +72,7 @@ import { ObservationsPageModule } from '../pages/observations/observations.modul
 import { AssessmentServiceProvider } from '../providers/assessment-service/assessment-service';
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { SolutionDetailsPage } from '../pages/solution-details/solution-details';
+import { IonicStepperModule } from 'ionic-stepper';
 
 @NgModule({
   declarations: [
@@ -121,6 +122,8 @@ import { SolutionDetailsPage } from '../pages/solution-details/solution-details'
     RatedCriteriaListPageModule,
     RegistryListPageModule,
     GeneralQuestionListPageModule,
+    IonicStepperModule,
+
     ObservationsPageModule  ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -1,80 +1,508 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { AppConfigs } from '../../../providers/appConfig';
-import { LocalStorageProvider } from '../../../providers/local-storage/local-storage';
-import { AssessmentServiceProvider } from '../../../providers/assessment-service/assessment-service';
-
-
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { ApiProvider } from '../../../providers/api/api';
+import { FormGroup } from '@angular/forms';
+import { UtilsProvider } from '../../../providers/utils/utils';
+import { SolutionDetailsPage } from '../../solution-details/solution-details';
+import { AddObservationFormPage } from '../add-observation-form/add-observation-form';
 
 @IonicPage()
 @Component({
-  selector: 'page-my-observation',
+  selector: 'page-add-observation',
   templateUrl: 'my-observation.html',
 })
 export class MyObservationPage {
+  observationStatus='all'
+  statusOption = [
+    {
+      label:"All",
+      value:'all'
+    },
+    {
+      label:"Draft",
+      value:'draft'
+    },
+    {
+      label:"In Progress",
+      value:'inProgress'
+    },
+    {
+      label:"In Active",
+      value:"inActive"
+    }
+  ]
 
-  programs: any;
-  enableRefresh = AppConfigs.configuration.enableAssessmentListRefresh;
 
+  addObservationData: {};
+  addObservationForm: FormGroup;
+  selectedFrameWork;
+  listOfFrameWork = [
+    [
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      },
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      },
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      },
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      },
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      }
+
+    ],
+    [
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      },
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      },
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      },
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      },
+      {
+        _id: "5beaaa2baf0065f0e0a105c7",
+        externalId: "Apple-Assessment-Framework-2018-001",
+        name: "Apple Assessment Framework 2018-001",
+        description: "Apple Assessment Framework 2018-001",
+        author: "a082787f-8f8f-42f2-a706-35457ca6f1fd",
+        parentId: null,
+        startDate : "21 July 2019",
+        endDate : "21 August 2019",
+        resourceType: [
+          "Assessment Framework"
+        ],
+        language: [
+          "English"
+        ],
+        keywords: [
+          "Framework",
+          "Assessment"
+        ],
+        levelToScoreMapping: {
+          L1: {
+            points: 25,
+            label: "Not Good"
+          },
+          L2: {
+            points: 50,
+            label: "Decent"
+          },
+          L3: {
+            points: 75,
+            label: "Good"
+          },
+          L4: {
+            points: 100,
+            label: "Best"
+          }
+        },
+        entityType: "school",
+        type: "assessment",
+        subType: "institutional",
+      }
+
+    ]
+    
+  ]
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private localStorage: LocalStorageProvider,
-    private assessmentService:AssessmentServiceProvider,
-    ) {
+    public apiProviders: ApiProvider,
+    public utils: UtilsProvider,
+    private modalCtrl: ModalController
+  ) {
   }
 
   ionViewDidLoad() {
-    console.log("MY Observation page called");
-    this.localStorage.getLocalStorage('observationList').then(data => { 
-      if (data) {
-        this.programs = data;
-      } else {
-        this.getAssessmentsApi();
+    console.log('ionViewDidLoad AddObservationPage');
+    this.apiProviders.getLocalJson('assets/addObservation.json').subscribe(successData => {
+      this.addObservationData = JSON.parse(successData['_body']).form;
+      console.log(JSON.stringify(this.addObservationData));
+
+      this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
+    },
+      error => {
+
+      })
+  }
+
+  saveDraft() {
+
+  }
+  addObservation() {
+    console.log("called add Observation")
+      const params = {
       }
-    }).catch(error => {
-      this.getAssessmentsApi();
-    })
+      let addObservationForm = this.modalCtrl.create(AddObservationFormPage, { data: params});
+      addObservationForm.onDidDismiss(data => {
+        if (data) {
+          // data.programId = this.entityDetails['program']._id;
+          //console.log("Dismiss with valid data")
+          // data.entityId = this.entityId;
+          // data.entityName = this.entityName;
+          // this.registryList.push(data);
+          // this.showUploadBtn = this.checkForUploadBtn();
+          // this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.submissionId, this.registryList)
+        }
+      })
+      addObservationForm.present();
   }
-
- 
-  
-  getAssessmentsApi() {
-    this.assessmentService.getAssessmentsApi ('observation').then(programs =>{
-      this.programs = programs;
-      //console.log("success in observations list api function");
-
-    }).catch(error=>{
-      //console.log("error in observations list api function");
-    })
-    
-
+  selectSolution(frameWork) {
+    this.selectedFrameWork = frameWork;
   }
-
-  refresh(event?: any) {
-   event ? this.assessmentService.refresh(this.programs ,'observation', event).then( program =>{
-     this.programs = program;
-     //console.log(program);
-   }).catch( error=>{})
-   : 
-   this.assessmentService.refresh(this.programs,'observation').then(program =>{
-    this.programs = program;
-   }
-   ).catch( error =>{
-
-   });
-  }
-
-
-  getAssessmentDetails(event) {
-    this.assessmentService.getAssessmentDetails(event,this.programs ,'observation').then(program=>{
-    this.programs = program;
-    }).catch(error=>{
-
-    })
-  }
-
-  openMenu(event) {
-    this.assessmentService.openMenu(event,this.programs , false);
+  showDetails(frameWork) {
+    let contactModal = this.modalCtrl.create(SolutionDetailsPage, { data: frameWork });
+    contactModal.present();
   }
 }
