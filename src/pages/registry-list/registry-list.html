@@ -1,5 +1,5 @@
 <ion-header>
-  <header [title]="'headings.'+registryType+'Registry'|translate" [hideBack]="false">
+  <header [title]="registryType+' Registry'" [hideBack]="false">
 
   </header>
 </ion-header>
@@ -16,7 +16,7 @@
       Refresh
     </button>
     <button ion-button icon-start float-right color="primary" (click)="addRegistryItem()">
-      {{'buttons.add'| translate}} {{'buttons.'+registryType | translate}}
+      {{'Add '+registryType}} 
     </button>
   </div>
 
