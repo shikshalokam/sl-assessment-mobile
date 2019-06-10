@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
 import { SolutionDetailsPage } from '../../solution-details/solution-details';
+import { SchoolListPage } from './school-list/school-list';
 
 /**
  * Generated class for the AddObservationFormPage page.
@@ -21,6 +22,7 @@ export class AddObservationFormPage {
   addObservationData: {};
   addObservationForm: FormGroup;
   selectedFrameWork;
+  selectedSchools = [];
   schoolList = [];
   schools = [];
   index =0;
@@ -458,19 +460,14 @@ export class AddObservationFormPage {
     console.log('ionViewDidLoad AddObservationPage');
     this.apiProviders.getLocalJson('assets/addObservation.json').subscribe(successData => {
       this.addObservationData = JSON.parse(successData['_body']).form;
-      // console.log(JSON.stringify(this.addObservationData['_body']));
-
       this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
     },
 
       error => {
-
       });
       this.apiProviders.getLocalJson('assets/schoolList.json').subscribe(schoolLists => {
-      // console.log(JSON.stringify(schoolLists['_body']));
 
         this.schools = JSON.parse(schoolLists['_body']).form;
-      // console.log(JSON.stringify(this.schools));
 
         this.schools.forEach(element => {
           element.selected = false;
@@ -484,7 +481,6 @@ export class AddObservationFormPage {
        console.log(this.stepper1 );
        console.log("stepper")
        
-        // this.schoolList=schools;
       },
   
         error => {
@@ -492,18 +488,7 @@ export class AddObservationFormPage {
         });
 
   }
-  doInfinite(infiniteScroll) {
-    // console.log('Begin async operation');
-
-    setTimeout(() => {
-      for (let i=0 ; ( i < 10 ) &&( this.index < this.schools.length); i++ ) {
-        this.schoolList.push( this.schools[this.index++] );
-      }
-
-      // console.log('Async operation has ended');
-      infiniteScroll.complete();
-    }, 500);
-  }
+ 
 
   selectChange(e) {
     console.log(e);
@@ -521,5 +506,19 @@ export class AddObservationFormPage {
   showDetails(frameWork) {
     let contactModal = this.modalCtrl.create(SolutionDetailsPage, { data: frameWork });
     contactModal.present();
+  }
+  openSchoolListmodal(){
+   let schoolListModal =  this.modalCtrl.create(SchoolListPage, {
+     schoolList : this.schoolList,
+     schools: this.schools,
+     index: this.index
+     }) ;
+     schoolListModal.onDidDismiss( schoolList => {
+      this.selectedSchools = schoolList;
+      console.log(this.selectedSchools.length)
+     });
+    schoolListModal.present();
+
+
   }
 }

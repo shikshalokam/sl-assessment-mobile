@@ -73,6 +73,7 @@ import { AssessmentServiceProvider } from '../providers/assessment-service/asses
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { SolutionDetailsPage } from '../pages/solution-details/solution-details';
 import { IonicStepperModule } from 'ionic-stepper';
+import { SchoolListPage } from '../pages/observations/add-observation-form/school-list/school-list';
 
 @NgModule({
   declarations: [
@@ -144,7 +145,8 @@ import { IonicStepperModule } from 'ionic-stepper';
     GeneralQuestionPage,
     GeneralQuestionSubmitPage,
     IndividualListingPage,
-    ProgramDetailsPage
+    ProgramDetailsPage,
+    
   ],
   providers: [
     StatusBar,

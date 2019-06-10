@@ -6,18 +6,25 @@ import { AddObservationFormPage } from './add-observation-form';
 import IonicStepperModule from 'ionic-stepper';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SchoolListPage } from './school-list/school-list';
 
 @NgModule({
   declarations: [
-      AddObservationFormPage
+      AddObservationFormPage,
+      SchoolListPage
   ],
   imports: [
     ComponentsModule,
     TranslateModule,
     IonicStepperModule,
     BrowserAnimationsModule,
+  
 
     IonicPageModule.forChild(AddObservationFormPage),
   ],
+  entryComponents:[
+    SchoolListPage
+  ]
+
 })
 export class AddObservationFormPageModule {}
