@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, App } from 'ionic-angular';
 import { ApiProvider } from '../../../providers/api/api';
 import { FormGroup } from '@angular/forms';
 import { UtilsProvider } from '../../../providers/utils/utils';
@@ -460,7 +460,8 @@ export class MyObservationPage {
     public navParams: NavParams,
     public apiProviders: ApiProvider,
     public utils: UtilsProvider,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private app :App
   ) {
   }
 
@@ -484,25 +485,28 @@ export class MyObservationPage {
     console.log("called add Observation")
       const params = {
       }
-      let addObservationForm = this.modalCtrl.create(AddObservationFormPage, { data: params});
-      addObservationForm.onDidDismiss(data => {
-        if (data) {
-          // data.programId = this.entityDetails['program']._id;
-          //console.log("Dismiss with valid data")
-          // data.entityId = this.entityId;
-          // data.entityName = this.entityName;
-          // this.registryList.push(data);
-          // this.showUploadBtn = this.checkForUploadBtn();
-          // this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.submissionId, this.registryList)
-        }
-      })
-      addObservationForm.present();
+      // this.app.getRootNav().setRoot(AddObservationFormPage, { data: params});
+
+this.app.getRootNav().push(AddObservationFormPage, { data: params})
+      // let addObservationForm = this.navCtrl.push(AddObservationFormPage, { data: params});
+      // addObservationForm.onDidDismiss(data => {
+      //   if (data) {
+      //     // data.programId = this.entityDetails['program']._id;
+      //     //console.log("Dismiss with valid data")
+      //     // data.entityId = this.entityId;
+      //     // data.entityName = this.entityName;
+      //     // this.registryList.push(data);
+      //     // this.showUploadBtn = this.checkForUploadBtn();
+      //     // this.localStorage.setLocalStorage(this.registryType + 'Details_' + this.submissionId, this.registryList)
+      //   }
+      // })
+      // addObservationForm.present();
   }
   selectSolution(frameWork) {
     this.selectedFrameWork = frameWork;
   }
   showDetails(frameWork) {
-    let contactModal = this.modalCtrl.create(SolutionDetailsPage, { data: frameWork });
-    contactModal.present();
+    let contactModal = this.navCtrl.push(SolutionDetailsPage, { data: frameWork });
+    // contactModal.present();
   }
 }

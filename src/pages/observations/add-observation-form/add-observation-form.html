@@ -5,8 +5,8 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <header [title]="'headings.addObservation'|translate" [hideBack]="false" [showClose]="true" [disableNetwork]="true"
-    [showMenu]="false">
+  <header [title]="'headings.addObservation'|translate" [hideBack]="false" [showClose]="false" [disableNetwork]="true"
+    [showMenu]="false" >
   </header>
   <!-- <header [title]="'headings.observations'|translate" [hideBack]="true" [showClose]="true" [disableNetwork]="true"> -->
 
@@ -21,7 +21,7 @@
   <ion-stepper [mode]="'horizontal'" #stepper (selectIndexChange)="selectChange($event)">
 
 
-    <ion-step label="Details" style="position: fixed;">
+    <ion-step label="Details"  >
       <div  class="fixBox">
         <dynamic-form [formFields]="addObservationData" [form]="addObservationForm"></dynamic-form>
       </div>
@@ -29,57 +29,43 @@
     </ion-step>
 
 
-    <ion-step >
-        <div top class="_flex-box ">
+    <ion-step label="Schools">
+      
+      <!-- <div *ngIf="schoolList && schools" class="fixBox">
+          <selectable-list [selectableList]="schoolList" [itemsPerShot]="index" [list]="schools"></selectable-list>
+      </div> -->
+      <ion-row>
+      
+        <ion-col >
 
-            <ion-item padding-bottom>
-              <ion-input type="text" placeholder="Search observation"></ion-input>
-                <!-- <ion-label>Tyoe</ion-label> -->
-                <!-- <ion-select [(ngModel)]="observationStatus">
-                  <ion-option *ngFor="let status of statusOption" value="{{status.value}}">{{status.label}}</ion-option>
-                </ion-select> -->
-              </ion-item>
-      </div>
-      <div class="fixBox" >
-
-      <ion-list *ngIf="schoolList">
-          <!-- <ion-list-header>
-            School List
-          </ion-list-header> -->
-          <ion-item *ngFor="let school of schoolList">
-            <!-- <div class="_flex-box">
-              <div text-wrap>
-                  {{school.name}}
-              </div>
-              <div>
-
-              </div>
-
-            </div> -->
-            <!-- <ion-item> -->
-                <ion-label text-wrap>{{school.name}}</ion-label>
-                <ion-checkbox color="dark" [checked]="school.selected" (click)="school.selected = true;"></ion-checkbox>
-              <!-- </ion-item> -->
-          </ion-item>
-          <!-- <ion-item>The Empire Strikes Back</ion-item>
-          <ion-item>Blade Runner</ion-item> -->
-        </ion-list>
-
-        <!-- <div *ngIf="!(schools?.length === schoolList?.length)" > -->
-            <ion-infinite-scroll  (ionInfinite)="doInfinite($event)">
-                <ion-infinite-scroll-content 
-                loadingSpinner="bubbles"
-                loadingText="Loading more data..."></ion-infinite-scroll-content>
-              </ion-infinite-scroll>
-        </div>
+        </ion-col>
+        <ion-col >
+        <button ion-button full (click)="openSchoolListmodal()" class="btnText">
+          {{'buttons.addSchools' | translate}}
+        </button>
+      </ion-col>
      
-    
+    </ion-row>
+
+    <div *ngIf="selectedSchools.length > 0 ; else noSchools ">
+        <!-- <selectable-list [selectableList]="selectedSchools" [itemsPerShot]="selectedSchools.length" [list]="schools"></selectable-list> -->
+        <ion-list *ngFor="let school of selectedSchools">
+            <ion-item-divider color="light">
+                <h3 class="headerText">
+                    <span class="_wrap-text">{{school.name}}</span> 
+                  </h3>
+          </ion-item-divider>
+        </ion-list>
+    </div>
+    <ng-template #noSchools>
+      <p class="_flex-box _justify-content-center">No Schools Selected.</p>
+    </ng-template>
     </ion-step>
 
 
     <ion-step label="Solutions">
 
-      <span class="fixBox" *ngIf="addObservationForm.controls.category.value">
+      <div class="fixBox" *ngIf="addObservationForm.controls.category.value">
         <span *ngIf="addObservationForm.controls.category.value === 'CO'; else TO">
           <ion-list *ngFor="let frameWork of listOfFrameWork[0]">
             <ion-item (click)="selectSolution(frameWork)" [ngClass]="{'active': frameWork === selectedFrameWork}">
@@ -101,7 +87,7 @@
             </ion-item>
           </ion-list>
         </ng-template>
-      </span>
+      </div>
        
     </ion-step>
   </ion-stepper>
