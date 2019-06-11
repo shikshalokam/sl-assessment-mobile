@@ -1,13 +1,6 @@
 <ion-header>
-  <!-- <ion-navbar color="primary">
-    <div class="_flex-box">
-      <ion-title>{{'headings.questionnaire'|translate}}</ion-title>
-      <ion-icon name="chatboxes" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px"
-        (click)="feedBack()" margin-right float-right></ion-icon>
-    </div>
-  </ion-navbar> -->
-  <header [title]="'headings.questionnaire'|translate" [disableNetwork]="true" [hideBack]="false" [enableDashboard]="true" [dashbordData]="dashbordData" (onDashboardOpen)="setModalRefernc($event)">
-
+  <header [title]="'headings.questionnaire'|translate" [disableNetwork]="true" [hideBack]="false"
+    [enableDashboard]="true" [dashbordData]="dashbordData" (onDashboardOpen)="setModalRefernc($event)">
   </header>
 </ion-header>
 
@@ -17,16 +10,25 @@
   <div class="_container">
     <ng-container *ngFor="let question of questions| slice:start:end; let i=index">
       <ng-container [ngSwitch]="question.responseType.toLowerCase()">
-        <input-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'"></input-type>
-        <input-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'"></input-type>
-        <radio-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'"></radio-type>
-        <date-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
-        <multiple-choice-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'multiselect'"></multiple-choice-type>
-        <matrix-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'"></matrix-type>
-        <slider [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'slider'"></slider>
+        <input-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'"></input-type>
+        <input-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'"></input-type>
+        <radio-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'"></radio-type>
+        <date-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
+        <multiple-choice-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+        <matrix-type [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'">
+        </matrix-type>
+        <slider [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'slider'"></slider>
       </ng-container>
     </ng-container>
   </div>
 
 </ion-content>
-<footer-buttons  [isFirst]="!start" [isLast]="questions?.length === end" (nextAction)="next()" (backAction)="back()"></footer-buttons>
+<footer-buttons [isFirst]="!start" [isLast]="questions?.length === end" (nextAction)="next()" (backAction)="back()">
+</footer-buttons>

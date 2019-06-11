@@ -3,12 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 
-/**
- * Generated class for the RatingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -19,7 +13,6 @@ export class RatingPage {
   view: string = 'question';
   submissionId: string;
   schoolData: any;
-  // criteriaQuestions: Array<any>;
   selectedCriteriaIndex: number;
   currentCriteria: any;
   allCriterias: any;
@@ -46,12 +39,12 @@ export class RatingPage {
 
     })
   }
-  
+
 
   saveRating(): void {
-    if(this.currentCriteria.score && this.currentCriteria.remarks) {
+    if (this.currentCriteria.score && this.currentCriteria.remarks) {
       this.currentCriteria.isCompleted = true;
-    } 
+    }
     this.utils.setLocalVariable('rating_' + this.submissionId, this.allCriterias)
     this.navCtrl.pop();
   }

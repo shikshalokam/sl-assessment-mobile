@@ -30,6 +30,7 @@ export class InputTypeComponent implements OnInit {
     console.log(this.imageLocalCopyId);
     this.isaNumber();
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
+    this.getErrorMsg();
     // this.checkForValidation();
   }
 
@@ -56,6 +57,14 @@ export class InputTypeComponent implements OnInit {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.data.endTime = this.data.isCompleted ? Date.now() : "";
 
+  }
+
+  getErrorMsg() {
+    if(this.data.validation.regex){
+      let string = this.data.validation.regex.split("[");
+      string = string[1].split("]")[0];
+      return "Should contain only values "+ string;
+    }
   }
 
 }

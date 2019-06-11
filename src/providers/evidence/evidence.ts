@@ -31,7 +31,7 @@ export class EvidenceProvider {
     this.schoolDetails = params.schoolDetails;
     this.schoolId = params._id;
     this.evidenceIndex = params.selectedEvidence;
-    const selectedECM = this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex];
+    const selectedECM = this.schoolDetails['assessments'][0] ? this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex] : this.schoolDetails['assessments']['evidences'][this.evidenceIndex];
 
     let action = this.actionSheet.create({
       title: "Survey actions",
@@ -50,9 +50,14 @@ export class EvidenceProvider {
           handler: () => {
             this.diagnostic.isLocationEnabled().then(success => {
               if (success) {
-                params.schoolDetails['assessments'][0]['evidences'][params.selectedEvidence].startTime = Date.now();
+                if(params.schoolDetails['assessments'][0]) {
+                  params.schoolDetails['assessments'][0]['evidences'][params.selectedEvidence].startTime = Date.now();
+                } else {
+                  params.schoolDetails['assessments']['evidences'][params.selectedEvidence].startTime = Date.now();
+                }
+                //  ?  :  = ;
                 // this.utils.setLocalSchoolData(params.schoolDetails);
-                this.localStorage.setLocalStorage("schoolDetails_"+this.schoolId, params.schoolDetails)
+                this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), params.schoolDetails)
                 delete params.schoolDetails;
                 this.appCtrl.getRootNav().push('SectionListPage', params);
               } else {
@@ -148,7 +153,7 @@ export class EvidenceProvider {
       this.utils.openToast(response.message);
       this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].isSubmitted = true;
       this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].notApplicable = true;
-      this.localStorage.setLocalStorage("schoolDetails_"+this.schoolId, this.schoolDetails)
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolDetails)
       // this.utils.setLocalSchoolData(this.schoolDetails);
       this.utils.stopLoader();
 
