@@ -1,17 +1,24 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, AlertController, Nav } from 'ionic-angular';
+import { Platform, AlertController, Nav, App, MenuController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-import { TabsPage } from '../pages/tabs/tabs';
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { TranslateService } from '@ngx-translate/core';
 import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../providers/network-gps/network-gps';
+import { HomePage } from '../pages/home/home';
+import { AppConfigs } from '../providers/appConfig';
+import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
+import { FaqPage } from '../pages/faq/faq';
+import { AboutPage } from '../pages/about/about';
+import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
+import { UtilsProvider } from '../providers/utils/utils';
+import { ObservationsPage } from '../pages/observations/observations';
 
 @Component({
   templateUrl: 'app.html'
+
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -19,8 +26,48 @@ export class MyApp {
   isAlertPresent: boolean = false;
   networkSubscription: any;
   networkAvailable: boolean;
+  appName: string = AppConfigs.appName;
   // rootPage: any = "LoginPage";
+  allPages: Array<Object> = [
+    {
+      name: "home",
+      icon: "home",
+      component: HomePage,
+      active: true
+    },
+    {
+      name: "institutional",
+      icon: "book",
+      component: InstitutionsEntityList,
+      active: false
+    },
+    {
+      name: "individual",
+      icon: "person",
+      component: IndividualListingPage,
+      active: false
+    },
+    {
+      name: "observations",
+      icon: "eye",
+      component: ObservationsPage,
+      active: false
+    },
+    {
+      name: "faqs",
+      icon: "help",
+      component: FaqPage,
+      active: false
+    },
+    {
+      name: "about",
+      icon: "information-circle",
+      component: AboutPage,
+      active: false
+    }
+  ]
 
+  currentPage;
   constructor(
     private platform: Platform,
     private statusBar: StatusBar,
@@ -29,9 +76,33 @@ export class MyApp {
     private alertCtrl: AlertController,
     private translate: TranslateService,
     private network: Network,
+    private app: App,
+    private events :Events,
     private networkGpsProvider: NetworkGpsProvider,
+    private menuCntrl: MenuController,
+    private utils: UtilsProvider
   ) {
+    this.events.subscribe('navigateTab',data=>{
+      console.log(data);
+      let index : number = this.findIndex(data);
+      this.goToPage(index);
+    })
+    this.events.subscribe('loginSuccess', data =>{
+      if(data == true){
+      // this.goToPage(0);
+      for (const page of this.allPages) {
+        page['active'] = false;
+      }
+      this.allPages[0]['active']= true;
+
+      }
+    })
+
     platform.ready().then(() => {
+      // this.goToPage(0);
+      console.log("go to page")
+
+      // this.currentPage = this.nav.getActive();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.initilaizeApp();
@@ -56,6 +127,16 @@ export class MyApp {
     if (this.networkSubscription) {
       this.networkSubscription.unsubscribe();
     }
+  }
+
+  goToPage(index) {
+    this.menuCntrl.close();
+    for (const page of this.allPages) {
+      page['active'] = false;
+    }
+    this.allPages[index]['active'] = true;
+    // this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name'] === "individual" ? "assessmentDetails_" : "schoolDetails_")
+    this.nav.setRoot(this.allPages[index]['component']);
   }
 
   initTranslate() {
@@ -89,11 +170,21 @@ export class MyApp {
     // this.statusBar.backgroundColorByName(black)
     this.currentUser.checkForTokens().then(response => {
       console.log("Deiactivated " + response.isDeactivated)
+      this.rootPage = WelcomePage;
+
       if (response.isDeactivated) {
         this.rootPage = WelcomePage;
+        this.allPages[0]['active'] = true;
+        for (const page of this.allPages) {
+          page['active'] = false;
+        }
         this.splashScreen.hide()
       } else {
-        this.rootPage = TabsPage;
+        this.rootPage = HomePage;
+        for (const page of this.allPages) {
+          page['active'] = false;
+        }
+        this.allPages[0]['active'] = true;
         // this.splashScreen.hide()
         // this.statusBar.overlaysWebView(false);
       }
@@ -141,6 +232,15 @@ export class MyApp {
         }
       }
     })
+  }
+  findIndex(componentName){
+    let currentIndex ;
+    this.allPages.forEach((page,index) =>{
+      if(componentName == page['name']){
+        currentIndex = index;
+      }
+    } );
+    return currentIndex;
   }
 
 }

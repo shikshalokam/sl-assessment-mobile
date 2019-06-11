@@ -22,7 +22,7 @@ export class DetailPage {
     private app: App,
     private alertctrl: AlertController,
     private currentUser: CurrentUserProvider,
-    private auth: AuthProvider, 
+    private auth: AuthProvider,
     private localStorage: LocalStorageProvider,
     private apiService: ApiProvider,
     private utils: UtilsProvider) {
@@ -38,7 +38,6 @@ export class DetailPage {
   }
 
   openUrl(url) {
-    console.log("innnn")
     const browser = this.iab.create(url);
     browser.show();
   }
@@ -46,8 +45,7 @@ export class DetailPage {
   clearData() {
     let alert = this.alertctrl.create({
       title: 'WARNING',
-      subTitle:'All schools survey data will be erased. This action is irreversable.Do you want to continue?',
-      // message:'hiii',
+      subTitle: 'All schools survey data will be erased. This action is irreversable.Do you want to continue?',
       buttons: [
         {
           text: 'No',
@@ -63,11 +61,14 @@ export class DetailPage {
             this.utils.startLoader()
             this.localStorage.deleteAllStorage().then(success => {
               this.utils.stopLoader();
-              this.auth.doLogout();
-              this.currentUser.removeUser();
-              let nav = this.app.getRootNav();
-              nav.setRoot(WelcomePage);
-            }).catch (error => {
+              this.auth.doLogout().then(success => {
+                this.currentUser.removeUser();
+                let nav = this.app.getRootNav();
+                nav.setRoot(WelcomePage);
+              }).catch(error => {
+
+              })
+            }).catch(error => {
               this.utils.stopLoader();
             })
           }
@@ -76,6 +77,7 @@ export class DetailPage {
       enableBackdropDismiss: false
     });
     alert.present();
+    
   }
 
   openAlert() {
@@ -91,14 +93,12 @@ export class DetailPage {
         {
           text: 'Cancel',
           handler: data => {
-            console.log('Cancel clicked');
           }
         },
         {
           text: 'Submit',
           handler: data => {
             this.getAccessTokenForAction(data)
-            console.log('Cancel clicked');
           }
         }
       ]
@@ -112,10 +112,10 @@ export class DetailPage {
     }
     let currentEcm = {}
     this.utils.startLoader();
-    this.apiService.httpPost(AppConfigs.help.getHelpToken , passcode, successData => {
+    this.apiService.httpPost(AppConfigs.help.getHelpToken, passcode, successData => {
       this.utils.ActionEnableSubmit(successData.result);
       this.utils.stopLoader();
-    } , error => {
+    }, error => {
       this.utils.stopLoader();
       this.utils.openToast(error.result.message);
 

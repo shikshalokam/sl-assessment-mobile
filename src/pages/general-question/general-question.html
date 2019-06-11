@@ -1,37 +1,40 @@
-
 <ion-header>
-    <header [title]="'headings.generalQuestions'|translate"  [showClose]="true" [disableNetwork]="true">
-    </header>
-  </ion-header>
+  <header [title]="'headings.generalQuestions'|translate" [showClose]="true" [disableNetwork]="true">
+  </header>
+</ion-header>
 
 
 <ion-content padding>
-    <div class="_container">
-        <!-- <ng-container *ngFor="let question of questions| slice:start:end; let i=index"> -->
-          <ng-container [ngSwitch]="question?.responseType?.toLowerCase()">
-            <input-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'"></input-type>
-            <input-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'"></input-type>
-            <radio-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'"></radio-type>
-            <date-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
-            <multiple-choice-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'multiselect'"></multiple-choice-type>
-            <matrix-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'"></matrix-type>
-          </ng-container>
-        <!-- </ng-container> -->
-      </div>
+  <div class="_container">
+    <ng-container [ngSwitch]="question?.responseType?.toLowerCase()">
+      <input-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question"
+        [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'"></input-type>
+      <input-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question"
+        [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'"></input-type>
+      <radio-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question"
+        [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'"></radio-type>
+      <date-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question"
+        [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
+      <multiple-choice-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId"
+        [data]="question" [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+      <matrix-type [evidenceId]="selectedEvidenceId" [generalQuestion]="true" [schoolId]="schoolId" [data]="question"
+        [imageLocalCopyId]="localImageListKey" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'">
+      </matrix-type>
+    </ng-container>
+  </div>
 </ion-content>
 
 <div class="_footer customFooter">
-    <ion-row>
-      <ion-col>
-        <button ion-button icon-start full color="light" (click)="cancel()">
-          {{'buttons.cancel'|translate}}
-        </button>
-      </ion-col>
-      <ion-col>
-        <!-- <button ion-button icon-end  full float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
-        <button ion-button icon-start full float-right color="primary" (click)="update()">
-          {{'buttons.save'|translate}}
-        </button>
-      </ion-col>
-    </ion-row>
-  </div>
+  <ion-row>
+    <ion-col>
+      <button ion-button icon-start full color="light" (click)="cancel()">
+        {{'buttons.cancel'|translate}}
+      </button>
+    </ion-col>
+    <ion-col>
+      <button ion-button icon-start full float-right color="primary" (click)="update()">
+        {{'buttons.save'|translate}}
+      </button>
+    </ion-col>
+  </ion-row>
+</div>

@@ -17,11 +17,13 @@ export class LocalStorageProvider {
     console.log(key)
     return new Promise((resolve, reject) => {
       this.storage.get(key).then( data => {
+        console.log(data)
         if(data) {
           resolve(data)
         } else {
           reject()
         }
+        // resolve(data)
       }).catch(error => {
         reject(error)
       })

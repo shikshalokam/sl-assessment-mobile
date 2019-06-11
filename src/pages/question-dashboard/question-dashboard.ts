@@ -26,13 +26,11 @@ export class QuestionDashboardPage {
   }
 
   ionViewDidLoad() {
-    //console.log('ionViewDidLoad QuestionDashboardPage');
+    console.log('ionViewDidLoad QuestionDashboardPage');
     this.questions = this.navParams.get('questions')['questions'];
-    //console.log(JSON.stringify(this.navParams.get('questions')['questions']))
     this.evidenceMethod = this.navParams.get('questions')['evidenceMethod'];
     this.sectionName = this.navParams.get('questions')['sectionName'];
     this.currentViewIndex = this.navParams.get('questions')['currentViewIndex'];
-    //console.log(this.currentViewIndex)
   }
 
   isQuestionComplete(question) {
@@ -44,20 +42,7 @@ export class QuestionDashboardPage {
   }
 
   checkForQuestionDisplay(qst): boolean {
-    console.log('checkcondition')
-    // let display = false;
-    // if (qst.visibleIf && qst.visibleIf.length) {
-    //   for (const question of this.questions) {
-    //     if ((question._id === qst.visibleIf[0]._id) && (eval('"' + question.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"'))) {
-    //       display = true;
-    //     }
-    //   }
-    //   return display
-    // } else {
-    //   return true
-    // }
     return this.utils.checkForDependentVisibility(qst, this.questions)
-
   }
 
   openToast(): void {

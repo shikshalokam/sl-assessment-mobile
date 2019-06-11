@@ -1,27 +1,4 @@
-<!-- <ion-content padding>
-  <ion-slides pager (ionSlideDidChange)="slideChanged()">
-
-    <ion-slide>
-      <ion-toolbar>
-        <ion-buttons end>
-          <button ion-button color="primary">Skip</button>
-        </ion-buttons>
-      </ion-toolbar>
-      <div><img src="assets/imgs/just-logo.png" margin-bottom></div>
-    </ion-slide>
-    <ion-slide>
-      <h1>Slide 2</h1>
-    </ion-slide>
-    <ion-slide>
-      <h1>Slide 3</h1>
-    </ion-slide>
-  </ion-slides>
-  <div class="_flex-box _justify-content-center skipBtn fullWidth">
-    <button ion-button full (click)="navigateTo()">{{skipMsg}}</button>
-  </div>
-</ion-content> -->
-
-<ion-content >
+<ion-content>
 
   <ion-slides pager>
     <ion-slide *ngFor="let slide of slidesList">
@@ -30,24 +7,17 @@
           <button ion-button color="primary" (click)="gotToLastSlide()">Skip</button>
         </ion-buttons>
       </ion-toolbar>
-    <div>
-        <img [src]="slide.image" *ngIf="slide.image" class="imageAdj"/>
-      <!-- <img src="" margin-bottom > -->
-    </div>
-      <!-- <img [src]="slide.image" class="slide-image"/> -->
+      <div>
+        <img [src]="slide.image" *ngIf="slide.image" class="imageAdj" />
+      </div>
       <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-      <!-- <p [innerHTML]="slide.description"></p> -->
     </ion-slide>
     <ion-slide>
       <ion-toolbar>
       </ion-toolbar>
-      <!-- <img src="assets/img/ica-slidebox-img-4.png" class="slide-image"/> -->
-      <!-- <h2 class="slide-title">Ready to Play?</h2>
-       -->
-       <div>
-        <img src="assets/imgs/login.png" class="imageAdj"/>
-
-       </div>
+      <div>
+        <img src="assets/imgs/login.png" class="imageAdj" />
+      </div>
       <button ion-button large clear icon-end color="primary" (click)="signIn()">
         Login
         <ion-icon name="arrow-forward"></ion-icon>
