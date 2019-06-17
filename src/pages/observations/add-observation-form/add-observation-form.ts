@@ -1,10 +1,12 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, App } from 'ionic-angular';
 import { FormGroup } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
 import { SolutionDetailsPage } from '../../solution-details/solution-details';
 import { SchoolListPage } from './school-list/school-list';
+import { NetworkGpsProvider } from '../../../providers/network-gps/network-gps';
+import { LocalStorageProvider } from '../../../providers/local-storage/local-storage';
 
 /**
  * Generated class for the AddObservationFormPage page.
@@ -447,12 +449,19 @@ export class AddObservationFormPage {
     
   ]
   selectedIndex: any = 0;
+  entityTypeData: any;
+  entityTypeForm: any;
+  currentLocation: string;
+  obsData: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public apiProviders: ApiProvider,
     public utils: UtilsProvider,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private networkGps : NetworkGpsProvider,
+    private localStorage: LocalStorageProvider,
+    private app :App
   ) {
   }
 
@@ -461,6 +470,8 @@ export class AddObservationFormPage {
     this.apiProviders.getLocalJson('assets/addObservation.json').subscribe(successData => {
       this.addObservationData = JSON.parse(successData['_body']).form;
       this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
+      this.entityTypeData = JSON.parse(successData['_body']).entityType;
+      this.entityTypeForm = this.utils.createFormGroup(this.entityTypeData);
     },
 
       error => {
@@ -498,10 +509,32 @@ export class AddObservationFormPage {
 
   }
   addObservation() {
+    this.obsData = this.addObservationForm.getRawValue();
+    this.obsData['solutionId'] = this.selectedFrameWork;
+    this.obsData['location'] = this.currentLocation;
+    this.obsData['entityType'] = this.entityTypeForm.getRawValue.category;
+    if(this.addObservationForm.controls.status.value == 'active'){
+
+    }
+    else{
+      this.localStorage.getLocalStorage('draftObservation').then( draftObs =>{
+       let draft = draftObs
+        draft.push(this.obsData);
+        console.log("pushed in array")
+        this.localStorage.setLocalStorage('draftObservation', draft );
+
+      }).catch( () =>{
+        this.localStorage.setLocalStorage('draftObservation',[this.obsData] );
+
+      })
+    }
+  this.app.getRootNav().pop();
 
   }
   selectSolution(frameWork) {
     this.selectedFrameWork = frameWork;
+    this.currentLocation =this.networkGps.getGpsLocation();
+    console.log(this.currentLocation)
   }
   showDetails(frameWork) {
     let contactModal = this.modalCtrl.create(SolutionDetailsPage, { data: frameWork });

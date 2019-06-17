@@ -13,14 +13,18 @@
         <ion-input type="text" placeholder="Search observation"></ion-input>
      
           <!-- <ion-label>Tyoe</ion-label> -->
-          <ion-select [(ngModel)]="observationStatus">
+          <ion-select [(ngModel)]="observationStatus" (ionChange)="changeObservationStatus()">
             
-            <ion-option *ngFor="let status of statusOption" value="{{status.value}}">{{status.label}}</ion-option>
+            <ion-option *ngFor="let status of statusOption" value="{{status.value}}" >{{status.label}}</ion-option>
           </ion-select>
         </ion-item>
-    
+        
 </div>
-
+  <div>
+        <ion-item *ngFor="let obs of observationList">
+            <ion-label text-wrap>{{obs.name}}</ion-label>
+          </ion-item>    
+  </div>
 <!-- <div style="padding:60px 0 0 0;">
   <ion-segment [(ngModel)]="actionType">
     <ion-segment-button value="assignedToMe">

@@ -16,24 +16,18 @@
 
 
 
-<ion-content padding-top *ngIf="addObservationForm">
+<ion-content padding-top *ngIf="addObservationForm && entityTypeForm">
 
   <ion-stepper [mode]="'horizontal'" #stepper (selectIndexChange)="selectChange($event)">
 
 
-    <ion-step label="Details"  >
-      <div  class="fixBox">
-        <dynamic-form [formFields]="addObservationData" [form]="addObservationForm"></dynamic-form>
-      </div>
-     
+    <ion-step label="Entity Type">
+      <dynamic-form [formFields]="entityTypeData" [form]="entityTypeForm"></dynamic-form>
     </ion-step>
 
-
-    <ion-step label="Schools">
+    <!-- <ion-step label="Schools">
       
-      <!-- <div *ngIf="schoolList && schools" class="fixBox">
-          <selectable-list [selectableList]="schoolList" [itemsPerShot]="index" [list]="schools"></selectable-list>
-      </div> -->
+     
       <ion-row>
       
         <ion-col >
@@ -48,7 +42,6 @@
     </ion-row>
 
     <div *ngIf="selectedSchools.length > 0 ; else noSchools ">
-        <!-- <selectable-list [selectableList]="selectedSchools" [itemsPerShot]="selectedSchools.length" [list]="schools"></selectable-list> -->
         <ion-list *ngFor="let school of selectedSchools">
             <ion-item-divider color="light">
                 <h3 class="headerText">
@@ -60,13 +53,13 @@
     <ng-template #noSchools>
       <p class="_flex-box _justify-content-center">No Schools Selected.</p>
     </ng-template>
-    </ion-step>
+    </ion-step> -->
 
 
     <ion-step label="Solutions">
 
-      <div class="fixBox" *ngIf="addObservationForm.controls.category.value">
-        <span *ngIf="addObservationForm.controls.category.value === 'CO'; else TO">
+      <div class="fixBox" *ngIf="entityTypeForm.controls.category.value">
+        <span *ngIf="entityTypeForm.controls.category.value === 'CO'; else TO">
           <ion-list *ngFor="let frameWork of listOfFrameWork[0]">
             <ion-item (click)="selectSolution(frameWork)" [ngClass]="{'active': frameWork === selectedFrameWork}">
               <ion-icon name="list-box" item-start></ion-icon>
@@ -87,8 +80,15 @@
             </ion-item>
           </ion-list>
         </ng-template>
-      </div>
+      </div> 
        
+    </ion-step>
+
+
+    <ion-step label="Details"  >
+      <div  class="fixBox">
+        <dynamic-form [formFields]="addObservationData" [form]="addObservationForm"></dynamic-form>
+      </div>
     </ion-step>
   </ion-stepper>
 </ion-content>
