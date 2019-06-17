@@ -3,8 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { ComponentsModule } from '../../../components/components.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { AddObservationFormPage } from './add-observation-form';
-import IonicStepperModule from 'ionic-stepper';
-import { BrowserModule } from '@angular/platform-browser';
+import { IonicStepperModule } from 'ionic-stepper';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SchoolListPage } from './school-list/school-list';
 
@@ -18,8 +17,6 @@ import { SchoolListPage } from './school-list/school-list';
     TranslateModule,
     IonicStepperModule,
     BrowserAnimationsModule,
-  
-
     IonicPageModule.forChild(AddObservationFormPage),
   ],
   entryComponents:[

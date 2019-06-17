@@ -109,15 +109,16 @@
             "validation":{
                 "required":true
             }
-        },
-       
+        }
+    ],
+    "entityType":[
         {
             "field": "category",
             "label": "Category",
             "value": "",
             "visible": true,
             "editable": true,
-            "input": "select",
+            "input": "radio",
             "options": [
                 {
                     "label": "Classroom  Observation",
@@ -132,6 +133,5 @@
                 "required":true
             }
         }
-
     ]
 }

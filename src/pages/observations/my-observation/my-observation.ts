@@ -5,6 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { UtilsProvider } from '../../../providers/utils/utils';
 import { SolutionDetailsPage } from '../../solution-details/solution-details';
 import { AddObservationFormPage } from '../add-observation-form/add-observation-form';
+import { LocalStorageProvider } from '../../../providers/local-storage/local-storage';
 
 @IonicPage()
 @Component({
@@ -455,13 +456,16 @@ export class MyObservationPage {
     ]
     
   ]
+  draftObservation: any;
+  observationList = [];
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public apiProviders: ApiProvider,
     public utils: UtilsProvider,
     private modalCtrl: ModalController,
-    private app :App
+    private app :App,
+    private localStorage : LocalStorageProvider
   ) {
   }
 
@@ -508,5 +512,17 @@ this.app.getRootNav().push(AddObservationFormPage, { data: params})
   showDetails(frameWork) {
     let contactModal = this.navCtrl.push(SolutionDetailsPage, { data: frameWork });
     // contactModal.present();
+  }
+  changeObservationStatus(){
+    // this.observationStatus = status.value;
+    console.log(this.observationStatus);
+    if (this.observationStatus === 'draft'){
+
+      this.localStorage.getLocalStorage('draftObservation').then(draftObs =>{
+        this.observationList = draftObs ;
+      }).catch(error =>{
+
+      })
+    }
   }
 }
