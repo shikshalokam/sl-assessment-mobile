@@ -40,9 +40,9 @@ export class DynamicFormComponent implements OnChanges {
 
   checkForVisibility(field) {
     if(this.form.valid){
-      console.log("valid form")
+      // console.log("valid form")
     } else {
-      console.log("invalid form")
+      // console.log("invalid form")
 
     }
     if (field.visibleIf) {

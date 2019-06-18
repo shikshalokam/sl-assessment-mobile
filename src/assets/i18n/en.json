@@ -28,7 +28,8 @@
         "feedback": "Feedback",
         "update": "Update",
         "Leader": "School Leader",
-        "Teacher": "Teacher"
+        "Teacher": "Teacher",
+        "saveDraft":"Draft"
     },
     "tabs": {
         "home": "Home",
