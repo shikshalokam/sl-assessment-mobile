@@ -183,7 +183,7 @@ export class ApiProvider {
 
   httpGet(url, successCallback, errorCallback) {
     this.validateApiToken().then(response => {
-      const gpsLocation = this.ngps.getGpsLocation()
+      const gpsLocation = this.ngps.getGpsLocation();
       const obj = {
         'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
