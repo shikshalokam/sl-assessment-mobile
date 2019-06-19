@@ -1,4 +1,4 @@
-<div [formGroup]="form" *ngIf="form" style="padding-bottom:60px">
+<div [formGroup]="form" *ngIf="form" >
 
   <div *ngFor="let fromField of formFields">
     <ion-list>
@@ -25,13 +25,23 @@
         {{fromField.visibleIf ? eval('"' + form['controls'][fromField?.field].value + '"' + fromField.visibleIf[0].operator + '"' + fromField.visibleIf[0].value + '"') : "nothing"}} -->
       <!-- {{checkForVisibility(fromField)}} -->
         <!-- {{eval('"' + fromField.value + '"' + qst.visibleIf[0].operator + '"' + qst.visibleIf[0].value + '"')}} -->
-      <ion-item *ngIf="fromField?.input === 'multiselect' && fromField?.visible && checkForVisibility(fromField)">
+      <ion-item *ngIf="(fromField?.input === 'multiselect' || fromField?.input === 'select') && fromField?.visible && checkForVisibility(fromField)">
         <ion-label floating>{{fromField?.label}}</ion-label>
-        <ion-select [formControlName]="fromField.field" multiple="true">
+        <ion-select [formControlName]="fromField.field" [multiple]="fromField?.input === 'multiselect'">
           <ion-option *ngFor="let opt of fromField.options" value="{{opt?.value}}">{{opt?.label}}</ion-option>
         </ion-select>
       </ion-item>
+
+
+      <ion-item *ngIf="fromField?.input === 'date' && fromField?.visible && checkForVisibility(fromField)">
+          <ion-label>{{fromField?.label}}</ion-label>
+          <ion-datetime displayFormat="MM/DD/YYYY" pickerFormat="DDDD MMMM YYYY" [formControlName]="fromField.field"></ion-datetime>
+        </ion-item>
+
+
     </ion-list>
+
+
 
   </div>
 

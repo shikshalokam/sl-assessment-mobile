@@ -20,6 +20,7 @@ import { SlackProvider } from '../providers/slack/slack';
 import { SliderComponent } from './slider/slider';
 import { EntityListingComponent } from './entity-listing/entity-listing';
 import { PipesModule } from '../pipes/pipes.module';
+import { SelectableListComponent } from './selectable-list/selectable-list';
 
 @NgModule({
 	declarations: [
@@ -36,7 +37,8 @@ import { PipesModule } from '../pipes/pipes.module';
     MenuItemComponent,
     DynamicFormComponent,
     SliderComponent,
-    EntityListingComponent
+    EntityListingComponent,
+    SelectableListComponent
   ],
 	imports: [
 		IonicModule,
@@ -59,7 +61,8 @@ import { PipesModule } from '../pipes/pipes.module';
     MenuItemComponent,
     DynamicFormComponent,
     SliderComponent,
-    EntityListingComponent
+    EntityListingComponent,
+    SelectableListComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
