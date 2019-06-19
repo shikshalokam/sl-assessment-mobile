@@ -12,20 +12,21 @@ import { Component, Input } from '@angular/core';
 })
 export class SelectableListComponent {
   @Input() selectableList;
-  @Input() list;
-  @Input() itemsPerShot;
+   list;
+   @Input() index = 10 ;
 
   text: string;
 
   constructor() {
     console.log('Hello SelectableListComponent Component');
     this.text = 'Hello World';
+    this.list = this.selectableList.slice(0,this.index-1);
   }
   doInfinite(infiniteScroll) {
     console.log("doInfinite function called");
     setTimeout(() => {
-      for (let i=0 ; ( i < 10 ) &&( this.itemsPerShot < this.list.length); i++ ) {
-        this.selectableList.push( this.list[this.itemsPerShot++] );
+      for (let i=0 ; ( i < 10 ) &&( this.index < this.selectableList.length); i++ ) {
+        this.list.push( this.selectableList[this.index++] );
       }
       infiniteScroll.complete();
     }, 500);

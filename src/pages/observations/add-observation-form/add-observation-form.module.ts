@@ -5,12 +5,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AddObservationFormPage } from './add-observation-form';
 import { IonicStepperModule } from 'ionic-stepper';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SchoolListPage } from './school-list/school-list';
+import { EntityListPage } from './entity-list/entity-list';
 
 @NgModule({
   declarations: [
       AddObservationFormPage,
-      SchoolListPage
+      EntityListPage
   ],
   imports: [
     ComponentsModule,
@@ -20,7 +20,7 @@ import { SchoolListPage } from './school-list/school-list';
     IonicPageModule.forChild(AddObservationFormPage),
   ],
   entryComponents:[
-    SchoolListPage
+    EntityListPage
   ]
 
 })
