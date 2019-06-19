@@ -11,10 +11,10 @@ import { UtilsProvider } from '../../providers/utils/utils';
  * Components.
  */
 @Component({
-  selector: 'entity-listing',
-  templateUrl: 'entity-listing.html'
+  selector: 'observation-entity-listing',
+  templateUrl: 'observation-entity-listing.html'
 })
-export class EntityListingComponent {
+export class ObservationEntityListingComponent {
 
   @Input() entityList;
   @Input() entityType;
@@ -22,7 +22,6 @@ export class EntityListingComponent {
   // @Output() goToEcmEvent = new EventEmitter();
   @Output() getAssessmentDetailsEvent = new EventEmitter();
   @Output() openMenuEvent = new EventEmitter();
-  @Input() enableAddRemoveEntityButton = false;
 
   text: string;
 
@@ -32,7 +31,7 @@ export class EntityListingComponent {
     private localStorage: LocalStorageProvider,
     private evdnsServ: EvidenceProvider,
     private utils: UtilsProvider) {
-
+  
     //console.log('Hello EntityListingComponent Component');
   }
 
@@ -50,12 +49,12 @@ export class EntityListingComponent {
     let submissionId = id
     let heading = name;
 
-
+    
 
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
-
+      
       // //console.log(JSON.stringify(successData));
-      //console.log("go to ecm called");
+    //console.log("go to ecm called");
 
 
       if (successData.assessment.evidences.length > 1) {
@@ -103,10 +102,10 @@ export class EntityListingComponent {
       programIndex: params[1],
       assessmentIndex: params[2],
       entityIndex: params[3],
-      submissionId: params[4],
-      solutionId: solutionId,
-      parentEntityId: parentEntityId,
-      createdByProgramId: createdByProgramId
+      submissionId : params[4],
+      solutionId :solutionId,
+      parentEntityId : parentEntityId,
+      createdByProgramId :createdByProgramId
     });
 
   }
