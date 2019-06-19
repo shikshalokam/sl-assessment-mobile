@@ -1,0 +1,34 @@
+      <div class="table">
+          <div class="table-row">
+              <ion-searchbar></ion-searchbar>
+          </div>
+          <div class="table-row last-row">
+              <div class="table-cell cell-content-outer-wrapper">
+                  <div class="cell-content-inner-wrapper">
+                      <div class="cell-content">
+                          <ion-list  *ngIf="selectableList">
+                              <ion-item *ngFor="let listItem of selectableList">
+                                <ion-label text-wrap>{{listItem.name}}</ion-label>
+                                <ion-checkbox color="dark" [checked]="listItem.selected" (click)="listItem.selected = true;"></ion-checkbox>
+                              </ion-item>
+                              
+                            </ion-list>
+                            
+                            
+                      </div>
+                     
+                      
+                  </div>
+              </div>
+              
+
+          </div>
+
+      </div>
+<div *ngIf="!(selectableList?.length === list?.length)">
+    <ion-infinite-scroll  (ionInfinite)="doInfinite($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</div>
+     

@@ -125,6 +125,7 @@ export class UtilsProvider {
   }
 
   createFormGroup(formFields): any {
+    console.log(JSON.stringify(formFields));
     let formGrp = {};
     formFields.forEach(formfield => {
       formGrp[formfield.field] = formfield.validation.required ? new FormControl(formfield.value || "", Validators.required) : new FormControl(formfield.value || "");

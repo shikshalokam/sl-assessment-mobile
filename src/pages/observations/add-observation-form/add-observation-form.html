@@ -1,0 +1,115 @@
+<ion-header>
+  <header [title]="'headings.addObservation'|translate" [hideBack]="false" [showClose]="false" [disableNetwork]="true"
+    [showMenu]="false">
+  </header>
+</ion-header>
+
+<ion-content padding-top>
+  <ion-stepper [mode]="'horizontal'" #stepper (selectIndexChange)="selectChange($event)">
+
+    <ion-step label="Entity Type" >
+        <h4>Entity Type</h4>
+      
+      <ion-list radio-group [(ngModel)]="entityType">
+        <!-- <ion-label>Entity Type</ion-label> -->
+        <ion-item *ngFor="let type of entityTypeData">
+          <ion-label>{{type.name}}</ion-label>
+          <ion-radio value="{{type._id}}"></ion-radio>
+        </ion-item>
+      </ion-list>
+    </ion-step>
+
+    <!-- <ion-step label="Schools">
+      
+     
+      <ion-row>
+      
+        <ion-col >
+
+        </ion-col>
+        <ion-col >
+        <button ion-button full (click)="openSchoolListmodal()" class="btnText">
+          {{'buttons.addSchools' | translate}}
+        </button>
+      </ion-col>
+     
+    </ion-row>
+
+    <div *ngIf="selectedSchools.length > 0 ; else noSchools ">
+        <ion-list *ngFor="let school of selectedSchools">
+            <ion-item-divider color="light">
+                <h3 class="headerText">
+                    <span class="_wrap-text">{{school.name}}</span> 
+                  </h3>
+          </ion-item-divider>
+        </ion-list>
+    </div>
+    <ng-template #noSchools>
+      <p class="_flex-box _justify-content-center">No Schools Selected.</p>
+    </ng-template>
+    </ion-step> -->
+
+
+    <ion-step label="Solutions">
+      <h4>Solution List</h4>
+      <div class="fixBox" *ngIf="listOfSolution">
+
+        <ion-list margin-top *ngFor="let frameWork of listOfSolution">
+          <ion-item (click)="selectSolution(frameWork)" [ngClass]="{'active': frameWork === selectedFrameWork}">
+            <ion-icon name="list-box" item-start></ion-icon>
+            <h2>{{frameWork.name}} </h2>
+            <p>{{frameWork.description}}</p>
+            <button ion-button clear item-end (click)="showDetails(frameWork)">View</button>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-step>
+
+
+    <ion-step label="Details">
+        <h4>Observation Details</h4>
+      
+      <div class="fixBox">
+        <dynamic-form [formFields]="addObservationData" [form]="addObservationForm"></dynamic-form>
+      </div>
+    </ion-step>
+  </ion-stepper>
+</ion-content>
+
+
+
+<ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col *ngIf="selectedIndex !== 0">
+        <button ion-button full (click)="stepper1.previousStep()" class="btnText">
+          {{'buttons.previous' | translate}}
+        </button>
+      </ion-col>
+      <ion-col *ngIf="selectedIndex === 0">
+
+      </ion-col>
+      <ion-col *ngIf="selectedIndex !== 2">
+        <button ion-button full
+          (click)=" doAction() ; selectedIndex === 0  ? entityType ? stepper1.nextStep() : tmpFunc() : selectedFrameWork ? stepper1.nextStep() : tmpFunc "
+          class="btnText">
+          {{'buttons.next' | translate}}
+        </button>
+      </ion-col>
+      
+      <ion-col *ngIf="selectedIndex === 2">
+          <button ion-button full (click)="saveDraft()" class="btnText">
+            <ion-icon name="pause" margin-right></ion-icon>
+            {{'buttons.saveDraft' | translate}}
+          </button>
+        </ion-col>
+        
+        <ion-col *ngIf="selectedIndex === 2">
+            <button ion-button full (click)="addObservation()" class="btnText">
+              <ion-icon name="cloud-upload" margin-right></ion-icon>
+              {{'buttons.add' | translate}}
+            </button>
+          </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
