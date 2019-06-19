@@ -76,7 +76,7 @@ export class AddObservationFormPage {
     console.log(e);
     this.selectedIndex = e;
   }
-  
+
   checkIndex() {
     console.log('checkIndex func ')
     switch (this.selectedIndex) {
@@ -225,16 +225,16 @@ export class AddObservationFormPage {
 
     // }
     // else {
-      // this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
-      //   let draft = draftObs
-      //   draft.push(this.obsData);
-      //   console.log("pushed in array")
-      //   this.localStorage.setLocalStorage('draftObservation', draft);
+    // this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
+    //   let draft = draftObs
+    //   draft.push(this.obsData);
+    //   console.log("pushed in array")
+    //   this.localStorage.setLocalStorage('draftObservation', draft);
 
-      // }).catch(() => {
-      //   this.localStorage.setLocalStorage('draftObservation', [this.obsData]);
+    // }).catch(() => {
+    //   this.localStorage.setLocalStorage('draftObservation', [this.obsData]);
 
-      // })
+    // })
     // }
     this.app.getRootNav().pop();
 
@@ -262,8 +262,8 @@ export class AddObservationFormPage {
     this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork._id, success => {
       this.addObservationData = success.result;
       // console.log(JSON.stringify(this.addObservationData))
-      this.addObservationData.forEach( element => {
-        element['validation'] = { required : true}
+      this.addObservationData.forEach(element => {
+        element['validation'] = { required: true }
       })
       this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
     }, error => {
@@ -273,7 +273,7 @@ export class AddObservationFormPage {
     //   if (isAvailable) {
     //     this.getLocation();
     //     console.log("func end")
-        
+
     //   }
     //   else {
     //     this.networkGps.checkForLocationPermissions();
@@ -289,45 +289,34 @@ export class AddObservationFormPage {
     let actionFlag = false;
     switch (this.selectedIndex) {
       case 0:
-        actionFlag = this.entityType ?  this.getSolutionList() : false;
+        actionFlag = this.entityType ? this.getSolutionList() : false;
         break;
       case 1:
-        actionFlag = this.selectedFrameWork ?  this.getObservationMetaForm() : false;
+        actionFlag = this.selectedFrameWork ? this.getObservationMetaForm() : false;
         break;
 
     }
     return actionFlag;
   }
-  tmpFunc(){}
-  saveDraft(){
-
+  tmpFunc() { }
+  saveDraft() {
     let obsData = this.creatPayLoad('draft');
-
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
       let draft = draftObs
       draft.push(obsData);
-      console.log("pushed in array")
       this.localStorage.setLocalStorage('draftObservation', draft);
-
     }).catch(() => {
       this.localStorage.setLocalStorage('draftObservation', [obsData]);
-
     })
-  // }
-  this.app.getRootNav().pop();
+    this.app.getRootNav().pop();
   }
 
-  creatPayLoad(type = 'publish'){
-
+  creatPayLoad(type = 'publish') {
     let payLoad = this.addObservationForm.getRawValue();
-
-    if(type ===  'draft')
-   {
-    payLoad['solutionId']= this.selectedFrameWork._id;
-    payLoad['entityId'] = this.entityType;
-   }
-
-    console.log(JSON.stringify(payLoad));
+    if (type === 'draft') {
+      payLoad['solutionId'] = this.selectedFrameWork._id;
+      payLoad['entityId'] = this.entityType;
+    }
     return payLoad;
   }
 }

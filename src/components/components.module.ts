@@ -21,6 +21,7 @@ import { SliderComponent } from './slider/slider';
 import { EntityListingComponent } from './entity-listing/entity-listing';
 import { PipesModule } from '../pipes/pipes.module';
 import { SelectableListComponent } from './selectable-list/selectable-list';
+import { ObservationEntityListingComponent } from './observation-entity-listing/observation-entity-listing';
 
 @NgModule({
 	declarations: [
@@ -38,7 +39,8 @@ import { SelectableListComponent } from './selectable-list/selectable-list';
     DynamicFormComponent,
     SliderComponent,
     EntityListingComponent,
-    SelectableListComponent
+    SelectableListComponent,
+    ObservationEntityListingComponent
   ],
 	imports: [
 		IonicModule,
@@ -62,13 +64,15 @@ import { SelectableListComponent } from './selectable-list/selectable-list';
     DynamicFormComponent,
     SliderComponent,
     EntityListingComponent,
-    SelectableListComponent
+    SelectableListComponent,
+    ObservationEntityListingComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
 		RadioTypeComponent,
 		MatrixModalComponent,
-		MenuItemComponent,EntityListingComponent
+    MenuItemComponent,
+    EntityListingComponent
 	],
 	providers:[
 		Network, DatePipe, SlackProvider
