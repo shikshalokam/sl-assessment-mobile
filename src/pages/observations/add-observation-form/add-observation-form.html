@@ -7,8 +7,11 @@
 <ion-content padding-top>
   <ion-stepper [mode]="'horizontal'" #stepper (selectIndexChange)="selectChange($event)">
 
-    <ion-step label="Entity Type">
+    <ion-step label="Entity Type" >
+        <h4>Entity Type</h4>
+      
       <ion-list radio-group [(ngModel)]="entityType">
+        <!-- <ion-label>Entity Type</ion-label> -->
         <ion-item *ngFor="let type of entityTypeData">
           <ion-label>{{type.name}}</ion-label>
           <ion-radio value="{{type._id}}"></ion-radio>
@@ -48,9 +51,10 @@
 
 
     <ion-step label="Solutions">
+      <h4>Solution List</h4>
+      <div class="fixBox" *ngIf="listOfSolution">
 
-      <div class="fixBox" *ngIf="listOfFrameWork">
-        <ion-list margin-top *ngFor="let frameWork of listOfFrameWork">
+        <ion-list margin-top *ngFor="let frameWork of listOfSolution">
           <ion-item (click)="selectSolution(frameWork)" [ngClass]="{'active': frameWork === selectedFrameWork}">
             <ion-icon name="list-box" item-start></ion-icon>
             <h2>{{frameWork.name}} </h2>
@@ -63,6 +67,8 @@
 
 
     <ion-step label="Details">
+        <h4>Observation Details</h4>
+      
       <div class="fixBox">
         <dynamic-form [formFields]="addObservationData" [form]="addObservationForm"></dynamic-form>
       </div>

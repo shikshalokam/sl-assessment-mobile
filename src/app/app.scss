@@ -20,63 +20,7 @@ $dark-grey-color: #808080;
 $font-size-base: 14px;
 $font-size-large: 18px;
 $white-color : #fff;
-// $step-circle-active-background-color: #a63936 ;
 
-
-
-
-$stepper-prefix: ionic-stepper;
-$step-prefix: ionic-step;
-
-$step-error-color: #f44336;
-$step-circle-w: 24px;
-$step-circle-h: 24px;
-$step-circle-r: 12px;
-$step-circle-color: #fff;
-:root{
-    $step-circle-active-background-color:red ;
-
-}
-
-$step-circle-inactive-background-color: rgba(0, 0, 0, 0.38);
-
-$step-label-size: 14px;
-$step-label-active-color: rgba(0, 0, 0, 0.87);
-$step-label-inactive-color: rgba(0, 0, 0, 0.38);
-
-$step-line-border: 1px;
-$step-line-color: #e0e0e0;
-
-
-
-.#{$head-prefix}-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 8px;
-    flex: none;
-    width: 24px;
-    height: 24px;
-    border-radius: 12px;
-    background-color: $step-circle-inactive-background-color;
-    color: $step-circle-color;
-    transition: background-color 225ms cubic-bezier(0.4, 0.0, 0.2, 1);
-
-    &-error {
-      background-color: rgba($step-error-color, 0.38)
-    }
-
-    &-active {
-      background-color: $step-circle-active-background-color;
-
-      &.#{$head-prefix}-icon-error {
-        background-color: $step-error-color;
-      }
-    }
-
-  }
- 
-// $blue-color: #488aff;
 $blue-color:  #a63936,;
 
 $primary-color: $blue-color;

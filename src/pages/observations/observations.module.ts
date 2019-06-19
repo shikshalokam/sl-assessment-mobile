@@ -3,7 +3,6 @@ import { IonicPageModule } from 'ionic-angular';
 import { ObservationsPage } from './observations';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '../../components/components.module';
-import { DraftObservationPageModule } from './draft-observation/draft-observation.module';
 import { MyObservationPageModule } from './my-observation/my-observation.module';
 import { ViewObservationPageModule } from './view-observation/view-observation.module';
 
@@ -15,7 +14,6 @@ import { ViewObservationPageModule } from './view-observation/view-observation.m
   imports: [
     TranslateModule,
     ComponentsModule,
-    DraftObservationPageModule,
     MyObservationPageModule,
     ViewObservationPageModule,
     IonicPageModule.forChild(ObservationsPage),

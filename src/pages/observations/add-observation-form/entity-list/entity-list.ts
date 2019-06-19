@@ -9,34 +9,29 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
  */
 
 @Component({
-  selector: 'page-school-list',
-  templateUrl: 'school-list.html',
+  selector: 'page-entity-list',
+  templateUrl: 'entity-list.html',
 })
-export class SchoolListPage {
-schoolList;
-index;
-schools;
+export class EntityListPage {
+entityList;
+
   constructor(
     public navCtrl: NavController,
      public navParams: NavParams,
      public viewCntrl :ViewController
      ) {
-    this.schoolList = this.navParams.get('schoolList');
-    this.schools = this.navParams.get('schools');
-    this.index = this.navParams.get('index');
+   
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SchoolListPage');
-    console.log(this.schools.length);
-    console.log(this.schoolList.length);
-    console.log(this.index);
+
   }
 
   
   addSchools(){
     let selectedSchools = []
-    this.schoolList.forEach(element => {
+    this.entityList.forEach(element => {
       if(element.selected){
         selectedSchools.push(element);
       }

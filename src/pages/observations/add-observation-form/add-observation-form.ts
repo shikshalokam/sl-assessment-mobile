@@ -4,7 +4,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
 import { SolutionDetailsPage } from '../../solution-details/solution-details';
-import { SchoolListPage } from './school-list/school-list';
+import { EntityListPage } from './entity-list/entity-list';
 import { NetworkGpsProvider } from '../../../providers/network-gps/network-gps';
 import { LocalStorageProvider } from '../../../providers/local-storage/local-storage';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -31,11 +31,10 @@ export class AddObservationFormPage {
   addObservationForm: FormGroup;
   selectedFrameWork;
   selectedSchools = [];
-  schoolList = [];
-  schools = [];
+
   index = 0;
   @ViewChild('stepper') stepper1: ElementRef;
-  listOfFrameWork;
+  listOfSolution;
   selectedIndex: any = 0;
   entityTypeData: any;
   entityTypeForm: any;
@@ -69,37 +68,6 @@ export class AddObservationFormPage {
     }, error => {
       console.log("error")
     });
-
-    // this.apiProviders.getLocalJson('assets/addObservation.json').subscribe(successData => {
-    //   this.addObservationData = JSON.parse(successData['_body']).form;
-    //   this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
-    //   this.entityTypeData = JSON.parse(successData['_body']).entityType;
-    //   this.entityTypeForm = this.utils.createFormGroup(this.entityTypeData);
-    // },
-
-    //   error => {
-    //   });
-    // this.apiProviders.getLocalJson('assets/schoolList.json').subscribe(schoolLists => {
-
-    //   this.schools = JSON.parse(schoolLists['_body']).form;
-
-    //   this.schools.forEach(element => {
-    //     element.selected = false;
-    //   });
-    //   if (this.schools) {
-    //     for (; (this.index < 10) && (this.index < this.schools.length);) {
-    //       // console.log(this.schools[this.index].name)
-    //       this.schoolList.push(this.schools[this.index++]);
-    //     }
-    //   }
-    //   console.log(this.stepper1);
-    //   console.log("stepper")
-
-    // },
-
-    //   error => {
-
-    //   });
 
   }
 
@@ -278,27 +246,11 @@ export class AddObservationFormPage {
     let contactModal = this.modalCtrl.create(SolutionDetailsPage, { data: frameWork });
     contactModal.present();
   }
-  openSchoolListmodal() {
-    let schoolListModal = this.modalCtrl.create(SchoolListPage, {
-      schoolList: this.schoolList,
-      schools: this.schools,
-      index: this.index
-    });
-    schoolListModal.onDidDismiss(schoolList => {
-      this.selectedSchools = schoolList;
-      console.log(this.selectedSchools.length)
-    });
-    schoolListModal.present();
-
-
-  }
-
-
   getSolutionList() {
     let solutionFlag = false;
     this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType, success => {
-      this.listOfFrameWork = success.result;
-      console.log(JSON.stringify(this.listOfFrameWork))
+      this.listOfSolution = success.result;
+      console.log(JSON.stringify(this.listOfSolution))
       solutionFlag = true;
     }, error => {
 
@@ -306,7 +258,7 @@ export class AddObservationFormPage {
     return solutionFlag;
   }
 
-  getCurrentLocation() {
+  getObservationMetaForm() {
     this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork._id, success => {
       this.addObservationData = success.result;
       // console.log(JSON.stringify(this.addObservationData))
@@ -340,7 +292,7 @@ export class AddObservationFormPage {
         actionFlag = this.entityType ?  this.getSolutionList() : false;
         break;
       case 1:
-        actionFlag = this.selectedFrameWork ?  this.getCurrentLocation() : false;
+        actionFlag = this.selectedFrameWork ?  this.getObservationMetaForm() : false;
         break;
 
     }
@@ -349,7 +301,7 @@ export class AddObservationFormPage {
   tmpFunc(){}
   saveDraft(){
 
-    let obsData = this.creatPayLoad();
+    let obsData = this.creatPayLoad('draft');
 
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
       let draft = draftObs
@@ -365,13 +317,17 @@ export class AddObservationFormPage {
   this.app.getRootNav().pop();
   }
 
-  creatPayLoad(){
+  creatPayLoad(type = 'publish'){
+
     let payLoad = this.addObservationForm.getRawValue();
-    payLoad['programId'] = this.selectedFrameWork.programId;
+
+    if(type ===  'draft')
+   {
     payLoad['solutionId']= this.selectedFrameWork._id;
     payLoad['entityId'] = this.entityType;
+   }
 
-    console.log(JSON.stringify(payLoad))
+    console.log(JSON.stringify(payLoad));
     return payLoad;
   }
 }
