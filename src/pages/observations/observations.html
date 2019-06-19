@@ -1,11 +1,62 @@
-
+<ion-header>
+  <header [title]="'headings.observations'|translate" [hideBack]="false">
+  </header>
+</ion-header>
 <ion-content>
-    <ion-tabs selectedIndex="0">
-        <ion-tab [root]="viewObservationPage" [tabTitle]="'tabs.view' | translate"  tabIcon="eye"></ion-tab>
-        <ion-tab [root]="myObservationPage" [tabTitle]="'tabs.myObservation' | translate" tabIcon="glasses"></ion-tab>
-        <!-- <ion-tab [root]="draftObservationPage" [tabTitle]="'tabs.draftObservation' | translate" tabIcon="md-bookmark"></ion-tab> -->
-      </ion-tabs>
+  <!-- <ion-tabs selectedIndex="0">
+    <ion-tab [root]="viewObservationPage" [tabTitle]="'tabs.view' | translate" tabIcon="eye"></ion-tab>
+    <ion-tab [root]="myObservationPage" [tabTitle]="'tabs.myObservation' | translate" tabIcon="glasses"></ion-tab>
+  </ion-tabs> -->
+
+  <div padding>
+    <ion-segment [(ngModel)]="selectedTab">
+      <ion-segment-button value="active" (click)="onTabChange('active')">
+        Active
+      </ion-segment-button>
+      <ion-segment-button value="draft" (click)="onTabChange('draft')">
+        Draft
+      </ion-segment-button>
+      <ion-segment-button value="completed" (click)="onTabChange('completed')">
+        Completed
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="selectedTab">
+    <div *ngSwitchCase="'active'">
+      <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+          refreshingText="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
+
+      <div style="padding: 0 0 60px 0">
+        <observation-entity-listing [entityList]="programs" [entityType]="'observations'"
+          (getAssessmentDetailsEvent)="getAssessmentDetails($event)" (refreshEvent)="refresh($event)"
+          (openMenuEvent)="openMenu($event)">
+        </observation-entity-listing>
+      </div>
+    </div>
+    <div *ngSwitchCase="'draft'">Draft</div>
+    <div *ngSwitchCase="'completed'">Completed</div>
+  </div>
+
+  <ion-fab bottom right>
+    <button ion-fab mini (click)="addObservation()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>
 
-
-
+<ion-footer no-shadow *ngIf="selectedTab === 'active'">
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button full (click)="refresh()" class="btnText">
+          <ion-icon name="refresh" margin-right></ion-icon>
+          {{'buttons.refresh' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
