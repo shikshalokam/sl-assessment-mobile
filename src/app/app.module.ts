@@ -2,7 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule, HttpClient} from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { IonicStorageModule } from '@ionic/storage';
@@ -96,7 +96,7 @@ import { IonicStepperModule } from 'ionic-stepper';
     ProgramDetailsPage
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     TranslateModule.forRoot(
