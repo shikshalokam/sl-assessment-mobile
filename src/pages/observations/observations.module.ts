@@ -20,5 +20,6 @@ import { AddObservationFormPageModule } from './add-observation-form/add-observa
     // ViewObservationPageModule,
     IonicPageModule.forChild(ObservationsPage),
   ],
+  entryComponents:[]
 })
 export class ObservationsPageModule {}

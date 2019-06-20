@@ -37,7 +37,32 @@
         </observation-entity-listing>
       </div>
     </div>
-    <div *ngSwitchCase="'draft'">Draft</div>
+    <div *ngSwitchCase="'draft'">
+      <ion-list>
+            
+          <button text-wrap  *ngFor="let draft of draftObservation;let i = index"  ion-item (click)="actionOnDraftObservation(i,draft)">
+          <h2>
+          <span *ngIf="draft?.name ; else noName">
+              {{ draft?.name }} 
+          </span>
+          <ng-template #noName>
+            (No Name)
+          </ng-template>
+        <span float-right *ngIf="draft.isComplete"
+          class="_completed _flex-box">
+          {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left>
+          </ion-icon>
+        </span>
+        
+        <span float-right *ngIf="!draft.isComplete "
+          class="_inProgress _flex-box">
+          {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
+        </span>
+       
+      </h2>
+    </button>
+      </ion-list>
+    </div>
     <div *ngSwitchCase="'completed'">Completed</div>
   </div>
 
