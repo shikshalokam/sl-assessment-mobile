@@ -224,7 +224,7 @@ export class AddObservationFormPage {
     this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType, success => {
       this.listOfSolution = success.result;
       console.log(JSON.stringify(this.listOfSolution))
-      if(this.editData.solutionId){
+      if( this.editData && this.editData.solutionId ){
         this.listOfSolution.forEach(element => {
         if(  element._id === this.editData.solutionId )
         this.selectedFrameWork = element;
@@ -240,6 +240,7 @@ export class AddObservationFormPage {
   getObservationMetaForm() {
     this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork._id, success => {
       this.addObservationData = success.result;
+      if(this.editData)
       this.addObservationData.forEach(element => {
         element.value = this.editData[element.field] ;
       });
