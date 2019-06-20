@@ -274,29 +274,13 @@ export class AddObservationFormPage {
      
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
       let draft = draftObs
-      if(this.editDataIndex >= 0){
-        draft.splice(this.editDataIndex , 1);
-      }
-      draft.push(obsData);
-      console.log("event getting publish");
-
+      this.editDataIndex >= 0 ?  draft[this.editDataIndex] = obsData  : draft.push(obsData);
       this.localStorage.setLocalStorage('draftObservation', draft);
-      if(option == 'normal')
-      {  
-        this.navCtrl.pop();
-      }  
-    else{
-      this.event.publish('draftObservationArrayReload');
-    }
+      option == 'normal' ? this.navCtrl.pop() :  this.event.publish('draftObservationArrayReload');
+    
     }).catch(() => {
       this.localStorage.setLocalStorage('draftObservation', [obsData]);
-      if(option === 'normal')
-      {  
-        this.navCtrl.pop();
-      }  
-    else{
-      this.event.publish('draftObservationArrayReload');
-    }
+      option == 'normal' ? this.navCtrl.pop() :  this.event.publish('draftObservationArrayReload');
     })
 
     
