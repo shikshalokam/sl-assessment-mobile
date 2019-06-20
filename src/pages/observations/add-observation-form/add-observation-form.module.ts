@@ -4,7 +4,7 @@ import { ComponentsModule } from '../../../components/components.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { AddObservationFormPage } from './add-observation-form';
 import { IonicStepperModule } from 'ionic-stepper';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EntityListPage } from './entity-list/entity-list';
 
 @NgModule({
@@ -16,7 +16,7 @@ import { EntityListPage } from './entity-list/entity-list';
     ComponentsModule,
     TranslateModule,
     IonicStepperModule,
-    BrowserAnimationsModule,
+    // BrowserAnimationsModule,
     IonicPageModule.forChild(AddObservationFormPage),
   ],
   entryComponents:[

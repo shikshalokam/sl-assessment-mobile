@@ -71,6 +71,7 @@
       
       <div class="fixBox">
         <dynamic-form [formFields]="addObservationData" [form]="addObservationForm"></dynamic-form>
+        
       </div>
     </ion-step>
   </ion-stepper>
@@ -98,7 +99,7 @@
       </ion-col>
       
       <ion-col *ngIf="selectedIndex === 2">
-          <button ion-button full (click)="saveDraft()" class="btnText">
+          <button ion-button full (click)="saveDraft() ; saveDraftType = 'normal'" class="btnText">
             <ion-icon name="pause" margin-right></ion-icon>
             {{'buttons.saveDraft' | translate}}
           </button>
