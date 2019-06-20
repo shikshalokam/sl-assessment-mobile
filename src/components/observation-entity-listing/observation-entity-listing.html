@@ -5,8 +5,23 @@
       <ion-item-divider color="light">
         <h4 class="bold" text-wrap> {{entity.name}} </h4>
       </ion-item-divider>
+
+      <ion-row class="_flex-box justify-content-space-between">
+        <ion-col>
+          <button ion-button icon-start clear small float-left>
+            <ion-icon name="checkmark"></ion-icon>
+            <div>Mark as complete</div>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button icon-start clear small float-right>
+            <ion-icon name="add"></ion-icon>
+            <div>Add Entity</div>
+          </button>
+        </ion-col>
+      </ion-row>
       <ion-list>
-        <ion-item-sliding *ngFor="let entity of solution.entities; let k = index" >
+        <ion-item-sliding *ngFor="let entity of solution.entities; let k = index">
           <ion-item text-wrap>
             <div class="_flex-box">
               <div style="flex:1"
@@ -17,10 +32,10 @@
                 *ngIf="!entity?.downloaded"></ion-icon>
               <ion-icon name="more" class="menuIcon" (click)="openMenu($event,i,j,k , entity?.submissionId)"
                 *ngIf="entity?.downloaded && showMenu"></ion-icon>
-  
+
               <!-- <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
               (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon> -->
-  
+
             </div>
           </ion-item>
           <ion-item-options side="right">
