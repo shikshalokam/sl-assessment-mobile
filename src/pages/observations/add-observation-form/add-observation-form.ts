@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, App, Config } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, App, Config, Events } from 'ionic-angular';
 import { FormGroup, Validators } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
@@ -20,7 +20,9 @@ import { AppConfigs } from '../../../providers/appConfig';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+export interface draftData{
 
+}
 @IonicPage()
 @Component({
   selector: 'page-add-observation-form',
@@ -41,6 +43,9 @@ export class AddObservationFormPage {
   currentLocation: any;
   obsData: any;
   entityType: any;
+  saveDraftType: string = 'force';
+  editData: any;
+  editDataIndex: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -54,8 +59,13 @@ export class AddObservationFormPage {
     private networkGps: NetworkGpsProvider,
     private localStorage: LocalStorageProvider,
     private app: App,
-    private storage: Storage
+    private storage: Storage,
+    private event :Events
   ) {
+    this.editData  = this.navParams.get('data');
+    this.editDataIndex  = this.navParams.get('index');
+
+    
   }
 
   ionViewDidLoad() {
@@ -65,6 +75,9 @@ export class AddObservationFormPage {
       this.entityTypeData = success.result;
       console.log(JSON.stringify(success));
       console.log("success data")
+      if(this.editData){
+        this.entityType = this.editData.entityId;
+      }
     }, error => {
       console.log("error")
     });
@@ -77,28 +90,7 @@ export class AddObservationFormPage {
     this.selectedIndex = e;
   }
 
-  checkIndex() {
-    console.log('checkIndex func ')
-    switch (this.selectedIndex) {
-
-      case 0: this.entityType = this.entityTypeForm.controls.category.value;
-        break;
-      case 1:
-        this.diagnostic.isLocationEnabled().then((isAvailable) => {
-          if (isAvailable) {
-            this.getLocation();
-            console.log("func end")
-          }
-          else {
-            this.networkGps.checkForLocationPermissions();
-          }
-        }).catch(error => {
-
-        });
-        break;
-    }
-
-  }
+  
 
   getLocation() {
     this.utils.startLoader();
@@ -217,26 +209,7 @@ export class AddObservationFormPage {
 
   }
   addObservation() {
-    // this.obsData = this.addObservationForm.getRawValue();
-    // this.obsData['solutionId'] = this.selectedFrameWork;
-    // this.obsData['location'] = this.currentLocation;
-    // this.obsData['entityType'] = this.entityTypeForm.getRawValue.category;
-    // if (this.addObservationForm.controls.status.value == 'active') {
-
-    // }
-    // else {
-    // this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
-    //   let draft = draftObs
-    //   draft.push(this.obsData);
-    //   console.log("pushed in array")
-    //   this.localStorage.setLocalStorage('draftObservation', draft);
-
-    // }).catch(() => {
-    //   this.localStorage.setLocalStorage('draftObservation', [this.obsData]);
-
-    // })
-    // }
-    this.app.getRootNav().pop();
+      this.app.getRootNav().pop();
 
   }
   selectSolution(frameWork) {
@@ -251,6 +224,12 @@ export class AddObservationFormPage {
     this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType, success => {
       this.listOfSolution = success.result;
       console.log(JSON.stringify(this.listOfSolution))
+      if( this.editData && this.editData.solutionId ){
+        this.listOfSolution.forEach(element => {
+        if(  element._id === this.editData.solutionId )
+        this.selectedFrameWork = element;
+        });
+      }
       solutionFlag = true;
     }, error => {
 
@@ -261,28 +240,14 @@ export class AddObservationFormPage {
   getObservationMetaForm() {
     this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork._id, success => {
       this.addObservationData = success.result;
-      // console.log(JSON.stringify(this.addObservationData))
+      if(this.editData)
       this.addObservationData.forEach(element => {
-        element['validation'] = { required: true }
-      })
+        element.value = this.editData[element.field] ;
+      });
       this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
     }, error => {
 
     });
-    // this.diagnostic.isLocationEnabled().then((isAvailable) => {
-    //   if (isAvailable) {
-    //     this.getLocation();
-    //     console.log("func end")
-
-    //   }
-    //   else {
-    //     this.networkGps.checkForLocationPermissions();
-    //   }
-    // }).catch(error => {
-
-    // });
-
-
     return (this.addObservationForm && this.currentLocation) ? true : false;
   }
   doAction() {
@@ -299,24 +264,47 @@ export class AddObservationFormPage {
     return actionFlag;
   }
   tmpFunc() { }
-  saveDraft() {
+  saveDraft(option = 'normal') {
+    
+   if(this.entityType){
     let obsData = this.creatPayLoad('draft');
+    
+      obsData['isComplete']=this.addObservationForm?this.addObservationForm.valid ? true : false : false;
+
+     
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
       let draft = draftObs
-      draft.push(obsData);
+      this.editDataIndex >= 0 ?  draft[this.editDataIndex] = obsData  : draft.push(obsData);
       this.localStorage.setLocalStorage('draftObservation', draft);
+      option == 'normal' ? this.navCtrl.pop() :  this.event.publish('draftObservationArrayReload');
+    
     }).catch(() => {
       this.localStorage.setLocalStorage('draftObservation', [obsData]);
+      option == 'normal' ? this.navCtrl.pop() :  this.event.publish('draftObservationArrayReload');
     })
-    this.app.getRootNav().pop();
+
+    
   }
 
+}
+
   creatPayLoad(type = 'publish') {
-    let payLoad = this.addObservationForm.getRawValue();
+    let payLoad = this.addObservationForm ?  this.addObservationForm.getRawValue() : {};
     if (type === 'draft') {
-      payLoad['solutionId'] = this.selectedFrameWork._id;
-      payLoad['entityId'] = this.entityType;
+      payLoad['isComplete']= false;
+      payLoad['solutionId'] = this.selectedFrameWork ? this.selectedFrameWork._id : null;
+      payLoad['entityId'] = this.entityType ? this.entityType : null ;
     }
     return payLoad;
   }
+
+
+  ionViewWillUnload(){
+
+
+    console.log("function called on leave");
+    if(this.saveDraftType !== 'normal')
+      this.saveDraft('force');
+  }
+
 }
