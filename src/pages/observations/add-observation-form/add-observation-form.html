@@ -7,13 +7,13 @@
 <ion-content padding-top>
   <ion-stepper [mode]="'horizontal'" #stepper (selectIndexChange)="selectChange($event)">
 
-    <ion-step label="Entity Type" >
-        <h4>Entity Type</h4>
+    <ion-step label="Step 1" >
+        <h4>Observation Type</h4>
       
       <ion-list radio-group [(ngModel)]="entityType">
         <!-- <ion-label>Entity Type</ion-label> -->
         <ion-item *ngFor="let type of entityTypeData">
-          <ion-label>{{type.name}}</ion-label>
+          <ion-label text-capitalize>{{type.name}}</ion-label>
           <ion-radio value="{{type._id}}"></ion-radio>
         </ion-item>
       </ion-list>
@@ -50,7 +50,7 @@
     </ion-step> -->
 
 
-    <ion-step label="Solutions">
+    <ion-step label="Step 2">
       <h4>Solution List</h4>
       <div class="fixBox" *ngIf="listOfSolution">
 
@@ -66,7 +66,7 @@
     </ion-step>
 
 
-    <ion-step label="Details">
+    <ion-step label="Step 3">
         <h4>Observation Details</h4>
       
       <div class="fixBox">
@@ -92,24 +92,25 @@
       <ion-col *ngIf="selectedIndex !== 2">
         <button ion-button full
           (click)=" doAction() ; selectedIndex === 0  ? entityType ? stepper1.nextStep() : tmpFunc() : selectedFrameWork ? stepper1.nextStep() : tmpFunc "
-          class="btnText">
-          {{'buttons.next' | translate}}
+          class="btnText"
+          >
+          {{'buttons.next' | translate}} 
         </button>
       </ion-col>
       
       <ion-col *ngIf="selectedIndex === 2">
           <button ion-button full (click)="saveDraft()" class="btnText">
-            <ion-icon name="pause" margin-right></ion-icon>
-            {{'buttons.saveDraft' | translate}}
+            <!-- <ion-icon name="pause" margin-right></ion-icon> -->
+            {{'buttons.save' | translate}}
           </button>
         </ion-col>
         
-        <ion-col *ngIf="selectedIndex === 2">
-            <button ion-button full (click)="addObservation()" class="btnText">
+        <!-- <ion-col *ngIf="selectedIndex === 2">
+            <button ion-button full (click)="addObservation()" class="btnText" >
               <ion-icon name="cloud-upload" margin-right></ion-icon>
               {{'buttons.add' | translate}}
             </button>
-          </ion-col>
+          </ion-col> -->
     </ion-row>
   </ion-toolbar>
 </ion-footer>
