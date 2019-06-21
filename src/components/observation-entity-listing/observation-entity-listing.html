@@ -8,12 +8,6 @@
 
       <ion-row class="_flex-box justify-content-space-between">
         <ion-col>
-          <button ion-button icon-start clear small float-left>
-            <ion-icon name="checkmark"></ion-icon>
-            <div>Mark as complete</div>
-          </button>
-        </ion-col>
-        <ion-col>
           <button ion-button icon-start clear small float-right>
             <ion-icon name="add"></ion-icon>
             <div>Add Entity</div>
@@ -28,10 +22,9 @@
                 (click)="entity?.downloaded ? goToEcm(entity?.submissionId,entity?.name ) : getAssessmentDetails(i, j,k) ">
                 {{entity.name}}
               </div>
-              <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j, k)"
-                *ngIf="!entity?.downloaded"></ion-icon>
-              <ion-icon name="more" class="menuIcon" (click)="openMenu($event,i,j,k , entity?.submissionId)"
-                *ngIf="entity?.downloaded && showMenu"></ion-icon>
+              <ion-icon name="trash" class="downloadIcon" margin-left></ion-icon>
+              <!-- <ion-icon name="more" class="menuIcon" (click)="openMenu($event,i,j,k , entity?.submissionId)"
+                *ngIf="entity?.downloaded && showMenu"></ion-icon> -->
 
               <!-- <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
               (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon> -->
@@ -39,7 +32,7 @@
             </div>
           </ion-item>
           <ion-item-options side="right">
-            <button ion-button color="warning">
+            <button ion-button color="warning" >
               <ion-icon name="trash"></ion-icon>
               Delete
             </button>

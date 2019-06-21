@@ -31,10 +31,10 @@
       </ion-refresher>
 
       <div style="padding: 0 0 60px 0">
-        <observation-entity-listing [entityList]="programs" [entityType]="'observations'"
-          (getAssessmentDetailsEvent)="getAssessmentDetails($event)" (refreshEvent)="refresh($event)"
-          (openMenuEvent)="openMenu($event)">
-        </observation-entity-listing>
+        <ion-card *ngFor="let observation of programs; let i=index" padding margin-right  (click)="navigateToDetails(i)">
+            {{ observation?.name }}
+        </ion-card>
+        
       </div>
     </div>
     <div *ngSwitchCase="'draft'">
