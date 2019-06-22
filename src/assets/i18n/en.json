@@ -29,7 +29,8 @@
         "update": "Update",
         "Leader": "School Leader",
         "Teacher": "Teacher",
-        "saveDraft":"Draft"
+        "saveDraft":"Draft",
+        "markAsComplete":"Mark as completed"
     },
     "tabs": {
         "home": "Home",
@@ -82,7 +83,8 @@
         "schoolLeaderRegistry": "School Leader Registry",
         "teacherRegistry": "Teacher Registry",
         "generalQuestions": "General Questions",
-        "individualAssessments": "Individual Assessments"
+        "individualAssessments": "Individual Assessments",
+        "observationDetails": "Observation Details"
     },
     "labels": {
         "welcome": "Welcome",
