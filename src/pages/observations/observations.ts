@@ -5,18 +5,8 @@ import { AssessmentServiceProvider } from '../../providers/assessment-service/as
 import { AppConfigs } from '../../providers/appConfig';
 import { AddObservationFormPage } from './add-observation-form/add-observation-form';
 import { ActionSheetController } from 'ionic-angular';
-// import { AddObservationFormPage } from './add-observation-form/add-observation-form';
+import { ObservationDetailsPage } from '../observation-details/observation-details';
 
-// import { ViewObservationPage } from './view-observation/view-observation';
-// import { MyObservationPage } from './my-observation/my-observation';
-// import { DraftObservationPage } from './draft-observation/draft-observation';
-
-/**
- * Generated class for the ObservationsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -25,9 +15,6 @@ import { ActionSheetController } from 'ionic-angular';
 })
 export class ObservationsPage {
 
-  // viewObservationPage = ViewObservationPage;
-  // myObservationPage = MyObservationPage;
-  // draftObservationPage = DraftObservationPage;
 
   selectedTab;
   draftObservation;
@@ -35,22 +22,21 @@ export class ObservationsPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public app :App,
+    public app: App,
     private localStorage: LocalStorageProvider,
-    private assessmentService:AssessmentServiceProvider,
-    private events:Events,
+    private assessmentService: AssessmentServiceProvider,
+    private events: Events,
     public actionSheetCtrl: ActionSheetController
-    ) {
-      this.events.subscribe('draftObservationArrayReload' , ()=>{
-        this.getDraftObservation();
-      })
+  ) {
+    this.events.subscribe('draftObservationArrayReload', () => {
+      this.getDraftObservation();
+    })
   }
 
   ionViewDidLoad() {
     this.selectedTab = 'active';
     console.log("observation Module loaded");
-    // this.getDraftObservation();
-    this.localStorage.getLocalStorage('observationList').then(data => { 
+    this.localStorage.getLocalStorage('observationList').then(data => {
       if (data) {
         this.programs = data;
       } else {
@@ -62,17 +48,13 @@ export class ObservationsPage {
   }
 
 
-  ionViewDidEnter(){
-    console.log("draft page is active")
-
+  ionViewDidEnter() {
     this.getDraftObservation();
-
-    console.log(JSON.stringify(this.draftObservation))
   }
 
   onTabChange(tabName) {
     this.selectedTab = tabName;
-    if(tabName === 'draft'){
+    if (tabName === 'draft') {
       this.getDraftObservation();
     }
   }
@@ -80,91 +62,83 @@ export class ObservationsPage {
 
   programs: any;
   enableRefresh = AppConfigs.configuration.enableAssessmentListRefresh;
-  
+
   getAssessmentsApi() {
-    this.assessmentService.getAssessmentsApi ('observation').then(programs =>{
+    this.assessmentService.getAssessmentsApi('observation').then(programs => {
       this.programs = programs;
-      //console.log("success in observations list api function");
-
-    }).catch(error=>{
-      //console.log("error in observations list api function");
+    }).catch(error => {
     })
-    
+  }
 
+  navigateToDetails(index) {
+    this.navCtrl.push(ObservationDetailsPage, {selectedObservationIndex: index})
   }
 
   refresh(event?: any) {
-   event ? this.assessmentService.refresh(this.programs ,'observation', event).then( program =>{
-     this.programs = program;
-     //console.log(program);
-   }).catch( error=>{})
-   : 
-   this.assessmentService.refresh(this.programs,'observation').then(program =>{
-    this.programs = program;
-   }
-   ).catch( error =>{
+    event ? this.assessmentService.refresh(this.programs, 'observation', event).then(program => {
+      this.programs = program;
+    }).catch(error => { })
+      :
+      this.assessmentService.refresh(this.programs, 'observation').then(program => {
+        this.programs = program;
+      }
+      ).catch(error => {
 
-   });
+      });
   }
 
   getDraftObservation() {
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
       this.draftObservation = draftObs;
-      console.log(JSON.stringify(draftObs))
-
     }).catch(() => {
       this.draftObservation = [];
     })
   }
 
-  addObservation(){
-this.app.getRootNav().push(AddObservationFormPage, {})
-// this.navCtrl.push('AddObservationFormPage', {})
-    
+  addObservation() {
+    this.app.getRootNav().push(AddObservationFormPage, {})
   }
 
 
   getAssessmentDetails(event) {
-    this.assessmentService.getAssessmentDetails(event,this.programs ,'observation').then(program=>{
-    this.programs = program;
-    }).catch(error=>{
+    this.assessmentService.getAssessmentDetails(event, this.programs, 'observation').then(program => {
+      this.programs = program;
+    }).catch(error => {
 
     })
   }
 
   openMenu(event) {
-    this.assessmentService.openMenu(event,this.programs , false);
+    this.assessmentService.openMenu(event, this.programs, false);
   }
 
 
-  actionOnDraftObservation(index,observation){
-    console.log(JSON.stringify(observation))
-    let actionArray  = [
+  actionOnDraftObservation(index, observation) {
+    let actionArray = [
       {
         text: 'Edit',
         role: 'edit',
         handler: () => {
           console.log('edit clicked');
-          this.app.getRootNav().push(AddObservationFormPage,  { data :observation , index : index})
+          this.app.getRootNav().push(AddObservationFormPage, { data: observation, index: index })
         }
-      },{
+      }, {
         text: 'Delete',
         handler: () => {
-          console.log('delete clicked');
-          this.draftObservation.splice(index , 1);
-          this.localStorage.setLocalStorage('draftObservation',this.draftObservation);
+          this.draftObservation.splice(index, 1);
+          this.localStorage.setLocalStorage('draftObservation', this.draftObservation);
         }
       }
     ];
-    if(observation.isComplete){
+    if (observation.isComplete) {
       actionArray.push({
         text: 'Publish',
         role: 'Publish',
         handler: () => {
-          observation.status='published';
+          observation.status = 'published';
           let publishObservation = observation;
-          this.draftObservation.splice(index , 1);
-          this.localStorage.setLocalStorage('draftObservation',this.draftObservation);
+          this.draftObservation.splice(index, 1);
+          this.localStorage.setLocalStorage('draftObservation', this.draftObservation);
         }
       })
     }
@@ -174,5 +148,5 @@ this.app.getRootNav().push(AddObservationFormPage, {})
     });
     actionSheet.present();
   }
-  }
-  
+}
+
