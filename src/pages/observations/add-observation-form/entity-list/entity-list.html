@@ -14,7 +14,7 @@
 
 <ion-content padding>
  <!-- <div  class="fixBox"> -->
-          <selectable-list [selectableList]="entityList"></selectable-list>
+          <selectable-list [selectableList]="entityList" (searchUrl)="search($event)" [list]="list" [index]="index"></selectable-list>
       <!-- </div> -->
 
           

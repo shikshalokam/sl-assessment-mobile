@@ -63,6 +63,7 @@ export class AddObservationFormPage {
     private event :Events
   ) {
     this.editData  = this.navParams.get('data');
+    console.log(JSON.stringify(this.navParams.get('data')));
     this.editDataIndex  = this.navParams.get('index');
 
     
@@ -76,7 +77,7 @@ export class AddObservationFormPage {
       console.log(JSON.stringify(success));
       console.log("success data")
       if(this.editData){
-        this.entityType = this.editData.entityId;
+        this.entityType = this.editData.data.entityId;
       }
     }, error => {
       console.log("error")
@@ -224,9 +225,9 @@ export class AddObservationFormPage {
     this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType, success => {
       this.listOfSolution = success.result;
       console.log(JSON.stringify(this.listOfSolution))
-      if( this.editData && this.editData.solutionId ){
+      if( this.editData && this.editData.data.solutionId ){
         this.listOfSolution.forEach(element => {
-        if(  element._id === this.editData.solutionId )
+        if(  element._id === this.editData.data.solutionId )
         this.selectedFrameWork = element;
         });
       }
@@ -240,10 +241,15 @@ export class AddObservationFormPage {
   getObservationMetaForm() {
     this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork._id, success => {
       this.addObservationData = success.result;
-      if(this.editData)
+      if(this.editData) {
       this.addObservationData.forEach(element => {
-        element.value = this.editData[element.field] ;
+        element.value = this.editData.data[element.field] ;
+        if(element.field === 'status'){
+          element.value = 'draft';
+        }
       });
+    
+    }
       this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
     }, error => {
 
@@ -267,13 +273,17 @@ export class AddObservationFormPage {
   saveDraft(option = 'normal') {
     
    if(this.entityType){
-    let obsData = this.creatPayLoad('draft');
+    let obsData :{} = {
+      data:{}
+    };
+     obsData['data'] = this.creatPayLoad('draft');
     
-      obsData['isComplete']=this.addObservationForm?this.addObservationForm.valid ? true : false : false;
+      obsData['data']['isComplete'] = this.addObservationForm?this.addObservationForm.valid ? true : false : false;
 
-     
+      console.log(JSON.stringify(obsData))
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
-      let draft = draftObs
+      let draft = draftObs;
+      console.log(JSON.stringify(obsData))
       this.editDataIndex >= 0 ?  draft[this.editDataIndex] = obsData  : draft.push(obsData);
       this.localStorage.setLocalStorage('draftObservation', draft);
       option == 'normal' ? this.navCtrl.pop() :  this.event.publish('draftObservationArrayReload');
