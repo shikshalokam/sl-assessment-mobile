@@ -34,27 +34,30 @@
         <ion-card *ngFor="let observation of programs; let i=index" padding margin-right  (click)="navigateToDetails(i)">
             {{ observation?.name }}
         </ion-card>
+        <ion-card *ngFor="let observation of createdObservation; let i=index" padding margin-right  (click)="navigateToCreatedObservationDetails(i)">
+          {{ observation?.name }}
+      </ion-card>
         
       </div>
     </div>
     <div *ngSwitchCase="'draft'">
-      <ion-list>
+      <ion-list *ngIf="draftObservation">
             
           <button text-wrap  *ngFor="let draft of draftObservation;let i = index"  ion-item (click)="actionOnDraftObservation(i,draft)">
           <h2>
-          <span *ngIf="draft?.name ; else noName">
-              {{ draft?.name }} 
+          <span *ngIf="draft?.data?.name ; else noName">
+              {{ draft?.data.name }} 
           </span>
           <ng-template #noName>
             (No Name)
           </ng-template>
-        <span float-right *ngIf="draft.isComplete"
+        <span float-right *ngIf="draft?.data?.isComplete"
           class="_completed _flex-box">
           {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left>
           </ion-icon>
         </span>
         
-        <span float-right *ngIf="!draft.isComplete "
+        <span float-right *ngIf="!draft?.data?.isComplete "
           class="_inProgress _flex-box">
           {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
         </span>
@@ -62,6 +65,11 @@
       </h2>
     </button>
       </ion-list>
+      <ion-list *ngIf="!draftObservation" >
+       <span class="_flex-box _justify-content-center">
+          No Drafts
+       </span>
+        </ion-list>
     </div>
     <div *ngSwitchCase="'completed'">Completed</div>
   </div>

@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { ApiProvider } from '../../providers/api/api';
 
 /**
  * Generated class for the SelectableListComponent component.
@@ -11,13 +12,16 @@ import { Component, Input } from '@angular/core';
   templateUrl: 'selectable-list.html'
 })
 export class SelectableListComponent {
-  @Input() selectableList;
-   list;
-   @Input() index = 10 ;
-
+  @Input() selectableList = [];
+  @Input() list;
+  @Input() index = 10 ;
+  @Output() searchUrl  = new EventEmitter();
+  @Input() observationId;
   text: string;
 
-  constructor() {
+  constructor(
+    private apiProviders : ApiProvider
+  ) {
     console.log('Hello SelectableListComponent Component');
     this.text = 'Hello World';
     this.list = this.selectableList.slice(0,this.index-1);
@@ -30,5 +34,15 @@ export class SelectableListComponent {
       }
       infiniteScroll.complete();
     }, 500);
+  }
+  searchEntity(event){
+      if(!event.value || event.value.length < 3){
+         return;
+      }
+     
+    console.log("search entity called")
+    console.log(event.value);
+    this.searchUrl.emit(event.value)
+
   }
 }

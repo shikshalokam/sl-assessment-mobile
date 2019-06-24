@@ -157,6 +157,37 @@ export class AssessmentServiceProvider {
 
   });
 }
+
+getAssessmentDetailsOfCreatedObservation(event, programs, assessmentType) {
+  return new Promise((resolve, reject) =>{
+  let programIndex = event.programIndex;
+  let schoolIndex = event.entityIndex;
+
+  // console.log(programIndex + " " + assessmentIndex + " " + schoolIndex)
+  this.utils.startLoader();
+  const url = AppConfigs.assessmentsList.detailsOfAssessment + programs[programIndex]._id + "?solutionId=" + programs[programIndex].solutionId + "&entityId=" + programs[programIndex].entities[schoolIndex]._id;
+  //console.log(url);
+  this.apiService.httpGet(url, success => {
+    this.ulsdp.mapSubmissionDataToQuestion(success.result);
+    const generalQuestions = success.result['assessment']['generalQuestions'] ? success.result['assessment']['generalQuestions'] : null;
+    this.localStorage.setLocalStorage("generalQuestions_" + success.result['assessment']["submissionId"], generalQuestions);
+    this.localStorage.setLocalStorage("generalQuestionsCopy_" + success.result['assessment']["submissionId"], generalQuestions);
+    programs[programIndex]['entities'][schoolIndex].downloaded = true;
+    programs[programIndex]['entities'][schoolIndex].submissionId = success.result.assessment.submissionId;
+    // this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId), success.result);
+    this.localStorage.setLocalStorage(`${assessmentType}List`, programs);
+    this.utils.stopLoader();
+    
+    resolve(programs);
+  }, error => {
+    //console.log("error details api")
+    this.utils.stopLoader();
+    reject();
+  });
+
+});
+}
+
 openMenu(event , programs , showMenu?:any) {
   let myEvent = event.event;
   let  programIndex =  event.programIndex;
