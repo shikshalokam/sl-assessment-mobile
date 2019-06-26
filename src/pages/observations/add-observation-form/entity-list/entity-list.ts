@@ -52,10 +52,10 @@ searchUrl;
   
   search(event){
     this.apiProviders.httpGet(this.searchUrl+this.observationId+"?search="+event , success =>{
-      this.selectableList = success.result[0].schoolInformation;
-      this.selectableList.forEach( element =>{
-        element.selected = false;
-      } )
+      this.selectableList = success.result[0].metaInformation;
+      // this.selectableList.forEach( element =>{
+      //   element.selected = false;
+      // } )
       console.log(JSON.stringify(success.result[0].schoolInformation));
       this.index = this.index > this.selectableList.length ? this.selectableList.length : this.index;
       this.list = this.selectableList.slice(0,this.index);

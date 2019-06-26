@@ -17,8 +17,8 @@ import { AssessmentServiceProvider } from '../../providers/assessment-service/as
 export class ObservationDetailsPage {
 
   observationDetails = [];
-  typeOfObservation = 'observation'
   programs: any;
+  
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private assessmentService: AssessmentServiceProvider,
@@ -28,13 +28,10 @@ export class ObservationDetailsPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ObservationDetailsPage');
     const selectedObservationIndex = this.navParams.get('selectedObservationIndex');
-    const typeOfObservation = this.navParams.get('typeOfObservation')
     console.log(selectedObservationIndex)
-    this.typeOfObservation = typeOfObservation === 'createdObservationList' ? 'createdObservationList' : 'observation'
-
-    this.localStorage.getLocalStorage(typeOfObservation).then(data => {
+    this.localStorage.getLocalStorage('createdObservationList').then(data => {
       this.programs = data;
-      // console.log(JSON.stringify(data))
+      console.log(JSON.stringify(data))
       this.observationDetails.push(data[selectedObservationIndex]);
       console.log(JSON.stringify(this.observationDetails))
 
@@ -47,6 +44,7 @@ export class ObservationDetailsPage {
   }
 
   getAssessmentDetails(event) {
+    // console.log(JSON.stringify(event))
     event.assessmentIndex ? 
     this.assessmentService.getAssessmentDetails(event, this.programs, 'observation').then(program => {
       this.programs = program;
@@ -54,11 +52,36 @@ export class ObservationDetailsPage {
 
     })
     : 
-    this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'bservation').then(program => {
+    console.log(JSON.stringify(this.programs));
+    console.log("TEST")
+    event.observationIndex = this.navParams.get('selectedObservationIndex');
+    this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(program => {
       this.programs = program;
+      
     }).catch(error => {
 
     })
 
+    
+
   }
+  updateLocalStorage(event){
+      console.log("local storge called")
+
+      this.localStorage.getLocalStorage('createdObservationList').then(data =>{
+            console.log(JSON.stringify(data[this.navParams.get('selectedObservationIndex')]))
+            console.log("success data")
+            event.length ? 
+            data[this.navParams.get('selectedObservationIndex')].entities = event
+            : 
+            data[this.navParams.get('selectedObservationIndex')].entities.splice(event,1);
+
+
+            this.localStorage.setLocalStorage('createdObservationList',data);
+          }).catch(error =>{
+
+          });
+  }
+
+
 }

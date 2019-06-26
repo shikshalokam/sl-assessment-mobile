@@ -1,52 +1,3 @@
-<div *ngIf="typeOfObservation === 'observation';else createdObservation">
-  <div *ngFor="let entity of entityList; let i = index">
-    <ion-card>
-  
-      <ion-item-group *ngFor="let solution of entity?.solutions; let j = index">
-        <ion-item-divider color="light">
-          <h4 class="bold" text-wrap> {{entity.name}} </h4>
-        </ion-item-divider>
-  
-        <ion-row class="_flex-box justify-content-space-between">
-          <ion-col>
-            <button ion-button icon-start clear small float-right (click)="addEntity(i,j)">
-              <ion-icon name="add"></ion-icon>
-              <div>Add Entity</div>
-            </button>
-          </ion-col>
-        </ion-row>
-        <ion-list>
-          <ion-item-sliding *ngFor="let entity of solution.entities; let k = index">
-            <ion-item text-wrap>
-              <div class="_flex-box">
-                <div style="flex:1"
-                  (click)="entity?.downloaded ? goToEcm(entity?.submissionId,entity?.name ) : getAssessmentDetails(i, j,k) ">
-                  {{entity.name}}
-                </div>
-                <ion-icon name="trash" class="downloadIcon" margin-left></ion-icon>
-                <!-- <ion-icon name="more" class="menuIcon" (click)="openMenu($event,i,j,k , entity?.submissionId)"
-                  *ngIf="entity?.downloaded && showMenu"></ion-icon> -->
-  
-                <!-- <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
-                (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon> -->
-  
-              </div>
-            </ion-item>
-            <ion-item-options side="right">
-              <button ion-button color="warning" (click)="removeEntity(i,j,k)">
-                <ion-icon name="trash"></ion-icon>
-                Delete
-              </button>
-            </ion-item-options>
-          </ion-item-sliding>
-        </ion-list>
-  
-      </ion-item-group>
-  
-    </ion-card>
-  </div>
-</div>
-<ng-template #createdObservation>
   <div *ngFor="let entity of entityList; let i = index">
     <ion-card>
   
@@ -68,10 +19,10 @@
             <ion-item text-wrap>
               <div class="_flex-box">
                 <div style="flex:1"
-                  (click)="entity?.downloaded ? goToEcm(entity?.submissionId,entity?.name ) : getAssessmentDetailsOfCreatedObservation(i,k) ">
+                  (click)="entity?.downloaded ? goToEcm(entity?.submissionId,entity?.name ) : getAssessmentDetailsOfCreatedObservation(i,k,entityList[i].solutionId) ">
                   {{entity.name}}
                 </div>
-                <ion-icon name="trash" class="downloadIcon" margin-left></ion-icon>
+                <ion-icon name="trash" class="downloadIcon"(click)="removeEntity(i,k)" margin-left></ion-icon>
                
   
               </div>
@@ -84,12 +35,16 @@
             </ion-item-options>
           </ion-item-sliding>
         </ion-list>
+        <ion-list *ngIf="!entity.entities.length">
+          <div class="_flex-box _justify-content-center flex1">
+            No Entities
+          </div>
+        </ion-list>
   
       </ion-item-group>
   
     </ion-card>
+    
   </div>
-</ng-template>
-<!-- {{typeOfObservation}} -->
 
 <div class="_flex-box msgContainer" *ngIf="!entityList?.length">No {{entityType}}</div>

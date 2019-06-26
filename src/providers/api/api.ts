@@ -197,7 +197,7 @@ export class ApiProvider {
         console.log("success data")
       }).catch(error => {
 
-        console.log(error)
+        console.log(JSON.stringify(error));
         const errorDetails = error['error'] ? JSON.parse(error['error']) : error ;
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;

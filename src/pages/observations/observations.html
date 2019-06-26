@@ -31,9 +31,6 @@
       </ion-refresher>
 
       <div style="padding: 0 0 60px 0">
-        <ion-card *ngFor="let observation of programs; let i=index" padding margin-right  (click)="navigateToDetails(i)">
-            {{ observation?.name }}
-        </ion-card>
         <ion-card *ngFor="let observation of createdObservation; let i=index" padding margin-right  (click)="navigateToCreatedObservationDetails(i)">
           {{ observation?.name }}
       </ion-card>
@@ -65,7 +62,7 @@
       </h2>
     </button>
       </ion-list>
-      <ion-list *ngIf="!draftObservation" >
+      <ion-list *ngIf="!draftObservation.length " >
        <span class="_flex-box _justify-content-center">
           No Drafts
        </span>

@@ -7,6 +7,7 @@ import { AddObservationFormPage } from './add-observation-form/add-observation-f
 import { ActionSheetController } from 'ionic-angular';
 import { ObservationDetailsPage } from '../observation-details/observation-details';
 import { ApiProvider } from '../../providers/api/api';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 
 @IonicPage()
@@ -25,6 +26,7 @@ export class ObservationsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public app: App,
+    public utils : UtilsProvider,
     private localStorage: LocalStorageProvider,
     private assessmentService: AssessmentServiceProvider,
     private apiProviders : ApiProvider,
@@ -39,28 +41,21 @@ export class ObservationsPage {
   ionViewDidLoad() {
     this.selectedTab = 'active';
     console.log("observation Module loaded");
-    this.localStorage.getLocalStorage('observationList').then(data => {
-      if (data) {
-        this.programs = data;
-      } else {
-        this.getAssessmentsApi();
-      }
-    }).catch(error => {
-      this.getAssessmentsApi();
-    })
+  
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       console.log("local storage createdObservationList")
       if (data) {
         this.createdObservation = data;
+
       } else {
         this.getCreatedObservation();
       }
+
     }).catch(error => {
       this.getCreatedObservation();
-    })
-  
 
-    // 
+    })
+
   }
 
 
@@ -79,43 +74,79 @@ export class ObservationsPage {
   programs: any;
   enableRefresh = AppConfigs.configuration.enableAssessmentListRefresh;
 
-  getAssessmentsApi() {
-    this.assessmentService.getAssessmentsApi('observation').then(programs => {
-      this.programs = programs;
-    }).catch(error => {
-    })
-  }
+  
   getCreatedObservation(){
     console.log("created oservation api called")
     this.apiProviders.httpGet(AppConfigs.cro.observationList,success=>{
       this.createdObservation = success.result;
+      this.createdObservation.forEach(element => {
+        if(element.entities.length >=0 ){
+          element.entities.forEach(entity => {
+            entity.downloaded = false;
+          });
+        }
+      });
+      console.log(JSON.stringify(this.createdObservation))
       this.localStorage.setLocalStorage('createdObservationList',this.createdObservation);
       },error=>{})
   }
 
-  navigateToDetails(index) {
-    this.navCtrl.push(ObservationDetailsPage, {selectedObservationIndex: index , typeOfObservation : "observationList"})
-  }
+  // navigateToDetails(index) {
+  //   this.navCtrl.push(ObservationDetailsPage, {selectedObservationIndex: index , typeOfObservation : "observationList"})
+  // }
   navigateToCreatedObservationDetails(index){
-    this.navCtrl.push(ObservationDetailsPage, {selectedObservationIndex: index ,  typeOfObservation : "createdObservationList"})
+    this.navCtrl.push(ObservationDetailsPage, {selectedObservationIndex: index })
 
   }
 
   refresh(event?: any) {
-    event ? this.assessmentService.refresh(this.programs, 'observation', event).then(program => {
-      this.programs = program;
-      
-    }).catch(error => { })
-      :
-      this.assessmentService.refresh(this.programs, 'observation').then(program => {
-        this.programs = program;
-      }
-      ).catch(error => {
+      const url = AppConfigs.cro.observationList;
+      // const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
+      event ? "" : this.utils.startLoader();
+      this.apiProviders.httpGet(url, successData => {
+        const downloadedAssessments = []
+        const currentObservation = successData.result;
+        for (const observation of this.createdObservation) {
+          for (const entity of observation.entities) {
+              if (entity.downloaded) {
+                downloadedAssessments.push({
+                  id: entity._id,
+                  observationId : observation._id
+                });
+              }
+            }
+  
+          }
+  
+        //console.log(JSON.stringify(downloadedAssessments))
+  
+        if (!downloadedAssessments.length) {
+          this.createdObservation = successData.result;
+          this.localStorage.setLocalStorage('createdObservationList', successData.result);
+          event ? event.complete() : this.utils.stopLoader();
+          
+        } else {
+          downloadedAssessments.forEach(element => {
 
+          for (const observation of successData.result) {
+            if(observation._id === element.observationId){
+              for (const entity of observation.entities) {
+                if (element.id === entity._id) {
+                  entity.downloaded = true;
+                }
+              }
+            }
+            }
+          });
+          // programs = currentPrograms;
+          this.localStorage.setLocalStorage('createdObservationList', successData.result);
+          event ? event.complete() : this.utils.stopLoader();
+          
+        }
+      }, error => {
       });
-
-      this.getCreatedObservation();
-     
+  
+    
   }
 
   getDraftObservation() {
@@ -182,7 +213,10 @@ export class ObservationsPage {
 
           this.apiProviders.httpPost(AppConfigs.cro.createObservation+observation.data.solutionId ,obj, success =>{
             console.log(JSON.stringify(success));
-            console.log("published obs")
+            // console.log("published obs")
+            this.utils.openToast(success.message, "Ok");
+
+            this.refresh();
           },error =>{
 
           })
