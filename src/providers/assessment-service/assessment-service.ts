@@ -182,6 +182,7 @@ console.log(JSON.stringify( programs[programIndex]))
     programs[event.observationIndex]['entities'][schoolIndex].submissionId = success.result.assessment.submissionId;
     // this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId), success.result);
     this.localStorage.setLocalStorage(assessmentType, programs);
+    
     this.utils.stopLoader();
     
     resolve(programs);

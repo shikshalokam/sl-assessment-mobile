@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
+import { UtilsProvider } from '../../providers/utils/utils';
+import { EvidenceProvider } from '../../providers/evidence/evidence';
 
 /**
  * Generated class for the ObservationDetailsPage page.
@@ -22,6 +24,9 @@ export class ObservationDetailsPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private assessmentService: AssessmentServiceProvider,
+    private utils :UtilsProvider,
+    private evdnsServ: EvidenceProvider,
+
     private localStorage: LocalStorageProvider) {
   }
 
@@ -57,6 +62,9 @@ export class ObservationDetailsPage {
     event.observationIndex = this.navParams.get('selectedObservationIndex');
     this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(program => {
       this.programs = program;
+      console.log("observation details fetched");
+      
+      this.goToEcm( this.navParams.get('selectedObservationIndex') , event ,program);
       
     }).catch(error => {
 
@@ -64,6 +72,47 @@ export class ObservationDetailsPage {
 
     
 
+  }
+  goToEcm(observationIndex , event ,program){
+    console.log("observation details fetched going to ecm" + JSON.stringify(event));
+
+  console.log(JSON.stringify(program[observationIndex]['entities'][event.entityIndex].submissionId))
+    let submissionId =     program[observationIndex]['entities'][event.entityIndex].submissionId
+    let heading = program[observationIndex]['entities'][event.entityIndex].name;
+    console.log(this.utils.getAssessmentLocalStorageKey(submissionId))
+    console.log(submissionId)
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
+      
+      // //console.log(JSON.stringify(successData));
+    //console.log("go to ecm called");
+
+
+      if (successData.assessment.evidences.length > 1) {
+
+        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
+
+      } else {
+        if (successData.assessment.evidences[0].startTime) {
+          //console.log("if loop " + successData.assessment.evidences[0].externalId)
+          this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
+          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
+        } else {
+
+          const assessment = { _id: submissionId, name: heading }
+          this.openAction(assessment, successData, 0);
+          //console.log("else loop");
+
+        }
+      }
+    }).catch(error => {
+    });
+
+  }
+  openAction(assessment, aseessmemtData, evidenceIndex) {
+    console.log("open action ")
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
+    const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
+    this.evdnsServ.openActionSheet(options);
   }
   updateLocalStorage(event){
       console.log("local storge called")
