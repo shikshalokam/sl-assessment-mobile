@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NavController, NavParams, ModalController } from 'ionic-angular';
+import { NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -22,20 +22,22 @@ export class ObservationEntityListingComponent {
   @Input() entityList;
   @Input() entityType;
   @Input() showMenu = true;
-  // @Output() goToEcmEvent = new EventEmitter();
   @Output() getAssessmentDetailsEvent = new EventEmitter();
   @Output() openMenuEvent = new EventEmitter();
-  @Input() typeOfObservation = 'observation';
   text: string;
+  // @Input() selectedindex ;
+  @Output() updatedLocalStorage = new EventEmitter();
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private localStorage: LocalStorageProvider,
+    public alertCntrl : AlertController,
     private evdnsServ: EvidenceProvider,
     private apiProviders : ApiProvider,
     private modalCtrl : ModalController,
     private utils: UtilsProvider) {
+      // console.log(this.selectedindex)
   
     //console.log('Hello EntityListingComponent Component');
   }
@@ -90,17 +92,13 @@ export class ObservationEntityListingComponent {
   }
 
 
-  getAssessmentDetails(programIndex, assessmentIndex, entityIndex) {
+
+  getAssessmentDetailsOfCreatedObservation(programIndex,entityIndex,solutionId){
+    console.log(solutionId)
     this.getAssessmentDetailsEvent.emit({
       programIndex: programIndex,
-      assessmentIndex: assessmentIndex,
-      entityIndex: entityIndex
-    });
-  }
-  getAssessmentDetailsOfCreatedObservation(programIndex,entityIndex){
-    this.getAssessmentDetailsEvent.emit({
-      programIndex: programIndex,
-      entityIndex: entityIndex
+      entityIndex: entityIndex,
+      solutionId : solutionId
     });
   }
 
@@ -121,10 +119,10 @@ export class ObservationEntityListingComponent {
     });
 
   }
+  
   addEntity(...params){
 
-   const  data = this.typeOfObservation === 'observation'? this.entityList[params[0]]._id : this.entityList[params[0]]._id 
-   let entityListModal = this.modalCtrl.create(EntityListPage, { data :data }
+   let entityListModal = this.modalCtrl.create(EntityListPage, { data : this.entityList[params[0]]._id  }
       );
       entityListModal.onDidDismiss( entityList => {
         if(entityList) {
@@ -138,7 +136,12 @@ export class ObservationEntityListingComponent {
           this.apiProviders.httpPost(AppConfigs.cro.mapEntityToObservation+this.entityList[params[0]]._id , payload , success =>{
             // console.log(JSON.stringify(this.entityList))
             this.entityList[0].entities = entityList;
-            
+            this.updatedLocalStorage.emit(entityList);
+            // this.localStorage.getLocalStorage('createdObservationList').then(success=>{
+
+            // }).catch(error=>{
+
+            // })
           },error=>{
 
           })
@@ -150,8 +153,49 @@ export class ObservationEntityListingComponent {
   }
   removeEntity(...params){
     console.log("remove entity called")
+      let alert = this.alertCntrl.create({
+        title: 'Confirm',
+        message: 'You are sure to delete the entity from the observation?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+            handler: () => {
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              let obj =  {
+                data:[
+              this.entityList[params[0]].entities[params[1]]._id
+                  ]
+              }
+              this.apiProviders.httpPost(AppConfigs.cro.unMapEntityToObservation+this.entityList[params[0]]._id,obj ,success=>{
+                this.utils.openToast(success.message,'ok');
+                console.log(JSON.stringify(success));
+
+              this.entityList[params[0]].entities.splice(params[1],1);
+              //   this.localStorage.getLocalStorage('createdObservationList').then(data =>{
+              //     console.log(JSON.stringify(data[this.s]))
+              //     console.log("success data")
+              //     data[this.selectedindex].entities.splice(params[1],1);
+              //     this.localStorage.setLocalStorage('createdObservationList',data);
+              //   }).catch(error =>{
+
+              //   });
+              this.updatedLocalStorage.emit(params[1]);
+              },error=>{
+                console.log(JSON.stringify(error));
+                console.log("error")
+
+              });
+            console.log(JSON.stringify(this.entityList))
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
     
-    this.entityList[params[0]].entities.splice(params[1],1);
-    console.log(JSON.stringify(this.entityList))
-  }
 }

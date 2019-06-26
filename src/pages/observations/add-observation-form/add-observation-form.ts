@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, ɵConsole } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, App, Config, Events } from 'ionic-angular';
 import { FormGroup, Validators } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
@@ -228,7 +228,7 @@ export class AddObservationFormPage {
       if( this.editData && this.editData.data.solutionId ){
         this.listOfSolution.forEach(element => {
         if(  element._id === this.editData.data.solutionId )
-        this.selectedFrameWork = element;
+        this.selectedFrameWork = element._id;
         });
       }
       solutionFlag = true;
@@ -239,7 +239,7 @@ export class AddObservationFormPage {
   }
 
   getObservationMetaForm() {
-    this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork._id, success => {
+    this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork, success => {
       this.addObservationData = success.result;
       if(this.editData) {
       this.addObservationData.forEach(element => {
@@ -302,9 +302,10 @@ export class AddObservationFormPage {
     let payLoad = this.addObservationForm ?  this.addObservationForm.getRawValue() : {};
     if (type === 'draft') {
       payLoad['isComplete']= false;
-      payLoad['solutionId'] = this.selectedFrameWork ? this.selectedFrameWork._id : null;
+      payLoad['solutionId'] = this.selectedFrameWork ? this.selectedFrameWork : null;
       payLoad['entityId'] = this.entityType ? this.entityType : null ;
     }
+    console.log(JSON.stringify(payLoad))
     return payLoad;
   }
 
