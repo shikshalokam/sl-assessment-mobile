@@ -7,7 +7,7 @@
 <ion-content>
   <observation-entity-listing [entityList]="observationDetails" [entityType]="'observations'"
     (getAssessmentDetailsEvent)="getAssessmentDetails($event)" (refreshEvent)="refresh($event)"
-    (openMenuEvent)="openMenu($event)">
+    (openMenuEvent)="openMenu($event)" (updatedLocalStorage)="updateLocalStorage($event)">
   </observation-entity-listing>
 </ion-content>
 

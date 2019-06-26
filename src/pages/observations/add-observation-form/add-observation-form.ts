@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, ɵConsole } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, App, Config, Events } from 'ionic-angular';
 import { FormGroup, Validators } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
@@ -63,6 +63,7 @@ export class AddObservationFormPage {
     private event :Events
   ) {
     this.editData  = this.navParams.get('data');
+    console.log(JSON.stringify(this.navParams.get('data')));
     this.editDataIndex  = this.navParams.get('index');
 
     
@@ -76,7 +77,7 @@ export class AddObservationFormPage {
       console.log(JSON.stringify(success));
       console.log("success data")
       if(this.editData){
-        this.entityType = this.editData.entityId;
+        this.entityType = this.editData.data.entityId;
       }
     }, error => {
       console.log("error")
@@ -224,10 +225,10 @@ export class AddObservationFormPage {
     this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType, success => {
       this.listOfSolution = success.result;
       console.log(JSON.stringify(this.listOfSolution))
-      if( this.editData && this.editData.solutionId ){
+      if( this.editData && this.editData.data.solutionId ){
         this.listOfSolution.forEach(element => {
-        if(  element._id === this.editData.solutionId )
-        this.selectedFrameWork = element;
+        if(  element._id === this.editData.data.solutionId )
+        this.selectedFrameWork = element._id;
         });
       }
       solutionFlag = true;
@@ -238,12 +239,17 @@ export class AddObservationFormPage {
   }
 
   getObservationMetaForm() {
-    this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork._id, success => {
+    this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork, success => {
       this.addObservationData = success.result;
-      if(this.editData)
+      if(this.editData) {
       this.addObservationData.forEach(element => {
-        element.value = this.editData[element.field] ;
+        element.value = this.editData.data[element.field] ;
+        if(element.field === 'status'){
+          element.value = 'draft';
+        }
       });
+    
+    }
       this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
     }, error => {
 
@@ -267,13 +273,17 @@ export class AddObservationFormPage {
   saveDraft(option = 'normal') {
     
    if(this.entityType){
-    let obsData = this.creatPayLoad('draft');
+    let obsData :{} = {
+      data:{}
+    };
+     obsData['data'] = this.creatPayLoad('draft');
     
-      obsData['isComplete']=this.addObservationForm?this.addObservationForm.valid ? true : false : false;
+      obsData['data']['isComplete'] = this.addObservationForm?this.addObservationForm.valid ? true : false : false;
 
-     
+      console.log(JSON.stringify(obsData))
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
-      let draft = draftObs
+      let draft = draftObs;
+      console.log(JSON.stringify(obsData))
       this.editDataIndex >= 0 ?  draft[this.editDataIndex] = obsData  : draft.push(obsData);
       this.localStorage.setLocalStorage('draftObservation', draft);
       option == 'normal' ? this.navCtrl.pop() :  this.event.publish('draftObservationArrayReload');
@@ -292,9 +302,10 @@ export class AddObservationFormPage {
     let payLoad = this.addObservationForm ?  this.addObservationForm.getRawValue() : {};
     if (type === 'draft') {
       payLoad['isComplete']= false;
-      payLoad['solutionId'] = this.selectedFrameWork ? this.selectedFrameWork._id : null;
+      payLoad['solutionId'] = this.selectedFrameWork ? this.selectedFrameWork : null;
       payLoad['entityId'] = this.entityType ? this.entityType : null ;
     }
+    console.log(JSON.stringify(payLoad))
     return payLoad;
   }
 
