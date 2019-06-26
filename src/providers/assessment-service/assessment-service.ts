@@ -167,7 +167,7 @@ console.log(JSON.stringify( programs[programIndex]))
   console.log(programIndex + " "  + " " + schoolIndex)
   this.utils.startLoader()
   // const url = AppConfigs.assessmentsList.detailsOfAssessment + programs[event.observationIndex]._id + "?solutionId=" + programs[event.observationIndex].solutionId + "&entityId=" +programs[event.observationIndex].entities[schoolIndex]._id;
-  const url = AppConfigs.cro.observationDetails+ programs[event.observationIndex]._id;
+  const url = AppConfigs.cro.observationDetails+ programs[event.observationIndex]._id+"?entityId="+programs[event.observationIndex].entities[schoolIndex]._id;
   console.log(url);
   console.log(url + "url") ;
 
@@ -178,10 +178,10 @@ console.log(JSON.stringify( programs[programIndex]))
     const generalQuestions = success.result['assessment']['generalQuestions'] ? success.result['assessment']['generalQuestions'] : null;
     this.localStorage.setLocalStorage("generalQuestions_" + success.result['assessment']["submissionId"], generalQuestions);
     this.localStorage.setLocalStorage("generalQuestionsCopy_" + success.result['assessment']["submissionId"], generalQuestions);
-    programs[programIndex]['entities'][schoolIndex].downloaded = true;
-    programs[programIndex]['entities'][schoolIndex].submissionId = success.result.assessment.submissionId;
+    programs[event.observationIndex]['entities'][schoolIndex].downloaded = true;
+    programs[event.observationIndex]['entities'][schoolIndex].submissionId = success.result.assessment.submissionId;
     // this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId), success.result);
-    this.localStorage.setLocalStorage(`${assessmentType}List`, programs);
+    this.localStorage.setLocalStorage(assessmentType, programs);
     this.utils.stopLoader();
     
     resolve(programs);
