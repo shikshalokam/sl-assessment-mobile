@@ -4,7 +4,6 @@ import { FormGroup, Validators } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
 import { SolutionDetailsPage } from '../../solution-details/solution-details';
-import { EntityListPage } from './entity-list/entity-list';
 import { NetworkGpsProvider } from '../../../providers/network-gps/network-gps';
 import { LocalStorageProvider } from '../../../providers/local-storage/local-storage';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -20,7 +19,7 @@ import { AppConfigs } from '../../../providers/appConfig';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-export interface draftData{
+export interface draftData {
 
 }
 @IonicPage()
@@ -60,51 +59,40 @@ export class AddObservationFormPage {
     private localStorage: LocalStorageProvider,
     private app: App,
     private storage: Storage,
-    private event :Events
+    private event: Events
   ) {
-    this.editData  = this.navParams.get('data');
-    console.log(JSON.stringify(this.navParams.get('data')));
-    this.editDataIndex  = this.navParams.get('index');
+    this.editData = this.navParams.get('data');
+    this.editDataIndex = this.navParams.get('index');
 
-    
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddObservationPage');
-
+    this.utils.startLoader();
     this.apiProviders.httpGet(AppConfigs.cro.getEntityListType, success => {
       this.entityTypeData = success.result;
-      console.log(JSON.stringify(success));
-      console.log("success data")
-      if(this.editData){
+      if (this.editData) {
         this.entityType = this.editData.data.entityId;
       }
+      this.utils.stopLoader();
     }, error => {
-      console.log("error")
+      this.utils.stopLoader();
     });
-
   }
-
 
   selectChange(e) {
-    console.log(e);
     this.selectedIndex = e;
   }
-
-  
 
   getLocation() {
     this.utils.startLoader();
     const options = {
       timeout: 2000
     }
-
-    console.log('Check permissions');
     this.permissions.checkPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(
       result => {
-        console.log('Has permission?', result.hasPermission)
         if (!result.hasPermission) {
-          console.log("ask permission");
           this.permissions.requestPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(result => {
             if (result.hasPermission) {
               this.locationAccuracy.canRequest().then((canRequest: boolean) => {
@@ -113,11 +101,7 @@ export class AddObservationFormPage {
                     () => {
                       this.geolocation.getCurrentPosition(options).then((resp) => {
                         this.currentLocation = resp.coords.latitude + "," + resp.coords.longitude;
-                        console.log(resp.coords.latitude + " " + resp.coords.longitude)
-
                       }).catch((error) => {
-                        console.log(error.message + " " + error.code);
-
                         this.storage.get('gpsLocation').then(success => {
                           this.currentLocation = success
 
@@ -134,10 +118,7 @@ export class AddObservationFormPage {
                 } else {
                   this.geolocation.getCurrentPosition(options).then((resp) => {
                     this.currentLocation = resp.coords.latitude + "," + resp.coords.longitude;
-                    console.log(resp.coords.latitude + " " + resp.coords.longitude)
                   }).catch((error) => {
-                    console.log(error.message + " " + error.code);
-
                     this.storage.get('gpsLocation').then(success => {
                       this.currentLocation = success
 
@@ -151,10 +132,8 @@ export class AddObservationFormPage {
               });
             }
           }).catch(error => {
-            console.log('error')
           })
         } else {
-          console.log('yes, Has permission');
           this.locationAccuracy.canRequest().then((canRequest: boolean) => {
             if (canRequest) {
               this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
@@ -162,11 +141,7 @@ export class AddObservationFormPage {
                   this.geolocation.getCurrentPosition(options).then((resp) => {
                     this.currentLocation = resp.coords.latitude + "," + resp.coords.longitude;
                     this.storage.set('currentLocation', this.currentLocation)
-                    console.log(resp.coords.latitude + " " + resp.coords.longitude)
-
                   }).catch((error) => {
-                    console.log(error.message + " " + error.code);
-
                     this.storage.get('gpsLocation').then(success => {
                       this.currentLocation = success
 
@@ -180,20 +155,13 @@ export class AddObservationFormPage {
                   }
                 );
             } else {
-              //For ios devices
               this.geolocation.getCurrentPosition(options).then((resp) => {
                 this.currentLocation = resp.coords.latitude + "," + resp.coords.longitude;
                 this.storage.set('currentLocation', this.currentLocation)
-                console.log(resp.coords.latitude + " " + resp.coords.longitude)
-
-
               }).catch((error) => {
-                console.log(error.message + " " + error.code);
-
                 this.storage.get('gpsLocation').then(success => {
                   this.currentLocation = success
                 }).catch(error => {
-
                 })
               });
             }
@@ -202,60 +170,62 @@ export class AddObservationFormPage {
         }
       }).catch(error => {
       });
-
-
-    console.log("Getting current location");
-
     this.utils.stopLoader();
-
   }
+
   addObservation() {
-      this.app.getRootNav().pop();
-
+    this.app.getRootNav().pop();
   }
+
   selectSolution(frameWork) {
     this.selectedFrameWork = frameWork;
   }
+
   showDetails(frameWork) {
     let contactModal = this.modalCtrl.create(SolutionDetailsPage, { data: frameWork });
     contactModal.present();
   }
+
   getSolutionList() {
     let solutionFlag = false;
+    this.utils.startLoader();
     this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType, success => {
       this.listOfSolution = success.result;
-      console.log(JSON.stringify(this.listOfSolution))
-      if( this.editData && this.editData.data.solutionId ){
+      if (this.editData && this.editData.data.solutionId) {
         this.listOfSolution.forEach(element => {
-        if(  element._id === this.editData.data.solutionId )
-        this.selectedFrameWork = element._id;
+          if (element._id === this.editData.data.solutionId)
+            this.selectedFrameWork = element._id;
         });
       }
       solutionFlag = true;
+      this.utils.stopLoader();
     }, error => {
-
+      this.utils.stopLoader();
     });
     return solutionFlag;
   }
 
   getObservationMetaForm() {
+    this.utils.startLoader();
     this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork, success => {
       this.addObservationData = success.result;
-      if(this.editData) {
-      this.addObservationData.forEach(element => {
-        element.value = this.editData.data[element.field] ;
-        if(element.field === 'status'){
-          element.value = 'draft';
-        }
-      });
-    
-    }
-      this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
-    }, error => {
+      if (this.editData) {
+        this.addObservationData.forEach(element => {
+          element.value = this.editData.data[element.field];
+          if (element.field === 'status') {
+            element.value = 'draft';
+          }
+        });
 
+      }
+      this.addObservationForm = this.utils.createFormGroup(this.addObservationData);
+      this.utils.stopLoader();
+    }, error => {
+      this.utils.stopLoader();
     });
     return (this.addObservationForm && this.currentLocation) ? true : false;
   }
+
   doAction() {
     let actionFlag = false;
     switch (this.selectedIndex) {
@@ -269,52 +239,45 @@ export class AddObservationFormPage {
     }
     return actionFlag;
   }
+
   tmpFunc() { }
+
   saveDraft(option = 'normal') {
-    
-   if(this.entityType){
-    let obsData :{} = {
-      data:{}
-    };
-     obsData['data'] = this.creatPayLoad('draft');
-    
-      obsData['data']['isComplete'] = this.addObservationForm?this.addObservationForm.valid ? true : false : false;
+    if (this.entityType) {
+      let obsData: {} = {
+        data: {}
+      };
+      obsData['data'] = this.creatPayLoad('draft');
+      obsData['data']['isComplete'] = this.addObservationForm ? this.addObservationForm.valid ? true : false : false;
+      this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
+        let draft = draftObs;
+        this.editDataIndex >= 0 ? draft[this.editDataIndex] = obsData : draft.push(obsData);
+        this.localStorage.setLocalStorage('draftObservation', draft);
+        option == 'normal' ? this.navCtrl.pop() : this.event.publish('draftObservationArrayReload');
 
-      console.log(JSON.stringify(obsData))
-    this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
-      let draft = draftObs;
-      console.log(JSON.stringify(obsData))
-      this.editDataIndex >= 0 ?  draft[this.editDataIndex] = obsData  : draft.push(obsData);
-      this.localStorage.setLocalStorage('draftObservation', draft);
-      option == 'normal' ? this.navCtrl.pop() :  this.event.publish('draftObservationArrayReload');
-    
-    }).catch(() => {
-      this.localStorage.setLocalStorage('draftObservation', [obsData]);
-      option == 'normal' ? this.navCtrl.pop() :  this.event.publish('draftObservationArrayReload');
-    })
+      }).catch(() => {
+        this.localStorage.setLocalStorage('draftObservation', [obsData]);
+        option == 'normal' ? this.navCtrl.pop() : this.event.publish('draftObservationArrayReload');
+      })
 
-    
+
+    }
+
   }
 
-}
-
   creatPayLoad(type = 'publish') {
-    let payLoad = this.addObservationForm ?  this.addObservationForm.getRawValue() : {};
+    let payLoad = this.addObservationForm ? this.addObservationForm.getRawValue() : {};
     if (type === 'draft') {
-      payLoad['isComplete']= false;
+      payLoad['isComplete'] = false;
       payLoad['solutionId'] = this.selectedFrameWork ? this.selectedFrameWork : null;
-      payLoad['entityId'] = this.entityType ? this.entityType : null ;
+      payLoad['entityId'] = this.entityType ? this.entityType : null;
     }
-    console.log(JSON.stringify(payLoad))
     return payLoad;
   }
 
 
-  ionViewWillUnload(){
-
-
-    console.log("function called on leave");
-    if(this.saveDraftType !== 'normal')
+  ionViewWillUnload() {
+    if (this.saveDraftType !== 'normal')
       this.saveDraft('force');
   }
 
