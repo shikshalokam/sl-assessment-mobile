@@ -43,7 +43,8 @@ export class ObservationsPage {
     console.log("observation Module loaded");
   
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
-      console.log("local storage createdObservationList")
+      console.log("local storage createdObservationList");
+      console.log(JSON.stringify(data))
       if (data) {
         this.createdObservation = data;
 
