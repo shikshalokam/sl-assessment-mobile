@@ -55,7 +55,7 @@
       <div class="fixBox" *ngIf="listOfSolution">
 
         <ion-list margin-top *ngFor="let frameWork of listOfSolution">
-          <ion-item (click)="selectSolution(frameWork)" [ngClass]="{'active': frameWork === selectedFrameWork}">
+          <ion-item (click)="selectSolution(frameWork._id)" [ngClass]="{'active': frameWork._id === selectedFrameWork}">
             <ion-icon name="list-box" item-start></ion-icon>
             <h2>{{frameWork.name}} </h2>
             <p>{{frameWork.description}}</p>
