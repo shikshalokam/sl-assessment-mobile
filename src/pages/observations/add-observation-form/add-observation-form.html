@@ -7,8 +7,8 @@
 <ion-content padding-top>
   <ion-stepper [mode]="'horizontal'" #stepper (selectIndexChange)="selectChange($event)">
 
-    <ion-step label="Step 1" >
-        <h4>Observation Type</h4>
+    <ion-step label="Type" >
+        <!-- <h4>Observation Type</h4> -->
       
       <ion-list radio-group [(ngModel)]="entityType">
         <!-- <ion-label>Entity Type</ion-label> -->
@@ -50,8 +50,8 @@
     </ion-step> -->
 
 
-    <ion-step label="Step 2">
-      <h4>Solution List</h4>
+    <ion-step label="Solution">
+      <!-- <h4>Solution List</h4> -->
       <div class="fixBox" *ngIf="listOfSolution">
 
         <ion-list margin-top *ngFor="let frameWork of listOfSolution">
@@ -66,8 +66,8 @@
     </ion-step>
 
 
-    <ion-step label="Step 3">
-        <h4>Observation Details</h4>
+    <ion-step label="Details">
+        <!-- <h4>Observation Details</h4> -->
       
       <div class="fixBox">
         <dynamic-form [formFields]="addObservationData" [form]="addObservationForm"></dynamic-form>

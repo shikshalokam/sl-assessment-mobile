@@ -133,17 +133,19 @@ export class ObservationEntityListingComponent {
           entityList.forEach(element => {
             payload.data.push(element._id);
           });
+          this.utils.startLoader();
           this.apiProviders.httpPost(AppConfigs.cro.mapEntityToObservation+this.entityList[params[0]]._id , payload , success =>{
             // console.log(JSON.stringify(this.entityList))
             this.entityList[0].entities = entityList;
             this.updatedLocalStorage.emit(entityList);
+            this.utils.stopLoader();
             // this.localStorage.getLocalStorage('createdObservationList').then(success=>{
 
             // }).catch(error=>{
 
             // })
           },error=>{
-
+            this.utils.stopLoader();
           })
         }
       })
@@ -155,7 +157,7 @@ export class ObservationEntityListingComponent {
     console.log("remove entity called")
       let alert = this.alertCntrl.create({
         title: 'Confirm',
-        message: 'You are sure to delete the entity from the observation?',
+        message: 'Are you sure you want to delete the entity?',
         buttons: [
           {
             text: 'No',
@@ -171,8 +173,10 @@ export class ObservationEntityListingComponent {
               this.entityList[params[0]].entities[params[1]]._id
                   ]
               }
+              this.utils.startLoader();
               this.apiProviders.httpPost(AppConfigs.cro.unMapEntityToObservation+this.entityList[params[0]]._id,obj ,success=>{
                 this.utils.openToast(success.message,'ok');
+                this.utils.stopLoader();
                 console.log(JSON.stringify(success));
 
               this.entityList[params[0]].entities.splice(params[1],1);
@@ -186,6 +190,8 @@ export class ObservationEntityListingComponent {
               //   });
               this.updatedLocalStorage.emit(params[1]);
               },error=>{
+                this.utils.stopLoader();
+
                 console.log(JSON.stringify(error));
                 console.log("error")
 
