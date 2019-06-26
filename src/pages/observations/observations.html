@@ -31,7 +31,7 @@
       </ion-refresher>
 
       <div style="padding: 0 0 60px 0">
-        <ion-card *ngFor="let observation of createdObservation; let i=index" padding margin-right  (click)="navigateToCreatedObservationDetails(i)">
+        <ion-card *ngFor="let observation of createdObservation; let i=index" text-capitalize padding margin-right  (click)="navigateToCreatedObservationDetails(i)">
           {{ observation?.name }}
       </ion-card>
         
