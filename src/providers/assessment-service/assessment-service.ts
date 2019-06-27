@@ -163,18 +163,12 @@ getAssessmentDetailsOfCreatedObservation(event, programs, assessmentType) {
   return new Promise((resolve, reject) =>{
   let programIndex = event.programIndex;
   let schoolIndex = event.entityIndex;
-console.log(JSON.stringify( programs[programIndex]))
-  console.log(programIndex + " "  + " " + schoolIndex)
   this.utils.startLoader()
   // const url = AppConfigs.assessmentsList.detailsOfAssessment + programs[event.observationIndex]._id + "?solutionId=" + programs[event.observationIndex].solutionId + "&entityId=" +programs[event.observationIndex].entities[schoolIndex]._id;
   const url = AppConfigs.cro.observationDetails+ programs[event.observationIndex]._id+"?entityId="+programs[event.observationIndex].entities[schoolIndex]._id;
-  console.log(url);
-  console.log(url + "url") ;
 
   this.apiService.httpGet(url, success => {
-    console.log("successData");
-    console.log(JSON.stringify(success));
-    this.ulsdp.mapSubmissionDataToQuestion(success.result);
+    this.ulsdp.mapSubmissionDataToQuestion(success.result, true);
     const generalQuestions = success.result['assessment']['generalQuestions'] ? success.result['assessment']['generalQuestions'] : null;
     this.localStorage.setLocalStorage("generalQuestions_" + success.result['assessment']["submissionId"], generalQuestions);
     this.localStorage.setLocalStorage("generalQuestionsCopy_" + success.result['assessment']["submissionId"], generalQuestions);
