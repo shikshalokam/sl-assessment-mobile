@@ -237,10 +237,21 @@ export class AddObservationFormPage {
         break;
 
     }
+    // this.selectedIndex === 0 ? 
+    // actionFlag ? null :  this.utils.openToast("select the type of observation") 
+    // : 
+    // this.selectedIndex === 1 ? actionFlag ? null :  this.utils.openToast("select a solution") : null
+
     return actionFlag;
   }
 
-  tmpFunc() { }
+  tmpFunc() { 
+    console.log("temp func")
+     this.selectedIndex === 0 ? this.utils.openToast("select the type of observation") 
+    : 
+     this.utils.openToast("select a solution") ;
+
+  }
 
   saveDraft(option = 'normal') {
     if (this.entityType) {
