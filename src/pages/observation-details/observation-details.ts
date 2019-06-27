@@ -4,6 +4,8 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
+import { ApiProvider } from '../../providers/api/api';
+import { AppConfigs } from '../../providers/appConfig';
 
 @Component({
   selector: 'page-observation-details',
@@ -19,7 +21,7 @@ export class ObservationDetailsPage {
     private assessmentService: AssessmentServiceProvider,
     private utils: UtilsProvider,
     private evdnsServ: EvidenceProvider,
-
+    private apiProvider : ApiProvider,
     private localStorage: LocalStorageProvider) {
   }
 
@@ -35,8 +37,16 @@ export class ObservationDetailsPage {
   }
 
   markAsComplete() {
+    this.apiProvider.httpGet(AppConfigs.cro.markAsComplete+this.programs[this.navParams.get('selectedObservationIndex')]._id , success =>{
+      this.programs[this.navParams.get('selectedObservationIndex')].status = "completed"
+      this.localStorage.setLocalStorage('createdObservationList',this.programs);
+      this.utils.openToast(success.message,'ok');
+      this.navCtrl.pop();
+    },error =>{
 
+    })
   }
+  
 
   getAssessmentDetails(event) {
     event.observationIndex = this.navParams.get('selectedObservationIndex');
@@ -88,5 +98,6 @@ export class ObservationDetailsPage {
     });
   }
 
+  
 
 }
