@@ -14,7 +14,7 @@
 <ion-footer no-shadow>
   <ion-toolbar class="_toolbar-background-md" position="bottom">
     <ion-row>
-      <ion-col>
+      <ion-col *ngIf="observationDetails[0]?.status !== 'completed' && observationDetails[0]?.entities?.length ">
         <button ion-button full (click)="markAsComplete()" class="btnText">
           <!-- <ion-icon name="refresh" margin-right></ion-icon> -->
           {{'buttons.markAsComplete' | translate}}

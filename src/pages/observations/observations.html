@@ -31,9 +31,11 @@
       </ion-refresher>
 
       <div style="padding: 0 0 60px 0">
-        <ion-card *ngFor="let observation of createdObservation; let i=index" text-capitalize padding margin-right  (click)="navigateToCreatedObservationDetails(i)">
+        <span *ngFor="let observation of createdObservation; let i=index" >
+        <ion-card *ngIf="observation.status !== 'completed'" text-capitalize padding margin-right  (click)="navigateToCreatedObservationDetails(i)">
           {{ observation?.name }}
-      </ion-card>
+        </ion-card>
+      </span>
         
       </div>
     </div>
@@ -68,7 +70,21 @@
        </span>
         </ion-list>
     </div>
-    <div *ngSwitchCase="'completed'">Completed</div>
+    <div *ngSwitchCase="'completed'">
+      <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+          refreshingText="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
+
+      <div style="padding: 0 0 60px 0">
+        <span *ngFor="let observation of createdObservation; let i=index" >
+        <ion-card *ngIf="observation.status === 'completed'" text-capitalize padding margin-right  (click)="navigateToCreatedObservationDetails(i)">
+          {{ observation?.name }}
+        </ion-card>
+      </span>
+      </div>
+    </div>
   </div>
 
   <ion-fab bottom right>
