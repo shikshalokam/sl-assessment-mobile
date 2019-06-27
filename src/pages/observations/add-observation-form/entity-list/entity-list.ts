@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { AppConfigs } from '../../../../providers/appConfig';
 import { ApiProvider } from '../../../../providers/api/api';
+import { UtilsProvider } from '../../../../providers/utils/utils';
 
 /**
  * Generated class for the SchoolListPage page.
@@ -25,7 +26,8 @@ searchUrl;
     public navCtrl: NavController,
      public navParams: NavParams,
      public viewCntrl :ViewController,
-     private apiProviders : ApiProvider
+     private apiProviders : ApiProvider,
+     private utils : UtilsProvider
      ) {
        this.searchUrl = AppConfigs.cro.searchEntity;
   this.observationId =  this.navParams.get('data');
@@ -51,6 +53,7 @@ searchUrl;
   }
   
   search(event){
+    this.utils.startLoader();
     this.apiProviders.httpGet(this.searchUrl+this.observationId+"?search="+event , success =>{
       this.selectableList = success.result[0].metaInformation;
       // this.selectableList.forEach( element =>{
@@ -60,7 +63,10 @@ searchUrl;
       this.index = this.index > this.selectableList.length ? this.selectableList.length : this.index;
       this.list = this.selectableList.slice(0,this.index);
       console.log(JSON.stringify(this.list))
+    this.utils.stopLoader();
+
 },error =>{
+  this.utils.stopLoader();
 
     })
   }

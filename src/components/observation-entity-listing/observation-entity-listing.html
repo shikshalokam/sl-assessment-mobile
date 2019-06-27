@@ -8,7 +8,7 @@
 
       <ion-row class="_flex-box justify-content-space-between">
         <ion-col>
-          <button ion-button icon-start clear small float-right (click)="addEntity(i)">
+          <button *ngIf="entityList[0].status !== 'completed'" ion-button icon-start clear small float-right (click)="addEntity(i)">
             <ion-icon name="add"></ion-icon>
             <div>Add Entity</div>
           </button>
@@ -22,11 +22,11 @@
                 (click)="entity?.downloaded ? goToEcm(entity?.submissionId,entity?.name ) : getAssessmentDetailsOfCreatedObservation(i,k,entityList[i].solutionId) ">
                 {{entity.name}}
               </div>
-              <ion-icon name="trash" class="downloadIcon" (click)="removeEntity(i,k)" margin-left></ion-icon>
+              <ion-icon *ngIf="entityList[0].status !== 'completed'" name="trash" class="downloadIcon" (click)="removeEntity(i,k)" margin-left></ion-icon>
             </div>
           </ion-item>
-          <ion-item-options side="right">
-            <button ion-button color="warning" (click)="removeEntity(i,k)">
+          <ion-item-options side="right" *ngIf="entityList[0].status !== 'completed'">
+            <button ion-button color="warning"  (click)="removeEntity(i,k)">
               <ion-icon name="trash"></ion-icon>
               Delete
             </button>
