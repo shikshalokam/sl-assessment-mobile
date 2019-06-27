@@ -41,27 +41,32 @@ export class ObservationsPage {
   ionViewDidLoad() {
     this.selectedTab = 'active';
     console.log("observation Module loaded");
-  
-    this.localStorage.getLocalStorage('createdObservationList').then(data => {
-      console.log("local storage createdObservationList");
-      console.log(JSON.stringify(data))
-      if (data) {
-        this.createdObservation = data;
-
-      } else {
-        this.getCreatedObservation();
-      }
-
-    }).catch(error => {
-      this.getCreatedObservation();
-
-    })
+    this.getFromLocal();
+   
 
   }
 
+  getFromLocal(){
+  this.localStorage.getLocalStorage('createdObservationList').then(data => {
+    console.log("local storage createdObservationList");
+    console.log(JSON.stringify(data))
+    if (data) {
+      this.createdObservation =[...data] ;
 
+    } else {
+      this.getCreatedObservation();
+    }
+
+  }).catch(error => {
+    this.getCreatedObservation();
+
+  })
+}
   ionViewDidEnter() {
     this.getDraftObservation();
+    this.getFromLocal();
+    // this.refresh();
+    // this.createdObservation = this.createdObservation;
   }
 
   onTabChange(tabName) {
@@ -140,7 +145,10 @@ export class ObservationsPage {
             }
           });
           // programs = currentPrograms;
+          console.log("refresh data");
+          console.log(JSON.stringify(successData.result))
           this.localStorage.setLocalStorage('createdObservationList', successData.result);
+          this.createdObservation = successData.result;
           event ? event.complete() : this.utils.stopLoader();
           
         }
