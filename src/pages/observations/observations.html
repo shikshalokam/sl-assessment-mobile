@@ -12,12 +12,18 @@
     <ion-segment [(ngModel)]="selectedTab">
       <ion-segment-button value="active" (click)="onTabChange('active')">
         Active
+        <ion-badge color="primary"  item-right>{{activeListLength}}</ion-badge>
+
       </ion-segment-button>
       <ion-segment-button value="draft" (click)="onTabChange('draft')">
         Draft
+        <ion-badge color="primary"  item-right>{{draftListLength}}</ion-badge>
+
       </ion-segment-button>
       <ion-segment-button value="completed" (click)="onTabChange('completed')">
         Completed
+        <ion-badge color="primary"  item-right>{{completeListLength}}</ion-badge>
+
       </ion-segment-button>
     </ion-segment>
   </div>
@@ -87,8 +93,8 @@
     </div>
   </div>
 
-  <ion-fab bottom right>
-    <button ion-fab mini (click)="addObservation()">
+  <ion-fab bottom right >
+    <button ion-fab mini color="secondary" (click)="addObservation()">
       <ion-icon name="add"></ion-icon>
     </button>
   </ion-fab>

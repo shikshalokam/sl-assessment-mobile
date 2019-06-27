@@ -15,7 +15,12 @@ page-observations {
         color: $primary-color;
         font-size: 30px;
     }
+    .action-sheets-groups-page {
 
+    .deleteIcon{
+        color: $red-color;
+    }
+}
     .downloadedIcon {
         color: $green-color;
     }

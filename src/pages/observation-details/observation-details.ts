@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -25,6 +25,7 @@ export class ObservationDetailsPage {
   
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    public alertCntrl : AlertController,
     private assessmentService: AssessmentServiceProvider,
     private utils :UtilsProvider,
     private evdnsServ: EvidenceProvider,
@@ -47,6 +48,20 @@ export class ObservationDetailsPage {
   }
 
   markAsComplete() {
+    let alert = this.alertCntrl.create({
+      title: 'Confirm',
+      message: `Are you sure you want to mark this observation as complete? <br>
+      Further you won't be able to do any kind of action.`,
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
     console.log(this.programs[this.navParams.get('selectedObservationIndex')]._id);
     this.apiProvider.httpGet(AppConfigs.cro.markAsComplete+this.programs[this.navParams.get('selectedObservationIndex')]._id , success =>{
       console.log(JSON.stringify(success))
@@ -57,6 +72,8 @@ export class ObservationDetailsPage {
     },error =>{
 
     })
+  }}]});
+  alert.present();
   }
   
 
@@ -124,7 +141,7 @@ export class ObservationDetailsPage {
     // console.log("open action ")
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
-    this.evdnsServ.openActionSheet(options);
+    this.evdnsServ.openActionSheet(options,"Observation");
   }
   updateLocalStorage(event){
       // console.log("local storge called")

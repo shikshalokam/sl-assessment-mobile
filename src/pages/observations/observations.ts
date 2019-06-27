@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Events, AlertController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { AppConfigs } from '../../providers/appConfig';
@@ -21,12 +21,16 @@ export class ObservationsPage {
   selectedTab;
   draftObservation;
   createdObservation: any;
+  draftListLength: Number = 0;
+  activeListLength : number = 0;
+  completeListLength : number = 0;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public app: App,
     public utils : UtilsProvider,
+    public alertCntrl : AlertController,
     private localStorage: LocalStorageProvider,
     private assessmentService: AssessmentServiceProvider,
     private apiProviders : ApiProvider,
@@ -42,6 +46,7 @@ export class ObservationsPage {
     this.selectedTab = 'active';
     console.log("observation Module loaded");
     this.getFromLocal();
+
    
 
   }
@@ -52,6 +57,7 @@ export class ObservationsPage {
     console.log(JSON.stringify(data))
     if (data) {
       this.createdObservation =[...data] ;
+      this.countCompleteActive();
 
     } else {
       this.getCreatedObservation();
@@ -65,6 +71,7 @@ export class ObservationsPage {
   ionViewDidEnter() {
     this.getDraftObservation();
     this.getFromLocal();
+    // this.countCompleteActive();
     // this.refresh();
     // this.createdObservation = this.createdObservation;
   }
@@ -94,9 +101,23 @@ export class ObservationsPage {
       });
       console.log(JSON.stringify(this.createdObservation))
       this.localStorage.setLocalStorage('createdObservationList',this.createdObservation);
-      },error=>{})
-  }
+    this.countCompleteActive();
 
+      },error=>{})
+
+  }
+  countCompleteActive(){
+    this.completeListLength = 0 ;
+    this.activeListLength = 0;
+    this.createdObservation.forEach(element => {
+      console.log(element.status)
+      element.status === 'completed' ? 
+      this.completeListLength = this.completeListLength+1 
+      :
+      this.activeListLength= this.activeListLength+1;
+    });
+    console.log( this.activeListLength + "        " + this.completeListLength)
+  }
   // navigateToDetails(index) {
   //   this.navCtrl.push(ObservationDetailsPage, {selectedObservationIndex: index , typeOfObservation : "observationList"})
   // }
@@ -152,6 +173,8 @@ export class ObservationsPage {
           event ? event.complete() : this.utils.stopLoader();
           
         }
+        this.countCompleteActive();
+
       }, error => {
       });
   
@@ -161,6 +184,9 @@ export class ObservationsPage {
   getDraftObservation() {
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
       this.draftObservation = draftObs;
+      this.draftListLength = this.draftObservation.length;
+      // this.countCompleteActive();
+
     }).catch(() => {
       this.draftObservation = [];
     })
@@ -189,23 +215,51 @@ export class ObservationsPage {
       {
         text: 'Edit',
         role: 'edit',
+        icon: 'create',
+
         handler: () => {
           console.log('edit clicked');
           this.app.getRootNav().push(AddObservationFormPage, { data: observation, index: index })
         }
-      }, {
+      }, 
+      {
         text: 'Delete',
+        cssClass: 'deleteIcon',
+        icon: 'trash',
         handler: () => {
-          this.draftObservation.splice(index, 1);
-          this.localStorage.setLocalStorage('draftObservation', this.draftObservation);
+          let alert = this.alertCntrl.create({
+            title: 'Confirm',
+            message: 'Are you sure you want to delete the observation?',
+            buttons: [
+              {
+                text: 'No',
+                role: 'cancel',
+                handler: () => {
+                }
+              },
+              {
+                text: 'Yes',
+                handler: () => {
+                  this.draftObservation.splice(index, 1);
+                  this.localStorage.setLocalStorage('draftObservation', this.draftObservation);
+                  this.getDraftObservation();
+                }
+              }
+            ]
+          });
+          alert.present();
         }
-      }
+         
+        }
     ];
     if (observation.data.isComplete) {
-      actionArray.push({
+      actionArray.splice(0,0,{
         text: 'Publish',
         role: 'Publish',
+        icon: 'add',
+
         handler: () => {
+          
           let obj : {} = {
             data:{}
           };
@@ -226,6 +280,7 @@ export class ObservationsPage {
             this.utils.openToast(success.message, "Ok");
 
             this.refresh();
+            this.selectedTab = 'active'
           },error =>{
 
           })
@@ -237,6 +292,7 @@ export class ObservationsPage {
     }
     const actionSheet = this.actionSheetCtrl.create({
       title: 'Choose a Action',
+      cssClass: 'action-sheets-groups-page',
       buttons: actionArray
     });
     actionSheet.present();
