@@ -33,12 +33,12 @@ export class ObservationDetailsPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ObservationDetailsPage');
     const selectedObservationIndex = this.navParams.get('selectedObservationIndex');
-    console.log(selectedObservationIndex)
+   // console.log(selectedObservationIndex)
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       this.programs = data;
-      console.log(JSON.stringify(data))
+     // console.log(JSON.stringify(data))
       this.observationDetails.push(data[selectedObservationIndex]);
-      console.log(JSON.stringify(this.observationDetails))
+     // console.log(JSON.stringify(this.observationDetails))
 
     }).catch(error => {
     })
@@ -49,20 +49,20 @@ export class ObservationDetailsPage {
   }
 
   getAssessmentDetails(event) {
-    // console.log(JSON.stringify(event))
-    event.assessmentIndex ? 
-    this.assessmentService.getAssessmentDetails(event, this.programs, 'observation').then(program => {
-      this.programs = program;
-    }).catch(error => {
+    // // console.log(JSON.stringify(event))
+    // event.assessmentIndex ? 
+    // this.assessmentService.getAssessmentDetails(event, this.programs, 'observation').then(program => {
+    //   this.programs = program;
+    // }).catch(error => {
 
-    })
-    : 
-    console.log(JSON.stringify(this.programs));
-    console.log("TEST")
+    // })
+    // : 
+    // console.log(JSON.stringify(this.programs));
+    // console.log("TEST")
     event.observationIndex = this.navParams.get('selectedObservationIndex');
     this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(program => {
       this.programs = program;
-      console.log("observation details fetched");
+      //console.log("observation details fetched");
       
       this.goToEcm( this.navParams.get('selectedObservationIndex') , event ,program);
       
@@ -74,13 +74,13 @@ export class ObservationDetailsPage {
 
   }
   goToEcm(observationIndex , event ,program){
-    console.log("observation details fetched going to ecm" + JSON.stringify(event));
+ //   console.log("observation details fetched going to ecm" + JSON.stringify(event));
 
-  console.log(JSON.stringify(program[observationIndex]['entities'][event.entityIndex].submissionId))
+  // console.log(JSON.stringify(program[observationIndex]['entities'][event.entityIndex].submissionId))
     let submissionId =     program[observationIndex]['entities'][event.entityIndex].submissionId
     let heading = program[observationIndex]['entities'][event.entityIndex].name;
-    console.log(this.utils.getAssessmentLocalStorageKey(submissionId))
-    console.log(submissionId)
+    // console.log(this.utils.getAssessmentLocalStorageKey(submissionId))
+    // console.log(submissionId)
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
       // //console.log(JSON.stringify(successData));
@@ -109,17 +109,17 @@ export class ObservationDetailsPage {
 
   }
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    console.log("open action ")
+    // console.log("open action ")
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
     this.evdnsServ.openActionSheet(options);
   }
   updateLocalStorage(event){
-      console.log("local storge called")
+      // console.log("local storge called")
 
       this.localStorage.getLocalStorage('createdObservationList').then(data =>{
-            console.log(JSON.stringify(data[this.navParams.get('selectedObservationIndex')]))
-            console.log("success data")
+            // console.log(JSON.stringify(data[this.navParams.get('selectedObservationIndex')]))
+            // console.log("success data")
             event.length ? 
             data[this.navParams.get('selectedObservationIndex')].entities = event
             : 
