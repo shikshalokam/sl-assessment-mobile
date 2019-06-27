@@ -54,15 +54,15 @@ export class ImageListingPage {
     // console.log(this.submissionId + "Image listing")
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.schoolData = data;
-    // console.log(this.submissionId + "Image listing  success")
-    //   console.log(JSON.stringify(data))
+      // console.log(this.submissionId + "Image listing  success")
+      console.log(JSON.stringify(data))
       this.currentEvidence = this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex];
       this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.submissionId;
       this.evidenceSections = this.currentEvidence['sections'];
       this.selectedEvidenceName = this.currentEvidence['name'];
       this.checkIfEcmSumittedByUser();
     }).catch(error => {
-    // console.log(this.submissionId + "Image listing error")
+      // console.log(this.submissionId + "Image listing error")
 
     })
 
@@ -72,7 +72,8 @@ export class ImageListingPage {
   checkIfEcmSumittedByUser() {
     this.utils.startLoader();
     const submissionId = this.submissionId;
-    this.apiService.httpGet(AppConfigs.survey.checkIfSubmitted + submissionId + "?evidenceId=" + this.currentEvidence.externalId, success => {
+    const url = this.schoolData.observation ? AppConfigs.cro.isSubmissionAllowed : AppConfigs.survey.checkIfSubmitted;
+    this.apiService.httpGet(url + submissionId + "?evidenceId=" + this.currentEvidence.externalId, success => {
       this.utils.stopLoader();
       if (success.result.allowed) {
         this.storage.get("allImageList").then(data => {
@@ -93,7 +94,7 @@ export class ImageListingPage {
         // if (this.schoolData['assessments'][0]) {
         //   this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
         // } else {
-          this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+        this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
         // }
         this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
         const options = {
@@ -226,10 +227,10 @@ export class ImageListingPage {
     console.log("submitting");
     const payload = this.constructPayload();
     const submissionId = this.submissionId;
-    const url = AppConfigs.survey.submission + submissionId + '/';
+    const url = (this.schoolData.observation ? AppConfigs.cro.makeSubmission : AppConfigs.survey.submission) + submissionId + '/';
     this.apiService.httpPost(url, payload, response => {
       this.utils.openToast(response.message);
-        this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+      this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
       const options = {
         _id: this.submissionId,

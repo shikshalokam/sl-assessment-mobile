@@ -53,7 +53,7 @@ export class UpdateLocalSchoolDataProvider {
     // })
   }
 
-  mapSubmissionDataToQuestion(schoolDetails): void {
+  mapSubmissionDataToQuestion(schoolDetails, isObservation?:boolean): void {
     const schoolObj = {};
     let mappedData
     // for (const schoolId of Object.keys(schoolDetails)) {
@@ -62,6 +62,10 @@ export class UpdateLocalSchoolDataProvider {
 
     // }
     mappedData = this.updateSubmissionsOnLogin(schoolDetails);
+    if(isObservation){
+      mappedData.observation = true;
+    }
+
 
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(schoolDetails.assessment.submissionId), mappedData)
     // this.storage.set('schoolsDetails', JSON.stringify(schoolObj));

@@ -37,7 +37,7 @@ export class ObservationEntityListingComponent {
     private apiProviders : ApiProvider,
     private modalCtrl : ModalController,
     private utils: UtilsProvider) {
-      // console.log(this.selectedindex)
+      console.log(JSON.stringify(this.entityList))
   
     //console.log('Hello EntityListingComponent Component');
   }
@@ -94,7 +94,6 @@ export class ObservationEntityListingComponent {
 
 
   getAssessmentDetailsOfCreatedObservation(programIndex,entityIndex,solutionId){
-    console.log(solutionId)
     this.getAssessmentDetailsEvent.emit({
       programIndex: programIndex,
       entityIndex: entityIndex,
