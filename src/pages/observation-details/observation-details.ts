@@ -4,6 +4,8 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
+import { ApiProvider } from '../../providers/api/api';
+import { AppConfigs } from '../../providers/appConfig';
 
 /**
  * Generated class for the ObservationDetailsPage page.
@@ -26,7 +28,7 @@ export class ObservationDetailsPage {
     private assessmentService: AssessmentServiceProvider,
     private utils :UtilsProvider,
     private evdnsServ: EvidenceProvider,
-
+    private apiProvider : ApiProvider,
     private localStorage: LocalStorageProvider) {
   }
 
@@ -45,8 +47,18 @@ export class ObservationDetailsPage {
   }
 
   markAsComplete() {
-    
+    console.log(this.programs[this.navParams.get('selectedObservationIndex')]._id);
+    this.apiProvider.httpGet(AppConfigs.cro.markAsComplete+this.programs[this.navParams.get('selectedObservationIndex')]._id , success =>{
+      console.log(JSON.stringify(success))
+      this.programs[this.navParams.get('selectedObservationIndex')].status = "completed"
+      this.localStorage.setLocalStorage('createdObservationList',this.programs);
+      this.utils.openToast(success.message,'ok');
+      this.navCtrl.pop();
+    },error =>{
+
+    })
   }
+  
 
   getAssessmentDetails(event) {
     // // console.log(JSON.stringify(event))
@@ -132,5 +144,6 @@ export class ObservationDetailsPage {
           });
   }
 
+  
 
 }
