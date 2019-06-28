@@ -120,6 +120,7 @@ export class ObservationEntityListingComponent {
   }
   
   addEntity(...params){
+    console.log(JSON.stringify(params))
 
    let entityListModal = this.modalCtrl.create(EntityListPage, { data : this.entityList[params[0]]._id  }
       );
@@ -134,24 +135,19 @@ export class ObservationEntityListingComponent {
           });
           this.utils.startLoader();
           this.apiProviders.httpPost(AppConfigs.cro.mapEntityToObservation+this.entityList[params[0]]._id , payload , success =>{
-            // console.log(JSON.stringify(this.entityList))
-            this.entityList[0].entities = entityList;
-            this.updatedLocalStorage.emit(entityList);
+            console.log(JSON.stringify(success))
+            // this.entityList[0].entities = entityList;
+            // this.updatedLocalStorage.emit(entityList);
             this.utils.stopLoader();
-            // this.localStorage.getLocalStorage('createdObservationList').then(success=>{
-
-            // }).catch(error=>{
-
-            // })
+       
           },error=>{
             this.utils.stopLoader();
           })
         }
       })
     entityListModal.present();
-    let updatedObservationList ;
-   
   }
+  
   removeEntity(...params){
     console.log("remove entity called")
       let alert = this.alertCntrl.create({
