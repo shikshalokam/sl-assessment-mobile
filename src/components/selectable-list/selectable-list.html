@@ -1,0 +1,39 @@
+<div class="table">
+    <div class="table-row">
+        <ion-searchbar debounce="500" type="3" (ionChange)="searchEntity($event)"></ion-searchbar>
+    </div>
+    <div class="table-row last-row">
+        <div class="table-cell cell-content-outer-wrapper">
+            <div class="cell-content-inner-wrapper">
+                <div class="cell-content">
+                    <ion-list *ngIf="list">
+                        <ion-item *ngFor="let listItem of list">
+                            <ion-label text-wrap>{{listItem.name}}</ion-label>
+                            <ion-checkbox color="dark" [checked]="listItem.selected"
+                                (click)="listItem.selected = !listItem.selected;"></ion-checkbox>
+                        </ion-item>
+
+                    </ion-list>
+                    <ion-list *ngIf="!list.length">
+                        <div class="_flex-box _justify-content-center flex1">
+                            Search Entities
+                        </div>
+                    </ion-list>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+<div *ngIf="!(selectableList?.length === list?.length)">
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</div>

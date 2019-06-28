@@ -30,8 +30,9 @@ export class ImageUploadComponent implements OnInit {
   get name() {
     return true
   }
-  @Input() evidenceId: string;
+  @Input() evidenceId: any;
   @Input() schoolId: string;
+  @Input() submissionId: any;
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
 
@@ -67,20 +68,20 @@ export class ImageUploadComponent implements OnInit {
       console.log("First fetch "  + JSON.stringify(this.allLocalImageList))
       console.log(this.generalQuestion)
       if(!this.generalQuestion){
-        if(this.allLocalImageList[this.schoolId]){
-          this.allLocalImageList[this.schoolId][this.evidenceId] = (this.allLocalImageList[this.schoolId][this.evidenceId] ) ? this.allLocalImageList[this.schoolId][this.evidenceId] : []
+        if(this.allLocalImageList[this.submissionId]){
+          this.allLocalImageList[this.submissionId][this.evidenceId] = (this.allLocalImageList[this.submissionId][this.evidenceId] ) ? this.allLocalImageList[this.submissionId][this.evidenceId] : []
         } else {
-          console.log(this.schoolId + " " + this.evidenceId)
-          this.allLocalImageList[this.schoolId] = {};
-          this.allLocalImageList[this.schoolId][this.evidenceId] = []
+          console.log(this.submissionId + " " + this.evidenceId)
+          this.allLocalImageList[this.submissionId] = {};
+          this.allLocalImageList[this.submissionId][this.evidenceId] = []
           this.localEvidenceImageList = [];
         }
       } else {
         console.log("oninit ")
-        if(this.allLocalImageList[this.schoolId]){
-          this.allLocalImageList[this.schoolId] = (this.allLocalImageList[this.schoolId] ) ? this.allLocalImageList[this.schoolId] : []
+        if(this.allLocalImageList[this.submissionId]){
+          this.allLocalImageList[this.submissionId] = (this.allLocalImageList[this.submissionId] ) ? this.allLocalImageList[this.submissionId] : []
         } else {
-          this.allLocalImageList[this.schoolId] = [];
+          this.allLocalImageList[this.submissionId] = [];
           this.localEvidenceImageList = [];
         }
       console.log("second fetch "  + JSON.stringify(this.allLocalImageList))
@@ -214,13 +215,13 @@ export class ImageUploadComponent implements OnInit {
         this.imageList.push({data: data, imageName: fileName });
         this.datas.fileName.push(fileName);
         console.log("Update local list")
-        console.log(this.schoolId + " " + this.evidenceId)
+        console.log(this.submissionId + " " + this.evidenceId)
 
         console.log(this.localEvidenceImageList);
         if(!this.generalQuestion){
-          this.allLocalImageList[this.schoolId][this.evidenceId].push({ name: fileName,  uploaded: false});
+          this.allLocalImageList[this.submissionId][this.evidenceId].push({ name: fileName,  uploaded: false});
         } else {
-        this.allLocalImageList[this.schoolId].push({ name: fileName,  uploaded: false});
+        this.allLocalImageList[this.submissionId].push({ name: fileName,  uploaded: false});
         }
         this.updateLocalImageList();
 
@@ -269,20 +270,20 @@ export class ImageUploadComponent implements OnInit {
     // this.file.removeFile(this.appFolderPath + '/', this.datas.fileName[index]).then(success => {
       let indexInLocalList;
       if(!this.generalQuestion) {
-        for (let i = 0; i < this.allLocalImageList[this.schoolId][this.evidenceId].length; i++) {
-          if (this.allLocalImageList[this.schoolId][this.evidenceId].name === this.imageList[index].imageName) {
+        for (let i = 0; i < this.allLocalImageList[this.submissionId][this.evidenceId].length; i++) {
+          if (this.allLocalImageList[this.submissionId][this.evidenceId].name === this.imageList[index].imageName) {
             indexInLocalList = i;
           }
         }
-        this.allLocalImageList[this.schoolId][this.evidenceId].splice(indexInLocalList, 1);
+        this.allLocalImageList[this.submissionId][this.evidenceId].splice(indexInLocalList, 1);
       } else {
         console.log("remove image else")
-        for (let i = 0; i < this.allLocalImageList[this.schoolId].length; i++) {
-          if (this.allLocalImageList[this.schoolId].name === this.imageList[index].imageName) {
+        for (let i = 0; i < this.allLocalImageList[this.submissionId].length; i++) {
+          if (this.allLocalImageList[this.submissionId].name === this.imageList[index].imageName) {
             indexInLocalList = i;
           }
         }
-        this.allLocalImageList[this.schoolId].splice(indexInLocalList, 1);
+        this.allLocalImageList[this.submissionId].splice(indexInLocalList, 1);
       }
       this.datas.fileName.splice(index, 1);
       this.imageList.splice(index, 1);

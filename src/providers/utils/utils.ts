@@ -81,7 +81,7 @@ export class UtilsProvider {
     // if (question.file.required && (question.fileName.length < question.file.minCount)) {
     //   return false
     // }
-    if (question.validation.regex && question.responseType === 'number' && !this.testRegex(question.validation.regex, question.value)) {
+    if (question.validation.regex && (question.responseType === 'number' || question.responseType === 'text') && !this.testRegex(question.validation.regex, question.value)) {
       return false
     }
 
@@ -125,6 +125,7 @@ export class UtilsProvider {
   }
 
   createFormGroup(formFields): any {
+    console.log(JSON.stringify(formFields));
     let formGrp = {};
     formFields.forEach(formfield => {
       formGrp[formfield.field] = formfield.validation.required ? new FormControl(formfield.value || "", Validators.required) : new FormControl(formfield.value || "");

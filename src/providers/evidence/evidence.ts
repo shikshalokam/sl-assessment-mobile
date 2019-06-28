@@ -13,7 +13,7 @@ import { LocalStorageProvider } from '../local-storage/local-storage';
 @Injectable()
 export class EvidenceProvider {
   schoolData: any;
-  schoolDetails: any;
+  entityDetails: any;
   schoolId: any;
   evidenceIndex: any;
 
@@ -27,38 +27,40 @@ export class EvidenceProvider {
     })
   }
 
-  openActionSheet(params): void {
-    this.schoolDetails = params.schoolDetails;
+  openActionSheet(params,type?): void {
+    type = type ? type : "Survey";
+    console.log(JSON.stringify(params) +  " test")
+    this.entityDetails = params.entityDetails;
     this.schoolId = params._id;
     this.evidenceIndex = params.selectedEvidence;
-    const selectedECM = this.schoolDetails['assessments'][0] ? this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex] : this.schoolDetails['assessments']['evidences'][this.evidenceIndex];
+    const selectedECM =  this.entityDetails['assessment']['evidences'][this.evidenceIndex] ;
 
     let action = this.actionSheet.create({
       title: "Survey actions",
       buttons: [
         {
-          text: "View Survey",
+          text: "View "+type,
           icon: "eye",
           handler: () => {
-            delete params.schoolDetails;
+            delete params.entityDetails;
             this.appCtrl.getRootNav().push('SectionListPage', params);
           }
         },
         {
-          text: "Start Survey",
+          text: "Start "+type,
           icon: 'arrow-forward',
           handler: () => {
             this.diagnostic.isLocationEnabled().then(success => {
               if (success) {
-                if(params.schoolDetails['assessments'][0]) {
-                  params.schoolDetails['assessments'][0]['evidences'][params.selectedEvidence].startTime = Date.now();
-                } else {
-                  params.schoolDetails['assessments']['evidences'][params.selectedEvidence].startTime = Date.now();
-                }
+                // if(params.entityDetails['assessment']) {
+                //   params.entityDetails['assessments']['evidences'][params.selectedEvidence].startTime = Date.now();
+                // } else {
+                  params.entityDetails['assessment']['evidences'][params.selectedEvidence].startTime = Date.now();
+                // }
                 //  ?  :  = ;
-                // this.utils.setLocalSchoolData(params.schoolDetails);
-                this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), params.schoolDetails)
-                delete params.schoolDetails;
+                // this.utils.setLocalSchoolData(params.entityDetails);
+                this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), params.entityDetails)
+                delete params.entityDetails;
                 this.appCtrl.getRootNav().push('SectionListPage', params);
               } else {
                 this.netwrkGpsProvider.checkForLocationPermissions();
@@ -86,7 +88,7 @@ export class EvidenceProvider {
       text: "ECM Not Allowed",
       icon: "alert",
       handler: () => {
-        delete params.schoolDetails;
+        delete params.entityDetails;
         this.openAlert(selectedECM)
       }
     })
@@ -146,15 +148,15 @@ export class EvidenceProvider {
   notApplicable(selectedECM) {
     this.utils.startLoader()
     const payload = this.constructPayload(selectedECM);
-    const submissionId = this.schoolDetails['assessments'][0].submissionId;
+    const submissionId = this.entityDetails['assessment'].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
     this.apiService.httpPost(url, payload, response => {
       console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
-      this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].isSubmitted = true;
-      this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].notApplicable = true;
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolDetails)
-      // this.utils.setLocalSchoolData(this.schoolDetails);
+      this.entityDetails['assessment']['evidences'][this.evidenceIndex].isSubmitted = true;
+      this.entityDetails['assessment']['evidences'][this.evidenceIndex].notApplicable = true;
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.entityDetails)
+      // this.utils.setLocalSchoolData(this.entityDetails);
       this.utils.stopLoader();
 
     }, error => {

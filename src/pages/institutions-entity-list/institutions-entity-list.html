@@ -26,7 +26,7 @@
 
   </header>
 </ion-header>
-
+<!-- 
 
 <ion-content>
     <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
@@ -39,17 +39,17 @@
       </ion-refresher>
   <ion-card text-wrap *ngFor="let assessment of schoolList; let i = index" style="margin-top: 5px">
     <ion-item-group>
-      <!-- <ion-item-divider color="light" >
+      <ion-item-divider color="light" >
         <h4 class="bold">Program - {{program.name}} ({{program.externalId}})</h4>
-      </ion-item-divider> -->
-      <!-- <ion-item *ngFor="let assessment of program?.assessments; let j = index" text-wrap> 
+      </ion-item-divider> 
+       <ion-item *ngFor="let assessment of program?.assessments; let j = index" text-wrap> 
         <div class="_flex-box">
           <div style="flex:1" (click)="assessment?.downloaded ? goToEcm(assessment.id,assessment?.name ) : getAssessmentDetails(i, j) ">{{assessment.name}} </div>
             <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j)" *ngIf="!assessment?.downloaded"></ion-icon>
             <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded" (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon>
         </div>
-      </ion-item> -->
-      <!-- <ion-list> -->
+      </ion-item> 
+      <ion-list>
       <ion-item >
         <div class="_flex-box">
             <ion-icon name="book" margin-right></ion-icon>
@@ -63,7 +63,7 @@
         </div>
       </ion-item>
 
-      <!-- </ion-list> -->
+      </ion-list>
     </ion-item-group>
   </ion-card>
   <div class="_flex-box msgContainer" *ngIf="!schoolList?.length">No Assessments</div>
@@ -81,4 +81,35 @@
       </ion-col>
     </ion-row>
   </ion-toolbar>
+</ion-footer> -->
+
+
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
+      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+<entity-listing *ngIf="programs"
+[entityList]="programs"  
+[entityType]="'observations'" 
+(getAssessmentDetailsEvent)="getAssessmentDetails($event)"
+(refreshEvent)="refresh($event)"
+(openMenuEvent)="openMenu($event)"
+>
+</entity-listing>
+</ion-content>
+<ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button full (click)="refresh()" class="btnText">
+          <ion-icon name="refresh" margin-right></ion-icon>
+          {{'buttons.refresh' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
 </ion-footer>
+

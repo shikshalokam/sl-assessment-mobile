@@ -23,19 +23,33 @@ export class MenuItemComponent {
   hideTeacherRegistry = true;
   hideLeaderRegistry=true;
   hideFeedback= true;
+  entityId: any;
+  showMenuArray: any;
+  solutionId: any;
+  parentEntityId: any;
+  createdByProgramId: any;
 
   constructor(private navParams: NavParams, private ratingService: RatingProvider,
     private appCtrl: App, private viewCtrl: ViewController, private utils: UtilsProvider,
     private events: Events, private ngps: NetworkGpsProvider, private modalCntrl: ModalController,
     private usld: UpdateLocalSchoolDataProvider) {
-    console.log('Hello MenuItemComponent Component');
+    //console.log('Hello MenuItemComponent Component');
+    this.showMenuArray =  this.navParams.get('showMenuArray');
     this.submissionId = this.navParams.get('submissionId');
+    this.entityId = this.navParams.get('entityId') ? this.navParams.get('entityId') : null;
     this.schoolId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
-    this.hideTeacherRegistry = this.navParams.get('hideTeacherRegistry');
-    this.hideLeaderRegistry=this.navParams.get('hideLeaderRegistry');
-    this.hideFeedback= this.navParams.get('hideFeedback');
+    this.solutionId = this.navParams.get('solutionId');
+    this.parentEntityId = this.navParams.get('parentEntityId');
+    this.createdByProgramId = this.navParams.get('createdByProgramId');
+    //console.log(JSON.stringify(this.showMenuArray) + this.entityId );
+
+    // this.showMenuItems(this.navParams.get('showMenuArray'));
+   
+   
     // this.parent = this.navParams.get("parent");
+    // //console.log(this.hideFeedback + "hide feedback");
+
     this.programId = this.navParams.get("programId")
     this.subscription = this.events.subscribe('network:offline', () => {
       this.utils.openToast("Network disconnected");
@@ -80,7 +94,7 @@ export class MenuItemComponent {
 
   goToProfile(): void {
     this.appCtrl.getRootNav().push('EntityProfilePage', {
-      _id: this.schoolId,
+      _id: this.submissionId,
       name: this.schoolName,
       // parent: this.parent
     })
@@ -88,10 +102,15 @@ export class MenuItemComponent {
   }
 
   goToRegistry(registryType): void {
-    this.appCtrl.getRootNav().push('ParentsListPage', {
+    this.appCtrl.getRootNav().push('RegistryListPage', {
       _id: this.schoolId,
       name: this.schoolName,
-      registry: registryType
+      registry: registryType,
+      submissionId:this.submissionId,
+      entityId:this.schoolId,
+      solutionId :this.solutionId,
+      parentEntityId : this.parentEntityId,
+      createdByProgramId :this.createdByProgramId
     })
     this.close();
   }
@@ -102,7 +121,7 @@ export class MenuItemComponent {
 
   refreshSchoolData(): void {
     const schoolData = {
-      _id: this.schoolId,
+      _id: this.submissionId,
       name: this.schoolName,
     };
     this.usld.getLocalData(schoolData);
@@ -141,4 +160,15 @@ export class MenuItemComponent {
     this.close();
 
   }
+
+
+  // showMenuItems(showMenuitemsArray ){
+  //   //console.log(JSON.stringify(showMenuitemsArray))
+  //   // this.hideTeacherRegistry = this.navParams.get('hideTeacherRegistry') === null  ||this.navParams.get('hideTeacherRegistry') === undefined ? true : this.navParams.get('hideTeacherRegistry')  ;
+  //   // this.hideLeaderRegistry=this.navParams.get('hideLeaderRegistry') === null || this.navParams.get('hideLeaderRegistry') === undefined  ?  true : this.navParams.get('hideLeaderRegistry');
+  //   // this.hideFeedback= this.navParams.get('hideFeedback') === null ||this.navParams.get('hideFeedback') === undefined  ?  true : this.navParams.get('hideFeedback') ;
+  //   this.hideTeacherRegistry = showMenuitemsArray.indexOf("teacher") >= 0 ? true :false;
+  //   this.hideLeaderRegistry = showMenuitemsArray.indexOf("shcoolLeader") >= 0 ? true :false;
+  //   this.hideFeedback = showMenuitemsArray.indexOf("feedback") >= 0 ? true :false;
+  // }
 }

@@ -66,15 +66,12 @@ export class NetworkGpsProvider {
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if (canRequest) {
         // the accuracy option will be ignored by iOS
-        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-          () => {
+        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
             this.getCurrentLocation();
-          },
-          error => {
-            this.utils.openToast("Location should be turned on for this action");
-            // this.enableGPSRequest()
           }
-        );
+        ).catch(errror => {
+          
+        });
       } else {
         //For ios devices
         this.getCurrentLocation();
