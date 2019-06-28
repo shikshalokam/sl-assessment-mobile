@@ -22,18 +22,18 @@ export class ObservationsPage {
   draftObservation;
   createdObservation: any;
   draftListLength: Number = 0;
-  activeListLength : number = 0;
-  completeListLength : number = 0;
+  activeListLength: number = 0;
+  completeListLength: number = 0;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public app: App,
-    public utils : UtilsProvider,
-    public alertCntrl : AlertController,
+    public utils: UtilsProvider,
+    public alertCntrl: AlertController,
     private localStorage: LocalStorageProvider,
     private assessmentService: AssessmentServiceProvider,
-    private apiProviders : ApiProvider,
+    private apiProviders: ApiProvider,
     private events: Events,
     public actionSheetCtrl: ActionSheetController
   ) {
@@ -45,35 +45,26 @@ export class ObservationsPage {
   ionViewDidLoad() {
     this.selectedTab = 'active';
     console.log("observation Module loaded");
-    this.getFromLocal();
-
-   
-
   }
 
-  getFromLocal(){
-  this.localStorage.getLocalStorage('createdObservationList').then(data => {
-    console.log("local storage createdObservationList");
-    console.log(JSON.stringify(data))
-    if (data) {
-      this.createdObservation =[...data] ;
-      this.countCompleteActive();
+  getFromLocal() {
+    this.localStorage.getLocalStorage('createdObservationList').then(data => {
+      if (data) {
+        this.createdObservation = [...data];
+        this.countCompleteActive();
 
-    } else {
+      } else {
+        this.getCreatedObservation();
+      }
+
+    }).catch(error => {
       this.getCreatedObservation();
-    }
 
-  }).catch(error => {
-    this.getCreatedObservation();
-
-  })
-}
+    })
+  }
   ionViewDidEnter() {
     this.getDraftObservation();
     this.getFromLocal();
-    // this.countCompleteActive();
-    // this.refresh();
-    // this.createdObservation = this.createdObservation;
   }
 
   onTabChange(tabName) {
@@ -87,75 +78,77 @@ export class ObservationsPage {
   programs: any;
   enableRefresh = AppConfigs.configuration.enableAssessmentListRefresh;
 
-  
-  getCreatedObservation(){
-    console.log("created oservation api called")
-    this.apiProviders.httpGet(AppConfigs.cro.observationList,success=>{
+
+  getCreatedObservation() {
+    console.log("created oservation api called");
+    this.utils.startLoader();
+    this.apiProviders.httpGet(AppConfigs.cro.observationList, success => {
       this.createdObservation = success.result;
       this.createdObservation.forEach(element => {
-        if(element.entities.length >=0 ){
+        if (element.entities.length >= 0) {
           element.entities.forEach(entity => {
             entity.downloaded = false;
           });
         }
       });
-      console.log(JSON.stringify(this.createdObservation))
-      this.localStorage.setLocalStorage('createdObservationList',this.createdObservation);
-    this.countCompleteActive();
+      console.log(JSON.stringify(this.createdObservation));
+      this.utils.stopLoader();
+      this.localStorage.setLocalStorage('createdObservationList', this.createdObservation);
+      this.countCompleteActive();
 
-      },error=>{})
+    }, error => { })
 
   }
-  countCompleteActive(){
-    this.completeListLength = 0 ;
+  countCompleteActive() {
+    this.completeListLength = 0;
     this.activeListLength = 0;
     this.createdObservation.forEach(element => {
       console.log(element.status)
-      element.status === 'completed' ? 
-      this.completeListLength = this.completeListLength+1 
-      :
-      this.activeListLength= this.activeListLength+1;
+      element.status === 'completed' ?
+        this.completeListLength = this.completeListLength + 1
+        :
+        this.activeListLength = this.activeListLength + 1;
     });
-    console.log( this.activeListLength + "        " + this.completeListLength)
+    console.log(this.activeListLength + "        " + this.completeListLength)
   }
   // navigateToDetails(index) {
   //   this.navCtrl.push(ObservationDetailsPage, {selectedObservationIndex: index , typeOfObservation : "observationList"})
   // }
-  navigateToCreatedObservationDetails(index){
-    this.navCtrl.push(ObservationDetailsPage, {selectedObservationIndex: index })
+  navigateToCreatedObservationDetails(index) {
+    this.navCtrl.push(ObservationDetailsPage, { selectedObservationIndex: index })
 
   }
 
   refresh(event?: any) {
-      const url = AppConfigs.cro.observationList;
-      // const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
-      event ? "" : this.utils.startLoader();
-      this.apiProviders.httpGet(url, successData => {
-        const downloadedAssessments = []
-        const currentObservation = successData.result;
-        for (const observation of this.createdObservation) {
-          for (const entity of observation.entities) {
-              if (entity.downloaded) {
-                downloadedAssessments.push({
-                  id: entity._id,
-                  observationId : observation._id,
-                  submissionId: entity.submissionId
-                });
-              }
-            }
-  
+    const url = AppConfigs.cro.observationList;
+    // const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
+    event ? "" : this.utils.startLoader();
+    this.apiProviders.httpGet(url, successData => {
+      const downloadedAssessments = []
+      const currentObservation = successData.result;
+      for (const observation of this.createdObservation) {
+        for (const entity of observation.entities) {
+          if (entity.downloaded) {
+            downloadedAssessments.push({
+              id: entity._id,
+              observationId: observation._id,
+              submissionId: entity.submissionId
+            });
           }
-  
-        if (!downloadedAssessments.length) {
-          this.createdObservation = successData.result;
-          this.localStorage.setLocalStorage('createdObservationList', successData.result);
-          event ? event.complete() : this.utils.stopLoader();
-          
-        } else {
-          downloadedAssessments.forEach(element => {
+        }
+
+      }
+
+      if (!downloadedAssessments.length) {
+        this.createdObservation = successData.result;
+        this.localStorage.setLocalStorage('createdObservationList', successData.result);
+        event ? event.complete() : this.utils.stopLoader();
+
+      } else {
+        downloadedAssessments.forEach(element => {
 
           for (const observation of successData.result) {
-            if(observation._id === element.observationId){
+            if (observation._id === element.observationId) {
               for (const entity of observation.entities) {
                 if (element.id === entity._id) {
                   entity.downloaded = true;
@@ -164,19 +157,19 @@ export class ObservationsPage {
                 }
               }
             }
-            }
-          });
-          this.localStorage.setLocalStorage('createdObservationList', successData.result);
-          this.createdObservation = successData.result;
-          event ? event.complete() : this.utils.stopLoader();
-          
-        }
-        this.countCompleteActive();
+          }
+        });
+        this.localStorage.setLocalStorage('createdObservationList', successData.result);
+        this.createdObservation = successData.result;
+        event ? event.complete() : this.utils.stopLoader();
 
-      }, error => {
-      });
-  
-    
+      }
+      this.countCompleteActive();
+
+    }, error => {
+    });
+
+
   }
 
   getDraftObservation() {
@@ -219,7 +212,7 @@ export class ObservationsPage {
           console.log('edit clicked');
           this.app.getRootNav().push(AddObservationFormPage, { data: observation, index: index })
         }
-      }, 
+      },
       {
         text: 'Delete',
         cssClass: 'deleteIcon',
@@ -247,39 +240,39 @@ export class ObservationsPage {
           });
           alert.present();
         }
-         
-        }
+
+      }
     ];
     if (observation.data.isComplete) {
-      actionArray.splice(0,0,{
+      actionArray.splice(0, 0, {
         text: 'Publish',
         role: 'Publish',
         icon: 'add',
 
         handler: () => {
-          
-          let obj : {} = {
-            data:{}
+
+          let obj: {} = {
+            data: {}
           };
           console.log(JSON.stringify(observation))
           obj['data'].status = 'published';
           obj['data'].startDate = observation.data.startDate;
           obj['data'].endDate = observation.data.endDate;
           obj['data'].name = observation.data.name;
-          obj['data'].description =observation.data.description ;
+          obj['data'].description = observation.data.description;
           console.log(JSON.stringify(obj));
 
 
           // observation.data.status = 'published';
 
-          this.apiProviders.httpPost(AppConfigs.cro.createObservation+observation.data.solutionId ,obj, success =>{
+          this.apiProviders.httpPost(AppConfigs.cro.createObservation + observation.data.solutionId, obj, success => {
             console.log(JSON.stringify(success));
             // console.log("published obs")
             this.utils.openToast(success.message, "Ok");
 
             this.refresh();
             this.selectedTab = 'active'
-          },error =>{
+          }, error => {
 
           })
           // let publishObservation = observation;
