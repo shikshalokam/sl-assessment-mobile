@@ -20,7 +20,9 @@ $dark-grey-color: #808080;
 $font-size-base: 14px;
 $font-size-large: 18px;
 $white-color : #fff;
-$blue-color: #488aff;
+
+$blue-color:  #a63936,;
+
 $primary-color: $blue-color;
 $red-color: #DC143C;
 $orange-color: #FF8C00;
@@ -42,6 +44,13 @@ ion-content {
 }
 ._justify-content-center {
     justify-content: center;
+}
+._vertical-center{
+    display: flex;
+    flex:1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 ._flex-direction-column {
@@ -125,7 +134,9 @@ ion-content {
     font-size: 25px;
     cursor: pointer;
 }
-
+._wrap-text{
+    white-space: pre-wrap;
+}
 ._container {
     flex-wrap: wrap;
     padding-bottom: 60px;

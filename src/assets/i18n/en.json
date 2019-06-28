@@ -5,7 +5,9 @@
         "ratings": "Rate",
         "start": "Start",
         "survey": "survey",
+        "previous":"Previous",
         "save": "Save",
+        "addSchools":"Add Schools",
         "next": "Next",
         "back": "Back",
         "upload": "Upload",
@@ -26,10 +28,13 @@
         "feedback": "Feedback",
         "update": "Update",
         "Leader": "School Leader",
-        "Teacher": "Teacher"
+        "Teacher": "Teacher",
+        "saveDraft":"Draft",
+        "markAsComplete":"Mark as completed"
     },
     "tabs": {
         "home": "Home",
+        "view":"All",
         "mySchool": "My Schools",
         "faqs": "FAQs",
         "about": "About",
@@ -37,10 +42,15 @@
         "rate": "Rate",
         "individual": "Individual",
         "institutional": "Institutions",
-        "observations":"Observations"
+        "observations":"Observations",
+        "myObservation":"My Observation",
+        "draftObservation":"Draft Observation",
+        "addObservation":"Add Observation"
 
     },
     "headings": {
+        "addObservation":"Add Observation",
+        "solutionDetails":"Solution Details",
         "home": "Home",
         "observations":"Observations",
         "myInstitutions":"My Institutions",
@@ -50,6 +60,7 @@
         "school": "School",
         "profile": "Profile",
         "survey": "Survey",
+        "addSchools":"Add Schools",
         "surveySections":"Survey - Sections",
         "evidenceMethods": "Evidence Methods",
         "sections": "Sections",
@@ -69,10 +80,11 @@
         "surveyEcm":"Survey - ECM",
         "parentContact": "Parent Contacts",
         "parentRegistry":"Parent Registry",
-        "LeaderRegistry": "School Leader Registry",
-        "TeacherRegistry": "Teacher Registry",
+        "schoolLeaderRegistry": "School Leader Registry",
+        "teacherRegistry": "Teacher Registry",
         "generalQuestions": "General Questions",
-        "individualAssessments": "Individual Assessments"
+        "individualAssessments": "Individual Assessments",
+        "observationDetails": "Observation Details"
     },
     "labels": {
         "welcome": "Welcome",

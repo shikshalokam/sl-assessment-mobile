@@ -18,7 +18,7 @@ export class SliderComponent {
   @Input() schoolId: string;
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
-
+  @Input() submissionId: any;
 
   color: string = 'light';
   isComplete: boolean;

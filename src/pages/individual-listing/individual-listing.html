@@ -3,7 +3,7 @@
   </header>
 </ion-header>
 
-
+<!-- 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
@@ -23,8 +23,8 @@
             {{assessment.name}} </div>
           <ion-icon name="cloud-download" class="downloadIcon" (click)="getAssessmentDetails(i, j)"
             *ngIf="!assessment?.downloaded"></ion-icon>
-          <!-- <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
-            (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon> -->
+          <ion-icon name="cloud-done" color="primary" class="downloadIcon downloadedIcon" *ngIf="assessment?.downloaded"
+            (click)="goToEcm(assessment.id, assessment?.name)"></ion-icon>
         </div>
       </ion-item>
     </ion-item-group>
@@ -44,3 +44,36 @@
     </ion-row>
   </ion-toolbar>
 </ion-footer>
+
+
+ -->
+
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
+      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+<entity-listing *ngIf="programs"
+[entityList]="programs"  
+[entityType]="'assessments'" 
+(getAssessmentDetailsEvent)="getAssessmentDetails($event)"
+(refreshEvent)="refresh($event)"
+[showMenu]="false"
+>
+</entity-listing>
+</ion-content>
+<ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button full (click)="refresh()" class="btnText">
+          <ion-icon name="refresh" margin-right></ion-icon>
+          {{'buttons.refresh' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
+

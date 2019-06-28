@@ -18,6 +18,10 @@ import { DatePipe } from '@angular/common';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form';
 import { SlackProvider } from '../providers/slack/slack';
 import { SliderComponent } from './slider/slider';
+import { EntityListingComponent } from './entity-listing/entity-listing';
+import { PipesModule } from '../pipes/pipes.module';
+import { SelectableListComponent } from './selectable-list/selectable-list';
+import { ObservationEntityListingComponent } from './observation-entity-listing/observation-entity-listing';
 
 @NgModule({
 	declarations: [
@@ -33,11 +37,17 @@ import { SliderComponent } from './slider/slider';
     HeaderComponent,
     MenuItemComponent,
     DynamicFormComponent,
-    SliderComponent],
+    SliderComponent,
+    EntityListingComponent,
+    SelectableListComponent,
+    ObservationEntityListingComponent
+  ],
 	imports: [
 		IonicModule,
-		DirectivesModule,
-		TranslateModule
+    DirectivesModule,
+    PipesModule,
+    TranslateModule,
+  
 	],
 	exports: [
 		InputTypeComponent,
@@ -52,13 +62,17 @@ import { SliderComponent } from './slider/slider';
     HeaderComponent,
     MenuItemComponent,
     DynamicFormComponent,
-    SliderComponent
+    SliderComponent,
+    EntityListingComponent,
+    SelectableListComponent,
+    ObservationEntityListingComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
 		RadioTypeComponent,
 		MatrixModalComponent,
-		MenuItemComponent
+    MenuItemComponent,
+    EntityListingComponent
 	],
 	providers:[
 		Network, DatePipe, SlackProvider

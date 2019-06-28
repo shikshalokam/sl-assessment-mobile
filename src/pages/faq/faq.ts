@@ -11,8 +11,8 @@ export class FaqPage {
   faqContent = [
     {
       heading: "What if my phone/screen is hung?",
-      content: `<p><ul><li>Press home button → close all applications → click on SDI app → resume survey. Data filled will not be lost.</li>
-      <li>Restart your phone → click on SDI app → resume survey. Data filled will not be lost.</li>
+      content: `<p><ul><li>Press home button → close all applications → click on Samiksha app → resume survey. Data filled will not be lost.</li>
+      <li>Restart your phone → click on Samiksha app → resume survey. Data filled will not be lost.</li>
       </ul></p>`,
       images: []
     },
@@ -60,22 +60,22 @@ export class FaqPage {
     },
     {
       heading: "What should I do if my phone battery is exhausted?",
-      content: `<p><ul><li>Charge your phone → restart → open SDI app → resume survey. Data filled will not be lost.</li>
+      content: `<p><ul><li>Charge your phone → restart → open Samiksha app → resume survey. Data filled will not be lost.</li>
       </ul></p>`,
       images: []
     },
     {
       heading: "What to do if my application crashes?",
-      content: `<p><ul><li>Click on SDI app → resume survey. Data filled will not be lost.</li>
-      <li>If crashed a second time: Restart your phone → click on SDI app → resume survey. Data filled will not be lost.</li>
+      content: `<p><ul><li>Click on Samiksha app → resume survey. Data filled will not be lost.</li>
+      <li>If crashed a second time: Restart your phone → click on Samiksha app → resume survey. Data filled will not be lost.</li>
       <li>If data is lost before submission of form, contact your immediate supervisor.</li>
       </ul></p>`,
       images: []
     },
     {
       heading: "What if my camera is not working?",
-      content: `<p><ul><li>Close all apps → click on SDI app → resume survey → take picture. Data filled will not be lost.</li>
-      <li>Restart your phone → click on SDI app → resume survey → take picture. Data filled will not be lost.
+      content: `<p><ul><li>Close all apps → click on Samiksha app → resume survey → take picture. Data filled will not be lost.</li>
+      <li>Restart your phone → click on Samiksha app → resume survey → take picture. Data filled will not be lost.
       </li>
       </ul></p>`,
       images: []
@@ -131,13 +131,17 @@ export class FaqPage {
     {
       heading: `Where can I find the training and application manual?
       Find the  Assessor Training Manual here-`,
-      content: `<p><a href="https://docs.google.com/document/d/1difw6K1mkESMsNGXeWLsfKz_iaWzawI9IEsYBiZJzyM/edit?usp=sharing">https://docs.google.com/document/d/1difw6K1mkESMsNGXeWLsfKz_iaWzawI9IEsYBiZJzyM/edit?usp=sharing</a>
+      content: `<p class="_flex-box _justify-content-center"><a href="https://docs.google.com/document/d/1difw6K1mkESMsNGXeWLsfKz_iaWzawI9IEsYBiZJzyM/edit?usp=sharing">
+          Click here to see the document
+      </a>
       </p>`,
       images: []
     },
     {
       heading: `Find the Application Manual here-`,
-      content: `<p><a href="https://docs.google.com/document/d/1Tw3WvCQRonmWjICC8AXYd-2VwrIPEJDFsScTy_CC4Xk/edit?usp=sharing">https://docs.google.com/document/d/1Tw3WvCQRonmWjICC8AXYd-2VwrIPEJDFsScTy_CC4Xk/edit?usp=sharing</a>
+      content: `<p class="_flex-box _justify-content-center"><a href="https://docs.google.com/document/d/1Tw3WvCQRonmWjICC8AXYd-2VwrIPEJDFsScTy_CC4Xk/edit?usp=sharing">
+      Click here to see the document
+      </a>
       </p>`,
       images: []
     }
