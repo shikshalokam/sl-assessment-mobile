@@ -8,6 +8,7 @@ import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { SlackProvider } from '../../providers/slack/slack';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { ObservationProvider } from '../../providers/observation/observation';
 
 declare var cordova: any;
 
@@ -20,7 +21,8 @@ export class ImageListingPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private file: File, private fileTransfer: FileTransfer,
     private apiService: ApiProvider, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
-    private platform: Platform, private slack: SlackProvider) {
+    private platform: Platform, private slack: SlackProvider,
+    private observetionProvider: ObservationProvider) {
   }
 
   uploadImages: any;
@@ -229,6 +231,9 @@ export class ImageListingPage {
     const submissionId = this.submissionId;
     const url = (this.schoolData.observation ? AppConfigs.cro.makeSubmission : AppConfigs.survey.submission) + submissionId + '/';
     this.apiService.httpPost(url, payload, response => {
+      if(this.schoolData.observation){
+        this.observetionProvider.markObservationAsCompleted(submissionId);
+      }
       this.utils.openToast(response.message);
       this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
