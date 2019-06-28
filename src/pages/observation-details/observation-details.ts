@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Events } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -24,16 +24,21 @@ export class ObservationDetailsPage {
     private utils: UtilsProvider,
     private evdnsServ: EvidenceProvider,
     private apiProvider: ApiProvider,
-    private localStorage: LocalStorageProvider) {
+    private localStorage: LocalStorageProvider,
+    private events: Events) {
+
+      this.events.subscribe('observationLocalstorageUpdated', success => {
+        this.getLocalStorageData();
+      })
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ObservationDetailsPage');
+    this.getLocalStorageData();
   }
 
   ionViewWillEnter() {
     console.log("On view enter")
-    this.getLocalStorageData();
   }
 
   getLocalStorageData() {
@@ -41,7 +46,6 @@ export class ObservationDetailsPage {
     const selectedObservationIndex = this.navParams.get('selectedObservationIndex');
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       this.programs = data;
-      // console.log(JSON.stringify(data));
       this.observationDetails.push(data[selectedObservationIndex]);
       this.enableCompleteBtn = this.isAllEntitysCompleted();
     }).catch(error => {
@@ -52,8 +56,7 @@ export class ObservationDetailsPage {
   isAllEntitysCompleted() {
     let completed = true;
     for (const entity of this.observationDetails[0]['entities']) {
-      console.log(JSON.stringify(entity))
-      if (entity.submissionStatus !== 'completed') {
+      if (entity.submissionStatus !== 'completed' ) {
         return false
       }
     }
@@ -127,14 +130,9 @@ export class ObservationDetailsPage {
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
     this.evdnsServ.openActionSheet(options, "Observation");
   }
-  updateLocalStorage(event) {
-    // event.submissionStatus = 'inprogress';
-    console.log(JSON.stringify(event));
+  updateLocalStorage() {
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
-      event.length ?
-        data[this.navParams.get('selectedObservationIndex')].entities = event
-        :
-        data[this.navParams.get('selectedObservationIndex')].entities.splice(event, 1);
+      data[this.navParams.get('selectedObservationIndex')] = this.observationDetails[0]
       this.localStorage.setLocalStorage('createdObservationList', data);
       this.getLocalStorageData();
     }).catch(error => {
