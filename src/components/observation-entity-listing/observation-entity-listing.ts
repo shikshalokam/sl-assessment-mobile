@@ -135,9 +135,12 @@ export class ObservationEntityListingComponent {
           });
           this.utils.startLoader();
           this.apiProviders.httpPost(AppConfigs.cro.mapEntityToObservation+this.entityList[params[0]]._id , payload , success =>{
-            console.log(JSON.stringify(success))
-            // this.entityList[0].entities = entityList;
-            // this.updatedLocalStorage.emit(entityList);
+            entityList.forEach(entity => {
+              entity.submissionStatus = "started";
+              entity.downloaded = false;
+            })
+            this.entityList[0].entities = [...entityList, ...this.entityList[0].entities];
+            this.updatedLocalStorage.emit();
             this.utils.stopLoader();
        
           },error=>{

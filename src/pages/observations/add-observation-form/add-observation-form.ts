@@ -246,10 +246,9 @@ export class AddObservationFormPage {
   }
 
   tmpFunc() { 
-    console.log("temp func")
-     this.selectedIndex === 0 ? this.utils.openToast("select the type of observation") 
+     this.selectedIndex === 0 ? this.utils.openToast("Select the type of observation") 
     : 
-     this.utils.openToast("select a solution") ;
+     this.utils.openToast("Select a solution") ;
 
   }
 
