@@ -88,7 +88,7 @@ export class ObservationEntityListingComponent {
   openAction(assessment, aseessmemtData, evidenceIndex) {
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
-    this.evdnsServ.openActionSheet(options);
+    this.evdnsServ.openActionSheet(options,'Observation');
   }
 
 

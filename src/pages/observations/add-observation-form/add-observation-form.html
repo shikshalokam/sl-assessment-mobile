@@ -11,7 +11,7 @@
         <!-- <h4>Observation Type</h4> -->
       
       <ion-list radio-group [(ngModel)]="entityType">
-        <!-- <ion-label>Entity Type</ion-label> -->
+        <ion-label>Select a observation Type</ion-label>
         <ion-item *ngFor="let type of entityTypeData">
           <ion-label text-capitalize>{{type.name}}</ion-label>
           <ion-radio value="{{type._id}}"></ion-radio>
@@ -53,6 +53,7 @@
     <ion-step label="Solution">
       <!-- <h4>Solution List</h4> -->
       <div class="fixBox" *ngIf="listOfSolution">
+          <ion-label>Select a solution</ion-label>
 
         <ion-list margin-top *ngFor="let frameWork of listOfSolution">
           <ion-item (click)="selectSolution(frameWork._id)" [ngClass]="{'active': frameWork._id === selectedFrameWork}">
@@ -92,7 +93,7 @@
       </ion-col>
       <ion-col *ngIf="selectedIndex !== 2">
         <button ion-button full
-          (click)=" doAction() ; selectedIndex === 0  ? entityType ? stepper1.nextStep() : tmpFunc() : selectedFrameWork ? stepper1.nextStep() : tmpFunc "
+          (click)=" doAction() ; selectedIndex === 0  ? entityType ? stepper1.nextStep() : tmpFunc() : selectedFrameWork ? stepper1.nextStep() : tmpFunc() "
           class="btnText"
           >
           {{'buttons.next' | translate}} 
