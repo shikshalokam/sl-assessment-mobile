@@ -24,8 +24,24 @@ export class SelectableListComponent {
   ) {
     console.log('Hello SelectableListComponent Component');
     this.text = 'Hello World';
+    // this.selectableList = this.filterSelected();
     this.list = this.selectableList.slice(0,this.index-1);
   }
+  // filterSelected(){
+  //   let arr = [];
+  //   if(this.selectableList){
+      
+  //   }
+  //   this.selectableList.forEach(element => {
+  //     if(! element.selected)
+  //     {
+  //       arr.push(element);
+  //     }
+  //   });
+  //   console.log("filtered array");
+  //   console.log(JSON.stringify(arr))
+  //   return arr;
+  // }
   doInfinite(infiniteScroll) {
     console.log("doInfinite function called");
     setTimeout(() => {
@@ -43,6 +59,6 @@ export class SelectableListComponent {
     console.log("search entity called")
     console.log(event.value);
     this.searchUrl.emit(event.value)
-
+    // this.filterSelected();
   }
 }

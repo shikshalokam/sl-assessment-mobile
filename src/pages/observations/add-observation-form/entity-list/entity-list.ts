@@ -55,12 +55,20 @@ searchUrl;
   search(event){
     this.utils.startLoader();
     this.apiProviders.httpGet(this.searchUrl+this.observationId+"?search="+event , success =>{
-      this.selectableList = success.result[0].metaInformation;
+      let arr = [] ;
+      for( let i = 0 ; i< success.result[0].metaInformation.length ; i++){
+        if(!success.result[0].metaInformation[i].selected){
+          arr.push(success.result[0].metaInformation[i])
+        }
+      }
+      this.selectableList = arr
+
       // this.selectableList.forEach( element =>{
       //   element.selected = false;
       // } )
-      console.log(JSON.stringify(success.result[0].schoolInformation));
+      console.log(JSON.stringify(success.result[0].metaInformation));
       this.index = this.index > this.selectableList.length ? this.selectableList.length : this.index;
+      
       this.list = this.selectableList.slice(0,this.index);
       console.log(JSON.stringify(this.list))
     this.utils.stopLoader();
