@@ -27,7 +27,8 @@ export class EvidenceProvider {
     })
   }
 
-  openActionSheet(params): void {
+  openActionSheet(params,type?): void {
+    type = type ? type : "Survey";
     console.log(JSON.stringify(params) +  " test")
     this.entityDetails = params.entityDetails;
     this.schoolId = params._id;
@@ -38,7 +39,7 @@ export class EvidenceProvider {
       title: "Survey actions",
       buttons: [
         {
-          text: "View Survey",
+          text: "View "+type,
           icon: "eye",
           handler: () => {
             delete params.entityDetails;
@@ -46,7 +47,7 @@ export class EvidenceProvider {
           }
         },
         {
-          text: "Start Survey",
+          text: "Start "+type,
           icon: 'arrow-forward',
           handler: () => {
             this.diagnostic.isLocationEnabled().then(success => {
