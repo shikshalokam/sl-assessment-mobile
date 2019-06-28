@@ -138,14 +138,13 @@ export class ObservationsPage {
               if (entity.downloaded) {
                 downloadedAssessments.push({
                   id: entity._id,
-                  observationId : observation._id
+                  observationId : observation._id,
+                  submissionId: entity.submissionId
                 });
               }
             }
   
           }
-  
-        //console.log(JSON.stringify(downloadedAssessments))
   
         if (!downloadedAssessments.length) {
           this.createdObservation = successData.result;
@@ -160,14 +159,13 @@ export class ObservationsPage {
               for (const entity of observation.entities) {
                 if (element.id === entity._id) {
                   entity.downloaded = true;
+                  entity.submissionId = element.submissionId;
+
                 }
               }
             }
             }
           });
-          // programs = currentPrograms;
-          console.log("refresh data");
-          console.log(JSON.stringify(successData.result))
           this.localStorage.setLocalStorage('createdObservationList', successData.result);
           this.createdObservation = successData.result;
           event ? event.complete() : this.utils.stopLoader();

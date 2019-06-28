@@ -11,7 +11,7 @@
   </observation-entity-listing>
 </ion-content>
 
-<ion-footer no-shadow>
+<ion-footer no-shadow  *ngIf="enableCompleteBtn">
   <ion-toolbar class="_toolbar-background-md" position="bottom">
     <ion-row>
       <ion-col *ngIf="observationDetails[0]?.status !== 'completed' && observationDetails[0]?.entities?.length ">

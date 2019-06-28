@@ -73,6 +73,7 @@ import { AssessmentServiceProvider } from '../providers/assessment-service/asses
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { SolutionDetailsPage } from '../pages/solution-details/solution-details';
 import { IonicStepperModule } from 'ionic-stepper';
+import { ObservationProvider } from '../providers/observation/observation';
 
 @NgModule({
   declarations: [
@@ -182,7 +183,8 @@ import { IonicStepperModule } from 'ionic-stepper';
     LocalStorageProvider,
     HTTP,
     AssessmentServiceProvider,
-    Deeplinks
+    Deeplinks,
+    ObservationProvider
 
   ]
 })

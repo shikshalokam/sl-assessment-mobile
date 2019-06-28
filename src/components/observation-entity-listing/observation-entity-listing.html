@@ -22,7 +22,13 @@
                 (click)="entity?.downloaded ? goToEcm(entity?.submissionId,entity?.name ) : getAssessmentDetailsOfCreatedObservation(i,k,entityList[i].solutionId) ">
                 {{entity.name}}
               </div>
-              <ion-icon *ngIf="entityList[0].status !== 'completed'" name="trash" class="downloadIcon" (click)="removeEntity(i,k)" margin-left></ion-icon>
+<!-- 
+              <span float-right *ngIf="entity?.submissionStatus === 'inprogress'"
+                class="_inProgress _flex-box">
+                <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
+              </span> -->
+              <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="cloud-done" class="completed" margin-left></ion-icon>
+              <ion-icon *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed'" name="trash" class="downloadIcon" (click)="removeEntity(i,k)" margin-left></ion-icon>
             </div>
           </ion-item>
           <ion-item-options side="right" *ngIf="entityList[0].status !== 'completed'">
