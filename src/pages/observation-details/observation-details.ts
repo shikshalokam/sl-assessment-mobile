@@ -15,38 +15,61 @@ export class ObservationDetailsPage {
 
   observationDetails = [];
   programs: any;
+  enableCompleteBtn: boolean;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private assessmentService: AssessmentServiceProvider,
     private utils: UtilsProvider,
     private evdnsServ: EvidenceProvider,
-    private apiProvider : ApiProvider,
+    private apiProvider: ApiProvider,
     private localStorage: LocalStorageProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ObservationDetailsPage');
+  }
+
+  ionViewWillEnter() {
+    console.log("On view enter")
+    this.getLocalStorageData();
+  }
+
+  getLocalStorageData() {
+    this.observationDetails = [];
     const selectedObservationIndex = this.navParams.get('selectedObservationIndex');
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       this.programs = data;
-      console.log(JSON.stringify(data))
+      // console.log(JSON.stringify(data));
       this.observationDetails.push(data[selectedObservationIndex]);
+      this.enableCompleteBtn = this.isAllEntitysCompleted();
     }).catch(error => {
     })
   }
 
+
+  isAllEntitysCompleted() {
+    let completed = true;
+    for (const entity of this.observationDetails[0]['entities']) {
+      console.log(JSON.stringify(entity))
+      if (entity.submissionStatus !== 'completed') {
+        return false
+      }
+    }
+    return completed
+  }
+
   markAsComplete() {
-    this.apiProvider.httpGet(AppConfigs.cro.markAsComplete+this.programs[this.navParams.get('selectedObservationIndex')]._id , success =>{
+    this.apiProvider.httpGet(AppConfigs.cro.markAsComplete + this.programs[this.navParams.get('selectedObservationIndex')]._id, success => {
       this.programs[this.navParams.get('selectedObservationIndex')].status = "completed"
-      this.localStorage.setLocalStorage('createdObservationList',this.programs);
-      this.utils.openToast(success.message,'ok');
+      this.localStorage.setLocalStorage('createdObservationList', this.programs);
+      this.utils.openToast(success.message, 'ok');
       this.navCtrl.pop();
-    },error =>{
+    }, error => {
 
     })
   }
-  
+
 
   getAssessmentDetails(event) {
     event.observationIndex = this.navParams.get('selectedObservationIndex');
@@ -84,20 +107,20 @@ export class ObservationDetailsPage {
     this.evdnsServ.openActionSheet(options);
   }
   updateLocalStorage(event) {
-
+    // event.submissionStatus = 'inprogress';
+    console.log(JSON.stringify(event));
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       event.length ?
         data[this.navParams.get('selectedObservationIndex')].entities = event
         :
         data[this.navParams.get('selectedObservationIndex')].entities.splice(event, 1);
-
-
       this.localStorage.setLocalStorage('createdObservationList', data);
+      this.getLocalStorageData();
     }).catch(error => {
 
     });
   }
 
-  
+
 
 }
