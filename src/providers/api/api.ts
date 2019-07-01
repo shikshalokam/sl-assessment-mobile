@@ -12,6 +12,7 @@ import { UtilsProvider } from '../utils/utils';
 // import { AuthProvider } from '../auth/auth';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { SlackProvider } from '../slack/slack';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class ApiProvider {
@@ -21,6 +22,7 @@ export class ApiProvider {
     private appCtrls: App, 
     private utils: UtilsProvider,
     private alertCntrl: AlertController,
+    private translate : TranslateService,
     private ngps: NetworkGpsProvider, 
     private slack: SlackProvider,
     private ngHttp: Http
@@ -120,7 +122,10 @@ export class ApiProvider {
       const errorObject = { ...this.errorObj };
       errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(errorObject)}.Toke expired. Relogin enabled.`;
       this.slack.pushException(errorObject);
-      this.utils.openToast("Something went wrong. Please try again", 'Ok');
+      this.translate.get(['toastMessage.someThingWentWrongTryLater','toastMessage.ok']).subscribe(translations =>{
+        this.utils.openToast(translations.someThingWentWrongTryLater , translations.ok);
+      })
+      
       this.doLogout().then(success => {
         this.reLoginAlert();
       }).catch(error => {
@@ -136,7 +141,9 @@ export class ApiProvider {
         const errorObject = { ...this.errorObj };
         errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
         this.slack.pushException(errorObject);
-        this.utils.openToast("Something went wrong. Please try again", 'Ok');
+        this.translate.get(['toastMessage.someThingWentWrongTryLater','toastMessage.ok']).subscribe(translations =>{
+          this.utils.openToast(translations.someThingWentWrongTryLater , translations.ok);
+        })
         errorCallback(error);
         this.doLogout().then(success => {
           this.reLoginAlert();
@@ -169,7 +176,9 @@ export class ApiProvider {
           this.errorTokenRetryCount++;
           this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
         } else {
-          this.utils.openToast(error.message, 'Ok');
+          this.translate.get('toastMessage.ok').subscribe(translations =>{
+            this.utils.openToast(error.message, translations);
+          })
           const errorObject = { ...this.errorObj };
           errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
           this.slack.pushException(errorObject);
@@ -203,7 +212,9 @@ export class ApiProvider {
           this.errorTokenRetryCount++;
           this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
         } else {
-          this.utils.openToast(error.message, 'Ok');
+          this.translate.get('toastMessage.ok').subscribe(translations =>{
+            this.utils.openToast(error.message, translations);
+          })
           const errorObject = { ...this.errorObj };
           errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}`;
           this.slack.pushException(errorObject);
@@ -218,11 +229,16 @@ export class ApiProvider {
     this.currentUser.deactivateActivateSession(true);
     let nav = this.appCtrls.getRootNav();
     nav.setRoot(WelcomePage);
+    let translateObject ;
+    this.translate.get(['actionSheet.sessionExpired','actionSheet.login']).subscribe(translations =>{
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
     let alert = this.alertCntrl.create({
-      title: 'Session has expired. Please login again to continue',
+      title: translateObject['actionSheet.sessionExpired'],
       buttons: [
         {
-          text: 'Login',
+          text: translateObject['actionSheet.login'],
           role: 'role',
           handler: data => {}
         }

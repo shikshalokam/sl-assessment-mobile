@@ -59,6 +59,7 @@ searchUrl;
       for( let i = 0 ; i< success.result[0].metaInformation.length ; i++){
         if(!success.result[0].metaInformation[i].selected){
           arr.push(success.result[0].metaInformation[i])
+
         }
       }
       this.selectableList = arr
@@ -67,8 +68,11 @@ searchUrl;
       //   element.selected = false;
       // } )
       console.log(JSON.stringify(success.result[0].metaInformation));
+
+      console.log(JSON.stringify(this.selectableList));
+      console.log("searched data");
       this.index = this.index > this.selectableList.length ? this.selectableList.length : this.index;
-      
+      console.log(this.index)
       this.list = this.selectableList.slice(0,this.index);
       console.log(JSON.stringify(this.list))
     this.utils.stopLoader();
