@@ -9,6 +9,7 @@
     <ion-input type="{{data?.responseType}}" (input)="isaNumber()" (keyup.enter) = "keyboard.hide()" [(ngModel)]="data.value" (ngModelChange)="checkForValidation()"></ion-input>
   </ion-item>
   <div *ngIf="!notNumber" class="_errorMsg">{{getErrorMsg()}}</div>
+
   <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
   <image-upload *ngIf="data?.file" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [submissionId]="submissionId"></image-upload>
 </div>
