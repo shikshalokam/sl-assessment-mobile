@@ -7,6 +7,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
 // import { imageLocalListName} from "../../providers/appConfig"
 import { PhotoLibrary } from '@ionic-native/photo-library';
+import { TranslateService } from '@ngx-translate/core';
 
 declare var cordova: any;
 
@@ -47,6 +48,7 @@ export class ImageUploadComponent implements OnInit {
     private file: File, private imgPicker: ImagePicker, private utils: UtilsProvider,
     private storage: Storage,
     private photoLibrary: PhotoLibrary, private platform: Platform, 
+    private translate : TranslateService,
     private alertCtrl : AlertController) {
     console.log('Hello ImageUploadComponent Component');
     this.text = 'Hello World';
@@ -101,24 +103,29 @@ export class ImageUploadComponent implements OnInit {
   }
 
   openActionSheet(): void {
+    let translateObject ;
+    this.translate.get(['actionSheet.addimage','actionSheet.camera','actionSheet.upload','actionSheet.cancel']).subscribe(translations =>{
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
     const actionSheet = this.actionSheet.create({
-      title: 'Add images',
+      title: translateObject['actionSheet.addimage'] ,
       buttons: [
         {
-          text: 'Camera',
+          text: translateObject['actionSheet.camera' ],
           role: 'destructive',
           icon: 'camera',
           handler: () => {
             this.openCamera();
           }
         }, {
-          text: 'Upload',
+          text: translateObject ['actionSheet.upload'],
           icon: 'cloud-upload',
           handler: () => {
             this.openLocalLibrary();
           }
         }, {
-          text: 'Cancel',
+          text: translateObject['actionSheet.cancel'],
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
@@ -293,18 +300,18 @@ export class ImageUploadComponent implements OnInit {
 
   deleteImageAlert(index) {
     let alert = this.alertCtrl.create({
-      title: 'Confirm',
-      message: 'Do you want to delete this image?',
+      title: `{{'actionSheet.confirm' | translate}}`,
+      message:`{{'actionSheet.confirmDeleteImage' | translate}}`,
       buttons: [
         {
-          text: 'No',
+          text:`{{'actionSheet.no' | translate}}`,
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
           }
         },
         {
-          text: 'Yes',
+          text: `{{'actionSheet.yes' | translate}}`,
           handler: () => {
             this.removeImgFromList(index);
           }
