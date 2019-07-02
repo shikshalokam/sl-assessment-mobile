@@ -20,7 +20,7 @@ entityList;
 observationId ;
 searchUrl;
   selectableList: any;
-  index: any = 10 ;
+  index: any = 100 ;
   list: any = [];
   constructor(
     public navCtrl: NavController,
@@ -54,6 +54,7 @@ searchUrl;
   
   search(event){
     this.utils.startLoader();
+    this.index = 100;
     this.apiProviders.httpGet(this.searchUrl+this.observationId+"?search="+event , success =>{
       let arr = [] ;
       for( let i = 0 ; i< success.result[0].metaInformation.length ; i++){
@@ -62,19 +63,22 @@ searchUrl;
 
         }
       }
-      this.selectableList = arr
-
+      console.log(JSON.stringify(arr))
+      this.selectableList =[...arr]
       // this.selectableList.forEach( element =>{
       //   element.selected = false;
       // } )
-      console.log(JSON.stringify(success.result[0].metaInformation));
+      // console.log(JSON.stringify(success.result[0]));
 
-      console.log(JSON.stringify(this.selectableList));
-      console.log("searched data");
-      this.index = this.index > this.selectableList.length ? this.selectableList.length : this.index;
-      console.log(this.index)
+      // console.log(JSON.stringify(this.selectableList));
+      // console.log("searched data");
+      console.log( this.index > arr.length );
+      this.index = this.index > arr.length ?  arr.length  : this.index;
+      console.log(arr.length )
+      console.log(this.index);
+      this.list = [];
       this.list = this.selectableList.slice(0,this.index);
-      console.log(JSON.stringify(this.list))
+      // console.log(JSON.stringify(this.list))
     this.utils.stopLoader();
 
 },error =>{
