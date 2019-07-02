@@ -279,6 +279,7 @@ export class ObservationsPage {
               this.utils.openToast(success.message, translations);
             })
             this.refresh();
+            this.getDraftObservation();
             this.selectedTab = 'active'
           }, error => {
 

@@ -98,19 +98,19 @@ export class EvidenceProvider {
       }
     })
     if(selectedECM.canBeNotAllowed) {
-      action.data.buttons.splice(action.data.buttons.length-1, 0, notAvailable);
+      action.data.buttons.splice(action.data.buttons.length-1, 0);
     }
-    // if(selectedECM.canBeNotApplicable) {
-    //   action['buttons'].push(
-    // {
-    //   text: "ECM Not Applicable",
-    //   icon: "alert",
-    //   handler: () => {
-    //     this.notApplicable(params);
-    //   }
-    // }
-    //   )
-    // }
+    if(selectedECM.canBeNotApplicable) {
+      action['buttons'].push(
+    {
+      text: "ECM Not Applicable",
+      icon: "alert",
+      handler: () => {
+        this.notApplicable(params);
+      }
+    }
+      )
+    }
     
     action.present();
   })
