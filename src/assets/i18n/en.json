@@ -99,7 +99,8 @@
         "completed": "Completed",
         "inprogress": "In Progress",
         "submitted": "Submitted",
-        "notApplicable": "NA"
+        "notApplicable": "NA",
+        "readytoPublish": "Ready to Publish"
     },
     "languages": {
         "english": "English",

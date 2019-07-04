@@ -8,6 +8,7 @@ import { AppConfigs } from '../../providers/appConfig';
 import { ExtendedDeviceInformation } from '@ionic-native/extended-device-information';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { Network } from '@ionic-native/network';
+import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser';
 
 
 @Component({
@@ -18,6 +19,8 @@ export class AboutPage {
   languageChange: string = 'en';
   isIos: boolean;
   networkDetails;
+
+
 
   aboutContent = [
     //   {
@@ -92,10 +95,14 @@ export class AboutPage {
       images: [
         { path: "assets/imgs/just-logo.png", position: "top" }
       ]
+    },
+    {
+      heading: "Terms of use",
+      link: "https://shikshalokam.org/wp-content/uploads/2019/05/Final-ShikshaLokam-Terms-of-Use-MCM-08052019-Clean-copy-1.html"
     }
   ]
-  
-  constructor(public navCtrl: NavController, private translate: TranslateService,
+
+  constructor(public navCtrl: NavController, private translate: TranslateService, private iab: InAppBrowser,
     private feedbackService: FeedbackProvider, private device: Device, private platform: Platform, private currentUSer: CurrentUserProvider, private network: Network) {
     this.isIos = this.platform.is('ios') ? true : false;
   }
@@ -112,7 +119,18 @@ export class AboutPage {
   }
 
   goTodetailsPage(i) {
-    this.navCtrl.push(DetailPage, { content: this.aboutContent[i], header: 'headings.about' })
+    if (this.aboutContent[i].link) {
+      const options: InAppBrowserOptions = {
+        hidenavigationbuttons: 'yes',
+        hideurlbar: 'yes',
+        closebuttoncolor: '#ffffff',
+        toolbarcolor: "#a63936"
+      };
+      this.iab.create(this.aboutContent[i].link, "_self", options)
+    } else {
+      this.navCtrl.push(DetailPage, { content: this.aboutContent[i], header: 'headings.about' });
+    }
+
   }
 
 }
