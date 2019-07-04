@@ -13,24 +13,25 @@
 
 
 <ion-content padding>
- <!-- <div  class="fixBox"> -->
-          <selectable-list [selectableList]="entityList" (searchUrl)="search($event)" [list]="list" [index]="index"></selectable-list>
-      <!-- </div> -->
-
-          
-      
+          <selectable-list [selectedListCount]="selectedListCount" (infinityScrollEvent)="search()" [totalCount]="totalCount" [selectableList]="selectableList" (searchUrl)="search($event)"  [index]="index"></selectable-list>
 </ion-content>
 <ion-footer no-shadow>
     <ion-toolbar class="_toolbar-background-md" position="bottom">
       <ion-row>
-          <ion-col>
-          </ion-col>
+          
+        
         <ion-col>
-            <button ion-button full (click)="addSchools()" class="btnText">
-              <ion-icon name="add" margin-right></ion-icon>
-              {{'buttons.add' | translate}}
-            </button>
-        </ion-col>
+          <button ion-button full (click)="cancel()" class="btnText" >
+            <ion-icon name="close" margin-right></ion-icon>
+            {{'buttons.cancel' | translate}}
+          </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button full (click)="addSchools()" class="btnText" [disabled]="selectedListCount.count === 0">
+          <ion-icon name="add" margin-right></ion-icon>
+          {{'buttons.add' | translate}}
+        </button>
+    </ion-col>
       </ion-row>
     </ion-toolbar>
   </ion-footer>
