@@ -61,12 +61,12 @@ export class InputTypeComponent implements OnInit {
     this.isaNumber();
   }
 
-  // getErrorMsg() {
-  //   if(this.data.validation.regex){
-  //     let string = this.data.validation.regex.split("[");
-  //     string = string[1].split("]")[0];
-  //     return "Should contain only values "+ string;
-  //   }
-  // }
+  getErrorMsg() {
+    if(this.data.validation.regex){
+      let string = this.data.validation.regex.split("[");
+      string = string[1].split("]")[0];
+      return "Should contain only values "+ string;
+    }
+  }
 
 }

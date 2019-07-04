@@ -94,12 +94,13 @@ export class AboutPage {
     <p>Network type: ${this.network.type}</p>`,
       images: [
         { path: "assets/imgs/just-logo.png", position: "top" }
-      ]
+      ],
+      link:null
     },
-    {
-      heading: "Terms of use",
-      link: "https://shikshalokam.org/wp-content/uploads/2019/05/Final-ShikshaLokam-Terms-of-Use-MCM-08052019-Clean-copy-1.html"
-    }
+    // {
+    //   heading: "Terms of use",
+    //   link: "https://shikshalokam.org/wp-content/uploads/2019/05/Final-ShikshaLokam-Terms-of-Use-MCM-08052019-Clean-copy-1.html"
+    // }
   ]
 
   constructor(public navCtrl: NavController, private translate: TranslateService, private iab: InAppBrowser,
