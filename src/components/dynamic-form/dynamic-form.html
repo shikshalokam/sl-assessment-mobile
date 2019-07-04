@@ -35,7 +35,7 @@
 
       <ion-item *ngIf="fromField?.input === 'date' && fromField?.visible && checkForVisibility(fromField)">
           <ion-label>{{fromField?.label}}</ion-label>
-          <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DDDD MMMM YYYY" [formControlName]="fromField.field"></ion-datetime>
+          <ion-datetime displayFormat="DD/MM/YYYY" [min]="minDate" pickerFormat="DDDD MMMM YYYY" [formControlName]="fromField.field"></ion-datetime>
         </ion-item>
 
 
