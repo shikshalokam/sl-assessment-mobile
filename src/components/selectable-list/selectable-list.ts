@@ -19,8 +19,8 @@ export class SelectableListComponent {
   @Output() searchUrl  = new EventEmitter();
   @Input() observationId;
   infinityScrollFlag = true;
+  @Input() selectedListCount ;
   text: string;
-
   constructor(
     private apiProviders : ApiProvider
   ) {
@@ -56,6 +56,10 @@ export class SelectableListComponent {
     }, 500);
   }
   searchEntity(event){
+    if(!event.value){
+      this.selectableList = [];
+      return
+    }
       if(!event.value || event.value.length < 3){
          return;
       }
@@ -64,5 +68,19 @@ export class SelectableListComponent {
     console.log(event.value);
     this.searchUrl.emit(event.value)
     // this.filterSelected();
+  }
+  clearEntity(){
+    this.selectableList = []
+  }
+  checkItem(listItem){
+    console.log("checked")
+    listItem.selected = !listItem.selected; 
+    listItem.selected ?  this.selectedListCount.count++ : this.selectedListCount.count-- ;
+  }
+  ionViewWillEnter(){
+    console.log(this.selectedListCount + "count")
+    console.log(JSON.stringify(this.selectableList))
+    
+
   }
 }
