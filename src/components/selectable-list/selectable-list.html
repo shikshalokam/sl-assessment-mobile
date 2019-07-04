@@ -6,15 +6,15 @@
         <div class="table-cell cell-content-outer-wrapper">
             <div class="cell-content-inner-wrapper">
                 <div class="cell-content">
-                    <ion-list *ngIf="list">
-                        <ion-item *ngFor="let listItem of list">
+                    <ion-list *ngIf="selectableList">
+                        <ion-item *ngFor="let listItem of selectableList">
                             <ion-label text-wrap>{{listItem.name}}</ion-label>
                             <ion-checkbox color="dark" [checked]="listItem.selected"
                                 (click)="listItem.selected = !listItem.selected;"></ion-checkbox>
                         </ion-item>
 
                     </ion-list>
-                    <ion-list *ngIf="!list.length">
+                    <ion-list *ngIf="!selectableList?.length">
                         <div class="_flex-box _justify-content-center flex1">
                            {{ 'message.searchEntities' | translate}}
                         </div>
@@ -31,9 +31,10 @@
     </div>
 
 </div>
-<div *ngIf="!(selectableList?.length === list?.length)">
-    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+<!-- <div *ngIf="!(selectableList?.length === list?.length)">
+    {{list?.length}} -->
+    <ion-infinite-scroll [enabled]="!(this.selectableList?.length === totalCount)" (ionInfinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
-</div>
+<!-- </div> -->

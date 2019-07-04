@@ -12,11 +12,13 @@ import { ApiProvider } from '../../providers/api/api';
   templateUrl: 'selectable-list.html'
 })
 export class SelectableListComponent {
-  @Input() selectableList : [];
-  @Input() list;
+  @Input() selectableList  ;
+  @Input() totalCount : number;
+  @Output() infinityScrollEvent = new EventEmitter();
   @Input() index = 100 ;
   @Output() searchUrl  = new EventEmitter();
   @Input() observationId;
+  infinityScrollFlag = true;
   text: string;
 
   constructor(
@@ -45,9 +47,11 @@ export class SelectableListComponent {
   doInfinite(infiniteScroll) {
     console.log("doInfinite function called");
     setTimeout(() => {
-      for (let i=0 ; ( i < 10 ) && ( this.selectableList && this.index < this.selectableList.length); i++ ) {
-        this.list.push(this.selectableList[this.index++]);
-      }
+      this.infinityScrollEvent.emit()
+      // for (let i=0 ; ( i < 10 ) && this.index < this.selectableList.length; i++ ) {
+      //   this.list.push(this.selectableList[this.index++]);
+      // }
+    //  this.infinityScrollFlag = this.list.length === this.selectableList.length ? false : true;
       infiniteScroll.complete();
     }, 500);
   }
