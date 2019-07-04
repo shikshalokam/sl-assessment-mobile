@@ -174,7 +174,7 @@
         "dontCloseApp":"Please don't close the app or go back.",
         "of":"of",
         "images":"Images",
-        
+        "startSearchEntity":"Start Search For Entity",
         "uploading":"Uploading",
         "completeObservation":"Are you sure you want to mark this observation as complete?",
         "restrictAction":"Further you won't be able to do any kind of action.",

@@ -16,27 +16,30 @@ import { UtilsProvider } from '../../../../providers/utils/utils';
   templateUrl: 'entity-list.html',
 })
 export class EntityListPage {
-entityList;
-observationId ;
-searchUrl;
-limit=10;
-page=1;
-totalCount = 0;
-searchValue = "";
+  entityList;
+  observationId;
+  searchUrl;
+  limit = 10;
+  page = 1;
+  totalCount = 0;
+  searchValue = "";
   selectableList: any;
-  index: any = 50 ;
+  index: any = 50;
   list: any = [];
   arr = [];
+  selectedListCount = {
+    count: 0
+  }
   constructor(
     public navCtrl: NavController,
-     public navParams: NavParams,
-     public viewCntrl :ViewController,
-     private apiProviders : ApiProvider,
-     private utils : UtilsProvider
-     ) {
-       this.searchUrl = AppConfigs.cro.searchEntity;
-  this.observationId =  this.navParams.get('data');
-  console.log(this.observationId)
+    public navParams: NavParams,
+    public viewCntrl: ViewController,
+    private apiProviders: ApiProvider,
+    private utils: UtilsProvider
+  ) {
+    this.searchUrl = AppConfigs.cro.searchEntity;
+    this.observationId = this.navParams.get('data');
+    console.log(this.observationId)
   }
 
   ionViewDidLoad() {
@@ -44,11 +47,11 @@ searchValue = "";
 
   }
 
-  
-  addSchools(){
+
+  addSchools() {
     let selectedSchools = []
     this.selectableList.forEach(element => {
-      if(element.selected){
+      if (element.selected) {
         selectedSchools.push(element);
       }
     });
@@ -56,35 +59,33 @@ searchValue = "";
     this.viewCntrl.dismiss(selectedSchools);
 
   }
-  
-  search(event?){
+  cancel(){
+    this.viewCntrl.dismiss();
+  }
+
+  search(event?) {
     this.searchValue = event ? event : this.searchValue;
     this.utils.startLoader();
     this.index = 50;
-    this.apiProviders.httpGet(this.searchUrl+this.observationId+"?search="+this.searchValue+"&page="+this.page+"&limit="+this.limit , success =>{
-       this.arr = event ? [] : this.arr ;
-      for( let i = 0 ; i< success.result[0].data.length ; i++){
-        if(!success.result[0].data[i].selected){
-          this.arr.push(success.result[0].data[i])
-
-        }
+    this.apiProviders.httpGet(this.searchUrl + this.observationId + "?search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
+      this.arr = event ? [] : this.arr;
+      for (let i = 0; i < success.result[0].data.length; i++) {
+        success.result[0].data[i].isSelected = success.result[0].data[i].selected;
+        // if (!success.result[0].data[i].selected) {
+        //   this.arr.push(success.result[0].data[i])
+        //   console.log("obj pushedd in array " + JSON.stringify(success.result[0].data[i]))
+        // }
       }
-       event ?  null :this.page++ ;
+      event ? null : this.page++;
       console.log(JSON.stringify(success.result[0]))
       this.totalCount = success.result[0].count;
-      this.selectableList =[...this.arr]
-     
-      // console.log( this.index > arr.length );
-      // this.index = this.index > arr.length ?  arr.length  : this.index;
-      // console.log(arr.length )
-      // console.log(this.index);
-      // this.list = [];
-      // this.list = this.selectableList.slice(0,this.index);
-      // // console.log(JSON.stringify(this.list))
-    this.utils.stopLoader();
+      this.selectableList = [...success.result[0].data]
 
-},error =>{
-  this.utils.stopLoader();
+
+      this.utils.stopLoader();
+
+    }, error => {
+      this.utils.stopLoader();
 
     })
   }
