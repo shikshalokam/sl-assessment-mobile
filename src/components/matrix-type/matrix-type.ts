@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { ModalController, AlertController } from 'ionic-angular';
 import { MatrixActionModalPage } from '../../pages/matrix-action-modal/matrix-action-modal';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'matrix-type',
@@ -23,7 +24,9 @@ export class MatrixTypeComponent implements OnInit {
   
   mainInstance: any;
 
-  constructor(private modalCntrl: ModalController, private utils: UtilsProvider, private alertCtrl: AlertController) {
+  constructor(private modalCntrl: ModalController, 
+    private translate : TranslateService,
+    private utils: UtilsProvider, private alertCtrl: AlertController) {
     console.log('Hello MatrixTypeComponent Component');
 
   }
@@ -117,19 +120,24 @@ export class MatrixTypeComponent implements OnInit {
 
 
   deleteInstanceAlert(index) {
+    let translateObject ;
+          this.translate.get(['actionSheet.confirmDelete','actionSheet.confirmDeleteInstance','actionSheet.no','actionSheet.yes']).subscribe(translations =>{
+            translateObject = translations;
+            console.log(JSON.stringify(translations))
+          })
     let alert = this.alertCtrl.create({
-      title: 'Confirm delete',
-      message: 'Do you want to delete this instance?',
+      title: translateObject['actionSheet.confirmDelete'],
+      message:translateObject['confirmDeleteInstance'],
       buttons: [
         {
-          text: 'No',
+          text:translateObject['no'],
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
           }
         },
         {
-          text: 'Yes',
+          text:translateObject['yes'],
           handler: () => {
             this.deleteInstance(index);
           }
