@@ -14,7 +14,7 @@
 
 <ion-content padding>
  <!-- <div  class="fixBox"> -->
-          <selectable-list [selectableList]="selectableList" (searchUrl)="search($event)" [list]="list" [index]="index"></selectable-list>
+          <selectable-list (infinityScrollEvent)="search()" [totalCount]="totalCount" [selectableList]="selectableList" (searchUrl)="search($event)"  [index]="index"></selectable-list>
       <!-- </div> -->
 
           
