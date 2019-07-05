@@ -12,7 +12,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
   templateUrl: 'radio-type.html'
 })
 export class RadioTypeComponent implements OnInit{
-
+  @Input() inputIndex ;
   @Input() data:any;
   @Input() isLast: boolean;
   @Input() isFirst: boolean;

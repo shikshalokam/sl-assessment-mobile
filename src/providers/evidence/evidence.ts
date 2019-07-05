@@ -40,7 +40,8 @@ export class EvidenceProvider {
     this.translate.get(['actionSheet.surveyAction','actionSheet.view','actionSheet.start','actionSheet.ecmNotApplicable','actionSheet.cancel','actionSheet.ecmNotAllowed']).subscribe(translations =>{
       translateObject = translations;
       console.log(JSON.stringify(translations))
-    let action = this.actionSheet.create({
+    let action = this.actionSheet.create(
+      {
       title: translateObject['actionSheet.surveyAction'],
       buttons: [
         {
@@ -98,19 +99,19 @@ export class EvidenceProvider {
       }
     })
     if(selectedECM.canBeNotAllowed) {
-      action.data.buttons.splice(action.data.buttons.length-1, 0);
+      action.data.buttons.splice(action.data.buttons.length-1, 0 , notAvailable);
     }
-    if(selectedECM.canBeNotApplicable) {
-      action['buttons'].push(
-    {
-      text: "ECM Not Applicable",
-      icon: "alert",
-      handler: () => {
-        this.notApplicable(params);
-      }
-    }
-      )
-    }
+    // if(selectedECM.canBeNotApplicable) {
+    //   action['buttons'].push(
+    // {
+    //   text: "ECM Not Applicable",
+    //   icon: "alert",
+    //   handler: () => {
+    //     this.notApplicable(params);
+    //   }
+    // }
+    //   )
+    // }
     
     action.present();
   })
