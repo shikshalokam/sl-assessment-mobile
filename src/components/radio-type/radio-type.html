@@ -1,5 +1,11 @@
 <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
-  <h4 [ngClass]="{'_validQuestion': data?.value}" *ngFor="let question of data.question">{{question}}</h4>
+  <h4 [ngClass]="{'_validQuestion': data?.value}" class="flexbox" >
+   <div class="noWrap">{{inputIndex}} .</div> <div padding-left>
+      <div  *ngFor="let question of data.question"> 
+      {{question}} 
+    </div> 
+    </div>
+  </h4>
 </ion-col>
 <div class="_tip _flex-box "> {{data?.tip}}</div>
 

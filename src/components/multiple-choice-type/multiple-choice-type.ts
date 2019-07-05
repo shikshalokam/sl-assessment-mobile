@@ -19,7 +19,7 @@ export class MultipleChoiceTypeComponent implements OnInit {
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
   @Input() submissionId: any;
-  
+  @Input() inputIndex ;
   constructor(private utils: UtilsProvider) {
     console.log('Hello checkboxTypeComponent Component');
     this.text = 'Hello World';
