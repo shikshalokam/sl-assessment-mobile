@@ -200,5 +200,15 @@ export class UtilsProvider {
     return 'assessmentDetails_'+entityId
   }
 
+  getCompletedQuestionsCount(questions) {
+    let count = 0;
+    for (const question of questions) {
+      if(question.isCompleted){
+        count ++;
+      }
+    }
+    return count
+  }
+
 }
 
