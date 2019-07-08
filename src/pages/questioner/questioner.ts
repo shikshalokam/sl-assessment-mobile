@@ -52,6 +52,7 @@ export class QuestionerPage {
       this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.submissionId;
       this.isViewOnly = !currentEvidences[this.selectedEvidenceIndex]['startTime'] ? true : false;
       this.questions = currentEvidences[this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
+      this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].totalQuestions = this.questions.length;
       this.dashbordData = {
         questions: this.questions,
         evidenceMethod: currentEvidences[this.selectedEvidenceIndex]['name'],
@@ -90,6 +91,7 @@ export class QuestionerPage {
   // images_CO_5bebcfcf92ec921dcf114828
 
   next(status?: string) {
+    
     if (this.questions[this.start].children.length) {
       this.updateTheChildrenQuestions(this.questions[this.start])
     }
@@ -109,6 +111,12 @@ export class QuestionerPage {
     } else {
       this.next('completed')
     }
+    this.updateCompletedQuestionCount();
+  }
+
+  updateCompletedQuestionCount() {
+    this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].completedQuestions = this.utils.getCompletedQuestionsCount(this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions']);
+
   }
 
   updateLocalData(): void {
@@ -144,6 +152,7 @@ export class QuestionerPage {
         this.back();
       }
     }
+    this.updateCompletedQuestionCount();
   }
 
   feedBack() {
