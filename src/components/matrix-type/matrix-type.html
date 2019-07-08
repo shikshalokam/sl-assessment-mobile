@@ -1,12 +1,14 @@
 <div>
   <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
-    <h4 [ngClass] = "{'_validQuestion': data?.completedInstance?.length && (data?.completedInstance?.length === data?.value?.length)}" class="flexbox" >
-      <div class="noWrap">{{inputIndex}} .</div> 
+    <h4 [ngClass] = "{'_validQuestion': data?.completedInstance?.length && (data?.completedInstance?.length === data?.value?.length)}"  >
+      <!-- <div class="noWrap">{{inputIndex}} .</div> 
       <div padding-left>
         <div class="wrapText" *ngFor="let question of data.question"> 
         {{question}} 
         </div> 
-      </div></h4>
+      </div> -->
+      <question-heading [inputIndex]="inputIndex" [data]="data"></question-heading>
+    </h4>
   </ion-col>
   <div class="_tip _flex-box "> {{data?.tip}}</div>
   <div>
