@@ -22,6 +22,7 @@ import { EntityListingComponent } from './entity-listing/entity-listing';
 import { PipesModule } from '../pipes/pipes.module';
 import { SelectableListComponent } from './selectable-list/selectable-list';
 import { ObservationEntityListingComponent } from './observation-entity-listing/observation-entity-listing';
+import { QuestionHeadingComponent } from './question-heading/question-heading';
 
 @NgModule({
 	declarations: [
@@ -40,7 +41,8 @@ import { ObservationEntityListingComponent } from './observation-entity-listing/
     SliderComponent,
     EntityListingComponent,
     SelectableListComponent,
-    ObservationEntityListingComponent
+    ObservationEntityListingComponent,
+    QuestionHeadingComponent
   ],
 	imports: [
 		IonicModule,
@@ -65,7 +67,8 @@ import { ObservationEntityListingComponent } from './observation-entity-listing/
     SliderComponent,
     EntityListingComponent,
     SelectableListComponent,
-    ObservationEntityListingComponent
+    ObservationEntityListingComponent,
+    QuestionHeadingComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
