@@ -65,28 +65,28 @@ export class ObservationEntityListingComponent {
 this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
   // console.log(JSON.stringify(successData));
-  this.navCtrl.push(AssessmentAboutPage, {data : successData});
+  // this.navCtrl.push(AssessmentAboutPage, {data : successData});
 
     // //console.log("go to ecm called");
 
 
-    //   if (successData.assessment.evidences.length > 1) {
+      if (successData.assessment.evidences.length > 1) {
 
-    //     this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
+        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
 
-    //   } else {
-    //     if (successData.assessment.evidences[0].startTime) {
-    //       //console.log("if loop " + successData.assessment.evidences[0].externalId)
-    //       this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
-    //       this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
-    //     } else {
+      } else {
+        if (successData.assessment.evidences[0].startTime) {
+          //console.log("if loop " + successData.assessment.evidences[0].externalId)
+          this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
+          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
+        } else {
 
-    //       const assessment = { _id: submissionId, name: heading }
-    //       this.openAction(assessment, successData, 0);
-    //       //console.log("else loop");
+          const assessment = { _id: submissionId, name: heading }
+          this.openAction(assessment, successData, 0);
+          //console.log("else loop");
 
-    //     }
-    //   }
+        }
+      }
     }).catch(error => {
     });
 
