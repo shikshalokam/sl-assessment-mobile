@@ -21,7 +21,7 @@ export class MatrixTypeComponent implements OnInit {
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
   @Input() submissionId: string;
-  
+  @Input() inputIndex ;
   mainInstance: any;
 
   constructor(private modalCntrl: ModalController, 
@@ -59,7 +59,8 @@ export class MatrixTypeComponent implements OnInit {
       evidenceId: this.evidenceId,
       schoolId: this.schoolId,
       generalQuestion: this.generalQuestion,
-      submissionId: this.submissionId
+      submissionId: this.submissionId,
+      questionIndex : this.inputIndex
     }
     let matrixModal = this.modalCntrl.create(MatrixActionModalPage, obj);
     matrixModal.onDidDismiss(instanceValue => {

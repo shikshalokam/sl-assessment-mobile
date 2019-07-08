@@ -145,7 +145,7 @@ export class MyApp {
     }
     this.allPages[index]['active'] = true;
     // this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name'] === "individual" ? "assessmentDetails_" : "schoolDetails_")
-    this.nav.setRoot(this.allPages[index]['component']);
+    this.nav.push(this.allPages[index]['component']);
   }
 
   initTranslate() {

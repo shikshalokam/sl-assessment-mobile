@@ -71,9 +71,9 @@ export class EvidenceListPage {
   openAction(assessment, evidenceIndex) {
     this.utils.setCurrentimageFolderName(this.entityEvidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: this.entityData };
-    //console.log("testing 1")
+    console.log("testing 1" + assessment._id + assessment.name + evidenceIndex)
     this.evdnsServ.openActionSheet(options);
-    //console.log("testing 2")
+    console.log(JSON.stringify(this.entityData ))
 
   }
 
@@ -82,6 +82,7 @@ export class EvidenceListPage {
     if (this.entityEvidences[index].startTime) {
       //console.log("if loop")
       this.utils.setCurrentimageFolderName(this.entityEvidences[index].externalId, this.entityId)
+      console.log(this.entityId + "     " + this.entityName + "   "+index)
       this.navCtrl.push('SectionListPage', { _id: this.entityId, name: this.entityName, selectedEvidence: index })
     } else {
       //console.log("else loop")
