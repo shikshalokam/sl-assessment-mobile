@@ -74,12 +74,14 @@ import { Deeplinks } from '@ionic-native/deeplinks';
 import { SolutionDetailsPage } from '../pages/solution-details/solution-details';
 import { IonicStepperModule } from 'ionic-stepper';
 import { ObservationProvider } from '../providers/observation/observation';
+import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about';
 
 @NgModule({
   declarations: [
     MyApp,
     AboutPage,
     HomePage,
+    AssessmentAboutPage,
     WelcomePage,
     InstitutionsEntityList,
     FaqPage,
@@ -142,11 +144,11 @@ import { ObservationProvider } from '../providers/observation/observation';
     RemarksPage,
     FeedbackPage,
     DetailPage,
+    AssessmentAboutPage,
     GeneralQuestionPage,
     GeneralQuestionSubmitPage,
     IndividualListingPage,
     ProgramDetailsPage,
-    
   ],
   providers: [
     StatusBar,
