@@ -7,7 +7,8 @@ import { EntityListPage } from '../../pages/observations/add-observation-form/en
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { TranslateService } from '@ngx-translate/core';
-
+import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
+// import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
 /**
  * Generated class for the EntityListingComponent component.
  *
@@ -54,35 +55,38 @@ export class ObservationEntityListingComponent {
 
 
   goToEcm(id, name) {
-    //console.log("go to ecm called");
+    console.log("go to ecm called");
     let submissionId = id
     let heading = name;
 
-    
+    // this.navCtrl.push('AssessmentAboutPage');
 
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
+
+this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
-      // //console.log(JSON.stringify(successData));
-    //console.log("go to ecm called");
+  // console.log(JSON.stringify(successData));
+  this.navCtrl.push(AssessmentAboutPage, {data : successData});
+
+    // //console.log("go to ecm called");
 
 
-      if (successData.assessment.evidences.length > 1) {
+    //   if (successData.assessment.evidences.length > 1) {
 
-        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
+    //     this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
 
-      } else {
-        if (successData.assessment.evidences[0].startTime) {
-          //console.log("if loop " + successData.assessment.evidences[0].externalId)
-          this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
-          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
-        } else {
+    //   } else {
+    //     if (successData.assessment.evidences[0].startTime) {
+    //       //console.log("if loop " + successData.assessment.evidences[0].externalId)
+    //       this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
+    //       this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
+    //     } else {
 
-          const assessment = { _id: submissionId, name: heading }
-          this.openAction(assessment, successData, 0);
-          //console.log("else loop");
+    //       const assessment = { _id: submissionId, name: heading }
+    //       this.openAction(assessment, successData, 0);
+    //       //console.log("else loop");
 
-        }
-      }
+    //     }
+    //   }
     }).catch(error => {
     });
 
@@ -96,6 +100,8 @@ export class ObservationEntityListingComponent {
 
 
   getAssessmentDetailsOfCreatedObservation(programIndex,entityIndex,solutionId){
+    console.log("go to details called");
+
     this.getAssessmentDetailsEvent.emit({
       programIndex: programIndex,
       entityIndex: entityIndex,

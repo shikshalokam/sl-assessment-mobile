@@ -1,0 +1,23 @@
+<ion-header>
+    <header [title]="'headings.about'|translate" [hideBack]="false">
+    </header>
+  </ion-header>
+  
+
+
+<ion-content padding>
+    <ion-item-group>
+        <ion-item-divider color="light">
+          <h4 class="bold" text-wrap text-capitalize> {{data.assessment.name}} </h4>
+        </ion-item-divider>
+      <ion-item padding>
+        <!-- <ion-row> -->
+          <h4>Description</h4>
+         
+        <!-- </ion-row> -->
+         <ion-row>
+            {{data.assessment.description}}
+          </ion-row>
+          </ion-item>
+  </ion-item-group>
+</ion-content>
