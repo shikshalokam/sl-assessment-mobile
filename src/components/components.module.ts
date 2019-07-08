@@ -23,6 +23,7 @@ import { PipesModule } from '../pipes/pipes.module';
 import { SelectableListComponent } from './selectable-list/selectable-list';
 import { ObservationEntityListingComponent } from './observation-entity-listing/observation-entity-listing';
 import { QuestionHeadingComponent } from './question-heading/question-heading';
+import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-menu-pop-over';
 
 @NgModule({
 	declarations: [
@@ -42,7 +43,8 @@ import { QuestionHeadingComponent } from './question-heading/question-heading';
     EntityListingComponent,
     SelectableListComponent,
     ObservationEntityListingComponent,
-    QuestionHeadingComponent
+    QuestionHeadingComponent,
+    GenericMenuPopOverComponent
   ],
 	imports: [
 		IonicModule,
@@ -68,14 +70,16 @@ import { QuestionHeadingComponent } from './question-heading/question-heading';
     EntityListingComponent,
     SelectableListComponent,
     ObservationEntityListingComponent,
-    QuestionHeadingComponent
+    QuestionHeadingComponent,
+    GenericMenuPopOverComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
 		RadioTypeComponent,
 		MatrixModalComponent,
     MenuItemComponent,
-    EntityListingComponent
+    EntityListingComponent,
+    GenericMenuPopOverComponent
 	],
 	providers:[
 		Network, DatePipe, SlackProvider
