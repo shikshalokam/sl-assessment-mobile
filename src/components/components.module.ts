@@ -23,6 +23,7 @@ import { PipesModule } from '../pipes/pipes.module';
 import { SelectableListComponent } from './selectable-list/selectable-list';
 import { ObservationEntityListingComponent } from './observation-entity-listing/observation-entity-listing';
 import { QuestionHeadingComponent } from './question-heading/question-heading';
+import { ProgressBarComponent } from './progress-bar/progress-bar';
 
 @NgModule({
 	declarations: [
@@ -42,7 +43,8 @@ import { QuestionHeadingComponent } from './question-heading/question-heading';
     EntityListingComponent,
     SelectableListComponent,
     ObservationEntityListingComponent,
-    QuestionHeadingComponent
+    QuestionHeadingComponent,
+    ProgressBarComponent
   ],
 	imports: [
 		IonicModule,
@@ -68,7 +70,8 @@ import { QuestionHeadingComponent } from './question-heading/question-heading';
     EntityListingComponent,
     SelectableListComponent,
     ObservationEntityListingComponent,
-    QuestionHeadingComponent
+    QuestionHeadingComponent,
+    ProgressBarComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
