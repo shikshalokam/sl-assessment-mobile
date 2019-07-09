@@ -21,7 +21,7 @@
     <ion-step label="Solution">
       <div class="fixBox" *ngIf="listOfSolution">
           <ion-label>{{'ionLabel.selectSolution' | translate}}</ion-label>
-          <ion-searchbar debounce="500" type="3" (ionClear)="clearSolution()" autofocus (ionChange)="searchSolution($event)" placeholder="{{'message.startSearchSolution' | translate}}"></ion-searchbar>
+          <ion-searchbar debounce="500" (ionClear)="clearSolution()" autofocus (ionChange)="searchSolution($event)" placeholder="{{'message.startSearchSolution' | translate}}"></ion-searchbar>
          <ion-list margin-top *ngFor="let frameWork of listOfSolution">
           <ion-item (click)="selectSolution(frameWork._id)" [ngClass]="{'active': frameWork._id === selectedFrameWork}">
             <ion-icon name="list-box" item-start></ion-icon>
