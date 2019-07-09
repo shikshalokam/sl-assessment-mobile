@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
 
 /**
@@ -16,19 +16,24 @@ export class GenericMenuPopOverComponent {
 
   text: string;
   showAbout = false;
-  index ;
-  type;
-  constructor(private navCntrl : NavController , private navParams : NavParams) {
+  assessmentIndex ;
+  assessmentName;
+  constructor(
+    private navCntrl : NavController ,
+    private navParams : NavParams,
+    private viewCntrl : ViewController
+    ) {
     console.log('Hello GenericMenuPopOverComponent Component');
     this.text = 'Hello World';
     this.showAbout  = this.navParams.get('showAbout')
-    this.index  = this.navParams.get('index')
-    this.type = this.navParams.get('type')
+    this.assessmentIndex  = this.navParams.get('assessmentIndex')
+    this.assessmentName = this.navParams.get('assessmentName')
     console.log(this.showAbout)
   }
   goToAbout(){
-    console.log("this is the index" + this.index)
-    this.navCntrl.push(AssessmentAboutPage , {index : this.index  , type : this.type})
+    console.log("this is the index" + this.assessmentIndex)
+    this.navCntrl.push(AssessmentAboutPage , {assessmentIndex : this.assessmentIndex  , assessmentName : this.assessmentName})
+    this.viewCntrl.dismiss();
 
   }
 }

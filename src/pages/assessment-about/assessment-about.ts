@@ -16,31 +16,31 @@ import { ObservationDetailsPage } from '../observation-details/observation-detai
 })
 export class AssessmentAboutPage {
   data ;
-  type;
-  index;
+  assessmentIndex;
+  assessmentName;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private localStorage: LocalStorageProvider,
      
      ) {
-   this.index =  this.navParams.get('index');
-   this.type = this.navParams.get('type')
-   console.log(JSON.stringify(this.type))
-   console.log(JSON.stringify(this.index))
+   this.assessmentIndex =  this.navParams.get('assessmentIndex');
+   this.assessmentName = this.navParams.get('assessmentName')
+   console.log(JSON.stringify(this.assessmentName))
+   console.log(JSON.stringify(this.assessmentIndex))
 
   }
 
   ionViewDidLoad() {
-    this.localStorage.getLocalStorage(this.type).then( success => {
-    this.data = success[this.index]
-    console.log(JSON.stringify(success[this.index]))
+    this.localStorage.getLocalStorage(this.assessmentName).then( success => {
+    this.data = success[this.assessmentIndex]
+    console.log(JSON.stringify(success[this.assessmentIndex]))
     }).catch(error => {
 
     });
     console.log('ionViewDidLoad AssessmentAboutPage');
   }
   goToEntity(){
-    this.navCtrl.push(ObservationDetailsPage, { selectedObservationIndex: this.index })
+    this.navCtrl.push(ObservationDetailsPage, { selectedObservationIndex: this.assessmentIndex })
   }
 }
