@@ -51,7 +51,7 @@ export class EntityListPage {
   addSchools() {
     let selectedSchools = []
     this.selectableList.forEach(element => {
-      if (element.selected) {
+      if (element.selected && !element.preSelected)  {
         selectedSchools.push(element);
       }
     });
@@ -71,10 +71,7 @@ export class EntityListPage {
       this.arr = event ? [] : this.arr;
       for (let i = 0; i < success.result[0].data.length; i++) {
         success.result[0].data[i].isSelected = success.result[0].data[i].selected;
-        // if (!success.result[0].data[i].selected) {
-        //   this.arr.push(success.result[0].data[i])
-        //   console.log("obj pushedd in array " + JSON.stringify(success.result[0].data[i]))
-        // }
+        success.result[0].data[i].preSelected = success.result[0].data[i].selected ? true : false;
       }
       event ? null : this.page++;
       console.log(JSON.stringify(success.result[0]))
