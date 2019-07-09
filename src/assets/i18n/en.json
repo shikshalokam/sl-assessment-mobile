@@ -53,6 +53,7 @@
     "buttons": {
         "view": "View",
         "draft":"Draft",
+        "goToEntities":"Go TO Entitites",
         "active":"Active",
         "completed":"Completed",
         "profile": "Profile",
@@ -63,6 +64,7 @@
         "survey": "survey",
         "previous":"Previous",
         "today":"Today",
+        "about":"About",
         "save": "Save",
         "addSchools":"Add Schools",
         "next": "Next",
@@ -126,7 +128,9 @@
         "questionnaire": "Questionnaire",
         "feedback": "Feedback",
         "logout": "Logout",
-
+        "startDate":"Start Date",
+        "endDate":"End Date",
+        "description":"Description",
         "criteria": "Criteria",
         "rate": "Rate",
         "uplaod": "Upload",
