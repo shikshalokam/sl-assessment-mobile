@@ -1,0 +1,6 @@
+<div class="progress-outer inProgress" [ngClass]="{'completed': progress === 100}">
+
+  <div class="progress-inner _flex-box _justify-content-center" [style.width]="progress + '%'">
+      <span *ngIf="progress >=25">{{progress}}%</span>
+  </div>
+</div>
