@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Events, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Events, AlertController, PopoverController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { AppConfigs } from '../../providers/appConfig';
@@ -9,6 +9,7 @@ import { ObservationDetailsPage } from '../observation-details/observation-detai
 import { ApiProvider } from '../../providers/api/api';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { TranslateService } from '@ngx-translate/core';
+import { GenericMenuPopOverComponent } from '../../components/generic-menu-pop-over/generic-menu-pop-over';
 
 
 @IonicPage()
@@ -36,6 +37,7 @@ export class ObservationsPage {
     private assessmentService: AssessmentServiceProvider,
     private apiProviders: ApiProvider,
     private translate : TranslateService,
+    private popoverCtrl : PopoverController,
     private events: Events,
     public actionSheetCtrl: ActionSheetController
   ) {
@@ -53,6 +55,7 @@ export class ObservationsPage {
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       if (data) {
         this.createdObservation = [...data];
+        console.log(JSON.stringify(data))
         this.countCompleteActive();
 
       } else {
@@ -198,8 +201,15 @@ export class ObservationsPage {
     })
   }
 
-  openMenu(event) {
-    this.assessmentService.openMenu(event, this.programs, false);
+  openMenu(event , index) {
+    // this.assessmentService.openMenu(event, this.programs, false);
+    console.log("open menu")
+    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true , assessmentIndex : index , assessmentName :'createdObservationList'})
+  
+    popover.present(
+      {ev:event}
+      );
+      
   }
 
 

@@ -24,6 +24,7 @@ import { SelectableListComponent } from './selectable-list/selectable-list';
 import { ObservationEntityListingComponent } from './observation-entity-listing/observation-entity-listing';
 import { QuestionHeadingComponent } from './question-heading/question-heading';
 import { ProgressBarComponent } from './progress-bar/progress-bar';
+import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-menu-pop-over';
 
 @NgModule({
 	declarations: [
@@ -44,7 +45,8 @@ import { ProgressBarComponent } from './progress-bar/progress-bar';
     SelectableListComponent,
     ObservationEntityListingComponent,
     QuestionHeadingComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    GenericMenuPopOverComponent
   ],
 	imports: [
 		IonicModule,
@@ -71,14 +73,16 @@ import { ProgressBarComponent } from './progress-bar/progress-bar';
     SelectableListComponent,
     ObservationEntityListingComponent,
     QuestionHeadingComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    GenericMenuPopOverComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
 		RadioTypeComponent,
 		MatrixModalComponent,
     MenuItemComponent,
-    EntityListingComponent
+    EntityListingComponent,
+    GenericMenuPopOverComponent
 	],
 	providers:[
 		Network, DatePipe, SlackProvider

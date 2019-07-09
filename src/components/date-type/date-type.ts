@@ -50,7 +50,7 @@ export class DateTypeComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.data.autoCapture = false
+    // this.data.autoCapture = false
     const dateTime = new Date();
     // this.currentDate = dateTime.split('T')[0];
     console.log(dateTime);
