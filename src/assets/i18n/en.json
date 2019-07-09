@@ -188,7 +188,7 @@
         "noQuestionAvailable":" No questions available",
         "noDraft":"No Drafts",
         "noEntity":"No Entity"  ,
-        "no":"NO"
+        "no":"No"
     },
     "toastMessage":{
         "selectSolution":"Select a Solution",
