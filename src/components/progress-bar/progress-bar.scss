@@ -14,10 +14,10 @@ progress-bar {
     }
 
     .completed {
-        border: 1px solid map-get($colors, primary) !important;
+        border: 1px solid map-get($colors, secondary) !important;
 
         div {
-            background-color: map-get($colors, primary) !important;
+            background-color: map-get($colors, secondary) !important;
         }
     }
 
