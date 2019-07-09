@@ -114,7 +114,8 @@ export class ObservationDetailsPage {
     })
   }
 
-  goToEcm(observationIndex, event, program) {
+  goToEcm(observationIndex, event, program) { 
+    console.log("Assesment details")
     let submissionId = program[observationIndex]['entities'][event.entityIndex].submissionId
     let heading = program[observationIndex]['entities'][event.entityIndex].name;
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
