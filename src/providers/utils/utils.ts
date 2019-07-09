@@ -9,12 +9,18 @@ import { AlertController } from 'ionic-angular';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageProvider } from '../local-storage/local-storage';
+import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser';
 
 @Injectable()
 export class UtilsProvider {
 
-  constructor(public http: HttpClient, private locationAccuracy: LocationAccuracy, public loadingCtrl: LoadingController,
-    private toastCtrl: ToastController, private storage: Storage, private localStorage: LocalStorageProvider) {
+  constructor(public http: HttpClient, 
+    private locationAccuracy: LocationAccuracy,
+     public loadingCtrl: LoadingController,
+    private toastCtrl: ToastController, 
+    private storage: Storage,
+     private localStorage: LocalStorageProvider,
+     private iab : InAppBrowser) {
     console.log('Hello UtilsProvider Provider');
   }
   loading: any;
@@ -208,6 +214,16 @@ export class UtilsProvider {
       }
     }
     return count
+  }
+
+  openExternalLinkOnBrowser(link) {
+    const options: InAppBrowserOptions = {
+      hidenavigationbuttons: 'yes',
+      // hideurlbar: 'yes',
+      closebuttoncolor: '#ffffff',
+      toolbarcolor: "#a63936"
+    };
+    this.iab.create(link, "_system", options)
   }
 
 }
