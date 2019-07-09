@@ -23,6 +23,7 @@ import { PipesModule } from '../pipes/pipes.module';
 import { SelectableListComponent } from './selectable-list/selectable-list';
 import { ObservationEntityListingComponent } from './observation-entity-listing/observation-entity-listing';
 import { QuestionHeadingComponent } from './question-heading/question-heading';
+import { ProgressBarComponent } from './progress-bar/progress-bar';
 import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-menu-pop-over';
 
 @NgModule({
@@ -44,6 +45,7 @@ import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-men
     SelectableListComponent,
     ObservationEntityListingComponent,
     QuestionHeadingComponent,
+    ProgressBarComponent,
     GenericMenuPopOverComponent
   ],
 	imports: [
@@ -71,6 +73,7 @@ import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-men
     SelectableListComponent,
     ObservationEntityListingComponent,
     QuestionHeadingComponent,
+    ProgressBarComponent,
     GenericMenuPopOverComponent
 	],
 	entryComponents: [
