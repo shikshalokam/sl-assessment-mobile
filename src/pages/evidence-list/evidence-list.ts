@@ -55,7 +55,7 @@ export class EvidenceListPage {
         totalQuestions = totalQuestions + section.totalQuestions;
         completedQuestions = completedQuestions + section.completedQuestions;
       }
-      const percentage = (completedQuestions/totalQuestions)*100;
+      const percentage = totalQuestions ? (completedQuestions/totalQuestions)*100 : 0;
       evidence.completePercentage = Math.trunc(percentage) ;
     }
   }
