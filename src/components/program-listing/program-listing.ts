@@ -56,7 +56,7 @@ export class ProgramListingComponent {
     this.navCtrl.push(AssessmentAboutPage , {assessmentIndex : index  , assessmentName : this.entityType+"List"})
   }
   goToEntityFunc(programIndex){
-    this.goToEntity.emit({programindex:programIndex ,entitytype: this.entityType});
+    this.goToEntity.emit(programIndex);
   }
 
 }
