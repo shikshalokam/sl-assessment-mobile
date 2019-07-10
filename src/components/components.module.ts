@@ -25,6 +25,7 @@ import { ObservationEntityListingComponent } from './observation-entity-listing/
 import { QuestionHeadingComponent } from './question-heading/question-heading';
 import { ProgressBarComponent } from './progress-bar/progress-bar';
 import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-menu-pop-over';
+import { ProgramListingComponent } from './program-listing/program-listing';
 
 @NgModule({
 	declarations: [
@@ -46,7 +47,8 @@ import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-men
     ObservationEntityListingComponent,
     QuestionHeadingComponent,
     ProgressBarComponent,
-    GenericMenuPopOverComponent
+    GenericMenuPopOverComponent,
+    ProgramListingComponent
   ],
 	imports: [
 		IonicModule,
@@ -74,7 +76,8 @@ import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-men
     ObservationEntityListingComponent,
     QuestionHeadingComponent,
     ProgressBarComponent,
-    GenericMenuPopOverComponent
+    GenericMenuPopOverComponent,
+    ProgramListingComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
