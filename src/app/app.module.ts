@@ -75,6 +75,7 @@ import { SolutionDetailsPage } from '../pages/solution-details/solution-details'
 import { IonicStepperModule } from 'ionic-stepper';
 import { ObservationProvider } from '../providers/observation/observation';
 import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about';
+import { EntityListingPage } from '../pages/entity-listing/entity-listing';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about'
     FaqPage,
     EntityProfileEditPage,
     ImageListingPage,
+    EntityListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
     SolutionDetailsPage,
@@ -149,6 +151,7 @@ import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about'
     GeneralQuestionSubmitPage,
     IndividualListingPage,
     ProgramDetailsPage,
+    EntityListingPage
   ],
   providers: [
     StatusBar,
