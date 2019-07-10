@@ -38,6 +38,8 @@ import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer} from '@ionic-native/file-transfer';
 import { ImagePicker } from '@ionic-native/image-picker';
+import { FileChooser } from '@ionic-native/file-chooser';
+
 import { ImageListingPage } from '../pages/image-listing/image-listing';
 import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
@@ -78,7 +80,6 @@ import { IonicStepperModule } from 'ionic-stepper';
 import { ObservationProvider } from '../providers/observation/observation';
 import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about';
 import { EntityListingPage } from '../pages/entity-listing/entity-listing';
-import { FileChooser } from '@ionic-native/file-chooser';
 import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-features';
 
 @NgModule({
@@ -198,7 +199,6 @@ import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-f
     ObservationProvider,
     SocialSharing,
     SharingFeaturesProvider
-
   ]
 })
 export class AppModule { }

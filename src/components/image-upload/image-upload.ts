@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActionSheetController, Platform , AlertController} from 'ionic-angular'
+import { ActionSheetController, Platform, AlertController } from 'ionic-angular'
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
@@ -8,6 +8,7 @@ import { Storage } from '@ionic/storage';
 // import { imageLocalListName} from "../../providers/appConfig"
 import { PhotoLibrary } from '@ionic-native/photo-library';
 import { TranslateService } from '@ngx-translate/core';
+import { FileChooser } from '@ionic-native/file-chooser';
 
 declare var cordova: any;
 
@@ -41,15 +42,16 @@ export class ImageUploadComponent implements OnInit {
   imageList: Array<any> = [];
   imageNameCounter: number = 0;
   localEvidenceImageList: any;
-  allLocalImageList: any ={};
+  allLocalImageList: any = {};
 
   constructor(private actionSheet: ActionSheetController,
     private camera: Camera,
     private file: File, private imgPicker: ImagePicker, private utils: UtilsProvider,
     private storage: Storage,
-    private photoLibrary: PhotoLibrary, private platform: Platform, 
-    private translate : TranslateService,
-    private alertCtrl : AlertController) {
+    private photoLibrary: PhotoLibrary, private platform: Platform,
+    private translate: TranslateService,
+    private fileChooser: FileChooser,
+    private alertCtrl: AlertController) {
     console.log('Hello ImageUploadComponent Component');
     this.text = 'Hello World';
   }
@@ -65,13 +67,13 @@ export class ImageUploadComponent implements OnInit {
     //   schoolId:"",
     // }
     console.log(this.imageLocalCopyId)
-    this.storage.get(this.generalQuestion ?'genericQuestionsImages':'allImageList').then(data => {
+    this.storage.get(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then(data => {
       this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
-      console.log("First fetch "  + JSON.stringify(this.allLocalImageList))
+      console.log("First fetch " + JSON.stringify(this.allLocalImageList))
       console.log(this.generalQuestion)
-      if(!this.generalQuestion){
-        if(this.allLocalImageList[this.submissionId]){
-          this.allLocalImageList[this.submissionId][this.evidenceId] = (this.allLocalImageList[this.submissionId][this.evidenceId] ) ? this.allLocalImageList[this.submissionId][this.evidenceId] : []
+      if (!this.generalQuestion) {
+        if (this.allLocalImageList[this.submissionId]) {
+          this.allLocalImageList[this.submissionId][this.evidenceId] = (this.allLocalImageList[this.submissionId][this.evidenceId]) ? this.allLocalImageList[this.submissionId][this.evidenceId] : []
         } else {
           console.log(this.submissionId + " " + this.evidenceId)
           this.allLocalImageList[this.submissionId] = {};
@@ -80,13 +82,13 @@ export class ImageUploadComponent implements OnInit {
         }
       } else {
         console.log("oninit ")
-        if(this.allLocalImageList[this.submissionId]){
-          this.allLocalImageList[this.submissionId] = (this.allLocalImageList[this.submissionId] ) ? this.allLocalImageList[this.submissionId] : []
+        if (this.allLocalImageList[this.submissionId]) {
+          this.allLocalImageList[this.submissionId] = (this.allLocalImageList[this.submissionId]) ? this.allLocalImageList[this.submissionId] : []
         } else {
           this.allLocalImageList[this.submissionId] = [];
           this.localEvidenceImageList = [];
         }
-      console.log("second fetch "  + JSON.stringify(this.allLocalImageList))
+        console.log("second fetch " + JSON.stringify(this.allLocalImageList))
 
       }
 
@@ -103,26 +105,27 @@ export class ImageUploadComponent implements OnInit {
   }
 
   openActionSheet(): void {
-    let translateObject ;
-    this.translate.get(['actionSheet.addimage','actionSheet.camera','actionSheet.upload','actionSheet.cancel']).subscribe(translations =>{
+    let translateObject;
+    this.translate.get(['actionSheet.addimage', 'actionSheet.camera', 'actionSheet.upload', 'actionSheet.cancel']).subscribe(translations => {
       translateObject = translations;
       console.log(JSON.stringify(translations))
     })
     const actionSheet = this.actionSheet.create({
-      title: translateObject['actionSheet.addimage'] ,
+      title: translateObject['actionSheet.addimage'],
       buttons: [
         {
-          text: translateObject['actionSheet.camera' ],
+          text: translateObject['actionSheet.camera'],
           role: 'destructive',
           icon: 'camera',
           handler: () => {
             this.openCamera();
           }
         }, {
-          text: translateObject ['actionSheet.upload'],
+          text: translateObject['actionSheet.upload'],
           icon: 'cloud-upload',
           handler: () => {
-            this.openLocalLibrary();
+            // this.openLocalLibrary();
+            this.openFilePicker();
           }
         }, {
           text: translateObject['actionSheet.cancel'],
@@ -134,6 +137,13 @@ export class ImageUploadComponent implements OnInit {
       ]
     });
     actionSheet.present();
+  }
+
+  openFilePicker() {
+    this.fileChooser.open()
+      .then(uri => console.log(uri))
+      .catch(e => console.log(e));
+
   }
 
   openCamera(): void {
@@ -219,16 +229,16 @@ export class ImageUploadComponent implements OnInit {
   pushToImageList(fileName) {
     this.file.checkFile(this.appFolderPath + '/', fileName).then(response => {
       this.file.readAsDataURL(this.appFolderPath, fileName).then(data => {
-        this.imageList.push({data: data, imageName: fileName });
+        this.imageList.push({ data: data, imageName: fileName });
         this.datas.fileName.push(fileName);
         console.log("Update local list")
         console.log(this.submissionId + " " + this.evidenceId)
 
         console.log(this.localEvidenceImageList);
-        if(!this.generalQuestion){
-          this.allLocalImageList[this.submissionId][this.evidenceId].push({ name: fileName,  uploaded: false});
+        if (!this.generalQuestion) {
+          this.allLocalImageList[this.submissionId][this.evidenceId].push({ name: fileName, uploaded: false });
         } else {
-        this.allLocalImageList[this.submissionId].push({ name: fileName,  uploaded: false});
+          this.allLocalImageList[this.submissionId].push({ name: fileName, uploaded: false });
         }
         this.updateLocalImageList();
 
@@ -247,7 +257,7 @@ export class ImageUploadComponent implements OnInit {
     for (const image of imageList) {
       this.file.checkFile(this.appFolderPath + '/', image).then(response => {
         this.file.readAsDataURL(this.appFolderPath, image).then(data => {
-          this.imageList.push({data: data, imageName: image});
+          this.imageList.push({ data: data, imageName: image });
 
         }).catch(err => {
 
@@ -275,36 +285,36 @@ export class ImageUploadComponent implements OnInit {
   removeImgFromList(index): void {
     // console.log(this.localEvidenceImageList);
     // this.file.removeFile(this.appFolderPath + '/', this.datas.fileName[index]).then(success => {
-      let indexInLocalList;
-      if(!this.generalQuestion) {
-        for (let i = 0; i < this.allLocalImageList[this.submissionId][this.evidenceId].length; i++) {
-          if (this.allLocalImageList[this.submissionId][this.evidenceId].name === this.imageList[index].imageName) {
-            indexInLocalList = i;
-          }
+    let indexInLocalList;
+    if (!this.generalQuestion) {
+      for (let i = 0; i < this.allLocalImageList[this.submissionId][this.evidenceId].length; i++) {
+        if (this.allLocalImageList[this.submissionId][this.evidenceId].name === this.imageList[index].imageName) {
+          indexInLocalList = i;
         }
-        this.allLocalImageList[this.submissionId][this.evidenceId].splice(indexInLocalList, 1);
-      } else {
-        console.log("remove image else")
-        for (let i = 0; i < this.allLocalImageList[this.submissionId].length; i++) {
-          if (this.allLocalImageList[this.submissionId].name === this.imageList[index].imageName) {
-            indexInLocalList = i;
-          }
-        }
-        this.allLocalImageList[this.submissionId].splice(indexInLocalList, 1);
       }
-      this.datas.fileName.splice(index, 1);
-      this.imageList.splice(index, 1);
-      this.updateLocalImageList();
+      this.allLocalImageList[this.submissionId][this.evidenceId].splice(indexInLocalList, 1);
+    } else {
+      console.log("remove image else")
+      for (let i = 0; i < this.allLocalImageList[this.submissionId].length; i++) {
+        if (this.allLocalImageList[this.submissionId].name === this.imageList[index].imageName) {
+          indexInLocalList = i;
+        }
+      }
+      this.allLocalImageList[this.submissionId].splice(indexInLocalList, 1);
+    }
+    this.datas.fileName.splice(index, 1);
+    this.imageList.splice(index, 1);
+    this.updateLocalImageList();
     // })
   }
 
   deleteImageAlert(index) {
     let alert = this.alertCtrl.create({
       title: `{{'actionSheet.confirm' | translate}}`,
-      message:`{{'actionSheet.confirmDeleteImage' | translate}}`,
+      message: `{{'actionSheet.confirmDeleteImage' | translate}}`,
       buttons: [
         {
-          text:`{{'actionSheet.no' | translate}}`,
+          text: `{{'actionSheet.no' | translate}}`,
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
