@@ -10,7 +10,7 @@
         <ion-col>
           <button *ngIf="entityList[0].status !== 'completed'" ion-button icon-start clear small float-right (click)="addEntity(i)">
             <ion-icon name="add"></ion-icon>
-            <div>{{'buttons.addEntity'| translate  }}</div>
+            <div>Add Entity</div>
           </button>
         </ion-col>
       </ion-row>
@@ -31,21 +31,21 @@
               <ion-icon *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed'" name="trash" class="downloadIcon" (click)="removeEntity(i,k)" margin-left></ion-icon>
             </div>
           </ion-item>
-          <!-- <ion-item-options side="right" *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed'">
+          <ion-item-options side="right" *ngIf="entityList[0].status !== 'completed'">
             <button ion-button color="warning"  (click)="removeEntity(i,k)">
               <ion-icon name="trash"></ion-icon>
-              {{'buttons.addEntity'| translate}
+              Delete
             </button>
-          </ion-item-options> -->
+          </ion-item-options>
         </ion-item-sliding>
       </ion-list>
       <ion-list *ngIf="!entity.entities.length">
         <div class="_flex-box _justify-content-center flex1">
-         {{'message.noEntity' | translate}}
+          No Entities
         </div>
       </ion-list>
     </ion-item-group>
   </ion-card>
 </div>
 
-<div class="_flex-box msgContainer" *ngIf="!entityList?.length">"{{'message.no' | translate}}" {{entityType}}</div>
+<div class="_flex-box msgContainer" *ngIf="!entityList?.length">No {{entityType}}</div>

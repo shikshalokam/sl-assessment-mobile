@@ -6,7 +6,6 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'page-observation-details',
@@ -24,7 +23,6 @@ export class ObservationDetailsPage {
     private assessmentService: AssessmentServiceProvider,
     private utils: UtilsProvider,
     private evdnsServ: EvidenceProvider,
-    private translate:TranslateService,
     private apiProvider: ApiProvider,
     private localStorage: LocalStorageProvider,
     private events: Events) {
@@ -66,33 +64,26 @@ export class ObservationDetailsPage {
   }
 
   markAsComplete() {
-    let translateObject ;
-    this.translate.get(['actionSheet.confirm','actionSheet.completeobservation','actionSheet.restrictAction','actionSheet.no','actionSheet.yes']).subscribe(translations =>{
-      translateObject = translations;
-      console.log(JSON.stringify(translations))
-    })
     let alert = this.alertCntrl.create({
-      title: translateObject['actionSheet.confirm'],
-      message:  translateObject['actionSheet.completeobservation'] +`<br>`+
-                   translateObject['actionSheet.restrictAction'],
+      title: 'Confirm',
+      message: `Are you sure you want to mark this observation as complete? <br>
+      Further you won't be able to do any kind of action.`,
       buttons: [
         {
-          text: translateObject['actionSheet.no'],
+          text: 'No',
           role: 'cancel',
           handler: () => {
           }
         },
         {
-          text:translateObject['actionSheet.yes'],
+          text: 'Yes',
           handler: () => {
             console.log(this.programs[this.navParams.get('selectedObservationIndex')]._id);
 
             this.apiProvider.httpGet(AppConfigs.cro.markAsComplete + this.programs[this.navParams.get('selectedObservationIndex')]._id, success => {
               this.programs[this.navParams.get('selectedObservationIndex')].status = "completed"
               this.localStorage.setLocalStorage('createdObservationList', this.programs);
-              this.translate.get('toastMessage.ok').subscribe(translations =>{
-                this.utils.openToast(success.message , translations);
-              })
+              this.utils.openToast(success.message, 'ok');
               this.navCtrl.pop();
             }, error => {
 

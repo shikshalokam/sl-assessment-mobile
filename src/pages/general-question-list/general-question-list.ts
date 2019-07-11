@@ -6,7 +6,6 @@ import { GeneralQuestionSubmitPage } from '../general-question-submit/general-qu
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Network } from '@ionic-native/network';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
-import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
@@ -23,9 +22,7 @@ export class GeneralQuestionListPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private utils: UtilsProvider,
     private modal: ModalController, private events: Events, private ngps: NetworkGpsProvider,
-    private alertCntrl: AlertController, 
-    private translate : TranslateService,
-    private network: Network, private localStorage: LocalStorageProvider) {
+    private alertCntrl: AlertController, private network: Network, private localStorage: LocalStorageProvider) {
     this.events.subscribe('network:offline', () => {
     });
 
@@ -72,17 +69,17 @@ export class GeneralQuestionListPage {
   checkForNetworkTypeAlert() {
     if (this.network.type !== ('3g' || '4g' || 'wifi')) {
       let alert = this.alertCntrl.create({
-        title: `{{'actionSheet.confirm' | translate}}`,
-        message: `{{'actionSheet.networkSlowAlert' | translate }}` , 
+        title: 'Confirm',
+        message: 'You are connected to a slower data network. Image upload may take longer time. Do you want to continue?',
         buttons: [
           {
-            text:  `{{'actionSheet.no'|translate}}`,
+            text: 'No',
             role: 'cancel',
             handler: () => {
             }
           },
           {
-            text: `{{'actionSheet.yes'|translate}}`,
+            text: 'Yes',
             handler: () => {
               this.goToImageListing()
             }
@@ -102,9 +99,7 @@ export class GeneralQuestionListPage {
       }
       this.navCtrl.push(GeneralQuestionSubmitPage, params);
     } else {
-      this.translate.get('toastMessage.enableInternet').subscribe(translations =>{
-        this.utils.openToast(translations);
-      })
+      this.utils.openToast("Please enable network to continue");
     }
 
 

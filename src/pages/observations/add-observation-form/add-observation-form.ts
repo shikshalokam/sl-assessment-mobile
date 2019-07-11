@@ -12,7 +12,6 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { AppConfigs } from '../../../providers/appConfig';
-import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Generated class for the AddObservationFormPage page.
@@ -59,7 +58,6 @@ export class AddObservationFormPage {
     private networkGps: NetworkGpsProvider,
     private localStorage: LocalStorageProvider,
     private app: App,
-    public translate : TranslateService,
     private storage: Storage,
     private event: Events
   ) {
@@ -113,9 +111,7 @@ export class AddObservationFormPage {
                       });
                     }).catch(
                       error => {
-                        this.translate.get('toastMessage.locationForAction').subscribe(translations =>{
-                          this.utils.openToast( translations);
-                        })
+                        this.utils.openToast("Location should be turned on for this action");
                         this.utils.stopLoader();
                       }
                     );
@@ -155,9 +151,7 @@ export class AddObservationFormPage {
                   });
                 }).catch(
                   error => {
-                    this.translate.get('toastMessage.locationForAction').subscribe(translations =>{
-                      this.utils.openToast( translations);
-                    })
+                    this.utils.openToast("Location should be turned on for this action");
                   }
                 );
             } else {
@@ -243,25 +237,19 @@ export class AddObservationFormPage {
         break;
 
     }
+    // this.selectedIndex === 0 ? 
+    // actionFlag ? null :  this.utils.openToast("select the type of observation") 
+    // : 
+    // this.selectedIndex === 1 ? actionFlag ? null :  this.utils.openToast("select a solution") : null
+
     return actionFlag;
   }
 
   tmpFunc() { 
-    let message ; 
-     this.selectedIndex === 0 ? this.translate.get('toastMessage.selectObservationType').subscribe(translations => {
-      //  console.log(JSON.stringify(translations))
-      message = translations;
-     })
+     this.selectedIndex === 0 ? this.utils.openToast("Select the type of observation") 
+    : 
+     this.utils.openToast("Select a solution") ;
 
-    : this.translate.get('toastMessage.selectSolution').subscribe(translations => {
-      
-      message = translations;
-
-
-    }) ;
-
-    
-     this.utils.openToast(message) 
   }
 
   saveDraft(option = 'normal') {

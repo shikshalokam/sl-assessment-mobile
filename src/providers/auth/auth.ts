@@ -6,7 +6,6 @@ import { App, AlertController } from "ionic-angular";
 
 import { UtilsProvider } from "../utils/utils";
 import { HomePage } from "../../pages/home/home";
-import { TranslateService } from "@ngx-translate/core";
 
 @Injectable()
 export class AuthProvider {
@@ -24,8 +23,6 @@ export class AuthProvider {
   constructor(public http: Http,
     private currentUser: CurrentUserProvider,
     private app: App, private alertCntrl: AlertController,
-    private translate:TranslateService,
-    private transate : TranslateService,
     private utils: UtilsProvider) { }
 
   doOAuthStepOne(): Promise<any> {
@@ -109,22 +106,17 @@ export class AuthProvider {
   }
 
   confirmPreviousUserName(previousUserEmail, tokens): void {
-    let translateObject ;
-    this.translate.get(['actionSheet.previousUserName','actionSheet.email','actionSheet.cancel','actionSheet.send']).subscribe(translations =>{
-      translateObject = translations;
-      console.log(JSON.stringify(translations))
-    })
     let alert = this.alertCntrl.create({
-      title: translateObject['actionSheet.previousUserName'],
+      title: 'Please enter previous username.',
       inputs: [
         {
-          name: translateObject['actionSheet.email'],
+          name: 'email',
           placeholder: 'Email',
         }
       ],
       buttons: [
         {
-          text: translateObject['actionSheet.cancel'],
+          text: 'Cancel',
           role: 'cancel',
           handler: data => {
             console.log('Cancel clicked');
@@ -133,7 +125,7 @@ export class AuthProvider {
           }
         },
         {
-          text: translateObject['actionSheet.send'],
+          text: 'Send',
           role: 'role',
           handler: data => {
             console.log(data.email + " " +previousUserEmail )
@@ -143,9 +135,7 @@ export class AuthProvider {
               this.currentUser.deactivateActivateSession(true);
 
               this.doLogout();
-              this.translate.get(['toastMessage.userNameMisMatch','toastMessage.ok']).subscribe(translations =>{
-                this.utils.openToast(translations.userNameMisMatch , translations.ok);
-              })
+              this.utils.openToast("Username didnot match. Please login again.", "Ok")
             }
 
           }
@@ -156,30 +146,22 @@ export class AuthProvider {
   }
 
   confirmDataClear(tokens): void {
-    let translateObject ;
-    this.translate.get(['actionSheet.dataLooseConfirm','actionSheet.no','actionSheet.yes']).subscribe(translations =>{
-      translateObject = translations;
-      console.log(JSON.stringify(translations))
-    }) 
-
     let alert = this.alertCntrl.create({
-      title: translateObject['actionSheet.dataLooseConfirm'],
+      title: 'All your datas will be lost. Do you want to continue?',
 
       buttons: [
         {
-          text: translateObject['actionSheet.no'],
+          text: 'No',
           role: 'cancel',
           handler: data => {
             this.currentUser.deactivateActivateSession(true);
 
             this.doLogout();
-            this.translate.get(['toastMessage.loginAgain','toastMessage.ok']).subscribe(translations =>{
-              this.utils.openToast(translations.loginAgain , translations.ok);
-            })
+            this.utils.openToast("Please login again.", "Ok")
           }
         },
         {
-          text:  translateObject['actionSheet.yes'],
+          text: 'yes',
           role: 'role',
           handler: data => {
             this.currentUser.removeUser();
