@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, ɵConsole } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, App, Config, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, App, Config, Events, AlertController } from 'ionic-angular';
 import { FormGroup, Validators } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
@@ -12,6 +12,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { AppConfigs } from '../../../providers/appConfig';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Generated class for the AddObservationFormPage page.
@@ -48,6 +49,8 @@ export class AddObservationFormPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    private translate: TranslateService,
+
     private permissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
@@ -55,7 +58,7 @@ export class AddObservationFormPage {
     private diagnostic: Diagnostic,
     public utils: UtilsProvider,
     private modalCtrl: ModalController,
-    private networkGps: NetworkGpsProvider,
+    private alertCtrl: AlertController,
     private localStorage: LocalStorageProvider,
     private app: App,
     private storage: Storage,
@@ -286,9 +289,47 @@ export class AddObservationFormPage {
   }
 
 
-  ionViewWillUnload() {
-    if (this.saveDraftType !== 'normal')
-      this.saveDraft('force');
+  // ionViewWillUnload() {
+  
+  // }
+
+  async ionViewCanLeave() {
+    if(this.saveDraftType !== 'normal'){
+      const shouldLeave = await this.confirmLeave();
+      return shouldLeave;
+    }
   }
+  
+  confirmLeave(): Promise<Boolean> {
+    let resolveLeaving;
+    const canLeave = new Promise<Boolean>(resolve => resolveLeaving = resolve);
+    let translateObject ;
+    this.translate.get(['actionSheet.confirmLeave','actionSheet.saveCurrentDataConfirmation','actionSheet.yes','actionSheet.no']).subscribe(translations =>{
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
+
+    const alert = this.alertCtrl.create({
+      title: translateObject['actionSheet.confirmLeave'],
+      message: translateObject['actionSheet.saveCurrentDataConfirmation'],
+      buttons: [
+        {
+          text: translateObject['actionSheet.no'],
+          role: 'cancel',
+          handler: () => resolveLeaving(true)
+        },
+        {
+          text: translateObject['actionSheet.yes'],
+          handler: () =>{
+            this.saveDraft('force')
+           resolveLeaving(true)
+          }
+        }
+      ]
+    });
+    alert.present();
+    return canLeave
+  }
+
 
 }
