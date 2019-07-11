@@ -11,7 +11,6 @@ import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { Network } from '@ionic-native/network';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
-import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
@@ -38,7 +37,6 @@ export class SectionListPage {
     private apiService: ApiProvider, private utils: UtilsProvider,
     private diagnostic: Diagnostic, private ngps: NetworkGpsProvider,
     private feedback: FeedbackProvider,
-    private translate : TranslateService,
     private events: Events, private platform: Platform,
     private alertCtrl: AlertController, private network: Network, private localStorage : LocalStorageProvider) {
 
@@ -164,24 +162,19 @@ export class SectionListPage {
 
   checkForNetworkTypeAlert() {
     if(this.network.type !== ('3g' || '4g' || 'wifi')){
-      let translateObject ;
-    this.translate.get(['actionSheet.confirm','actionSheet.yes','actionSheet.no','actionSheet.slowInternet']).subscribe(translations =>{
-      translateObject = translations;
-      console.log(JSON.stringify(translations))
-    })
       let alert = this.alertCtrl.create({
-        title: translateObject['actionSheet.confirm'],
-        message: translateObject['actionSheet.slowInternet'],
+        title: 'Confirm',
+        message: 'You are connected to a slower data network. Image upload may take longer time. Do you want to continue?',
         buttons: [
           {
-            text: translateObject['actionSheet.no'],
+            text: 'No',
             role: 'cancel',
             handler: () => {
               //console.log('Cancel clicked');
             }
           },
           {
-            text: translateObject['actionSheet.yes'],
+            text: 'Yes',
             handler: () => {
               this.goToImageListing()
             }
@@ -211,9 +204,7 @@ export class SectionListPage {
         this.ngps.checkForLocationPermissions();
       })
     } else {
-      this.translate.get('toastMessage.connectToInternet').subscribe(translations =>{
-        this.utils.openToast(translations);
-      })
+      this.utils.openToast("Please enable network to continue");
     }
     
 
@@ -237,9 +228,7 @@ export class SectionListPage {
         //console.log(JSON.stringify(error))
       })
     } else {
-      this.translate.get('toastMessage.networkConnectionForAction').subscribe(translations =>{
-        this.utils.openToast(translations);
-      })
+      this.utils.openToast("Please enable network connection for this action.");
     }
 
     // //console.log(JSON.stringify(this.constructPayload()));

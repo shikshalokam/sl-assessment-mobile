@@ -16,7 +16,7 @@ export class MatrixModalComponent {
 
   constructor() {
     console.log('Hello MatrixModalComponent Component');
-    this.text = 'Hello Worlsd';
+    this.text = 'Hello World';
   }
 
 }

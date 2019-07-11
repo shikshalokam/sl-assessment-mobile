@@ -7,7 +7,6 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
-import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
@@ -33,7 +32,6 @@ export class RegistryListPage {
     public navParams: NavParams,
     private storage: Storage,
     private modalCntrl: ModalController,
-    private translate : TranslateService,
     private ngps: NetworkGpsProvider,
     private utils: UtilsProvider,
     private localStorage: LocalStorageProvider,
@@ -120,9 +118,7 @@ export class RegistryListPage {
       }
     } else {
       event.complete();
-      this.translate.get('toastMessage.enableInternet').subscribe(translations =>{
-        this.utils.openToast( translations);
-      })
+      this.utils.openToast("You need network connection for this action.");
     }
   }
 
@@ -168,9 +164,7 @@ export class RegistryListPage {
         this.utils.openToast(error.message);
       })
     } else {
-      this.translate.get('toastMessage.enableInternet').subscribe(translations =>{
-        this.utils.openToast( translations);
-      })
+      this.utils.openToast("You need network connection for this action.");
     }
   }
 
@@ -253,9 +247,7 @@ export class RegistryListPage {
 
       })
     } else {
-      this.translate.get('toastMessage.enableInternet').subscribe(translations =>{
-        this.utils.openToast( translations);
-      })
+      this.utils.openToast("You need network connection for this action.");
     }
   }
 

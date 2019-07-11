@@ -8,7 +8,6 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'page-detail',
@@ -21,7 +20,6 @@ export class DetailPage {
     public navParams: NavParams,
     private iab: InAppBrowser,
     private app: App,
-    private translate : TranslateService,
     private alertctrl: AlertController,
     private currentUser: CurrentUserProvider,
     private auth: AuthProvider,
@@ -45,24 +43,19 @@ export class DetailPage {
   }
 
   clearData() {
-    let translateObject ;
-          this.translate.get(['actionSheet.warning','actionSheet.schoolSurveyEarse','actionSheet.no','actionSheet.yes']).subscribe(translations =>{
-            translateObject = translations;
-            console.log(JSON.stringify(translations))
-          })
     let alert = this.alertctrl.create({
-      title: translateObject['actionSheet.warning'],
-      subTitle: translateObject['actionSheet.schoolSurveyEarse'],
+      title: 'WARNING',
+      subTitle: 'All schools survey data will be erased. This action is irreversable.Do you want to continue?',
       buttons: [
         {
-          text:  translateObject['actionSheet.no'],
+          text: 'No',
           role: 'role',
           handler: data => {
 
           }
         },
         {
-          text:  translateObject['actionSheet.yes'],
+          text: 'Yes',
           role: 'role',
           handler: data => {
             this.utils.startLoader()
@@ -88,27 +81,22 @@ export class DetailPage {
   }
 
   openAlert() {
-    let translateObject ;
-    this.translate.get(['actionSheet.pleaseEnterPasscode','actionSheet.passcode','actionSheet.cancel','actionSheet.submit']).subscribe(translations =>{
-      translateObject = translations;
-      console.log(JSON.stringify(translations))
-    })
     const alert = this.alertctrl.create({
-      title: translateObject['actionSheet.pleaseEnterPasscode'],
+      title: 'Please enter the passcode.',
       inputs: [
         {
-          name: translateObject['actionSheet.passcode'],
-          placeholder: translateObject['actionSheet.passcode']
+          name: 'passcode',
+          placeholder: 'Passcode'
         },
       ],
       buttons: [
         {
-          text: translateObject['actionSheet.cancel'],
+          text: 'Cancel',
           handler: data => {
           }
         },
         {
-          text: translateObject['actionSheet.submit'],
+          text: 'Submit',
           handler: data => {
             this.getAccessTokenForAction(data)
           }
