@@ -10,7 +10,6 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { HomePage } from '../home/home';
-import { TranslateService } from '@ngx-translate/core';
 
 
 @IonicPage()
@@ -27,7 +26,6 @@ export class LoginPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage,
     private auth: AuthProvider,
     private events : Events,
-    private translate : TranslateService,
     private toastCtrl: ToastController, private network: Network,
     private permissions: AndroidPermissions, private geolocation: Geolocation,
     private diagnostic: Diagnostic, private utils: UtilsProvider) {
@@ -70,10 +68,7 @@ export class LoginPage {
       this.utils.openToast(JSON.stringify(resp))
   
     }).catch((error) => {
-      this.translate.get('toastMessage.errorGettingLoaction').subscribe(translations =>{
-        this.utils.openToast(translations + JSON.stringify(error));
-      })
-     
+      this.utils.openToast('Error getting location' + JSON.stringify(error))
     });
   }
 

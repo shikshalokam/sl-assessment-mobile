@@ -35,6 +35,13 @@ export class InputTypeComponent implements OnInit {
     // this.checkForValidation();
   }
 
+  getErrorMsg() {
+    if(this.data.validation.regex){
+      let string = this.data.validation.regex.split("[");
+      string = string[1].split("]")[0];
+      return "Should contain only values "+ string;
+    }
+  }
 
 
   next(status?: any) {
