@@ -109,6 +109,12 @@
         "tamil": "தமிழ்",
         "kannada": "ಕನ್ನಡ",
         "gujarati": "ગુજરાતી"
+    },
+    "actionSheet":{
+        "confirmLeave":"Confirm Leave!",
+        "saveCurrentDataConfirmation":"Do you want to save the new data",
+        "yes":"Yes",
+        "no":"No"
     }
 
 }
