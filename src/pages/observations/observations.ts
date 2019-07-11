@@ -8,7 +8,6 @@ import { ActionSheetController } from 'ionic-angular';
 import { ObservationDetailsPage } from '../observation-details/observation-details';
 import { ApiProvider } from '../../providers/api/api';
 import { UtilsProvider } from '../../providers/utils/utils';
-import { TranslateService } from '@ngx-translate/core';
 
 
 @IonicPage()
@@ -35,7 +34,6 @@ export class ObservationsPage {
     private localStorage: LocalStorageProvider,
     private assessmentService: AssessmentServiceProvider,
     private apiProviders: ApiProvider,
-    private translate : TranslateService,
     private events: Events,
     public actionSheetCtrl: ActionSheetController
   ) {
@@ -204,14 +202,9 @@ export class ObservationsPage {
 
 
   actionOnDraftObservation(index, observation) {
-    let translateObject ;
-    this.translate.get(['actionSheet.edit','actionSheet.chooseAction','actionSheet.delete','actionSheet.confirm','actionSheet.deleteObservation','actionSheet.yes','actionSheet.no','actionSheet.publish']).subscribe(translations =>{
-      translateObject = translations;
-      console.log(JSON.stringify(translations))
-    })
     let actionArray = [
       {
-        text:translateObject['actionSheet.edit'],
+        text: 'Edit',
         role: 'edit',
         icon: 'create',
 
@@ -221,22 +214,22 @@ export class ObservationsPage {
         }
       },
       {
-        text: translateObject['actionSheet.delete'],
+        text: 'Delete',
         cssClass: 'deleteIcon',
         icon: 'trash',
         handler: () => {
           let alert = this.alertCntrl.create({
-            title: translateObject['actionSheet.confirm'],
-            message:translateObject['actionSheet.deleteObservation'],
+            title: 'Confirm',
+            message: 'Are you sure you want to delete the observation?',
             buttons: [
               {
-                text:translateObject['actionSheet.no'],
+                text: 'No',
                 role: 'cancel',
                 handler: () => {
                 }
               },
               {
-                text:translateObject['actionSheet.yes'],
+                text: 'Yes',
                 handler: () => {
                   this.draftObservation.splice(index, 1);
                   this.localStorage.setLocalStorage('draftObservation', this.draftObservation);
@@ -252,7 +245,7 @@ export class ObservationsPage {
     ];
     if (observation.data.isComplete) {
       actionArray.splice(0, 0, {
-        text: translateObject['actionSheet.publish'],
+        text: 'Publish',
         role: 'Publish',
         icon: 'add',
 
@@ -275,11 +268,9 @@ export class ObservationsPage {
           this.apiProviders.httpPost(AppConfigs.cro.createObservation + observation.data.solutionId, obj, success => {
             console.log(JSON.stringify(success));
             // console.log("published obs")
-            this.translate.get('toastMessage.ok').subscribe(translations =>{
-              this.utils.openToast(success.message, translations);
-            })
+            this.utils.openToast(success.message, "Ok");
+
             this.refresh();
-            this.getDraftObservation();
             this.selectedTab = 'active'
           }, error => {
 
@@ -291,7 +282,7 @@ export class ObservationsPage {
       })
     }
     const actionSheet = this.actionSheetCtrl.create({
-      title: translateObject['actionSheet.chooseAction'],
+      title: 'Choose a Action',
       cssClass: 'action-sheets-groups-page',
       buttons: actionArray
     });

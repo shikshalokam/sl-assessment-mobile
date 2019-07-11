@@ -6,7 +6,6 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { EntityListPage } from '../../pages/observations/add-observation-form/entity-list/entity-list';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
-import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Generated class for the EntityListingComponent component.
@@ -35,7 +34,6 @@ export class ObservationEntityListingComponent {
     private localStorage: LocalStorageProvider,
     public alertCntrl : AlertController,
     private evdnsServ: EvidenceProvider,
-    private translate : TranslateService,
     private apiProviders : ApiProvider,
     private modalCtrl : ModalController,
     private utils: UtilsProvider) {
@@ -155,23 +153,18 @@ export class ObservationEntityListingComponent {
   
   removeEntity(...params){
     console.log("remove entity called")
-    let translateObject ;
-          this.translate.get(['actionSheet.confirm','actionSheet.deleteEntity','actionSheet.no','actionSheet.yes']).subscribe(translations =>{
-            translateObject = translations;
-            console.log(JSON.stringify(translations))
-          })
       let alert = this.alertCntrl.create({
-        title: translateObject['actionSheet.confirm'],
-        message:translateObject['actionSheet.deleteEntity'],
+        title: 'Confirm',
+        message: 'Are you sure you want to delete the entity?',
         buttons: [
           {
-            text: translateObject['actionSheet.no'],
+            text: 'No',
             role: 'cancel',
             handler: () => {
             }
           },
           {
-            text: translateObject['actionSheet.yes'],
+            text: 'Yes',
             handler: () => {
               let obj =  {
                 data:[
@@ -180,18 +173,19 @@ export class ObservationEntityListingComponent {
               }
               this.utils.startLoader();
               this.apiProviders.httpPost(AppConfigs.cro.unMapEntityToObservation+this.entityList[params[0]]._id,obj ,success=>{
-                let  okMessage;
-                this.translate.get('toastMessage.ok').subscribe(translations => {
-                  //  console.log(JSON.stringify(translations))
-             
-                  okMessage = translations
-                 })
-                this.utils.openToast(success.message , okMessage);
-                
+                this.utils.openToast(success.message,'ok');
                 this.utils.stopLoader();
                 console.log(JSON.stringify(success));
 
               this.entityList[params[0]].entities.splice(params[1],1);
+              //   this.localStorage.getLocalStorage('createdObservationList').then(data =>{
+              //     console.log(JSON.stringify(data[this.s]))
+              //     console.log("success data")
+              //     data[this.selectedindex].entities.splice(params[1],1);
+              //     this.localStorage.setLocalStorage('createdObservationList',data);
+              //   }).catch(error =>{
+
+              //   });
               this.updatedLocalStorage.emit(params[1]);
               },error=>{
                 this.utils.stopLoader();
