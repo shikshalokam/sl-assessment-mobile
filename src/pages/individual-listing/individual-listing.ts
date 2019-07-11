@@ -79,7 +79,5 @@ export class IndividualListingPage {
   }
 
 
-  goToEntityFunc(programIndex){
-    this.navCtrl.push(EntityListingPage,{ programIndex : programIndex , programs : this.programs , assessmentType : 'individual' })
-  }
+ 
 }

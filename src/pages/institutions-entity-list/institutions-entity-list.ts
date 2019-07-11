@@ -79,7 +79,5 @@ export class InstitutionsEntityList {
   }
 
 
-  goToEntityFunc(programIndex){
-    this.navCtrl.push(EntityListingPage,{ programIndex : programIndex , programs : this.programs , assessmentType : 'institutional' })
-  }
+
 }
