@@ -9,6 +9,8 @@ import { Storage } from '@ionic/storage';
 import { PhotoLibrary } from '@ionic-native/photo-library';
 import { TranslateService } from '@ngx-translate/core';
 import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from '@ionic-native/file-path';
+import { IOSFilePicker } from '@ionic-native/file-picker';
 
 declare var cordova: any;
 
@@ -22,6 +24,23 @@ export class ImageUploadComponent implements OnInit {
   datas;
   isIos: boolean;
   appFolderPath: string;
+  videoFormats = ["mp4", "mp3", "WMV", "WEBM", "flv", "avi", "3GP", "OGG"];
+  audioFormats = ["AIF", "cda", "mp3","mpa", "ogg", "wav", "wma"];
+  pptFormats=  ["ppt", "pptx", "pps", "ppsx"];
+  wordFormats = ["docx", "doc", "docm", "dotx"]
+  pdfFormats = ["pdf"];
+  spreadSheetFormats = ["xls", "xlsx"];
+  typeOfFormats = ["video","audio","ppt", "word", "pdf", "spreadSheet"]
+
+  iconCheck(file){
+    console.log("inside extension")
+    // console.log(JSON.stringify(this.imageList))
+    let extension = file.split('.');
+    extension = extension[extension.length -1];
+    if(this.videoFormats.includes(extension)){
+      return "videocam"
+    }
+  }
 
   @Input()
   set data(data) {
@@ -50,6 +69,8 @@ export class ImageUploadComponent implements OnInit {
     private storage: Storage,
     private photoLibrary: PhotoLibrary, private platform: Platform,
     private translate: TranslateService,
+    private filePath: FilePath,
+    private iosFilePicker: IOSFilePicker,
     private fileChooser: FileChooser,
     private alertCtrl: AlertController) {
     console.log('Hello ImageUploadComponent Component');
@@ -106,7 +127,7 @@ export class ImageUploadComponent implements OnInit {
 
   openActionSheet(): void {
     let translateObject;
-    this.translate.get(['actionSheet.addimage', 'actionSheet.camera', 'actionSheet.upload', 'actionSheet.cancel']).subscribe(translations => {
+    this.translate.get(['actionSheet.addimage', 'actionSheet.camera', 'actionSheet.uploadFile', 'actionSheet.uploadImage', 'actionSheet.upload', 'actionSheet.cancel']).subscribe(translations => {
       translateObject = translations;
       console.log(JSON.stringify(translations))
     })
@@ -120,12 +141,19 @@ export class ImageUploadComponent implements OnInit {
           handler: () => {
             this.openCamera();
           }
-        }, {
-          text: translateObject['actionSheet.upload'],
+        },
+        {
+          text: translateObject['actionSheet.uploadImage'],
           icon: 'cloud-upload',
           handler: () => {
-            // this.openLocalLibrary();
-            this.openFilePicker();
+            this.openLocalLibrary();
+            // this.openFilePicker();
+          }
+        }, {
+          text: translateObject['actionSheet.uploadFile'],
+          icon: 'document',
+          handler: () => {
+            this.isIos ? this.filePickerForIOS() : this.openFilePicker();
           }
         }, {
           text: translateObject['actionSheet.cancel'],
@@ -139,11 +167,26 @@ export class ImageUploadComponent implements OnInit {
     actionSheet.present();
   }
 
+  filePickerForIOS() {
+    this.iosFilePicker.pickFile().then(data => {
+      console.log(JSON.stringify(data))
+    }).then(error => {
+
+    })
+  }
+
+  // For android
   openFilePicker() {
     this.fileChooser.open()
-      .then(uri => console.log(uri))
+      .then(filePath => {
+        this.filePath.resolveNativePath(filePath).then(data => {
+          this.checkForLocalFolder(data);
+          // const extension = this.utils.getFileExtensions(data)
+          // console.log(JSON.stringify(extension))
+        }).catch(err => {
+        })
+      })
       .catch(e => console.log(e));
-
   }
 
   openCamera(): void {
@@ -175,7 +218,8 @@ export class ImageUploadComponent implements OnInit {
   checkForLocalFolder(imagePath) {
     let currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
     let currentPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-
+    console.log(JSON.stringify(currentName));
+    console.log(JSON.stringify(currentPath))
     if (this.isIos) {
       console.log("Ios ")
       this.file.checkDir(this.file.documentsDirectory, 'images').then(success => {
@@ -220,13 +264,14 @@ export class ImageUploadComponent implements OnInit {
     // })
     this.file.copyFile(namePath, currentName, this.appFolderPath, currentName).then(success => {
       // console.log(JSON.stringify(success));
-      this.pushToImageList(currentName);
+      console.log("Inside heree")
+      this.pushToFileList(currentName);
     }, error => {
       // console.log("error" + JSON.stringify(error));
     });
   }
 
-  pushToImageList(fileName) {
+  pushToFileList(fileName) {
     this.file.checkFile(this.appFolderPath + '/', fileName).then(response => {
       this.file.readAsDataURL(this.appFolderPath, fileName).then(data => {
         this.imageList.push({ data: data, imageName: fileName });
