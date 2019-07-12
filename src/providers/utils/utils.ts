@@ -226,5 +226,15 @@ export class UtilsProvider {
     this.iab.create(link, "_system", options)
   }
 
+  getFileExtensions(url) {
+    let  splittedString = url.split('.');
+    let splittedStringForName = url.split('/')
+    const obj = {
+      type:splittedString[splittedString.length -1],
+      name:splittedStringForName[splittedStringForName.length -1]
+    }
+    return obj
+  }
+
 }
 

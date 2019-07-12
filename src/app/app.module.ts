@@ -39,6 +39,7 @@ import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer} from '@ionic-native/file-transfer';
 import { ImagePicker } from '@ionic-native/image-picker';
 import { FileChooser } from '@ionic-native/file-chooser';
+import { IOSFilePicker } from '@ionic-native/file-picker';
 
 import { ImageListingPage } from '../pages/image-listing/image-listing';
 import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
@@ -198,7 +199,9 @@ import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-f
     Deeplinks,
     ObservationProvider,
     SocialSharing,
-    SharingFeaturesProvider
+    SharingFeaturesProvider,
+    IOSFilePicker
+
   ]
 })
 export class AppModule { }
