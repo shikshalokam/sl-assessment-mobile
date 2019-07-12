@@ -79,6 +79,8 @@ import { ObservationProvider } from '../providers/observation/observation';
 import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about';
 import { EntityListingPage } from '../pages/entity-listing/entity-listing';
 import { FileChooser } from '@ionic-native/file-chooser';
+import { Base64 } from '@ionic-native/base64/ngx';
+import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-features';
 
 @NgModule({
   declarations: [
@@ -176,6 +178,7 @@ import { FileChooser } from '@ionic-native/file-chooser';
     Diagnostic,
     Camera,
     File,
+    Base64,
     FilePath,
     FileTransfer,
     ImagePicker,
@@ -195,7 +198,8 @@ import { FileChooser } from '@ionic-native/file-chooser';
     AssessmentServiceProvider,
     Deeplinks,
     ObservationProvider,
-    SocialSharing
+    SocialSharing,
+    SharingFeaturesProvider
 
   ]
 })
