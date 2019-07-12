@@ -289,12 +289,15 @@ export class AddObservationFormPage {
   }
 
 
-  // ionViewWillUnload() {
-  
-  // }
+  ionViewWillUnload() {
+    if(this.saveDraftType === 'force' && this.entityType ){
+      this.saveDraft('force')
+    }
+
+  }
 
   async ionViewCanLeave() {
-    if(this.saveDraftType !== 'normal'){
+    if(this.saveDraftType !== 'normal' && this.entityType && this.editDataIndex){
       const shouldLeave = await this.confirmLeave();
       return shouldLeave;
     }
