@@ -9,10 +9,10 @@ export class GeneralQuestionPage {
 
   question: any;
   schoolId: any;
-
+  submissionId: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private viewCntrl: ViewController) {
     this.question = this.navParams.get('question');
-    this.schoolId = this.navParams.get('schoolId');
+    this.submissionId = this.navParams.get('_id');
   }
 
   ionViewDidLoad() {

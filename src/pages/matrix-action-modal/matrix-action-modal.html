@@ -22,18 +22,18 @@
               </ion-item-divider>
           <div class="_fullScreenCard" *ngIf="checkForVisibility(j)">
             <input-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-              [schoolId]="schoolId" *ngSwitchCase="'text'" [hideButton]="true"></input-type>
+              [schoolId]="schoolId" *ngSwitchCase="'text'" [hideButton]="true" [submissionId]="submissionId"></input-type>
             <input-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-              [schoolId]="schoolId" *ngSwitchCase="'number'" [hideButton]="true"></input-type>
+              [schoolId]="schoolId" *ngSwitchCase="'number'" [submissionId]="submissionId" [hideButton]="true"></input-type>
             <radio-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-              [schoolId]="schoolId" *ngSwitchCase="'radio'" [hideButton]="true"></radio-type>
+              [schoolId]="schoolId" *ngSwitchCase="'radio'" [submissionId]="submissionId" [hideButton]="true"></radio-type>
             <date-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-              [schoolId]="schoolId" *ngSwitchCase="'date'" [hideButton]="true"></date-type>
+              [schoolId]="schoolId" *ngSwitchCase="'date'" [submissionId]="submissionId" [hideButton]="true"></date-type>
             <slider [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
-              [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'slider'"></slider>
+              [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'slider'"></slider>
 
             <multiple-choice-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-              [schoolId]="schoolId" *ngSwitchCase="'multiselect'" [hideButton]="true"></multiple-choice-type>
+              [schoolId]="schoolId" *ngSwitchCase="'multiselect'" [submissionId]="submissionId" [hideButton]="true"></multiple-choice-type>
           </div>
         </ng-container>
       </ng-container>

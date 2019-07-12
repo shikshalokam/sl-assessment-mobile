@@ -1,0 +1,137 @@
+{
+    "form" : [
+        {
+            "field": "name",
+            "label": " Name",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "text",
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "description",
+            "label": " Description",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "text",
+            "validation":{
+                "required":true
+            }
+        },
+      
+        {
+            "field": "keywords",
+            "label": "Keywords",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "text",
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "language",
+            "label": "Language",
+            "value": "1412153",
+            "visible": true,
+            "editable": true,
+            "input": "select",
+            "options": [
+                {
+                    "value": "en",
+                    "label": "English"
+                },
+                {
+                    "value": "kn",
+                    "label": "Kannada"
+                },
+                {
+                    "value": "te",
+                    "label": "Telugu"
+                },
+                {
+                    "value": "hi",
+                    "label": "Hindi"
+                },
+                {
+                    "value": "ml",
+                    "label": "Malayalam"
+                }
+            ],
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "status",
+            "label": "Status",
+            "value": "draft",
+            "visible": true,
+            "editable": true,
+            "input": "select",
+            "options":[
+                {
+                    "label":"Draft",
+                    "value":"draft"
+                },
+                {
+                    "label":"Active",
+                    "value":"active"
+                }
+            ],
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "startDate",
+            "label": "Start Date",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "date",
+            "validation":{
+                "required":true
+            }
+        },
+        {
+            "field": "endDate",
+            "label": "End Date",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "date",
+            "validation":{
+                "required":true
+            }
+        }
+    ],
+    "entityType":[
+        {
+            "field": "category",
+            "label": "Category",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "input": "radio",
+            "options": [
+                {
+                    "label": "Classroom  Observation",
+                    "value": "CO"
+                },
+                {
+                    "label": "Teacher Observation",
+                    "value": "TO"
+                }
+            ],
+            "validation":{
+                "required":true
+            }
+        }
+    ]
+}

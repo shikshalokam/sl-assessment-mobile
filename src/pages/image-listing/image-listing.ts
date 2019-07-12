@@ -8,6 +8,7 @@ import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { SlackProvider } from '../../providers/slack/slack';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { ObservationProvider } from '../../providers/observation/observation';
 
 declare var cordova: any;
 
@@ -20,13 +21,14 @@ export class ImageListingPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private file: File, private fileTransfer: FileTransfer,
     private apiService: ApiProvider, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
-    private platform: Platform, private slack: SlackProvider) {
+    private platform: Platform, private slack: SlackProvider,
+    private observetionProvider: ObservationProvider) {
   }
 
   uploadImages: any;
   imageList = [];
   appFolderPath: string = this.platform.is('ios') ? cordova.file.documentsDirectory + 'images' : cordova.file.externalDataDirectory + 'images';
-  schoolId: any;
+  // schoolId: any;
   schoolName: string
   selectedEvidenceIndex: any;
   currentEvidenceId: any;
@@ -44,21 +46,26 @@ export class ImageListingPage {
     "title": `Error Details`,
     "text": ``
   }
+  submissionId;
 
   ionViewDidLoad() {
-    this.schoolId = this.navParams.get('_id');
+    this.submissionId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
-
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
+    // console.log(this.submissionId + "Image listing")
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.schoolData = data;
-      this.currentEvidence = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex] : this.schoolData['assessments']['evidences'][this.selectedEvidenceIndex];
-      this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.schoolId;
+      // console.log(this.submissionId + "Image listing  success")
+      console.log(JSON.stringify(data))
+      this.currentEvidence = this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex];
+      this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.submissionId;
       this.evidenceSections = this.currentEvidence['sections'];
       this.selectedEvidenceName = this.currentEvidence['name'];
       this.checkIfEcmSumittedByUser();
     }).catch(error => {
+      // console.log(this.submissionId + "Image listing error")
+
     })
 
   }
@@ -66,13 +73,15 @@ export class ImageListingPage {
 
   checkIfEcmSumittedByUser() {
     this.utils.startLoader();
-    const submissionId = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['submissionId'] : this.schoolData['assessments']['submissionId'];
-    this.apiService.httpGet(AppConfigs.survey.checkIfSubmitted + submissionId + "?evidenceId=" + this.currentEvidence.externalId, success => {
+    const submissionId = this.submissionId;
+    const url = this.schoolData.observation ? AppConfigs.cro.isSubmissionAllowed : AppConfigs.survey.checkIfSubmitted;
+    this.apiService.httpGet(url + submissionId + "?evidenceId=" + this.currentEvidence.externalId, success => {
       this.utils.stopLoader();
       if (success.result.allowed) {
         this.storage.get("allImageList").then(data => {
-          if (data && JSON.parse(data)[this.schoolId]) {
-            this.uploadImages = (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.schoolId][this.currentEvidence.externalId]) : [];
+          console.log(data)
+          if (data && JSON.parse(data)[this.submissionId]) {
+            this.uploadImages = (JSON.parse(data)[this.submissionId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.submissionId][this.currentEvidence.externalId]) : [];
           } else {
             this.uploadImages = [];
           }
@@ -84,14 +93,14 @@ export class ImageListingPage {
         })
       } else {
         this.utils.openToast("Submission completed successfully");
-        if (this.schoolData['assessments'][0]) {
-          this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
-        } else {
-          this.schoolData['assessments']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
-        }
-        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData);
+        // if (this.schoolData['assessments'][0]) {
+        //   this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+        // } else {
+        this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+        // }
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
         const options = {
-          _id: this.schoolId,
+          _id: this.submissionId,
           name: this.schoolName
         }
         this.navCtrl.remove(2, 1);
@@ -104,7 +113,7 @@ export class ImageListingPage {
   }
 
   getImageUploadUrls() {
-    const submissionId = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['submissionId'] : this.schoolData['assessments']['submissionId'];
+    const submissionId = this.submissionId;
     const files = {
       "files": [],
       submissionId: submissionId
@@ -217,19 +226,19 @@ export class ImageListingPage {
 
   submitEvidence() {
     this.utils.startLoader('Please wait while submitting')
+    console.log("submitting");
     const payload = this.constructPayload();
-    const submissionId = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0].submissionId : this.schoolData['assessments']['submissionId'];
-    const url = AppConfigs.survey.submission + submissionId + '/';
+    const submissionId = this.submissionId;
+    const url = (this.schoolData.observation ? AppConfigs.cro.makeSubmission : AppConfigs.survey.submission) + submissionId + '/';
     this.apiService.httpPost(url, payload, response => {
-      this.utils.openToast(response.message);
-      if (this.schoolData['assessments'][0]) {
-        this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
-      } else {
-        this.schoolData['assessments']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+      if(this.schoolData.observation){
+        this.observetionProvider.markObservationAsCompleted(submissionId);
       }
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData);
+      this.utils.openToast(response.message);
+      this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
       const options = {
-        _id: this.schoolId,
+        _id: this.submissionId,
         name: this.schoolName
       }
       this.utils.stopLoader();

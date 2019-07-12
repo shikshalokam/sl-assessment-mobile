@@ -40,8 +40,6 @@ export class CurrentUserProvider {
   }
 
   getCurrentUserData(): any {
-    console.log("user")
-    
     const currentUser = this.curretUser ? jwt_decode(this.curretUser.accessToken) : null
     return currentUser
   }

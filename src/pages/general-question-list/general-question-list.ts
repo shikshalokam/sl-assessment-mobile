@@ -15,7 +15,7 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 export class GeneralQuestionListPage {
 
   generalQuestions: any;
-  schoolId: any;
+  submissionId: any;
   allGeneralQuestions: any;
   enableSubmitBtn: boolean = false;
   networkAvailable: boolean;
@@ -33,8 +33,8 @@ export class GeneralQuestionListPage {
   }
 
   ionViewWillEnter() {
-    this.schoolId = this.navParams.get('_id');
-    this.localStorage.getLocalStorage('generalQuestions_' + this.schoolId).then(data => {
+    this.submissionId = this.navParams.get('_id');
+    this.localStorage.getLocalStorage('generalQuestions_' + this.submissionId).then(data => {
       if (data) {
         this.allGeneralQuestions = data;
         this.generalQuestions = this.allGeneralQuestions;
@@ -45,12 +45,12 @@ export class GeneralQuestionListPage {
   }
 
   OpenQuestionModal(index) {
-    const modal = this.modal.create(GeneralQuestionPage, { "question": JSON.parse(JSON.stringify(this.generalQuestions[index])), schoolId: this.schoolId });
+    const modal = this.modal.create(GeneralQuestionPage, { "question": JSON.parse(JSON.stringify(this.generalQuestions[index])), submissionId: this.submissionId });
     modal.onDidDismiss(data => {
       if (data) {
         this.generalQuestions[index] = data;
         this.enableSubmitBtn = this.enableGeneralaSubmission();
-        this.localStorage.setLocalStorage('generalQuestions_' + this.schoolId, this.allGeneralQuestions)
+        this.localStorage.setLocalStorage('generalQuestions_' + this.submissionId, this.allGeneralQuestions)
       }
     })
     modal.present();
@@ -95,7 +95,7 @@ export class GeneralQuestionListPage {
     this.ngps.checkForLocationPermissions();
     if (this.networkAvailable) {
       const params = {
-        _id: this.schoolId,
+        _id: this.submissionId,
       }
       this.navCtrl.push(GeneralQuestionSubmitPage, params);
     } else {

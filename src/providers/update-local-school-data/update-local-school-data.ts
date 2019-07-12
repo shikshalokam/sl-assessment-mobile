@@ -17,7 +17,7 @@ export class UpdateLocalSchoolDataProvider {
   }
 
   getSubmissionStatus(): void {
-    const url = AppConfigs.survey.getSubmissionStatus + this.currentSchool.assessments[0].submissionId;
+    const url = AppConfigs.survey.getSubmissionStatus + this.currentSchool.assessment.submissionId;
     this.apiService.httpGet(url, success => {
       this.updatedSubmissionStatus = success.result.evidences;
       this.utils.stopLoader();
@@ -53,25 +53,31 @@ export class UpdateLocalSchoolDataProvider {
     // })
   }
 
-  mapSubmissionDataToQuestion(schoolDetails): void {
+  mapSubmissionDataToQuestion(schoolDetails, isObservation?:boolean): void {
     const schoolObj = {};
     let mappedData
-    for (const schoolId of Object.keys(schoolDetails)) {
-      mappedData = this.updateSubmissionsOnLogin(schoolDetails);
-      // schoolObj[mappedData["schoolProfile"]["_id"]] = mappedData;
+    // for (const schoolId of Object.keys(schoolDetails)) {
+    //   mappedData = this.updateSubmissionsOnLogin(schoolDetails);
+    //   // schoolObj[mappedData["schoolProfile"]["_id"]] = mappedData;
 
+    // }
+    mappedData = this.updateSubmissionsOnLogin(schoolDetails);
+    if(isObservation){
+      mappedData.observation = true;
     }
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(mappedData["schoolProfile"] ? mappedData["schoolProfile"]["_id"] :mappedData["entityProfile"]["_id"]), mappedData)
+
+
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(schoolDetails.assessment.submissionId), mappedData)
     // this.storage.set('schoolsDetails', JSON.stringify(schoolObj));
     // this.events.publish("localDataUpdated");
   }
   updateSubmissionsOnLogin(schoolData) {
-    const assessment = schoolData.assessments[0] ? schoolData.assessments[0] : schoolData.assessments;
+    const assessment = schoolData.assessment;
     // const assessmentEvidence = schoolData.assessments[0] ? schoolData.assessments[0] : schoolData.assessments.evidences;
     for (const evidence of assessment.evidences) {
-
       const validSubmission = assessment.submissions[evidence.externalId];
       if (validSubmission) {
+        evidence.notApplicable = validSubmission.notApplicable;
         for (const section of evidence.sections) {
           for (const question of section.questions) {
             // // console.logg(question._id)
@@ -88,7 +94,7 @@ export class UpdateLocalSchoolDataProvider {
   }
 
   checkForLocalDataUpdate(): void {
-    for (const evidence of this.currentSchool.assessments[0].evidences) {
+    for (const evidence of this.currentSchool.assessment.evidences) {
       const validSubmission = this.getValidSubmissionForEvidenceMethod(evidence.externalId);
       evidence.isSubmitted = validSubmission.submittedBy ? true : false;
       evidence.startTime = validSubmission.startTime;
@@ -102,7 +108,7 @@ export class UpdateLocalSchoolDataProvider {
         }
       }
     }
-    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.currentSchool["schoolProfile"]["_id"]), this.schoolDetails)
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.currentSchool.assessment.submissionId), this.schoolDetails)
     // this.storage.set('schoolsDetails', JSON.stringify(this.schoolDetails));
     // this.events.publish("localDataUpdated");
   }
