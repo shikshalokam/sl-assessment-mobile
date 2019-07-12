@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { ParentsListPage } from './registry-list';
+import { RegistryListPage } from './registry-list';
 import { TranslateModule } from "@ngx-translate/core";
 import { ComponentsModule } from '../../components/components.module';
 import { RegistryFormPage } from '../registry-form/registry-form';
 
 @NgModule({
   declarations: [
-    ParentsListPage,
+    RegistryListPage,
     RegistryFormPage
   ],
   imports: [
-    IonicPageModule.forChild(ParentsListPage),
+    IonicPageModule.forChild(RegistryListPage),
     TranslateModule,
     ComponentsModule
   ],

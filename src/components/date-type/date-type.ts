@@ -16,7 +16,7 @@ export class DateTypeComponent implements OnInit{
   @Input() schoolId: string;
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
-
+  @Input() submissionId: any;
   @Input() hideButton: boolean;
   questionValid: boolean;
   currentDate;

@@ -2,7 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule, HttpClient} from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { IonicStorageModule } from '@ionic/storage';
@@ -69,6 +69,11 @@ import { ProgramDetailsPage } from '../pages/program-details/program-details';
 import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
 import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.module';
 import { ObservationsPageModule } from '../pages/observations/observations.module';
+import { AssessmentServiceProvider } from '../providers/assessment-service/assessment-service';
+import { Deeplinks } from '@ionic-native/deeplinks';
+import { SolutionDetailsPage } from '../pages/solution-details/solution-details';
+import { IonicStepperModule } from 'ionic-stepper';
+import { ObservationProvider } from '../providers/observation/observation';
 
 @NgModule({
   declarations: [
@@ -82,6 +87,7 @@ import { ObservationsPageModule } from '../pages/observations/observations.modul
     ImageListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
+    SolutionDetailsPage,
     RemarksPage,
     FeedbackPage,
     DetailPage,
@@ -91,7 +97,7 @@ import { ObservationsPageModule } from '../pages/observations/observations.modul
     ProgramDetailsPage
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     TranslateModule.forRoot(
@@ -117,8 +123,9 @@ import { ObservationsPageModule } from '../pages/observations/observations.modul
     RatedCriteriaListPageModule,
     RegistryListPageModule,
     GeneralQuestionListPageModule,
-    ObservationsPageModule
-  ],
+    IonicStepperModule,
+
+    ObservationsPageModule  ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
@@ -129,6 +136,7 @@ import { ObservationsPageModule } from '../pages/observations/observations.modul
     FaqPage,
     EntityProfileEditPage,
     ImageListingPage,
+    SolutionDetailsPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
     RemarksPage,
@@ -137,7 +145,8 @@ import { ObservationsPageModule } from '../pages/observations/observations.modul
     GeneralQuestionPage,
     GeneralQuestionSubmitPage,
     IndividualListingPage,
-    ProgramDetailsPage
+    ProgramDetailsPage,
+    
   ],
   providers: [
     StatusBar,
@@ -172,7 +181,11 @@ import { ObservationsPageModule } from '../pages/observations/observations.modul
     SlackProvider,
     Keyboard,
     LocalStorageProvider,
-    HTTP
+    HTTP,
+    AssessmentServiceProvider,
+    Deeplinks,
+    ObservationProvider
+
   ]
 })
 export class AppModule { }

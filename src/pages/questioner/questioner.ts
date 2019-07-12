@@ -14,7 +14,7 @@ export class QuestionerPage {
 
   questions: any;
   schoolName: string;
-  schoolId: any;
+  submissionId: any;
   selectedEvidenceIndex: any;
   selectedSectionIndex: any;
   start: number = 0;
@@ -39,16 +39,17 @@ export class QuestionerPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Questioner');
-    this.schoolId = this.navParams.get('_id');
+    this.submissionId = this.navParams.get('_id');
+    console.log(this.submissionId)
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.selectedSectionIndex = this.navParams.get('selectedSection');
     this.utils.startLoader();
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId)).then(data => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.schoolData = data;
-      const currentEvidences = this.schoolData['assessments'][0] ? this.schoolData['assessments'][0]['evidences'] : this.schoolData['assessments']['evidences']
+      const currentEvidences =  this.schoolData['assessment']['evidences'] ;
       this.selectedEvidenceId = currentEvidences[this.selectedEvidenceIndex].externalId;
-      this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId;
+      this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.submissionId;
       this.isViewOnly = !currentEvidences[this.selectedEvidenceIndex]['startTime'] ? true : false;
       this.questions = currentEvidences[this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
       this.dashbordData = {
@@ -65,19 +66,19 @@ export class QuestionerPage {
     })
     // this.storage.get('schoolsDetails').then(data => {
     //   this.schoolData = JSON.parse(data);
-    //   this.selectedEvidenceId = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
-    //   this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.schoolId;
-    //   // console.log("sample " +this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
-    //   this.isViewOnly = !this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;
-    //   this.questions = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
-    //   // console.log(JSON.stringify(this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name))
+    //   this.selectedEvidenceId = this.schoolData[this.submissionId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
+    //   this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.submissionId;
+    //   // console.log("sample " +this.schoolData[this.submissionId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'])
+    //   this.isViewOnly = !this.schoolData[this.submissionId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['startTime'] ? true : false;
+    //   this.questions = this.schoolData[this.submissionId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
+    //   // console.log(JSON.stringify(this.schoolData[this.submissionId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name))
     //   this.dashbordData = {
     //     questions: this.questions,
-    //     evidenceMethod: this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'],
-    //     sectionName: this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name,
+    //     evidenceMethod: this.schoolData[this.submissionId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'],
+    //     sectionName: this.schoolData[this.submissionId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].name,
     //     currentViewIndex: this.start
     //   }
-    //   this.isCurrentEvidenceSubmitted = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
+    //   this.isCurrentEvidenceSubmitted = this.schoolData[this.submissionId]['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted
     //   // console.log(this.allQuestionsOfEvidence.length + " length of questions");
     //   this.utils.stopLoader();
 
@@ -93,7 +94,7 @@ export class QuestionerPage {
       this.updateTheChildrenQuestions(this.questions[this.start])
     }
     if (this.end < this.questions.length && !status) {
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData)
       this.start++;
       this.end++;;
       this.dashbordData.currentViewIndex = this.start;
@@ -103,7 +104,7 @@ export class QuestionerPage {
       } else if (this.questions[this.start].visibleIf.length && this.questions[this.start].visibleIf[0] && this.checkForQuestionDisplay(this.questions[this.start])) {
       }
     } else if (status === 'completed') {
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData)
       this.navCtrl.pop()
     } else {
       this.next('completed')
@@ -111,7 +112,7 @@ export class QuestionerPage {
   }
 
   updateLocalData(): void {
-    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData)
   }
 
   checkForQuestionDisplay(qst): boolean {
@@ -135,7 +136,7 @@ export class QuestionerPage {
       this.updateTheChildrenQuestions(this.questions[this.start])
     }
     if (this.start > 0) {
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.schoolData)
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData)
       this.start--;
       this.dashbordData.currentViewIndex = this.start;
       this.end--;

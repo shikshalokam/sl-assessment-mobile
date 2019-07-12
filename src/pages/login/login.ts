@@ -63,7 +63,7 @@ export class LoginPage {
 
   
   getCurrentLocation(): void {
-    console.log('getting current location')
+    //console.log('getting current location')
     this.geolocation.getCurrentPosition().then((resp) => {
       this.utils.openToast(JSON.stringify(resp))
   
@@ -73,13 +73,13 @@ export class LoginPage {
   }
 
   isLocationEnabled() {
-    console.log('Is location enabled');
+    //console.log('Is location enabled');
     this.diagnostic.isLocationAvailable().then(isAvailable => {
-      console.log("Location enabled" + isAvailable)
+      //console.log("Location enabled" + isAvailable)
       if (isAvailable) {
         this.getCurrentLocation();
       } else {
-        console.log('GPS offf')
+        //console.log('GPS offf')
       }
     }).catch(error => {
 
@@ -87,25 +87,25 @@ export class LoginPage {
   }
 
   checkForLocationPermissions(): void {
-    console.log('Check permissions');
+    //console.log('Check permissions');
     this.permissions.checkPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(
       result => {
-        console.log('Has permission?', result.hasPermission)
+        //console.log('Has permission?', result.hasPermission)
         if (!result.hasPermission) {
-          console.log("ask permission");
+          //console.log("ask permission");
           this.permissions.requestPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(result => {
             if(result.hasPermission) {
               this.isLocationEnabled();
             }
           }).catch(error => {
-            console.log('error')
+            //console.log('error')
           })
         } else {
-          console.log('yes, Has permission');
+          //console.log('yes, Has permission');
           this.isLocationEnabled();
         }
       }).catch(error => {
-        console.log("Error check for permission" + JSON.stringify(error))
+        //console.log("Error check for permission" + JSON.stringify(error))
       });
   }
 
@@ -117,7 +117,7 @@ export class LoginPage {
     });
 
     toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
+      //console.log('Dismissed toast');
     });
 
     toast.present();

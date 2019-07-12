@@ -81,242 +81,246 @@ export class HomePage {
     private app: App,
     private localStorage: LocalStorageProvider
   ) {
-    this.subscription = this.events.subscribe('localDataUpdated', () => {
-      this.getLocalSchoolDetails();
-    });
+    //console.log("Home page called");
+    // this.subscription = this.events.subscribe('localDataUpdated', () => {
+    //   this.getLocalSchoolDetails();
+    // });
+    // this.userData = this.currentUser.getCurrentUserData();
 
     this.isIos = this.platform.is('ios') ? true : false;
 
   }
 
-  ionViewWillEnter() {
-    this.onInit();
+  ionViewDidLoad() {
+    this.userData = this.currentUser.getCurrentUserData();
+    this.navCtrl.id = "HomePage";
+
     if (this.network.type != 'none') {
       this.networkAvailable = true;
     }
   }
 
-  getSchoolListApi(): void {
-    this.utils.startLoader();
-    this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors + '/', response => {
-      this.schoolList = response.result;
-      this.storage.set('schools', this.schoolList);
-      if (!this.schoolList.length) {
-        this.utils.stopLoader();
-        this.errorMsg = response.message;
-        // this.unauthorized(response.message);
-      } else {
-        this.utils.stopLoader();
-      }
-    }, error => {
-      this.utils.stopLoader();
-      if (error.status == '401') {
-        this.appCtrl.getRootNav().push(WelcomePage);
-      }
-    })
-  }
+  // getSchoolListApi(): void {
+  //   this.utils.startLoader();
+  //   this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors + '/', response => {
+  //     this.schoolList = response.result;
+  //     this.storage.set('schools', this.schoolList);
+  //     if (!this.schoolList.length) {
+  //       this.utils.stopLoader();
+  //       this.errorMsg = response.message;
+  //       // this.unauthorized(response.message);
+  //     } else {
+  //       this.utils.stopLoader();
+  //     }
+  //   }, error => {
+  //     this.utils.stopLoader();
+  //     if (error.status == '401') {
+  //       this.appCtrl.getRootNav().push(WelcomePage);
+  //     }
+  //   })
+  // }
   goToPage(index) {
     this.events.publish('navigateTab',this.allPages[index]['name'])
   }
-  unauthorized(msg) {
-    let alert = this.alertCntrl.create({
-      title: "Unauthorized",
-      subTitle: msg,
-      buttons: [
-        {
-          text: 'Ok',
-          role: 'role',
-          handler: data => {
-            this.apiService.doLogout().then(success => {
-              this.currentUser.removeUser();
-              let nav = this.app.getRootNav();
-              nav.setRoot(WelcomePage);
-            }).then(error => {
-            })
-          }
-        }
-      ],
-      enableBackdropDismiss: false
-    });
-    alert.present();
-  }
+  // unauthorized(msg) {
+  //   let alert = this.alertCntrl.create({
+  //     title: "Unauthorized",
+  //     subTitle: msg,
+  //     buttons: [
+  //       {
+  //         text: 'Ok',
+  //         role: 'role',
+  //         handler: data => {
+  //           this.apiService.doLogout().then(success => {
+  //             this.currentUser.removeUser();
+  //             let nav = this.app.getRootNav();
+  //             nav.setRoot(WelcomePage);
+  //           }).then(error => {
+  //           })
+  //         }
+  //       }
+  //     ],
+  //     enableBackdropDismiss: false
+  //   });
+  //   alert.present();
+  // }
 
 
 
-  getSchoolDetails(): void {
-    if (!this.schoolIndex) {
-      this.utils.stopLoader();
-      this.utils.startLoader(`Please wait while fetching school details.`)
-    }
-    this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[this.schoolIndex]['_id'] + '/', response => {
-      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolList[this.schoolIndex]['_id']), response.result);
-      this.localStorage.setLocalStorage("generalQuestions_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions'] ? response.result['assessments'][0]['generalQuestions'] : null);
-      this.localStorage.setLocalStorage("generalQuestionsCopy_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
-      this.schoolList[this.schoolIndex]['submissionId'] = response.result['assessments'][0].submissionId;
-      this.schoolList[this.schoolIndex]['programId'] = response.result.program._id;
-      this.mappSubmissionData(response.result);
-      this.schoolList[this.schoolIndex]['schoolDetailsFetched'] = true;
-      this.localStorage.setLocalStorage('schools', this.schoolList);
-      if (this.schoolIndex === this.schoolList.length - 1) {
-        this.getParentRegistry();
-      } else {
-        this.schoolIndex++;
-        this.getSchoolDetails();
-      }
-    }, error => {
-    })
-  }
+  // getSchoolDetails(): void {
+  //   if (!this.schoolIndex) {
+  //     this.utils.stopLoader();
+  //     this.utils.startLoader(`Please wait while fetching school details.`)
+  //   }
+  //   this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[this.schoolIndex]['_id'] + '/', response => {
+  //     this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolList[this.schoolIndex]['_id']), response.result);
+  //     this.localStorage.setLocalStorage("generalQuestions_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions'] ? response.result['assessments'][0]['generalQuestions'] : null);
+  //     this.localStorage.setLocalStorage("generalQuestionsCopy_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
+  //     this.schoolList[this.schoolIndex]['submissionId'] = response.result['assessments'][0].submissionId;
+  //     this.schoolList[this.schoolIndex]['programId'] = response.result.program._id;
+  //     this.mappSubmissionData(response.result);
+  //     this.schoolList[this.schoolIndex]['schoolDetailsFetched'] = true;
+  //     this.localStorage.setLocalStorage('schools', this.schoolList);
+  //     if (this.schoolIndex === this.schoolList.length - 1) {
+  //       this.getParentRegistry();
+  //     } else {
+  //       this.schoolIndex++;
+  //       this.getSchoolDetails();
+  //     }
+  //   }, error => {
+  //   })
+  // }
 
-  mappSubmissionData(schoolDetailsObj): void {
-    this.ulsd.mapSubmissionDataToQuestion(schoolDetailsObj);
-  }
+  // mappSubmissionData(schoolDetailsObj): void {
+  //   this.ulsd.mapSubmissionDataToQuestion(schoolDetailsObj);
+  // }
 
-  openAction(school, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
-    const options = { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolDetails, parent: this };
-    this.evdnsServ.openActionSheet(options);
-  }
+  // openAction(school, evidenceIndex) {
+  //   this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
+  //   const options = { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolDetails, parent: this };
+  //   this.evdnsServ.openActionSheet(options);
+  // }
 
-  goToRating(school): void {
-    const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
-    this.ratingService.checkForRatingDetails(submissionId, school);
-  }
+  // goToRating(school): void {
+  //   const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
+  //   this.ratingService.checkForRatingDetails(submissionId, school);
+  // }
 
-  getParentRegistryForm(): void {
-    this.apiService.httpGet(AppConfigs.parentInfo.getParentRegisterForm, success => {
-      this.localStorage.setLocalStorage('parentRegisterForm', success.result)
-    }, error => {
-    })
-  }
+  // getParentRegistryForm(): void {
+  //   this.apiService.httpGet(AppConfigs.parentInfo.getParentRegisterForm, success => {
+  //     this.localStorage.setLocalStorage('parentRegisterForm', success.result)
+  //   }, error => {
+  //   })
+  // }
 
-  getLocalSchoolDetails(): void {
-    this.storage.get('schoolsDetails').then(details => {
-      this.schoolDetails = JSON.parse(details);
-      for (const schoolId of Object.keys(this.schoolDetails)) {
-        this.checkForProgressStatus(this.schoolDetails[schoolId]['assessments'][0]['evidences'])
-      }
-    })
-    this.localStorage.getLocalStorage('generalQuestions').then(questions => {
-      if (questions) {
-        this.generalQuestions = questions;
-      }
-    }).catch(error => {
+  // getLocalSchoolDetails(): void {
+  //   //console.log("get local school details");
+  //   this.storage.get('schoolsDetails').then(details => {
+  //     this.schoolDetails = JSON.parse(details);
+  //     for (const schoolId of Object.keys(this.schoolDetails)) {
+  //       this.checkForProgressStatus(this.schoolDetails[schoolId]['assessments'][0]['evidences'])
+  //     }
+  //   })
+  //   this.localStorage.getLocalStorage('generalQuestions').then(questions => {
+  //     if (questions) {
+  //       this.generalQuestions = questions;
+  //     }
+  //   }).catch(error => {
 
-    })
-  }
+  //   })
+  // }
 
-  goToSections(school, evidenceIndex) {
-    if (this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].startTime) {
-      this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
-      this.appCtrl.getRootNav().push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, parent: this })
-    } else {
-      this.openAction(school, evidenceIndex);
-    }
-  }
+  // goToSections(school, evidenceIndex) {
+  //   if (this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].startTime) {
+  //     this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
+  //     this.appCtrl.getRootNav().push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, parent: this })
+  //   } else {
+  //     this.openAction(school, evidenceIndex);
+  //   }
+  // }
 
-  goToGeneralQuestionList(school): void {
-    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: school._id, name: school.name })
-  }
+  // goToGeneralQuestionList(school): void {
+  //   this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: school._id, name: school.name })
+  // }
 
-  gotToEvidenceList(school) {
-    this.appCtrl.getRootNav().push('EvidenceListPage', { _id: school._id, name: school.name, parent: this })
-  }
+  // gotToEvidenceList(school) {
+  //   this.appCtrl.getRootNav().push('EvidenceListPage', { _id: school._id, name: school.name, parent: this })
+  // }
 
-  goToProfile(school): void {
-    this.appCtrl.getRootNav().push('EntityProfilePage', { _id: school._id, name: school.name, parent: this })
-  }
+  // goToProfile(school): void {
+  //   this.appCtrl.getRootNav().push('EntityProfilePage', { _id: school._id, name: school.name, parent: this })
+  // }
 
-  getParentRegistry() {
-    for (const school of this.schoolList) {
-      this.apiService.httpGet(AppConfigs.parentInfo.getParentList + school['_id'], data => {
-        this.parentListSuccessCallback(data.result)
-      }, error => {
+  // getParentRegistry() {
+  //   for (const school of this.schoolList) {
+  //     this.apiService.httpGet(AppConfigs.parentInfo.getParentList + school['_id'], data => {
+  //       this.parentListSuccessCallback(data.result)
+  //     }, error => {
 
-      })
-    }
-  }
+  //     })
+  //   }
+  // }
 
-  parentListSuccessCallback = (parentdata) => {
-    this.parentList.push(parentdata);
-    for (const parent of parentdata) {
-      if (parent) {
-        parent.uploaded = true;
-      }
-    }
-    const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
-    this.localStorage.setLocalStorage("parentDetails_" + schoolId, parentdata)
-    if (this.parentList.length === this.schoolList.length) {
-      this.utils.stopLoader();
-      for (const parent of parentdata) {
-        if (parent) {
-          parent.uploaded = true;
-        }
-      }
-    }
-  }
+  // parentListSuccessCallback = (parentdata) => {
+  //   this.parentList.push(parentdata);
+  //   for (const parent of parentdata) {
+  //     if (parent) {
+  //       parent.uploaded = true;
+  //     }
+  //   }
+  //   const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
+  //   this.localStorage.setLocalStorage("parentDetails_" + schoolId, parentdata)
+  //   if (this.parentList.length === this.schoolList.length) {
+  //     this.utils.stopLoader();
+  //     for (const parent of parentdata) {
+  //       if (parent) {
+  //         parent.uploaded = true;
+  //       }
+  //     }
+  //   }
+  // }
 
 
-  checkForProgressStatus(evidences) {
-    for (const evidence of evidences) {
-      if (evidence.isSubmitted) {
-        evidence.progressStatus = 'submitted';
-      } else if (!evidence.startTime) {
-        evidence.progressStatus = '';
-      } else {
-        evidence.progressStatus = 'completed';
-        for (const section of evidence.sections) {
-          if (section.progressStatus === 'inProgress' || !section.progressStatus) {
-            evidence.progressStatus = 'inProgress';
-          }
-        }
-      }
-    }
-  }
+  // checkForProgressStatus(evidences) {
+  //   for (const evidence of evidences) {
+  //     if (evidence.isSubmitted) {
+  //       evidence.progressStatus = 'submitted';
+  //     } else if (!evidence.startTime) {
+  //       evidence.progressStatus = '';
+  //     } else {
+  //       evidence.progressStatus = 'completed';
+  //       for (const section of evidence.sections) {
+  //         if (section.progressStatus === 'inProgress' || !section.progressStatus) {
+  //           evidence.progressStatus = 'inProgress';
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
-  onInit() {
-    this.navCtrl.id = "HomePage";
-    this.storage.get('parentRegisterForm').then(form => {
-      if (!form) {
-        this.getParentRegistryForm();
-      }
-    })
-    this.userData = this.currentUser.getCurrentUserData();
-    this.localStorage.getLocalStorage('schools').then(schools => {
-      this.schoolList = schools;
-    }).catch(error => {
-      this.getSchoolListApi();
-    })
-  }
+  // onInit() {
+  //   // this.storage.get('parentRegisterForm').then(form => {
+  //   //   if (!form) {
+  //   //     this.getParentRegistryForm();
+  //   //   }
+  //   // })
+  //   // this.userData = this.currentUser.getCurrentUserData();
+  //   // this.localStorage.getLocalStorage('schools').then(schools => {
+  //   //   this.schoolList = schools;
+  //   // }).catch(error => {
+  //   //   this.getSchoolListApi();
+  //   // })
+  // }
 
-  checkForAllSchoolDetailsFetchedStatus() {
-    let index = 0;
-    for (const school of this.schoolList) {
-      if (!school['schoolDetailsFetched']) {
-        this.schoolIndex = index;
-        this.getSchoolDetails();
-        break;
-      }
-      index++;
-    }
-  }
+  // checkForAllSchoolDetailsFetchedStatus() {
+  //   let index = 0;
+  //   for (const school of this.schoolList) {
+  //     if (!school['schoolDetailsFetched']) {
+  //       this.schoolIndex = index;
+  //       this.getSchoolDetails();
+  //       break;
+  //     }
+  //     index++;
+  //   }
+  // }
 
-  getRatedQuestions(school): void {
-    const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
-    this.ratingService.fetchRatedQuestions(submissionId, school);
-  }
+  // getRatedQuestions(school): void {
+  //   const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
+  //   this.ratingService.fetchRatedQuestions(submissionId, school);
+  // }
 
-  openMenu(myEvent, index) {
-    let popover = this.popoverCtrl.create(MenuItemComponent, {
-      submissionId: this.schoolList[index]['submissionId'],
-      _id: this.schoolList[index]['_id'],
-      name: this.schoolList[index]['name'],
-      parent: this,
-      programId: this.schoolList['programId']
-    });
-    popover.present({
-      ev: myEvent
-    });
-  }
+  // openMenu(myEvent, index) {
+  //   let popover = this.popoverCtrl.create(MenuItemComponent, {
+  //     submissionId: this.schoolList[index]['submissionId'],
+  //     _id: this.schoolList[index]['_id'],
+  //     name: this.schoolList[index]['name'],
+  //     parent: this,
+  //     programId: this.schoolList['programId']
+  //   });
+  //   popover.present({
+  //     ev: myEvent
+  //   });
+  // }
 
   ionViewWillLeave() {
     if (this.subscription) {
