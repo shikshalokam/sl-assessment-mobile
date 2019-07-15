@@ -134,7 +134,6 @@ import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-f
     RegistryListPageModule,
     GeneralQuestionListPageModule,
     IonicStepperModule,
-
     ObservationsPageModule  ],
   bootstrap: [IonicApp],
   entryComponents: [
