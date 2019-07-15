@@ -166,7 +166,8 @@
         "inprogress": "In Progress",
         "submitted": "Submitted",
         "notApplicable": "NA",
-        "readytoPublish": "Ready to Publish"
+        "readytoPublish": "Ready to Publish",
+        "files": "Files"
     },
     "languages": {
         "english": "English",
