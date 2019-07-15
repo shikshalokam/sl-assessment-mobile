@@ -149,7 +149,8 @@
         <variable name="DEEPLINK_5_HOST" value=" " />
     </plugin>
     <allow-navigation href="http://10.0.0.20:8100" />
+    <allow-navigation href="http://localhost:8100" sessionid="8ac97154" />
     <engine name="browser" spec="5.0.4" />
-    <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.4" />
+    <engine name="ios" spec="4.5.5" />
 </widget>
