@@ -1,15 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, Events, Platform } from 'ionic-angular';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
-import { SocialSharing } from '@ionic-native/social-sharing';
-import { FileChooser } from '@ionic-native/file-chooser';
-import { Base64 } from '@ionic-native/base64/ngx';
-
 import { Network } from '@ionic-native/network';
 import { InstitutionsEntityList } from '../institutions-entity-list/institutions-entity-list';
 import { IndividualListingPage } from '../individual-listing/individual-listing';
 import { ObservationsPage } from '../observations/observations';
-import { File } from '@ionic-native/file';
 import { SharingFeaturesProvider } from '../../providers/sharing-features/sharing-features';
 
 declare var cordova: any;
