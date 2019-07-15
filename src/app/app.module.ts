@@ -30,6 +30,8 @@ import { QuestionerPageModule } from '../pages/questioner/questioner.module';
 import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
 import { FaqPage } from '../pages/faq/faq';
+import { SocialSharing } from '@ionic-native/social-sharing';
+
 import { EntityProfileEditPage } from '../pages/entity-profile-edit/entity-profile-edit';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
@@ -76,6 +78,8 @@ import { IonicStepperModule } from 'ionic-stepper';
 import { ObservationProvider } from '../providers/observation/observation';
 import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about';
 import { EntityListingPage } from '../pages/entity-listing/entity-listing';
+import { FileChooser } from '@ionic-native/file-chooser';
+import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-features';
 
 @NgModule({
   declarations: [
@@ -159,6 +163,8 @@ import { EntityListingPage } from '../pages/entity-listing/entity-listing';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     InAppBrowser,
     AuthProvider,
+    FileChooser,
+
     CurrentUserProvider,
     Network,
     SchoolListProvider,
@@ -189,7 +195,9 @@ import { EntityListingPage } from '../pages/entity-listing/entity-listing';
     HTTP,
     AssessmentServiceProvider,
     Deeplinks,
-    ObservationProvider
+    ObservationProvider,
+    SocialSharing,
+    SharingFeaturesProvider
 
   ]
 })
