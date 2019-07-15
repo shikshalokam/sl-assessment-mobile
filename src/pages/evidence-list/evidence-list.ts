@@ -34,7 +34,7 @@ export class EvidenceListPage {
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(successData => {
       this.utils.stopLoader();
       this.entityData = successData;
-      // console.log(JSON.stringify(successData));
+      console.log(JSON.stringify(successData));
       this.entityEvidences = this.entityData['assessment']['evidences'] ;
       this.mapCompletedAndTotalQuestions();
       this.checkForProgressStatus();
@@ -55,7 +55,10 @@ export class EvidenceListPage {
         totalQuestions = totalQuestions + section.totalQuestions;
         completedQuestions = completedQuestions + section.completedQuestions;
       }
-      const percentage = totalQuestions ? (completedQuestions/totalQuestions)*100 : 0;
+      let percentage = totalQuestions ? (completedQuestions/totalQuestions)*100 : 0;
+      if(!completedQuestions) {
+        percentage = 0;
+      }
       evidence.completePercentage = Math.trunc(percentage) ;
     }
   }

@@ -1,6 +1,6 @@
 progress-bar {
     .progress-outer {
-        width: 100%;
+        flex: 1;
         text-align: center;
         color: $white-color;
     }
@@ -9,8 +9,7 @@ progress-bar {
         min-height: 12px;
         white-space: nowrap;
         overflow: hidden;
-        font-size: 10px;
-        font-weight: 500;
+        
     }
 
     .completed {
@@ -27,5 +26,11 @@ progress-bar {
         div {
             background-color: $orange-color;
         }
+    }
+
+    .textStyle {
+        font-size: 10px;
+        font-weight: 500;
+        margin-left: 5px;
     }
 }

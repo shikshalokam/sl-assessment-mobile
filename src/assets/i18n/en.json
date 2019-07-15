@@ -45,6 +45,8 @@
         "yes":"Yes",
         "ok":"Ok",
         "no":"No",
+        "uploadImage":"Upload Image",
+        "uploadFile":"Upload File",
         "publish":"Publish",
         "chooseAction":"Choose a action",
         "deleteObservation":"Are you sure you want to delete the observation?",
@@ -164,7 +166,8 @@
         "inprogress": "In Progress",
         "submitted": "Submitted",
         "notApplicable": "NA",
-        "readytoPublish": "Ready to Publish"
+        "readytoPublish": "Ready to Publish",
+        "files": "Files"
     },
     "languages": {
         "english": "English",
