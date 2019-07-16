@@ -24,13 +24,11 @@ export class AudioRecordingListingComponent {
   audio: MediaObject;
   audioList: any[] = [];
   isIos: boolean = this.platform.is('ios');
-<<<<<<< HEAD
+
   interval: number = 0;
   timeLeft: number = 0;
   minutes: number = 0;
   seconds: number = 0;
-=======
->>>>>>> audio recoding in app
 
   constructor(
     private media: Media,
@@ -40,7 +38,7 @@ export class AudioRecordingListingComponent {
   ) {
 
     this.isIos = this.platform.is('ios') ? true : false;
-<<<<<<< HEAD
+
     console.log("on const")
     this.getAudioList();
 
@@ -65,20 +63,11 @@ export class AudioRecordingListingComponent {
       // this.audioList = JSON.parse(localStorage.getItem("audiolist"));
       // console.log(this.audioList);
     // }
-=======
-
 
 
   }
   
 
-  getAudioList() {
-    if(localStorage.getItem("audiolist")) {
-      this.audioList = JSON.parse(localStorage.getItem("audiolist"));
-      console.log(this.audioList);
-    }
->>>>>>> audio recoding in app
-  }
 
 
   startRecord() {
@@ -88,33 +77,18 @@ export class AudioRecordingListingComponent {
         this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
         this.filePath = this.file.documentsDirectory +"images/"+ this.fileName;
         this.audio = this.media.create(this.filePath);
-<<<<<<< HEAD
         this.recording = true;
         this.startTimer();
         this.audio.startRecord();
-
-
-=======
-        this.audio.startRecord();
-        this.recording = true;
->>>>>>> audio recoding in app
       }).catch(err => {
-
         this.file.createDir(cordova.file.documentsDirectory, 'images', false).then(success => {
           this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
           this.filePath = this.file.documentsDirectory+"images/" + this.fileName;
           this.audio = this.media.create(this.filePath);
-<<<<<<< HEAD
-
           this.recording = true;
         this.startTimer();
         this.audio.startRecord();
 
-
-=======
-          this.audio.startRecord();
-          this.recording = true;
->>>>>>> audio recoding in app
         }, error => { })
       });
 
@@ -125,16 +99,9 @@ export class AudioRecordingListingComponent {
         this.filePath = this.file.externalDataDirectory +"images/"+ this.fileName;
         console.log(this.filePath)
         this.audio = this.media.create(this.filePath);
-<<<<<<< HEAD
         this.recording = true;
         this.startTimer();
         this.audio.startRecord();
-
-
-=======
-        this.audio.startRecord();
-        this.recording = true;
->>>>>>> audio recoding in app
       }).catch(err => {
         console.log("No image File")
 
@@ -144,25 +111,17 @@ export class AudioRecordingListingComponent {
         this.filePath = this.file.externalDataDirectory+"images/"+this.fileName;
         console.log(this.filePath)
         this.audio = this.media.create(this.filePath);
-<<<<<<< HEAD
         this.recording = true;
         this.startTimer();
         this.audio.startRecord();
 
 
-
-
-=======
-        this.audio.startRecord();
-        this.recording = true;
->>>>>>> audio recoding in app
         }, error => { })
       });
      
     }
   
   }
-<<<<<<< HEAD
   startTimer() {
     if(this.recording){
     this.interval = setInterval(() => {
@@ -192,18 +151,8 @@ export class AudioRecordingListingComponent {
     let data = { name: this.fileName , uploaded : false , audio : true};
     this.audioList.push(data);
     // this.localStorage.setLocalStorage("audiolist", JSON.stringify(this.audioList));
-=======
 
-  stopRecord() {
-    console.log(this.submissionId)
-
-    this.audio.stopRecord();
-    let data = { filename: this.fileName };
-    this.audioList.push(data);
-    localStorage.setItem("audiolist", JSON.stringify(this.audioList));
-    this.recording = false;
->>>>>>> audio recoding in app
-    this.getAudioList();
+  
     this.localStorage.getLocalStorage('allImageList').then( data =>{
       // console.log();
      console.log(data +"localstorage");
@@ -211,14 +160,9 @@ export class AudioRecordingListingComponent {
       data= JSON.parse(data)
      data[this.submissionId][this.evidenceId].push({
        name: this.fileName,
-<<<<<<< HEAD
        uploaded : false,
        audio : true
-=======
-       uploaded : false
->>>>>>> audio recoding in app
      })
-
      this.localStorage.setLocalStorage( 'allImageList', JSON.stringify(data));
     } ).catch( error =>{
       console.log("no local")
