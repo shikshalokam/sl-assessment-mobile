@@ -135,7 +135,8 @@ export class ImageUploadComponent implements OnInit {
 
   filePickerForIOS() {
     this.iosFilePicker.pickFile().then(data => {
-    }).then(error => {
+      this.checkForLocalFolder("file://" +data);
+    }).catch(error => {
 
     })
   }
