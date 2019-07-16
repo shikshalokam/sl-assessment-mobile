@@ -68,7 +68,7 @@
     "cordova-plugin-ionic-webview": "2.4.1",
     "cordova-plugin-media": "5.0.3",
     "cordova-plugin-network-information": "2.0.1",
-    "cordova-plugin-photo-library": "2.1.1",
+    "cordova-plugin-photo-library": "2.2.1",
     "cordova-plugin-request-location-accuracy": "2.3.0",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "2.4.2",
@@ -161,7 +161,9 @@
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
       },
       "cordova-plugin-filechooser": {},
-      "cordova-plugin-media": {}
+      "cordova-plugin-media": {
+        "KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE": "NO"
+      }
     },
     "platforms": [
       "browser",
