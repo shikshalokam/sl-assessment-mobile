@@ -10,6 +10,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { IOSFilePicker } from '@ionic-native/file-picker';
+import { FILE_EXTENSION_HEADERS } from './mimTypes';
+import { FileOpener } from '@ionic-native/file-opener';
 
 declare var cordova: any;
 
@@ -24,14 +26,14 @@ export class ImageUploadComponent implements OnInit {
   isIos: boolean;
   appFolderPath: string;
   videoFormats = ["mp4", "WMV", "WEBM", "flv", "avi", "3GP", "OGG"];
-  audioFormats = ["AIF", "cda", "mpa", "ogg", "wav", "wma",'mp3'];
+  audioFormats = ["AIF", "cda", "mpa", "ogg", "wav", "wma", 'mp3'];
   pptFormats = ["ppt", "pptx", "pps", "ppsx"];
   wordFormats = ["docx", "doc", "docm", "dotx"];
   imageFormats = ['jpg', 'png']
   pdfFormats = ["pdf"];
   spreadSheetFormats = ["xls", "xlsx"];
 
-  
+
   @Input()
   set data(data) {
     this.datas = data;
@@ -61,6 +63,7 @@ export class ImageUploadComponent implements OnInit {
     private translate: TranslateService,
     private filePath: FilePath,
     private iosFilePicker: IOSFilePicker,
+    private fileOpener: FileOpener,
     private fileChooser: FileChooser,
     private alertCtrl: AlertController) {
     console.log('Hello ImageUploadComponent Component');
@@ -135,7 +138,7 @@ export class ImageUploadComponent implements OnInit {
 
   filePickerForIOS() {
     this.iosFilePicker.pickFile().then(data => {
-      this.checkForLocalFolder("file://" +data);
+      this.checkForLocalFolder("file://" + data);
     }).catch(error => {
 
     })
@@ -219,7 +222,7 @@ export class ImageUploadComponent implements OnInit {
 
   pushToFileList(fileName) {
     this.file.checkFile(this.appFolderPath + '/', fileName).then(response => {
-      if (this.imageFormats.indexOf(this.getExtensionFromName(fileName)) >=0) {
+      if (this.imageFormats.indexOf(this.getExtensionFromName(fileName)) >= 0) {
         this.file.readAsDataURL(this.appFolderPath, fileName).then(data => {
           this.imageList.push({ data: data, imageName: fileName, extension: this.getExtensionFromName(fileName) });
           this.setLocalDatas(fileName);
@@ -257,7 +260,7 @@ export class ImageUploadComponent implements OnInit {
     for (const image of imageList) {
       this.file.checkFile(this.appFolderPath + '/', image).then(response => {
 
-        if (this.imageFormats.indexOf(this.getExtensionFromName(image)) >=0) {
+        if (this.imageFormats.indexOf(this.getExtensionFromName(image)) >= 0) {
           this.file.readAsDataURL(this.appFolderPath, image).then(data => {
             this.imageList.push({ data: data, imageName: image, extension: this.getExtensionFromName(image) });
             // this.setLocalDatas(fileName);
@@ -343,6 +346,14 @@ export class ImageUploadComponent implements OnInit {
 
   updateLocalImageList() {
     this.utils.setLocalImages(this.allLocalImageList, this.generalQuestion);
+  }
+
+  previewFile(fileName,extension) {
+    this.fileOpener.open(this.appFolderPath+'/'+fileName, FILE_EXTENSION_HEADERS[extension])
+      .then(() => console.log('File is opened'))
+      .catch(e =>{
+        this.utils.openToast('No file readers available');
+      })
   }
 
 }
