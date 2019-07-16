@@ -36,6 +36,7 @@ import { AudioListComponent } from './audio-list/audio-list';
 		InputTypeComponent,
 		RadioTypeComponent,
     MultipleChoiceTypeComponent,
+    
     DateTypeComponent,
     RemarksComponent,
     ImageUploadComponent,
