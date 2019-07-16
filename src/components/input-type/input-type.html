@@ -24,5 +24,7 @@
 
   <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
   <image-upload *ngIf="data?.file" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [submissionId]="submissionId"></image-upload>
+  <audio-recording-listing  [submissionId]="submissionId" [evidenceId]="evidenceId" ></audio-recording-listing>
+
 </div>
 <!-- <footer-buttons *ngIf="!hideButton" [isFirst]="isFirst" [isLast]="isLast" (nextAction)="next()" (backAction)="back()"></footer-buttons> -->

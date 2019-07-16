@@ -26,6 +26,8 @@ import { QuestionHeadingComponent } from './question-heading/question-heading';
 import { ProgressBarComponent } from './progress-bar/progress-bar';
 import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-menu-pop-over';
 import { ProgramListingComponent } from './program-listing/program-listing';
+import { AudioRecordingListingComponent } from './audio-recording-listing/audio-recording-listing';
+import { AudioListComponent } from './audio-list/audio-list';
 
 @NgModule({
 	declarations: [
@@ -48,7 +50,9 @@ import { ProgramListingComponent } from './program-listing/program-listing';
     QuestionHeadingComponent,
     ProgressBarComponent,
     GenericMenuPopOverComponent,
-    ProgramListingComponent
+    ProgramListingComponent,
+    AudioRecordingListingComponent,
+    AudioListComponent
   ],
 	imports: [
 		IonicModule,
@@ -77,7 +81,9 @@ import { ProgramListingComponent } from './program-listing/program-listing';
     QuestionHeadingComponent,
     ProgressBarComponent,
     GenericMenuPopOverComponent,
-    ProgramListingComponent
+    ProgramListingComponent,
+    AudioRecordingListingComponent,
+    AudioListComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
