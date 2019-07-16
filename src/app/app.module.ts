@@ -40,6 +40,7 @@ import { FileTransfer} from '@ionic-native/file-transfer';
 import { ImagePicker } from '@ionic-native/image-picker';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { IOSFilePicker } from '@ionic-native/file-picker';
+import { FileOpener } from '@ionic-native/file-opener';
 
 import { ImageListingPage } from '../pages/image-listing/image-listing';
 import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
@@ -199,7 +200,8 @@ import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-f
     ObservationProvider,
     SocialSharing,
     SharingFeaturesProvider,
-    IOSFilePicker
+    IOSFilePicker,
+    FileOpener
 
   ]
 })
