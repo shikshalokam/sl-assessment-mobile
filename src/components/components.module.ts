@@ -28,6 +28,8 @@ import { GenericMenuPopOverComponent } from './generic-menu-pop-over/generic-men
 import { ProgramListingComponent } from './program-listing/program-listing';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
+import { AudioRecordingListingComponent } from './audio-recording-listing/audio-recording-listing';
+import { AudioListComponent } from './audio-list/audio-list';
 
 @NgModule({
 	declarations: [
@@ -50,7 +52,9 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     QuestionHeadingComponent,
     ProgressBarComponent,
     GenericMenuPopOverComponent,
-    ProgramListingComponent
+    ProgramListingComponent,
+    AudioRecordingListingComponent,
+    AudioListComponent
   ],
 	imports: [
 		IonicModule,
@@ -79,7 +83,9 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     QuestionHeadingComponent,
     ProgressBarComponent,
     GenericMenuPopOverComponent,
-    ProgramListingComponent
+    ProgramListingComponent,
+    AudioRecordingListingComponent,
+    AudioListComponent
 	],
 	entryComponents: [
 		InputTypeComponent,

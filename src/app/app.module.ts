@@ -83,6 +83,7 @@ import { ObservationProvider } from '../providers/observation/observation';
 import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about';
 import { EntityListingPage } from '../pages/entity-listing/entity-listing';
 import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-features';
+import { Media } from '@ionic-native/media';
 
 @NgModule({
   declarations: [
@@ -201,8 +202,9 @@ import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-f
     SocialSharing,
     SharingFeaturesProvider,
     IOSFilePicker,
-    FileOpener
+    FileOpener,
 
+    Media,
   ]
 })
 export class AppModule { }
