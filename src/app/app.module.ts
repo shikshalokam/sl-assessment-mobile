@@ -208,6 +208,7 @@ import { Media } from '@ionic-native/media';
     IOSFilePicker,
     FileOpener,
     HintProvider,
+
     Media,
   ]
 })
