@@ -29,11 +29,9 @@ export class AudioListComponent {
       index : index
     })
   }
-<<<<<<< HEAD
+
   delete(fileName,index){
     
   }
-=======
->>>>>>> audio recoding in app
 
 }

@@ -1,7 +1,7 @@
 <!-- Generated template for the AudioRecordingListingComponent component -->
 <ion-card>
   <ion-card-content>
-<<<<<<< HEAD
+
     <ion-row *ngIf="!recording">
         <button ion-button primary (click)="startRecord()">
           <ion-icon name="mic"></ion-icon>&nbsp;&nbsp;Start Record
@@ -16,25 +16,16 @@
          <span *ngIf="minutes < 10">0</span>{{minutes}} :  <span *ngIf="seconds < 10">0</span>{{seconds}}
        </h1>
     </ion-row>
-=======
-    <ion-card-title>
-      <button ion-button primary (click)="stopRecord()" *ngIf="recording"><ion-icon name="mic-off"></ion-icon>&nbsp;&nbsp;Stop Record</button>
-      <button ion-button primary (click)="startRecord()" *ngIf="!recording"><ion-icon name="mic"></ion-icon>&nbsp;&nbsp;Start Record</button>
-    </ion-card-title>
->>>>>>> audio recoding in app
+
+   
+
   </ion-card-content>
 </ion-card>
 <ion-list>
 
-<<<<<<< HEAD
-  <span *ngFor="let audio of audioList; index as i;">
-    <audio-list (audioPlay)="playAudio($event)" [audioList]="audio"></audio-list>
-  </span>
-=======
 <span *ngFor="let audio of audioList; index as i;">
     <audio-list (audioPlay)="playAudio($event)" [audioList]="audio"></audio-list>
 </span>
->>>>>>> audio recoding in app
   <!-- <ion-item *ngFor="let audio of audioList; index as i;">
     <p>{{audio.filename}}</p>
     <button ion-button clear item-end large (click)="playAudio(audio.filename, i)"><ion-icon  *ngIf="!playFlag" name="play"></ion-icon><ion-icon  *ngIf="playFlag" name="pause"></ion-icon></button>
