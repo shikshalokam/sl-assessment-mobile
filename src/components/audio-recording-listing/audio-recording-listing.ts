@@ -152,7 +152,6 @@ export class AudioRecordingListingComponent {
 
   
     this.localStorage.getLocalStorage('allImageList').then( data =>{
-      // console.log();
      console.log(data +"localstorage");
 
       data= JSON.parse(data)
