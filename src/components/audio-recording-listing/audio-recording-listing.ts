@@ -37,17 +37,30 @@ export class AudioRecordingListingComponent {
   ) {
 
     this.isIos = this.platform.is('ios') ? true : false;
-
-
+    console.log("on const")
+    this.getAudioList();
 
   }
-  
+  // ionViewDidLoad(){
+  //   console.log("on did load")
+  //   this.getAudioList();
+  // }
 
   getAudioList() {
-    if(localStorage.getItem("audiolist")) {
-      this.audioList = JSON.parse(localStorage.getItem("audiolist"));
-      console.log(this.audioList);
-    }
+    this.localStorage.getLocalStorage("allImageList").then(data =>{
+      data = JSON.parse(data);
+      data[this.submissionId][this.evidenceId].forEach(element => {
+          if (element.audio)
+          {
+            this.audioList.push(element);
+          }
+      });
+    }).catch( error =>{
+
+    })
+      // this.audioList = JSON.parse(localStorage.getItem("audiolist"));
+      // console.log(this.audioList);
+    // }
   }
 
 
@@ -138,9 +151,9 @@ export class AudioRecordingListingComponent {
     this.seconds = 0;
     clearInterval(this.interval)
     this.audio.stopRecord();
-    let data = { filename: this.fileName };
+    let data = { name: this.fileName , uploaded : false , audio : true};
     this.audioList.push(data);
-    localStorage.setItem("audiolist", JSON.stringify(this.audioList));
+    // this.localStorage.setLocalStorage("audiolist", JSON.stringify(this.audioList));
     this.getAudioList();
     this.localStorage.getLocalStorage('allImageList').then( data =>{
       // console.log();
@@ -149,7 +162,8 @@ export class AudioRecordingListingComponent {
       data= JSON.parse(data)
      data[this.submissionId][this.evidenceId].push({
        name: this.fileName,
-       uploaded : false
+       uploaded : false,
+       audio : true
      })
 
      this.localStorage.setLocalStorage( 'allImageList', JSON.stringify(data));
