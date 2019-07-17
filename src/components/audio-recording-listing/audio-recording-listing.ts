@@ -24,6 +24,10 @@ export class AudioRecordingListingComponent {
   audio: MediaObject;
   audioList: any[] = [];
   isIos: boolean = this.platform.is('ios');
+  interval: number = 0;
+  timeLeft: number = 0;
+  minutes: number = 0;
+  seconds: number = 0;
 
   constructor(
     private media: Media,
@@ -54,16 +58,23 @@ export class AudioRecordingListingComponent {
         this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
         this.filePath = this.file.documentsDirectory +"images/"+ this.fileName;
         this.audio = this.media.create(this.filePath);
-        this.audio.startRecord();
         this.recording = true;
+        this.startTimer();
+        this.audio.startRecord();
+
+
       }).catch(err => {
 
         this.file.createDir(cordova.file.documentsDirectory, 'images', false).then(success => {
           this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
           this.filePath = this.file.documentsDirectory+"images/" + this.fileName;
           this.audio = this.media.create(this.filePath);
-          this.audio.startRecord();
+
           this.recording = true;
+        this.startTimer();
+        this.audio.startRecord();
+
+
         }, error => { })
       });
 
@@ -74,8 +85,11 @@ export class AudioRecordingListingComponent {
         this.filePath = this.file.externalDataDirectory +"images/"+ this.fileName;
         console.log(this.filePath)
         this.audio = this.media.create(this.filePath);
-        this.audio.startRecord();
         this.recording = true;
+        this.startTimer();
+        this.audio.startRecord();
+
+
       }).catch(err => {
         console.log("No image File")
 
@@ -85,23 +99,48 @@ export class AudioRecordingListingComponent {
         this.filePath = this.file.externalDataDirectory+"images/"+this.fileName;
         console.log(this.filePath)
         this.audio = this.media.create(this.filePath);
-        this.audio.startRecord();
         this.recording = true;
+        this.startTimer();
+        this.audio.startRecord();
+
+
+
+
         }, error => { })
       });
      
     }
   
   }
-
+  startTimer() {
+    if(this.recording){
+    this.interval = setInterval(() => {
+      if(this.timeLeft >= 0) {
+        this.timeLeft++;
+         console.log(this.timeLeft)
+        this.minutes = Math.ceil(this.timeLeft / 60) - 1;
+        this.seconds = Math.floor(this.timeLeft % 60)
+      } else {
+        this.timeLeft = 0;
+        // this.minutes = Math.ceil(this.timeLeft / 60) - 1;
+        this.minutes = 0;
+        // this.seconds = Math.floor(this.timeLeft % 60);
+        this.seconds = 0;
+      }
+    },1000)
+  }
+    
+  }
   stopRecord() {
-    console.log(this.submissionId)
-
+    this.recording = false;
+    this.timeLeft = 0;
+    this.minutes = 0;
+    this.seconds = 0;
+    clearInterval(this.interval)
     this.audio.stopRecord();
     let data = { filename: this.fileName };
     this.audioList.push(data);
     localStorage.setItem("audiolist", JSON.stringify(this.audioList));
-    this.recording = false;
     this.getAudioList();
     this.localStorage.getLocalStorage('allImageList').then( data =>{
       // console.log();
