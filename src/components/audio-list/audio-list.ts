@@ -29,5 +29,8 @@ export class AudioListComponent {
       index : index
     })
   }
+  delete(fileName,index){
+    
+  }
 
 }
