@@ -37,7 +37,6 @@ export class AudioRecordingListingComponent {
   ) {
 
     this.isIos = this.platform.is('ios') ? true : false;
-
     console.log("on const")
     this.getAudioList();
 
@@ -149,8 +148,6 @@ export class AudioRecordingListingComponent {
     this.audio.stopRecord();
     let data = { name: this.fileName , uploaded : false , audio : true};
     this.audioList.push(data);
-
-  
     this.localStorage.getLocalStorage('allImageList').then( data =>{
      console.log(data +"localstorage");
 
