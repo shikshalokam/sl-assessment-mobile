@@ -73,6 +73,7 @@ export class ImageUploadComponent implements OnInit {
   ngOnInit() {
     this.storage.get(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then(data => {
       this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
+      console.log(data)
       if (!this.generalQuestion) {
         if (this.allLocalImageList[this.submissionId]) {
           this.allLocalImageList[this.submissionId][this.evidenceId] = (this.allLocalImageList[this.submissionId][this.evidenceId]) ? this.allLocalImageList[this.submissionId][this.evidenceId] : []
