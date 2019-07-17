@@ -150,7 +150,8 @@
         "teacherRegistry": "Teacher Registry",
         "generalQuestions": "General Questions",
         "individualAssessments": "Individual Assessments",
-        "observationDetails": "Observation Details"
+        "observationDetails": "Observation Details",
+        "hint":"Hint"
     },
     "labels": {
         "welcome": "Welcome",
