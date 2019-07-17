@@ -1,11 +1,13 @@
 multiple-choice-type {
-    // .flexbox{
-    //     display: flex;
-    //     align-items: baseline;
-    //     flex-wrap: nowrap;
-    // }
-    // .noWrap{
-    //     white-space: nowrap;
-        
-    // }
+    .help {
+        font-size: 30px;
+        z-index: 2;
+        margin-right: 15px;
+        position: absolute;
+        right: 0;
+    }
+
+    .label {
+        justify-content: flex-start
+    }
 }
