@@ -24,7 +24,6 @@ export class AudioRecordingListingComponent {
   audio: MediaObject;
   audioList: any[] = [];
   isIos: boolean = this.platform.is('ios');
-
   interval: number = 0;
   timeLeft: number = 0;
   minutes: number = 0;
@@ -150,7 +149,6 @@ export class AudioRecordingListingComponent {
     this.audio.stopRecord();
     let data = { name: this.fileName , uploaded : false , audio : true};
     this.audioList.push(data);
-    // this.localStorage.setLocalStorage("audiolist", JSON.stringify(this.audioList));
 
   
     this.localStorage.getLocalStorage('allImageList').then( data =>{
