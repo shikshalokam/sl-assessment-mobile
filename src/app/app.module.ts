@@ -83,6 +83,8 @@ import { ObservationProvider } from '../providers/observation/observation';
 import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about';
 import { EntityListingPage } from '../pages/entity-listing/entity-listing';
 import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-features';
+import { HintProvider } from '../providers/hint/hint';
+import { HintPage } from '../pages/hint/hint';
 
 @NgModule({
   declarations: [
@@ -105,7 +107,8 @@ import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-f
     GeneralQuestionPage,
     GeneralQuestionSubmitPage,
     IndividualListingPage,
-    ProgramDetailsPage
+    ProgramDetailsPage,
+    HintPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -157,7 +160,8 @@ import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-f
     GeneralQuestionSubmitPage,
     IndividualListingPage,
     ProgramDetailsPage,
-    EntityListingPage
+    EntityListingPage,
+    HintPage
   ],
   providers: [
     StatusBar,
@@ -201,7 +205,8 @@ import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-f
     SocialSharing,
     SharingFeaturesProvider,
     IOSFilePicker,
-    FileOpener
+    FileOpener,
+    HintProvider
 
   ]
 })
