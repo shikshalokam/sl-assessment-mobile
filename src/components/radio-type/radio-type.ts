@@ -1,5 +1,6 @@
 import { Component, Input, Output , EventEmitter, OnInit} from '@angular/core';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { HintProvider } from '../../providers/hint/hint';
 
 /**
  * Generated class for the RadioTypeComponent component.
@@ -28,7 +29,7 @@ export class RadioTypeComponent implements OnInit{
   color: string = 'light';
   isComplete: boolean;
 
-  constructor(private utils: UtilsProvider) {
+  constructor(private utils: UtilsProvider, private hintService: HintProvider) {
 
     console.log('Hello RadioTypeComponent Component');
 
@@ -56,5 +57,9 @@ export class RadioTypeComponent implements OnInit{
   checkForValidation(): void {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.data.endTime = this.data.isCompleted ? Date.now() : "";
+  }
+
+  openHint(hint){
+    this.hintService.presentHintModal({hint: hint});
   }
 }
