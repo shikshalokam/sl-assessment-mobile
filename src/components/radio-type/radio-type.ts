@@ -39,11 +39,15 @@ export class RadioTypeComponent implements OnInit{
     // console.log(JSON.stringify(this.data))
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
     console.log("Evidence id"+ this.evidenceId)
-
+    
 
   }
 
-
+  updateData(event){
+    console.log(JSON.stringify(this.data));
+    // this.data ={}
+    // this.data = Object.assign({}, this.data)
+  }
   next(status?:any) {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.nextCallBack.emit(status);

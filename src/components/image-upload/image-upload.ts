@@ -37,6 +37,7 @@ export class ImageUploadComponent implements OnInit {
   @Input()
   set data(data) {
     this.datas = data;
+    console.log("added anew file")
     this.createImageFromName(data['fileName'])
   }
 
@@ -324,18 +325,23 @@ export class ImageUploadComponent implements OnInit {
   }
 
   deleteImageAlert(index) {
+    let translateObject ;
+          this.translate.get(['actionSheet.confirmDelete','actionSheet.confirmDeleteInstance','actionSheet.no','actionSheet.yes']).subscribe(translations =>{
+            translateObject = translations;
+            console.log(JSON.stringify(translations))
+          })
     let alert = this.alertCtrl.create({
-      title: `{{'actionSheet.confirm' | translate}}`,
-      message: `{{'actionSheet.confirmDeleteImage' | translate}}`,
+      title: translateObject['actionSheet.confirmDelete'],
+      message:translateObject['actionSheet.confirmDeleteInstance'],
       buttons: [
         {
-          text: `{{'actionSheet.no' | translate}}`,
+          text: translateObject['actionSheet.no'],
           role: 'cancel',
           handler: () => {
           }
         },
         {
-          text: `{{'actionSheet.yes' | translate}}`,
+          text: translateObject['actionSheet.yes'],
           handler: () => {
             this.removeImgFromList(index);
           }
