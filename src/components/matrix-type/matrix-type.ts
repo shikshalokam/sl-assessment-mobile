@@ -128,17 +128,17 @@ export class MatrixTypeComponent implements OnInit {
           })
     let alert = this.alertCtrl.create({
       title: translateObject['actionSheet.confirmDelete'],
-      message:translateObject['confirmDeleteInstance'],
+      message:translateObject['actionSheet.confirmDeleteInstance'],
       buttons: [
         {
-          text:translateObject['no'],
+          text:translateObject['actionSheet.no'],
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
           }
         },
         {
-          text:translateObject['yes'],
+          text:translateObject['actionSheet.yes'],
           handler: () => {
             this.deleteInstance(index);
           }
