@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, OnChanges } from '@angular/core';
 import { ActionSheetController, Platform, AlertController } from 'ionic-angular'
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
@@ -12,6 +12,8 @@ import { FilePath } from '@ionic-native/file-path';
 import { IOSFilePicker } from '@ionic-native/file-picker';
 import { FILE_EXTENSION_HEADERS } from './mimTypes';
 import { FileOpener } from '@ionic-native/file-opener';
+import { MediaObject, Media } from '@ionic-native/media';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 declare var cordova: any;
 
@@ -21,9 +23,20 @@ declare var cordova: any;
 })
 export class ImageUploadComponent implements OnInit {
 
+  recording: boolean = false;
+  filesPath: string;
+  fileName: string;
+  audio: MediaObject;
+  audioList: any[] = [];
+  isIos: boolean = this.platform.is('ios');
+  interval;
+  timeLeft: number = 0;
+  minutes: number = 0;
+  seconds: number = 0;
+
+
   text: string;
   datas;
-  isIos: boolean;
   appFolderPath: string;
   videoFormats = ["mp4", "WMV", "WEBM", "flv", "avi", "3GP", "OGG"];
   audioFormats = ["AIF", "cda", "mpa", "ogg", "wav", "wma", 'mp3'];
@@ -58,6 +71,7 @@ export class ImageUploadComponent implements OnInit {
 
   constructor(private actionSheet: ActionSheetController,
     private camera: Camera,
+    private localStorage : LocalStorageProvider,
     private file: File, private imgPicker: ImagePicker, private utils: UtilsProvider,
     private storage: Storage,
     private photoLibrary: PhotoLibrary, private platform: Platform,
@@ -66,6 +80,7 @@ export class ImageUploadComponent implements OnInit {
     private iosFilePicker: IOSFilePicker,
     private fileOpener: FileOpener,
     private fileChooser: FileChooser,
+    private media: Media,
     private alertCtrl: AlertController) {
     console.log('Hello ImageUploadComponent Component');
     this.text = 'Hello World';
@@ -74,7 +89,7 @@ export class ImageUploadComponent implements OnInit {
   ngOnInit() {
     this.storage.get(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then(data => {
       this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
-      console.log(data)
+      console.log(data + "On init")
       if (!this.generalQuestion) {
         if (this.allLocalImageList[this.submissionId]) {
           this.allLocalImageList[this.submissionId][this.evidenceId] = (this.allLocalImageList[this.submissionId][this.evidenceId]) ? this.allLocalImageList[this.submissionId][this.evidenceId] : []
@@ -227,27 +242,27 @@ export class ImageUploadComponent implements OnInit {
       if (this.imageFormats.indexOf(this.getExtensionFromName(fileName)) >= 0) {
         this.file.readAsDataURL(this.appFolderPath, fileName).then(data => {
           this.imageList.push({ data: data, imageName: fileName, extension: this.getExtensionFromName(fileName) });
-          this.setLocalDatas(fileName);
+          this.setLocalDatas(fileName);        
         }).catch(err => {
         })
       } else {
         this.imageList.push({ data: "", imageName: fileName, extension: this.getExtensionFromName(fileName) });
-        this.setLocalDatas(fileName);
-        this.updateLocalImageList();
+        this.setLocalDatas(fileName);    
+        // this.updateLocalImageList();
       }
 
     }).catch(error => {
     })
   }
 
-  setLocalDatas(fileName) {
+  setLocalDatas(fileName ) {
     this.datas.fileName.push(fileName);
     if (!this.generalQuestion) {
       this.allLocalImageList[this.submissionId][this.evidenceId].push({ name: fileName, uploaded: false });
     } else {
       this.allLocalImageList[this.submissionId].push({ name: fileName, uploaded: false });
     }
-    this.updateLocalImageList();
+               this.updateLocalImageList();
   }
 
   getExtensionFromName(fileName) {
@@ -273,17 +288,6 @@ export class ImageUploadComponent implements OnInit {
           // this.setLocalDatas(image);
           // this.updateLocalImageList();
         }
-
-
-
-
-
-
-
-        // this.file.readAsDataURL(this.appFolderPath, image).then(data => {
-        //   this.imageList.push({ data: data, imageName: image });
-        // }).catch(err => {
-        // })
       }).catch(error => {
         this.imageList.push(image);
       })
@@ -352,7 +356,31 @@ export class ImageUploadComponent implements OnInit {
   }
 
   updateLocalImageList() {
-    this.utils.setLocalImages(this.allLocalImageList, this.generalQuestion);
+    this.localStorage.getLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then( data =>{
+      data = JSON.parse(data);
+      
+      if(!this.generalQuestion)
+      data[this.submissionId][this.evidenceId] = [...data[this.submissionId][this.evidenceId], ...this.allLocalImageList][this.submissionId][this.evidenceId] ;
+      else 
+      data[this.submissionId] = [ ... data[this.submissionId] , ... this.allLocalImageList][this.submissionId] ;
+
+      this.localStorage.setLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList' , JSON.stringify(data))
+      // this.utils.setLocalImages(this.allLocalImageList, this.generalQuestion);
+      this.localStorage.getLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then( data =>{
+        console.log(data   + " updating");
+        this.allLocalImageList = JSON.parse(data)
+    }).catch(error =>{});
+
+
+    }).catch( data =>{
+      this.localStorage.setLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList' , JSON.stringify(this.allLocalImageList));
+      this.localStorage.getLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then( data =>{
+        console.log(data + " setting");
+        this.allLocalImageList = JSON.parse(data)
+
+    }).catch(error =>{});
+
+    })
   }
 
   previewFile(fileName,extension) {
@@ -362,5 +390,135 @@ export class ImageUploadComponent implements OnInit {
         this.utils.openToast('No file readers available');
       })
   }
+
+
+
+  startRecord() {
+    
+    if (this.platform.is('ios')) {
+      this.file.checkDir(this.file.documentsDirectory, 'images').then(success => {
+        this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
+        this.filesPath = this.file.documentsDirectory +"images/"+ this.fileName;
+        this.audio = this.media.create(this.filesPath);
+        this.recording = true;
+        this.startTimer();
+        this.audio.startRecord();
+        // this.pushToFileList(this.fileName );
+        // this.datas.fileName.push(this.fileName);
+
+
+      }).catch(err => {
+        this.file.createDir(cordova.file.documentsDirectory, 'images', false).then(success => {
+          this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
+          this.filesPath = this.file.documentsDirectory+"images/" + this.fileName;
+          this.audio = this.media.create(this.filesPath);
+          this.recording = true;
+        this.startTimer();
+        this.audio.startRecord();
+        // this.datas.fileName.push(this.fileName);
+
+        }, error => { })
+      });
+
+      
+    } else if (this.platform.is('android')) {
+      this.file.checkDir(this.file.externalDataDirectory, 'images').then(success => {
+        this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
+        this.filesPath = this.file.externalDataDirectory +"images/"+ this.fileName;
+        console.log(this.filePath)
+        this.audio = this.media.create(this.filesPath);
+        this.recording = true;
+        this.startTimer();
+        this.audio.startRecord();
+        // this.datas.fileName.push(this.fileName);
+
+      }).catch(err => {
+        console.log("No image File")
+
+        this.file.createDir(cordova.file.externalDataDirectory, 'images', false).then(success => {
+          console.log("file created with name image")
+        this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
+        this.filesPath = this.file.externalDataDirectory+"images/"+this.fileName;
+        console.log(this.filePath)
+        this.audio = this.media.create(this.filesPath);
+        this.recording = true;
+        this.startTimer();
+        this.audio.startRecord();
+        // this.datas.fileName.push(this.fileName);
+
+        }, error => { })
+      });
+
+     
+    }
+  }
+  startTimer() {
+    if(this.recording){
+    this.interval = setInterval(() => {
+      if(this.timeLeft >= 0) {
+        this.timeLeft++;
+         console.log(this.timeLeft)
+        this.minutes = Math.ceil(this.timeLeft / 60) - 1;
+        this.seconds = Math.floor(this.timeLeft % 60)
+      } else {
+        this.timeLeft = 0;
+        // this.minutes = Math.ceil(this.timeLeft / 60) - 1;
+        this.minutes = 0;
+        // this.seconds = Math.floor(this.timeLeft % 60);
+        this.seconds = 0;
+      }
+    },1000)
+  }
+    
+  }
+  stopRecord() {
+    this.recording = false;
+    this.timeLeft = 0;
+    this.minutes = 0;
+    this.seconds = 0;
+    clearInterval(this.interval)
+    this.audio.stopRecord();
+    // this.datas.fileName.push(this.fileName)
+    // console.log(JSON.stringify(this.imageList))
+    
+  this.pushToFileList(this.fileName  );
+  // if (!this.generalQuestion) {
+  //   this.allLocalImageList[this.submissionId][this.evidenceId].push({ name: this.fileName, uploaded: false  , audio : true});
+  // } else {
+  //   this.allLocalImageList[this.submissionId].push({ name: this.fileName, uploaded: false  , audio : true});
+  // }
+  // console.log(JSON.stringify(this.imageList))
+
+    // let data = { name: this.fileName , uploaded : false , audio : true};
+    // this.audioList.push(data);
+    // this.localStorage.getLocalStorage('allImageList').then( data =>{
+    //  console.log(data +"localstorage");
+
+    //   data= JSON.parse(data)
+    //  data[this.submissionId][this.evidenceId].push({
+    //    name: this.fileName,
+    //    uploaded : false,
+    //    audio : true
+    //  })
+     
+    //  this.localStorage.setLocalStorage( 'allImageList', JSON.stringify(data));
+    //  console.log(JSON.stringify(data));
+    // } ).catch( error =>{
+    //   console.log("no local")
+    //   let data :any ={
+    //     [this.submissionId] : {
+    //       [this.evidenceId]:[]
+    //     }
+    //   };
+    //   data[this.submissionId][this.evidenceId].push({
+    //     name: this.fileName,
+    //     uploaded : false
+    //   });
+    //  this.localStorage.setLocalStorage( 'allImageList', JSON.stringify(data));
+    //  console.log(JSON.stringify(data));
+
+    // });
+  }
+
 
 }

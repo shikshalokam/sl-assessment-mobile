@@ -26,7 +26,7 @@ export class AudioRecordingListingComponent {
   audio: MediaObject;
   audioList: any[] = [];
   isIos: boolean = this.platform.is('ios');
-  interval: number = 0;
+  interval;
   timeLeft: number = 0;
   minutes: number = 0;
   seconds: number = 0;

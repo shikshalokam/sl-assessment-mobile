@@ -47,6 +47,7 @@ export class RadioTypeComponent implements OnInit{
     console.log(JSON.stringify(this.data));
     // this.data ={}
     // this.data = Object.assign({}, this.data)
+    this.data.fileName = [...this.data.fileName]
   }
   next(status?:any) {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
