@@ -29,6 +29,7 @@ export class QuestionerPage {
   dashbordData: any;
   modalRefrnc: any;
   localImageListKey: any;
+  countCompletedQuestion: number;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -48,6 +49,8 @@ export class QuestionerPage {
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.schoolData = data;
       const currentEvidences =  this.schoolData['assessment']['evidences'] ;
+      this.countCompletedQuestion = this.utils.getCompletedQuestionsCount(this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions']);
+
       this.selectedEvidenceId = currentEvidences[this.selectedEvidenceIndex].externalId;
       this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.submissionId;
       this.isViewOnly = !currentEvidences[this.selectedEvidenceIndex]['startTime'] ? true : false;
@@ -112,10 +115,12 @@ export class QuestionerPage {
       this.next('completed')
     }
     this.updateCompletedQuestionCount();
+    // this.calculateCompletedQuestion();
   }
 
   updateCompletedQuestionCount() {
     this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].completedQuestions = this.utils.getCompletedQuestionsCount(this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions']);
+    this.countCompletedQuestion = this.utils.getCompletedQuestionsCount(this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions']);
 
   }
 
