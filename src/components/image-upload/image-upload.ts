@@ -14,6 +14,7 @@ import { FILE_EXTENSION_HEADERS } from './mimTypes';
 import { FileOpener } from '@ionic-native/file-opener';
 import { MediaObject, Media } from '@ionic-native/media';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 declare var cordova: any;
 
@@ -80,6 +81,7 @@ export class ImageUploadComponent implements OnInit {
     private iosFilePicker: IOSFilePicker,
     private fileOpener: FileOpener,
     private fileChooser: FileChooser,
+    private androidPermissions : AndroidPermissions,
     private media: Media,
     private alertCtrl: AlertController) {
     console.log('Hello ImageUploadComponent Component');
@@ -400,9 +402,14 @@ export class ImageUploadComponent implements OnInit {
         this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
         this.filesPath = this.file.documentsDirectory +"images/"+ this.fileName;
         this.audio = this.media.create(this.filesPath);
-        this.recording = true;
-        this.startTimer();
+        
         this.audio.startRecord();
+        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
+          result => {
+             result.hasPermission ? this.startTimer() :null;
+          }).catch();
+        // this.startTimer();
+
         // this.pushToFileList(this.fileName );
         // this.datas.fileName.push(this.fileName);
 
@@ -412,9 +419,11 @@ export class ImageUploadComponent implements OnInit {
           this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.mp3';
           this.filesPath = this.file.documentsDirectory+"images/" + this.fileName;
           this.audio = this.media.create(this.filesPath);
-          this.recording = true;
-        this.startTimer();
         this.audio.startRecord();
+        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
+          result => {
+             result.hasPermission ? this.startTimer() :null;
+          }).catch();
         // this.datas.fileName.push(this.fileName);
 
         }, error => { })
@@ -427,9 +436,12 @@ export class ImageUploadComponent implements OnInit {
         this.filesPath = this.file.externalDataDirectory +"images/"+ this.fileName;
         console.log(this.filePath)
         this.audio = this.media.create(this.filesPath);
-        this.recording = true;
-        this.startTimer();
+        
         this.audio.startRecord();
+        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
+          result => {
+             result.hasPermission ? this.startTimer() :null;
+          }).catch();
         // this.datas.fileName.push(this.fileName);
 
       }).catch(err => {
@@ -441,9 +453,13 @@ export class ImageUploadComponent implements OnInit {
         this.filesPath = this.file.externalDataDirectory+"images/"+this.fileName;
         console.log(this.filePath)
         this.audio = this.media.create(this.filesPath);
-        this.recording = true;
-        this.startTimer();
+        
+        // this.startTimer();
         this.audio.startRecord();
+        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
+          result => {
+             result.hasPermission ? this.startTimer() :null;
+          }).catch();
         // this.datas.fileName.push(this.fileName);
 
         }, error => { })
@@ -453,6 +469,7 @@ export class ImageUploadComponent implements OnInit {
     }
   }
   startTimer() {
+    this.recording = true;
     if(this.recording){
     this.interval = setInterval(() => {
       if(this.timeLeft >= 0) {
