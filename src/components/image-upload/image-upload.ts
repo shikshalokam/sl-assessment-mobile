@@ -67,7 +67,7 @@ export class ImageUploadComponent implements OnInit {
   imageList: Array<any> = [];
   imageNameCounter: number = 0;
   localEvidenceImageList: any;
-  allLocalImageList: any = {};
+  // allLocalImageList: any = {};
 
   constructor(private actionSheet: ActionSheetController,
     private camera: Camera,
@@ -87,29 +87,29 @@ export class ImageUploadComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.storage.get(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then(data => {
-      this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
-      console.log(data + "On init")
-      if (!this.generalQuestion) {
-        if (this.allLocalImageList[this.submissionId]) {
-          this.allLocalImageList[this.submissionId][this.evidenceId] = (this.allLocalImageList[this.submissionId][this.evidenceId]) ? this.allLocalImageList[this.submissionId][this.evidenceId] : []
-        } else {
-          console.log(this.submissionId + " " + this.evidenceId)
-          this.allLocalImageList[this.submissionId] = {};
-          this.allLocalImageList[this.submissionId][this.evidenceId] = []
-          this.localEvidenceImageList = [];
-        }
-      } else {
-        if (this.allLocalImageList[this.submissionId]) {
-          this.allLocalImageList[this.submissionId] = (this.allLocalImageList[this.submissionId]) ? this.allLocalImageList[this.submissionId] : []
-        } else {
-          this.allLocalImageList[this.submissionId] = [];
-          this.localEvidenceImageList = [];
-        }
-      }
-      // this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
-      // this.localEvidenceImageList = (this.allLocalImageList && this.allLocalImageList[this.evidenceId]) ? this.allLocalImageList[this.evidenceId] : [];
-    })
+    // this.storage.get(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then(data => {
+    //   this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
+    //   console.log(data + "On init")
+    //   if (!this.generalQuestion) {
+    //     if (this.allLocalImageList[this.submissionId]) {
+    //       this.allLocalImageList[this.submissionId][this.evidenceId] = (this.allLocalImageList[this.submissionId][this.evidenceId]) ? this.allLocalImageList[this.submissionId][this.evidenceId] : []
+    //     } else {
+    //       console.log(this.submissionId + " " + this.evidenceId)
+    //       this.allLocalImageList[this.submissionId] = {};
+    //       this.allLocalImageList[this.submissionId][this.evidenceId] = []
+    //       this.localEvidenceImageList = [];
+    //     }
+    //   } else {
+    //     if (this.allLocalImageList[this.submissionId]) {
+    //       this.allLocalImageList[this.submissionId] = (this.allLocalImageList[this.submissionId]) ? this.allLocalImageList[this.submissionId] : []
+    //     } else {
+    //       this.allLocalImageList[this.submissionId] = [];
+    //       this.localEvidenceImageList = [];
+    //     }
+    //   }
+    //   // this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
+    //   // this.localEvidenceImageList = (this.allLocalImageList && this.allLocalImageList[this.evidenceId]) ? this.allLocalImageList[this.evidenceId] : [];
+    // })
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'images' : cordova.file.externalDataDirectory + 'images';
   }
@@ -257,11 +257,11 @@ export class ImageUploadComponent implements OnInit {
 
   setLocalDatas(fileName ) {
     this.datas.fileName.push(fileName);
-    if (!this.generalQuestion) {
-      this.allLocalImageList[this.submissionId][this.evidenceId].push({ name: fileName, uploaded: false });
-    } else {
-      this.allLocalImageList[this.submissionId].push({ name: fileName, uploaded: false });
-    }
+    // if (!this.generalQuestion) {
+    //   this.allLocalImageList[this.submissionId][this.evidenceId].push({ name: fileName, uploaded: false });
+    // } else {
+    //   this.allLocalImageList[this.submissionId].push({ name: fileName, uploaded: false });
+    // }
                this.updateLocalImageList();
   }
 
@@ -308,21 +308,21 @@ export class ImageUploadComponent implements OnInit {
 
   removeImgFromList(index): void {
     let indexInLocalList;
-    if (!this.generalQuestion) {
-      for (let i = 0; i < this.allLocalImageList[this.submissionId][this.evidenceId].length; i++) {
-        if (this.allLocalImageList[this.submissionId][this.evidenceId].name === this.imageList[index].imageName) {
-          indexInLocalList = i;
-        }
-      }
-      this.allLocalImageList[this.submissionId][this.evidenceId].splice(indexInLocalList, 1);
-    } else {
-      for (let i = 0; i < this.allLocalImageList[this.submissionId].length; i++) {
-        if (this.allLocalImageList[this.submissionId].name === this.imageList[index].imageName) {
-          indexInLocalList = i;
-        }
-      }
-      this.allLocalImageList[this.submissionId].splice(indexInLocalList, 1);
-    }
+    // if (!this.generalQuestion) {
+    //   for (let i = 0; i < this.allLocalImageList[this.submissionId][this.evidenceId].length; i++) {
+    //     if (this.allLocalImageList[this.submissionId][this.evidenceId].name === this.imageList[index].imageName) {
+    //       indexInLocalList = i;
+    //     }
+    //   }
+    //   this.allLocalImageList[this.submissionId][this.evidenceId].splice(indexInLocalList, 1);
+    // } else {
+    //   for (let i = 0; i < this.allLocalImageList[this.submissionId].length; i++) {
+    //     if (this.allLocalImageList[this.submissionId].name === this.imageList[index].imageName) {
+    //       indexInLocalList = i;
+    //     }
+    //   }
+    //   this.allLocalImageList[this.submissionId].splice(indexInLocalList, 1);
+    // }
     this.datas.fileName.splice(index, 1);
     this.imageList.splice(index, 1);
     this.updateLocalImageList();
@@ -356,31 +356,31 @@ export class ImageUploadComponent implements OnInit {
   }
 
   updateLocalImageList() {
-    this.localStorage.getLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then( data =>{
-      data = JSON.parse(data);
+    // this.localStorage.getLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then( data =>{
+    //   data = JSON.parse(data);
       
-      if(!this.generalQuestion)
-      data[this.submissionId][this.evidenceId] = [...data[this.submissionId][this.evidenceId], ...this.allLocalImageList][this.submissionId][this.evidenceId] ;
-      else 
-      data[this.submissionId] = [ ... data[this.submissionId] , ... this.allLocalImageList][this.submissionId] ;
+    //   if(!this.generalQuestion)
+    //   data[this.submissionId][this.evidenceId] = [...data[this.submissionId][this.evidenceId], ...this.allLocalImageList][this.submissionId][this.evidenceId] ;
+    //   else 
+    //   data[this.submissionId] = [ ... data[this.submissionId] , ... this.allLocalImageList][this.submissionId] ;
 
-      this.localStorage.setLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList' , JSON.stringify(data))
-      // this.utils.setLocalImages(this.allLocalImageList, this.generalQuestion);
-      this.localStorage.getLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then( data =>{
-        console.log(data   + " updating");
-        this.allLocalImageList = JSON.parse(data)
-    }).catch(error =>{});
+    //   this.localStorage.setLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList' , JSON.stringify(data))
+    //   // this.utils.setLocalImages(this.allLocalImageList, this.generalQuestion);
+    //   this.localStorage.getLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then( data =>{
+    //     console.log(data   + " updating");
+    //     this.allLocalImageList = JSON.parse(data)
+    // }).catch(error =>{});
 
 
-    }).catch( data =>{
-      this.localStorage.setLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList' , JSON.stringify(this.allLocalImageList));
-      this.localStorage.getLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then( data =>{
-        console.log(data + " setting");
-        this.allLocalImageList = JSON.parse(data)
+    // }).catch( data =>{
+    //   this.localStorage.setLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList' , JSON.stringify(this.allLocalImageList));
+    //   this.localStorage.getLocalStorage(this.generalQuestion ? 'genericQuestionsImages' : 'allImageList').then( data =>{
+    //     console.log(data + " setting");
+    //     this.allLocalImageList = JSON.parse(data)
 
-    }).catch(error =>{});
+    // }).catch(error =>{});
 
-    })
+    // })
   }
 
   previewFile(fileName,extension) {
