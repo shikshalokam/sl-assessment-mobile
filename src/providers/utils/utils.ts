@@ -236,5 +236,9 @@ export class UtilsProvider {
     return obj
   }
 
+  getImageListForEcm(entityId, s) {
+
+  }
+
 }
 
