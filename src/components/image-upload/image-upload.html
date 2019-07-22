@@ -20,7 +20,7 @@
       <fa name="file-excel-o" class="attachmentIcon" *ngIf="spreadSheetFormats.includes(image?.extension)"></fa>
     </span>
   </div>
-  <ion-card>
+  <ion-card *ngIf="datas?.allowAudioRecording">
     <ion-card-content>
       <ion-row *ngIf="!recording">
           <button ion-button primary (click)="startRecord()">

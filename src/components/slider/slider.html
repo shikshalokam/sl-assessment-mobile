@@ -26,6 +26,6 @@
   </ion-item>
 
   <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
-  <image-upload *ngIf="data?.file" [submissionId]="submissionId" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId"
+  <image-upload  [submissionId]="submissionId" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId"
     [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
 </div>

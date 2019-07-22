@@ -42,7 +42,7 @@
   <div style="width: 100%">
     <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
   </div>
-  <image-upload *ngIf="data?.file" [data]="data" [submissionId]="submissionId" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId"
+  <image-upload  [data]="data" [submissionId]="submissionId" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId"
     [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
 
 </div>
