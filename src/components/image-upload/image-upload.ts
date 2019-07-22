@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange, OnChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActionSheetController, Platform, AlertController } from 'ionic-angular'
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
@@ -404,10 +404,8 @@ export class ImageUploadComponent implements OnInit {
         this.audio = this.media.create(this.filesPath);
         
         this.audio.startRecord();
-        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
-          result => {
-             result.hasPermission ? this.startTimer() :null;
-          }).catch();
+        this.checkRecordMediaPermission();
+       
         // this.startTimer();
 
         // this.pushToFileList(this.fileName );
@@ -420,10 +418,8 @@ export class ImageUploadComponent implements OnInit {
           this.filesPath = this.file.documentsDirectory+"images/" + this.fileName;
           this.audio = this.media.create(this.filesPath);
         this.audio.startRecord();
-        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
-          result => {
-             result.hasPermission ? this.startTimer() :null;
-          }).catch();
+        this.checkRecordMediaPermission();
+       
         // this.datas.fileName.push(this.fileName);
 
         }, error => { })
@@ -438,10 +434,8 @@ export class ImageUploadComponent implements OnInit {
         this.audio = this.media.create(this.filesPath);
         
         this.audio.startRecord();
-        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
-          result => {
-             result.hasPermission ? this.startTimer() :null;
-          }).catch();
+        this.checkRecordMediaPermission();
+       
         // this.datas.fileName.push(this.fileName);
 
       }).catch(err => {
@@ -453,13 +447,10 @@ export class ImageUploadComponent implements OnInit {
         this.filesPath = this.file.externalDataDirectory+"images/"+this.fileName;
         console.log(this.filePath)
         this.audio = this.media.create(this.filesPath);
-        
+        this.checkRecordMediaPermission();
         // this.startTimer();
         this.audio.startRecord();
-        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
-          result => {
-             result.hasPermission ? this.startTimer() :null;
-          }).catch();
+       
         // this.datas.fileName.push(this.fileName);
 
         }, error => { })
@@ -479,14 +470,18 @@ export class ImageUploadComponent implements OnInit {
         this.seconds = Math.floor(this.timeLeft % 60)
       } else {
         this.timeLeft = 0;
-        // this.minutes = Math.ceil(this.timeLeft / 60) - 1;
         this.minutes = 0;
-        // this.seconds = Math.floor(this.timeLeft % 60);
         this.seconds = 0;
       }
     },1000)
   }
-    
+ 
+  }
+  checkRecordMediaPermission(){
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
+      result => {
+         result.hasPermission ? this.startTimer() :null;
+      }).catch();
   }
   stopRecord() {
     this.recording = false;
@@ -495,46 +490,7 @@ export class ImageUploadComponent implements OnInit {
     this.seconds = 0;
     clearInterval(this.interval)
     this.audio.stopRecord();
-    // this.datas.fileName.push(this.fileName)
-    // console.log(JSON.stringify(this.imageList))
-    
-  this.pushToFileList(this.fileName  );
-  // if (!this.generalQuestion) {
-  //   this.allLocalImageList[this.submissionId][this.evidenceId].push({ name: this.fileName, uploaded: false  , audio : true});
-  // } else {
-  //   this.allLocalImageList[this.submissionId].push({ name: this.fileName, uploaded: false  , audio : true});
-  // }
-  // console.log(JSON.stringify(this.imageList))
-
-    // let data = { name: this.fileName , uploaded : false , audio : true};
-    // this.audioList.push(data);
-    // this.localStorage.getLocalStorage('allImageList').then( data =>{
-    //  console.log(data +"localstorage");
-
-    //   data= JSON.parse(data)
-    //  data[this.submissionId][this.evidenceId].push({
-    //    name: this.fileName,
-    //    uploaded : false,
-    //    audio : true
-    //  })
-     
-    //  this.localStorage.setLocalStorage( 'allImageList', JSON.stringify(data));
-    //  console.log(JSON.stringify(data));
-    // } ).catch( error =>{
-    //   console.log("no local")
-    //   let data :any ={
-    //     [this.submissionId] : {
-    //       [this.evidenceId]:[]
-    //     }
-    //   };
-    //   data[this.submissionId][this.evidenceId].push({
-    //     name: this.fileName,
-    //     uploaded : false
-    //   });
-    //  this.localStorage.setLocalStorage( 'allImageList', JSON.stringify(data));
-    //  console.log(JSON.stringify(data));
-
-    // });
+    this.pushToFileList(this.fileName  );
   }
 
 
