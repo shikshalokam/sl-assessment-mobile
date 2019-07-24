@@ -85,6 +85,7 @@ import { EntityListingPage } from '../pages/entity-listing/entity-listing';
 import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-features';
 import { HintProvider } from '../providers/hint/hint';
 import { HintPage } from '../pages/hint/hint';
+import { Media } from '@ionic-native/media';
 
 @NgModule({
   declarations: [
@@ -206,8 +207,9 @@ import { HintPage } from '../pages/hint/hint';
     SharingFeaturesProvider,
     IOSFilePicker,
     FileOpener,
-    HintProvider
+    HintProvider,
 
+    Media,
   ]
 })
 export class AppModule { }

@@ -22,9 +22,10 @@
   </ion-item>
 </ion-list>
 <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>
-<image-upload *ngIf="data?.file" [submissionId]="submissionId" [data]="data" [generalQuestion]="generalQuestion"
-  [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
-
+<!-- {{data?.fileName?.length}} -->
+<image-upload  [submissionId]="submissionId" [data]="data" [generalQuestion]="generalQuestion" [imageLocalCopyId]="imageLocalCopyId" [evidenceId]="evidenceId" [schoolId]="schoolId"></image-upload>
+<!-- *ngIf="data.allowAudioRecording" -->
+<!-- (audioAddedEvent)="updateData($event)" -->
 <!-- <ion-footer no-shadow>
   <ion-toolbar position="bottom">
     <ion-row>

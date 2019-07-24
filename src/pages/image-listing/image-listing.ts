@@ -50,7 +50,7 @@ export class ImageListingPage {
   }
   submissionId;
 
-  ionViewDidLoad() {
+   ionViewDidLoad() {
     this.submissionId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
@@ -59,16 +59,29 @@ export class ImageListingPage {
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.schoolData = data;
       // console.log(this.submissionId + "Image listing  success")
-      console.log(JSON.stringify(data))
       this.currentEvidence = this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex];
       this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.submissionId;
       this.evidenceSections = this.currentEvidence['sections'];
       this.selectedEvidenceName = this.currentEvidence['name'];
-      this.checkIfEcmSumittedByUser();
+     this.getAllImages();
     }).catch(error => {
       // console.log(this.submissionId + "Image listing error")
 
     })
+
+  }
+
+  getAllImages() {
+    let  imageArray = [];
+    for (const sections of this.currentEvidence.sections) {
+      for (const question of sections.questions) {
+        let questImage = this.utils.getImageNamesForQuestion(question);
+        imageArray = questImage.length ? [...imageArray, ...questImage] : imageArray;
+      }
+    }
+    console.log(JSON.stringify(imageArray));
+    this.uploadImages = imageArray;
+    this.checkIfEcmSumittedByUser();
 
   }
 
@@ -80,19 +93,19 @@ export class ImageListingPage {
     this.apiService.httpGet(url + submissionId + "?evidenceId=" + this.currentEvidence.externalId, success => {
       this.utils.stopLoader();
       if (success.result.allowed) {
-        this.storage.get("allImageList").then(data => {
-          console.log(data)
-          if (data && JSON.parse(data)[this.submissionId]) {
-            this.uploadImages = (JSON.parse(data)[this.submissionId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.submissionId][this.currentEvidence.externalId]) : [];
-          } else {
-            this.uploadImages = [];
-          }
+        // this.storage.get("allImageList").then(data => {
+        //   console.log(data)
+        //   if (data && JSON.parse(data)[this.submissionId]) {
+        //     this.uploadImages = (JSON.parse(data)[this.submissionId][this.currentEvidence.externalId]) ? (JSON.parse(data)[this.submissionId][this.currentEvidence.externalId]) : [];
+        //   } else {
+        //     this.uploadImages = [];
+        //   }
           if (this.uploadImages.length) {
             this.createImageFromName(this.uploadImages);
           } else {
             this.submitEvidence();
           }
-        })
+        // })
       } else {
         this.translate.get('toastMessage.submissionCompleted').subscribe(translations =>{
           this.utils.openToast(translations);
@@ -123,7 +136,7 @@ export class ImageListingPage {
       submissionId: submissionId
     }
     for (const image of this.uploadImages) {
-      files.files.push(image.name)
+      files.files.push(image)
     }
     this.apiService.httpPost(AppConfigs.survey.getImageUploadUr, files, success => {
       this.utils.stopLoader();
@@ -162,7 +175,7 @@ export class ImageListingPage {
   createImageFromName(imageList) {
     this.utils.startLoader();
     for (const image of imageList) {
-      this.imageList.push({ uploaded: false, file: image.name, url: "" });
+      this.imageList.push({ uploaded: false, file: image, url: "" });
     }
     this.getImageUploadUrls();
   }
