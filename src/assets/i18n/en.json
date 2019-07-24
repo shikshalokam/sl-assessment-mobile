@@ -93,7 +93,8 @@
         "Leader": "School Leader",
         "Teacher": "Teacher",
         "saveDraft":"Draft",
-        "markAsComplete":"Mark as completed"
+        "markAsComplete":"Mark as completed",
+        "preview":"Preview"
     },
     "tabs": {
         "home": "Home",
@@ -109,7 +110,6 @@
         "myObservation":"My Observation",
         "draftObservation":"Draft Observation",
         "addObservation":"Add Observation"
-
     },
     "headings": {
         
@@ -152,7 +152,8 @@
         "generalQuestions": "General Questions",
         "individualAssessments": "Individual Assessments",
         "observationDetails": "Observation Details",
-        "hint":"Hint"
+        "hint":"Hint",
+        "submissionPreview":"Submission Preview"
     },
     "labels": {
         "welcome": "Welcome",

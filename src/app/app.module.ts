@@ -86,6 +86,7 @@ import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-f
 import { HintProvider } from '../providers/hint/hint';
 import { HintPage } from '../pages/hint/hint';
 import { Media } from '@ionic-native/media';
+import { PreviewPage } from '../pages/preview/preview';
 
 @NgModule({
   declarations: [
@@ -109,7 +110,8 @@ import { Media } from '@ionic-native/media';
     GeneralQuestionSubmitPage,
     IndividualListingPage,
     ProgramDetailsPage,
-    HintPage
+    HintPage,
+    PreviewPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -162,7 +164,8 @@ import { Media } from '@ionic-native/media';
     IndividualListingPage,
     ProgramDetailsPage,
     EntityListingPage,
-    HintPage
+    HintPage,
+    PreviewPage
   ],
   providers: [
     StatusBar,
