@@ -236,5 +236,21 @@ export class UtilsProvider {
     return obj
   }
 
+  getImageNamesForQuestion(question) {
+    let imageArray = [];
+    if(question.responseType === 'matrix'){
+      for (const instance of question.value) {
+        for (const qst of instance) {
+          imageArray = qst.fileName.length ? [...imageArray, ...qst.fileName] : imageArray
+        }
+      }
+    } else {
+      imageArray = [...imageArray, question.fileName]
+    }
+    return imageArray
+  }
+
+
+
 }
 
