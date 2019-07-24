@@ -87,6 +87,7 @@ import { HintProvider } from '../providers/hint/hint';
 import { HintPage } from '../pages/hint/hint';
 import { Media } from '@ionic-native/media';
 import { PreviewPage } from '../pages/preview/preview';
+import { SubmissionListPage } from '../pages/submission-list/submission-list';
 
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { PreviewPage } from '../pages/preview/preview';
     IndividualListingPage,
     ProgramDetailsPage,
     HintPage,
-    PreviewPage
+    PreviewPage,
+    SubmissionListPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -165,7 +167,8 @@ import { PreviewPage } from '../pages/preview/preview';
     ProgramDetailsPage,
     EntityListingPage,
     HintPage,
-    PreviewPage
+    PreviewPage,
+    SubmissionListPage
   ],
   providers: [
     StatusBar,
