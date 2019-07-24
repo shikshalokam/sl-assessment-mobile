@@ -25,7 +25,7 @@ export class SelectableListComponent {
     console.log('Hello SelectableListComponent Component');
     this.text = 'Hello World';
     // this.selectableList = this.filterSelected();
-    this.list = this.selectableList.slice(0,this.index-1);
+    // this.list = this.selectableList.slice(0,this.index-1);
   }
   // filterSelected(){
   //   let arr = [];
