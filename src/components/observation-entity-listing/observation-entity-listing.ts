@@ -8,6 +8,7 @@ import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { TranslateService } from '@ngx-translate/core';
 import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
+import { SubmissionListPage } from '../../pages/submission-list/submission-list';
 // import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
 /**
  * Generated class for the EntityListingComponent component.
@@ -26,6 +27,7 @@ export class ObservationEntityListingComponent {
   @Input() showMenu = true;
   @Output() getAssessmentDetailsEvent = new EventEmitter();
   @Output() openMenuEvent = new EventEmitter();
+  @Input() selectedObservationIndex;
   text: string;
   // @Input() selectedindex ;
   @Output() updatedLocalStorage = new EventEmitter();
@@ -54,14 +56,18 @@ export class ObservationEntityListingComponent {
   // }
 
 
-  goToEcm(id, name) {
+  goToEcm(id, name , entityindex , observationIndex) {
     console.log("go to ecm called");
+    // console.log(this.entityList[observationIndex]['entities'][entityindex].submissions.length);
     let submissionId = id
     let heading = name;
 
     // this.navCtrl.push('AssessmentAboutPage');
 
-
+    if (this.entityList[observationIndex]['entities'][entityindex].submissions && this.entityList[observationIndex]['entities'][entityindex].submissions.length > 0){
+      console.log(this.selectedObservationIndex)
+      this.navCtrl.push(SubmissionListPage , {observationIndex :observationIndex , entityIndex :entityindex ,selectedObservationIndex : this.selectedObservationIndex })
+    }else {
 this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       
   // console.log(JSON.stringify(successData));
@@ -75,6 +81,7 @@ this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submis
         this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
 
       } else {
+        
         if (successData.assessment.evidences[0].startTime) {
           //console.log("if loop " + successData.assessment.evidences[0].externalId)
           this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
@@ -89,6 +96,7 @@ this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submis
       }
     }).catch(error => {
     });
+  }
 
   }
   openAction(assessment, aseessmemtData, evidenceIndex) {
