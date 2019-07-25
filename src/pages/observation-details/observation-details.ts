@@ -7,6 +7,7 @@ import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { TranslateService } from '@ngx-translate/core';
+import { SubmissionListPage } from '../submission-list/submission-list';
 
 @Component({
   selector: 'page-observation-details',
@@ -17,6 +18,7 @@ export class ObservationDetailsPage {
   observationDetails = [];
   programs: any;
   enableCompleteBtn: boolean;
+  selectedObservationIndex: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -35,6 +37,8 @@ export class ObservationDetailsPage {
   }
 
   ionViewDidLoad() {
+    this.selectedObservationIndex = this.navParams.get('selectedObservationIndex');
+
     console.log('ionViewDidLoad ObservationDetailsPage');
     this.getLocalStorageData();
   }
@@ -45,10 +49,9 @@ export class ObservationDetailsPage {
 
   getLocalStorageData() {
     this.observationDetails = [];
-    const selectedObservationIndex = this.navParams.get('selectedObservationIndex');
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       this.programs = data;
-      this.observationDetails.push(data[selectedObservationIndex]);
+      this.observationDetails.push(data[this.selectedObservationIndex]);
       this.enableCompleteBtn = this.isAllEntitysCompleted();
     }).catch(error => {
     })
@@ -105,23 +108,38 @@ export class ObservationDetailsPage {
 
 
   getAssessmentDetails(event) {
+    // console.log("getting assessment details")
     event.observationIndex = this.navParams.get('selectedObservationIndex');
+    // console.log(this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length)
     this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(program => {
       this.programs = program;
-      this.goToEcm(this.navParams.get('selectedObservationIndex'), event, program);
+      // console.log(JSON.stringify(program))
+     
+      this.goToEcm(this.navParams.get('selectedObservationIndex'), event, program)
     }).catch(error => {
 
     })
+  }
+  goToSubmissionListPage(observationIndex,entityIndex) {
+    this.navCtrl.push(SubmissionListPage , {observationIndex : observationIndex , entityIndex : entityIndex , selectedObservationIndex :this.navParams.get('selectedObservationIndex')}  )
   }
 
   goToEcm(observationIndex, event, program) { 
     console.log("Assesment details")
     let submissionId = program[observationIndex]['entities'][event.entityIndex].submissionId
     let heading = program[observationIndex]['entities'][event.entityIndex].name;
+    if (this.observationDetails[event.programIndex].entities[event.entityIndex].submissions  && this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length > 0 ){
+        this.goToSubmissionListPage(event.programIndex,event.entityIndex)
+     }else {
+    console.log(this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length)
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
+      // console.log(JSON.stringify(successData.assessment))
       if (successData.assessment.evidences.length > 1) {
         this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
       } else {
+      //   if (this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length > 0 ){
+      //   this.goToSubmissionListPage(event.programIndex,event.entityIndex)
+      // }else {
         if (successData.assessment.evidences[0].startTime) {
           this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
           this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
@@ -129,16 +147,19 @@ export class ObservationDetailsPage {
           const assessment = { _id: submissionId, name: heading }
           this.openAction(assessment, successData, 0);
         }
-      }
+    }
     }).catch(error => {
     });
+  }
 
   }
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    // console.log("open action ")
+    // console.log(JSON.stringify(assessment))
+
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
     this.evdnsServ.openActionSheet(options, "Observation");
+
   }
   updateLocalStorage() {
     this.localStorage.getLocalStorage('createdObservationList').then(data => {

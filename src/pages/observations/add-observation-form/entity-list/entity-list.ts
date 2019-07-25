@@ -69,14 +69,15 @@ export class EntityListPage {
     this.index = 50;
     this.apiProviders.httpGet(this.searchUrl + this.observationId + "?search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
       this.arr = event ? [] : this.arr;
-      for (let i = 0; i < success.result[0].data.length; i++) {
-        success.result[0].data[i].isSelected = success.result[0].data[i].selected;
-        success.result[0].data[i].preSelected = success.result[0].data[i].selected ? true : false;
-      }
-      event ? null : this.page++;
-      console.log(JSON.stringify(success.result[0]))
-      this.totalCount = success.result[0].count;
-      this.selectableList = [...success.result[0].data]
+      // for (let i = 0; i < success.result[0].data.length; i++) {
+      //   success.result[0].data[i].isSelected = success.result[0].data[i].selected;
+      //   success.result[0].data[i].preSelected = success.result[0].data[i].selected ? true : false;
+      // }
+      // event ? null : this.page++;
+      // console.log(JSON.stringify(success.result[0]))
+      // this.totalCount = success.result[0].count;
+      // console.log(JSON.stringify(success))
+      this.selectableList = [...success.result[0].metaInformation]
 
 
       this.utils.stopLoader();
