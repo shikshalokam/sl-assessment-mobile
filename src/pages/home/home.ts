@@ -9,6 +9,10 @@ import { SharingFeaturesProvider } from '../../providers/sharing-features/sharin
 
 import { Media, MediaObject } from '@ionic-native/media';
 import { File } from '@ionic-native/file';
+import { ApiProvider } from '../../providers/api/api';
+import { AppConfigs } from '../../providers/appConfig';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+
 declare var cordova: any;
 
 @Component({
@@ -64,10 +68,12 @@ export class HomePage {
     private currentUser: CurrentUserProvider,
     private network: Network,
     private media: Media,
-  private file: File,
+    private file: File,
     private events: Events,
-    private sharingFeature : SharingFeaturesProvider,
+    private sharingFeature: SharingFeaturesProvider,
     private platform: Platform,
+    private apiService: ApiProvider,
+    private localStorage:LocalStorageProvider
   ) {
 
 
@@ -84,11 +90,28 @@ export class HomePage {
     if (this.network.type != 'none') {
       this.networkAvailable = true;
     }
+
+    this.localStorage.getLocalStorage('staticLinks').then(success => {
+      if(success){
+
+      } else{
+        this.getStaticLinks();
+      }
+    }).catch(error => {
+      this.getStaticLinks();
+    })
   }
 
 
   socialSharingInApp() {
-   this.sharingFeature.sharingThroughApp();
+    this.sharingFeature.sharingThroughApp();
+  }
+
+  getStaticLinks() {
+    this.apiService.httpGet(AppConfigs.externalLinks.getStaticLinks, success => {
+      this.localStorage.setLocalStorage('staticLinks', success.result);
+    }, error => {
+    });
   }
 
   // getAudioList() {
@@ -141,9 +164,9 @@ export class HomePage {
   // }
 
   goToPage(index) {
-    this.events.publish('navigateTab',this.allPages[index]['name'])
+    this.events.publish('navigateTab', this.allPages[index]['name'])
   }
- 
+
   ionViewWillLeave() {
 
   }
