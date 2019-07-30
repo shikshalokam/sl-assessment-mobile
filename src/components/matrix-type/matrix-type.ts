@@ -147,4 +147,14 @@ export class MatrixTypeComponent implements OnInit {
     });
     alert.present();
   }
+
+  getLastModified(instance) {
+    let lastModifiedAt = 0;
+    for (const question of instance) {
+      if(question.startTime > lastModifiedAt){
+        lastModifiedAt = question.startTime;
+      }
+    }
+    return lastModifiedAt
+  }
 }
