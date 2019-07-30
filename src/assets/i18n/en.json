@@ -53,6 +53,7 @@
         "networkSlowAlert" : "You are connected to a slower data network. Image upload may take longer time. Do you want to continue?"
     },
     "buttons": {
+        "observeAgain":"Observe Again",
         "view": "View",
         "draft":"Draft",
         "goToEntities":"Go TO Entitites",
@@ -195,7 +196,8 @@
         "noQuestionAvailable":" No questions available",
         "noDraft":"No Drafts",
         "noEntity":"No Entity"  ,
-        "no":"No"
+        "no":"No",
+        "noSolutionFound":"No Solutions"
     },
     "toastMessage":{
         "selectSolution":"Select a Solution",

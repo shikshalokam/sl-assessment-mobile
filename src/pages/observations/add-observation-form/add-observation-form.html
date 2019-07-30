@@ -30,6 +30,9 @@
             <button ion-button clear item-end (click)="showDetails(frameWork)">View</button>
           </ion-item>
         </ion-list>
+        <div *ngIf="listOfSolution?.length == 0"  class="_flex-box msgContainer">
+            {{'message.noSolutionFound' | translate}}
+        </div>
       </div>
       <ion-infinite-scroll [enabled]="!(this.listOfSolution?.length === totalCount) && this.listOfSolution?.length > 0" (ionInfinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
