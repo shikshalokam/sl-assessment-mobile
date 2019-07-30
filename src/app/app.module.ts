@@ -89,6 +89,7 @@ import { Media } from '@ionic-native/media';
 import { PreviewPage } from '../pages/preview/preview';
 import { SubmissionListPage } from '../pages/submission-list/submission-list';
 import { ObservationServiceProvider } from '../providers/observation-service/observation-service';
+import { DownloadAndPreviewProvider } from '../providers/download-and-preview/download-and-preview';
 
 @NgModule({
   declarations: [
@@ -218,6 +219,7 @@ import { ObservationServiceProvider } from '../providers/observation-service/obs
 
     Media,
     ObservationServiceProvider,
+    DownloadAndPreviewProvider,
   ]
 })
 export class AppModule { }

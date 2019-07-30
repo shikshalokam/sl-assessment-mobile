@@ -30,6 +30,9 @@ export class ObservationEntityListingComponent {
   @Output() openMenuEvent = new EventEmitter();
   @Input() selectedObservationIndex;
   @Input() observationList;
+  @Output() actionsEvent = new EventEmitter();
+
+
   text: string;
   // @Input() selectedindex ;
   @Output() updatedLocalStorage = new EventEmitter();
@@ -270,6 +273,12 @@ export class ObservationEntityListingComponent {
       ]
     });
     alert.present();
+  }
+
+
+  actions(submissionId, action) {
+    console.log("in " + submissionId + " ",  action)
+    this.actionsEvent.emit({ "submissionId": submissionId, "action": action })
   }
 
 }
