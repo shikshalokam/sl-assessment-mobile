@@ -149,29 +149,29 @@ export class ObservationServiceProvider {
   }
 
 
-  getObservationList(){
-    return new Promise((resolve,reject) =>{
-      this.utils.startLoader();
-      this.apiProvider.httpGet(AppConfigs.cro.observationList, success => {
-        let createdObservation = success.result;
-        createdObservation.forEach(element => {
-          if (element.entities.length >= 0) {
-            element.entities.forEach(entity => {
-              // entity.downloaded = false;
-              if(entity.submissions && entity.submissions.length > 0){
-                entity.submissions.forEach( submission =>{
-                  submission['downloaded'] = false;
-                })
-              }
-            });
-          }
-        });
-        console.log(JSON.stringify(createdObservation));
-        this.utils.stopLoader();
-        this.localStorage.setLocalStorage('createdObservationList', createdObservation)
-    },error=>{
+  // getObservationList(){
+  //   return new Promise((resolve,reject) =>{
+  //     this.utils.startLoader();
+  //     this.apiProvider.httpGet(AppConfigs.cro.observationList, success => {
+  //       let createdObservation = success.result;
+  //       createdObservation.forEach(element => {
+  //         if (element.entities.length >= 0) {
+  //           element.entities.forEach(entity => {
+  //             // entity.downloaded = false;
+  //             if(entity.submissions && entity.submissions.length > 0){
+  //               entity.submissions.forEach( submission =>{
+  //                 submission['downloaded'] = false;
+  //               })
+  //             }
+  //           });
+  //         }
+  //       });
+  //       console.log(JSON.stringify(createdObservation));
+  //       this.utils.stopLoader();
+  //       this.localStorage.setLocalStorage('createdObservationList', createdObservation)
+  //   },error=>{
       
-     })
-   })
-  }
+  //    })
+  //  })
+  // }
 }

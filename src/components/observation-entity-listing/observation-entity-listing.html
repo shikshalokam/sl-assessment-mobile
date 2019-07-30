@@ -33,7 +33,9 @@
                   <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
                 </span> -->
                 <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="cloud-done" class="completed" margin-left></ion-icon>
-                <ion-icon *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed'" name="trash" class="downloadIcon" (click)="removeEntity(i,k)" margin-left></ion-icon>
+                <ion-icon *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed' && !(entity?.submissions.length > 0)" name="trash" class="downloadIcon" (click)="removeEntity(i,k)" margin-left></ion-icon>
+                <ion-icon *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed' && (entity?.submissions.length > 0)" name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
+
               </div>
             </ion-item>
             <!-- <ion-item-options side="right" *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed'">
