@@ -237,53 +237,53 @@ export class ObservationDetailsPage {
   }
 
 
-  getAssessmentDetails(event) {
-    // console.log("getting assessment details")
-    event.observationIndex = this.navParams.get('selectedObservationIndex');
-    // console.log(this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length)
-    this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(program => {
-      this.programs = program;
-      // console.log(JSON.stringify(program))
+  // getAssessmentDetails(event) {
+  //   // console.log("getting assessment details")
+  //   event.observationIndex = this.navParams.get('selectedObservationIndex');
+  //   // console.log(this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length)
+  //   this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(program => {
+  //     this.programs = program;
+  //     // console.log(JSON.stringify(program))
 
-      this.goToEcm(this.navParams.get('selectedObservationIndex'), event, program)
-    }).catch(error => {
+  //     this.goToEcm(this.navParams.get('selectedObservationIndex'), event, program)
+  //   }).catch(error => {
 
-    })
-  }
+  //   })
+  // }
 
-  goToSubmissionListPage(observationIndex, entityIndex) {
-    this.navCtrl.push(SubmissionListPage, { observationIndex: observationIndex, entityIndex: entityIndex, selectedObservationIndex: this.navParams.get('selectedObservationIndex') })
-  }
+  // goToSubmissionListPage(observationIndex, entityIndex) {
+  //   this.navCtrl.push(SubmissionListPage, { observationIndex: observationIndex, entityIndex: entityIndex, selectedObservationIndex: this.navParams.get('selectedObservationIndex') })
+  // }
 
-  goToEcm(observationIndex, event, program) {
-    console.log("Assesment details")
-    let submissionId = program[observationIndex]['entities'][event.entityIndex].submissionId
-    let heading = program[observationIndex]['entities'][event.entityIndex].name;
-    if (this.observationDetails[event.programIndex].entities[event.entityIndex].submissions[0] && this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length > 0) {
-      this.goToSubmissionListPage(event.programIndex, event.entityIndex)
-    } else {
-      // console.log(this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length)
-      this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
-        // console.log(JSON.stringify(successData.assessment))
-        if (successData.assessment.evidences.length > 1) {
-          this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
-        } else {
-          //   if (this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length > 0 ){
-          //   this.goToSubmissionListPage(event.programIndex,event.entityIndex)
-          // }else {
-          if (successData.assessment.evidences[0].startTime) {
-            this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
-            this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
-          } else {
-            const assessment = { _id: submissionId, name: heading }
-            this.openAction(assessment, successData, 0);
-          }
-        }
-      }).catch(error => {
-      });
-    }
+  // goToEcm(observationIndex, event, program) {
+  //   console.log("Assesment details")
+  //   let submissionId = program[observationIndex]['entities'][event.entityIndex].submissionId
+  //   let heading = program[observationIndex]['entities'][event.entityIndex].name;
+  //   if (this.observationDetails[event.programIndex].entities[event.entityIndex].submissions[0] && this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length > 0) {
+  //     this.goToSubmissionListPage(event.programIndex, event.entityIndex)
+  //   } else {
+  //     // console.log(this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length)
+  //     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
+  //       // console.log(JSON.stringify(successData.assessment))
+  //       if (successData.assessment.evidences.length > 1) {
+  //         this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
+  //       } else {
+  //         //   if (this.observationDetails[event.programIndex].entities[event.entityIndex].submissions.length > 0 ){
+  //         //   this.goToSubmissionListPage(event.programIndex,event.entityIndex)
+  //         // }else {
+  //         if (successData.assessment.evidences[0].startTime) {
+  //           this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
+  //           this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
+  //         } else {
+  //           const assessment = { _id: submissionId, name: heading }
+  //           this.openAction(assessment, successData, 0);
+  //         }
+  //       }
+  //     }).catch(error => {
+  //     });
+  //   }
 
-  }
+  // }
   openAction(assessment, aseessmemtData, evidenceIndex) {
     // console.log(JSON.stringify(assessment))
 
@@ -292,15 +292,15 @@ export class ObservationDetailsPage {
     this.evdnsServ.openActionSheet(options, "Observation");
 
   }
-  updateLocalStorage() {
-    this.localStorage.getLocalStorage('createdObservationList').then(data => {
-      data[this.navParams.get('selectedObservationIndex')] = this.observationDetails[0]
-      this.localStorage.setLocalStorage('createdObservationList', data);
-      this.getLocalStorageData();
-    }).catch(error => {
+  // updateLocalStorage() {
+  //   this.localStorage.getLocalStorage('createdObservationList').then(data => {
+  //     data[this.navParams.get('selectedObservationIndex')] = this.observationDetails[0]
+  //     this.localStorage.setLocalStorage('createdObservationList', data);
+  //     this.getLocalStorageData();
+  //   }).catch(error => {
 
-    });
-  }
+  //   });
+  // }
 
 
 

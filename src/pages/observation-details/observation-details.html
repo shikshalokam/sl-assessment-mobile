@@ -8,20 +8,20 @@
   <observation-entity-listing [entityList]="observationDetails" [entityType]="'observations'"
     [observationList]="observationList"
     (refreshEvent)="refresh($event)" [selectedObservationIndex]="selectedObservationIndex"
-    (openMenuEvent)="openMenu($event)" (updatedLocalStorage)="updateLocalStorage($event)">
+    (openMenuEvent)="openMenu($event)" >
   </observation-entity-listing>
   
 </ion-content>
 
-<ion-footer no-shadow  *ngIf="enableCompleteBtn">
+<!-- <ion-footer no-shadow  *ngIf="enableCompleteBtn">
   <ion-toolbar class="_toolbar-background-md" position="bottom">
     <ion-row>
       <ion-col *ngIf="observationDetails[0]?.status !== 'completed' && observationDetails[0]?.entities?.length ">
         <button ion-button full (click)="markAsComplete()" class="btnText">
-          <!-- <ion-icon name="refresh" margin-right></ion-icon> -->
+          <ion-icon name="refresh" margin-right></ion-icon>
           {{'buttons.markAsComplete' | translate}}
         </button>
       </ion-col>
     </ion-row>
   </ion-toolbar>
-</ion-footer>
+</ion-footer> -->

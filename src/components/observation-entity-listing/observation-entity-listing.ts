@@ -80,7 +80,7 @@ export class ObservationEntityListingComponent {
     let heading = name;
     // this.observationProvider.getSubmission(this.selectedObservationIndex ,entityindex, 1 , this.observationList,'createdObservationList').then(success => {
     // //   console.log(JSON.stringify(success));
-    this.localStorage.getLocalStorage('createdObservationList').then(success => {  
+    // this.localStorage.getLocalStorage('createdObservationList').then(success => {  
       // console.log(JSON.stringify(success[observationIndex]))  
       // console.log(success[observationIndex].entities[entityindex])
       // let submissionId = success[observationIndex].entities[entityindex].submissionId;
@@ -110,9 +110,9 @@ export class ObservationEntityListingComponent {
         }
   
       }).catch();
-    }).catch(error => {
+    // }).catch(error => {
 
-    })
+    // })
    
 
     //   this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
@@ -200,11 +200,11 @@ export class ObservationEntityListingComponent {
         this.apiProviders.httpPost(AppConfigs.cro.mapEntityToObservation + this.entityList[params[0]]._id, payload, success => {
           // this.utils.stopLoader();
 
-          entityList.forEach(entity => {
-            entity.submissionStatus = "started";
-            entity.downloaded = false;
-          })
-          this.entityList[0].entities = [...entityList, ...this.entityList[0].entities];
+          // entityList.forEach(entity => {
+          //   entity.submissionStatus = "started";
+          //   entity.downloaded = false;
+          // })
+          // this.entityList[0].entities = [...entityList, ...this.entityList[0].entities];
           // this.updatedLocalStorage.emit();
           this.events.publish('refreshObservationList','added');
 
