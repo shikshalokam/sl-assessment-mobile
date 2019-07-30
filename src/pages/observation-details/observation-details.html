@@ -4,9 +4,10 @@
   </ion-header>
 
 
-<ion-content>
+<ion-content >
   <observation-entity-listing [entityList]="observationDetails" [entityType]="'observations'"
-    (getAssessmentDetailsEvent)="getAssessmentDetails($event)" (refreshEvent)="refresh($event)" [selectedObservationIndex]="selectedObservationIndex"
+    [observationList]="observationList"
+    (refreshEvent)="refresh($event)" [selectedObservationIndex]="selectedObservationIndex"
     (openMenuEvent)="openMenu($event)" (updatedLocalStorage)="updateLocalStorage($event)">
   </observation-entity-listing>
   
