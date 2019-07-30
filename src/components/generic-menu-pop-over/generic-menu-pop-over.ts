@@ -31,7 +31,6 @@ export class GenericMenuPopOverComponent {
     console.log(this.showAbout)
   }
   goToAbout(){
-    console.log("this is the index" + this.assessmentIndex)
     this.navCntrl.push(AssessmentAboutPage , {assessmentIndex : this.assessmentIndex  , assessmentName : this.assessmentName})
     this.viewCntrl.dismiss();
 
