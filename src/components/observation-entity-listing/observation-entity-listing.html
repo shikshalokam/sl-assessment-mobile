@@ -37,23 +37,33 @@
                 <ion-icon *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed' && (entity?.submissions.length > 0)" name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
                
               </div>
-            </ion-item>
-            <!-- <ion-item-options side="right" *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed'">
-              <button ion-button color="warning"  (click)="removeEntity(i,k)">
-                <ion-icon name="trash"></ion-icon>
-                {{'buttons.addEntity'| translate}
-              </button>
-            </ion-item-options> -->
-          </ion-item-sliding>
-        </ion-list>
-        <ion-list *ngIf="!entity.entities.length">
-          <div class="_flex-box _justify-content-center flex1">
-           {{'message.noEntity' | translate}}
-          </div>
-        </ion-list>
-      </ion-item-group>
-    </ion-card>
-  </div>
+<!-- 
+              <span float-right *ngIf="entity?.submissionStatus === 'inprogress'"
+                class="_inProgress _flex-box">
+                <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
+              </span> -->
+              <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="eye" class="completed" (click) ="actions(entity?.submissionId, 'preview')"margin-left></ion-icon>
+              <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="share-alt" class="completed" margin-left (click) ="actions(entity?.submissionId, 'share')"></ion-icon>
+
+              <!-- <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="cloud-done" class="completed" margin-left></ion-icon> -->
+              <ion-icon *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed'" name="trash" class="downloadIcon" (click)="removeEntity(i,k)" margin-left></ion-icon>
+            </div>
+          </ion-item>
+          <!-- <ion-item-options side="right" *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed'">
+            <button ion-button color="warning"  (click)="removeEntity(i,k)">
+              <ion-icon name="trash"></ion-icon>
+              {{'buttons.addEntity'| translate}
+            </button>
+          </ion-item-options> -->
+        </ion-item-sliding>
+      </ion-list>
+      <ion-list *ngIf="!entity.entities.length">
+        <div class="_flex-box _justify-content-center flex1">
+         {{'message.noEntity' | translate}}
+        </div>
+      </ion-list>
+    </ion-item-group>
+  </ion-card>
 </div>
 
 
