@@ -45,14 +45,6 @@ export class EvidenceProvider {
       title: translateObject['actionSheet.surveyAction'],
       buttons: [
         {
-          text:translateObject['actionSheet.view']+" "+type,
-          icon: "eye",
-          handler: () => {
-            delete params.entityDetails;
-            this.appCtrl.getRootNav().push('SectionListPage', params);
-          }
-        },
-        {
           text: translateObject['actionSheet.start']+" "+type,
           icon: 'arrow-forward',
           handler: () => {
@@ -74,6 +66,14 @@ export class EvidenceProvider {
             }).catch(error => {
               this.netwrkGpsProvider.checkForLocationPermissions();
             })
+          }
+        },
+        {
+          text:translateObject['actionSheet.view']+" "+type,
+          icon: "eye",
+          handler: () => {
+            delete params.entityDetails;
+            this.appCtrl.getRootNav().push('SectionListPage', params);
           }
         },
         {
