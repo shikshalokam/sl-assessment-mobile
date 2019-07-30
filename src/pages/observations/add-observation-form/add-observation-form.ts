@@ -201,7 +201,17 @@ export class AddObservationFormPage {
     event ? this.solutionPage ++ : this.solutionPage ;
     this.utils.startLoader();
     this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType + "?search="+this.searchSolutionUrl+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
-      // console.log(JSON.stringify(success.result[0].data))
+      // console.log(JSON.stringify(success.result))
+      // this.listOfSolution = event ? [...this.listOfSolution ,...success.result] :[...success.result];
+      // // this.totalCount = success.result[0].count;
+      // console.log(JSON.stringify(this.listOfSolution))
+      // if (this.editData && this.editData.data.solutionId) {
+      //   this.listOfSolution.forEach(element => {
+      //     if (element._id === this.editData.data.solutionId)
+      //       this.selectedFrameWork = element._id;
+      //   });
+      // }
+      console.log(JSON.stringify(success.result[0].data))
       this.listOfSolution = event ? [...this.listOfSolution ,...success.result[0].data] :[...success.result[0].data];
       this.totalCount = success.result[0].count;
       console.log(JSON.stringify(this.listOfSolution))
