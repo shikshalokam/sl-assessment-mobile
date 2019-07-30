@@ -7,9 +7,11 @@
 <ion-content>
   <observation-entity-listing [entityList]="observationDetails" [entityType]="'observations'"
     (getAssessmentDetailsEvent)="getAssessmentDetails($event)" (refreshEvent)="refresh($event)" [selectedObservationIndex]="selectedObservationIndex"
-    (openMenuEvent)="openMenu($event)" (updatedLocalStorage)="updateLocalStorage($event)">
+    (openMenuEvent)="openMenu($event)" (updatedLocalStorage)="updateLocalStorage($event)"
+    (actionsEvent)="doActions($event)"
+    >
   </observation-entity-listing>
-  
+
 </ion-content>
 
 <ion-footer no-shadow  *ngIf="enableCompleteBtn">
