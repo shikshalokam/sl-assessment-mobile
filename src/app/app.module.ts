@@ -88,6 +88,7 @@ import { HintPage } from '../pages/hint/hint';
 import { Media } from '@ionic-native/media';
 import { PreviewPage } from '../pages/preview/preview';
 import { SubmissionListPage } from '../pages/submission-list/submission-list';
+import { ObservationServiceProvider } from '../providers/observation-service/observation-service';
 
 @NgModule({
   declarations: [
@@ -216,6 +217,7 @@ import { SubmissionListPage } from '../pages/submission-list/submission-list';
     HintProvider,
 
     Media,
+    ObservationServiceProvider,
   ]
 })
 export class AppModule { }
