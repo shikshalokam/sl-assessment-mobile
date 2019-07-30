@@ -24,12 +24,14 @@ export class SharingFeaturesProvider {
     console.log('Hello SharingFeaturesProvider Provider');
   }
   
-  sharingThroughApp(){
+  sharingThroughApp( fileName?){
+    let subject = "hi";
+    let link = "google.com";
+    let message = "hi";
+    if (!fileName){
     this.fileChooser.open()
     .then(uri => {
-      let subject = "hi";
-      let link = "google.com";
-      let message = "hi";
+     
       (<any>window).FilePath.resolveNativePath(uri, (result) => {
          let fileName = result.split('/').pop();
          let path = result.substring(0, result.lastIndexOf("/") + 1);
@@ -48,6 +50,24 @@ export class SharingFeaturesProvider {
     }
     )
     .catch(e => console.log(e));
+  }else{
+    (<any>window).FilePath.resolveNativePath(fileName, (result) => {
+      let fileName = result.split('/').pop();
+      let path = result.substring(0, result.lastIndexOf("/") + 1);
+         this.file.readAsDataURL(path, fileName)
+         .then(base64File => {
+             this.socialSharing.share("", fileName, base64File , "").then(() => {
+               console.log("share Success")
+             }).catch(() => {
+               console.log("share Failure")
+             });
+         })
+         .catch(() => {
+             console.log('Error reading file');
+         })
+   });
+  }
+
   }
 
 }

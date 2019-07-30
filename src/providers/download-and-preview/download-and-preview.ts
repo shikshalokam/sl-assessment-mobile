@@ -8,6 +8,7 @@ import { FILE_EXTENSION_HEADERS } from '../../components/image-upload/mimTypes';
 import { UtilsProvider } from '../utils/utils';
 import { AppConfigs } from '../appConfig';
 import { ApiProvider } from '../api/api';
+import { SharingFeaturesProvider } from '../sharing-features/sharing-features';
 
 
 /*
@@ -26,7 +27,7 @@ export class DownloadAndPreviewProvider {
   appFolderPath;
 
   constructor(public http: HttpClient, private fileTransfr: FileTransfer, private platform: Platform,
-    private file: File, private fileOpener: FileOpener, private utils: UtilsProvider,
+    private file: File,private shareFeature : SharingFeaturesProvider, private fileOpener: FileOpener, private utils: UtilsProvider,
     private apiProvider: ApiProvider) {
     console.log('Hello DownloadAndPreviewProvider Provider');
     this.isIos = this.platform.is('ios') ? true : false;
@@ -38,14 +39,16 @@ export class DownloadAndPreviewProvider {
     const fileName = "submissionDoc_" + submissionId + ".pdf";
     this.file.checkFile(this.appFolderPath+ '/', fileName).then(success => {
     console.log("Check for file available")
-
-      this.previewSubmissionDoc(fileName)
+      action === 'share' ? this.shareSubmissionDoc(this.appFolderPath+ '/'+ fileName) : this.previewSubmissionDoc(fileName)
     }).catch(error => {
     console.log("Check for file not available")
 
       this.getSubmissionDocUrl(submissionId, action);
       // this.downloadSubmissionDoc(submissionId, action)
     })
+  }
+  shareSubmissionDoc(fileName: string) {
+    this.shareFeature.sharingThroughApp(fileName)
   }
 
   downloadSubmissionDoc(submissionId, fileRemoteUrl, action) {
@@ -59,14 +62,15 @@ export class DownloadAndPreviewProvider {
       if (action === 'preview') {
         this.previewSubmissionDoc(fileName)
       } else if (action === 'share') {
+        this.shareSubmissionDoc(fileName)
 
       }
-      this.utils.stopLoader();
+      // this.utils.stopLoader();
       console.log(JSON.stringify(success))
     }).catch(error => {
     console.log("file dowload error")
 
-      this.utils.stopLoader();
+      // this.utils.stopLoader();
       console.log(JSON.stringify(error))
     })
   }

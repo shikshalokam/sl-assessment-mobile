@@ -7,6 +7,7 @@ import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
+import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 
 /**
  * Generated class for the SubmissionListPage page.
@@ -37,6 +38,8 @@ export class SubmissionListPage {
     private evdnsServ: EvidenceProvider,
     private utils: UtilsProvider,
     private events: Events,
+    private dap: DownloadAndPreviewProvider,
+
     private observationService :ObservationServiceProvider,
     private assessmentService : AssessmentServiceProvider
   ) {
@@ -205,5 +208,15 @@ export class SubmissionListPage {
     }).catch(error =>{
 
     })
+  }
+
+
+  actions(submissionId, action) {
+      this.dap.checkForSubmissionDoc(submissionId, action)
+      console.log(action)
+      // this.getSubmissionPdf(event.submissionId, event.action);
+  
+      // this.downloadFile("http://www.africau.edu/images/default/sample.pdf")
+  
   }
 }

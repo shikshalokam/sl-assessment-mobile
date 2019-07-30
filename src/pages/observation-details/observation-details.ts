@@ -43,7 +43,6 @@ export class ObservationDetailsPage {
     private localStorage: LocalStorageProvider,
     private fileTransfr: FileTransfer,
     private platform: Platform,
-    private dap: DownloadAndPreviewProvider,
     private events: Events) {
 
     this.events.subscribe('observationLocalstorageUpdated', success => {
@@ -335,13 +334,13 @@ export class ObservationDetailsPage {
 
   }
 
-  doActions(event){
-    console.log(JSON.stringify(event));
-    this.dap.checkForSubmissionDoc(event.submissionId, event.action)
-    // this.getSubmissionPdf(event.submissionId, event.action);
+  // doActions(event){
+  //   console.log(JSON.stringify(event));
+  //   this.dap.checkForSubmissionDoc(event.submissionId, event.action)
+  //   // this.getSubmissionPdf(event.submissionId, event.action);
 
-    // this.downloadFile("http://www.africau.edu/images/default/sample.pdf")
-  }
+  //   // this.downloadFile("http://www.africau.edu/images/default/sample.pdf")
+  // }
 
 
 
