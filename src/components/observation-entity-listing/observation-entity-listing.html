@@ -27,7 +27,10 @@
                 class="_inProgress _flex-box">
                 <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
               </span> -->
-              <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="cloud-done" class="completed" margin-left></ion-icon>
+              <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="eye" class="completed" (click) ="actions(entity?.submissionId, 'preview')"margin-left></ion-icon>
+              <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="share-alt" class="completed" margin-left (click) ="actions(entity?.submissionId, 'share')"></ion-icon>
+
+              <!-- <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="cloud-done" class="completed" margin-left></ion-icon> -->
               <ion-icon *ngIf="entityList[0].status !== 'completed' && entity?.submissionStatus !== 'completed'" name="trash" class="downloadIcon" (click)="removeEntity(i,k)" margin-left></ion-icon>
             </div>
           </ion-item>
