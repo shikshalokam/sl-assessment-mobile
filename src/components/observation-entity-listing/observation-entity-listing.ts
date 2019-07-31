@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
 import { SubmissionListPage } from '../../pages/submission-list/submission-list';
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
+import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 // import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
 /**
  * Generated class for the EntityListingComponent component.
@@ -43,9 +44,11 @@ export class ObservationEntityListingComponent {
     private localStorage: LocalStorageProvider,
     public alertCntrl: AlertController,
     private evdnsServ: EvidenceProvider,
+    private assessmentService : AssessmentServiceProvider,
     private translate: TranslateService,
     private apiProviders: ApiProvider,
     private events: Events,
+    private observationService : ObservationServiceProvider,
     private modalCtrl: ModalController,
     private utils: UtilsProvider) {
     console.log(JSON.stringify(this.entityList))
@@ -60,93 +63,69 @@ export class ObservationEntityListingComponent {
   //     name: name
   //   })
   // }
-  checkSubmission(entity, observationIndex, entityindex) {
+  checkSubmission(entity, observationIndex, entityIndex) {
     console.log(JSON.stringify(this.entityList))
     console.log("checking submission");
 
-    if (this.entityList[observationIndex]['entities'][entityindex].submissions && this.entityList[observationIndex]['entities'][entityindex].submissions.length > 0) {
+    if (this.entityList[observationIndex]['entities'][entityIndex].submissions && this.entityList[observationIndex]['entities'][entityIndex].submissions.length > 0) {
       console.log("submission there")
-      this.navCtrl.push(SubmissionListPage, { observationIndex: observationIndex, entityIndex: entityindex, selectedObservationIndex: this.selectedObservationIndex })
+      this.navCtrl.push(SubmissionListPage, { observationIndex: observationIndex, entityIndex: entityIndex, selectedObservationIndex: this.selectedObservationIndex })
     } else {
       console.log("no submission")
-      this.observationProvider.getSubmission(this.selectedObservationIndex ,entityindex, 1 , this.observationList,'createdObservationList').then(submissionId => {
-        this.goToEcm( entity.name, entityindex, observationIndex , submissionId) 
-      }).catch(error => {
+      let event = {
+        entityIndex: entityIndex,
+        observationIndex: this.selectedObservationIndex,
+        submissionNumber: 1
+      }
+      this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.observationList, 'createdObservationList').then(result => {
+        this.observationService.refreshObservationList(this.observationList).then(success => {
+          this.observationList = success;
+          this.entityList[0] = success[this.selectedObservationIndex];
+          this.navCtrl.push(SubmissionListPage, { observationIndex: observationIndex, entityIndex: entityIndex, selectedObservationIndex: this.selectedObservationIndex })
 
-      });
+          // this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+          // this.goToEcm(0 , entityIndex)
+        }).catch(error => {
+  
+        })
+      }).catch(error => {
+  
+      })
+
+
+      // this.observationProvider.getSubmission(this.selectedObservationIndex ,entityindex, 1 , this.observationList,'createdObservationList').then(submissionId => {
+      //   this.goToEcm( entity.name, entityindex, observationIndex , submissionId) 
+      // }).catch(error => {
+
+      // });
     }
   }
+  goToEcm(index , entityIndex) {
+    console.log("go to ecm called");
+    // console.log(JSON.stringify(this.programs))
+    let submissionId = this.observationList[this.selectedObservationIndex]['entities'][entityIndex].submissions[index]._id
+    let heading = this.observationList[this.selectedObservationIndex]['entities'][entityIndex].name;
 
-  goToEcm( name, entityindex, observationIndex ,submissionId) {
-    // console.log("go to ecm called");
-    let heading = name;
-    // this.observationProvider.getSubmission(this.selectedObservationIndex ,entityindex, 1 , this.observationList,'createdObservationList').then(success => {
-    // //   console.log(JSON.stringify(success));
-    // this.localStorage.getLocalStorage('createdObservationList').then(success => {  
-      // console.log(JSON.stringify(success[observationIndex]))  
-      // console.log(success[observationIndex].entities[entityindex])
-      // let submissionId = success[observationIndex].entities[entityindex].submissionId;
-      this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
-        // console.log(JSON.stringify(successData));
-        // this.navCtrl.push(AssessmentAboutPage, { data: successData });
-        console.log("go to ecm called");
-  
-  
-        if (successData.assessment.evidences.length > 1) {
-  
-          this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
-  
+    // console.log(this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].submissions[index])
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
+      // console.log(JSON.stringify(successData))
+      if (successData.assessment.evidences.length > 1) {
+        // console.log("more then one evedince method")
+        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
+      } else {
+        console.log("  one evedince method")
+
+        // console.log(successData.assessment.evidences[0].startTime + "start time")
+        if (successData.assessment.evidences[0].startTime) {
+          this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
+          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
         } else {
-  
-          if (successData.assessment.evidences[0].startTime) {
-            //console.log("if loop " + successData.assessment.evidences[0].externalId)
-            this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
-            this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
-          } else {
-  
-            const assessment = { _id: submissionId, name: heading }
-            this.openAction(assessment, successData, 0);
-            //console.log("else loop");
-  
-          }
+          const assessment = { _id: submissionId, name: heading }
+          this.openAction(assessment, successData, 0);
         }
-  
-      }).catch();
-    // }).catch(error => {
-
-    // })
-   
-
-    //   this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
-
-    // // console.log(JSON.stringify(successData));
-    // // this.navCtrl.push(AssessmentAboutPage, {data : successData});
-
-    //   // //console.log("go to ecm called");
-
-
-    //     if (successData.assessment.evidences.length > 1) {
-
-    //       this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
-
-    //     } else {
-
-    //       if (successData.assessment.evidences[0].startTime) {
-    //         //console.log("if loop " + successData.assessment.evidences[0].externalId)
-    //         this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
-    //         this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
-    //       } else {
-
-    //         const assessment = { _id: submissionId, name: heading }
-    //         this.openAction(assessment, successData, 0);
-    //         //console.log("else loop");
-
-    //       }
-    //     }
-    //   }).catch(error => {
-    //   });
-    // }
-
+      }
+    }).catch(error => {
+    });
   }
   openAction(assessment, aseessmemtData, evidenceIndex) {
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
