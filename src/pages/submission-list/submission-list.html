@@ -30,6 +30,8 @@
         <ion-icon *ngIf="submission?.status == 'completed'" name="eye" class="completed" (click) ="$event.stopPropagation() ; actions(submission?._id, 'preview') "margin-left></ion-icon>
         <ion-icon *ngIf="submission?.status == 'completed'" name="share-alt" class="completed" margin-left (click) ="actions(submission?._id, 'share') ;  $event.stopPropagation();"></ion-icon>
         <ion-icon *ngIf="submission?.downloaded && !(submission.status === 'completed')" name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
+        <ion-icon *ngIf="!(submission.status === 'completed')" name="trash" class="_progressIcon" margin-left (click) ="$event.stopPropagation() ; deleteSubmission(submission?._id) "></ion-icon>
+
         </div>
       </ion-item>
   </div>

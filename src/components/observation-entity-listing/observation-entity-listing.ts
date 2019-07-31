@@ -212,7 +212,7 @@ export class ObservationEntityListingComponent {
 
 
         }, error => {
-          this.utils.stopLoader();
+          // this.utils.stopLoader();
         })
       }
     })
