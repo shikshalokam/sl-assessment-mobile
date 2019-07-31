@@ -63,14 +63,13 @@ export class DownloadAndPreviewProvider {
         this.previewSubmissionDoc(fileName)
       } else if (action === 'share') {
         this.shareSubmissionDoc(fileName)
-
       }
-      // this.utils.stopLoader();
+      this.utils.stopLoader();
       console.log(JSON.stringify(success))
     }).catch(error => {
     console.log("file dowload error")
 
-      // this.utils.stopLoader();
+      this.utils.stopLoader();
       console.log(JSON.stringify(error))
     })
   }
