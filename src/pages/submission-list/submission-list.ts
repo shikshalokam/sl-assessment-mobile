@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, NavParams, Events, Config, AlertController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
@@ -8,6 +8,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
 import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Generated class for the SubmissionListPage page.
@@ -30,7 +31,7 @@ export class SubmissionListPage {
   submissionList: any;
   assessmentDetails: any;
   // firstLoad = true;
-  constructor(  
+  constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private apiProvider: ApiProvider,
@@ -38,10 +39,11 @@ export class SubmissionListPage {
     private evdnsServ: EvidenceProvider,
     private utils: UtilsProvider,
     private events: Events,
+    private alertCntrl: AlertController,
     private dap: DownloadAndPreviewProvider,
-
-    private observationService :ObservationServiceProvider,
-    private assessmentService : AssessmentServiceProvider
+    private translate: TranslateService,
+    private observationService: ObservationServiceProvider,
+    private assessmentService: AssessmentServiceProvider
   ) {
   }
 
@@ -54,7 +56,7 @@ export class SubmissionListPage {
     // this.firstLoad = false;
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     // if(this.firstLoad === false)
     // this.observationService.refreshObservationList(this.programs).then(success=>{
     //   this.programs = success ;
@@ -82,7 +84,7 @@ export class SubmissionListPage {
     }).catch(error => {
     })
   }
-  getAssessmentDetails(index, submissionNum=null) {
+  getAssessmentDetails(index, submissionNum = null) {
     let submissionNumber = submissionNum ? submissionNum : this.submissionList[index].submissionNumber
     console.log("get assessment function called");
     // this.apiProvider.httpGet(AppConfigs.cro.observationDetails + this.programs[this.selectedObservationIndex]._id + "?entityId=" + this.programs[this.selectedObservationIndex].entities[this.entityIndex]._id + "&submissionNumber=" + submissionNumber, success => {
@@ -103,16 +105,16 @@ export class SubmissionListPage {
 
     // });
     let event = {
-      entityIndex : this.navParams.get('entityIndex'),
+      entityIndex: this.navParams.get('entityIndex'),
       observationIndex: this.navParams.get('selectedObservationIndex'),
-      submissionIndex : index 
+      submissionIndex: index
     }
-    this.assessmentService.getAssessmentDetailsOfCreatedObservation(event , this.programs , 'createdObservationList').then( success =>{
-      this.programs = success ;
-      this.observationDetails[0] = success[this.selectedObservationIndex] 
+    this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(success => {
+      this.programs = success;
+      this.observationDetails[0] = success[this.selectedObservationIndex]
       this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
       this.goToEcm(index)
-    }).catch(error =>{
+    }).catch(error => {
 
     })
 
@@ -169,54 +171,85 @@ export class SubmissionListPage {
   }
   observeAgain() {
     // this.getAssessmentDetails(this.submissionList.length , this.submissionList.length + 1)
-   let submissionNumber = this.submissionList.length+ 1;
-   
-  //  console.log(submissionNumber)
-  //  this.apiProvider.httpGet(AppConfigs.cro.observationDetails + this.programs[this.selectedObservationIndex]._id + "?entityId=" + this.programs[this.selectedObservationIndex].entities[this.entityIndex]._id + "&submissionNumber=" + submissionNumber, success => {
-  //     this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(success.result.assessment.submissionId), success.result)
-  //     console.log("successful called with new submission number")
-  //       this.observationService.refreshObservationList(this.programs).then(success=>{
-  //         this.programs = success ;
-  //         console.log("successful called refresh api")
-  //         console.log( success[this.selectedObservationIndex].entities[this.entityIndex].submissions.length)
-  //         this.submissionList =[... this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions];
-  //         let x =[1,2,3]
-  //         console.log(this.submissionList.length)
-  //         console.log(x.length)
-          
-  //        }).catch( error =>{
+    let submissionNumber = this.submissionList.length + 1;
 
-  //       })
-  //   },error =>{
+    //  console.log(submissionNumber)
+    //  this.apiProvider.httpGet(AppConfigs.cro.observationDetails + this.programs[this.selectedObservationIndex]._id + "?entityId=" + this.programs[this.selectedObservationIndex].entities[this.entityIndex]._id + "&submissionNumber=" + submissionNumber, success => {
+    //     this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(success.result.assessment.submissionId), success.result)
+    //     console.log("successful called with new submission number")
+    //       this.observationService.refreshObservationList(this.programs).then(success=>{
+    //         this.programs = success ;
+    //         console.log("successful called refresh api")
+    //         console.log( success[this.selectedObservationIndex].entities[this.entityIndex].submissions.length)
+    //         this.submissionList =[... this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions];
+    //         let x =[1,2,3]
+    //         console.log(this.submissionList.length)
+    //         console.log(x.length)
 
-  //   })
+    //        }).catch( error =>{
+
+    //       })
+    //   },error =>{
+
+    //   })
     let event = {
-      entityIndex : this.navParams.get('entityIndex'),
+      entityIndex: this.navParams.get('entityIndex'),
       observationIndex: this.navParams.get('selectedObservationIndex'),
-      submissionNumber : submissionNumber
+      submissionNumber: submissionNumber
     }
-    this.assessmentService.getAssessmentDetailsOfCreatedObservation(event , this.programs , 'createdObservationList').then( result =>{
-              this.observationService.refreshObservationList(this.programs).then(success=>{
-              this.programs = success ;
-              this.observationDetails[0] = success[this.selectedObservationIndex];
-              this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
-              this.goToEcm(this.submissionList.length)
+    this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(result => {
+      this.observationService.refreshObservationList(this.programs).then(success => {
+        this.programs = success;
+        this.observationDetails[0] = success[this.selectedObservationIndex];
+        this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+        this.goToEcm(this.submissionList.length)
 
-            }).catch( error =>{
+      }).catch(error => {
 
-           })
-    }).catch(error =>{
+      })
+    }).catch(error => {
 
     })
   }
 
 
   actions(submissionId, action) {
-      this.dap.checkForSubmissionDoc(submissionId, action)
-      console.log(action)
-      // this.getSubmissionPdf(event.submissionId, event.action);
-  
-      // this.downloadFile("http://www.africau.edu/images/default/sample.pdf")
-  
+    this.dap.checkForSubmissionDoc(submissionId, action);
   }
+  deleteSubmission(submissionId) {
+
+    let translateObject;
+    this.translate.get(['actionSheet.confirm', 'actionSheet.deleteSubmission', 'actionSheet.no', 'actionSheet.yes']).subscribe(translations => {
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
+    let alert = this.alertCntrl.create({
+      title: translateObject['actionSheet.confirm'],
+      message: translateObject['actionSheet.deleteSubmission'],
+      buttons: [
+        {
+          text: translateObject['actionSheet.no'],
+          role: 'cancel',
+          handler: () => {
+          }
+        },
+        {
+          text: translateObject['actionSheet.yes'],
+          handler: () => {
+            this.apiProvider.httpGet(AppConfigs.cro.obsrvationSubmissionDelete + submissionId, success => {
+              this.observationService.refreshObservationList(this.programs).then(success => {
+                this.programs = success;
+                this.observationDetails[0] = success[this.selectedObservationIndex];
+                this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+                this.goToEcm(this.submissionList.length)
+              }).catch(error => { });
+            }, error => { })
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+
 }
