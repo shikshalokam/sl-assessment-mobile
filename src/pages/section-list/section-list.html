@@ -51,7 +51,7 @@
     </ion-card-content>
   </ion-card> -->
 
-  <div margin class="border-radius">
+  <div margin class="border-radius" *ngIf="currentEvidence?.description">
     <h2 padding-left>{{'headings.description' | translate}}</h2>
     <div padding-left padding-right padding-bottom>
         {{currentEvidence?.description}}

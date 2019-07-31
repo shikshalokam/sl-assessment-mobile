@@ -50,7 +50,7 @@ export class ImageListingPage {
   }
   submissionId;
 
-   ionViewDidLoad() {
+  ionViewDidLoad() {
     this.submissionId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
@@ -63,7 +63,7 @@ export class ImageListingPage {
       this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.submissionId;
       this.evidenceSections = this.currentEvidence['sections'];
       this.selectedEvidenceName = this.currentEvidence['name'];
-     this.getAllImages();
+      this.getAllImages();
     }).catch(error => {
       // console.log(this.submissionId + "Image listing error")
 
@@ -72,11 +72,14 @@ export class ImageListingPage {
   }
 
   getAllImages() {
-    let  imageArray = [];
+    let imageArray = [];
     for (const sections of this.currentEvidence.sections) {
       for (const question of sections.questions) {
         let questImage = this.utils.getImageNamesForQuestion(question);
-        imageArray = questImage.length ? [...imageArray, ...questImage] : imageArray;
+
+        // imageArray = questImage.length ? [...imageArray, ...questImage] : imageArray;
+        const newArray = questImage.length ? imageArray.concat(questImage) : imageArray;
+        imageArray = newArray;
       }
     }
     console.log(JSON.stringify(imageArray));
@@ -100,14 +103,14 @@ export class ImageListingPage {
         //   } else {
         //     this.uploadImages = [];
         //   }
-          if (this.uploadImages.length) {
-            this.createImageFromName(this.uploadImages);
-          } else {
-            this.submitEvidence();
-          }
+        if (this.uploadImages.length) {
+          this.createImageFromName(this.uploadImages);
+        } else {
+          this.submitEvidence();
+        }
         // })
       } else {
-        this.translate.get('toastMessage.submissionCompleted').subscribe(translations =>{
+        this.translate.get('toastMessage.submissionCompleted').subscribe(translations => {
           this.utils.openToast(translations);
         })
         // if (this.schoolData['assessments'][0]) {
@@ -147,7 +150,7 @@ export class ImageListingPage {
       this.checkForLocalFolder();
     }, error => {
       this.utils.stopLoader();
-      this.translate.get('toastMessage.enableToGetGoogleUrls').subscribe(translations =>{
+      this.translate.get('toastMessage.enableToGetGoogleUrls').subscribe(translations => {
         this.utils.openToast(translations);
       })
     })
@@ -210,7 +213,7 @@ export class ImageListingPage {
         const errorObject = { ... this.errorObj };
         this.retryCount++;
         if (this.retryCount > 3) {
-          this.translate.get('toastMessage.someThingWentWrongTryLater').subscribe(translations =>{
+          this.translate.get('toastMessage.someThingWentWrongTryLater').subscribe(translations => {
             this.utils.openToast(translations);
           })
           errorObject.text = `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
@@ -252,7 +255,7 @@ export class ImageListingPage {
     const submissionId = this.submissionId;
     const url = (this.schoolData.observation ? AppConfigs.cro.makeSubmission : AppConfigs.survey.submission) + submissionId + '/';
     this.apiService.httpPost(url, payload, response => {
-      if(this.schoolData.observation){
+      if (this.schoolData.observation) {
         this.observetionProvider.markObservationAsCompleted(submissionId);
       }
       this.utils.openToast(response.message);

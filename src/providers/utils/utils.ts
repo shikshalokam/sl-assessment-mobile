@@ -14,13 +14,13 @@ import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser'
 @Injectable()
 export class UtilsProvider {
 
-  constructor(public http: HttpClient, 
+  constructor(public http: HttpClient,
     private locationAccuracy: LocationAccuracy,
-     public loadingCtrl: LoadingController,
-    private toastCtrl: ToastController, 
+    public loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
     private storage: Storage,
-     private localStorage: LocalStorageProvider,
-     private iab : InAppBrowser) {
+    private localStorage: LocalStorageProvider,
+    private iab: InAppBrowser) {
     console.log('Hello UtilsProvider Provider');
   }
   loading: any;
@@ -203,14 +203,14 @@ export class UtilsProvider {
 
   getAssessmentLocalStorageKey(entityId) {
     // return this.currentAssessmentType ? this.currentAssessmentType + schoolId : "schoolDetails_" + schoolId
-    return 'assessmentDetails_'+entityId
+    return 'assessmentDetails_' + entityId
   }
 
   getCompletedQuestionsCount(questions) {
     let count = 0;
     for (const question of questions) {
-      if(question.isCompleted){
-        count ++;
+      if (question.isCompleted) {
+        count++;
       }
     }
     return count
@@ -227,25 +227,29 @@ export class UtilsProvider {
   }
 
   getFileExtensions(url) {
-    let  splittedString = url.split('.');
+    let splittedString = url.split('.');
     let splittedStringForName = url.split('/')
     const obj = {
-      type:splittedString[splittedString.length -1],
-      name:splittedStringForName[splittedStringForName.length -1]
+      type: splittedString[splittedString.length - 1],
+      name: splittedStringForName[splittedStringForName.length - 1]
     }
     return obj
   }
 
   getImageNamesForQuestion(question) {
     let imageArray = [];
-    if(question.responseType === 'matrix'){
+    if (question.responseType === 'matrix') {
       for (const instance of question.value) {
         for (const qst of instance) {
-          imageArray = qst.fileName.length ? [...imageArray, ...qst.fileName] : imageArray
+          const newArray = qst.fileName.length ? imageArray.concat(qst.fileName) : imageArray
+          imageArray = newArray
         }
       }
     } else {
-      imageArray = [...imageArray, question.fileName]
+      // imageArray = [...imageArray, question.fileName]
+      const newArray = question.fileName.length ? imageArray.concat(question.fileName) : imageArray;
+      imageArray = newArray
+
     }
     return imageArray
   }
