@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Platform } from 'ionic-angular';
+import { NavController, NavParams, Platform, Events } from 'ionic-angular';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Storage } from '@ionic/storage';
 import { File } from '@ionic-native/file';
@@ -23,6 +23,7 @@ export class ImageListingPage {
     private storage: Storage, private file: File, private fileTransfer: FileTransfer,
     private apiService: ApiProvider, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
     private platform: Platform, private slack: SlackProvider,
+    private events :Events,
     private translate: TranslateService,
     private observetionProvider: ObservationProvider) {
   }
@@ -266,6 +267,8 @@ export class ImageListingPage {
         name: this.schoolName
       }
       this.utils.stopLoader();
+      this.schoolData.observation ? this.events.publish('updateSubmissionStatus'): null;
+
       this.navCtrl.remove(2, 1);
       this.navCtrl.pop();
     }, error => {
