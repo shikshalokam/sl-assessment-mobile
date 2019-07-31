@@ -45,6 +45,17 @@ export class SubmissionListPage {
     private observationService: ObservationServiceProvider,
     private assessmentService: AssessmentServiceProvider
   ) {
+    this.events.subscribe('updateSubmissionStatus' , refresh => {
+      this.observationService.refreshObservationList(this.programs).then(success => {
+        this.programs = success;
+        this.observationDetails[0] = success[this.selectedObservationIndex];
+        this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+        this.goToEcm(this.submissionList.length)
+
+      }).catch(error => {
+
+      })
+    })
   }
 
   ionViewDidLoad() {
