@@ -301,47 +301,5 @@ export class ObservationDetailsPage {
     this.evdnsServ.openActionSheet(options, "Observation");
 
   }
-  // updateLocalStorage() {
-  //   this.localStorage.getLocalStorage('createdObservationList').then(data => {
-  //     data[this.navParams.get('selectedObservationIndex')] = this.observationDetails[0]
-  //     this.localStorage.setLocalStorage('createdObservationList', data);
-  //     this.getLocalStorageData();
-  //   }).catch(error => {
-
-  //   });
-  // }
-
-  getSubmissionPdf(submissionId, action) {
-    this.apiProvider.httpGet(AppConfigs.cro.getSubmissionPdf+submissionId, success => {
-      if(success.result.url){
-
-      }else {
-        this.utils.openToast(success.message);
-      }
-      console.log(JSON.stringify(success))
-    }, error => {
-      console.log(JSON.stringify(error))
-    })
-  }
-
-  downloadFile(url) {
-    const fileTransfer: FileTransferObject = this.fileTransfr.create();
-    fileTransfer.download(url,this.appFolderPath + '/submissionDoc_'+".pdf").then(success => {
-      console.log(JSON.stringify(success))
-    }).catch(error => {
-      console.log(JSON.stringify(error))
-    })
-
-  }
-
-  // doActions(event){
-  //   console.log(JSON.stringify(event));
-  //   this.dap.checkForSubmissionDoc(event.submissionId, event.action)
-  //   // this.getSubmissionPdf(event.submissionId, event.action);
-
-  //   // this.downloadFile("http://www.africau.edu/images/default/sample.pdf")
-  // }
-
-
-
+  
 }
