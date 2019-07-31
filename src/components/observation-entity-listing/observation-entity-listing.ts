@@ -30,6 +30,8 @@ export class ObservationEntityListingComponent {
   @Output() openMenuEvent = new EventEmitter();
   @Input() selectedObservationIndex;
   @Input() observationList;
+
+
   text: string;
   // @Input() selectedindex ;
   @Output() updatedLocalStorage = new EventEmitter();
@@ -271,5 +273,7 @@ export class ObservationEntityListingComponent {
     });
     alert.present();
   }
+
+
 
 }

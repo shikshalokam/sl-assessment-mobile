@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, Events } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Events, Platform } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -9,6 +9,11 @@ import { AppConfigs } from '../../providers/appConfig';
 import { TranslateService } from '@ngx-translate/core';
 import { SubmissionListPage } from '../submission-list/submission-list';
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
+
+declare var cordova: any;
+
 
 @Component({
   selector: 'page-observation-details',
@@ -22,6 +27,8 @@ export class ObservationDetailsPage {
   selectedObservationIndex: any;
   observationList: any;
   firstVisit = true;
+  isIos: boolean;
+  appFolderPath;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -31,16 +38,18 @@ export class ObservationDetailsPage {
     private evdnsServ: EvidenceProvider,
     private translate: TranslateService,
     private observationService:ObservationServiceProvider,
+    private observationProvider : ObservationServiceProvider,
     private apiProvider: ApiProvider,
     private localStorage: LocalStorageProvider,
-    private observationProvider : ObservationServiceProvider,
+    private fileTransfr: FileTransfer,
+    private platform: Platform,
     private events: Events) {
 
     this.events.subscribe('observationLocalstorageUpdated', success => {
       this.getLocalStorageData();
     })
     this.events.subscribe('refreshObservationList', type => {
-      type === 'added' ? this.refresh('added') : this.refresh();
+    this.refresh();
       console.log("refresh obs list")
     })
   }
@@ -50,8 +59,8 @@ export class ObservationDetailsPage {
 
     console.log('ionViewDidLoad ObservationDetailsPage');
     this.getLocalStorageData();
-
-    
+    this.isIos = this.platform.is('ios') ? true : false;
+    this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'submissionDocs' : cordova.file.externalDataDirectory + 'submissionDocs';
   }
 
   ionViewWillEnter() {
@@ -292,16 +301,5 @@ export class ObservationDetailsPage {
     this.evdnsServ.openActionSheet(options, "Observation");
 
   }
-  // updateLocalStorage() {
-  //   this.localStorage.getLocalStorage('createdObservationList').then(data => {
-  //     data[this.navParams.get('selectedObservationIndex')] = this.observationDetails[0]
-  //     this.localStorage.setLocalStorage('createdObservationList', data);
-  //     this.getLocalStorageData();
-  //   }).catch(error => {
-
-  //   });
-  // }
-
-
-
+  
 }

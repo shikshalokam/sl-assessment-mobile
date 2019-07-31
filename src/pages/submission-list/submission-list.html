@@ -13,20 +13,23 @@
   <div *ngIf="submissionList">
       <ion-item *ngFor="let submission of submissionList ; let i = index" class="_flex-box _justify-content-space-between" >
           {{submission?.download}}
+          <div class="_flex-box" (click)="submission?.downloaded === true ? goToEcm(i) : getAssessmentDetails(i)">
 
-        <div class="_flex-box" (click)="submission?.downloaded === true ? goToEcm(i) : getAssessmentDetails(i)">
+        <!-- <div class="_flex-box"> -->
           <div style="flex:1" text-capitalize>
             {{submission?.createdAt | date :'medium'}} 
           </div>
           <ion-icon name="cloud-download" class="downloadIcon" 
           *ngIf="!submission?.downloaded && (submission.status === 'started')"></ion-icon>
 
-          <div float-right *ngIf="submission.status === 'completed' && !evidence?.notApplicable"
+          <!-- <div float-right *ngIf="submission.status === 'completed' && !evidence?.notApplicable"
           class="_submitted _flex-box">
 
           {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
-        </div>
-          <ion-icon *ngIf="submission?.downloaded && !(submission.status === 'completed')" name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
+        </div> -->
+        <ion-icon *ngIf="submission?.status == 'completed'" name="eye" class="completed" (click) ="$event.stopPropagation() ; actions(submission?._id, 'preview') "margin-left></ion-icon>
+        <ion-icon *ngIf="submission?.status == 'completed'" name="share-alt" class="completed" margin-left (click) ="actions(submission?._id, 'share') ;  $event.stopPropagation();"></ion-icon>
+        <ion-icon *ngIf="submission?.downloaded && !(submission.status === 'completed')" name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
         </div>
       </ion-item>
   </div>
