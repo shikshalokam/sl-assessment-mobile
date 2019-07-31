@@ -231,7 +231,7 @@ export class ObservationEntityListingComponent {
 
                 okMessage = translations
               })
-              this.utils.openToast(success.message, okMessage);
+              this.utils.openToast(success.message);
 
               this.utils.stopLoader();
               console.log(JSON.stringify(success));

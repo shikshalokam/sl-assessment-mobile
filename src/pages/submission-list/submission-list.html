@@ -35,7 +35,9 @@
         </div>
       </ion-item>
   </div>
- 
+  <div *ngIf="!(submissionList?.length > 0)" class="_flex-box _justify-content-center">
+    {{'message.noSubmission'|translate}}
+  </div>
 </ion-content>
 <ion-footer no-shadow  >
   <ion-toolbar position="bottom">
