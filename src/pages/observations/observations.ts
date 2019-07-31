@@ -57,11 +57,12 @@ export class ObservationsPage {
 
   getFromLocal() {
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
+      this.utils.startLoader();
       if (data) {
         this.createdObservation = [...data];
         console.log(JSON.stringify(data))
         this.countCompleteActive();
-
+        this.utils.stopLoader();
       } else {
         this.getCreatedObservation();
       }

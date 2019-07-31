@@ -11,6 +11,7 @@
         "confirm":"Confirm",
         "completeobservation":"Are you sure to mark this observation as complete?",
         "deleteEntity":"Are you sure to remove the entity form observation?",
+        "deleteSubmission":"Are you sure to remove the submission ? ",
         "surveyAction":"Survey Actions",
         "restrictAction":"Further you won't be able to do any kind of action.",
         "view":"View",
@@ -198,7 +199,7 @@
         "noEntity":"No Entity"  ,
         "no":"No",
         "noSolutionFound":"No Solutions"
-    },
+        },
     "toastMessage":{
         "selectSolution":"Select a Solution",
         "selectObservationType":"Select a observation Type",
