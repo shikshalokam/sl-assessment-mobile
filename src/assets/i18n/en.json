@@ -184,6 +184,7 @@
         "gujarati": "ગુજરાતી"
     },
     "message":{
+        "noSubmission":"No Submissions",
         "searchEntities":"Search for entities",
         "startSearchSolution":"Search for solutions",
         "dontCloseApp":"Please don't close the app or go back.",
