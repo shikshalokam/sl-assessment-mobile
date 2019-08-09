@@ -53,9 +53,11 @@
         "deleteObservation":"Are you sure you want to delete the observation?",
         "networkSlowAlert" : "You are connected to a slower data network. Image upload may take longer time. Do you want to continue?"
     },
+    
     "buttons": {
         "observeAgain":"Observe Again",
         "view": "View",
+        "addNew":"Add New",
         "draft":"Draft",
         "goToEntities":"Go TO Entitites",
         "active":"Active",
@@ -92,7 +94,8 @@
         "Teacher": "Teacher",
         "saveDraft":"Draft",
         "markAsComplete":"Mark as completed",
-        "preview":"Preview"
+        "preview":"Preview",
+        "edit":"Edit"
     },
     "tabs": {
         "home": "Home",

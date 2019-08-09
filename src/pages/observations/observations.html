@@ -20,11 +20,12 @@
         <ion-badge color="primary"  item-right>{{draftListLength}}</ion-badge>
 
       </ion-segment-button>
-      <ion-segment-button value="completed" (click)="onTabChange('completed')">
-        Completed
+      
+      <!-- <ion-segment-button value="completed" (click)="onTabChange('completed')">
+        {{'buttons.completed' | translate}}
         <ion-badge color="primary"  item-right>{{completeListLength}}</ion-badge>
 
-      </ion-segment-button>
+      </ion-segment-button> -->
     </ion-segment>
   </div>
 
@@ -96,8 +97,12 @@
   </div>
 
   <ion-fab bottom right >
-    <button ion-fab mini color="secondary" (click)="addObservation()">
+    <!-- <button ion-fab mini color="secondary" (click)="addObservation()">
       <ion-icon name="add"></ion-icon>
+    </button> -->
+    <button ion-fab mini (click)="refresh()" >
+      <ion-icon name="refresh"></ion-icon>
+      <!-- {{'buttons.refresh' | translate}} -->
     </button>
   </ion-fab>
 </ion-content>
@@ -106,9 +111,14 @@
   <ion-toolbar class="_toolbar-background-md" position="bottom">
     <ion-row>
       <ion-col>
-        <button ion-button full (click)="refresh()" class="btnText">
+        <!-- <button ion-button full (click)="refresh()" class="btnText">
           <ion-icon name="refresh" margin-right></ion-icon>
           {{'buttons.refresh' | translate}}
+        </button> -->
+
+        <button ion-button full class="btnText" (click)="addObservation()">
+          <ion-icon name="add" padding-right></ion-icon> 
+          {{ 'buttons.addNew' | translate}}
         </button>
       </ion-col>
     </ion-row>
