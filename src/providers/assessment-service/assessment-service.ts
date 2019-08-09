@@ -145,7 +145,7 @@ export class AssessmentServiceProvider {
       this.localStorage.setLocalStorage("generalQuestionsCopy_" + success.result['assessment']["submissionId"], generalQuestions);
       programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].downloaded = true;
       programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId = success.result.assessment.submissionId;
-      // this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId), success.result);
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId), success.result);
       this.localStorage.setLocalStorage(`${assessmentType}List`, programs);
       this.utils.stopLoader();
       
