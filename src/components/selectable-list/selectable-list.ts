@@ -12,15 +12,13 @@ import { ApiProvider } from '../../providers/api/api';
   templateUrl: 'selectable-list.html'
 })
 export class SelectableListComponent {
-  @Input() selectableList  ;
-  @Input() totalCount : number;
-  @Output() infinityScrollEvent = new EventEmitter();
-  @Input() index = 100 ;
+  @Input() selectableList = [];
+  @Input() list;
+  @Input() index = 10 ;
   @Output() searchUrl  = new EventEmitter();
   @Input() observationId;
-  infinityScrollFlag = true;
-  @Input() selectedListCount ;
   text: string;
+
   constructor(
     private apiProviders : ApiProvider
   ) {
@@ -47,19 +45,13 @@ export class SelectableListComponent {
   doInfinite(infiniteScroll) {
     console.log("doInfinite function called");
     setTimeout(() => {
-      this.infinityScrollEvent.emit()
-      // for (let i=0 ; ( i < 10 ) && this.index < this.selectableList.length; i++ ) {
-      //   this.list.push(this.selectableList[this.index++]);
-      // }
-    //  this.infinityScrollFlag = this.list.length === this.selectableList.length ? false : true;
+      for (let i=0 ; ( i < 10 ) &&( this.index < this.selectableList.length); i++ ) {
+        this.list.push( this.selectableList[this.index++] );
+      }
       infiniteScroll.complete();
     }, 500);
   }
   searchEntity(event){
-    if(!event.value){
-      this.selectableList = [];
-      return
-    }
       if(!event.value || event.value.length < 3){
          return;
       }
@@ -68,19 +60,5 @@ export class SelectableListComponent {
     console.log(event.value);
     this.searchUrl.emit(event.value)
     // this.filterSelected();
-  }
-  clearEntity(){
-    this.selectableList = []
-  }
-  checkItem(listItem){
-    console.log("checked")
-    listItem.selected = !listItem.selected; 
-    listItem.selected ?  this.selectedListCount.count++ : this.selectedListCount.count-- ;
-  }
-  ionViewWillEnter(){
-    console.log(this.selectedListCount + "count")
-    console.log(JSON.stringify(this.selectableList))
-    
-
   }
 }

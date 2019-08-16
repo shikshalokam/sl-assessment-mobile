@@ -11,17 +11,17 @@
   <div padding>
     <ion-segment [(ngModel)]="selectedTab">
       <ion-segment-button value="active" (click)="onTabChange('active')">
-        {{'buttons.active' | translate}}
+        Active
         <ion-badge color="primary"  item-right>{{activeListLength}}</ion-badge>
 
       </ion-segment-button>
       <ion-segment-button value="draft" (click)="onTabChange('draft')">
-        {{'buttons.draft' | translate}}
+        Draft
         <ion-badge color="primary"  item-right>{{draftListLength}}</ion-badge>
 
       </ion-segment-button>
       <ion-segment-button value="completed" (click)="onTabChange('completed')">
-        {{'buttons.completed' | translate}}
+        Completed
         <ion-badge color="primary"  item-right>{{completeListLength}}</ion-badge>
 
       </ion-segment-button>
@@ -59,7 +59,7 @@
           </ng-template>
         <span float-right *ngIf="draft?.data?.isComplete"
           class="_completed _flex-box">
-          {{'labels.readytoPublish'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left>
+          {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left>
           </ion-icon>
         </span>
         
@@ -73,7 +73,7 @@
       </ion-list>
       <ion-list *ngIf="!draftObservation.length " >
        <span class="_flex-box _justify-content-center">
-        {{'message.noDraft' | translate}}
+          No Drafts
        </span>
         </ion-list>
     </div>

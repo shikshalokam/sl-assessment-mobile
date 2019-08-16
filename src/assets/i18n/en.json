@@ -62,8 +62,6 @@
         "completed":"Completed",
         "profile": "Profile",
         "ratings": "Rate",
-        "delete":"Delete",
-        "done":"Done",
         "start": "Start",
         "survey": "survey",
         "previous":"Previous",
@@ -75,10 +73,8 @@
         "back": "Back",
         "upload": "Upload",
         "and": "and",
-        "skip":"Skip",
         "submit": "Submit",
         "cancel": "Cancel",
-        "addEntity":"Add Entity",
         "send": "Send",
         "yes": "Yes",
         "no": "No",
@@ -222,4 +218,5 @@
         "loactionForAction":"Location should be turned on for this action.",
         "questionResponseNotRequiredForCompleteAssessment":"This questions response is not required to complete the assessment."
     }
+
 }

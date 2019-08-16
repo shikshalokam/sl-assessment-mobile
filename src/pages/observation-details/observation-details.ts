@@ -219,7 +219,7 @@ export class ObservationDetailsPage {
         translateObject['actionSheet.restrictAction'],
       buttons: [
         {
-          text: translateObject['actionSheet.no'],
+          text: 'No',
           role: 'cancel',
           handler: () => {
           }

@@ -28,8 +28,6 @@ export class MyApp {
   networkSubscription: any;
   networkAvailable: boolean;
   appName: string = AppConfigs.appName;
-  appVersion = "v " + AppConfigs.appVersion;
-  appEnvironment = AppConfigs.environment;
   // rootPage: any = "LoginPage";
   allPages: Array<Object> = [
     {
@@ -235,24 +233,19 @@ export class MyApp {
       } else {
         if (!this.isAlertPresent) {
           this.isAlertPresent = true;
-          let translateObject ;
-          this.translate.get(['actionSheet.appTermination','actionSheet.appTerminationMessage','actionSheet.cancel','actionSheet.closeApp']).subscribe(translations =>{
-            translateObject = translations;
-            console.log(JSON.stringify(translations))
-          })
           alert = this.alertCtrl.create({
-            title: translateObject['actionSheet.appTermination'],
-            message: translateObject['actionSheet.appTerminationMessage'],
+            title: 'App termination',
+            message: 'Do you want to close the app?',
             enableBackdropDismiss: false,
             buttons: [{
-              text: translateObject['actionSheet.cancel'],
+              text: 'Cancel',
               role: 'cancel',
               handler: () => {
                 console.log('Application exit prevented!');
                 this.isAlertPresent = false;
               }
             }, {
-              text: translateObject['actionSheet.closeApp'],
+              text: 'Close App',
               handler: () => {
                 this.platform.exitApp(); // Close this application
               }
