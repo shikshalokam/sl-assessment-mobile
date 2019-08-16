@@ -19,9 +19,17 @@ export class EntityListPage {
   entityList;
   observationId;
   searchUrl;
+  limit = 10;
+  page = 1;
+  totalCount = 0;
+  searchValue = "";
   selectableList: any;
   index: any = 50;
   list: any = [];
+  arr = [];
+  selectedListCount = {
+    count: 0
+  }
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -43,7 +51,7 @@ export class EntityListPage {
   addSchools() {
     let selectedSchools = []
     this.selectableList.forEach(element => {
-      if (element.selected) {
+      if (element.selected && !element.preSelected)  {
         selectedSchools.push(element);
       }
     });
@@ -51,25 +59,29 @@ export class EntityListPage {
     this.viewCntrl.dismiss(selectedSchools);
 
   }
+  cancel(){
+    this.viewCntrl.dismiss();
+  }
 
-  search(event) {
-    this.index =50;
+  search(event?) {
+    this.searchValue = event ? event : this.searchValue;
     this.utils.startLoader();
-    this.apiProviders.httpGet(this.searchUrl + this.observationId + "?search=" + event, success => {
+    this.index = 50;
+    this.apiProviders.httpGet(this.searchUrl + this.observationId + "?search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
+      this.arr = event ? [] : this.arr;
+      for (let i = 0; i < success.result[0].data.length; i++) {
+        success.result[0].data[i].isSelected = success.result[0].data[i].selected;
+        success.result[0].data[i].preSelected = success.result[0].data[i].selected ? true : false;
+      }
+      event ? null : this.page++;
+      console.log(JSON.stringify(success.result[0]))
+      this.totalCount = success.result[0].count;
+      console.log(JSON.stringify(success))
+      // this.selectableList = [...success.result[0].metaInformation]
+      this.selectableList = [...success.result[0].data]
+
       this.utils.stopLoader();
 
-      let arr = [];
-      for (let i = 0; i < success.result[0].metaInformation.length; i++) {
-        if (!success.result[0].metaInformation[i].selected) {
-          arr.push(success.result[0].metaInformation[i])
-        }
-      }
-      this.selectableList = arr
-      // this.selectableList.forEach( element =>{
-      //   element.selected = false;
-      // } )
-      this.index = this.index > this.selectableList.length ? this.selectableList.length : this.index;
-      this.list = this.selectableList.slice(0, this.index);
     }, error => {
       this.utils.stopLoader();
 
