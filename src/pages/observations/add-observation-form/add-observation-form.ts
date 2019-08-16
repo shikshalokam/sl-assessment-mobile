@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, ɵConsole } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, App, Config, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, App, Config, Events, AlertController } from 'ionic-angular';
 import { FormGroup, Validators } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
@@ -53,6 +53,8 @@ export class AddObservationFormPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    private translate: TranslateService,
+
     private permissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
@@ -60,10 +62,9 @@ export class AddObservationFormPage {
     private diagnostic: Diagnostic,
     public utils: UtilsProvider,
     private modalCtrl: ModalController,
-    private networkGps: NetworkGpsProvider,
+    private alertCtrl: AlertController,
     private localStorage: LocalStorageProvider,
     private app: App,
-    public translate : TranslateService,
     private storage: Storage,
     private event: Events
   ) {
@@ -117,9 +118,7 @@ export class AddObservationFormPage {
                       });
                     }).catch(
                       error => {
-                        this.translate.get('toastMessage.locationForAction').subscribe(translations =>{
-                          this.utils.openToast( translations);
-                        })
+                        this.utils.openToast("Location should be turned on for this action");
                         this.utils.stopLoader();
                       }
                     );
@@ -159,9 +158,7 @@ export class AddObservationFormPage {
                   });
                 }).catch(
                   error => {
-                    this.translate.get('toastMessage.locationForAction').subscribe(translations =>{
-                      this.utils.openToast( translations);
-                    })
+                    this.utils.openToast("Location should be turned on for this action");
                   }
                 );
             } else {
@@ -261,6 +258,11 @@ export class AddObservationFormPage {
         break;
 
     }
+    // this.selectedIndex === 0 ? 
+    // actionFlag ? null :  this.utils.openToast("select the type of observation") 
+    // : 
+    // this.selectedIndex === 1 ? actionFlag ? null :  this.utils.openToast("select a solution") : null
+
     return actionFlag;
   }
   doInfinite(infiniteScroll) {
@@ -293,21 +295,10 @@ export class AddObservationFormPage {
     this.getSolutionList();
   }
   tmpFunc() { 
-    let message ; 
-     this.selectedIndex === 0 ? this.translate.get('toastMessage.selectObservationType').subscribe(translations => {
-      //  console.log(JSON.stringify(translations))
-      message = translations;
-     })
+     this.selectedIndex === 0 ? this.utils.openToast("Select the type of observation") 
+    : 
+     this.utils.openToast("Select a solution") ;
 
-    : this.translate.get('toastMessage.selectSolution').subscribe(translations => {
-      
-      message = translations;
-
-
-    }) ;
-
-    
-     this.utils.openToast(message) 
   }
 
   saveDraft(option = 'normal') {
@@ -345,8 +336,49 @@ export class AddObservationFormPage {
 
 
   ionViewWillUnload() {
-    if (this.saveDraftType !== 'normal')
-      this.saveDraft('force');
+    if(this.saveDraftType === 'force' && this.entityType ){
+      this.saveDraft('force')
+    }
+
   }
+
+  async ionViewCanLeave() {
+    if(this.saveDraftType !== 'normal' && this.entityType && this.editDataIndex){
+      const shouldLeave = await this.confirmLeave();
+      return shouldLeave;
+    }
+  }
+  
+  confirmLeave(): Promise<Boolean> {
+    let resolveLeaving;
+    const canLeave = new Promise<Boolean>(resolve => resolveLeaving = resolve);
+    let translateObject ;
+    this.translate.get(['actionSheet.confirmLeave','actionSheet.saveCurrentDataConfirmation','actionSheet.yes','actionSheet.no']).subscribe(translations =>{
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
+
+    const alert = this.alertCtrl.create({
+      title: translateObject['actionSheet.confirmLeave'],
+      message: translateObject['actionSheet.saveCurrentDataConfirmation'],
+      buttons: [
+        {
+          text: translateObject['actionSheet.no'],
+          role: 'cancel',
+          handler: () => resolveLeaving(true)
+        },
+        {
+          text: translateObject['actionSheet.yes'],
+          handler: () =>{
+            this.saveDraft('force')
+           resolveLeaving(true)
+          }
+        }
+      ]
+    });
+    alert.present();
+    return canLeave
+  }
+
 
 }

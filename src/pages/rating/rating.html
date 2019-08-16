@@ -22,7 +22,7 @@
   <div [ngSwitch]="view" class="container">
     <div *ngSwitchCase="'question'">
       <div class="_errorBox _flex-box _justify-content-center" *ngIf="!currentCriteria?.questions.length">
-       {{'messagee.noQuestionAvailable'| translate}}
+        No questions available
       </div>
       <ion-card *ngFor="let question of currentCriteria?.questions">
         <ion-card-header>
