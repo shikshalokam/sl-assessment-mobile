@@ -227,7 +227,7 @@ export class SubmissionListPage {
 
   actions(submissionId, action) {
     // this.dap.checkForSubmissionDoc(submissionId, action);
-    this.navCtrl.push(ObservationReportsPage)
+    this.navCtrl.push(ObservationReportsPage, {submissionId: submissionId})
   }
   deleteSubmission(submissionId) {
 

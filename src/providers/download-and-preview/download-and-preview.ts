@@ -10,14 +10,6 @@ import { AppConfigs } from '../appConfig';
 import { ApiProvider } from '../api/api';
 import { SharingFeaturesProvider } from '../sharing-features/sharing-features';
 
-
-/*
-  Generated class for the DownloadAndPreviewProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
-
 declare var cordova: any;
 
 
@@ -47,6 +39,9 @@ export class DownloadAndPreviewProvider {
       // this.downloadSubmissionDoc(submissionId, action)
     })
   }
+
+
+
   shareSubmissionDoc(fileName: string) {
     this.shareFeature.sharingThroughApp(fileName)
   }
@@ -73,28 +68,20 @@ export class DownloadAndPreviewProvider {
       console.log(JSON.stringify(error))
     })
   }
+  
 
 
   getSubmissionDocUrl(submissionId, action) {
     this.utils.startLoader()
-    console.log("call api")
-
     this.apiProvider.httpGet(AppConfigs.cro.getSubmissionPdf + submissionId, success => {
       if (success.result.url) {
-    console.log("api success")
-
         this.downloadSubmissionDoc(submissionId, success.result.url, action)
       } else {
-    console.log("api no file created")
-
         this.utils.openToast(success.message);
         this.utils.stopLoader();
-
       }
-      console.log(JSON.stringify(success))
     }, error => {
       this.utils.stopLoader();
-      console.log(JSON.stringify(error))
     })
   }
 
