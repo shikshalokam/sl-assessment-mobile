@@ -9,6 +9,7 @@ import { AssessmentServiceProvider } from '../../providers/assessment-service/as
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
 import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 import { TranslateService } from '@ngx-translate/core';
+import { ObservationReportsPage } from '../observation-reports/observation-reports';
 
 /**
  * Generated class for the SubmissionListPage page.
@@ -225,7 +226,8 @@ export class SubmissionListPage {
 
 
   actions(submissionId, action) {
-    this.dap.checkForSubmissionDoc(submissionId, action);
+    // this.dap.checkForSubmissionDoc(submissionId, action);
+    this.navCtrl.push(ObservationReportsPage)
   }
   deleteSubmission(submissionId) {
 
