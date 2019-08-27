@@ -147,7 +147,7 @@ export class ApiProvider {
   }
 
 
-  httpPost(url, payload, successCallback, errorCallback) {
+  httpPost(url, payload, successCallback, errorCallback, isDhitiAPI=false) {
     // let nav = this.appCtrls.getActiveNav();
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
@@ -156,24 +156,27 @@ export class ApiProvider {
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
         'appVersion': AppConfigs.appVersion
       }
-      const apiUrl = AppConfigs.api_base_url + url;
+      const apiUrl = (isDhitiAPI ? AppConfigs.dhiti_base_url : AppConfigs.api_base_url) + url;
       console.log(apiUrl)
-
+      console.log(JSON.stringify(payload))
       this.http.setDataSerializer('json');
       this.http.post(apiUrl, payload, obj).then(data => {
-
-        successCallback(JSON.parse(data.data));
+        console.log(JSON.stringify(data))
+        successCallback(data.data ? JSON.parse(data.data) : null);
       }).catch(error => {
+        console.log(JSON.stringify(error));
+
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
           this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
         } else {
-          this.utils.openToast(error.message, 'Ok');
+          this.utils.openToast(errorDetails.message, 'Ok');
           const errorObject = { ...this.errorObj };
           errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
           this.slack.pushException(errorObject);
         }
+        errorCallback(JSON.parse(error['error']))
       })
     }).catch(error => {
       this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
@@ -181,7 +184,7 @@ export class ApiProvider {
   }
 
 
-  httpGet(url, successCallback, errorCallback) {
+  httpGet(url, successCallback, errorCallback, isDhitiAPI=false) {
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation();
       const obj = {
@@ -190,10 +193,10 @@ export class ApiProvider {
         'appVersion': AppConfigs.appVersion
       }
       this.http.setDataSerializer('json');
-      const apiUrl = AppConfigs.api_base_url + url;
+      const apiUrl = (isDhitiAPI ? AppConfigs.dhiti_base_url : AppConfigs.api_base_url) + url;
       console.log(apiUrl)
       this.http.get(apiUrl, {}, obj).then(data => {
-        successCallback(JSON.parse(data.data));
+        successCallback(data.data ? JSON.parse(data.data) : null);
         console.log("success data")
       }).catch(error => {
 

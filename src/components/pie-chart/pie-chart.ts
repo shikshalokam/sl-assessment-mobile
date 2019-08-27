@@ -38,12 +38,12 @@ export class PieChartComponent implements OnInit {
         text: " "
       },
       tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        // pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
       },
       plotOptions: {
         pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
+          // allowPointSelect: true,
+          // cursor: 'pointer',
           showInLegend: true
         },
       },

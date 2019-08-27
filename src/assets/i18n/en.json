@@ -151,7 +151,8 @@
         "individualAssessments": "Individual Assessments",
         "observationDetails": "Observation Details",
         "hint":"Hint",
-        "submissionPreview":"Submission Preview"
+        "submissionPreview":"Submission Preview",
+        "observationReports":"Report"
     },
     "labels": {
         "welcome": "Welcome",

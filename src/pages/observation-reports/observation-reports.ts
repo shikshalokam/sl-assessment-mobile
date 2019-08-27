@@ -1,128 +1,94 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Platform } from 'ionic-angular';
+import { ApiProvider } from '../../providers/api/api';
+import { AppConfigs } from '../../providers/appConfig';
+import { File } from '@ionic-native/file';
+import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 
-/**
- * Generated class for the ObservationReportsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
+declare var cordova: any;
 @Component({
   selector: 'page-observation-reports',
   templateUrl: 'observation-reports.html',
 })
 export class ObservationReportsPage {
 
-  reportObj = {
-    "entityName": "Tumkur School-20",
-    "observationName": "Tumukuru Flash Visit-2019 By - Leader20",
-    "observationId": "5d1a002d2dfd8135bc8e1654",
-    "entityType": "school",
-    "entityId": "5cf12e54c8baf753f2c77362",
-    "response": [
-      {
-        "order": "1",
-        "question": "What is your name?",
-        "responseType": "text",
-        "answers": [
-          "Kiran",
-          "Deepa",
-          "Akash"
-        ],
-        "chart": {}
-      },
-      {
-        "order": "2",
-        "question": "Do you work in Bangalore?",
-        "responseType": "radio",
-        "answers": [],
-        "chart": {
-          "type": "pie",
-          "data": [
-            {
-              "data": [
-                {
-                  "name": "option1",
-                  "y": 61.41,
+  reportObj;
+  submissionId;
+  observationId;
+  entityId;
+  error;
+  payload;
+  appFolderPath;
+  isIos;
+  fileName;
+  action;
 
-
-                },
-                {
-                  "name": "option2",
-                  "y": 11.84
-                },
-                {
-                  "name": "option3",
-                  "y": 10.85
-                },
-                {
-                  "name": "option4",
-                  "y": 4.67
-                }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "order": "3",
-        "question": "Which are your favorite technologies?",
-        "responseType": "multi-select",
-        "answers": [],
-        "chart": {
-          "type": "bar",
-          "data": [
-            {
-              "data": [
-                20,
-                30,
-                40,
-                5,
-                5
-              ]
-            }
-          ],
-          "xAxis": {
-            "categories": [
-              "Option1",
-              "option2",
-              "option3",
-              "option4"
-            ],
-            "title": {
-              "text": "Responses"
-            }
-          },
-          "yAxis": {
-            "title": {
-              "text": "Responses in percentage"
-            }
-          },
-
-
-        }
-      },
-      {
-        "order": "4",
-        "question": "What is your age?",
-        "responseType": "slider",
-        "answers": [
-          "25",
-          "25",
-          "28"
-        ],
-        "chart": {}
-      }
-    ]
-  }
-    ;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, private dap: DownloadAndPreviewProvider,
+    public navParams: NavParams, private platform: Platform,
+    private apiService: ApiProvider, private file: File) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ObservationReportsPage');
+    this.submissionId = this.navParams.get('submissionId');
+    this.observationId = this.navParams.get('observationId')
+    this.entityId = this.navParams.get('entityId');
+    this.payload = {
+      "entityId": this.entityId,
+      "submissionId": this.submissionId,
+      "observationId": this.observationId
+    }
+    this.isIos = this.platform.is('ios') ? true : false;
+    this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'submissionDocs' : cordova.file.externalDataDirectory + 'submissionDocs';
+
+    this.getObservationReports();
+
+  }
+
+  getObservationReports(download = false) {
+    let url;
+    if (this.submissionId) {
+      url = AppConfigs.observationReports.instanceReport;
+      this.fileName = this.submissionId;
+    } else if (!this.submissionId && !this.entityId) {
+      url = AppConfigs.observationReports.observationReport;
+      this.fileName = this.observationId;
+    } else {
+      url = AppConfigs.observationReports.entityReport
+      this.fileName = this.entityId + '_' + this.observationId;
+    }
+
+    this.apiService.httpPost(url, this.payload, (success) => {
+      if (success) {
+        if (download) {
+
+        } else {
+          this.reportObj = success;
+        }
+      } else {
+        this.error = "No data found"
+      }
+    }, error => {
+      this.error = "No data found"
+    }, true)
+
+  }
+
+  downloadSharePdf(action) {
+    this,action = action;
+    this.checkForSubmissionDoc(this.fileName)
+  }
+
+  checkForSubmissionDoc(submissionId) {
+    console.log("Check for file")
+    const fileName = "report_" + submissionId + ".pdf";
+    this.file.checkFile(this.appFolderPath + '/', fileName).then(success => {
+      console.log("Check for file available")
+      this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + '/' + fileName) : this.dap.previewSubmissionDoc(fileName)
+    }).catch(error => {
+      console.log("Check for file not available")
+      this.getObservationReports(true)
+    })
   }
 
 }

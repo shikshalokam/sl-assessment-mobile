@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import * as Highcharts from 'highcharts';
 
 /**
  * Generated class for the BarChartComponent component.
@@ -10,13 +11,49 @@ import { Component } from '@angular/core';
   selector: 'bar-chart',
   templateUrl: 'bar-chart.html'
 })
-export class BarChartComponent {
+export class BarChartComponent implements OnInit {
 
-  text: string;
+  @Input() data;
+  @Input() questionNumber;
+  Highcharts = Highcharts; // required
+  chartConstructor = 'chart'; // optional string, defaults to 'chart'
+  updateFlag = false; // optional boolean
+  oneToOneFlag = true; // optional boolean, defaults to false
+  runOutsideAngular = false;
+  chartObj;
 
   constructor() {
     console.log('Hello BarChartComponent Component');
-    this.text = 'Hello World';
+  }
+
+  ngOnInit() {
+    this.chartObj = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'bar'
+      },
+      title: {
+        text: " "
+      },
+      xAxis: this.data.chart.xAxis,
+      yAxis: this.data.chart.yAxis,
+      tooltip: {
+        // pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            enabled: false
+          },
+          showInLegend: false
+        }
+      },
+      series: this.data.chart.data
+
+    }
+
   }
 
 }
