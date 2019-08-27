@@ -30,6 +30,10 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 import { AudioRecordingListingComponent } from './audio-recording-listing/audio-recording-listing';
 import { AudioListComponent } from './audio-list/audio-list';
+import { ReportsTextComponent } from './reports-text/reports-text';
+import { PieChartComponent } from './pie-chart/pie-chart';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { BarChartComponent } from './bar-chart/bar-chart';
 
 @NgModule({
 	declarations: [
@@ -55,14 +59,18 @@ import { AudioListComponent } from './audio-list/audio-list';
     GenericMenuPopOverComponent,
     ProgramListingComponent,
     AudioRecordingListingComponent,
-    AudioListComponent
+    AudioListComponent,
+    ReportsTextComponent,
+    PieChartComponent,
+    BarChartComponent
   ],
 	imports: [
 		IonicModule,
     DirectivesModule,
     PipesModule,
     TranslateModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    HighchartsChartModule
 	],
 	exports: [
 		InputTypeComponent,
@@ -86,7 +94,10 @@ import { AudioListComponent } from './audio-list/audio-list';
     GenericMenuPopOverComponent,
     ProgramListingComponent,
     AudioRecordingListingComponent,
-    AudioListComponent
+    AudioListComponent,
+    ReportsTextComponent,
+    PieChartComponent,
+    BarChartComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
