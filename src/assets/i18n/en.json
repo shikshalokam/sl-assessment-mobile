@@ -3,7 +3,8 @@
         "date":"Date",
         "generalQuestions":"General Questions",
         "selectObservationType":"Select a observation Type",
-        "selectSolution" : "Select a Solution"
+        "selectSolution" : "Select a Solution",
+        "selectSchool":"Select Schools"
     },
     "actionSheet":{
         "edit":"Edit",
@@ -59,6 +60,7 @@
         "view": "View",
         "addNew":"Add New",
         "draft":"Draft",
+        "publish":"Publish",
         "goToEntities":"Go TO Entitites",
         "active":"Active",
         "completed":"Completed",
@@ -188,6 +190,8 @@
     },
     "message":{
         "noSubmission":"No Submissions",
+        "startSearchSchool":"search school",
+        "noSchoolFound":"No Schools Found",
         "searchEntities":"Search for entities",
         "startSearchSolution":"Search for solutions",
         "dontCloseApp":"Please don't close the app or go back.",
@@ -210,6 +214,7 @@
         "networkDisconnected" : "NetWork Disconnected",
         "networkConnected":"Network Connected",
         "ok":"OK",
+        "allValueAreMandatory":"Fill Mandatory Field",
         "enableInternet":"Please enable your internet connection to continue.",
         "connectToInternet":"Please connect to internet ",
         "networkConnectionForAction":"You need network connection for this action.",
