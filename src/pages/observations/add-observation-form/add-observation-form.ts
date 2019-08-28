@@ -316,11 +316,25 @@ export class AddObservationFormPage {
 
     this.apiProviders.httpGet(AppConfigs.cro.searchEntity+this.selectedFrameWork+"&search="+this.searchEntity+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
       this.entityListTotalCount = success.result[0].count;
-      success.result[0].data.forEach(element => {
-        element["selected"]= true;
-    });
+      if(this.editData && this.editData.data.entities.length == 0 ){
+          success.result[0].data.forEach(element => {
+            element["selected"]= false;
+          });
+        }else if(this.editData && this.editData.data.entities.length == 0 ) {
+          success.result[0].data.forEach(element => {
+            
+            element["selected"] = this.editData.data.entities.includes(element._id) > -1 ? true : false;
+          });
+        }else{
+          success.result[0].data.forEach(element => {
+            element["selected"]= true;
+          });
+        }
     this.entityList = success.result[0].data;
-    this.entityCount = this.entityList.length;
+    this.entityCount = 0;
+    this.entityList.forEach(element => {
+      element.selected ? this.entityCount++ : this.entityCount
+    });
     console.log(JSON.stringify(success))
     },error =>{
 
@@ -477,6 +491,6 @@ export class AddObservationFormPage {
   }
   countEntity(entity){
     entity.selected ? this.entityCount-- : this.entityCount++ ;
-    console.log(JSON.stringify(entity))
+    console.log(this.entityCount)
   }
 }
