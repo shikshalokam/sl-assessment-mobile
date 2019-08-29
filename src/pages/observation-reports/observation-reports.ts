@@ -80,7 +80,7 @@ export class ObservationReportsPage {
     }, error => {
       this.error = "No data found";
       this.utils.stopLoader();
-    }, true)
+    }, {dhiti:true})
 
   }
 
