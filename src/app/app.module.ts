@@ -92,6 +92,7 @@ import { ObservationServiceProvider } from '../providers/observation-service/obs
 import { DownloadAndPreviewProvider } from '../providers/download-and-preview/download-and-preview';
 import { ObservationReportsPage } from '../pages/observation-reports/observation-reports';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracker';
 
 @NgModule({
   declarations: [
@@ -225,6 +226,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
     Media,
     ObservationServiceProvider,
     DownloadAndPreviewProvider,
+    UpdateTrackerProvider,
   ]
 })
 export class AppModule { }
