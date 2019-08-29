@@ -409,6 +409,7 @@ export class AddObservationFormPage {
       message = translations;
 
   })
+  this.utils.openToast(message)
   }
 
   saveDraft(option = 'normal') {
