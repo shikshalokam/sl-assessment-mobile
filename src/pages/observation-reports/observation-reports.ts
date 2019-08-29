@@ -4,6 +4,9 @@ import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { File } from '@ionic-native/file';
 import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { UtilsProvider } from '../../providers/utils/utils';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 declare var cordova: any;
 @Component({
@@ -25,6 +28,8 @@ export class ObservationReportsPage {
 
   constructor(public navCtrl: NavController, private dap: DownloadAndPreviewProvider,
     public navParams: NavParams, private platform: Platform,
+    private fileTransfer: FileTransfer, private utils: UtilsProvider,
+    private androidPermissions: AndroidPermissions,
     private apiService: ApiProvider, private file: File) {
   }
 
@@ -39,29 +44,33 @@ export class ObservationReportsPage {
       "observationId": this.observationId
     }
     this.isIos = this.platform.is('ios') ? true : false;
-    this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'submissionDocs' : cordova.file.externalDataDirectory + 'submissionDocs';
+    this.appFolderPath = this.isIos ? cordova.file.externalRootDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
 
     this.getObservationReports();
 
   }
 
   getObservationReports(download = false) {
+    this.utils.startLoader();
     let url;
     if (this.submissionId) {
       url = AppConfigs.observationReports.instanceReport;
-      this.fileName = this.submissionId;
+      this.fileName = this.submissionId + ".pdf";
     } else if (!this.submissionId && !this.entityId) {
       url = AppConfigs.observationReports.observationReport;
-      this.fileName = this.observationId;
+      this.fileName = this.observationId + ".pdf";
     } else {
       url = AppConfigs.observationReports.entityReport
-      this.fileName = this.entityId + '_' + this.observationId;
+      this.fileName = this.entityId + '_' + this.observationId + ".pdf";
     }
 
+    this.payload.download = download;
+
     this.apiService.httpPost(url, this.payload, (success) => {
+      this.utils.stopLoader();
       if (success) {
         if (download) {
-
+          this.downloadSubmissionDoc(success.pdfUrl)
         } else {
           this.reportObj = success;
         }
@@ -69,25 +78,59 @@ export class ObservationReportsPage {
         this.error = "No data found"
       }
     }, error => {
-      this.error = "No data found"
+      this.error = "No data found";
+      this.utils.stopLoader();
     }, true)
 
   }
 
   downloadSharePdf(action) {
-    this,action = action;
-    this.checkForSubmissionDoc(this.fileName)
+    this.action = action;
+
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(status => {
+      console.log(JSON.stringify(status))
+      if (status.hasPermission) {
+        this.checkForSubmissionDoc(this.fileName)
+      } else {
+        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(success => {
+          if (success.hasPermission) {
+            this.checkForSubmissionDoc(this.fileName)
+          }
+        }).catch(error => {
+          console.log(JSON.stringify(error))
+        })
+      }
+    })
   }
 
-  checkForSubmissionDoc(submissionId) {
+  checkForSubmissionDoc(submissiond) {
     console.log("Check for file")
-    const fileName = "report_" + submissionId + ".pdf";
-    this.file.checkFile(this.appFolderPath + '/', fileName).then(success => {
+    this.file.checkFile(this.appFolderPath, this.fileName).then(success => {
       console.log("Check for file available")
-      this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + '/' + fileName) : this.dap.previewSubmissionDoc(fileName)
+      this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
     }).catch(error => {
       console.log("Check for file not available")
       this.getObservationReports(true)
+    })
+  }
+
+
+  downloadSubmissionDoc(fileRemoteUrl) {
+    console.log("file dowload")
+    this.utils.startLoader();
+    const fileName = "submissionDoc_" + this.fileName + ".pdf";
+    const fileTransfer: FileTransferObject = this.fileTransfer.create();
+
+    fileTransfer.download(fileRemoteUrl, this.appFolderPath + this.fileName).then(success => {
+      console.log("file dowload success")
+      this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
+      this.utils.stopLoader();
+      console.log(JSON.stringify(success))
+    }).catch(error => {
+      console.log("file dowload error")
+
+      this.utils.stopLoader();
+      console.log(JSON.stringify(error))
     })
   }
 

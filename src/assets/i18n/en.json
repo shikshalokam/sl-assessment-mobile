@@ -94,7 +94,9 @@
         "markAsComplete":"Mark as completed",
         "preview":"Preview",
         "addEntity":"Add Entities",
-        "viewReports":"View Reports"
+        "viewReports":"View Reports",
+        "viewObservationReport":"View Observation report",
+        "viewEntityReport":"View Entity Report"
     },
     "tabs": {
         "home": "Home",
