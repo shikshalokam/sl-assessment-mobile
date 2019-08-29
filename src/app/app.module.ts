@@ -90,6 +90,7 @@ import { PreviewPage } from '../pages/preview/preview';
 import { SubmissionListPage } from '../pages/submission-list/submission-list';
 import { ObservationServiceProvider } from '../providers/observation-service/observation-service';
 import { DownloadAndPreviewProvider } from '../providers/download-and-preview/download-and-preview';
+import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracker';
 
 @NgModule({
   declarations: [
@@ -220,6 +221,7 @@ import { DownloadAndPreviewProvider } from '../providers/download-and-preview/do
     Media,
     ObservationServiceProvider,
     DownloadAndPreviewProvider,
+    UpdateTrackerProvider,
   ]
 })
 export class AppModule { }

@@ -154,8 +154,12 @@ export class ApiProvider {
   }
 
 
-  httpPost(url, payload, successCallback, errorCallback) {
+  httpPost(url, payload, successCallback, errorCallback , config?) {
     // let nav = this.appCtrls.getActiveNav();
+    let options = {};
+    console.log("httpget" + JSON.stringify(options))
+    options['version'] = (config && config.version )? config.config :"v1";
+    options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
       const obj = {
@@ -163,7 +167,9 @@ export class ApiProvider {
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
         'appVersion': AppConfigs.appVersion
       }
-      const apiUrl = AppConfigs.api_base_url + url;
+      // const apiUrl = AppConfigs.api_base_url + url;
+      const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
+
       console.log(apiUrl)
 
       this.http.setDataSerializer('json');
@@ -190,7 +196,14 @@ export class ApiProvider {
   }
 
 
-  httpGet(url, successCallback, errorCallback) {
+  httpGet(url, successCallback, errorCallback , config?) {
+    // console.log("httpget" + JSON.stringify(options))
+    // if(options && options.version){
+      let options = {};
+      options['version'] = (config && config.version )? config.version :"v1";
+      options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
+    // }
+
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation();
       const obj = {
@@ -199,7 +212,7 @@ export class ApiProvider {
         'appVersion': AppConfigs.appVersion
       }
       this.http.setDataSerializer('json');
-      const apiUrl = AppConfigs.api_base_url + url;
+      const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
       console.log(apiUrl)
       this.http.get(apiUrl, {}, obj).then(data => {
         successCallback(JSON.parse(data.data));
@@ -224,6 +237,8 @@ export class ApiProvider {
       this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
     })
   }
+
+
 
   reLoginAlert() {
     this.currentUser.deactivateActivateSession(true);
