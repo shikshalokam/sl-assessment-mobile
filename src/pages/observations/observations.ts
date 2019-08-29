@@ -196,6 +196,8 @@ export class ObservationsPage {
   getDraftObservation() {
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
       this.draftObservation = draftObs;
+      console.log("Draft observation");
+      console.log(JSON.stringify(draftObs))
       this.draftListLength = this.draftObservation.length;
       // this.countCompleteActive();
 
@@ -220,7 +222,7 @@ export class ObservationsPage {
   openMenu(event , index) {
     // this.assessmentService.openMenu(event, this.programs, false);
     console.log("open menu")
-    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true , assessmentIndex : index , assessmentName :'createdObservationList'})
+    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true ,showEdit : true , assessmentIndex : index , assessmentName :'createdObservationList'})
   
     popover.present(
       {ev:event}
@@ -230,9 +232,14 @@ export class ObservationsPage {
 
 
   actionOnDraftObservation(index, observation) {
+    let translateObject ;
+    this.translate.get(['actionSheet.edit','actionSheet.chooseAction','actionSheet.delete','actionSheet.confirm','actionSheet.deleteObservation','actionSheet.yes','actionSheet.no','actionSheet.publish']).subscribe(translations =>{
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
     let actionArray = [
       {
-        text: 'Edit',
+        text:translateObject['actionSheet.edit'],
         role: 'edit',
         icon: 'create',
 
@@ -242,22 +249,22 @@ export class ObservationsPage {
         }
       },
       {
-        text: 'Delete',
+        text: translateObject['actionSheet.delete'],
         cssClass: 'deleteIcon',
         icon: 'trash',
         handler: () => {
           let alert = this.alertCntrl.create({
-            title: 'Confirm',
-            message: 'Are you sure you want to delete the observation?',
+            title: translateObject['actionSheet.confirm'],
+            message:translateObject['actionSheet.deleteObservation'],
             buttons: [
               {
-                text: 'No',
+                text:translateObject['actionSheet.no'],
                 role: 'cancel',
                 handler: () => {
                 }
               },
               {
-                text: 'Yes',
+                text:translateObject['actionSheet.yes'],
                 handler: () => {
                   this.draftObservation.splice(index, 1);
                   this.localStorage.setLocalStorage('draftObservation', this.draftObservation);
@@ -273,7 +280,7 @@ export class ObservationsPage {
     ];
     if (observation.data.isComplete) {
       actionArray.splice(0, 0, {
-        text: 'Publish',
+        text: translateObject['actionSheet.publish'],
         role: 'Publish',
         icon: 'add',
 
@@ -288,6 +295,8 @@ export class ObservationsPage {
           obj['data'].endDate = observation.data.endDate;
           obj['data'].name = observation.data.name;
           obj['data'].description = observation.data.description;
+          obj['data'].entities = observation.data.entities;
+
           console.log(JSON.stringify(obj));
 
 
@@ -296,9 +305,11 @@ export class ObservationsPage {
           this.apiProviders.httpPost(AppConfigs.cro.createObservation + observation.data.solutionId, obj, success => {
             console.log(JSON.stringify(success));
             // console.log("published obs")
-            this.utils.openToast(success.message, "Ok");
-
+            this.translate.get('toastMessage.ok').subscribe(translations =>{
+              this.utils.openToast(success.message, translations);
+            })
             this.refresh();
+            this.getDraftObservation();
             this.selectedTab = 'active'
           }, error => {
 
@@ -310,7 +321,7 @@ export class ObservationsPage {
       })
     }
     const actionSheet = this.actionSheetCtrl.create({
-      title: 'Choose a Action',
+      title: translateObject['actionSheet.chooseAction'],
       cssClass: 'action-sheets-groups-page',
       buttons: actionArray
     });

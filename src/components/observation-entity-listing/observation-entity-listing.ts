@@ -166,7 +166,7 @@ export class ObservationEntityListingComponent {
   addEntity(...params) {
     console.log(JSON.stringify(params))
 
-    let entityListModal = this.modalCtrl.create(EntityListPage, { data: this.entityList[params[0]]._id }
+    let entityListModal = this.modalCtrl.create(EntityListPage, { data: this.entityList[params[0]]._id,solutionId : this.observationList[this.selectedObservationIndex].solutionId}
     );
     entityListModal.onDidDismiss(entityList => {
       if (entityList) {
