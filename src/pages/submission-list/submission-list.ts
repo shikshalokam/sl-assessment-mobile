@@ -9,6 +9,7 @@ import { AssessmentServiceProvider } from '../../providers/assessment-service/as
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
 import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 import { TranslateService } from '@ngx-translate/core';
+import { ObservationReportsPage } from '../observation-reports/observation-reports';
 
 /**
  * Generated class for the SubmissionListPage page.
@@ -45,7 +46,7 @@ export class SubmissionListPage {
     private observationService: ObservationServiceProvider,
     private assessmentService: AssessmentServiceProvider
   ) {
-    this.events.subscribe('updateSubmissionStatus' , refresh => {
+    this.events.subscribe('updateSubmissionStatus', refresh => {
       this.observationService.refreshObservationList(this.programs).then(success => {
         this.programs = success;
         this.observationDetails[0] = success[this.selectedObservationIndex];
@@ -223,9 +224,18 @@ export class SubmissionListPage {
     })
   }
 
+  viewEntityReports() {
+    const payload = {
+      entityId: this.submissionList[0].entityId,
+      observationId: this.submissionList[0].observationId
+    }
+    this.navCtrl.push(ObservationReportsPage, payload);
+  }
+
 
   actions(submissionId, action) {
-    this.dap.checkForSubmissionDoc(submissionId, action);
+    // this.dap.checkForSubmissionDoc(submissionId, action);
+    this.navCtrl.push(ObservationReportsPage, { submissionId: submissionId })
   }
   deleteSubmission(submissionId) {
 

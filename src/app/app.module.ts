@@ -90,6 +90,8 @@ import { PreviewPage } from '../pages/preview/preview';
 import { SubmissionListPage } from '../pages/submission-list/submission-list';
 import { ObservationServiceProvider } from '../providers/observation-service/observation-service';
 import { DownloadAndPreviewProvider } from '../providers/download-and-preview/download-and-preview';
+import { ObservationReportsPage } from '../pages/observation-reports/observation-reports';
+import { HighchartsChartModule } from 'highcharts-angular';
 import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracker';
 
 @NgModule({
@@ -116,12 +118,14 @@ import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracke
     ProgramDetailsPage,
     HintPage,
     PreviewPage,
-    SubmissionListPage
+    SubmissionListPage,
+    ObservationReportsPage
   ],
   imports: [
     BrowserAnimationsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
+    HighchartsChartModule,
     TranslateModule.forRoot(
       {
         loader: {
@@ -171,7 +175,8 @@ import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracke
     EntityListingPage,
     HintPage,
     PreviewPage,
-    SubmissionListPage
+    SubmissionListPage,
+    ObservationReportsPage
   ],
   providers: [
     StatusBar,

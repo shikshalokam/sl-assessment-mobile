@@ -13,6 +13,7 @@ import { Network } from '@ionic-native/network';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { TranslateService } from '@ngx-translate/core';
 import { PreviewPage } from '../preview/preview';
+import { ObservationReportsPage } from '../observation-reports/observation-reports';
 import { UpdateTrackerProvider } from '../../providers/update-tracker/update-tracker';
 
 @IonicPage()
@@ -176,6 +177,10 @@ export class SectionListPage {
       });
       alert.present();
     }
+  }
+
+  viewReport() {
+    this.navCtrl.push(ObservationReportsPage, { submissionId: this.submissionId })
   }
 
 

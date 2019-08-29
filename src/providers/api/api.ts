@@ -171,24 +171,25 @@ export class ApiProvider {
       const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
 
       console.log(apiUrl)
-
+      console.log(JSON.stringify(payload))
       this.http.setDataSerializer('json');
       this.http.post(apiUrl, payload, obj).then(data => {
-
-        successCallback(JSON.parse(data.data));
+        console.log(JSON.stringify(data))
+        successCallback(data.data ? JSON.parse(data.data) : null);
       }).catch(error => {
+        console.log(JSON.stringify(error));
+
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
           this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
         } else {
-          this.translate.get('toastMessage.ok').subscribe(translations =>{
-            this.utils.openToast(error.message, translations);
-          })
+          this.utils.openToast(errorDetails.message, 'Ok');
           const errorObject = { ...this.errorObj };
           errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
           this.slack.pushException(errorObject);
         }
+        errorCallback(JSON.parse(error['error']))
       })
     }).catch(error => {
       this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
@@ -215,7 +216,7 @@ export class ApiProvider {
       const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
       console.log(apiUrl)
       this.http.get(apiUrl, {}, obj).then(data => {
-        successCallback(JSON.parse(data.data));
+        successCallback(data.data ? JSON.parse(data.data) : null);
         console.log("success data")
       }).catch(error => {
 
