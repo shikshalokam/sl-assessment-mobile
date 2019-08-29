@@ -13,6 +13,15 @@
 
 </ion-content>
 
+
+<ion-footer no-shadow>
+  <ion-toolbar position="bottom">
+    <ion-row>
+      <button ion-button full (click)="viewObservationReports()">
+        {{'buttons.viewReports'|translate}}</button>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
 <!-- <ion-footer no-shadow  *ngIf="enableCompleteBtn">
   <ion-toolbar class="_toolbar-background-md" position="bottom">
     <ion-row>

@@ -40,8 +40,16 @@
 <ion-footer no-shadow>
   <ion-toolbar position="bottom">
     <ion-row>
-      <button ion-button full (click)="observeAgain()">
-        {{'buttons.observeAgain'|translate}}</button>
+      <ion-col>
+        <button ion-button full (click)="observeAgain()">
+          {{'buttons.observeAgain'|translate}}</button>
+
+      </ion-col>
+      <ion-col>
+        <button ion-button full (click)="viewEntityReports()">
+          {{'buttons.viewReports'|translate}}</button>
+      </ion-col>
+
     </ion-row>
   </ion-toolbar>
 </ion-footer>
