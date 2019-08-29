@@ -3,9 +3,12 @@
         "date":"Date",
         "generalQuestions":"General Questions",
         "selectObservationType":"Select a observation Type",
-        "selectSolution" : "Select a Solution"
+        "selectSolution" : "Select a Solution",
+        "selectSchool":"Select Schools"
     },
     "actionSheet":{
+        "confirmLeave":"Are you sure to leave.",
+        "saveCurrentDataConfirmation":"Old details will be lost ? Are you sure to overwrite the details",
         "edit":"Edit",
         "delete":"Delete",
         "confirm":"Confirm",
@@ -53,10 +56,13 @@
         "deleteObservation":"Are you sure you want to delete the observation?",
         "networkSlowAlert" : "You are connected to a slower data network. Image upload may take longer time. Do you want to continue?"
     },
+    
     "buttons": {
         "observeAgain":"Observe Again",
         "view": "View",
+        "addNew":"Add New",
         "draft":"Draft",
+        "publish":"Publish",
         "goToEntities":"Go TO Entitites",
         "active":"Active",
         "completed":"Completed",
@@ -64,6 +70,8 @@
         "ratings": "Rate",
         "start": "Start",
         "survey": "survey",
+        "delete":"Delete",
+        "done":"Done",
         "previous":"Previous",
         "today":"Today",
         "about":"About",
@@ -72,9 +80,10 @@
         "next": "Next",
         "back": "Back",
         "upload": "Upload",
-        "and": "and",
+        "skip":"Skip",
         "submit": "Submit",
         "cancel": "Cancel",
+        "addEntity":"Add Entity",
         "send": "Send",
         "yes": "Yes",
         "no": "No",
@@ -93,10 +102,10 @@
         "saveDraft":"Draft",
         "markAsComplete":"Mark as completed",
         "preview":"Preview",
-        "addEntity":"Add Entities",
         "viewReports":"View Reports",
         "viewObservationReport":"View Observation report",
-        "viewEntityReport":"View Entity Report"
+        "viewEntityReport":"View Entity Report",
+        "edit":"Edit"
     },
     "tabs": {
         "home": "Home",
@@ -186,6 +195,8 @@
     },
     "message":{
         "noSubmission":"No Submissions",
+        "startSearchSchool":"search school",
+        "noSchoolFound":"No Schools Found",
         "searchEntities":"Search for entities",
         "startSearchSolution":"Search for solutions",
         "dontCloseApp":"Please don't close the app or go back.",
@@ -208,6 +219,7 @@
         "networkDisconnected" : "NetWork Disconnected",
         "networkConnected":"Network Connected",
         "ok":"OK",
+        "allValueAreMandatory":"Fill Mandatory Field",
         "enableInternet":"Please enable your internet connection to continue.",
         "connectToInternet":"Please connect to internet ",
         "networkConnectionForAction":"You need network connection for this action.",
