@@ -46,7 +46,7 @@ export class SubmissionListPage {
     private observationService: ObservationServiceProvider,
     private assessmentService: AssessmentServiceProvider
   ) {
-    this.events.subscribe('updateSubmissionStatus' , refresh => {
+    this.events.subscribe('updateSubmissionStatus', refresh => {
       this.observationService.refreshObservationList(this.programs).then(success => {
         this.programs = success;
         this.observationDetails[0] = success[this.selectedObservationIndex];
@@ -224,10 +224,18 @@ export class SubmissionListPage {
     })
   }
 
+  viewEntityReports() {
+    const payload = {
+      entityId: this.submissionList[0].entityId,
+      observationId: this.submissionList[0].observationId
+    }
+    this.navCtrl.push(ObservationReportsPage, payload);
+  }
+
 
   actions(submissionId, action) {
     // this.dap.checkForSubmissionDoc(submissionId, action);
-    this.navCtrl.push(ObservationReportsPage, {submissionId: submissionId})
+    this.navCtrl.push(ObservationReportsPage, { submissionId: submissionId })
   }
   deleteSubmission(submissionId) {
 

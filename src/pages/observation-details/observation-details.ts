@@ -11,6 +11,7 @@ import { SubmissionListPage } from '../submission-list/submission-list';
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
+import { ObservationReportsPage } from '../observation-reports/observation-reports';
 
 declare var cordova: any;
 
@@ -188,6 +189,7 @@ export class ObservationDetailsPage {
       this.programs = data;
       this.observationList = data;
       this.observationDetails.push(data[this.selectedObservationIndex]);
+      console.log(JSON.stringify(this.observationDetails))
       this.enableCompleteBtn = this.isAllEntitysCompleted();
       this.firstVisit = false;
     }).catch(error => {
@@ -245,6 +247,12 @@ export class ObservationDetailsPage {
     alert.present();
   }
 
+  viewObservationReports() {
+    const payload = {
+      observationId: this.observationDetails[0]._id
+    }
+    this.navCtrl.push(ObservationReportsPage, payload);
+  }
 
   // getAssessmentDetails(event) {
   //   // console.log("getting assessment details")

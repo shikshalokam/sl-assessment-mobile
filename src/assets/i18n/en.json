@@ -92,7 +92,9 @@
         "Teacher": "Teacher",
         "saveDraft":"Draft",
         "markAsComplete":"Mark as completed",
-        "preview":"Preview"
+        "preview":"Preview",
+        "addEntity":"Add Entities",
+        "viewReports":"View Reports"
     },
     "tabs": {
         "home": "Home",
