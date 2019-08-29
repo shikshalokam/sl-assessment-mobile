@@ -8,8 +8,11 @@
   <ion-stepper [mode]="'horizontal'" #stepper (selectIndexChange)="selectChange($event)">
 
     <!-- <ion-step label="Type" >
+    <ion-step label="Type" >
+        <h4>Observation Type</h4> \
+      
       <ion-list radio-group [(ngModel)]="entityType">
-        <ion-label>{{'ionLabel.selectObservationType' | translate}}</ion-label>
+        <ion-label>Select a observation Type</ion-label>
         <ion-item *ngFor="let type of entityTypeData">
           <ion-label text-capitalize>{{type.name}}</ion-label>
           <ion-radio value="{{type._id}}"></ion-radio>
@@ -17,8 +20,39 @@
       </ion-list>
     </ion-step> -->
 
+    <!-- <ion-step label="Schools">
+      
+     
+      <ion-row>
+      
+        <ion-col >
+
+        </ion-col>
+        <ion-col >
+        <button ion-button full (click)="openSchoolListmodal()" class="btnText">
+          {{'buttons.addSchools' | translate}}
+        </button>
+      </ion-col>
+     
+    </ion-row>
+
+    <div *ngIf="selectedSchools.length > 0 ; else noSchools ">
+        <ion-list *ngFor="let school of selectedSchools">
+            <ion-item-divider color="light">
+                <h3 class="headerText">
+                    <span class="_wrap-text">{{school.name}}</span> 
+                  </h3>
+          </ion-item-divider>
+        </ion-list>
+    </div>
+    <ng-template #noSchools>
+      <p class="_flex-box _justify-content-center">No Schools Selected.</p>
+    </ng-template>
+    </ion-step> -->
+
 
     <ion-step label="Solution">
+      <!-- <h4>Solution List</h4> -->
       <div class="fixBox" *ngIf="listOfSolution">
           <ion-label>{{'ionLabel.selectSolution' | translate}}</ion-label>
           <ion-searchbar debounce="500" (ionClear)="clearSolution()" autofocus (ionChange)="searchSolution($event)" placeholder="{{'message.startSearchSolution' | translate}}"></ion-searchbar>

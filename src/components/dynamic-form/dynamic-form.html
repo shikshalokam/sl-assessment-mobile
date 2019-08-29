@@ -36,13 +36,9 @@
       <ion-item *ngIf="fromField?.input === 'date' && fromField?.visible && checkForVisibility(fromField)">
           <ion-label>{{fromField?.label}} <span class="_requiredClass" *ngIf="fromField?.validation?.required">*</span></ion-label>
           <ion-datetime displayFormat="DD/MM/YYYY" [min]="minDate" pickerFormat="DDDD MMMM YYYY" [formControlName]="fromField.field"></ion-datetime>
+
         </ion-item>
-
-
     </ion-list>
-
-
-
   </div>
 
 </div>
