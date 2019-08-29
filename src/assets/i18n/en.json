@@ -102,6 +102,9 @@
         "saveDraft":"Draft",
         "markAsComplete":"Mark as completed",
         "preview":"Preview",
+        "viewReports":"View Reports",
+        "viewObservationReport":"View Observation report",
+        "viewEntityReport":"View Entity Report",
         "edit":"Edit"
     },
     "tabs": {
@@ -161,7 +164,8 @@
         "individualAssessments": "Individual Assessments",
         "observationDetails": "Observation Details",
         "hint":"Hint",
-        "submissionPreview":"Submission Preview"
+        "submissionPreview":"Submission Preview",
+        "observationReports":"Report"
     },
     "labels": {
         "welcome": "Welcome",
