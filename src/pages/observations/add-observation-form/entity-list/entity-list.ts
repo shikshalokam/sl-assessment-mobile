@@ -30,6 +30,7 @@ export class EntityListPage {
   selectedListCount = {
     count: 0
   }
+  solutionId: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -39,6 +40,8 @@ export class EntityListPage {
   ) {
     this.searchUrl = AppConfigs.cro.searchEntity;
     this.observationId = this.navParams.get('data');
+    this.solutionId = this.navParams.get('solutionId');
+
     console.log(this.observationId)
   }
 
@@ -67,7 +70,7 @@ export class EntityListPage {
     this.searchValue = event ? event : this.searchValue;
     this.utils.startLoader();
     this.index = 50;
-    this.apiProviders.httpGet(this.searchUrl + this.observationId + "?search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
+    this.apiProviders.httpGet(this.searchUrl + this.solutionId + "&search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
       this.arr = event ? [] : this.arr;
       for (let i = 0; i < success.result[0].data.length; i++) {
         success.result[0].data[i].isSelected = success.result[0].data[i].selected;
@@ -85,7 +88,7 @@ export class EntityListPage {
     }, error => {
       this.utils.stopLoader();
 
-    })
+    },{version : "v2",dhiti : false})
   }
 
 }

@@ -196,6 +196,8 @@ export class ObservationsPage {
   getDraftObservation() {
     this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
       this.draftObservation = draftObs;
+      console.log("Draft observation");
+      console.log(JSON.stringify(draftObs))
       this.draftListLength = this.draftObservation.length;
       // this.countCompleteActive();
 
@@ -220,7 +222,7 @@ export class ObservationsPage {
   openMenu(event , index) {
     // this.assessmentService.openMenu(event, this.programs, false);
     console.log("open menu")
-    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true , assessmentIndex : index , assessmentName :'createdObservationList'})
+    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true ,showEdit : true , assessmentIndex : index , assessmentName :'createdObservationList'})
   
     popover.present(
       {ev:event}
@@ -293,6 +295,8 @@ export class ObservationsPage {
           obj['data'].endDate = observation.data.endDate;
           obj['data'].name = observation.data.name;
           obj['data'].description = observation.data.description;
+          obj['data'].entities = observation.data.entities;
+
           console.log(JSON.stringify(obj));
 
 
