@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, ɵConsole } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, App, Config, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, App, Config, Events, AlertController } from 'ionic-angular';
 import { FormGroup, Validators } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
@@ -62,6 +62,8 @@ export class AddObservationFormPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    private translate: TranslateService,
+
     private permissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
@@ -69,10 +71,9 @@ export class AddObservationFormPage {
     private diagnostic: Diagnostic,
     public utils: UtilsProvider,
     private modalCtrl: ModalController,
-    private networkGps: NetworkGpsProvider,
+    private alertCtrl: AlertController,
     private localStorage: LocalStorageProvider,
     private app: App,
-    public translate : TranslateService,
     private storage: Storage,
     private event: Events
   ) {
@@ -142,7 +143,7 @@ export class AddObservationFormPage {
                         this.translate.get('toastMessage.locationForAction').subscribe(translations =>{
                           this.utils.openToast( translations);
                         })
-                        this.utils.stopLoader();
+                                                this.utils.stopLoader();
                       }
                     );
                 } else {
@@ -183,8 +184,7 @@ export class AddObservationFormPage {
                   error => {
                     this.translate.get('toastMessage.locationForAction').subscribe(translations =>{
                       this.utils.openToast( translations);
-                    })
-                  }
+                    })                  }
                 );
             } else {
               this.geolocation.getCurrentPosition(options).then((resp) => {
@@ -250,6 +250,8 @@ export class AddObservationFormPage {
         this.listOfSolution.forEach(element => {
           if (element._id === this.editData.data.solutionId)
             this.selectedFrameWork = element._id;
+            this.ObservationFromTitle = element.name;
+            this.ObservationFromDescription = element.description;
         });
       }
       solutionFlag = true;
@@ -265,14 +267,22 @@ export class AddObservationFormPage {
     this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork, success => {
       this.addObservationData = success.result;
       console.log(JSON.stringify(this.addObservationData))
-      if (this.editData) {
-        this.addObservationData.forEach(element => {
+      if (this.editData) { 
+        if((! this.editData.data.name ||! this.editData.data.description)  && this.editData.data.solutionId){
+          this.addObservationData.forEach(element => {
+          if (element.field == 'name') 
+            element.value = this.ObservationFromTitle;
+          if (element.field == 'description')
+            element.value = this.ObservationFromDescription;
+        });
+        }else{
+          this.addObservationData.forEach(element => {
           element.value = this.editData.data[element.field];
           if (element.field === 'status') {
             element.value = 'draft';
           }
         });
-
+        }
       }else{
         this.addObservationData.forEach(element => {
           switch(element.field){
@@ -309,6 +319,11 @@ export class AddObservationFormPage {
 
         break;
     }
+    // this.selectedIndex === 0 ? 
+    // actionFlag ? null :  this.utils.openToast("select the type of observation") 
+    // : 
+    // this.selectedIndex === 1 ? actionFlag ? null :  this.utils.openToast("select a solution") : null
+
     return actionFlag;
   }
   getEntityList(event ?) {
@@ -403,12 +418,9 @@ export class AddObservationFormPage {
     : this.translate.get('toastMessage.allValueAreMandatory').subscribe(translations => {
       
       message = translations;
+     });
+     this.utils.openToast(message) ;
 
-
-    }) ;
-
-    
-     this.utils.openToast(message) 
   }
 
   saveDraft(option = 'normal') {
@@ -418,7 +430,7 @@ export class AddObservationFormPage {
       };
       // obsData['data']['entities'] = [];
       obsData['data'] = this.creatPayLoad('draft');
-      obsData['data']['isComplete'] = this.addObservationForm && obsData['data']['entities'].length > 0 ? this.addObservationForm.valid ? true : false : false;
+      obsData['data']['isComplete'] = this.addObservationForm && obsData['data']['entities'].length > 0 ?(this.addObservationForm && this.addObservationForm.valid)? true : false : false;
       this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
         let draft = draftObs;
         this.editDataIndex >= 0 ? draft[this.editDataIndex] = obsData : draft.push(obsData);
@@ -437,7 +449,7 @@ export class AddObservationFormPage {
 
   creatPayLoad(type = 'publish') {
     let payLoad = this.addObservationForm ? this.addObservationForm.getRawValue() : {};
-    payLoad['entities'] = this.addObservationForm.valid ?   this.getSelectedEntities() : [];
+    payLoad['entities'] = ( this.addObservationForm && this.addObservationForm.valid )?   this.getSelectedEntities() : [];
     if (type === 'draft') {
       payLoad['isComplete'] = false;
       payLoad['solutionId'] = this.selectedFrameWork ? this.selectedFrameWork : null;
@@ -459,8 +471,9 @@ export class AddObservationFormPage {
 
   ionViewWillUnload() {
     if (this.saveDraftType !== 'normal' && !this.isPublished)
-      this.saveDraft('force');
+        this.editData ?  null : this.saveDraft('force');
   }
+
   publishObservation(){
    let obj = {
       data :{}
@@ -489,8 +502,50 @@ export class AddObservationFormPage {
 
     })
   }
+
   countEntity(entity){
     entity.selected ? this.entityCount-- : this.entityCount++ ;
     console.log(this.entityCount)
   }
+
+  async ionViewCanLeave() {
+    console.log(this.saveDraftType + "  " + this.editDataIndex)
+    if(this.saveDraftType != 'normal'  && this.editDataIndex >= -1){
+      const shouldLeave = await this.confirmLeave();
+      return shouldLeave;
+    }
+  }
+  
+  confirmLeave(): Promise<Boolean> {
+    let resolveLeaving;
+    const canLeave = new Promise<Boolean>(resolve => resolveLeaving = resolve);
+    let translateObject ;
+    this.translate.get(['actionSheet.confirmLeave','actionSheet.saveCurrentDataConfirmation','actionSheet.yes','actionSheet.no']).subscribe(translations =>{
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
+
+    const alert = this.alertCtrl.create({
+      title: translateObject['actionSheet.confirmLeave'],
+      message: translateObject['actionSheet.saveCurrentDataConfirmation'],
+      buttons: [
+        {
+          text: translateObject['actionSheet.no'],
+          role: 'cancel',
+          handler: () => resolveLeaving(true)
+        },
+        {
+          text: translateObject['actionSheet.yes'],
+          handler: () =>{
+            this.saveDraft('force')
+           resolveLeaving(true)
+          }
+        }
+      ]
+    });
+    alert.present();
+    return canLeave
+  }
+
+
 }

@@ -32,10 +32,8 @@ export class MenuItemComponent {
 
   constructor(private navParams: NavParams, private ratingService: RatingProvider,
     private appCtrl: App, private viewCtrl: ViewController, private utils: UtilsProvider,
-    private events: Events, private ngps: NetworkGpsProvider, private modalCntrl: ModalController,
-    private usld: UpdateLocalSchoolDataProvider,
-    private translate : TranslateService
-    ) {
+    private events: Events, private ngps: NetworkGpsProvider, private modalCntrl: ModalController,    private translate : TranslateService,
+    private usld: UpdateLocalSchoolDataProvider) {
     //console.log('Hello MenuItemComponent Component');
     this.showMenuArray =  this.navParams.get('showMenuArray');
     this.submissionId = this.navParams.get('submissionId');
@@ -61,7 +59,6 @@ export class MenuItemComponent {
         message = translations;
        })
       this.utils.openToast(message);
-      this.networkAvailable = false;
     });
 
     // Online event
@@ -72,7 +69,6 @@ export class MenuItemComponent {
         message = translations;
        })
       this.utils.openToast(message);
-      this.networkAvailable = true;
     });
 
     this.networkAvailable = this.ngps.getNetworkStatus();
@@ -111,7 +107,6 @@ export class MenuItemComponent {
         okMessage = translations.ok
        })
       this.utils.openToast(message , okMessage);
-      
     } else {
       this.ratingService.checkForRatingDetails(this.submissionId, school);
     }

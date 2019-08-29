@@ -6,34 +6,33 @@
 -->
 <ion-header>
 
-    <header [title]="'headings.addSchools'|translate" [hideBack]="false" [showMenu]="false" [showClose]="true" [disableNetwork]="true">
-      </header>
+  <header [title]="'headings.addSchools'|translate" [hideBack]="false" [showMenu]="false" [showClose]="true" [disableNetwork]="true">
+    </header>
 
 </ion-header>
 
 
 <ion-content padding>
-          <selectable-list [selectedListCount]="selectedListCount" (infinityScrollEvent)="search()" [totalCount]="totalCount" [selectableList]="selectableList" (searchUrl)="search($event)"  [index]="index"></selectable-list>
+        <selectable-list [selectedListCount]="selectedListCount" (infinityScrollEvent)="search()" [totalCount]="totalCount" [selectableList]="selectableList" (searchUrl)="search($event)"  [index]="index"></selectable-list>
 </ion-content>
 <ion-footer no-shadow>
-    <ion-toolbar class="_toolbar-background-md" position="bottom">
-      <ion-row>
-          
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
         
-        <ion-col>
-          <button ion-button full (click)="cancel()" class="btnText" >
-            <ion-icon name="close" margin-right></ion-icon>
-            {{'buttons.cancel' | translate}}
-          </button>
-      </ion-col>
+      
       <ion-col>
-        <button ion-button full (click)="addSchools()" class="btnText" [disabled]="selectedListCount.count === 0">
-          <ion-icon name="add" margin-right></ion-icon>
-          {{'buttons.add' | translate}}
+        <button ion-button full (click)="cancel()" class="btnText" >
+          <ion-icon name="close" margin-right></ion-icon>
+          {{'buttons.cancel' | translate}}
         </button>
     </ion-col>
-      </ion-row>
-    </ion-toolbar>
-  </ion-footer>
-  
-  
+    <ion-col>
+      <button ion-button full (click)="addSchools()" class="btnText" [disabled]="selectedListCount.count === 0">
+        <ion-icon name="add" margin-right></ion-icon>
+        {{'buttons.add' | translate}}
+      </button>
+  </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
+

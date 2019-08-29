@@ -21,11 +21,11 @@ export class MatrixTypeComponent implements OnInit {
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
   @Input() submissionId: string;
-  @Input() inputIndex ;
+  @Input() inputIndex;
   mainInstance: any;
 
-  constructor(private modalCntrl: ModalController, 
-    private translate : TranslateService,
+  constructor(private modalCntrl: ModalController,
+    private translate: TranslateService,
     private utils: UtilsProvider, private alertCtrl: AlertController) {
     console.log('Hello MatrixTypeComponent Component');
 
@@ -60,22 +60,22 @@ export class MatrixTypeComponent implements OnInit {
       schoolId: this.schoolId,
       generalQuestion: this.generalQuestion,
       submissionId: this.submissionId,
-      questionIndex : this.inputIndex
+      questionIndex: this.inputIndex
     }
     let matrixModal = this.modalCntrl.create(MatrixActionModalPage, obj);
     matrixModal.onDidDismiss(instanceValue => {
       if (instanceValue) {
-        this.data.completedInstance =  this.data.completedInstance ? this.data.completedInstance : [];
+        this.data.completedInstance = this.data.completedInstance ? this.data.completedInstance : [];
         this.data.value[i] = instanceValue;
-        console.log("saved isntance"+JSON.stringify(instanceValue));
+        console.log("saved isntance" + JSON.stringify(instanceValue));
         let instanceCompletion = this.checkCompletionOfInstance(this.data.value[i]);
-        if(instanceCompletion) {
-          if(this.data.completedInstance.indexOf(i) < 0) {
+        if (instanceCompletion) {
+          if (this.data.completedInstance.indexOf(i) < 0) {
             this.data.completedInstance.push(i);
           }
         } else {
           const index = this.data.completedInstance.indexOf(i);
-          if(index >= 0) {
+          if (index >= 0) {
             this.data.completedInstance.splice(index, 1);
           }
         }
@@ -85,11 +85,11 @@ export class MatrixTypeComponent implements OnInit {
     matrixModal.present();
   }
 
-  checkCompletionOfInstance(data): boolean{
+  checkCompletionOfInstance(data): boolean {
     let isCompleted = true;
     for (const question of data) {
       // question.isCompleted = this.utils.isQuestionComplete(question);
-      if(!question.isCompleted){
+      if (!question.isCompleted) {
         isCompleted = false;
         return false
       }
@@ -102,9 +102,9 @@ export class MatrixTypeComponent implements OnInit {
     this.data.value.splice(instanceIndex, 1);
     // let instanceCompletion = this.checkCompletionOfInstance(this.data.value[instanceIndex]);
     // if(instanceCompletion) {
-      if(this.data.completedInstance && this.data.completedInstance.length && this.data.completedInstance.indexOf(instanceIndex) >= 0) {
-        this.data.completedInstance.splice(instanceIndex,1);
-      }
+    if (this.data.completedInstance && this.data.completedInstance.length && this.data.completedInstance.indexOf(instanceIndex) >= 0) {
+      this.data.completedInstance.splice(instanceIndex, 1);
+    }
     this.checkForValidation();
 
     // }
@@ -121,24 +121,24 @@ export class MatrixTypeComponent implements OnInit {
 
 
   deleteInstanceAlert(index) {
-    let translateObject ;
-          this.translate.get(['actionSheet.confirmDelete','actionSheet.confirmDeleteInstance','actionSheet.no','actionSheet.yes']).subscribe(translations =>{
-            translateObject = translations;
-            console.log(JSON.stringify(translations))
-          })
+    let translateObject;
+    this.translate.get(['actionSheet.confirmDelete', 'actionSheet.confirmDeleteInstance', 'actionSheet.no', 'actionSheet.yes']).subscribe(translations => {
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
     let alert = this.alertCtrl.create({
       title: translateObject['actionSheet.confirmDelete'],
-      message:translateObject['actionSheet.confirmDeleteInstance'],
+      message: translateObject['actionSheet.confirmDeleteInstance'],
       buttons: [
         {
-          text:translateObject['actionSheet.no'],
+          text: translateObject['actionSheet.no'],
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
           }
         },
         {
-          text:translateObject['actionSheet.yes'],
+          text: translateObject['actionSheet.yes'],
           handler: () => {
             this.deleteInstance(index);
           }
@@ -151,7 +151,7 @@ export class MatrixTypeComponent implements OnInit {
   getLastModified(instance) {
     let lastModifiedAt = 0;
     for (const question of instance) {
-      if(question.startTime > lastModifiedAt){
+      if (question.startTime > lastModifiedAt) {
         lastModifiedAt = question.startTime;
       }
     }
