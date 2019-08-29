@@ -28,8 +28,8 @@ export class MyApp {
   networkSubscription: any;
   networkAvailable: boolean;
   appName: string = AppConfigs.appName;
-  appVersion = "1.1.0";
-  appEnvironment = "Development";
+  appVersion = AppConfigs.appVersion;
+  appEnvironment = AppConfigs.environment;
   // rootPage: any = "LoginPage";
   allPages: Array<Object> = [
     {
