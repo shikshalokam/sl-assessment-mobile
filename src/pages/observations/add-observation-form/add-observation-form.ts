@@ -403,8 +403,7 @@ export class AddObservationFormPage {
       message = translations;
      })
 
-    : 
-    this.translate.get('toastMessage.allValueAreMandatory').subscribe(translations => {
+    : this.translate.get('toastMessage.allValueAreMandatory').subscribe(translations => {
       
       message = translations;
 
