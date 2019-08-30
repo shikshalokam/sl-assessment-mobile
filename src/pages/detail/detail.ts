@@ -8,6 +8,7 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
+import { AccessActionsProvider } from '../../providers/access-actions/access-actions';
 
 @Component({
   selector: 'page-detail',
@@ -25,6 +26,7 @@ export class DetailPage {
     private auth: AuthProvider,
     private localStorage: LocalStorageProvider,
     private apiService: ApiProvider,
+    private accessAction: AccessActionsProvider,
     private utils: UtilsProvider) {
   }
 
@@ -112,14 +114,23 @@ export class DetailPage {
     }
     let currentEcm = {}
     this.utils.startLoader();
-    this.apiService.httpPost(AppConfigs.help.getHelpToken, passcode, successData => {
-      this.utils.ActionEnableSubmit(successData.result);
+    this.apiService.httpPost(AppConfigs.help.getHelpToken , passcode, successData => {
+      console.log(JSON.stringify(successData))
+      if(successData.result.action.includes('enableAutoSubmission')) {
+        this.accessAction.ActionAutoSubmit(successData.result);
+      } else {
+        this.accessAction.ActionEnableSubmit(successData.result);
+      }
       this.utils.stopLoader();
     }, error => {
       this.utils.stopLoader();
       this.utils.openToast(error.result.message);
 
     })
+  }
+
+  relogin() {
+    this.auth.reloginEnable();
   }
 
 }

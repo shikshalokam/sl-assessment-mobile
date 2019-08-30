@@ -74,6 +74,7 @@ import { Deeplinks } from '@ionic-native/deeplinks';
 import { SolutionDetailsPage } from '../pages/solution-details/solution-details';
 import { IonicStepperModule } from 'ionic-stepper';
 import { ObservationProvider } from '../providers/observation/observation';
+import { AccessActionsProvider } from '../providers/access-actions/access-actions';
 
 @NgModule({
   declarations: [
@@ -184,8 +185,8 @@ import { ObservationProvider } from '../providers/observation/observation';
     HTTP,
     AssessmentServiceProvider,
     Deeplinks,
-    ObservationProvider
-
+    ObservationProvider,
+    AccessActionsProvider
   ]
 })
 export class AppModule { }

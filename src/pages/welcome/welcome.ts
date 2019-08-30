@@ -19,7 +19,9 @@ export class WelcomePage {
   slidesList = [
     {
       // title: "Slide 1",
-      image: "assets/imgs/just-logo.png"
+      // image: "assets/imgs/just-logo.png"
+      image: "assets/imgs/SDI_App_Logo.jpg"
+
     },
     // { title: "Slide 2" },
     // { title: "Slide 3" }
