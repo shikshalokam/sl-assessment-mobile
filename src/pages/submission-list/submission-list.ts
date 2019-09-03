@@ -182,7 +182,7 @@ export class SubmissionListPage {
   }
   observeAgain() {
     // this.getAssessmentDetails(this.submissionList.length , this.submissionList.length + 1)
-    let submissionNumber = this.submissionList.length + 1;
+    let submissionNumber = this.submissionList[this.submissionList.length-1].submissionNumber + 1;
 
     //  console.log(submissionNumber)
     //  this.apiProvider.httpGet(AppConfigs.cro.observationDetails + this.programs[this.selectedObservationIndex]._id + "?entityId=" + this.programs[this.selectedObservationIndex].entities[this.entityIndex]._id + "&submissionNumber=" + submissionNumber, success => {
