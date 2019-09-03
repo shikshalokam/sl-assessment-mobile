@@ -227,7 +227,8 @@ export class ApiProvider {
           this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
         } else {
           this.translate.get('toastMessage.ok').subscribe(translations =>{
-            this.utils.openToast(error.message, translations);
+            this.utils.openToast(errorDetails.message, translations);
+            errorCallback(error)
           })
           const errorObject = { ...this.errorObj };
           errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}`;
