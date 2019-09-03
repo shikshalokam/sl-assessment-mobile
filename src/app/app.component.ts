@@ -16,7 +16,7 @@ import { IndividualListingPage } from '../pages/individual-listing/individual-li
 import { UtilsProvider } from '../providers/utils/utils';
 import { ObservationsPage } from '../pages/observations/observations';
 import { Deeplinks } from '@ionic-native/deeplinks';
-
+import {IonicApp } from 'ionic-angular';
 @Component({
   templateUrl: 'app.html'
 
@@ -81,6 +81,7 @@ export class MyApp {
     private translate: TranslateService,
     private network: Network,
     private events: Events,
+    private ionicApp: IonicApp,
     private networkGpsProvider: NetworkGpsProvider,
     private menuCntrl: MenuController,
     private deepLinks: Deeplinks,
@@ -227,6 +228,18 @@ export class MyApp {
 
   registerBAckButtonAction(): void {
     this.platform.registerBackButtonAction(() => {
+      let ready = true;
+      let activePortal = this.ionicApp._loadingPortal.getActive() ||
+               this.ionicApp._modalPortal.getActive() ||
+               this.ionicApp._toastPortal.getActive() ||
+               this.ionicApp._overlayPortal.getActive();
+
+            if (activePortal) {
+               ready = false;
+               activePortal.dismiss();
+               activePortal.onDidDismiss(() => { ready = true; });
+               return;
+            }
       let alert;
       // this.nav.indexOf('WelcomePage')
       // console.log("hiii "+ JSON.stringify(this.nav.getByIndex(0)))
