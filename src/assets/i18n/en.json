@@ -92,7 +92,8 @@
         "Teacher": "Teacher",
         "saveDraft":"Draft",
         "markAsComplete":"Mark as completed",
-        "preview":"Preview"
+        "preview":"Preview",
+        "addEntity":"Add Entity"
     },
     "tabs": {
         "home": "Home",

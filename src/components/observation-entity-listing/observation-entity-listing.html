@@ -19,8 +19,8 @@
         <ion-list>
           <ion-item-sliding *ngFor="let entity of entity.entities; let k = index">
             <ion-item text-wrap>
-              <div class="_flex-box">
-                <div style="flex:1" text-capitalize (click)="checkSubmission(entity,i,k)">
+              <div class="_flex-box" (click)="checkSubmission(entity,i,k)">
+                <div style="flex:1" text-capitalize >
                   {{entity.name}}
                 </div>
                 <!-- <div style="flex:1" text-capitalize
@@ -34,7 +34,7 @@
                 </span> -->
                 <!-- <ion-icon *ngIf="entity?.submissionStatus == 'completed'" name="cloud-done" class="completed" margin-left></ion-icon> -->
                 <ion-icon *ngIf="!(entity?.submissions.length > 0)" name="trash" class="downloadIcon"
-                  (click)="removeEntity(i,k)" margin-left></ion-icon>
+                  (click)="$event.stopPropagation() ;removeEntity(i,k)" margin-left></ion-icon>
                 <ion-icon *ngIf="(entity?.submissions.length > 0)" name="arrow-forward" class="_progressIcon"
                   margin-left></ion-icon>
 
