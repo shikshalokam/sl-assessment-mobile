@@ -45,42 +45,36 @@ export class ObservationReportsPage {
     }
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.externalRootDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
-
     this.getObservationReports();
-
   }
+
+
+
 
   getObservationReports(download = false) {
     this.utils.startLoader();
     let url;
     if (this.submissionId) {
       url = AppConfigs.observationReports.instanceReport;
-      this.fileName = this.submissionId + ".pdf";
     } else if (!this.submissionId && !this.entityId) {
       url = AppConfigs.observationReports.observationReport;
-      this.fileName = this.observationId + ".pdf";
     } else {
       url = AppConfigs.observationReports.entityReport
-      this.fileName = this.entityId + '_' + this.observationId + ".pdf";
     }
 
-    this.payload.download = download;
 
     this.apiService.httpPost(url, this.payload, (success) => {
-      this.utils.stopLoader();
       if (success) {
-        if (download) {
-          this.downloadSubmissionDoc(success.pdfUrl)
-        } else {
-          this.reportObj = success;
-        }
+        this.reportObj = success;
       } else {
         this.error = "No data found"
       }
+      this.utils.stopLoader();
+
     }, error => {
       this.error = "No data found";
       this.utils.stopLoader();
-    }, {dhiti:true})
+    }, { dhiti: true })
 
   }
 
@@ -110,8 +104,37 @@ export class ObservationReportsPage {
       this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
     }).catch(error => {
       console.log("Check for file not available")
-      this.getObservationReports(true)
+      // this.getObservationReports(true)
+      this.getObservationReportUrl();
     })
+  }
+
+  getObservationReportUrl() {
+    this.utils.startLoader();
+    let url = AppConfigs.observationReports.getReportsPdfUrls + "type=submission&";
+    if (this.submissionId) {
+      url = url + "submissionId="+ this.submissionId;
+      this.fileName = this.submissionId + ".pdf";
+    } else if (!this.submissionId && !this.entityId) {
+      url = url + "observationId=" + this.observationId
+      this.fileName = this.observationId + ".pdf";
+    } else {
+      url = url + "entityId=" + this.entityId + "&observationId=" + this.observationId
+      this.fileName = this.entityId + '_' + this.observationId + ".pdf";
+    }
+
+    this.apiService.httpGet(url, success => {
+      this.utils.stopLoader();
+      if (success.status === 'success' && success.pdfUrl) {
+        this.downloadSubmissionDoc(success.pdfUrl);
+      } else {
+        this.utils.openToast(success.message)
+      }
+    }, error => {
+      this.utils.openToast(error.message)
+
+      this.utils.stopLoader();
+    }, { dhiti: true })
   }
 
 
