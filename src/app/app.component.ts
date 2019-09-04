@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Platform, AlertController, Nav, App, MenuController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -17,11 +17,17 @@ import { UtilsProvider } from '../providers/utils/utils';
 import { ObservationsPage } from '../pages/observations/observations';
 import { Deeplinks } from '@ionic-native/deeplinks';
 import {IonicApp } from 'ionic-angular';
+import { ApiProvider } from '../providers/api/api';
+import { LocalStorageProvider } from '../providers/local-storage/local-storage';
+import { RoleDashboardPage } from '../pages/role-dashboard/role-dashboard';
+
+
 @Component({
   templateUrl: 'app.html'
 
 })
 export class MyApp {
+
   @ViewChild(Nav) nav: Nav;
   rootPage: any;
   isAlertPresent: boolean = false;
@@ -70,7 +76,7 @@ export class MyApp {
       active: false
     }
   ]
-
+  profileRoles = [];
   currentPage;
   constructor(
     private platform: Platform,
@@ -82,12 +88,18 @@ export class MyApp {
     private network: Network,
     private events: Events,
     private ionicApp: IonicApp,
+    private currentUserProvider :CurrentUserProvider,
+    private apiProvider : ApiProvider,
     private networkGpsProvider: NetworkGpsProvider,
     private menuCntrl: MenuController,
     private deepLinks: Deeplinks,
-    private utils: UtilsProvider
+    private utils: UtilsProvider,
+    private localStorageProvider : LocalStorageProvider
   ) {
 
+    
+    
+    
 
 
 
@@ -97,6 +109,25 @@ export class MyApp {
       let index: number = this.findIndex(data);
       this.goToPage(index);
     })
+    this.events.subscribe('multipleRole' , data =>{
+      if (data ) {
+        // this.goToPage(0);
+        let flag = true
+        this.allPages.forEach(page =>{
+          if(page['name'] == 'userRolePage'){
+           flag = false;
+          }
+        })
+        flag ?
+        this.allPages.splice(this.allPages.length-2, 0 ,{
+        name: "dashboard",
+        icon: "analytics",
+        component: RoleDashboardPage,
+        active: false
+    }) : 
+    false
+      }
+    });
     this.events.subscribe('loginSuccess', data => {
       if (data == true) {
         // this.goToPage(0);
@@ -134,7 +165,31 @@ export class MyApp {
     });
 
   }
+  // ionViewDidLoad(){
+  //   this.localStorageProvider.getLocalStorage('profileRole').then( roles => {
+  //     this.profileRoles = roles;
+  //     console.log(JSON.stringify(roles))
+  //     this.getRoles();
 
+  //   }).catch( error =>{
+  //     this.getRoles();
+  //     console.log("called get roles")
+  //   })
+  // }
+  // getRoles() {
+  //  console.log("i m here")
+  //   let currentUser =   this.currentUserProvider.getCurrentUserData();
+  //  console.log(JSON.stringify(currentUser) + "usr details")
+  //   // this.apiProvider.httpGet(AppConfigs.roles.getProfile+currentUser.sub,success =>{
+  //   //   this.profileRoles = success.result;
+  //   //   console.log(JSON.stringify(success))
+  //   //   this.localStorageProvider.setLocalStorage('profileRole',success.result);
+  //   // },error =>{
+  //   //   this.utils.openToast(error);
+  //   // })  
+  //   console.log("func end");
+  // }
+  
   ionViewWillLeave() {
     if (this.networkSubscription) {
       this.networkSubscription.unsubscribe();

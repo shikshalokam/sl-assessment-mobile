@@ -93,6 +93,9 @@ import { DownloadAndPreviewProvider } from '../providers/download-and-preview/do
 import { ObservationReportsPage } from '../pages/observation-reports/observation-reports';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracker';
+import { RoleDashboardPage } from '../pages/role-dashboard/role-dashboard';
+import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
+import { DashboardPage } from '../pages/dashboard/dashboard';
 
 @NgModule({
   declarations: [
@@ -119,7 +122,9 @@ import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracke
     HintPage,
     PreviewPage,
     SubmissionListPage,
-    ObservationReportsPage
+    ObservationReportsPage,
+    RoleDashboardPage,ReportEntityListingPage,
+    DashboardPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -176,7 +181,10 @@ import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracke
     HintPage,
     PreviewPage,
     SubmissionListPage,
-    ObservationReportsPage
+    DashboardPage,
+    ObservationReportsPage,
+    RoleDashboardPage,
+    ReportEntityListingPage
   ],
   providers: [
     StatusBar,

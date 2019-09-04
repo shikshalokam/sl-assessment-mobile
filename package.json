@@ -83,6 +83,8 @@
     "cordova-sqlite-storage": "2.6.0",
     "cordova.plugins.diagnostic": "4.0.12",
     "es6-promise-plugin": "^4.2.2",
+    "highcharts": "^7.2.0",
+    "highcharts-angular": "^2.4.0",
     "ionic": "3.15.0",
     "ionic-angular": "3.9.2",
     "ionic-plugin-deeplinks": "1.0.19",
@@ -92,9 +94,7 @@
     "rxjs": "5.5.11",
     "save": "2.3.2",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.26",
-    "highcharts": "^7.1.1",
-    "highcharts-angular": "^2.4.0"
+    "zone.js": "0.8.26"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.0",
@@ -183,4 +183,3 @@
     ]
   }
 }
-
