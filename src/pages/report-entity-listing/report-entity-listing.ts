@@ -37,12 +37,18 @@ export class ReportEntityListingPage {
   }
   selectEntity(entity){
     console.log("select entity")
-    if(entity.entityType){
-    let url = entity._id ? AppConfigs.roles.entityList+entity._id+"?type="+entity.entityType : AppConfigs.roles.entityList+entity.entityId+"?type="+entity.entityType
+    
+    if(entity.immediateSubEntityType){
+      this.utils.startLoader();
+    let url = entity._id ? AppConfigs.roles.entityList+entity._id+"?type="+entity.immediateSubEntityType : AppConfigs.roles.entityList+entity.entityId+"?type="+entity.entityType
     this.apiProvider.httpGet(url,success =>{
       console.log(success.result[0].entityType)
-      this.navCtrl.push(ReportEntityListingPage , {data :  success.result , "entityType":entity.entityType } );
+      this.navCtrl.push(ReportEntityListingPage , {data :  success.result , "entityType":entity.immediateSubEntityType } );
+      this.utils.stopLoader();
+      
     },error=>{
+      this.utils.stopLoader();
+
       this.utils.openToast(error)
         })
    }
@@ -52,14 +58,17 @@ export class ReportEntityListingPage {
   }
   viewInstanceReport(entity){
 console.log("api called")
+    this.utils.startLoader();
     this.apiProvider.httpPost(AppConfigs.roles.instanceReport,{"entityId" : entity._id},success =>{
       this.instanceReportData = success;
       this.navCtrl.push(DashboardPage , { "data" :success} )
       console.log(JSON.stringify(success))
-
+      this.utils.stopLoader();
     },error=>{
+      this.utils.stopLoader();
       console.log("error");
       this.utils.openToast(error)
+
     },{"dhiti":true})
   }
 

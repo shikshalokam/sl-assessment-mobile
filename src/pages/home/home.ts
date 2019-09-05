@@ -13,7 +13,7 @@ import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { UtilsProvider } from '../../providers/utils/utils';
-import { RoleDashboardPage } from '../role-dashboard/role-dashboard';
+import { RoleListingPage } from '../role-listing/role-listing';
 import * as HighCharts from 'highcharts';
 
 declare var cordova: any;
@@ -102,7 +102,7 @@ export class HomePage {
         name: "dashboard",
         subName: '',
         icon: "analytics",
-        component: RoleDashboardPage,
+        component: RoleListingPage,
         active: false
     }) 
     this.events.publish('multipleRole' , true);
@@ -145,7 +145,7 @@ export class HomePage {
           name: "dashoard",
           subName: '',
           icon: "analytics",
-          component: RoleDashboardPage,
+          component: RoleListingPage,
           active: false
       }) : null;
       this.events.publish('multipleRole' , true);
