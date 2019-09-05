@@ -34,6 +34,9 @@ import { ReportsTextComponent } from './reports-text/reports-text';
 import { PieChartComponent } from './pie-chart/pie-chart';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { BarChartComponent } from './bar-chart/bar-chart';
+import { ReportEntityListComponent } from './report-entity-list/report-entity-list';
+import { HighChartsComponent } from './high-charts/high-charts';
+import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
 
 @NgModule({
 	declarations: [
@@ -62,7 +65,10 @@ import { BarChartComponent } from './bar-chart/bar-chart';
     AudioListComponent,
     ReportsTextComponent,
     PieChartComponent,
-    BarChartComponent
+    BarChartComponent,
+    ReportEntityListComponent,
+    HighChartsComponent,
+    ExpansionPanelComponent
   ],
 	imports: [
 		IonicModule,
@@ -97,7 +103,10 @@ import { BarChartComponent } from './bar-chart/bar-chart';
     AudioListComponent,
     ReportsTextComponent,
     PieChartComponent,
-    BarChartComponent
+    BarChartComponent,
+    ReportEntityListComponent,
+    HighChartsComponent,
+    ExpansionPanelComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
