@@ -93,7 +93,7 @@ import { DownloadAndPreviewProvider } from '../providers/download-and-preview/do
 import { ObservationReportsPage } from '../pages/observation-reports/observation-reports';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracker';
-import { RoleDashboardPage } from '../pages/role-dashboard/role-dashboard';
+import { RoleListingPage } from '../pages/role-listing/role-listing';
 import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 
@@ -123,7 +123,8 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
     PreviewPage,
     SubmissionListPage,
     ObservationReportsPage,
-    RoleDashboardPage,ReportEntityListingPage,
+    RoleListingPage,
+    ReportEntityListingPage,
     DashboardPage
   ],
   imports: [
@@ -183,7 +184,7 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
     SubmissionListPage,
     DashboardPage,
     ObservationReportsPage,
-    RoleDashboardPage,
+    RoleListingPage,
     ReportEntityListingPage
   ],
   providers: [

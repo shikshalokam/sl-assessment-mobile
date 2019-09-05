@@ -19,7 +19,7 @@ import { Deeplinks } from '@ionic-native/deeplinks';
 import {IonicApp } from 'ionic-angular';
 import { ApiProvider } from '../providers/api/api';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
-import { RoleDashboardPage } from '../pages/role-dashboard/role-dashboard';
+import { RoleListingPage } from '../pages/role-listing/role-listing';
 
 
 @Component({
@@ -122,7 +122,7 @@ export class MyApp {
         this.allPages.splice(this.allPages.length-2, 0 ,{
         name: "dashboard",
         icon: "analytics",
-        component: RoleDashboardPage,
+        component: RoleListingPage,
         active: false
     }) : 
     false
