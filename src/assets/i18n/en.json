@@ -61,6 +61,7 @@
         "observeAgain":"Observe Again",
         "view": "View",
         "addNew":"Add New",
+        "viewReport":"View Report",
         "draft":"Draft",
         "publish":"Publish",
         "goToEntities":"Go TO Entitites",
@@ -120,9 +121,17 @@
         "observations":"Observations",
         "myObservation":"My Observation",
         "draftObservation":"Draft Observation",
-        "addObservation":"Add Observation"
+        "addObservation":"Add Observation",
+        "userRolePage":"Roles",
+        "dashboard":"Dashboard"
     },
     "headings": {
+        "zone":"Zones",
+        "state":"State",
+        "district":"District",
+        "entities":"Entities",
+        "userRolePage":"Roles",
+        "dashboard":"Dashboard",
         "submissionListPage":"Submission List",
         "addObservation":"Add Observation",
         "solutionDetails":"Solution Details",

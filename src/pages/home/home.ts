@@ -12,6 +12,9 @@ import { File } from '@ionic-native/file';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { UtilsProvider } from '../../providers/utils/utils';
+import { RoleListingPage } from '../role-listing/role-listing';
+import * as HighCharts from 'highcharts';
 
 declare var cordova: any;
 
@@ -33,7 +36,7 @@ export class HomePage {
   generalQuestions: any;
   schoolIndex = 0;
   currentProgramId: any;
-
+  profileRoles ;
   allPages: Array<Object> = [
 
     {
@@ -68,12 +71,16 @@ export class HomePage {
     private currentUser: CurrentUserProvider,
     private network: Network,
     private media: Media,
+    private currentUserProvider : CurrentUserProvider,
+    private localStorageProvider : LocalStorageProvider,
     private file: File,
     private events: Events,
     private sharingFeature: SharingFeaturesProvider,
     private platform: Platform,
     private apiService: ApiProvider,
-    private localStorage:LocalStorageProvider
+    private localStorage:LocalStorageProvider,
+    private apiProvider : ApiProvider,
+    private utils : UtilsProvider
   ) {
 
 
@@ -86,7 +93,25 @@ export class HomePage {
   ionViewDidLoad() {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
+    this.localStorageProvider.getLocalStorage('profileRole').then( success => {
+      this.profileRoles = success;
+      console.log(JSON.stringify(success))
+      // this.getRoles();
+     if( success.result.roles.length > 0 ){
+       this.allPages.push({
+        name: "dashboard",
+        subName: '',
+        icon: "analytics",
+        component: RoleListingPage,
+        active: false
+    }) 
+    this.events.publish('multipleRole' , true);
+  }
 
+    }).catch( error =>{
+      this.getRoles();
+      console.log("called get roles")
+    })
     if (this.network.type != 'none') {
       this.networkAvailable = true;
     }
@@ -100,9 +125,36 @@ export class HomePage {
     }).catch(error => {
       this.getStaticLinks();
     })
+
+
+    // ionViewDidLoad() { 
+     
+    // }
   }
-
-
+// expansionData={
+//   title :"hi"
+// }
+  getRoles() {
+   console.log("i m here")
+    let currentUser =   this.currentUserProvider.getCurrentUserData();
+   console.log(JSON.stringify(currentUser) + "usr details")
+    this.apiProvider.httpGet(AppConfigs.roles.getProfile+currentUser.sub,success =>{
+      this.profileRoles = success.result;
+      console.log(JSON.stringify(success))
+      success.result.roles.length > 0 ? this.allPages.push({
+          name: "dashoard",
+          subName: '',
+          icon: "analytics",
+          component: RoleListingPage,
+          active: false
+      }) : null;
+      this.events.publish('multipleRole' , true);
+      this.localStorageProvider.setLocalStorage('profileRole',success);
+    },error =>{
+      this.utils.openToast(error);
+    })  
+    console.log("func end");
+  }
   socialSharingInApp() {
     this.sharingFeature.sharingThroughApp();
   }

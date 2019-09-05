@@ -157,12 +157,13 @@ export class ApiProvider {
   httpPost(url, payload, successCallback, errorCallback , config?) {
     // let nav = this.appCtrls.getActiveNav();
     let options = {};
-    console.log("httpget" + JSON.stringify(options))
+    console.log("httpPost" + JSON.stringify(options)+"post call")
     options['version'] = (config && config.version )? config.config :"v1";
     options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
       const obj = {
+        'x-auth-token': this.currentUser.curretUser.accessToken,
         'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
         'appVersion': AppConfigs.appVersion
@@ -174,7 +175,7 @@ export class ApiProvider {
       console.log(JSON.stringify(payload))
       this.http.setDataSerializer('json');
       this.http.post(apiUrl, payload, obj).then(data => {
-        console.log(JSON.stringify(data))
+        // console.log(JSON.stringify(data))
         successCallback(data.data ? JSON.parse(data.data) : null);
       }).catch(error => {
         console.log(JSON.stringify(error));
