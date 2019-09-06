@@ -71,7 +71,7 @@ export class SubmissionListPage {
   ionViewDidEnter() {
     // if(this.firstLoad === false)
     // this.observationService.refreshObservationList(this.programs).then(success=>{
-    //   this.programs = success ;
+    //   tionViewDidEnterhis.programs = success ;
     //   this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
     // }).catch();
     this.selectedObservationIndex = this.navParams.get('selectedObservationIndex');

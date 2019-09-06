@@ -203,6 +203,7 @@
         "gujarati": "ગુજરાતી"
     },
     "message":{
+        "noReportsFound":"No reports found",
         "noSubmission":"No Submissions",
         "startSearchSchool":"search school",
         "noSchoolFound":"No Schools Found",

@@ -15,4 +15,7 @@
   <high-charts [chartData] = "item" *ngIf="item.chart.type != 'expansion'"></high-charts>
   <expansion-panel [datas]="item" *ngIf="item.chart.type == 'expansion'"></expansion-panel>
  </div>
+ <div *ngIf="!(data?.reportSections)" class="_flex-box _justify-content-center">
+   {{ 'message.noReportsFound' | translate}}
+ </div>
 </ion-content>
