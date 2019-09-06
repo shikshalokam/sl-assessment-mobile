@@ -114,7 +114,7 @@ export class MyApp {
         // this.goToPage(0);
         let flag = true
         this.allPages.forEach(page =>{
-          if(page['name'] == 'userRolePage'){
+          if(page['name'] == 'dashboard'){
            flag = false;
           }
         })
@@ -124,7 +124,8 @@ export class MyApp {
         icon: "analytics",
         component: RoleListingPage,
         active: false
-    }) : 
+        }) 
+    : 
     false
       }
     });
