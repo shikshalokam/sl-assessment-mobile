@@ -6,7 +6,6 @@ import { InstitutionsEntityList } from '../institutions-entity-list/institutions
 import { IndividualListingPage } from '../individual-listing/individual-listing';
 import { ObservationsPage } from '../observations/observations';
 import { SharingFeaturesProvider } from '../../providers/sharing-features/sharing-features';
-
 import { Media, MediaObject } from '@ionic-native/media';
 import { File } from '@ionic-native/file';
 import { ApiProvider } from '../../providers/api/api';
@@ -67,6 +66,8 @@ export class HomePage {
   fileName: string;
   audio: MediaObject;
   audioList: any[] = [];
+  canViewLoad: boolean = false;
+  pages;
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
     private network: Network,
@@ -94,7 +95,7 @@ export class HomePage {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
     this.localStorageProvider.getLocalStorage('profileRole').then( success => {
-      this.profileRoles = success;
+      this.profileRoles = success.result;
       console.log(JSON.stringify(success))
       // this.getRoles();
      if( success.result.roles.length > 0 ){
@@ -105,11 +106,15 @@ export class HomePage {
         component: RoleListingPage,
         active: false
     }) 
+    this.canViewLoad = true;
+    this.pages = this.allPages ;
     this.events.publish('multipleRole' , true);
   }
 
     }).catch( error =>{
-      this.getRoles();
+      this.getRoles().then(success  =>{
+        this.pages = success;
+      }).catch();
       console.log("called get roles")
     })
     if (this.network.type != 'none') {
@@ -136,24 +141,35 @@ export class HomePage {
 // }
   getRoles() {
    console.log("i m here")
+   return new Promise((resolve, reject) =>{
     let currentUser =   this.currentUserProvider.getCurrentUserData();
    console.log(JSON.stringify(currentUser) + "usr details")
     this.apiProvider.httpGet(AppConfigs.roles.getProfile+currentUser.sub,success =>{
       this.profileRoles = success.result;
       console.log(JSON.stringify(success))
-      success.result.roles.length > 0 ? this.allPages.push({
-          name: "dashoard",
-          subName: '',
-          icon: "analytics",
-          component: RoleListingPage,
-          active: false
-      }) : null;
+      console.log(success.result.roles.length)
+
+     if(success.result.roles.length > 0)
+     {
+      this.allPages.splice(this.allPages.length, 0 ,{
+        name: "dashoard",
+        subName: '',
+        icon: "analytics",
+        component: RoleListingPage,
+        active: false
+         }) 
+     }
+      // this.allPages = [ ...this.allPages ]
       this.events.publish('multipleRole' , true);
+      this.canViewLoad = true;
       this.localStorageProvider.setLocalStorage('profileRole',success);
+      resolve(this.allPages)
     },error =>{
       this.utils.openToast(error);
+      reject();
     })  
     console.log("func end");
+  });
   }
   socialSharingInApp() {
     this.sharingFeature.sharingThroughApp();
@@ -223,5 +239,5 @@ export class HomePage {
 
   }
 
-
+  
 }

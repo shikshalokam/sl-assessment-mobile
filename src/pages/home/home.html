@@ -10,12 +10,12 @@
     </ion-card-content>
   </ion-card>
 
-  <div padding>
+  <div padding *ngIf="canViewLoad">
     <div>
       <h4>{{'labels.goTo'| translate}}</h4>
     </div>
     <div class="_flex-box ">
-      <ion-card  class="_flex-box _justify-content-space-between"  *ngFor="let page of allPages;let i = index" (click)="goToPage(i)">
+      <ion-card  class="_flex-box _justify-content-space-between"  *ngFor="let page of pages;let i = index" (click)="goToPage(i)">
         <div padding class="_flex-box _justify-content-center" >
             <ion-icon name="{{page.icon}}" class="sizeAdj" ></ion-icon>
             <div margin-left>{{'tabs.'+page?.name|translate}} <span *ngIf="page.subName">{{'labels.'+page.subName | translate}}</span></div>
@@ -29,5 +29,5 @@
  
     <!-- <high-charts></high-charts>
   <expansion-panel ></expansion-panel> -->
-
+<!-- <button (click)="speechFromText()">speech</button> -->
 </ion-content>
