@@ -96,6 +96,8 @@ import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracke
 import { RoleListingPage } from '../pages/role-listing/role-listing';
 import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
 import { DashboardPage } from '../pages/dashboard/dashboard';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
 
 @NgModule({
   declarations: [
@@ -231,11 +233,12 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
     IOSFilePicker,
     FileOpener,
     HintProvider,
-
+    TextToSpeech,
     Media,
     ObservationServiceProvider,
     DownloadAndPreviewProvider,
     UpdateTrackerProvider,
+    TextToSpeechProvider,
   ]
 })
 export class AppModule { }
