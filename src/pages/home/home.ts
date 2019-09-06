@@ -94,29 +94,29 @@ export class HomePage {
   ionViewDidLoad() {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
-  //   this.localStorageProvider.getLocalStorage('profileRole').then( success => {
-  //     this.profileRoles = success.result;
-  //     console.log(JSON.stringify(success))
-  //     // this.getRoles();
-  //    if( success.result.roles.length > 0 ){
-  //      this.allPages.push({
-  //       name: "dashboard",
-  //       subName: '',
-  //       icon: "analytics",
-  //       component: RoleListingPage,
-  //       active: false
-  //   }) 
-  //   this.canViewLoad = true;
-  //   this.pages = this.allPages ;
-  //   this.events.publish('multipleRole' , true);
-  // }
+    this.localStorageProvider.getLocalStorage('profileRole').then( success => {
+    //   this.profileRoles = success.result;
+    //   console.log(JSON.stringify(success))
+    //   // this.getRoles();
+     if( success.result.roles.length > 0 ){
+    //    this.allPages.push({
+    //     name: "dashboard",
+    //     subName: '',
+    //     icon: "analytics",
+    //     component: RoleListingPage,
+    //     active: false
+    // }) 
+    // this.canViewLoad = true;
+    // this.pages = this.allPages ;
+    this.events.publish('multipleRole' , true);
+  }
 
-  //   }).catch( error =>{
-  //     this.getRoles().then(success  =>{
-  //       this.pages = success;
-  //     }).catch();
-  //     console.log("called get roles")
-  //   })
+    }).catch( error =>{
+      this.getRoles().then(success  =>{
+        // this.pages = success;
+      }).catch();
+      console.log("called get roles")
+    })
     if (this.network.type != 'none') {
       this.networkAvailable = true;
     }
@@ -146,23 +146,21 @@ export class HomePage {
    console.log(JSON.stringify(currentUser) + "usr details")
     this.apiProvider.httpGet(AppConfigs.roles.getProfile+currentUser.sub,success =>{
       this.profileRoles = success.result;
-      console.log(JSON.stringify(success))
-      console.log(success.result.roles.length)
-
+      
      if(success.result.roles.length > 0)
      {
-      this.allPages.splice(this.allPages.length, 0 ,{
-        name: "dashoard",
-        subName: '',
-        icon: "analytics",
-        component: RoleListingPage,
-        active: false
-         }) 
-     }
-      // this.allPages = [ ...this.allPages ]
-      this.events.publish('multipleRole' , true);
-      this.canViewLoad = true;
+      // this.allPages.splice(this.allPages.length, 0 ,{
+      //   name: "dashoard",
+      //   subName: '',
+      //   icon: "analytics",
+      //   component: RoleListingPage,
+      //   active: false
+      //    }) 
+      this.events.publish('multipleRole' , true);     
       this.localStorageProvider.setLocalStorage('profileRole',success);
+    }
+      // this.allPages = [ ...this.allPages ]
+      // this.canViewLoad = true;
       resolve(this.allPages)
     },error =>{
       this.utils.openToast(error);
