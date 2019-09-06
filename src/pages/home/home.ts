@@ -6,7 +6,7 @@ import { InstitutionsEntityList } from '../institutions-entity-list/institutions
 import { IndividualListingPage } from '../individual-listing/individual-listing';
 import { ObservationsPage } from '../observations/observations';
 import { SharingFeaturesProvider } from '../../providers/sharing-features/sharing-features';
-
+import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { Media, MediaObject } from '@ionic-native/media';
 import { File } from '@ionic-native/file';
 import { ApiProvider } from '../../providers/api/api';
@@ -74,6 +74,7 @@ export class HomePage {
     private currentUserProvider : CurrentUserProvider,
     private localStorageProvider : LocalStorageProvider,
     private file: File,
+    private tts: TextToSpeech,
     private events: Events,
     private sharingFeature: SharingFeaturesProvider,
     private platform: Platform,
@@ -223,5 +224,10 @@ export class HomePage {
 
   }
 
+  speechFromText(){
+    this.tts.speak('Hello World')
+  .then(() => console.log('Success'))
+  .catch((reason: any) => console.log(reason));
+  }
 
 }
