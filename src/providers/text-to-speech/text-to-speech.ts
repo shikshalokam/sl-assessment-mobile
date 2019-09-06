@@ -20,11 +20,7 @@ export class TextToSpeechProvider {
     options['local']= options.local ? options.local : 'en-US';
     options['rate']= options.rate ? options.rate : 1;
     
-    this.tts.speak({
-      text : options.text,
-      locale : options.local,
-      rate	: options.rate
-    })
+    this.tts.speak(options)
   .then(() => console.log('Success'))
   .catch((reason: any) => console.log(reason));
   }
