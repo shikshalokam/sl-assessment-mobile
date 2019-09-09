@@ -2,6 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { Platform, AlertController, Nav, App, MenuController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,6 +21,7 @@ import {IonicApp } from 'ionic-angular';
 import { ApiProvider } from '../providers/api/api';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { RoleListingPage } from '../pages/role-listing/role-listing';
+import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
 
 
 @Component({
@@ -166,6 +168,12 @@ export class MyApp {
     });
 
   }
+  // ionViewDidLoad() {
+  //   console.log("fired")
+  //   this.allPages.forEach((page,index) =>{
+  //     this.allPages[index]['active'] = page['name'] == 'home' ? true : false;
+  //   })
+  // }
   // ionViewDidLoad(){
   //   this.localStorageProvider.getLocalStorage('profileRole').then( roles => {
   //     this.profileRoles = roles;
@@ -198,6 +206,7 @@ export class MyApp {
   }
 
   goToPage(index) {
+    // if ( this.allPages[index]['name'] != 'home'){
     this.menuCntrl.close();
     if(this.allPages[index]["externalLink"]){
       this.utils.openExternalLinkOnBrowser(AppConfigs.externalLinks.faq)
@@ -206,10 +215,25 @@ export class MyApp {
         page['active'] = false;
       }
       this.allPages[index]['active'] = true;
-      // this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name'] === "individual" ? "assessmentDetails_" : "schoolDetails_")
-      this.nav.push(this.allPages[index]['component']);
-    }
+      if (this.allPages[index]['name'] == 'dashboard'){
+        this.localStorageProvider.getLocalStorage('profileRole').then(success =>{
+          // this.roles = success.result.roles;
+          success.result.roles.length == 1 ? 
+        this.nav.push(ReportEntityListingPage ,{  "currentEntityType" : success.result.roles[0].immediateSubEntityType, "data" : success.result.roles[0].entities  , "entityType" : success.result.roles[0].entities[0].immediateSubEntityType})
+          : 
+        this.nav.push(this.allPages[index]['component']);
 
+        }).catch();
+      }
+      else{
+        this.nav.push(this.allPages[index]['component']);
+      }
+      // this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name'] === "individual" ? "assessmentDetails_" : "schoolDetails_")
+//     }
+//   }
+// else{
+//   this.menuCntrl.close();
+}
   }
 
   initTranslate() {
