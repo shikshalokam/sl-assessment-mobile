@@ -108,14 +108,14 @@ export class HomePage {
     // }) 
     // this.canViewLoad = true;
     // this.pages = this.allPages ;
-    this.events.publish('multipleRole' , true);
+    // this.events.publish('multipleRole' , true);
   }
 
     }).catch( error =>{
-      this.getRoles().then(success  =>{
-        // this.pages = success;
-      }).catch();
-      console.log("called get roles")
+      // this.getRoles().then(success  =>{
+      //   // this.pages = success;
+      // }).catch();
+      // console.log("called get roles")
     })
     if (this.network.type != 'none') {
       this.networkAvailable = true;
