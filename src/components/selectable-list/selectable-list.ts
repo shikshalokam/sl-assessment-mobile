@@ -1,15 +1,14 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { ApiProvider } from '../../providers/api/api';
-
 /**
- * Generated class for the SelectableListComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+* Generated class for the SelectableListComponent component.
+*
+* See https://angular.io/api/core/Component for more info on Angular
+* Components.
+*/
 @Component({
-  selector: 'selectable-list',
-  templateUrl: 'selectable-list.html'
+ selector: 'selectable-list',
+ templateUrl: 'selectable-list.html'
 })
 export class SelectableListComponent {
   @Input() selectableList  ;

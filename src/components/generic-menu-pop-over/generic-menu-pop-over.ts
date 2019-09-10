@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, App } from 'ionic-angular';
 import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
 
 /**
@@ -20,7 +20,7 @@ export class GenericMenuPopOverComponent {
   assessmentIndex ;
   assessmentName;
   constructor(
-    private navCntrl : NavController ,
+    private appCtrl : App ,
     private navParams : NavParams,
     private viewCntrl : ViewController
     ) {
@@ -33,7 +33,7 @@ export class GenericMenuPopOverComponent {
     console.log(this.showAbout)
   }
   goToAbout(){
-    this.navCntrl.push(AssessmentAboutPage , {assessmentIndex : this.assessmentIndex  , assessmentName : this.assessmentName})
+    this.appCtrl.getRootNav().push(AssessmentAboutPage , {assessmentIndex : this.assessmentIndex  , assessmentName : this.assessmentName})
     this.viewCntrl.dismiss();
 
   }

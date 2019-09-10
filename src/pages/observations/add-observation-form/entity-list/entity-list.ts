@@ -3,17 +3,15 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { AppConfigs } from '../../../../providers/appConfig';
 import { ApiProvider } from '../../../../providers/api/api';
 import { UtilsProvider } from '../../../../providers/utils/utils';
-
 /**
- * Generated class for the SchoolListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
+* Generated class for the SchoolListPage page.
+*
+* See https://ionicframework.com/docs/components/#navigation for more info on
+* Ionic pages and navigation.
+*/
 @Component({
-  selector: 'page-entity-list',
-  templateUrl: 'entity-list.html',
+ selector: 'page-entity-list',
+ templateUrl: 'entity-list.html',
 })
 export class EntityListPage {
   entityList;
