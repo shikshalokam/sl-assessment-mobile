@@ -6,12 +6,12 @@
 <ion-card>
 
   <ion-item  text-wrap>
-    <div class="_flex-box" >
+    <div class="_flex-box"  (click)="goToEntityFunc(i)">
       <div style="flex:1">
         {{program.name}}   
       </div>
-      <ion-icon name="information-circle"  class="menuIcon" (click)="openAbout(i)"></ion-icon>
-      <ion-icon name="play"  class="menuIcon" (click)="goToEntityFunc(i)"></ion-icon>
+      <ion-icon name="information-circle"  class="menuIcon" (click)="$event.stopPropagation() ;openAbout(i)"></ion-icon>
+      <ion-icon name="play"  class="menuIcon" ></ion-icon>
 
     </div>
   </ion-item>

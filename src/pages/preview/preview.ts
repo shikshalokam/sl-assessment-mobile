@@ -44,20 +44,21 @@ export class PreviewPage {
     this.networkAvailable = this.ngps.getNetworkStatus()
   }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     console.log('ionViewDidLoad PreviewPage');
     this.submissionId = this.navParams.get('_id');
     this.entityName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
+    // this.utils.startLoader();
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.entityDetails = data;
       this.currentEvidence = data['assessment']['evidences'][this.selectedEvidenceIndex];
       this.evidenceSections = this.currentEvidence['sections'];
       this.checkForEvidenceCompletion();
       console.log(JSON.stringify(data))
-      this.utils.stopLoader();
+      // this.utils.stopLoader();
     }).catch(error => {
-      this.utils.stopLoader();
+      // this.utils.stopLoader();
     })
   }
 
