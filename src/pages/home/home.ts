@@ -95,27 +95,26 @@ export class HomePage {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
     this.localStorageProvider.getLocalStorage('profileRole').then( success => {
-    //   this.profileRoles = success.result;
-    //   console.log(JSON.stringify(success))
-    //   // this.getRoles();
+      this.profileRoles = success.result;
+      // this.getRoles();
      if( success.result.roles.length > 0 ){
-    //    this.allPages.push({
-    //     name: "dashboard",
-    //     subName: '',
-    //     icon: "analytics",
-    //     component: RoleListingPage,
-    //     active: false
-    // }) 
-    // this.canViewLoad = true;
-    // this.pages = this.allPages ;
-    // this.events.publish('multipleRole' , true);
+       this.allPages.push({
+        name: "dashboard",
+        subName: '',
+        icon: "analytics",
+        component: RoleListingPage,
+        active: false
+    }) 
+    this.canViewLoad = true;
+    this.pages = this.allPages ;
+    this.events.publish('multipleRole' , true);
   }
 
     }).catch( error =>{
-      // this.getRoles().then(success  =>{
-      //   // this.pages = success;
-      // }).catch();
-      // console.log("called get roles")
+      this.getRoles().then(success  =>{
+        // this.pages = success;
+      }).catch();
+      console.log("called get roles")
     })
     if (this.network.type != 'none') {
       this.networkAvailable = true;
