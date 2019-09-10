@@ -6,12 +6,14 @@ import { InstitutionsEntityList } from '../institutions-entity-list/institutions
 import { IndividualListingPage } from '../individual-listing/individual-listing';
 import { ObservationsPage } from '../observations/observations';
 import { SharingFeaturesProvider } from '../../providers/sharing-features/sharing-features';
-
 import { Media, MediaObject } from '@ionic-native/media';
 import { File } from '@ionic-native/file';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { UtilsProvider } from '../../providers/utils/utils';
+import { RoleListingPage } from '../role-listing/role-listing';
+import * as HighCharts from 'highcharts';
 
 declare var cordova: any;
 
@@ -33,7 +35,7 @@ export class HomePage {
   generalQuestions: any;
   schoolIndex = 0;
   currentProgramId: any;
-
+  profileRoles ;
   allPages: Array<Object> = [
 
     {
@@ -64,16 +66,22 @@ export class HomePage {
   fileName: string;
   audio: MediaObject;
   audioList: any[] = [];
+  canViewLoad: boolean = false;
+  pages;
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
     private network: Network,
     private media: Media,
+    private currentUserProvider : CurrentUserProvider,
+    private localStorageProvider : LocalStorageProvider,
     private file: File,
     private events: Events,
     private sharingFeature: SharingFeaturesProvider,
     private platform: Platform,
     private apiService: ApiProvider,
-    private localStorage:LocalStorageProvider
+    private localStorage:LocalStorageProvider,
+    private apiProvider : ApiProvider,
+    private utils : UtilsProvider
   ) {
 
 
@@ -86,7 +94,29 @@ export class HomePage {
   ionViewDidLoad() {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
+    this.localStorageProvider.getLocalStorage('profileRole').then( success => {
+    //   this.profileRoles = success.result;
+    //   console.log(JSON.stringify(success))
+    //   // this.getRoles();
+     if( success.result.roles.length > 0 ){
+    //    this.allPages.push({
+    //     name: "dashboard",
+    //     subName: '',
+    //     icon: "analytics",
+    //     component: RoleListingPage,
+    //     active: false
+    // }) 
+    // this.canViewLoad = true;
+    // this.pages = this.allPages ;
+    // this.events.publish('multipleRole' , true);
+  }
 
+    }).catch( error =>{
+      // this.getRoles().then(success  =>{
+      //   // this.pages = success;
+      // }).catch();
+      // console.log("called get roles")
+    })
     if (this.network.type != 'none') {
       this.networkAvailable = true;
     }
@@ -100,9 +130,45 @@ export class HomePage {
     }).catch(error => {
       this.getStaticLinks();
     })
+
+
+    // ionViewDidLoad() { 
+     
+    // }
   }
-
-
+// expansionData={
+//   title :"hi"
+// }
+  getRoles() {
+   console.log("i m here")
+   return new Promise((resolve, reject) =>{
+    let currentUser =   this.currentUserProvider.getCurrentUserData();
+   console.log(JSON.stringify(currentUser) + "usr details")
+    this.apiProvider.httpGet(AppConfigs.roles.getProfile+currentUser.sub,success =>{
+      this.profileRoles = success.result;
+      
+     if(success.result.roles.length > 0)
+     {
+      // this.allPages.splice(this.allPages.length, 0 ,{
+      //   name: "dashoard",
+      //   subName: '',
+      //   icon: "analytics",
+      //   component: RoleListingPage,
+      //   active: false
+      //    }) 
+      this.events.publish('multipleRole' , true);     
+      this.localStorageProvider.setLocalStorage('profileRole',success);
+    }
+      // this.allPages = [ ...this.allPages ]
+      // this.canViewLoad = true;
+      resolve(this.allPages)
+    },error =>{
+      this.utils.openToast(error);
+      reject();
+    })  
+    console.log("func end");
+  });
+  }
   socialSharingInApp() {
     this.sharingFeature.sharingThroughApp();
   }
@@ -171,5 +237,5 @@ export class HomePage {
 
   }
 
-
+  
 }
