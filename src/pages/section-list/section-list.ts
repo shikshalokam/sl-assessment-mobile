@@ -13,6 +13,8 @@ import { Network } from '@ionic-native/network';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { TranslateService } from '@ngx-translate/core';
 import { PreviewPage } from '../preview/preview';
+import { ObservationReportsPage } from '../observation-reports/observation-reports';
+import { UpdateTrackerProvider } from '../../providers/update-tracker/update-tracker';
 
 @IonicPage()
 @Component({
@@ -41,6 +43,7 @@ export class SectionListPage {
     private feedback: FeedbackProvider,
     private translate: TranslateService,
     private events: Events, private platform: Platform,
+    private updateTracker : UpdateTrackerProvider,
     private alertCtrl: AlertController, private network: Network, private localStorage: LocalStorageProvider) {
 
     this.events.subscribe('network:offline', () => {
@@ -64,7 +67,9 @@ export class SectionListPage {
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.sectionData = data;
-      this.currentEvidence = this.sectionData['assessment']['evidences'][this.selectedEvidenceIndex];
+      let assessmentDetails = this.updateTracker.getLastModifiedInSection(data,this.selectedEvidenceIndex ,this.submissionId);
+      this.currentEvidence = assessmentDetails['assessment']['evidences'][this.selectedEvidenceIndex];
+      console.log(JSON.stringify(this.currentEvidence))
       this.evidenceSections = this.currentEvidence['sections'];
       this.selectedEvidenceName = this.currentEvidence['name'];
       this.checkForEvidenceCompletion();
@@ -172,6 +177,10 @@ export class SectionListPage {
       });
       alert.present();
     }
+  }
+
+  viewReport() {
+    this.navCtrl.push(ObservationReportsPage, { submissionId: this.submissionId })
   }
 
 

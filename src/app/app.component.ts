@@ -1,7 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Platform, AlertController, Nav, App, MenuController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,18 +17,27 @@ import { IndividualListingPage } from '../pages/individual-listing/individual-li
 import { UtilsProvider } from '../providers/utils/utils';
 import { ObservationsPage } from '../pages/observations/observations';
 import { Deeplinks } from '@ionic-native/deeplinks';
+import {IonicApp } from 'ionic-angular';
+import { ApiProvider } from '../providers/api/api';
+import { LocalStorageProvider } from '../providers/local-storage/local-storage';
+import { RoleListingPage } from '../pages/role-listing/role-listing';
+import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
+
 
 @Component({
   templateUrl: 'app.html'
 
 })
 export class MyApp {
+
   @ViewChild(Nav) nav: Nav;
   rootPage: any;
   isAlertPresent: boolean = false;
   networkSubscription: any;
   networkAvailable: boolean;
   appName: string = AppConfigs.appName;
+  appVersion = AppConfigs.appVersion;
+  appEnvironment = AppConfigs.environment;
   // rootPage: any = "LoginPage";
   allPages: Array<Object> = [
     {
@@ -68,7 +78,7 @@ export class MyApp {
       active: false
     }
   ]
-
+  profileRoles = [];
   currentPage;
   constructor(
     private platform: Platform,
@@ -79,12 +89,19 @@ export class MyApp {
     private translate: TranslateService,
     private network: Network,
     private events: Events,
+    private ionicApp: IonicApp,
+    private currentUserProvider :CurrentUserProvider,
+    private apiProvider : ApiProvider,
     private networkGpsProvider: NetworkGpsProvider,
     private menuCntrl: MenuController,
     private deepLinks: Deeplinks,
-    private utils: UtilsProvider
+    private utils: UtilsProvider,
+    private localStorageProvider : LocalStorageProvider
   ) {
 
+    
+    
+    
 
 
 
@@ -94,6 +111,26 @@ export class MyApp {
       let index: number = this.findIndex(data);
       this.goToPage(index);
     })
+    this.events.subscribe('multipleRole' , data =>{
+      if (data ) {
+        // this.goToPage(0);
+        let flag = true
+        this.allPages.forEach(page =>{
+          if(page['name'] == 'dashboard'){
+           flag = false;
+          }
+        })
+        flag ?
+        this.allPages.splice(this.allPages.length-2, 0 ,{
+        name: "dashboard",
+        icon: "analytics",
+        component: RoleListingPage,
+        active: false
+        }) 
+    : 
+    false
+      }
+    });
     this.events.subscribe('loginSuccess', data => {
       if (data == true) {
         // this.goToPage(0);
@@ -131,7 +168,37 @@ export class MyApp {
     });
 
   }
+  // ionViewDidLoad() {
+  //   console.log("fired")
+  //   this.allPages.forEach((page,index) =>{
+  //     this.allPages[index]['active'] = page['name'] == 'home' ? true : false;
+  //   })
+  // }
+  // ionViewDidLoad(){
+  //   this.localStorageProvider.getLocalStorage('profileRole').then( roles => {
+  //     this.profileRoles = roles;
+  //     console.log(JSON.stringify(roles))
+  //     this.getRoles();
 
+  //   }).catch( error =>{
+  //     this.getRoles();
+  //     console.log("called get roles")
+  //   })
+  // }
+  // getRoles() {
+  //  console.log("i m here")
+  //   let currentUser =   this.currentUserProvider.getCurrentUserData();
+  //  console.log(JSON.stringify(currentUser) + "usr details")
+  //   // this.apiProvider.httpGet(AppConfigs.roles.getProfile+currentUser.sub,success =>{
+  //   //   this.profileRoles = success.result;
+  //   //   console.log(JSON.stringify(success))
+  //   //   this.localStorageProvider.setLocalStorage('profileRole',success.result);
+  //   // },error =>{
+  //   //   this.utils.openToast(error);
+  //   // })  
+  //   console.log("func end");
+  // }
+  
   ionViewWillLeave() {
     if (this.networkSubscription) {
       this.networkSubscription.unsubscribe();
@@ -139,6 +206,7 @@ export class MyApp {
   }
 
   goToPage(index) {
+    // if ( this.allPages[index]['name'] != 'home'){
     this.menuCntrl.close();
     if(this.allPages[index]["externalLink"]){
       this.utils.openExternalLinkOnBrowser(AppConfigs.externalLinks.faq)
@@ -147,10 +215,25 @@ export class MyApp {
         page['active'] = false;
       }
       this.allPages[index]['active'] = true;
-      // this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name'] === "individual" ? "assessmentDetails_" : "schoolDetails_")
-      this.nav.push(this.allPages[index]['component']);
-    }
+      if (this.allPages[index]['name'] == 'dashboard'){
+        this.localStorageProvider.getLocalStorage('profileRole').then(success =>{
+          // this.roles = success.result.roles;
+          success.result.roles.length == 1 ? 
+        this.nav.push(ReportEntityListingPage ,{  "currentEntityType" : success.result.roles[0].immediateSubEntityType, "data" : success.result.roles[0].entities  , "entityType" : success.result.roles[0].entities[0].immediateSubEntityType})
+          : 
+        this.nav.push(this.allPages[index]['component']);
 
+        }).catch();
+      }
+      else{
+        this.nav.push(this.allPages[index]['component']);
+      }
+      // this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name'] === "individual" ? "assessmentDetails_" : "schoolDetails_")
+//     }
+//   }
+// else{
+//   this.menuCntrl.close();
+}
   }
 
   initTranslate() {
@@ -225,6 +308,18 @@ export class MyApp {
 
   registerBAckButtonAction(): void {
     this.platform.registerBackButtonAction(() => {
+      let ready = true;
+      let activePortal = this.ionicApp._loadingPortal.getActive() ||
+               this.ionicApp._modalPortal.getActive() ||
+               this.ionicApp._toastPortal.getActive() ||
+               this.ionicApp._overlayPortal.getActive();
+
+            if (activePortal) {
+               ready = false;
+               activePortal.dismiss();
+               activePortal.onDidDismiss(() => { ready = true; });
+               return;
+            }
       let alert;
       // this.nav.indexOf('WelcomePage')
       // console.log("hiii "+ JSON.stringify(this.nav.getByIndex(0)))

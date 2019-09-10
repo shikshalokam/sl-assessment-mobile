@@ -14,6 +14,7 @@
                                             (click)="checkItem(listItem)"></ion-checkbox>
                                     </ion-item>
                         </ng-container>
+
                     </ion-list>
                     <ion-list *ngIf="!selectableList?.length">
                         <div class="_flex-box _justify-content-center noDataMsg">
@@ -24,12 +25,14 @@
             </div>
         </div>
     </div>
- </div>
- <!-- <div *ngIf="!(selectableList?.length === list?.length)">
+
+</div>
+<!-- <div *ngIf="!(selectableList?.length === list?.length)">
+
     {{list?.length}} -->
     <ion-infinite-scroll [enabled]="!(this.selectableList?.length === totalCount) && this.selectableList?.length > 0" (ionInfinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
- <!-- </div> -->
- 
+<!-- </div> -->
+

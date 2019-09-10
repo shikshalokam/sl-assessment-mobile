@@ -30,6 +30,13 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 import { AudioRecordingListingComponent } from './audio-recording-listing/audio-recording-listing';
 import { AudioListComponent } from './audio-list/audio-list';
+import { ReportsTextComponent } from './reports-text/reports-text';
+import { PieChartComponent } from './pie-chart/pie-chart';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { BarChartComponent } from './bar-chart/bar-chart';
+import { ReportEntityListComponent } from './report-entity-list/report-entity-list';
+import { HighChartsComponent } from './high-charts/high-charts';
+import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
 
 @NgModule({
 	declarations: [
@@ -55,14 +62,21 @@ import { AudioListComponent } from './audio-list/audio-list';
     GenericMenuPopOverComponent,
     ProgramListingComponent,
     AudioRecordingListingComponent,
-    AudioListComponent
+    AudioListComponent,
+    ReportsTextComponent,
+    PieChartComponent,
+    BarChartComponent,
+    ReportEntityListComponent,
+    HighChartsComponent,
+    ExpansionPanelComponent
   ],
 	imports: [
 		IonicModule,
     DirectivesModule,
     PipesModule,
     TranslateModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    HighchartsChartModule
 	],
 	exports: [
 		InputTypeComponent,
@@ -86,7 +100,13 @@ import { AudioListComponent } from './audio-list/audio-list';
     GenericMenuPopOverComponent,
     ProgramListingComponent,
     AudioRecordingListingComponent,
-    AudioListComponent
+    AudioListComponent,
+    ReportsTextComponent,
+    PieChartComponent,
+    BarChartComponent,
+    ReportEntityListComponent,
+    HighChartsComponent,
+    ExpansionPanelComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
