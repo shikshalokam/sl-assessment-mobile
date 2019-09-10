@@ -14,11 +14,14 @@ import * as Highcharts from 'highcharts';
 })
 export class HighChartsComponent implements OnInit {
   @Input() chartData ;
+  yAxisPercent = true;
   // @Input() chartData = {
   //   order: 1,
   //   chart: {
   //     type: "bar",
   //     // renderTo:'container',
+  //     entityType : 'cluster',
+  //     childEntityType : 'school',
   //     stacking: "percent",
   //     title: "Criteria vs level mapping aggregated at domain level",
   //     xAxis: {
@@ -34,37 +37,75 @@ export class HighChartsComponent implements OnInit {
   //     yAxis: {
   //       title: {
   //         text: "Criteria"
-  //       }
+  //       } 
   //     },
   //     data: [
   //       {
   //         name: "LEvel 1",
   //         data: [
-  //           5,
-  //           3,
-  //           4,
-  //           7,
-  //           2
+  //           {
+  //             y: 12,
+  //             entityId: '123abs456',
+        
+  //           },
+  //           {
+  //             y: 6,
+  //             entityId: '123abs456',
+              
+  //           },
+  //           {
+  //             y: 18,
+  //             entityId: '123abs456',
+              
+  //           },
+
   //         ]
   //       },
   //       {
-  //         name: "Level 2",
+  //         name: "LEvel 2",
   //         data: [
-  //           2,
-  //           2,
-  //           3,
-  //           2,
-  //           1
+  //           {
+  //             y: 20,
+  //             entityId: '123abs456',
+              
+  //           },
+  //           {
+  //             y: 3,
+  //             entityId: '123abs456',
+              
+  //           },
+  //           {
+  //             y: 14,
+  //             entityId: '123abs456',
+              
+  //           },
+
   //         ]
   //       },
   //       {
   //         name: "LEvel 3",
   //         data: [
-  //           3,
-  //           4,
-  //           4,
-  //           2,
-  //           5
+  //           {
+  //             y: 15,
+  //             entityId: '123abs456',
+              
+  //           },
+  //           {
+  //             y: 7,
+  //             entityId: '123abs456',
+              
+  //           },
+  //           {
+  //             y: 7,
+  //             entityId: '123abs456',
+              
+  //           },
+  //           {
+  //             y: 7,
+  //             entityId: '123abs456',
+              
+  //           },
+
   //         ]
   //       }
   //     ]
@@ -82,6 +123,15 @@ export class HighChartsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.chartData.chart.yAxis['labels'] = this.yAxisPercent ? {
+      formatter: function() {
+         return this.value+"%";
+      }
+    } :  {
+      formatter: function() {
+         return this.value;
+      } }
+      ;
     this.chartObj = {
       chart: {
         plotBackgroundColor: null,
@@ -97,19 +147,27 @@ export class HighChartsComponent implements OnInit {
       tooltip: {
         // pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
       },
+      legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'top',
+        floating: true,
+        backgroundColor: '#FFFFFF'
+    },
       plotOptions: {
         bar: {
           dataLabels: {
-            enabled: false
+              enabled: true,
+              color: '#FFFFFF'
           },
-          showInLegend: false
+          showInLegend: true,
         },
         series: {
           stacking: 'percent',
           point: {
             events: {
               click: function () {
-                console.log('Category: ' + this.category + ', value: ' + this.y)
+                console.log('Category: ' + this.category + ', value: ' + this.y, ',   id :' + this.entityId + '    entityType : ' + this.entityType)
               }
             }
           }

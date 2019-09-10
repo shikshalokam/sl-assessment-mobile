@@ -329,7 +329,7 @@ export class AddObservationFormPage {
   getEntityList(event ?) {
     event ? this.entityListPage ++ : this.entityListPage ;
 
-    this.apiProviders.httpGet(AppConfigs.cro.searchEntity+this.selectedFrameWork+"&search="+this.searchEntity+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
+    this.apiProviders.httpGet(AppConfigs.cro.searchEntity+"?solutionId="+this.selectedFrameWork+"&search="+this.searchEntity+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
       this.entityListTotalCount = success.result[0].count;
       if(this.editData && this.editData.data.entities.length == 0 ){
           success.result[0].data.forEach(element => {

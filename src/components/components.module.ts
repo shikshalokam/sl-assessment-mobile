@@ -37,13 +37,13 @@ import { BarChartComponent } from './bar-chart/bar-chart';
 import { ReportEntityListComponent } from './report-entity-list/report-entity-list';
 import { HighChartsComponent } from './high-charts/high-charts';
 import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
+import { PageQuestionComponent } from './page-question/page-question';
 
 @NgModule({
 	declarations: [
 		InputTypeComponent,
 		RadioTypeComponent,
     MultipleChoiceTypeComponent,
-    
     DateTypeComponent,
     RemarksComponent,
     ImageUploadComponent,
@@ -68,7 +68,8 @@ import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
     BarChartComponent,
     ReportEntityListComponent,
     HighChartsComponent,
-    ExpansionPanelComponent
+    ExpansionPanelComponent,
+    PageQuestionComponent
   ],
 	imports: [
 		IonicModule,
@@ -106,7 +107,8 @@ import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
     BarChartComponent,
     ReportEntityListComponent,
     HighChartsComponent,
-    ExpansionPanelComponent
+    ExpansionPanelComponent,
+    PageQuestionComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
