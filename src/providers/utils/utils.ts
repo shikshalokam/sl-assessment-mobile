@@ -112,7 +112,15 @@ export class UtilsProvider {
     }
     return true
   }
-
+  isPageQuestionComplete(question){
+    let isCompleted = true;
+    question.pageQuestions.forEach(element => {
+      if(!element.isCompleted){
+       isCompleted = false;
+      }
+    });
+    return isCompleted;
+  }
   enableGPSRequest() {
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if (canRequest) {
