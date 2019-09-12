@@ -10,7 +10,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser';
-
+ 
 @Injectable()
 export class UtilsProvider {
 
@@ -115,9 +115,15 @@ export class UtilsProvider {
   isPageQuestionComplete(question){
     let isCompleted = true;
     question.pageQuestions.forEach(element => {
-      if(!element.isCompleted){
+      console.log(element.responseType)
+      if(element.responseType.toLowerCase() === 'matrix'){
+        if(!this.isMatrixQuestionComplete(element)){
+          isCompleted = false;
+         }
+      }else if(!element.isCompleted){
        isCompleted = false;
       }
+
     });
     return isCompleted;
   }
@@ -262,6 +268,17 @@ export class UtilsProvider {
     return imageArray
   }
 
+  pageQuestionEndTime(question){
+    let endTime =  question.pageQuestions[0].endTime ;
+    question.pageQuestions.forEach(element => {
+      console.log(element.responseType)
+       if( element.isCompleted &&  endTime < element.endTime){
+       endTime = element.endTime
+      }
+
+    });
+    return endTime;
+  }
 
 
 }

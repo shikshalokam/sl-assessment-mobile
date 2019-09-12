@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { UtilsProvider } from '../../providers/utils/utils';
 
 /**
@@ -11,12 +11,13 @@ import { UtilsProvider } from '../../providers/utils/utils';
   selector: 'page-question',
   templateUrl: 'page-question.html'
 })
-export class PageQuestionComponent implements OnInit {
+export class PageQuestionComponent implements OnInit  , OnDestroy{
   @Input() inputIndex ;
   @Input() data: any;
   @Input() isLast: boolean;
   @Input() isFirst: boolean;
   @Output() nextCallBack = new EventEmitter();
+  @Output() updateLocalData = new EventEmitter();
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
   @Input() hideButton: boolean;
@@ -32,9 +33,12 @@ export class PageQuestionComponent implements OnInit {
     console.log('Hello PageQuestionComponent Component');
     this.text = 'Hello World';
   }
-  
+  ngOnDestroy(){
+          console.log("NG ON DESTORY")
+          this.data.isCompleted = this.utils.isPageQuestionComplete(this.data);
+  }
   ngOnInit() {
-    // console.log(this.imageLocalCopyId);
+    console.log("hello");
     // this.isaNumber();
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
     // this.getErrorMsg();
@@ -93,5 +97,8 @@ export class PageQuestionComponent implements OnInit {
   }
 
  
+  updateLocalDataInPageQuestion(): void {
+    this.updateLocalData.emit();
+  }
 
 }
