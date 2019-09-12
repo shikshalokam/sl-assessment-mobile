@@ -253,6 +253,7 @@ export class ImageListingPage {
     this.utils.startLoader('Please wait while submitting')
     console.log("submitting");
     const payload = this.constructPayload();
+    console.log(JSON.stringify(payload));
     const submissionId = this.submissionId;
     const url = (this.schoolData.observation ? AppConfigs.cro.makeSubmission : AppConfigs.survey.submission) + submissionId + '/';
     this.apiService.httpPost(url, payload, response => {
@@ -296,61 +297,123 @@ export class ImageListingPage {
     evidence.endTime = Date.now();
     for (const section of this.evidenceSections) {
       for (const question of section.questions) {
-        let obj = {
-          qid: question._id,
-          value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
-          remarks: question.remarks,
-          fileName: [],
-          payload: {
-            question: question.question,
-            labels: [],
-            responseType: question.responseType,
-            filesNotUploaded: []
-          },
-          startTime: question.startTime,
-          endTime: question.endTime
-        };
 
-        if (question.fileName && question.fileName.length) {
-          const filePaylaod = []
-          for (const fileName of question.fileName) {
-            for (const updatedFileDetails of this.imageList) {
-              if (fileName === updatedFileDetails.file) {
-                const obj = {
-                  name: fileName,
-                  sourcePath: updatedFileDetails.sourcePath
+        if (question.responseType === 'pageQuestions'){
+          for(const questions of question.pageQuestions){
+            let obj = {
+              qid: questions._id,
+              value: questions.responseType === 'matrix' ? this.constructMatrixObject(questions) : questions.value,
+              remarks: questions.remarks,
+              fileName: [],
+              payload: {
+                questions: questions.questions,
+                labels: [],
+                responseType: questions.responseType,
+                filesNotUploaded: []
+              },
+              startTime: questions.startTime,
+              endTime: questions.endTime
+            };
+    
+            if (questions.fileName && questions.fileName.length) {
+              const filePaylaod = []
+              for (const fileName of questions.fileName) {
+                for (const updatedFileDetails of this.imageList) {
+                  if (fileName === updatedFileDetails.file) {
+                    const obj = {
+                      name: fileName,
+                      sourcePath: updatedFileDetails.sourcePath
+                    }
+                    filePaylaod.push(obj);
+                  }
                 }
-                filePaylaod.push(obj);
+              }
+              obj.fileName = filePaylaod;
+            }
+    
+            if (questions.responseType === 'multiselect') {
+              for (const val of questions.value) {
+                for (const option of questions.options) {
+                  if (val === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
+                    obj.payload.labels.push(option.label);
+                  }
+                }
+              }
+    
+            } else if (questions.responseType === 'radio') {
+    
+              for (const option of questions.options) {
+                if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
+                  obj.payload.labels.push(option.label);
+                }
+              }
+    
+            } else {
+              obj.payload.labels.push(questions.value);
+            }
+            for (const key of Object.keys(questions.payload)) {
+              obj[key] = questions.payload[key];
+            }
+            evidence.answers[obj.qid] = obj;
+          }
+        }else {
+          let obj = {
+            qid: question._id,
+            value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
+            remarks: question.remarks,
+            fileName: [],
+            payload: {
+              question: question.question,
+              labels: [],
+              responseType: question.responseType,
+              filesNotUploaded: []
+            },
+            startTime: question.startTime,
+            endTime: question.endTime
+          };
+  
+          if (question.fileName && question.fileName.length) {
+            const filePaylaod = []
+            for (const fileName of question.fileName) {
+              for (const updatedFileDetails of this.imageList) {
+                if (fileName === updatedFileDetails.file) {
+                  const obj = {
+                    name: fileName,
+                    sourcePath: updatedFileDetails.sourcePath
+                  }
+                  filePaylaod.push(obj);
+                }
               }
             }
+            obj.fileName = filePaylaod;
           }
-          obj.fileName = filePaylaod;
-        }
-
-        if (question.responseType === 'multiselect') {
-          for (const val of question.value) {
+  
+          if (question.responseType === 'multiselect') {
+            for (const val of question.value) {
+              for (const option of question.options) {
+                if (val === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
+                  obj.payload.labels.push(option.label);
+                }
+              }
+            }
+  
+          } else if (question.responseType === 'radio') {
+  
             for (const option of question.options) {
-              if (val === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
+              if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
                 obj.payload.labels.push(option.label);
               }
             }
+  
+          } else {
+            obj.payload.labels.push(question.value);
           }
-
-        } else if (question.responseType === 'radio') {
-
-          for (const option of question.options) {
-            if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
-              obj.payload.labels.push(option.label);
-            }
+          for (const key of Object.keys(question.payload)) {
+            obj[key] = question.payload[key];
           }
-
-        } else {
-          obj.payload.labels.push(question.value);
+          evidence.answers[obj.qid] = obj;
         }
-        for (const key of Object.keys(question.payload)) {
-          obj[key] = question.payload[key];
-        }
-        evidence.answers[obj.qid] = obj;
+       
       }
     }
     payload.evidence = evidence;

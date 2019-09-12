@@ -13,11 +13,15 @@
               [schoolId]="schoolId" *ngSwitchCase="'radio'" [submissionId]="submissionId" [hideButton]="true"></radio-type>
             <date-type  [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
               [schoolId]="schoolId" *ngSwitchCase="'date'" [submissionId]="submissionId" [hideButton]="true"></date-type>
-            <slider [inputIndex]="j+1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+            <slider [inputIndex]="j+1" [evidenceId]="evidenceId" [schoolId]="schoolId" [data]="question"
               [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'slider'"></slider>
 
             <multiple-choice-type  [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
               [schoolId]="schoolId" *ngSwitchCase="'multiselect'" [submissionId]="submissionId" [hideButton]="true"></multiple-choice-type>
+            
+              <matrix-type [inputIndex]="j + 1" [evidenceId]="evidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalDataInPageQuestion()" *ngSwitchCase="'matrix'">
+        </matrix-type>
           </div>
         </ng-container>
 

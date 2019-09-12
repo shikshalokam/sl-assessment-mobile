@@ -36,6 +36,7 @@ export class QuestionDashboardPage {
   }
 
   isQuestionComplete(question) {
+    console.log("iscomplete called")
     if (question.responseType.toLowerCase() === 'matrix') {
       return this.utils.isMatrixQuestionComplete(question);
     } else if (question.responseType.toLowerCase() === 'pagequestions'){
