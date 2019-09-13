@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { UtilsProvider } from '../../providers/utils/utils';
 
 /**
@@ -11,7 +11,8 @@ import { UtilsProvider } from '../../providers/utils/utils';
   selector: 'page-question',
   templateUrl: 'page-question.html'
 })
-export class PageQuestionComponent implements OnInit  , OnDestroy{
+export class PageQuestionComponent {
+  // export class PageQuestionComponent implements OnInit  , OnDestroy , OnChanges{
   @Input() inputIndex ;
   @Input() data: any;
   @Input() isLast: boolean;
@@ -33,70 +34,30 @@ export class PageQuestionComponent implements OnInit  , OnDestroy{
     console.log('Hello PageQuestionComponent Component');
     this.text = 'Hello World';
   }
-  ngOnDestroy(){
-          console.log("NG ON DESTORY")
-          this.data.isCompleted = this.utils.isPageQuestionComplete(this.data);
-  }
-  ngOnInit() {
-    console.log("hello");
-    // this.isaNumber();
-    this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
-    // this.getErrorMsg();
-    // this.checkForValidation();
-    console.log(JSON.stringify(this.data))
-  }
-
-  ionViewCanLeave(){
-    console.log("leaving page")
-    this.data.isCompleted = true;
-    this.data.pageQuestions.array.forEach(element => {
-      if(!element.isCompleted){
-        this.data.isCompleted = false;
-      }
-    }); this.utils.isQuestionComplete(this.data.pageQuestions)
-  }
-  // getErrorMsg() {
-  //   if(this.data.validation.regex){
-  //     let string = this.data.validation.regex.split("[");
-  //     string = string[1].split("]")[0];
-  //     return "Should contain only values "+ string;
+  // ngOnDestroy(){}
+  // ngOnChanges(changes: SimpleChanges) {
+  //   for (let propName in changes) {
+  //     let chng = changes[propName];
+  //     let cur  = JSON.stringify(chng.currentValue);
+  //     let prev = JSON.stringify(chng.previousValue);
+  //      console.log("NG ON DESTORY")
+  //         this.data.isCompleted = this.utils.isPageQuestionComplete(this.data);
+  //         // this.data.isCompleted = true;
+  //         // this.data.pageQuestions.array.forEach(element => {
+  //         //   if(!element.isCompleted){
+  //         //     this.data.isCompleted = false;
+  //         //   }
+  //         // }); this.utils.isQuestionComplete(this.data.pageQuestions)
   //   }
   // }
-
-
-  next(status?: any) {
-    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
-    this.nextCallBack.emit(status);
-  }
-
-  isaNumber() {
-    this.notNumber =  this.utils.testRegex(this.data.validation.regex, this.data.value);
-  }
-
-  back() {
-    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
-    this.previousCallBack.emit('previous');
-  }
-  
-  // checkForValidation(): void {
-  //   this.questionValid = this.utils.isQuestionComplete(this.data);
+  // ngOnInit() {
+  //   console.log("hello");
+  //   // this.isaNumber();
+  //   this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
+  //   // this.getErrorMsg();
+  //   // this.checkForValidation();
+  //   console.log(JSON.stringify(this.data))
   // }
-  checkForValidation(): void {
-    // console.log(this.submissionId)
-    this.data.isCompleted = this.utils.isQuestionComplete(this.data);
-    this.data.endTime = this.data.isCompleted ? Date.now() : "";
-    this.isaNumber();
-  }
-
-  getErrorMsg() {
-    if(this.data.validation.regex){
-      let string = this.data.validation.regex.split("[");
-      string = string[1].split("]")[0];
-      return "Should contain only values "+ string;
-    }
-  }
-
- 
   updateLocalDataInPageQuestion(): void {
     this.updateLocalData.emit();
   }

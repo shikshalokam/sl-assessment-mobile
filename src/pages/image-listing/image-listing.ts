@@ -275,7 +275,6 @@ export class ImageListingPage {
     }, error => {
       this.utils.stopLoader();
     })
-
   }
 
   constructPayload(): any {
@@ -295,68 +294,9 @@ export class ImageListingPage {
     evidence.externalId = currentEvidence.externalId;
     evidence.startTime = currentEvidence.startTime;
     evidence.endTime = Date.now();
+    this.evidenceSections = this.pullOutPageQuestion(); 
     for (const section of this.evidenceSections) {
       for (const question of section.questions) {
-
-        if (question.responseType === 'pageQuestions'){
-          for(const questions of question.pageQuestions){
-            let obj = {
-              qid: questions._id,
-              value: questions.responseType === 'matrix' ? this.constructMatrixObject(questions) : questions.value,
-              remarks: questions.remarks,
-              fileName: [],
-              payload: {
-                questions: questions.questions,
-                labels: [],
-                responseType: questions.responseType,
-                filesNotUploaded: []
-              },
-              startTime: questions.startTime,
-              endTime: questions.endTime
-            };
-    
-            if (questions.fileName && questions.fileName.length) {
-              const filePaylaod = []
-              for (const fileName of questions.fileName) {
-                for (const updatedFileDetails of this.imageList) {
-                  if (fileName === updatedFileDetails.file) {
-                    const obj = {
-                      name: fileName,
-                      sourcePath: updatedFileDetails.sourcePath
-                    }
-                    filePaylaod.push(obj);
-                  }
-                }
-              }
-              obj.fileName = filePaylaod;
-            }
-    
-            if (questions.responseType === 'multiselect') {
-              for (const val of questions.value) {
-                for (const option of questions.options) {
-                  if (val === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
-                    obj.payload.labels.push(option.label);
-                  }
-                }
-              }
-    
-            } else if (questions.responseType === 'radio') {
-    
-              for (const option of questions.options) {
-                if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
-                  obj.payload.labels.push(option.label);
-                }
-              }
-    
-            } else {
-              obj.payload.labels.push(questions.value);
-            }
-            for (const key of Object.keys(questions.payload)) {
-              obj[key] = questions.payload[key];
-            }
-            evidence.answers[obj.qid] = obj;
-          }
-        }else {
           let obj = {
             qid: question._id,
             value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
@@ -412,13 +352,39 @@ export class ImageListingPage {
             obj[key] = question.payload[key];
           }
           evidence.answers[obj.qid] = obj;
+          console.log("i m here")
         }
        
       }
-    }
+    
     payload.evidence = evidence;
     return payload
   }
+
+  pullOutPageQuestion(){
+    console.log("Pull Out page Questions");
+    console.log(JSON.stringify(this.evidenceSections))
+    let sections = this.evidenceSections ;
+      sections.forEach((section,sectionIndex) => {
+    let questionsArray = [];
+        section.questions.forEach((question) => {
+        if(question.responseType === 'pageQuestions'){
+            question.pageQuestions.forEach(pageQuestion => {
+              questionsArray.push(pageQuestion)
+              console.log("pageQuestion")
+            });
+        }else{
+          questionsArray.push(question)
+        }
+      });
+      this.evidenceSections[sectionIndex].questions = questionsArray
+    });
+    
+    console.log("After Pull Out page Questions");
+    console.log(JSON.stringify(this.evidenceSections))
+    return this.evidenceSections;
+  }
+
 
   constructMatrixObject(question) {
     const value = [];
