@@ -113,19 +113,18 @@ export class UtilsProvider {
     return true
   }
   isPageQuestionComplete(question){
-    let isCompleted = true;
-    question.pageQuestions.forEach(element => {
+    for (const element of question.pageQuestions) {
+
       console.log(element.responseType)
       if(element.responseType.toLowerCase() === 'matrix'){
         if(!this.isMatrixQuestionComplete(element)){
-          isCompleted = false;
+          return  false;
          }
       }else if(!element.isCompleted){
-       isCompleted = false;
+       return  false;
       }
-
-    });
-    return isCompleted;
+    }
+    return true;
   }
   enableGPSRequest() {
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
