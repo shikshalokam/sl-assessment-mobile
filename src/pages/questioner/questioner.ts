@@ -180,20 +180,4 @@ export class QuestionerPage {
       }
     })
   }
-
-  // checkPagQuestionValid(){
-  //   this.questions[this.start].isCompleted = true;
-  //   this.questions[this.start].pageQuestions.forEach(element => {
-  //     if(!element.isCompleted){
-  //       this.questions[this.start].isCompleted = false;
-  //     }
-  //   });
-  // }
-  // ionViewWillEnter(){
-  //   console.log("questionary paga loaded");
-  //   if ( this.questions && this.questions[this.start].responseType === 'pageQuestions'){
-  //     this.questions[this.start].isCompleted = this.utils.isPageQuestionComplete(this.questions[this.start]);
-  //   }
-  // }
-
 }
