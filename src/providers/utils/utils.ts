@@ -267,17 +267,7 @@ export class UtilsProvider {
     return imageArray
   }
 
-  pageQuestionEndTime(question){
-    let endTime =  question.pageQuestions[0].endTime ;
-    question.pageQuestions.forEach(element => {
-      console.log(element.responseType)
-       if( element.isCompleted &&  endTime < element.endTime){
-       endTime = element.endTime
-      }
-
-    });
-    return endTime;
-  }
+  
 
 
 }

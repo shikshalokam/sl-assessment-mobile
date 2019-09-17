@@ -95,7 +95,7 @@ export class QuestionerPage {
 
   next(status?: string) {
     if (this.questions[this.start].responseType === 'pageQuestions'){
-      // this.questions[this.start].endTime = this.utils.pageQuestionEndTime(this.questions[this.start]);
+      this.questions[this.start].endTime =  this.questions[this.start] ? Date.now() : "";
       this.questions[this.start].isCompleted = this.utils.isPageQuestionComplete(this.questions[this.start]);
     } 
     if (this.questions[this.start].children.length) {
@@ -149,6 +149,7 @@ export class QuestionerPage {
 
   back() {
     if (this.questions[this.start].responseType === 'pageQuestions'){
+      this.questions[this.start].endTime =  this.questions[this.start] ? Date.now() : "";
       this.questions[this.start].isCompleted = this.utils.isPageQuestionComplete(this.questions[this.start]);
     }
     if (this.questions[this.start].children.length) {
