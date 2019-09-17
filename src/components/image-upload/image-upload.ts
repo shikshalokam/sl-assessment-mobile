@@ -191,7 +191,7 @@ export class ImageUploadComponent implements OnInit {
   }
 
   saveToLibrary(url): void {
-    this.photoLibrary.saveImage(url, 'samiksha').then(data => {
+    this.photoLibrary.saveImage(url, 'darpan').then(data => {
     }).catch(error => {
     })
   }

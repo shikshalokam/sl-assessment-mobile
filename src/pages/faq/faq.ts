@@ -11,8 +11,8 @@ export class FaqPage {
   faqContent = [
     {
       heading: "What if my phone/screen is hung?",
-      content: `<p><ul><li>Press home button → close all applications → click on Samiksha app → resume survey. Data filled will not be lost.</li>
-      <li>Restart your phone → click on Samiksha app → resume survey. Data filled will not be lost.</li>
+      content: `<p><ul><li>Press home button → close all applications → click on Darpan app → resume survey. Data filled will not be lost.</li>
+      <li>Restart your phone → click on Darpan app → resume survey. Data filled will not be lost.</li>
       </ul></p>`,
       images: []
     },
@@ -60,22 +60,22 @@ export class FaqPage {
     },
     {
       heading: "What should I do if my phone battery is exhausted?",
-      content: `<p><ul><li>Charge your phone → restart → open Samiksha app → resume survey. Data filled will not be lost.</li>
+      content: `<p><ul><li>Charge your phone → restart → open Darpan app → resume survey. Data filled will not be lost.</li>
       </ul></p>`,
       images: []
     },
     {
       heading: "What to do if my application crashes?",
-      content: `<p><ul><li>Click on Samiksha app → resume survey. Data filled will not be lost.</li>
-      <li>If crashed a second time: Restart your phone → click on Samiksha app → resume survey. Data filled will not be lost.</li>
+      content: `<p><ul><li>Click on Darpan app → resume survey. Data filled will not be lost.</li>
+      <li>If crashed a second time: Restart your phone → click on Darpan app → resume survey. Data filled will not be lost.</li>
       <li>If data is lost before submission of form, contact your immediate supervisor.</li>
       </ul></p>`,
       images: []
     },
     {
       heading: "What if my camera is not working?",
-      content: `<p><ul><li>Close all apps → click on Samiksha app → resume survey → take picture. Data filled will not be lost.</li>
-      <li>Restart your phone → click on Samiksha app → resume survey → take picture. Data filled will not be lost.
+      content: `<p><ul><li>Close all apps → click on Darpan app → resume survey → take picture. Data filled will not be lost.</li>
+      <li>Restart your phone → click on Darpan app → resume survey → take picture. Data filled will not be lost.
       </li>
       </ul></p>`,
       images: []
