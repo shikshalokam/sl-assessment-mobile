@@ -117,7 +117,7 @@ export class AboutPage {
       <p>User Id : ${this.currentUSer.getCurrentUserData().preferred_username}
       <p>Network type: ${this.network.type}</p>`,
         images: [
-          { path: "assets/imgs/just-logo.png", position: "top" }
+          { path: "assets/imgs/image1.jpg", position: "top" }
         ],
         link: null
       },

@@ -19,7 +19,7 @@ export class WelcomePage {
   slidesList = [
     {
       // title: "Slide 1",
-      image: "assets/imgs/just-logo.png"
+      image: "assets/imgs/image1.jpg"
     },
     // { title: "Slide 2" },
     // { title: "Slide 3" }
