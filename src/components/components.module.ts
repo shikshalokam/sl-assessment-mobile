@@ -35,7 +35,7 @@ import { PieChartComponent } from './pie-chart/pie-chart';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { BarChartComponent } from './bar-chart/bar-chart';
 import { ReportEntityListComponent } from './report-entity-list/report-entity-list';
-import { HighChartsComponent } from './high-charts/high-charts';
+import { PercentageColumnChartsComponent } from './percentage-column-charts/percentage-column-charts';
 import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
 import { PageQuestionComponent } from './page-question/page-question';
 
@@ -67,7 +67,7 @@ import { PageQuestionComponent } from './page-question/page-question';
     PieChartComponent,
     BarChartComponent,
     ReportEntityListComponent,
-    HighChartsComponent,
+    PercentageColumnChartsComponent,
     ExpansionPanelComponent,
     PageQuestionComponent
   ],
@@ -106,7 +106,7 @@ import { PageQuestionComponent } from './page-question/page-question';
     PieChartComponent,
     BarChartComponent,
     ReportEntityListComponent,
-    HighChartsComponent,
+    PercentageColumnChartsComponent,
     ExpansionPanelComponent,
     PageQuestionComponent
 	],

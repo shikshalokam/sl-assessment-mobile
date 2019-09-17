@@ -9,10 +9,10 @@ import * as Highcharts from 'highcharts';
  * Components.
  */
 @Component({
-  selector: 'high-charts',
-  templateUrl: 'high-charts.html'
+  selector: 'percentage-column-charts',
+  templateUrl: 'percentage-column-charts.html'
 })
-export class HighChartsComponent implements OnInit {
+export class PercentageColumnChartsComponent implements OnInit {
   @Input() chartData ;
   yAxisPercent = true;
   Highcharts = Highcharts; // required

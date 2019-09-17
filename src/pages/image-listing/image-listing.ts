@@ -76,11 +76,21 @@ export class ImageListingPage {
     let imageArray = [];
     for (const sections of this.currentEvidence.sections) {
       for (const question of sections.questions) {
-        let questImage = this.utils.getImageNamesForQuestion(question);
-
+        let questImage 
+        if(question.responseType === 'pageQuestions' ){
+           question.pageQuestions.forEach(element => {
+           questImage = this.utils.getImageNamesForQuestion(element);
+           const newArray = questImage.length ? imageArray.concat(questImage) : imageArray;
+           imageArray = newArray;
+             
+           });
+        }else {
+          questImage = this.utils.getImageNamesForQuestion(question);
+          const newArray = questImage.length ? imageArray.concat(questImage) : imageArray;
+          imageArray = newArray;
         // imageArray = questImage.length ? [...imageArray, ...questImage] : imageArray;
-        const newArray = questImage.length ? imageArray.concat(questImage) : imageArray;
-        imageArray = newArray;
+        }
+       
       }
     }
     console.log(JSON.stringify(imageArray));
@@ -369,10 +379,11 @@ export class ImageListingPage {
     let questionsArray = [];
         section.questions.forEach((question) => {
         if(question.responseType === 'pageQuestions'){
-            question.pageQuestions.forEach(pageQuestion => {
-              questionsArray.push(pageQuestion)
-              console.log("pageQuestion")
-            });
+            // question.pageQuestions.forEach(pageQuestion => {
+            //   questionsArray.push(pageQuestion)
+            //   console.log("pageQuestion")
+            // });
+            questionsArray = [ ...questionsArray , ...question.pageQuestions]
         }else{
           questionsArray.push(question)
         }
