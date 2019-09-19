@@ -1,5 +1,5 @@
 <span class="flexbox">
-    <div class="noWrap">{{inputIndex}} .</div> 
+    <div class="noWrap" *ngIf="showQuestionNumber">{{inputIndex}} .</div> 
     <div padding-left>
       <div class="wrapText" *ngFor="let question of data.question"> 
       {{question}} 
