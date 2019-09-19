@@ -15,6 +15,7 @@ export class QuestionHeadingComponent {
   text: string;
   @Input()data ;
   @Input()inputIndex;
+  showQuestionNumber = false;
   constructor() {
     console.log('Hello QuestionHeadingComponent Component');
     this.text = 'Hello World';
