@@ -4,6 +4,7 @@ import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { DashboardPage } from '../dashboard/dashboard';
+import { ProgramListingPage } from '../program-listing/program-listing';
 
 /**
  * Generated class for the ReportEntityListingPage page.
@@ -57,19 +58,19 @@ export class ReportEntityListingPage {
 
   }
   viewInstanceReport(entity){
-console.log("api called")
-    this.utils.startLoader();
-    this.apiProvider.httpPost(AppConfigs.roles.instanceReport,{"entityId" : entity._id},success =>{
-      this.instanceReportData = success;
-      this.navCtrl.push(DashboardPage , { "data" :success} )
-      console.log(JSON.stringify(success))
-      this.utils.stopLoader();
-    },error=>{
-      this.utils.stopLoader();
-      console.log("error");
-      this.utils.openToast(error)
+    // console.log("api called")
+    // this.utils.startLoader();
+    // this.apiProvider.httpPost(AppConfigs.roles.instanceReport,{"entityId" : entity._id},success =>{
+    //   this.instanceReportData = success;
+      this.navCtrl.push(ProgramListingPage , { "entity" :entity} )
+    //   console.log(JSON.stringify(success))
+    //   this.utils.stopLoader();
+    // },error=>{
+    //   this.utils.stopLoader();
+    //   console.log("error");
+    //   this.utils.openToast(error)
 
-    },{"dhiti":true})
+    // },{"dhiti":true})
   }
 
 }
