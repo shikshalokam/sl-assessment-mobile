@@ -100,9 +100,9 @@ export class HighChartsComponent implements OnInit {
       plotOptions: {
         bar: {
           dataLabels: {
-            enabled: false
+            enabled: true
           },
-          showInLegend: false
+          showInLegend: true
         },
         series: {
           stacking: 'percent',
