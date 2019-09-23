@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import * as Highcharts from 'highcharts';
 
 /**
@@ -13,6 +13,7 @@ import * as Highcharts from 'highcharts';
   templateUrl: 'high-charts.html'
 })
 export class HighChartsComponent implements OnInit {
+  @Output()clickOnGraphEventEmit = new EventEmitter();
   @Input() chartData ;
   // @Input() chartData = {
   //   order: 1,
@@ -108,9 +109,8 @@ export class HighChartsComponent implements OnInit {
           stacking: 'percent',
           point: {
             events: {
-              click: function () {
-                console.log('Category: ' + this.category + ', value: ' + this.y)
-              }
+              click: this.onPointClick.bind(this)
+              
             }
           }
         }
@@ -120,4 +120,11 @@ export class HighChartsComponent implements OnInit {
 
   }
 
+  onPointClick = (event) => { 
+    // console.log(JSON.stringify(event.point.options))
+    // console.log('Category: ' + event.category + ', value: ' + event.entityId)
+    event.point.options['nextChildEntityType'] = this.chartData.chart.nextChildEntityType;
+    this.chartData.chart.nextChildEntityType == "" ? null :
+    this.clickOnGraphEventEmit.emit(event.point.options)
+  }
 }
