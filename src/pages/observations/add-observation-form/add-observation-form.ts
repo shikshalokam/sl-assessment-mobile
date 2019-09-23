@@ -79,8 +79,6 @@ export class AddObservationFormPage {
   ) {
     this.editData = this.navParams.get('data');
     this.editDataIndex = this.navParams.get('index');
-
-
   }
 
   ionViewDidLoad() {
@@ -495,6 +493,17 @@ export class AddObservationFormPage {
       // console.log("published obs")
         this.utils.openToast(success.message);
         this.isPublished = true;
+        console.log(this.editDataIndex)
+        if(this.editData){
+          this.localStorage.getLocalStorage('draftObservation').then(draftObs=>{
+            draftObs.splice(this.editDataIndex, 1);
+            console.log(JSON.stringify(draftObs))
+            console.log("DRAFTOBS")
+            this.localStorage.setLocalStorage('draftObservation', draftObs);
+          }).catch( error=>{
+
+          })
+        }
         this.navCtrl.pop();
 
      
@@ -510,7 +519,10 @@ export class AddObservationFormPage {
 
   async ionViewCanLeave() {
     console.log(this.saveDraftType + "  " + this.editDataIndex)
-    if(this.saveDraftType != 'normal'  && this.editDataIndex >= -1){
+    if(this.isPublished){
+      return true
+    }
+    if(this.saveDraftType != 'normal'  && this.editDataIndex >= -1 ){
       const shouldLeave = await this.confirmLeave();
       return shouldLeave;
     }

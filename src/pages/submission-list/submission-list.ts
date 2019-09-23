@@ -47,14 +47,16 @@ export class SubmissionListPage {
     private assessmentService: AssessmentServiceProvider
   ) {
     this.events.subscribe('updateSubmissionStatus', refresh => {
+      // this.utils.startLoader();
       this.observationService.refreshObservationList(this.programs).then(success => {
         this.programs = success;
         this.observationDetails[0] = success[this.selectedObservationIndex];
         this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
         this.goToEcm(this.submissionList.length)
+        // this.utils.stopLoader();
 
       }).catch(error => {
-
+        // this.utils.stopLoader();
       })
     })
   }
@@ -83,6 +85,7 @@ export class SubmissionListPage {
   getLocalStorageData() {
     this.observationDetails = [];
     console.log("Getting data from local storage ")
+    this.utils.startLoader();
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       this.programs = data;
       console.log(this.selectedObservationIndex + "" + this.entityIndex + "" + this.observationIndex)
@@ -92,8 +95,11 @@ export class SubmissionListPage {
       this.submissionList = this.observationDetails[0].entities[this.entityIndex].submissions;
       console.log(JSON.stringify(this.submissionList))
 
+      this.utils.stopLoader();
 
     }).catch(error => {
+    this.utils.stopLoader();
+
     })
   }
   getAssessmentDetails(index, submissionNum = null) {
@@ -209,18 +215,20 @@ export class SubmissionListPage {
       observationIndex: this.navParams.get('selectedObservationIndex'),
       submissionNumber: submissionNumber
     }
+    // this.utils.startLoader();
     this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(result => {
       this.observationService.refreshObservationList(this.programs).then(success => {
         this.programs = success;
         this.observationDetails[0] = success[this.selectedObservationIndex];
         this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+        // this.utils.stopLoader();
+        
         this.goToEcm(this.submissionList.length)
-
       }).catch(error => {
-
+        // this.utils.stopLoader();
       })
     }).catch(error => {
-
+      // this.utils.stopLoader();
     })
   }
 
@@ -257,14 +265,22 @@ export class SubmissionListPage {
         {
           text: translateObject['actionSheet.yes'],
           handler: () => {
+            this.utils.startLoader();
             this.apiProvider.httpGet(AppConfigs.cro.obsrvationSubmissionDelete + submissionId, success => {
               this.observationService.refreshObservationList(this.programs).then(success => {
                 this.programs = success;
+                this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions.length > 0 ? null : this.navCtrl.pop(); 
                 this.observationDetails[0] = success[this.selectedObservationIndex];
                 this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+                
                 this.goToEcm(this.submissionList.length)
-              }).catch(error => { });
-            }, error => { })
+                this.utils.stopLoader();
+              }).catch(error => {
+                this.utils.stopLoader();
+               });
+            }, error => {
+              this.utils.stopLoader();
+             })
           }
         }
       ]
