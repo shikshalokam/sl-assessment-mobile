@@ -21,7 +21,7 @@ export class DashboardPage {
   programId: any;
   solutionId: any;
 
-  constructor(public navCtrl: NavController, public utils: UtilsProvider, public navParams: NavParams ,private apiProvider : ApiProvider) {
+  constructor(public navCtrl: NavController, public utils: UtilsProvider, public navParams: NavParams, private apiProvider: ApiProvider) {
   }
 
   ionViewDidLoad() {
@@ -31,26 +31,40 @@ export class DashboardPage {
     this.programId = this.navParams.get('programId');
     this.solutionId = this.navParams.get('solutionId');
 
-    this.getEntityReports();
+    this.getEntityRequestObject();
   }
-  getEntityReports() {
+  getEntityRequestObject() {
 
     console.log(JSON.stringify(this.entity))
+    let obj = {
+      "entityId": this.entity._id,
+      "programId": this.programId,
+      "solutionId": this.solutionId,
+      "entityType": this.entity.entityType,
+      "immediateChildEntityType": this.entity.immediateSubEntityType ? this.entity.immediateSubEntityType : this.entity.immediateChildEntityType ? this.entity.immediateChildEntityType : ""
+    }
+    this.getEntityReports(obj);
+  }
+
+  clickOnGraphEventEmit(event) {
+    console.log(JSON.stringify(event))
+    let entityObj = {
+      entityId : event.entityId,
+      entityType : this.entity.immediateSubEntityType ? this.entity.immediateSubEntityType : this.entity.immediateChildEntityType ? this.entity.immediateChildEntityType : "" ,
+      immediateChildEntityType : event.nextChildEntityType
+    }
+    this.navCtrl.push(DashboardPage ,{ "entity" :entityObj,"programId" : this.programId , "solutionId":this.solutionId} )
+  }
+  getEntityReports(obj) {
     this.utils.startLoader();
-    this.apiProvider.httpPost(AppConfigs.roles.instanceReport,{
-      "entityId" : this.entity._id,
-      "programId":this.programId,
-      "solutionId":this.solutionId,
-      "entityType":this.entity.entityType,
-      "immediateChildEntityType": this.entity.immediateSubEntityType ? this.entity.immediateSubEntityType :  this.entity.immediateChildEntityType ? this.entity.immediateChildEntityType :""
-    },success =>{
-     this.data = success
-    console.log(JSON.stringify(success))
+    this.apiProvider.httpPost(AppConfigs.roles.instanceReport, obj, success => {
+      this.data = success
+      console.log(JSON.stringify(success))
       this.utils.stopLoader();
-    },error=>{
+    }, error => {
       this.utils.stopLoader();
       console.log("error");
       this.utils.openToast(error)
-    },{"dhiti":true})  }
-
+    }, { "dhiti": true })
+  }
 }

@@ -33,8 +33,9 @@ export class ProgramListingPage {
   }
   getProgramList() {
     console.log(JSON.stringify(this.entity))
-    this.apiProvider.httpPost(AppConfigs.roles.programList, { "entityId": this.entity._id, "entityType": this.entity.entityType, "immediateChildEntityType": this.entity.immediateSubEntityType ? this.entity.immediateSubEntityType :  this.entity.immediateChildEntityType ? this.entity.immediateChildEntityType : "" }, success => {
-      this.programList = success.data
+    this.utils.startLoader();
+        this.apiProvider.httpPost(AppConfigs.roles.programList, { "entityId": this.entity._id, "entityType": this.entity.entityType, "immediateChildEntityType": this.entity.immediateSubEntityType ? this.entity.immediateSubEntityType :  this.entity.immediateChildEntityType ? this.entity.immediateChildEntityType : "" }, success => {
+      this.programList = success
       // this.isProgramListAvailable = this.programList.length ? true : false;
       console.log(JSON.stringify(success))
       console.log(JSON.stringify(this.programList))
