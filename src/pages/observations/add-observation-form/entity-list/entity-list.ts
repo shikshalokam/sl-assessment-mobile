@@ -68,7 +68,7 @@ export class EntityListPage {
     this.searchValue = event ? event : this.searchValue;
     this.utils.startLoader();
     this.index = 50;
-    this.apiProviders.httpGet(this.searchUrl + this.solutionId + "&search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
+    this.apiProviders.httpGet(this.searchUrl +"?solutionId="+ this.solutionId + "&search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
       this.arr = event ? [] : this.arr;
       for (let i = 0; i < success.result[0].data.length; i++) {
         success.result[0].data[i].isSelected = success.result[0].data[i].selected;
