@@ -127,7 +127,7 @@ import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech
     ObservationReportsPage,
     RoleListingPage,
     ReportEntityListingPage,
-    DashboardPage
+    DashboardPage,
   ],
   imports: [
     BrowserAnimationsModule,
