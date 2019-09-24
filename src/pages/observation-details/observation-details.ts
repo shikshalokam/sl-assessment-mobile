@@ -49,7 +49,8 @@ export class ObservationDetailsPage {
     this.events.subscribe('observationLocalstorageUpdated', success => {
       this.getLocalStorageData();
     })
-    this.events.subscribe('refreshObservationList', type => {
+
+    this.events.subscribe('refreshObservationListOnAddEntity', type => {
     this.refresh();
       console.log("refresh obs list")
     })
@@ -75,14 +76,24 @@ export class ObservationDetailsPage {
   }
 
   refresh(type = 'normal') {
+    console.log("refresh called")
+    this.utils.startLoader();
+
     const url = AppConfigs.cro.observationList;
     this.observationProvider.refreshObservationList(this.observationList).then(observationList =>{
       this.programs = observationList;
       this.observationList = observationList;
       this.observationDetails[0]= (observationList[this.selectedObservationIndex]);
       this.enableCompleteBtn = this.isAllEntitysCompleted();    
-        console.log(JSON.stringify(observationList))
-    }).catch();
+        // console.log(JSON.stringify(observationList))
+      this.utils.stopLoader();
+
+    }).catch(
+      error =>{
+      this.utils.stopLoader();
+
+      }
+    );
 
     // const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
     // event ? "" : this.utils.startLoader();
