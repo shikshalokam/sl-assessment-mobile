@@ -73,8 +73,6 @@ export class ObservationServiceProvider {
 
   refreshObservationList(observationList , event? :any){
     return new Promise((resolve, reject) =>{
-      event ? "" : ""
-      
       let createdObservation ;
       let downloadSubmission =[];
       observationList.forEach(entity => {

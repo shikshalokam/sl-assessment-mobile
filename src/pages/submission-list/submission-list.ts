@@ -269,12 +269,13 @@ export class SubmissionListPage {
             this.apiProvider.httpGet(AppConfigs.cro.obsrvationSubmissionDelete + submissionId, success => {
               this.observationService.refreshObservationList(this.programs).then(success => {
                 this.programs = success;
-                this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions.length > 0 ? null : this.navCtrl.pop(); 
-                this.observationDetails[0] = success[this.selectedObservationIndex];
                 this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
-                
-                this.goToEcm(this.submissionList.length)
+
                 this.utils.stopLoader();
+
+                this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions.length > 0 ? null : this.navCtrl.pop(); 
+                
+                // this.goToEcm(this.submissionList.length)
               }).catch(error => {
                 this.utils.stopLoader();
                });

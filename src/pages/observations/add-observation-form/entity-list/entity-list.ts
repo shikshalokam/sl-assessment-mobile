@@ -29,7 +29,6 @@ export class EntityListPage {
     count: 0
   }
   solutionId: any;
-  li: any;
   listOfNotSelectedCount: any;
   constructor(
     public navCtrl: NavController,
