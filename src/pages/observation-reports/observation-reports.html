@@ -27,11 +27,11 @@
       </ion-card>
     </div>
   </div>
-  <div class="_flex-box _justify-content-center _errorBox" *ngIf="error">
-    {{error}}
+  <div class="_flex-box _justify-content-center _errorBox" *ngIf="!reportObj?.response">
+    {{reportObj?.data}}
   </div>
 
-  <ion-fab bottom right>
+  <ion-fab bottom right *ngIf="reportObj?.response">
     <button ion-fab mini>
       <ion-icon name="more"></ion-icon>
     </button>
