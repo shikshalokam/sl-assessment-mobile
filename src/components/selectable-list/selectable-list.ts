@@ -12,6 +12,7 @@ import { ApiProvider } from '../../providers/api/api';
 })
 export class SelectableListComponent {
   @Input() selectableList  ;
+  @Input() listOfNotSelectedCount;
   @Input() totalCount : number;
   @Output() infinityScrollEvent = new EventEmitter();
   @Input() index = 100 ;

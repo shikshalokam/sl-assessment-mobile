@@ -27,6 +27,11 @@ export class PieChartComponent implements OnInit {
   }
 
   ngOnInit() {
+    for (const outer of this.data.chart.data) {
+      for (const inner of outer.data) {
+          inner.y = parseInt(inner.y)
+      }
+  }
     this.chartObj = {
       chart: {
         plotBackgroundColor: null,

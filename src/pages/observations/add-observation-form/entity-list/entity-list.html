@@ -7,7 +7,7 @@
 
 
 <ion-content padding>
-        <selectable-list [selectedListCount]="selectedListCount" (infinityScrollEvent)="search()" [totalCount]="totalCount" [selectableList]="selectableList" (searchUrl)="search($event)"  [index]="index"></selectable-list>
+        <selectable-list [listOfNotSelectedCount]="listOfNotSelectedCount" [selectedListCount]="selectedListCount" (infinityScrollEvent)="search()" [totalCount]="totalCount" [selectableList]="selectableList" (searchUrl)="search($event)"  [index]="index"></selectable-list>
 </ion-content>
 <ion-footer no-shadow>
   <ion-toolbar class="_toolbar-background-md" position="bottom">
