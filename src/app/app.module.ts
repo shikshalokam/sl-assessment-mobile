@@ -99,6 +99,7 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
 import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
 import { ProgramListingPage } from '../pages/program-listing/program-listing';
+import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
 
 @NgModule({
   declarations: [
@@ -129,7 +130,8 @@ import { ProgramListingPage } from '../pages/program-listing/program-listing';
     ObservationReportsPage,
     RoleListingPage,
     ReportEntityListingPage,
-    DashboardPage
+    DashboardPage,
+    ObservationEditPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -191,7 +193,8 @@ import { ProgramListingPage } from '../pages/program-listing/program-listing';
 
     ObservationReportsPage,
     RoleListingPage,
-    ReportEntityListingPage
+    ReportEntityListingPage,
+    ObservationEditPage
   ],
   providers: [
     StatusBar,
