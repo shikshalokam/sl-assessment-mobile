@@ -237,7 +237,7 @@ export class ObservationsPage {
   openMenu(event , index) {
     // this.assessmentService.openMenu(event, this.programs, false);
     console.log("open menu")
-    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true ,showEdit : false , assessmentIndex : index , assessmentName :'createdObservationList'})
+    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true ,showEdit : true , assessmentIndex : index , assessmentName :'createdObservationList'})
   
     popover.present(
       {ev:event}
