@@ -98,6 +98,7 @@ import { ReportEntityListingPage } from '../pages/report-entity-listing/report-e
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
+import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
 
 @NgModule({
   declarations: [
@@ -128,6 +129,7 @@ import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech
     RoleListingPage,
     ReportEntityListingPage,
     DashboardPage,
+    ObservationEditPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -187,7 +189,8 @@ import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech
     DashboardPage,
     ObservationReportsPage,
     RoleListingPage,
-    ReportEntityListingPage
+    ReportEntityListingPage,
+    ObservationEditPage
   ],
   providers: [
     StatusBar,
