@@ -32,7 +32,7 @@ export class PieChartComponent implements OnInit {
           inner.y = parseInt(inner.y)
       }
   }
-    this.chartObj = {
+  this.chartObj = {
       chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,

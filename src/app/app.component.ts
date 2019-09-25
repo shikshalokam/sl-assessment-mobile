@@ -17,7 +17,7 @@ import { IndividualListingPage } from '../pages/individual-listing/individual-li
 import { UtilsProvider } from '../providers/utils/utils';
 import { ObservationsPage } from '../pages/observations/observations';
 import { Deeplinks } from '@ionic-native/deeplinks';
-import {IonicApp } from 'ionic-angular';
+import { IonicApp } from 'ionic-angular';
 import { ApiProvider } from '../providers/api/api';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { RoleListingPage } from '../pages/role-listing/role-listing';
@@ -90,18 +90,18 @@ export class MyApp {
     private network: Network,
     private events: Events,
     private ionicApp: IonicApp,
-    private currentUserProvider :CurrentUserProvider,
-    private apiProvider : ApiProvider,
+    private currentUserProvider: CurrentUserProvider,
+    private apiProvider: ApiProvider,
     private networkGpsProvider: NetworkGpsProvider,
     private menuCntrl: MenuController,
     private deepLinks: Deeplinks,
     private utils: UtilsProvider,
-    private localStorageProvider : LocalStorageProvider
+    private localStorageProvider: LocalStorageProvider
   ) {
 
-    
-    
-    
+
+
+
 
 
 
@@ -111,24 +111,16 @@ export class MyApp {
       let index: number = this.findIndex(data);
       this.goToPage(index);
     })
-    this.events.subscribe('multipleRole' , data =>{
-      if (data ) {
-        // this.goToPage(0);
-        let flag = true
-        this.allPages.forEach(page =>{
-          if(page['name'] == 'dashboard'){
-           flag = false;
-          }
-        })
-        flag ?
-        this.allPages.splice(this.allPages.length-2, 0 ,{
-        name: "dashboard",
-        icon: "analytics",
-        component: RoleListingPage,
-        active: false
-        }) 
-    : 
-    false
+    this.events.subscribe('multipleRole', data => {
+      if (data) {
+ 
+        this.allPages.splice(this.allPages.length-2, 0,{
+            name: "dashboard",
+            icon: "analytics",
+            component: RoleListingPage,
+            extenalLink: false,
+            active: false
+          })
       }
     });
     this.events.subscribe('loginSuccess', data => {
@@ -198,7 +190,7 @@ export class MyApp {
   //   // })  
   //   console.log("func end");
   // }
-  
+
   ionViewWillLeave() {
     if (this.networkSubscription) {
       this.networkSubscription.unsubscribe();
@@ -208,32 +200,33 @@ export class MyApp {
   goToPage(index) {
     // if ( this.allPages[index]['name'] != 'home'){
     this.menuCntrl.close();
-    if(this.allPages[index]["externalLink"]){
+    if (this.allPages[index]["externalLink"]) {
       this.utils.openExternalLinkOnBrowser(AppConfigs.externalLinks.faq)
     } else {
       for (const page of this.allPages) {
         page['active'] = false;
       }
       this.allPages[index]['active'] = true;
-      if (this.allPages[index]['name'] == 'dashboard'){
-        this.localStorageProvider.getLocalStorage('profileRole').then(success =>{
+      if (this.allPages[index]['name'] === 'dashboard') {
+        this.localStorageProvider.getLocalStorage('profileRole').then(success => {
           // this.roles = success.result.roles;
-          success.result.roles.length == 1 ? 
-        this.nav.push(ReportEntityListingPage ,{  "currentEntityType" : success.result.roles[0].immediateSubEntityType, "data" : success.result.roles[0].entities  , "entityType" : success.result.roles[0].entities[0].immediateSubEntityType})
-          : 
-        this.nav.push(this.allPages[index]['component']);
+          success.roles.length === 1 ?
+            this.nav.push(ReportEntityListingPage, { "currentEntityType": success.roles[0].immediateSubEntityType, "data": success.roles[0].entities, "entityType": success.roles[0].entities[0].immediateSubEntityType })
+            :
+            this.nav.push(this.allPages[index]['component']);
 
-        }).catch();
+        }).catch(error =>{
+        });
       }
-      else{
+      else {
         this.nav.push(this.allPages[index]['component']);
       }
       // this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name'] === "individual" ? "assessmentDetails_" : "schoolDetails_")
-//     }
-//   }
-// else{
-//   this.menuCntrl.close();
-}
+      //     }
+      //   }
+      // else{
+      //   this.menuCntrl.close();
+    }
   }
 
   initTranslate() {
@@ -285,7 +278,7 @@ export class MyApp {
           '/institutional': InstitutionsEntityList,
           '/faq': FaqPage,
         }
-        this.deepLinks.route( paths ).subscribe(match => {
+        this.deepLinks.route(paths).subscribe(match => {
           this.rootPage = paths[match['$link']['path']];
           console.log(JSON.stringify(match))
           console.log('Successfully matched route', match);
@@ -310,16 +303,16 @@ export class MyApp {
     this.platform.registerBackButtonAction(() => {
       let ready = true;
       let activePortal = this.ionicApp._loadingPortal.getActive() ||
-               this.ionicApp._modalPortal.getActive() ||
-               this.ionicApp._toastPortal.getActive() ||
-               this.ionicApp._overlayPortal.getActive();
+        this.ionicApp._modalPortal.getActive() ||
+        this.ionicApp._toastPortal.getActive() ||
+        this.ionicApp._overlayPortal.getActive();
 
-            if (activePortal) {
-               ready = false;
-               activePortal.dismiss();
-               activePortal.onDidDismiss(() => { ready = true; });
-               return;
-            }
+      if (activePortal) {
+        ready = false;
+        activePortal.dismiss();
+        activePortal.onDidDismiss(() => { ready = true; });
+        return;
+      }
       let alert;
       // this.nav.indexOf('WelcomePage')
       // console.log("hiii "+ JSON.stringify(this.nav.getByIndex(0)))

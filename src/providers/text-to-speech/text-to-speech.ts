@@ -19,21 +19,27 @@ export class TextToSpeechProvider {
   }
 
   speechFromText(options) {
-    options['local'] = options.local ? options.local : 'en-IN';
-    options['rate'] = options.rate ? options.rate : .5;
-
-    this.tts.speak(options)
-      .then(() => {
-        console.log('Success');
-        this.events.publish('speech', 'stop');
-      }
-      )
-
-      .catch((reason: any) => console.log(reason));
+    return new Promise((resolve, reject) => {
+      options['local'] = options.local ? options.local : 'en-IN';
+      options['rate'] = options.rate ? options.rate : .5;
+      this.tts.speak(options)
+        .then(success => {
+          resolve(success)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
+
   stopSpeech() {
-    this.tts.speak("").then((value) => {
-      this.events.publish('speech', 'stop');
-    }).catch();
+    return new Promise((resolve, reject) => {
+      this.tts.speak("").then(success => {
+        resolve(success);
+      }).catch(error => {
+        reject(error);
+      });
+    });
   }
+
 }
