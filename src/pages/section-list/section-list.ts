@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { PreviewPage } from '../preview/preview';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
 import { UpdateTrackerProvider } from '../../providers/update-tracker/update-tracker';
+import { a } from '@angular/core/src/render3';
 
 @IonicPage()
 @Component({
@@ -104,7 +105,17 @@ export class SectionListPage {
     for (const section of this.evidenceSections) {
       allAnswered = true;
       for (const question of section.questions) {
-        if (!question.isCompleted) {
+        if( question.responseType === 'pageQuestions'){
+          for (const questions of question.pageQuestions)
+          {
+              if(!questions.isCompleted){
+                allAnswered = false
+                break;
+              }
+              break;
+            }    
+            break;    
+        }else  if (!question.isCompleted) {
           allAnswered = false;
           break;
         }
