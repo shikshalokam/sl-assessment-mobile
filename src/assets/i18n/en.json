@@ -60,6 +60,7 @@
     "buttons": {
         "observeAgain":"Observe Again",
         "view": "View",
+        "and":"and",
         "addNew":"Add New",
         "viewReport":"View Report",
         "draft":"Draft",
@@ -84,7 +85,6 @@
         "skip":"Skip",
         "submit": "Submit",
         "cancel": "Cancel",
-        "and":"and",
         "addEntity":"Add Entity",
         "send": "Send",
         "yes": "Yes",
