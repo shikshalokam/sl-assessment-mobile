@@ -154,7 +154,7 @@ export class AssessmentServiceProvider {
       //console.log("error details api")
       this.utils.stopLoader();
       reject();
-    },{version:"v2"});
+    },{version:"v1"});
 
   });
 }
@@ -188,7 +188,7 @@ getAssessmentDetailsOfCreatedObservation(event, programs, assessmentType) {
     //console.log("error details api")
     this.utils.stopLoader();
     reject();
-  },{version:"v2"});
+  },{version:"v1"});
 
 });
 }
