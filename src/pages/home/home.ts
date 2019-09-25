@@ -13,7 +13,6 @@ import { AppConfigs } from '../../providers/appConfig';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { RoleListingPage } from '../role-listing/role-listing';
-import * as HighCharts from 'highcharts';
 
 declare var cordova: any;
 
@@ -35,7 +34,8 @@ export class HomePage {
   generalQuestions: any;
   schoolIndex = 0;
   currentProgramId: any;
-  profileRoles ;
+  profileRoles;
+  dashboardEnable: boolean;
   allPages: Array<Object> = [
 
     {
@@ -72,16 +72,16 @@ export class HomePage {
     private currentUser: CurrentUserProvider,
     private network: Network,
     private media: Media,
-    private currentUserProvider : CurrentUserProvider,
-    private localStorageProvider : LocalStorageProvider,
+    private currentUserProvider: CurrentUserProvider,
+    private localStorageProvider: LocalStorageProvider,
     private file: File,
     private events: Events,
     private sharingFeature: SharingFeaturesProvider,
     private platform: Platform,
     private apiService: ApiProvider,
-    private localStorage:LocalStorageProvider,
-    private apiProvider : ApiProvider,
-    private utils : UtilsProvider
+    private localStorage: LocalStorageProvider,
+    private apiProvider: ApiProvider,
+    private utils: UtilsProvider
   ) {
 
 
@@ -94,80 +94,47 @@ export class HomePage {
   ionViewDidLoad() {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
-    this.localStorageProvider.getLocalStorage('profileRole').then( success => {
-      this.profileRoles = success.result;
-      // this.getRoles();
-     if( success.result.roles.length > 0 ){
-       this.allPages.push({
-        name: "dashboard",
-        subName: '',
-        icon: "analytics",
-        component: RoleListingPage,
-        active: false
-    }) 
-    this.canViewLoad = true;
-    this.pages = this.allPages ;
-    this.events.publish('multipleRole' , true);
-  }
+    this.localStorageProvider.getLocalStorage('profileRole').then(success => {
+      this.profileRoles = success;
+      if (success.roles.length > 0) {
+        this.dashboardEnable = true;
+        this.canViewLoad = true;
+        this.pages = this.allPages;
+        this.events.publish('multipleRole', true);
+      } 
 
-    }).catch( error =>{
-      this.getRoles().then(success  =>{
-        // this.pages = success;
-      }).catch();
-      console.log("called get roles")
+    }).catch(error => {
+      this.getRoles();
     })
     if (this.network.type != 'none') {
       this.networkAvailable = true;
     }
 
     this.localStorage.getLocalStorage('staticLinks').then(success => {
-      if(success){
-
-      } else{
+      if (success) {
+      } else {
         this.getStaticLinks();
       }
     }).catch(error => {
       this.getStaticLinks();
     })
-
-
-    // ionViewDidLoad() { 
-     
-    // }
   }
-// expansionData={
-//   title :"hi"
-// }
+
   getRoles() {
-   console.log("i m here")
-   return new Promise((resolve, reject) =>{
-    let currentUser =   this.currentUserProvider.getCurrentUserData();
-   console.log(JSON.stringify(currentUser) + "usr details")
-    this.apiProvider.httpGet(AppConfigs.roles.getProfile+currentUser.sub,success =>{
+    // return new Promise((resolve, reject) => {
+    let currentUser = this.currentUserProvider.getCurrentUserData();
+    this.apiProvider.httpGet(AppConfigs.roles.getProfile + currentUser.sub, success => {
       this.profileRoles = success.result;
-      
-     if(success.result.roles.length > 0)
-     {
-      // this.allPages.splice(this.allPages.length, 0 ,{
-      //   name: "dashoard",
-      //   subName: '',
-      //   icon: "analytics",
-      //   component: RoleListingPage,
-      //   active: false
-      //    }) 
-      this.events.publish('multipleRole' , true);     
-      this.localStorageProvider.setLocalStorage('profileRole',success);
-    }
-      // this.allPages = [ ...this.allPages ]
-      // this.canViewLoad = true;
-      resolve(this.allPages)
-    },error =>{
+      this.localStorage.setLocalStorage('profileRole', this.profileRoles)
+      if (success.result.roles.length > 0) {
+        this.dashboardEnable = true;
+        this.events.publish('multipleRole', true);
+      }
+    }, error => {
       this.utils.openToast(error);
-      reject();
-    })  
-    console.log("func end");
-  });
+    })
   }
+
   socialSharingInApp() {
     this.sharingFeature.sharingThroughApp();
   }
@@ -179,62 +146,13 @@ export class HomePage {
     });
   }
 
-  // getAudioList() {
-  //   if(localStorage.getItem("audiolist")) {
-  //     this.audioList = JSON.parse(localStorage.getItem("audiolist"));
-  //     console.log(this.audioList);
-  //   }
-  // }
-
-
-  // startRecord() {
-  //   if (this.platform.is('ios')) {
-  //     this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
-  //     this.filePath = this.file.documentsDirectory.replace(/file:\/\//g, '') + this.fileName;
-
-  //     this.audio = this.media.create(this.filePath);
-  //   } else if (this.platform.is('android')) {
-  //     this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
-  //     this.filePath = 'file:///'+this.file.externalDataDirectory.replace(/file:\/\//g, '') + this.fileName;
-  //     console.log(this.filePath)
-  //     this.audio = this.media.create(this.filePath);
-  //   }
-  //   this.audio.startRecord();
-  //   this.recording = true;
-  // }
-
-  // stopRecord() {
-  //   this.audio.stopRecord();
-  //   let data = { filename: this.fileName };
-  //   this.audioList.push(data);
-  //   localStorage.setItem("audiolist", JSON.stringify(this.audioList));
-  //   this.recording = false;
-  //   this.getAudioList();
-  // }
-
-
-  // playAudio(file,idx) {
-  //   console.log(file)
-  //   if (this.platform.is('ios')) {
-  //     this.filePath = this.file.documentsDirectory.replace(/file:\/\//g, '') + file;
-  //     this.audio = this.media.create(this.filePath);
-  //   } else if (this.platform.is('android')) {
-  //     this.filePath = 'file:///'+this.file.externalDataDirectory.replace(/file:\/\//g, '') + file;
-  //     console.log(this.filePath)
-  //     this.audio = this.media.create(this.filePath);
-  //     console.log("audio")
-  //   }
-  //   this.audio.play();
-  //   this.audio.setVolume(1);
-  // }
-
   goToPage(index) {
-    this.events.publish('navigateTab', this.allPages[index]['name'])
+    this.events.publish('navigateTab', index >= 0 ? this.allPages[index]['name'] : 'dashboard')
   }
 
   ionViewWillLeave() {
-
+    this.events.unsubscribe('multipleRole');
   }
 
-  
+
 }
