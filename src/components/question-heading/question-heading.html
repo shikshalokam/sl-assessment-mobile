@@ -1,5 +1,6 @@
-<!-- <span class="flexbox">
-    <div class="noWrap">{{inputIndex}} .</div> 
+
+<!--<span class="flexbox">
+    <div class="noWrap" *ngIf="showQuestionNumber">{{inputIndex}} .</div> 
     <div padding-left>
       <div class="wrapText" *ngFor="let question of data.question"> 
       {{question}} 
@@ -7,7 +8,7 @@
     </div>
 </span> -->
 <span class="flexbox">
-  <div class="noWrap">{{inputIndex}} .</div>
+  <div class="noWrap" *ngIf="showQuestionNumber">{{inputIndex}} .</div>
   <div padding-left>
     <div  *ngFor="let question of data.question;let first = first">
       <div class=" _flex-box  _justify-content-space-between">
