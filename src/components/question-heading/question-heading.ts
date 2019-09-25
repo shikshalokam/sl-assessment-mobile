@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { TextToSpeechProvider } from '../../providers/text-to-speech/text-to-speech';
 import { Events } from 'ionic-angular';
 

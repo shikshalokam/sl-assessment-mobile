@@ -227,7 +227,8 @@
         "noDraft":"No Drafts",
         "noEntity":"No Entity"  ,
         "no":"No",
-        "noSolutionFound":"No Solutions"
+        "noSolutionFound":"No Solutions",
+        "noProgramsFound":"No Programs found."
         },
     "toastMessage":{
         "selectSolution":"Select a Solution",
