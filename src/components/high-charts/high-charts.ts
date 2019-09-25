@@ -124,6 +124,7 @@ export class HighChartsComponent implements OnInit {
     // console.log(JSON.stringify(event.point.options))
     // console.log('Category: ' + event.category + ', value: ' + event.entityId)
     event.point.options['nextChildEntityType'] = this.chartData.chart.nextChildEntityType;
+    event.point.options['grandChildEntityType'] = this.chartData.chart.grandChildEntityType
     this.chartData.chart.nextChildEntityType == "" ? null :
     this.clickOnGraphEventEmit.emit(event.point.options)
   }

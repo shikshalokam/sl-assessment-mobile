@@ -49,13 +49,14 @@ export class DashboardPage {
   clickOnGraphEventEmit(event) {
     console.log(JSON.stringify(event))
     let entityObj = {
-      entityId : event.entityId,
-      entityType : this.entity.immediateSubEntityType ? this.entity.immediateSubEntityType : this.entity.immediateChildEntityType ? this.entity.immediateChildEntityType : "" ,
-      immediateChildEntityType : event.nextChildEntityType
+      _id : event.entityId,
+      entityType : event.nextChildEntityType,
+      immediateChildEntityType : event.grandChildEntityType
     }
     this.navCtrl.push(DashboardPage ,{ "entity" :entityObj,"programId" : this.programId , "solutionId":this.solutionId} )
   }
   getEntityReports(obj) {
+    console.log(JSON.stringify(obj))
     this.utils.startLoader();
     this.apiProvider.httpPost(AppConfigs.roles.instanceReport, obj, success => {
       this.data = success
