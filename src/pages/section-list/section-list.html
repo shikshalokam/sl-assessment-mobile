@@ -20,6 +20,7 @@
       </h3>
     </ion-item-divider>
     <ng-container *ngFor="let section of evidenceSections; let i= index">
+    
       <ion-item (click)="goToQuestioner(i)" *ngIf="section?.questions?.length">
         <h3>
           <ion-icon name="list-box" margin-right></ion-icon> {{ section?.name }}
@@ -61,7 +62,7 @@
 </ion-content>
 
 <ion-footer no-shadow
-  *ngIf="((allAnsweredForEvidence && !currentEvidence.isSubmitted) || currentEvidence?.enableSubmit) && !sectionData?.observation">
+  *ngIf="((allAnsweredForEvidence && !currentEvidence?.isSubmitted) || currentEvidence?.enableSubmit) && !sectionData?.observation">
   <ion-toolbar position="bottom">
     <ion-row>
       <button ion-button full (click)="checkForNetworkTypeAlert()">{{'buttons.upload'|translate}}
@@ -72,7 +73,7 @@
   </ion-toolbar>
 </ion-footer>
 
-<ion-footer no-shadow *ngIf="sectionData?.observation && !currentEvidence.isSubmitted">
+<ion-footer no-shadow *ngIf="sectionData?.observation && !currentEvidence?.isSubmitted">
   <ion-toolbar position="bottom">
     <ion-row>
       <button ion-button full (click)="previewSubmission()">
@@ -81,7 +82,7 @@
   </ion-toolbar>
 </ion-footer>
 
-<ion-footer no-shadow *ngIf="sectionData?.observation && currentEvidence.isSubmitted">
+<ion-footer no-shadow *ngIf="sectionData?.observation && currentEvidence?.isSubmitted">
   <ion-toolbar position="bottom">
     <ion-row>
       <button ion-button full (click)="viewReport()">

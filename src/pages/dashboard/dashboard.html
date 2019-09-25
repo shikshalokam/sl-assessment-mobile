@@ -7,12 +7,12 @@
 <ion-header>
     <header [title]="'headings.dashboard'|translate" [hideBack]="false">
     </header>
-  </ion-header>
+</ion-header>
   
 <ion-content padding>
   <h2>{{data?.title}}</h2>
  <div *ngFor="let item of data?.reportSections">
-  <high-charts [chartData] = "item" *ngIf="item.chart.type != 'expansion'"></high-charts>
+  <percentage-column-charts [chartData] = "item" *ngIf="item.chart.type != 'expansion'" (clickOnGraphEventEmit)="clickOnGraphEventEmit($event)"></percentage-column-charts>
   <expansion-panel [datas]="item" *ngIf="item.chart.type == 'expansion'"></expansion-panel>
  </div>
  <div *ngIf="!(data?.reportSections)" class="_flex-box _justify-content-center">
