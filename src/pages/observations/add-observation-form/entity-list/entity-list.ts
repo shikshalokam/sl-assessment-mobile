@@ -10,26 +10,24 @@ import { UtilsProvider } from '../../../../providers/utils/utils';
 * Ionic pages and navigation.
 */
 @Component({
- selector: 'page-entity-list',
- templateUrl: 'entity-list.html',
+  selector: 'page-entity-list',
+  templateUrl: 'entity-list.html',
 })
 export class EntityListPage {
   entityList;
   observationId;
   searchUrl;
-  limit = 10;
+  limit = 50;
   page = 1;
   totalCount = 0;
   searchValue = "";
-  selectableList: any;
+  selectableList: any = [];
   index: any = 50;
-  list: any = [];
   arr = [];
   selectedListCount = {
     count: 0
   }
   solutionId: any;
-  listOfNotSelectedCount: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -40,60 +38,63 @@ export class EntityListPage {
     this.searchUrl = AppConfigs.cro.searchEntity;
     this.observationId = this.navParams.get('data');
     this.solutionId = this.navParams.get('solutionId');
-
     console.log(this.observationId)
   }
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad SchoolListPage');
-
   }
-
-
   addSchools() {
     let selectedSchools = []
     this.selectableList.forEach(element => {
-      if (element.selected && !element.preSelected)  {
+      if (element.selected && !element.preSelected) {
         selectedSchools.push(element);
       }
     });
+
     console.log(selectedSchools.length);
     this.viewCntrl.dismiss(selectedSchools);
-
   }
-  cancel(){
+  cancel() {
     this.viewCntrl.dismiss();
   }
-
+  checkItem(listItem) {
+    console.log("checked")
+    listItem.selected = !listItem.selected;
+    listItem.selected ? this.selectedListCount.count++ : this.selectedListCount.count--;
+  }
   search(event?) {
     this.searchValue = event ? event : this.searchValue;
     this.utils.startLoader();
-    this.index = 50;
-    this.apiProviders.httpGet(this.searchUrl +"?observationId="+this.observationId + "&search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
+    this.page = event ? this.page : this.page + 1;
+    this.apiProviders.httpGet(this.searchUrl + this.observationId + "?search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
       this.arr = event ? [] : this.arr;
-
-      console.log(JSON.stringify(success))
-      this.listOfNotSelectedCount = 0;
       for (let i = 0; i < success.result[0].data.length; i++) {
-        success.result[0].data[i].selected ?  this.listOfNotSelectedCount :this.listOfNotSelectedCount++;
         success.result[0].data[i].isSelected = success.result[0].data[i].selected;
         success.result[0].data[i].preSelected = success.result[0].data[i].selected ? true : false;
       }
-  
-      event ? null : this.page++;
-      console.log(JSON.stringify(success.result[0]))
       this.totalCount = success.result[0].count;
-      console.log(JSON.stringify(success))
-      // this.selectableList = [...success.result[0].metaInformation]
-      this.selectableList = success.result[0].data.length > 0 ? [...success.result[0].data] : []
-
+      this.selectableList = [... this.selectableList, ...success.result[0].data]
       this.utils.stopLoader();
-
     }, error => {
-        this.utils.openToast(error.message)
       this.utils.stopLoader();
-
-    },{version : "v2",dhiti : false})
+    })
   }
 
+
+  doInfinite(infiniteScroll) {
+    setTimeout(() => {
+      this.search();
+      infiniteScroll.complete();
+    }, 500);
+  }
+  searchEntity(event) {
+    if (!event.value) {
+      this.selectableList = [];
+      return
+    }
+    if (!event.value || event.value.length < 3) {
+      return;
+    }
+    this.search(event.value)
+  }
 }
