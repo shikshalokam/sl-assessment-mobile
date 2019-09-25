@@ -18,6 +18,8 @@ export class QuestionHeadingComponent {
   text: string;
   @Input()data ;
   @Input()inputIndex;
+  showQuestionNumber = false;
+
   play = false;
   constructor(private textToSpeech : TextToSpeechProvider,private events :Events) {
     console.log('Hello QuestionHeadingComponent Component');
