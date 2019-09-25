@@ -107,7 +107,8 @@
         "viewReports":"View Reports",
         "viewObservationReport":"View Observation report",
         "viewEntityReport":"View Entity Report",
-        "edit":"Edit"
+        "edit":"Edit",
+        "observation":"Observation"
     },
     "tabs": {
         "home": "Home",
@@ -175,7 +176,8 @@
         "observationDetails": "Observation Details",
         "hint":"Hint",
         "submissionPreview":"Submission Preview",
-        "observationReports":"Report"
+        "observationReports":"Report",
+        "observationUpdate":"Observation Update"
     },
     "labels": {
         "welcome": "Welcome",
