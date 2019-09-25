@@ -79,8 +79,6 @@ export class AddObservationFormPage {
   ) {
     this.editData = this.navParams.get('data');
     this.editDataIndex = this.navParams.get('index');
-
-
   }
 
   ionViewDidLoad() {
@@ -329,7 +327,7 @@ export class AddObservationFormPage {
   getEntityList(event ?) {
     event ? this.entityListPage ++ : this.entityListPage ;
 
-    this.apiProviders.httpGet(AppConfigs.cro.searchEntity+"?solutionId="+this.selectedFrameWork+"&search="+this.searchEntity+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
+    this.apiProviders.httpGet(AppConfigs.cro.searchEntity+'?solutionId='+this.selectedFrameWork+"&search="+this.searchEntity+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
       this.entityListTotalCount = success.result[0].count;
       if(this.editData && this.editData.data.entities.length == 0 ){
           success.result[0].data.forEach(element => {
@@ -495,6 +493,17 @@ export class AddObservationFormPage {
       // console.log("published obs")
         this.utils.openToast(success.message);
         this.isPublished = true;
+        console.log(this.editDataIndex)
+        if(this.editData){
+          this.localStorage.getLocalStorage('draftObservation').then(draftObs=>{
+            draftObs.splice(this.editDataIndex, 1);
+            console.log(JSON.stringify(draftObs))
+            console.log("DRAFTOBS")
+            this.localStorage.setLocalStorage('draftObservation', draftObs);
+          }).catch( error=>{
+
+          })
+        }
         this.navCtrl.pop();
 
      
@@ -510,7 +519,10 @@ export class AddObservationFormPage {
 
   async ionViewCanLeave() {
     console.log(this.saveDraftType + "  " + this.editDataIndex)
-    if(this.saveDraftType != 'normal'  && this.editDataIndex >= -1){
+    if(this.isPublished){
+      return true
+    }
+    if(this.saveDraftType != 'normal'  && this.editDataIndex >= -1 ){
       const shouldLeave = await this.confirmLeave();
       return shouldLeave;
     }

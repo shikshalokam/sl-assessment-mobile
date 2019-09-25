@@ -19,17 +19,19 @@
     <div *ngFor="let element of reportObj?.response;let i = index">
       <ion-card [ngSwitch]="element?.responseType">
         <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'text'"></reports-text>
+        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'number'"></reports-text>
+        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'date'"></reports-text>
         <pie-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'radio'"></pie-chart>
         <bar-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'multiselect'"></bar-chart>
         <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchDefault></reports-text>
       </ion-card>
     </div>
   </div>
-  <div class="_flex-box _justify-content-center _errorBox" *ngIf="error">
-    {{error}}
+  <div class="_flex-box _justify-content-center _errorBox" *ngIf="!reportObj?.response">
+    {{reportObj?.data}}
   </div>
 
-  <ion-fab bottom right>
+  <ion-fab bottom right *ngIf="reportObj?.response">
     <button ion-fab mini>
       <ion-icon name="more"></ion-icon>
     </button>

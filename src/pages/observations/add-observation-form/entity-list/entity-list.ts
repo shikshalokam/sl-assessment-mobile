@@ -29,6 +29,7 @@ export class EntityListPage {
     count: 0
   }
   solutionId: any;
+  listOfNotSelectedCount: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -68,22 +69,28 @@ export class EntityListPage {
     this.searchValue = event ? event : this.searchValue;
     this.utils.startLoader();
     this.index = 50;
-    this.apiProviders.httpGet(this.searchUrl +"?solutionId="+ this.solutionId + "&search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
+    this.apiProviders.httpGet(this.searchUrl +"?observationId="+this.observationId + "&search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
       this.arr = event ? [] : this.arr;
+
+      console.log(JSON.stringify(success))
+      this.listOfNotSelectedCount = 0;
       for (let i = 0; i < success.result[0].data.length; i++) {
+        success.result[0].data[i].selected ?  this.listOfNotSelectedCount :this.listOfNotSelectedCount++;
         success.result[0].data[i].isSelected = success.result[0].data[i].selected;
         success.result[0].data[i].preSelected = success.result[0].data[i].selected ? true : false;
       }
+  
       event ? null : this.page++;
       console.log(JSON.stringify(success.result[0]))
       this.totalCount = success.result[0].count;
       console.log(JSON.stringify(success))
       // this.selectableList = [...success.result[0].metaInformation]
-      this.selectableList = [...success.result[0].data]
+      this.selectableList = success.result[0].data.length > 0 ? [...success.result[0].data] : []
 
       this.utils.stopLoader();
 
     }, error => {
+        this.utils.openToast(error.message)
       this.utils.stopLoader();
 
     },{version : "v2",dhiti : false})

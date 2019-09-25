@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { NavController, NavParams, ModalController, AlertController, Events } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
@@ -22,7 +22,7 @@ import { AssessmentServiceProvider } from '../../providers/assessment-service/as
   selector: 'observation-entity-listing',
   templateUrl: 'observation-entity-listing.html'
 })
-export class ObservationEntityListingComponent {
+export class ObservationEntityListingComponent implements OnDestroy {
 
   @Input() entityList;
   @Input() entityType;
@@ -51,11 +51,14 @@ export class ObservationEntityListingComponent {
     private observationService : ObservationServiceProvider,
     private modalCtrl: ModalController,
     private utils: UtilsProvider) {
-    console.log(JSON.stringify(this.entityList))
+    // console.log(JSON.stringify(this.entityList))
 
     //console.log('Hello EntityListingComponent Component');
   }
 
+  ngOnDestroy(): void {
+    this.events.unsubscribe('refreshObservationListOnAddEntity');
+  }
   // goToEcm(id, name) {
   //   //console.log(JSON.stringify(id))
   //   this.goToEcmEvent.emit({
@@ -64,7 +67,7 @@ export class ObservationEntityListingComponent {
   //   })
   // }
   checkSubmission(entity, observationIndex, entityIndex) {
-    console.log(JSON.stringify(this.entityList))
+    // console.log(JSON.stringify(this.entityList))
     console.log("checking submission");
 
     if (this.entityList[observationIndex]['entities'][entityIndex].submissions && this.entityList[observationIndex]['entities'][entityIndex].submissions.length > 0) {
@@ -77,6 +80,7 @@ export class ObservationEntityListingComponent {
         observationIndex: this.selectedObservationIndex,
         submissionNumber: 1
       }
+      // this.utils.startLoader();
       this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.observationList, 'createdObservationList').then(result => {
         this.observationService.refreshObservationList(this.observationList).then(success => {
           this.observationList = success;
@@ -136,7 +140,7 @@ export class ObservationEntityListingComponent {
 
 
   getAssessmentDetailsOfCreatedObservation(programIndex, entityIndex, solutionId) {
-    console.log("go to details called");
+    // console.log("go to details called");
 
     this.getAssessmentDetailsEvent.emit({
       programIndex: programIndex,
@@ -164,13 +168,13 @@ export class ObservationEntityListingComponent {
   }
 
   addEntity(...params) {
-    console.log(JSON.stringify(params))
+    // console.log(JSON.stringify(params))
 
     let entityListModal = this.modalCtrl.create(EntityListPage, { data: this.entityList[params[0]]._id,solutionId : this.observationList[this.selectedObservationIndex].solutionId}
     );
     entityListModal.onDidDismiss(entityList => {
       if (entityList) {
-        console.log(JSON.stringify(entityList));
+        // console.log(JSON.stringify(entityList));
         let payload = {
           data: []
         }
@@ -187,7 +191,8 @@ export class ObservationEntityListingComponent {
           // })
           // this.entityList[0].entities = [...entityList, ...this.entityList[0].entities];
           // this.updatedLocalStorage.emit();
-          this.events.publish('refreshObservationList','added');
+          console.log("refreshObservationListOnAddEntity getting called")
+          this.events.publish('refreshObservationListOnAddEntity');
 
 
         }, error => {
