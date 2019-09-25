@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import * as Highcharts from 'highcharts';
 
 /**
@@ -13,6 +13,7 @@ import * as Highcharts from 'highcharts';
   templateUrl: 'percentage-column-charts.html'
 })
 export class PercentageColumnChartsComponent implements OnInit {
+  @Output()clickOnGraphEventEmit = new EventEmitter();
   @Input() chartData ;
   yAxisPercent = true;
   Highcharts = Highcharts; // required
@@ -61,18 +62,16 @@ export class PercentageColumnChartsComponent implements OnInit {
       plotOptions: {
         bar: {
           dataLabels: {
-              enabled: true,
-              color: '#FFFFFF'
+            enabled: true
           },
-          showInLegend: true,
+          showInLegend: true
         },
         series: {
           stacking: 'percent',
           point: {
             events: {
-              click: function () {
-                console.log('Category: ' + this.category + ', value: ' + this.y, ',   id :' + this.entityId + '    entityType : ' + this.entityType)
-              }
+              click: this.onPointClick.bind(this)
+              
             }
           }
         }
@@ -82,4 +81,12 @@ export class PercentageColumnChartsComponent implements OnInit {
 
   }
 
+  onPointClick = (event) => { 
+    // console.log(JSON.stringify(event.point.options))
+    // console.log('Category: ' + event.category + ', value: ' + event.entityId)
+    event.point.options['nextChildEntityType'] = this.chartData.chart.nextChildEntityType;
+    event.point.options['grandChildEntityType'] = this.chartData.chart.grandChildEntityType
+    this.chartData.chart.nextChildEntityType == "" ? null :
+    this.clickOnGraphEventEmit.emit(event.point.options)
+  }
 }
