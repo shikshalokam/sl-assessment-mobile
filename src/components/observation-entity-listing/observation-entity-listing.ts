@@ -106,6 +106,12 @@ export class ObservationEntityListingComponent implements OnDestroy {
   }
   goToEcm(index , entityIndex) {
     console.log("go to ecm called");
+    let recentlyUpdatedEntity = {
+      programName :this.observationList[this.selectedObservationIndex]._id,
+      ProgramId :this.observationList[this.selectedObservationIndex]._id,
+      EntityName : this.observationList[this.selectedObservationIndex].entities[entityIndex].name,
+      EntityId : this.observationList[this.selectedObservationIndex].entities[entityIndex]._id,
+    }
     // console.log(JSON.stringify(this.programs))
     let submissionId = this.observationList[this.selectedObservationIndex]['entities'][entityIndex].submissions[index]._id
     let heading = this.observationList[this.selectedObservationIndex]['entities'][entityIndex].name;
@@ -115,14 +121,14 @@ export class ObservationEntityListingComponent implements OnDestroy {
       // console.log(JSON.stringify(successData))
       if (successData.assessment.evidences.length > 1) {
         // console.log("more then one evedince method")
-        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
+        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading ,recentlyUpdatedEntity :recentlyUpdatedEntity })
       } else {
         console.log("  one evedince method")
 
         // console.log(successData.assessment.evidences[0].startTime + "start time")
         if (successData.assessment.evidences[0].startTime) {
           this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
-          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
+          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 , recentlyUpdatedEntity : recentlyUpdatedEntity})
         } else {
           const assessment = { _id: submissionId, name: heading }
           this.openAction(assessment, successData, 0);

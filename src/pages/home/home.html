@@ -47,4 +47,20 @@
   <!-- <high-charts></high-charts>
   <expansion-panel ></expansion-panel> -->
   <!-- <button (click)="speechFromText()">speech</button> -->
+
+
+  <div *ngIf="recentlyModifiedAssessment">
+
+      <ion-card class="_flex-box" *ngFor="let assessment of recentlyModifiedAssessment;let i = index"
+      (click)="goToRecentlyUpdatedAssessment(assessment)">
+      <div padding  style="flex:1">
+        <!-- <ion-icon name="analytics" class="sizeAdj"></ion-icon> -->
+        <div margin-left text-wrap>{{assessment.EntityName}} 
+          <!-- <span
+            *ngIf="page.subName">{{'labels.'+page.subName | translate}}</span> -->
+          </div>
+      </div>
+      <ion-icon *ngIf="!isIos" name="arrow-forward" margin-right></ion-icon>
+    </ion-card>
+  </div>
 </ion-content>

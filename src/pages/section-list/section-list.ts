@@ -35,6 +35,7 @@ export class SectionListPage {
   currentEvidence: any;
   networkAvailable: any;
   isIos: boolean = this.platform.is('ios');
+  recentlyUpdatedEntity: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App,
@@ -66,9 +67,11 @@ export class SectionListPage {
     this.submissionId = this.navParams.get('_id');
     this.entityName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
+    this.recentlyUpdatedEntity = this.navParams.get('recentlyUpdatedEntity');
+
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.sectionData = data;
-      let assessmentDetails = this.updateTracker.getLastModifiedInSection(data,this.selectedEvidenceIndex ,this.submissionId);
+      let assessmentDetails = this.updateTracker.getLastModifiedInSection(data,this.selectedEvidenceIndex ,this.submissionId,this.recentlyUpdatedEntity);
       this.currentEvidence = assessmentDetails['assessment']['evidences'][this.selectedEvidenceIndex];
       console.log(JSON.stringify(this.currentEvidence))
       this.evidenceSections = this.currentEvidence['sections'];

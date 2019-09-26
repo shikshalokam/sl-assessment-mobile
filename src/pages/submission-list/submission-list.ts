@@ -139,23 +139,30 @@ export class SubmissionListPage {
   }
   goToEcm(index) {
     console.log("go to ecm called");
+
     // console.log(JSON.stringify(this.programs))
     let submissionId = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].submissions[index]._id
     let heading = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].name;
-
+ let recentlyUpdatedEntity = {
+      programName :this.programs[this.selectedObservationIndex].name,
+      ProgramId :this.programs[this.selectedObservationIndex]._id,
+      EntityName : this.programs[this.selectedObservationIndex].entities[this.entityIndex].name,
+      EntityId : this.programs[this.selectedObservationIndex].entities[this.entityIndex]._id,
+      submissionId :submissionId
+    }
     // console.log(this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].submissions[index])
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       // console.log(JSON.stringify(successData))
       if (successData.assessment.evidences.length > 1) {
         // console.log("more then one evedince method")
-        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading })
+        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading ,recentlyUpdatedEntity:recentlyUpdatedEntity})
       } else {
         console.log("  one evedince method")
 
         // console.log(successData.assessment.evidences[0].startTime + "start time")
         if (successData.assessment.evidences[0].startTime) {
           this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
-          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 })
+          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 , recentlyUpdatedEntity : recentlyUpdatedEntity })
         } else {
           const assessment = { _id: submissionId, name: heading }
           this.openAction(assessment, successData, 0);
