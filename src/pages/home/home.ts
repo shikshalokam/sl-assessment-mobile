@@ -13,6 +13,7 @@ import { AppConfigs } from '../../providers/appConfig';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { RoleListingPage } from '../role-listing/role-listing';
+import { EvidenceProvider } from '../../providers/evidence/evidence';
 
 declare var cordova: any;
 
@@ -68,9 +69,11 @@ export class HomePage {
   audioList: any[] = [];
   canViewLoad: boolean = false;
   pages;
+  recentlyModifiedAssessment: any;
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
     private network: Network,
+    private evdnsServ :EvidenceProvider,
     private media: Media,
     private currentUserProvider: CurrentUserProvider,
     private localStorageProvider: LocalStorageProvider,
@@ -118,8 +121,20 @@ export class HomePage {
     }).catch(error => {
       this.getStaticLinks();
     })
+
+   
   }
 
+  ionViewDidEnter(){
+    console.log("home page enter")
+    this.localStorage.getLocalStorage('recentlyModifiedAssessment').then(succcess=>{
+      this.recentlyModifiedAssessment = succcess;
+      console.log(JSON.stringify(this.recentlyModifiedAssessment));
+      console.log("LAST MODEFIED AT ARRAY")
+    }).catch(error =>{
+      console.log("LAST MODEFIED AT ARRAY IS BLANK")
+    });
+  }
   getRoles() {
     // return new Promise((resolve, reject) => {
     let currentUser = this.currentUserProvider.getCurrentUserData();
@@ -154,5 +169,56 @@ export class HomePage {
     this.events.unsubscribe('multipleRole');
   }
 
+
+  goToRecentlyUpdatedAssessment(assessment){
+    // this.utils.getAssessmentLocalStorageKey(assessment.submissionId)
+
+
+
+    let submissionId = assessment.submissionId
+    let heading = assessment.EntityName;
+    let recentlyUpdatedEntity = {
+      programName :assessment.programName,
+      ProgramId :assessment.ProgramId,
+      EntityName : assessment.EntityName,
+      EntityId :assessment.EntityId,
+      submissionId:submissionId
+    }
+    console.log("go to ecm called" + submissionId );
+
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
+
+      console.log(JSON.stringify(successData));
+      //console.log("go to ecm called");
+
+      // successData = this.updateTracker.getLastModified(successData , submissionId)
+      console.log("after modification")
+      if (successData.assessment.evidences.length > 1) {
+
+        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading ,recentlyUpdatedEntity : recentlyUpdatedEntity})
+
+      } else {
+        if (successData.assessment.evidences[0].startTime) {
+          //console.log("if loop " + successData.assessment.evidences[0].externalId)
+          this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
+          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0  ,recentlyUpdatedEntity : recentlyUpdatedEntity})
+        } else {
+
+          const assessment = { _id: submissionId, name: heading ,recentlyUpdatedEntity : recentlyUpdatedEntity}
+          this.openAction(assessment, successData, 0);
+          //console.log("else loop");
+
+        }
+      }
+    }).catch(error => {
+    });
+
+  }
+
+  openAction(assessment, aseessmemtData, evidenceIndex) {
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
+    const options = { _id: assessment._id, name: assessment.name,recentlyUpdatedEntity : assessment.recentlyUpdatedEntity ,selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
+    this.evdnsServ.openActionSheet(options);
+  }
 
 }
