@@ -42,7 +42,7 @@ export class UpdateTrackerProvider {
   getLastModifiedInSection(assessmentDetails, selectedEvidenceIndex, submissionId , recentlyUpdatedEntity) {
 
     for (let currentSectionIndex = 0; currentSectionIndex < assessmentDetails['assessment']['evidences'][selectedEvidenceIndex].sections.length; currentSectionIndex++) {
-      let lastUpdated = assessmentDetails['assessment']['evidences'][selectedEvidenceIndex].sections[currentSectionIndex].questions[0].endTime
+      let lastUpdated = 0;
       for (var questionIndex = 0; questionIndex < assessmentDetails['assessment']['evidences'][selectedEvidenceIndex].sections[currentSectionIndex].questions.length; questionIndex++) {
 
         lastUpdated = lastUpdated < assessmentDetails['assessment']['evidences'][selectedEvidenceIndex].sections[currentSectionIndex].questions[questionIndex].endTime ?
