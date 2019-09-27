@@ -11,8 +11,8 @@ import { UtilsProvider } from '../../providers/utils/utils';
   selector: 'page-question',
   templateUrl: 'page-question.html'
 })
-export class PageQuestionComponent {
-  // export class PageQuestionComponent implements OnInit  , OnDestroy , OnChanges{
+// export class PageQuestionComponent {
+  export class PageQuestionComponent implements OnInit  {
   @Input() inputIndex ;
   @Input() data: any;
   @Input() isLast: boolean;
@@ -34,6 +34,10 @@ export class PageQuestionComponent {
     console.log('Hello PageQuestionComponent Component');
     this.text = 'Hello World';
   }
+  ngOnInit() {
+    this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
+  }
+
   // ngOnDestroy(){}
   // ngOnChanges(changes: SimpleChanges) {
   //   for (let propName in changes) {
