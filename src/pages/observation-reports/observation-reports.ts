@@ -111,7 +111,8 @@ export class ObservationReportsPage {
 
   getObservationReportUrl() {
     this.utils.startLoader();
-    let url = AppConfigs.observationReports.getReportsPdfUrls + "type=submission&";
+    // + "type=submission&"
+    let url = AppConfigs.observationReports.getReportsPdfUrls ;
     if (this.submissionId) {
       url = url + "submissionId="+ this.submissionId;
       this.fileName = this.submissionId + ".pdf";
