@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, App, Events, Platform, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
@@ -15,7 +15,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { PreviewPage } from '../preview/preview';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
 import { UpdateTrackerProvider } from '../../providers/update-tracker/update-tracker';
-import { a } from '@angular/core/src/render3';
 
 @IonicPage()
 @Component({
@@ -35,6 +34,7 @@ export class SectionListPage {
   currentEvidence: any;
   networkAvailable: any;
   isIos: boolean = this.platform.is('ios');
+  recentlyUpdatedEntity: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App,
@@ -46,29 +46,33 @@ export class SectionListPage {
     private events: Events, private platform: Platform,
     private updateTracker : UpdateTrackerProvider,
     private alertCtrl: AlertController, private network: Network, private localStorage: LocalStorageProvider) {
-
+      
     this.events.subscribe('network:offline', () => {
       this.networkAvailable = false;
     });
-
+   
     // Online event
     this.events.subscribe('network:online', () => {
       this.networkAvailable = true;
     });
     this.networkAvailable = this.ngps.getNetworkStatus()
+    
   }
+
+ 
   ionViewWillEnter() {
-    // //console.log('Entered')
-    // //console.log(JSON.stringify(this.userData))
-    //console.log('ionViewDidLoad SectionListPage');
+  
     this.utils.startLoader();
     this.userData = this.currentUser.getCurrentUserData();
+    
     this.submissionId = this.navParams.get('_id');
     this.entityName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
+    this.recentlyUpdatedEntity = this.navParams.get('recentlyUpdatedEntity');
+    
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.sectionData = data;
-      let assessmentDetails = this.updateTracker.getLastModifiedInSection(data,this.selectedEvidenceIndex ,this.submissionId);
+      let assessmentDetails = this.updateTracker.getLastModifiedInSection(data,this.selectedEvidenceIndex ,this.submissionId,this.recentlyUpdatedEntity);
       this.currentEvidence = assessmentDetails['assessment']['evidences'][this.selectedEvidenceIndex];
       console.log(JSON.stringify(this.currentEvidence))
       this.evidenceSections = this.currentEvidence['sections'];
@@ -96,7 +100,7 @@ export class SectionListPage {
     }).catch(error => {
 
     })
-
+     
   }
 
 

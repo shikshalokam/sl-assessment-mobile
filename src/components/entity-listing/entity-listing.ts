@@ -62,7 +62,8 @@ export class EntityListingComponent  implements OnInit{
       programName :programName,
       ProgramId :ProgramId,
       EntityName : EntityName,
-      EntityId :EntityId
+      EntityId :EntityId,
+      submissionId:id
     }
     console.log("go to ecm called" + submissionId );
 
