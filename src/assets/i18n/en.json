@@ -130,11 +130,13 @@
     "headings": {
         "zone":"Zones",
         "state":"State",
+        "lastModified":"Last Modefied at",
         "district":"District",
         "entities":"Entities",
         "userRolePage":"Roles",
         "dashboard":"Dashboard",
         "cluster":"Cluster",
+        "myActiveAssessment":"My active asssessment",
         "submissionListPage":"Submission List",
         "addObservation":"Add Observation",
         "solutionDetails":"Solution Details",
