@@ -182,7 +182,8 @@ export class HomePage {
       ProgramId :assessment.ProgramId,
       EntityName : assessment.EntityName,
       EntityId :assessment.EntityId,
-      submissionId:submissionId
+      submissionId:submissionId,
+      isObservation : assessment.isObservation
     }
     console.log("go to ecm called" + submissionId );
 

@@ -86,12 +86,18 @@ export class UpdateTrackerProvider {
         recentlyUpdatedEntity.lastModified = lastUpdated;
         this.localStorage.getLocalStorage('recentlyModifiedAssessment').then(updatedList => {
           let successArray = [...updatedList];
-          // let isPresentFlag = false ;
+          let isPresentFlag = true ;
 
           for (let assessmentIndex = 0; assessmentIndex < updatedList.length; assessmentIndex++) {
             if (updatedList[assessmentIndex].ProgramId === recentlyUpdatedEntity.ProgramId && updatedList[assessmentIndex].EntityId === recentlyUpdatedEntity.EntityId) {
               //  successArray.splice(assessmentIndex, 1); 
-              delete successArray[assessmentIndex]
+              isPresentFlag = false;
+
+              if(updatedList[assessmentIndex].lastModified != recentlyUpdatedEntity.lastModified)
+               {
+                delete successArray[assessmentIndex];
+                isPresentFlag = true;
+               }  
 
               // successArray.unshift(recentlyUpdatedEntity);
             } 
@@ -101,8 +107,8 @@ export class UpdateTrackerProvider {
             // }
 
           }
-          successArray.unshift(recentlyUpdatedEntity);
-          this.localStorage.setLocalStorage('recentlyModifiedAssessment', successArray.filter(item => item !== null).slice(0,4));
+          isPresentFlag ? successArray.unshift(recentlyUpdatedEntity) : "";
+          this.localStorage.setLocalStorage('recentlyModifiedAssessment', successArray.filter(item => item !== null).slice(0,10));
 
         }).catch(() => {
           this.localStorage.setLocalStorage('recentlyModifiedAssessment', [recentlyUpdatedEntity]);

@@ -67,14 +67,22 @@ export class ObservationEntityListingComponent implements OnDestroy {
   //   })
   // }
   checkSubmission(entity, observationIndex, entityIndex) {
+    const recentlyUpdatedEntity = {
+       programName :this.observationList[this.selectedObservationIndex]._id,
+      ProgramId :this.observationList[this.selectedObservationIndex]._id,
+      EntityName : this.observationList[this.selectedObservationIndex].entities[entityIndex].name,
+      EntityId : this.observationList[this.selectedObservationIndex].entities[entityIndex]._id,
+      isObservation : true
+    }
     // console.log(JSON.stringify(this.entityList))
     console.log("checking submission");
-
+    console.log(this.selectedObservationIndex)
     if (this.entityList[observationIndex]['entities'][entityIndex].submissions && this.entityList[observationIndex]['entities'][entityIndex].submissions.length > 0) {
       console.log("submission there")
-      this.navCtrl.push(SubmissionListPage, { observationIndex: observationIndex, entityIndex: entityIndex, selectedObservationIndex: this.selectedObservationIndex })
+      this.navCtrl.push(SubmissionListPage, { observationIndex: observationIndex, entityIndex: entityIndex, selectedObservationIndex: this.selectedObservationIndex , recentlyUpdatedEntity:recentlyUpdatedEntity })
     } else {
       console.log("no submission")
+    
       let event = {
         entityIndex: entityIndex,
         observationIndex: this.selectedObservationIndex,
@@ -85,7 +93,8 @@ export class ObservationEntityListingComponent implements OnDestroy {
         this.observationService.refreshObservationList(this.observationList).then(success => {
           this.observationList = success;
           this.entityList[0] = success[this.selectedObservationIndex];
-          this.navCtrl.push(SubmissionListPage, { observationIndex: observationIndex, entityIndex: entityIndex, selectedObservationIndex: this.selectedObservationIndex })
+         
+          this.navCtrl.push(SubmissionListPage, { observationIndex: observationIndex, entityIndex: entityIndex, selectedObservationIndex: this.selectedObservationIndex ,recentlyUpdatedEntity:recentlyUpdatedEntity  })
 
           // this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
           // this.goToEcm(0 , entityIndex)
@@ -107,10 +116,11 @@ export class ObservationEntityListingComponent implements OnDestroy {
   goToEcm(index , entityIndex) {
     console.log("go to ecm called");
     let recentlyUpdatedEntity = {
-      programName :this.observationList[this.selectedObservationIndex]._id,
+      programName :this.observationList[this.selectedObservationIndex].name,
       ProgramId :this.observationList[this.selectedObservationIndex]._id,
       EntityName : this.observationList[this.selectedObservationIndex].entities[entityIndex].name,
       EntityId : this.observationList[this.selectedObservationIndex].entities[entityIndex]._id,
+      isObservation : true  
     }
     // console.log(JSON.stringify(this.programs))
     let submissionId = this.observationList[this.selectedObservationIndex]['entities'][entityIndex].submissions[index]._id
