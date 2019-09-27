@@ -5,7 +5,7 @@
 
 
 <ion-content >
-  <observation-entity-listing [entityList]="observationDetails" [entityType]="'observations'"
+  <observation-entity-listing *ngIf="selectedObservationIndex >= 0" [entityList]="observationDetails" [entityType]="'observations'"
     [observationList]="observationList"
     (refreshEvent)="refresh($event)" [selectedObservationIndex]="selectedObservationIndex"
     (openMenuEvent)="openMenu($event)" >

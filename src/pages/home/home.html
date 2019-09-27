@@ -49,16 +49,25 @@
   <!-- <button (click)="speechFromText()">speech</button> -->
 
 
-  <div *ngIf="recentlyModifiedAssessment">
-
-      <ion-card class="_flex-box" *ngFor="let assessment of recentlyModifiedAssessment;let i = index"
+  <div margin *ngIf="recentlyModifiedAssessment">
+    <h2 margin-bottom>{{'headings.myActiveAssessment' | translate}}</h2>
+      <ion-card  class="_flex-box" *ngFor="let assessment of recentlyModifiedAssessment;let i = index"
       (click)="goToRecentlyUpdatedAssessment(assessment)">
-      <div padding  style="flex:1">
-        <!-- <ion-icon name="analytics" class="sizeAdj"></ion-icon> -->
-        <div margin-left text-wrap>{{assessment.EntityName}} 
+      <div padding  style="flex:1"  class="_flex-box">
+        <ion-icon name="eye" *ngIf="assessment.isObservation" class="sizeAdj"></ion-icon>
+        <ion-icon name="book" *ngIf="!(assessment.isObservation)" class="sizeAdj"></ion-icon>
+        <div margin-left style="flex: 1" text-wrap>{{assessment.EntityName}} 
           <!-- <span
             *ngIf="page.subName">{{'labels.'+page.subName | translate}}</span> -->
           </div>
+          
+      </div>
+      <div margin-right>
+        <div class="colorText">{{'headings.lastModified'|translate}}</div>
+        <div >
+        {{assessment.lastModified | date}}
+
+        </div>
       </div>
       <ion-icon *ngIf="!isIos" name="arrow-forward" margin-right></ion-icon>
     </ion-card>
