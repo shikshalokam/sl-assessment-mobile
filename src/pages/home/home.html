@@ -11,7 +11,7 @@
   </ion-card>
 
   <!-- <div padding *ngIf="canViewLoad"> -->
-  <div padding>
+  <div padding *ngIf="!recentlyModifiedAssessment">
     <div>
       <h4>{{'labels.goTo'| translate}}</h4>
     </div>
