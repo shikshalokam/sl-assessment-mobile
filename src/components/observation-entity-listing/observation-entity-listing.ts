@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { NavController, NavParams, ModalController, AlertController, Events } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
@@ -22,7 +22,7 @@ import { AssessmentServiceProvider } from '../../providers/assessment-service/as
   selector: 'observation-entity-listing',
   templateUrl: 'observation-entity-listing.html'
 })
-export class ObservationEntityListingComponent implements OnDestroy {
+export class ObservationEntityListingComponent implements OnInit, OnDestroy {
 
   @Input() entityList;
   @Input() entityType;
@@ -31,6 +31,7 @@ export class ObservationEntityListingComponent implements OnDestroy {
   @Output() openMenuEvent = new EventEmitter();
   @Input() selectedObservationIndex;
   @Input() observationList;
+  copyOfEntityList;
 
 
   text: string;
@@ -56,8 +57,23 @@ export class ObservationEntityListingComponent implements OnDestroy {
     //console.log('Hello EntityListingComponent Component');
   }
 
+  ngOnInit() {
+    this.copyOfEntityList = this.entityList;
+  }
+
   ngOnDestroy(): void {
     this.events.unsubscribe('refreshObservationListOnAddEntity');
+  }
+
+  fileterList(ev) {
+    const val = ev.target.value;
+    let entityList = JSON.parse(JSON.stringify(this.copyOfEntityList));
+    if (val && val.trim() != '') {
+      entityList[0]['entities'] = entityList[0].entities.filter((item) => {
+        return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
+    this.entityList = entityList;
   }
   // goToEcm(id, name) {
   //   //console.log(JSON.stringify(id))

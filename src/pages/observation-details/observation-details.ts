@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , ViewChild} from '@angular/core';
 import { NavController, NavParams, AlertController, Events, Platform } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
@@ -21,6 +21,7 @@ declare var cordova: any;
   templateUrl: 'observation-details.html',
 })
 export class ObservationDetailsPage {
+  @ViewChild("entityComponent") childEntityList;
 
   observationDetails = [];
   programs: any;
@@ -30,6 +31,7 @@ export class ObservationDetailsPage {
   firstVisit = true;
   isIos: boolean;
   appFolderPath;
+  search;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -67,6 +69,7 @@ export class ObservationDetailsPage {
 
   ionViewWillEnter() {
     console.log("On view enter")
+    this.search = "";
     //  if(!this.firstVisit )
     // this.observationService.refreshObservationList(this.observationList).then( data =>{
     //   this.programs = data
@@ -256,6 +259,10 @@ export class ObservationDetailsPage {
         }]
     });
     alert.present();
+  }
+
+  fileterList(event) {
+    this.childEntityList.fileterList(event)
   }
 
   viewObservationReports() {
