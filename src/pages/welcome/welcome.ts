@@ -6,6 +6,7 @@ import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { UserLoginPage } from '../user-login/user-login';
 
 @Component({
   selector: 'page-welcome',
@@ -48,6 +49,10 @@ export class WelcomePage {
 
     });
     this.subscription.add(connectSubscription);
+  }
+
+  goToLogin() {
+    this.navCtrl.push(UserLoginPage)
   }
 
   ionViewWillLeave() {

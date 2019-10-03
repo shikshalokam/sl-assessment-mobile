@@ -90,6 +90,7 @@ import { PreviewPage } from '../pages/preview/preview';
 import { SubmissionListPage } from '../pages/submission-list/submission-list';
 import { ObservationServiceProvider } from '../providers/observation-service/observation-service';
 import { DownloadAndPreviewProvider } from '../providers/download-and-preview/download-and-preview';
+import { UserLoginPage } from '../pages/user-login/user-login';
 
 @NgModule({
   declarations: [
@@ -115,7 +116,8 @@ import { DownloadAndPreviewProvider } from '../providers/download-and-preview/do
     ProgramDetailsPage,
     HintPage,
     PreviewPage,
-    SubmissionListPage
+    SubmissionListPage,
+    UserLoginPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -170,7 +172,8 @@ import { DownloadAndPreviewProvider } from '../providers/download-and-preview/do
     EntityListingPage,
     HintPage,
     PreviewPage,
-    SubmissionListPage
+    SubmissionListPage,
+    UserLoginPage
   ],
   providers: [
     StatusBar,
