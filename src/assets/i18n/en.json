@@ -108,7 +108,8 @@
         "observations":"Observations",
         "myObservation":"My Observation",
         "draftObservation":"Draft Observation",
-        "addObservation":"Add Observation"
+        "addObservation":"Add Observation",
+        "resetPassword":"Reset Password"
     },
     "headings": {
         "submissionListPage":"Submission List",
@@ -152,7 +153,8 @@
         "individualAssessments": "Individual Assessments",
         "observationDetails": "Observation Details",
         "hint":"Hint",
-        "submissionPreview":"Submission Preview"
+        "submissionPreview":"Submission Preview",
+        "resetPassword":"Reset Password"
     },
     "labels": {
         "welcome": "Welcome",

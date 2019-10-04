@@ -16,6 +16,7 @@ import { IndividualListingPage } from '../pages/individual-listing/individual-li
 import { UtilsProvider } from '../providers/utils/utils';
 import { ObservationsPage } from '../pages/observations/observations';
 import { Deeplinks } from '@ionic-native/deeplinks';
+import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 
 @Component({
   templateUrl: 'app.html'
@@ -65,6 +66,12 @@ export class MyApp {
       name: "about",
       icon: "information-circle",
       component: AboutPage,
+      active: false
+    },
+    {
+      name: "resetPassword",
+      icon: "refresh",
+      component: ResetPasswordPage,
       active: false
     }
   ]

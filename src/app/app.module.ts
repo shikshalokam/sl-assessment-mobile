@@ -90,6 +90,9 @@ import { PreviewPage } from '../pages/preview/preview';
 import { SubmissionListPage } from '../pages/submission-list/submission-list';
 import { ObservationServiceProvider } from '../providers/observation-service/observation-service';
 import { DownloadAndPreviewProvider } from '../providers/download-and-preview/download-and-preview';
+import { UserLoginPage } from '../pages/user-login/user-login';
+import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
+import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 
 @NgModule({
   declarations: [
@@ -115,7 +118,10 @@ import { DownloadAndPreviewProvider } from '../providers/download-and-preview/do
     ProgramDetailsPage,
     HintPage,
     PreviewPage,
-    SubmissionListPage
+    SubmissionListPage,
+    UserLoginPage,
+    ForgotPasswordPage,
+    ResetPasswordPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -170,7 +176,10 @@ import { DownloadAndPreviewProvider } from '../providers/download-and-preview/do
     EntityListingPage,
     HintPage,
     PreviewPage,
-    SubmissionListPage
+    SubmissionListPage,
+    UserLoginPage,
+    ForgotPasswordPage,
+    ResetPasswordPage
   ],
   providers: [
     StatusBar,
