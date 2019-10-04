@@ -92,6 +92,7 @@ import { ObservationServiceProvider } from '../providers/observation-service/obs
 import { DownloadAndPreviewProvider } from '../providers/download-and-preview/download-and-preview';
 import { UserLoginPage } from '../pages/user-login/user-login';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
+import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 
 @NgModule({
   declarations: [
@@ -119,7 +120,8 @@ import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
     PreviewPage,
     SubmissionListPage,
     UserLoginPage,
-    ForgotPasswordPage
+    ForgotPasswordPage,
+    ResetPasswordPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -176,7 +178,8 @@ import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
     PreviewPage,
     SubmissionListPage,
     UserLoginPage,
-    ForgotPasswordPage
+    ForgotPasswordPage,
+    ResetPasswordPage
   ],
   providers: [
     StatusBar,
