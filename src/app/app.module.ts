@@ -91,6 +91,7 @@ import { SubmissionListPage } from '../pages/submission-list/submission-list';
 import { ObservationServiceProvider } from '../providers/observation-service/observation-service';
 import { DownloadAndPreviewProvider } from '../providers/download-and-preview/download-and-preview';
 import { UserLoginPage } from '../pages/user-login/user-login';
+import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 
 @NgModule({
   declarations: [
@@ -117,7 +118,8 @@ import { UserLoginPage } from '../pages/user-login/user-login';
     HintPage,
     PreviewPage,
     SubmissionListPage,
-    UserLoginPage
+    UserLoginPage,
+    ForgotPasswordPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -173,7 +175,8 @@ import { UserLoginPage } from '../pages/user-login/user-login';
     HintPage,
     PreviewPage,
     SubmissionListPage,
-    UserLoginPage
+    UserLoginPage,
+    ForgotPasswordPage
   ],
   providers: [
     StatusBar,

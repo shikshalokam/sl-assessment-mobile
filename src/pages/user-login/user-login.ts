@@ -2,14 +2,13 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, App } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AppConfigs } from '../../providers/appConfig';
-import { ApiProvider } from '../../providers/api/api';
 import { Http, URLSearchParams } from '@angular/http';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import * as CryptoJS from 'crypto-js';
-import * as xml2json from 'xml2json';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { HomePage } from '../home/home';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { ForgotPasswordPage } from '../forgot-password/forgot-password';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @Component({
   selector: 'page-user-login',
@@ -27,7 +26,8 @@ export class UserLoginPage {
   userDetails;
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private utils: UtilsProvider,
-    private currentUser: CurrentUserProvider, private app: App) {
+    private currentUser: CurrentUserProvider, private app: App, private navCtrl: NavController,
+    private localStorage: LocalStorageProvider) {
     this.signIn = this.formBuilder.group({
       staffID: ['', Validators.required],
       password: ['', Validators.required],
@@ -147,12 +147,17 @@ export class UserLoginPage {
       const xmlDoc = parser.parseFromString(error.error.text, "text/xml");
       try {
         this.userDetails = JSON.parse(xmlDoc.getElementsByTagName('string')[0].childNodes[0].nodeValue)[0];
+        this.localStorage.setLocalStorage("partnerLoginDetails", this.userDetails);
         this.checkForKeycloakUser(this.signIn.value.staffID, this.signIn.value.password)
       } catch (e) {
         this.utils.stopLoader();
         this.utils.openToast("Invalid UserID & Password !!!");
       }
     })
+  }
+
+  goToForgotPassword() {
+    this.navCtrl.push(ForgotPasswordPage)
   }
 
 
