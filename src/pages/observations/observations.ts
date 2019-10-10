@@ -62,8 +62,6 @@ export class ObservationsPage {
       if (data) {
         this.createdObservation = [...data];
         this.refresh();
-
-        // console.log(JSON.stringify(data))
         this.countCompleteActive();
         this.utils.stopLoader();
       } else {
@@ -236,8 +234,7 @@ export class ObservationsPage {
 
   openMenu(event , index) {
     // this.assessmentService.openMenu(event, this.programs, false);
-    console.log("open menu")
-    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true ,showEdit : true , assessmentIndex : index , assessmentName :'createdObservationList'})
+    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { "isObservation": true,"showAbout" : true ,"showEdit" : true , "assessmentIndex" : index , "assessmentName" :'createdObservationList'})
   
     popover.present(
       {ev:event}
