@@ -93,6 +93,16 @@ import { DownloadAndPreviewProvider } from '../providers/download-and-preview/do
 import { UserLoginPage } from '../pages/user-login/user-login';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 import { ResetPasswordPage } from '../pages/reset-password/reset-password';
+import { ObservationReportsPage } from '../pages/observation-reports/observation-reports';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracker';
+import { RoleListingPage } from '../pages/role-listing/role-listing';
+import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
+import { DashboardPage } from '../pages/dashboard/dashboard';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
+import { ProgramListingPage } from '../pages/program-listing/program-listing';
+import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
 
 @NgModule({
   declarations: [
@@ -101,6 +111,7 @@ import { ResetPasswordPage } from '../pages/reset-password/reset-password';
     HomePage,
     AssessmentAboutPage,
     WelcomePage,
+    ProgramListingPage,
     InstitutionsEntityList,
     FaqPage,
     EntityProfileEditPage,
@@ -121,12 +132,18 @@ import { ResetPasswordPage } from '../pages/reset-password/reset-password';
     SubmissionListPage,
     UserLoginPage,
     ForgotPasswordPage,
-    ResetPasswordPage
+    ResetPasswordPage,
+    ObservationReportsPage,
+    RoleListingPage,
+    ReportEntityListingPage,
+    DashboardPage,
+    ObservationEditPage
   ],
   imports: [
     BrowserAnimationsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
+    HighchartsChartModule,
     TranslateModule.forRoot(
       {
         loader: {
@@ -179,7 +196,14 @@ import { ResetPasswordPage } from '../pages/reset-password/reset-password';
     SubmissionListPage,
     UserLoginPage,
     ForgotPasswordPage,
-    ResetPasswordPage
+    ResetPasswordPage,
+    DashboardPage,
+    ProgramListingPage,
+
+    ObservationReportsPage,
+    RoleListingPage,
+    ReportEntityListingPage,
+    ObservationEditPage
   ],
   providers: [
     StatusBar,
@@ -225,10 +249,12 @@ import { ResetPasswordPage } from '../pages/reset-password/reset-password';
     IOSFilePicker,
     FileOpener,
     HintProvider,
-
+    TextToSpeech,
     Media,
     ObservationServiceProvider,
     DownloadAndPreviewProvider,
+    UpdateTrackerProvider,
+    TextToSpeechProvider,
   ]
 })
 export class AppModule { }

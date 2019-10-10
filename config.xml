@@ -158,7 +158,6 @@
     <plugin name="cordova-plugin-photo-library" spec="2.2.1">
         <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="To choose photos" />
     </plugin>
-    <allow-navigation href="http://localhost:8100" sessionid="e99c6de3" />
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="7.1.4" />
     <engine name="ios" spec="^5.0.1" />
