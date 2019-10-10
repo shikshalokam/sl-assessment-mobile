@@ -20,6 +20,7 @@ export class GenericMenuPopOverComponent {
   showEdit = false;
   assessmentIndex;
   assessmentName;
+  isObservation;
   constructor(
     private appCtrl: App,
     private navParams: NavParams,
@@ -31,9 +32,10 @@ export class GenericMenuPopOverComponent {
     this.showEdit = this.navParams.get('showEdit')
     this.assessmentIndex = this.navParams.get('assessmentIndex')
     this.assessmentName = this.navParams.get('assessmentName');
+    this.isObservation = this.navParams.get('isObservation');
   }
   goToAbout() {
-    this.appCtrl.getRootNav().push(AssessmentAboutPage, { assessmentIndex: this.assessmentIndex, assessmentName: this.assessmentName })
+    this.appCtrl.getRootNav().push(AssessmentAboutPage, { assessmentIndex: this.assessmentIndex, assessmentName: this.assessmentName, isObservation: this.isObservation})
     this.viewCntrl.dismiss();
 
   }

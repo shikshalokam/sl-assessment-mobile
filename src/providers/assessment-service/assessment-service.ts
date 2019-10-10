@@ -27,18 +27,19 @@ export class AssessmentServiceProvider {
 
 
 
-  getAssessmentsApi(assessmentType) {
+  getAssessmentsApi(assessmentType, noLoader?:boolean) {
     return new Promise((resolve, reject) =>{
 
     // console.log(assessmentType + " list api called");
     const url = AppConfigs.assessmentsList.listOfAssessment + assessmentType;
     // let programs;
     // console.log(url)
-    this.utils.startLoader()
+    !noLoader ? this.utils.startLoader() : null
+    
     //console.log("List api called ")
     this.apiService.httpGet(url, successData => {
       // console.log("success data")
-      this.utils.stopLoader();
+      !noLoader ? this.utils.stopLoader() : null
       // console.log(JSON.stringify(successData))
       for (const program of successData.result) {
         for (const solution of program.solutions) {
@@ -55,7 +56,9 @@ export class AssessmentServiceProvider {
       resolve(successData.result)
     }, error => {
       //console.log("error in list of assessment")
-      this.utils.stopLoader();
+      // this.utils.stopLoader();
+      !noLoader ? this.utils.stopLoader() : null
+
       reject();
 
     });

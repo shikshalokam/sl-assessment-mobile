@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, Events, Platform } from 'ionic-angular';
+import { NavController, Events, Platform , PopoverController} from 'ionic-angular';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { Network } from '@ionic-native/network';
 import { InstitutionsEntityList } from '../institutions-entity-list/institutions-entity-list';
@@ -14,6 +14,9 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 import { UtilsProvider } from '../../providers/utils/utils';
 import { RoleListingPage } from '../role-listing/role-listing';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
+import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
+import { ObservationDetailsPage } from '../observation-details/observation-details';
+import { GenericMenuPopOverComponent } from '../../components/generic-menu-pop-over/generic-menu-pop-over';
 
 declare var cordova: any;
 
@@ -70,10 +73,14 @@ export class HomePage {
   canViewLoad: boolean = false;
   pages;
   recentlyModifiedAssessment: any;
+  institutionalAssessments ;
+  individualAssessments;
+  observations;
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
     private network: Network,
     private evdnsServ :EvidenceProvider,
+    private popoverCtrl : PopoverController,
     private media: Media,
     private currentUserProvider: CurrentUserProvider,
     private localStorageProvider: LocalStorageProvider,
@@ -84,7 +91,8 @@ export class HomePage {
     private apiService: ApiProvider,
     private localStorage: LocalStorageProvider,
     private apiProvider: ApiProvider,
-    private utils: UtilsProvider
+    private utils: UtilsProvider,
+    private assessmentService: AssessmentServiceProvider
   ) {
 
 
@@ -125,15 +133,113 @@ export class HomePage {
    
   }
 
+  getIndividualAssessmentFromLocal() {
+    this.localStorage.getLocalStorage('individualList').then(data => {
+      if (data) {
+        this.individualAssessments = data;
+      } else {
+        this.getIndividualAssessmentsApi();
+      }
+    }).catch(error => {
+      this.getIndividualAssessmentsApi();
+    })
+  }
+
+  getInstitutionalAssessmentsFromLocal() {
+    this.localStorage.getLocalStorage('institutionalList').then(data => {
+      if (data) {
+        this.institutionalAssessments = data;
+
+      } else {
+        this.getInstitutionalAssessmentsApi();
+      }
+    }).catch(error => {
+      this.getInstitutionalAssessmentsApi();
+    })
+  }
+
+
+
+  getIndividualAssessmentsApi() {
+    this.assessmentService.getAssessmentsApi ('individual', true).then(programs =>{
+      this.individualAssessments = programs;
+    }).catch(error=>{
+    })
+    
+
+  }
+
+  getInstitutionalAssessmentsApi() {
+    this.assessmentService.getAssessmentsApi('institutional', true).then(programs => {
+      this.institutionalAssessments = programs;
+    }).catch(error=>{
+    })
+  }
+
+  getObservationListFromLocal() {
+    this.localStorage.getLocalStorage('createdObservationList').then(data => {
+      if (data) {
+        this.observations = data;
+      } else {
+        this.getObservationsFromApi();
+      }
+
+    }).catch(error => {
+      this.getObservationsFromApi();
+
+    })
+  }
+
+  navigateToCreatedObservationDetails(index) {
+    this.navCtrl.push(ObservationDetailsPage, { selectedObservationIndex: index })
+
+  }
+
+  getObservationsFromApi() {
+    this.apiProvider.httpGet(AppConfigs.cro.observationList, success => {
+      this.observations = success.result;
+      this.observations.forEach(element => {
+        if (element.entities.length >= 0) {
+          element.entities.forEach(entity => {
+            // entity.downloaded = false;
+            if(entity.submissions && entity.submissions.length > 0){
+              entity.submissions.forEach( submission =>{
+                submission['downloaded'] = false;
+              })
+            }
+          });
+        }
+      });
+      this.localStorage.setLocalStorage('createdObservationList', this.observations);
+    }, error => {
+     })
+  }
+
+  openMenu(event , index) {
+    // this.assessmentService.openMenu(event, this.programs, false);
+    console.log("open menu")
+    // let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true ,showEdit : true , assessmentIndex : index , assessmentName :'createdObservationList'})
+    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { "isObservation": true,"showAbout" : true ,"showEdit" : true , "assessmentIndex" : index , "assessmentName" :'createdObservationList'})
+  
+    popover.present(
+      {ev:event}
+      );
+      
+  }
+
   ionViewDidEnter(){
     console.log("home page enter")
-    this.localStorage.getLocalStorage('recentlyModifiedAssessment').then(succcess=>{
-      this.recentlyModifiedAssessment = succcess;
-      console.log(JSON.stringify(this.recentlyModifiedAssessment));
-      console.log("LAST MODEFIED AT ARRAY")
-    }).catch(error =>{
-      console.log("LAST MODEFIED AT ARRAY IS BLANK")
-    });
+    // this.localStorage.getLocalStorage('recentlyModifiedAssessment').then(succcess=>{
+    //   this.recentlyModifiedAssessment = succcess;
+    //   console.log(JSON.stringify(this.recentlyModifiedAssessment));
+    //   console.log("LAST MODEFIED AT ARRAY")
+    // }).catch(error =>{
+    //   console.log("LAST MODEFIED AT ARRAY IS BLANK")
+    // });
+
+    this.getInstitutionalAssessmentsFromLocal();
+    this.getIndividualAssessmentFromLocal();
+    this.getObservationListFromLocal();
   }
   getRoles() {
     // return new Promise((resolve, reject) => {
