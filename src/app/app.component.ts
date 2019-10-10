@@ -22,6 +22,7 @@ import { ApiProvider } from '../providers/api/api';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { RoleListingPage } from '../pages/role-listing/role-listing';
 import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
+import * as Highcharts from 'highcharts';
 
 
 @Component({
@@ -135,6 +136,9 @@ export class MyApp {
     })
 
     platform.ready().then(() => {
+      Highcharts.setOptions({
+        colors: ['#D35400','#F1C40F', '#3498DB', '#8E44AD', '#154360', '#145A32']
+      })
 
       // this.goToPage(0);
       // console.log("go to page")
