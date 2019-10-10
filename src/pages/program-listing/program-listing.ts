@@ -47,7 +47,7 @@ export class ProgramListingPage {
       this.utils.openToast(error)
     }, { "dhiti": true })
   }
-  getReportsAccordingToSolution(programId , solutionId){
-    this.navCtrl.push(DashboardPage , { "entity" :this.entity,"programId" : programId , "solutionId":solutionId} )
+  getReportsAccordingToSolution(programId , solutionId, solutionName){
+    this.navCtrl.push(DashboardPage , { "entity" :this.entity,"programId" : programId , "solutionId":solutionId, solutionName:solutionName} )
   }
 }

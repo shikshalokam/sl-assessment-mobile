@@ -73,7 +73,7 @@
     <h2 margin>{{'headings.myActiveAssessment' | translate}}</h2>
     <!--institutional assessment  List -->
 
-    <program-listing *ngIf="institutionalAssessments" [programList]="institutionalAssessments" [homePage]="true"
+    <program-listing *ngIf="institutionalAssessments?.length" [programList]="institutionalAssessments" [homePage]="true"
       [assessmentlocalStorageName]="institutionalList" [entityType]="'institutional'" (refreshEvent)="refresh($event)">
     </program-listing>
 
