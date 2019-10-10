@@ -54,6 +54,9 @@ export class EntityListPage {
     console.log(selectedSchools.length);
     this.viewCntrl.dismiss(selectedSchools);
   }
+  clearEntity(){
+    this.selectableList = []
+  }
   cancel() {
     this.viewCntrl.dismiss();
   }
@@ -64,20 +67,20 @@ export class EntityListPage {
   }
   search(event?) {
     this.searchValue = event ? event : this.searchValue;
-    this.utils.startLoader();
+    event ? this.utils.startLoader() : "";
     this.page = event ? this.page : this.page + 1;
-    this.apiProviders.httpGet(this.searchUrl + this.observationId + "?search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
-      this.arr = event ? [] : this.arr;
+    this.apiProviders.httpGet(this.searchUrl +"?observationId="+ this.observationId + "&search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
+      this.selectableList = event ? [] : this.selectableList;
       for (let i = 0; i < success.result[0].data.length; i++) {
         success.result[0].data[i].isSelected = success.result[0].data[i].selected;
         success.result[0].data[i].preSelected = success.result[0].data[i].selected ? true : false;
       }
       this.totalCount = success.result[0].count;
       this.selectableList = [... this.selectableList, ...success.result[0].data]
-      this.utils.stopLoader();
+      event ? this.utils.stopLoader() : "";
     }, error => {
-      this.utils.stopLoader();
-    })
+      event ? this.utils.stopLoader() : "";
+    },{version:"v2"})
   }
 
 
