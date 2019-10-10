@@ -30,5 +30,29 @@ page-home {
     .arrow-forward{
         font-size: 30px;
     }
+    .bold {
+        font-size: 16px !important;
+        font-weight: 500 !important;
+    }
+    .msgContainer {
+        height: 50px;
+        justify-content: center;
+    }
+    .downloadIcon {
+        color: $primary-color;
+        font-size: 30px;
+    }
+    .downloadedIcon {
+        color: $green-color;
+    }
+
+    .menuIcon {
+        font-size: 25px;
+        padding: 0 15px;
+    }
+    .observationIcon {
+        font-size: 25px;
+        margin-right: 10px;
+    }
 
 }

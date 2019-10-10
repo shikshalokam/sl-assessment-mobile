@@ -7,6 +7,7 @@ import { DownloadAndPreviewProvider } from '../../providers/download-and-preview
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { DatePipe } from '@angular/common';
 
 declare var cordova: any;
 @Component({
@@ -30,6 +31,7 @@ export class ObservationReportsPage {
     public navParams: NavParams, private platform: Platform,
     private fileTransfer: FileTransfer, private utils: UtilsProvider,
     private androidPermissions: AndroidPermissions,
+    private datepipe: DatePipe,
     private apiService: ApiProvider, private file: File) {
   }
 
@@ -84,11 +86,11 @@ export class ObservationReportsPage {
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(status => {
       console.log(JSON.stringify(status))
       if (status.hasPermission) {
-        this.checkForSubmissionDoc(this.fileName)
+        this.getObservationReportUrl()
       } else {
         this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(success => {
           if (success.hasPermission) {
-            this.checkForSubmissionDoc(this.fileName)
+            this.getObservationReportUrl()
           }
         }).catch(error => {
           console.log(JSON.stringify(error))
@@ -97,31 +99,32 @@ export class ObservationReportsPage {
     })
   }
 
-  checkForSubmissionDoc(submissiond) {
-    console.log("Check for file")
-    this.file.checkFile(this.appFolderPath, this.fileName).then(success => {
-      console.log("Check for file available")
-      this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
-    }).catch(error => {
-      console.log("Check for file not available")
-      // this.getObservationReports(true)
-      this.getObservationReportUrl();
-    })
-  }
+  // checkForSubmissionDoc(submissiond) {
+  //   console.log("Check for file")
+  //   this.file.checkFile(this.appFolderPath, this.fileName).then(success => {
+  //     console.log("Check for file available")
+  //     this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
+  //   }).catch(error => {
+  //     console.log("Check for file not available")
+  //     // this.getObservationReports(true)
+  //     this.getObservationReportUrl();
+  //   })
+  // }
 
   getObservationReportUrl() {
     this.utils.startLoader();
     // + "type=submission&"
     let url = AppConfigs.observationReports.getReportsPdfUrls ;
+    const timeStamp = '_'+this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a')
     if (this.submissionId) {
       url = url + "submissionId="+ this.submissionId;
-      this.fileName = this.submissionId + ".pdf";
+      this.fileName = this.submissionId+timeStamp + ".pdf";
     } else if (!this.submissionId && !this.entityId) {
       url = url + "observationId=" + this.observationId
-      this.fileName = this.observationId + ".pdf";
+      this.fileName = this.observationId +timeStamp+ ".pdf";
     } else {
       url = url + "entityId=" + this.entityId + "&observationId=" + this.observationId
-      this.fileName = this.entityId + '_' + this.observationId + ".pdf";
+      this.fileName = this.entityId + '_' + this.observationId +timeStamp+ ".pdf";
     }
 
     this.apiService.httpGet(url, success => {
@@ -142,12 +145,12 @@ export class ObservationReportsPage {
   downloadSubmissionDoc(fileRemoteUrl) {
     console.log("file dowload")
     this.utils.startLoader();
-    const fileName = "submissionDoc_" + this.fileName + ".pdf";
+    const fileName = "submissionDoc_" + this.fileName;
     const fileTransfer: FileTransferObject = this.fileTransfer.create();
 
-    fileTransfer.download(fileRemoteUrl, this.appFolderPath + this.fileName).then(success => {
+    fileTransfer.download(fileRemoteUrl, this.appFolderPath + fileName).then(success => {
       console.log("file dowload success")
-      this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
+      this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + fileName)
       this.utils.stopLoader();
       console.log(JSON.stringify(success))
     }).catch(error => {
