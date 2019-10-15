@@ -43,7 +43,9 @@ export class DashboardPage {
     private fileTransfer: FileTransfer,
     private file: File,
     private datepipe: DatePipe,
+    private platform: Platform,
     private apiProvider: ApiProvider) {
+    this.isIos = this.platform.is('ios')
   }
 
   ionViewDidLoad() {
@@ -54,7 +56,7 @@ export class DashboardPage {
     this.solutionId = this.navParams.get('solutionId');
     this.solutionName = this.navParams.get('solutionName')
     this.getEntityRequestObject();
-    this.appFolderPath = this.isIos ? cordova.file.externalRootDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
+    this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
 
   }
   getEntityRequestObject() {
@@ -67,7 +69,7 @@ export class DashboardPage {
       "entityType": this.entity.entityType,
       "immediateChildEntityType": this.entity.immediateSubEntityType ? this.entity.immediateSubEntityType : this.entity.immediateChildEntityType ? this.entity.immediateChildEntityType : ""
     }
-    this.fileName = "submissionDoc_"+this.payload.programId+"_"+this.payload.entityId+"_"+this.payload.entityType+'.pdf';
+    this.fileName = "submissionDoc_" + this.payload.programId + "_" + this.payload.entityId + "_" + this.payload.entityType + '.pdf';
     this.getEntityReports(this.payload);
   }
 
@@ -124,7 +126,7 @@ export class DashboardPage {
   getAssessmentPdfReportUrl() {
     this.utils.startLoader();
     let url = AppConfigs.roles.getAssessmentReportPdf;
-    this.apiProvider.httpPost(url, this.payload,success => {
+    this.apiProvider.httpPost(url, this.payload, success => {
       this.utils.stopLoader();
       if (success.status === 'success' && success.pdfUrl) {
         this.downloadSubmissionDoc(success.pdfUrl);
@@ -141,9 +143,18 @@ export class DashboardPage {
 
   downloadSubmissionDoc(fileRemoteUrl) {
     this.utils.startLoader();
-    const fileName = this.solutionName.replace(/\s/g,'') +"_"+ this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a') + ".pdf";
-    const fileTransfer: FileTransferObject = this.fileTransfer.create();
+    if (this.isIos) {
+      this.checkForDowloadDirectory(fileRemoteUrl)
+    } else {
+      this.filedownload(fileRemoteUrl)
+    }
 
+  }
+
+
+  filedownload(fileRemoteUrl) {
+    const fileName = this.solutionName.replace(/\s/g, '') + "_" + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a') + ".pdf";
+    const fileTransfer: FileTransferObject = this.fileTransfer.create();
     fileTransfer.download(fileRemoteUrl, this.appFolderPath + fileName).then(success => {
       console.log("file dowload success")
       this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + fileName)
@@ -155,6 +166,27 @@ export class DashboardPage {
       this.utils.stopLoader();
       console.log(JSON.stringify(error))
     })
+  }
+
+  checkForDowloadDirectory(fileRemoteUrl) {
+    console.log("check for download")
+    this.file.checkDir(this.file.documentsDirectory, 'Download').then(success => {
+      this.filedownload(fileRemoteUrl);
+    }).catch(err => {
+      console.log("check for download")
+
+      this.file.createDir(cordova.file.documentsDirectory, 'Download', false).then(success => {
+        this.fileName = 'record' + new Date().getDate() + new Date().getMonth() + new Date().getFullYear() + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds() + '.mp3';
+        // this.filesPath = this.file.documentsDirectory + "images/" + this.fileName;
+        // this.audio = this.media.create(this.filesPath);
+        // this.audio.startRecord();
+        // this.startTimer();
+        this.filedownload(fileRemoteUrl);
+
+      }, error => {
+        console.log(JSON.stringify(error))
+      })
+    });
   }
 
 }
