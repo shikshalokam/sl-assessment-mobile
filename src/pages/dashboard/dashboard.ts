@@ -176,7 +176,7 @@ export class DashboardPage {
       console.log("check for download")
 
       this.file.createDir(cordova.file.documentsDirectory, 'Download', false).then(success => {
-        this.fileName = 'record' + new Date().getDate() + new Date().getMonth() + new Date().getFullYear() + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds() + '.mp3';
+        // this.fileName = 'record' + new Date().getDate() + new Date().getMonth() + new Date().getFullYear() + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds() + '.mp3';
         // this.filesPath = this.file.documentsDirectory + "images/" + this.fileName;
         // this.audio = this.media.create(this.filesPath);
         // this.audio.startRecord();
