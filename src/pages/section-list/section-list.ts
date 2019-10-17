@@ -74,7 +74,7 @@ export class SectionListPage {
       this.sectionData = data;
       let assessmentDetails = this.updateTracker.getLastModifiedInSection(data,this.selectedEvidenceIndex ,this.submissionId,this.recentlyUpdatedEntity);
       this.currentEvidence = assessmentDetails['assessment']['evidences'][this.selectedEvidenceIndex];
-      console.log(JSON.stringify(this.currentEvidence))
+      // console.log(JSON.stringify(this.currentEvidence))
       this.evidenceSections = this.currentEvidence['sections'];
       this.selectedEvidenceName = this.currentEvidence['name'];
       this.checkForEvidenceCompletion();
@@ -109,17 +109,17 @@ export class SectionListPage {
     for (const section of this.evidenceSections) {
       allAnswered = true;
       for (const question of section.questions) {
-        if( question.responseType === 'pageQuestions'){
-          for (const questions of question.pageQuestions)
-          {
-              if(!questions.isCompleted){
-                allAnswered = false
-                break;
-              }
-              break;
-            }    
-            break;    
-        }else  if (!question.isCompleted) {
+        // if( question.responseType === 'pageQuestions'){
+        //   for (const questions of question.pageQuestions){
+        //       if(!questions.isCompleted){
+        //         allAnswered = false
+        //         break;
+        //       }
+        //       // break;
+        //     }    
+        //     break;    
+        // }else  
+        if (!question.isCompleted) {
           allAnswered = false;
           break;
         }
@@ -147,7 +147,7 @@ export class SectionListPage {
   }
 
   goToQuestioner(selectedSection): void {
-    console.log(this.submissionId + "sectionlist")
+    // console.log(this.submissionId + "sectionlist")
     const params = {
       _id: this.submissionId,
       name: this.entityName,
@@ -169,7 +169,7 @@ export class SectionListPage {
       let translateObject;
       this.translate.get(['actionSheet.confirm', 'actionSheet.yes', 'actionSheet.no', 'actionSheet.slowInternet']).subscribe(translations => {
         translateObject = translations;
-        console.log(JSON.stringify(translations))
+        // console.log(JSON.stringify(translations))
       })
       let alert = this.alertCtrl.create({
         title: translateObject['actionSheet.confirm'],

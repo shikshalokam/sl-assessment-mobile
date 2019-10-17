@@ -15,6 +15,7 @@ import { FileOpener } from '@ionic-native/file-opener';
 import { MediaObject, Media } from '@ionic-native/media';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 declare var cordova: any;
 
@@ -82,6 +83,7 @@ export class ImageUploadComponent implements OnInit {
     private fileOpener: FileOpener,
     private fileChooser: FileChooser,
     private androidPermissions: AndroidPermissions,
+    private diagnostic: Diagnostic,
     private media: Media,
     private alertCtrl: AlertController) {
     console.log('Hello ImageUploadComponent Component');
@@ -403,17 +405,21 @@ export class ImageUploadComponent implements OnInit {
         this.fileName = 'record' + new Date().getDate() + new Date().getMonth() + new Date().getFullYear() + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds() + '.mp3';
         this.filesPath = this.file.documentsDirectory + "images/" + this.fileName;
         this.file.createFile(this.file.tempDirectory, this.fileName, true).then(() => {
-          this.startTimer();
           this.mediaObject = this.media.create(this.file.tempDirectory.replace(/^file:\/\//, '') + this.fileName);
           this.mediaObject.startRecord();
+          this.startTimer();
+        }).catch(error => {
+          this.utils.openToast("Something went wrong");
         });
 
       }).catch(err => {
         this.file.createDir(cordova.file.documentsDirectory, 'images', false).then(success => {
           this.fileName = 'record' + new Date().getDate() + new Date().getMonth() + new Date().getFullYear() + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds() + '.mp3';
           this.filesPath = this.file.documentsDirectory + "images/" + this.fileName;
-          this.audio = this.media.create(this.filesPath);
-          this.audio.startRecord();
+          this.mediaObject = this.media.create(this.file.tempDirectory.replace(/^file:\/\//, '') + this.fileName);
+          this.mediaObject.startRecord();
+          // this.audio = this.media.create(this.filesPath);
+          // this.audio.startRecord();
           this.startTimer();
         }, error => { })
       });
@@ -460,18 +466,47 @@ export class ImageUploadComponent implements OnInit {
 
   }
   checkRecordMediaPermission() {
-    const permissionsArray = [
-      this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE,
-      this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
-      this.androidPermissions.PERMISSION.RECORD_AUDIO
-    ]
-    this.androidPermissions.requestPermissions(permissionsArray).then(success => {
-      success.hasPermission ? this.startRecord() : this.utils.openToast("Please accept the permissions to use this feature")
+    this.diagnostic.isMicrophoneAuthorized().then(success => {
+      console.log(JSON.stringify(success));
+      this.diagnostic.requestMicrophoneAuthorization().then(success => {
+        console.log("inside success of permission ")
+        console.log(success === 'true')
+        console.log(success);
+        if(success === 'authorized' || success === 'GRANTED'){
+          const permissionsArray = [
+            this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE,
+            this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
+            this.androidPermissions.PERMISSION.RECORD_AUDIO
+          ]
+          this.androidPermissions.requestPermissions(permissionsArray).then(successResult => {
+            successResult.hasPermission ? this.startRecord() : this.utils.openToast("Please accept the permissions to use this feature")
+          }).catch(error => {
+            this.utils.openToast("Please accept the permissions to use this feature")
+          })
+        } else{
+          this.utils.openToast("Please accept the permissions to use this feature")
+        }
+
+      }).catch(error => {
+        console.log("Please accept the permissions to use this feature")
+      })
+
     }).catch(error => {
-      this.utils.openToast("Please accept the permissions to use this feature")
+      console.log(JSON.stringify(error))
     })
+    // const permissionsArray = [
+    //   this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE,
+    //   this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
+    //   this.androidPermissions.PERMISSION.RECORD_AUDIO
+    // ]
+    // this.androidPermissions.requestPermissions(permissionsArray).then(success => {
+    //   success.hasPermission ? this.startRecord() : this.utils.openToast("Please accept the permissions to use this feature")
+    // }).catch(error => {
+    //   this.utils.openToast("Please accept the permissions to use this feature")
+    // })
 
   }
+
   stopRecord() {
     this.recording = false;
     this.timeLeft = 0;
