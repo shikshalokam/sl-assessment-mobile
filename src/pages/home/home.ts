@@ -217,7 +217,7 @@ export class HomePage {
 
   openMenu(event , index) {
     // this.assessmentService.openMenu(event, this.programs, false);
-    console.log("open menu")
+    // console.log("open menu")
     // let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true ,showEdit : true , assessmentIndex : index , assessmentName :'createdObservationList'})
     let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { "isObservation": true,"showAbout" : true ,"showEdit" : true , "assessmentIndex" : index , "assessmentName" :'createdObservationList'})
   
@@ -228,7 +228,7 @@ export class HomePage {
   }
 
   ionViewDidEnter(){
-    console.log("home page enter")
+    // console.log("home page enter")
     // this.localStorage.getLocalStorage('recentlyModifiedAssessment').then(succcess=>{
     //   this.recentlyModifiedAssessment = succcess;
     //   console.log(JSON.stringify(this.recentlyModifiedAssessment));
@@ -246,8 +246,9 @@ export class HomePage {
     let currentUser = this.currentUserProvider.getCurrentUserData();
     this.apiProvider.httpGet(AppConfigs.roles.getProfile + currentUser.sub, success => {
       this.profileRoles = success.result;
-      this.localStorage.setLocalStorage('profileRole', this.profileRoles)
-      if (success.result.roles.length > 0) {
+      this.localStorage.setLocalStorage('profileRole', this.profileRoles);
+      console.log(JSON.stringify(success))
+      if (success.result.roles && success.result.roles.length > 0) {
         this.dashboardEnable = true;
         this.events.publish('multipleRole', true);
       }
@@ -291,15 +292,15 @@ export class HomePage {
       submissionId:submissionId,
       isObservation : assessment.isObservation
     }
-    console.log("go to ecm called" + submissionId );
+    // console.log("go to ecm called" + submissionId );
 
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
 
-      console.log(JSON.stringify(successData));
+      // console.log(JSON.stringify(successData));
       //console.log("go to ecm called");
 
       // successData = this.updateTracker.getLastModified(successData , submissionId)
-      console.log("after modification")
+      // console.log("after modification")
       if (successData.assessment.evidences.length > 1) {
 
         this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading ,recentlyUpdatedEntity : recentlyUpdatedEntity})

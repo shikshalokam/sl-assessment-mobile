@@ -93,7 +93,7 @@ export class ImageListingPage {
        
       }
     }
-    console.log(JSON.stringify(imageArray));
+    // console.log(JSON.stringify(imageArray));
     this.uploadImages = imageArray;
     this.checkIfEcmSumittedByUser();
 
@@ -263,7 +263,7 @@ export class ImageListingPage {
     this.utils.startLoader('Please wait while submitting')
     console.log("submitting");
     const payload = this.constructPayload();
-    console.log(JSON.stringify(payload));
+    // console.log(JSON.stringify(payload));
     const submissionId = this.submissionId;
     const url = (this.schoolData.observation ? AppConfigs.cro.makeSubmission : AppConfigs.survey.submission) + submissionId + '/';
     this.apiService.httpPost(url, payload, response => {
@@ -285,6 +285,12 @@ export class ImageListingPage {
     }, error => {
       this.utils.stopLoader();
     })
+  }
+
+  ionViewDidLeave(){
+    this.schoolData.observation ? 
+    this.events.unsubscribe('updateSubmissionStatus'): 
+    null
   }
 
   constructPayload(): any {
@@ -362,7 +368,7 @@ export class ImageListingPage {
             obj[key] = question.payload[key];
           }
           evidence.answers[obj.qid] = obj;
-          console.log("i m here")
+          // console.log("i m here")
         }
        
       }
@@ -373,7 +379,7 @@ export class ImageListingPage {
 
   pullOutPageQuestion(){
     console.log("Pull Out page Questions");
-    console.log(JSON.stringify(this.evidenceSections))
+    // console.log(JSON.stringify(this.evidenceSections))
     let sections = this.evidenceSections ;
       sections.forEach((section,sectionIndex) => {
     let questionsArray = [];
@@ -392,7 +398,7 @@ export class ImageListingPage {
     });
     
     console.log("After Pull Out page Questions");
-    console.log(JSON.stringify(this.evidenceSections))
+    // console.log(JSON.stringify(this.evidenceSections))
     return this.evidenceSections;
   }
 

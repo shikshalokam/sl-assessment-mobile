@@ -60,7 +60,7 @@ export class UtilsProvider {
 
   setCurrentimageFolderName(evidenceId, schoolId) {
     this.imagePath = 'images_' + evidenceId + '_' + schoolId;
-    console.log("Image path: " + this.imagePath)
+    // console.log("Image path: " + this.imagePath)
   }
 
   setLocalImages(images, isGeneralQuestion) {
@@ -113,15 +113,19 @@ export class UtilsProvider {
     return true
   }
   isPageQuestionComplete(question){
+    // console.log(question.pageQuestions.length)
     for (const element of question.pageQuestions) {
 
-      console.log(element.responseType)
-      if(element.responseType.toLowerCase() === 'matrix'){
-        if(!this.isMatrixQuestionComplete(element)){
-          return  false;
-         }
-      }else if(!element.isCompleted){
-       return  false;
+      // console.log(element.responseType)
+      // if(element.responseType.toLowerCase() === 'matrix'){
+      //   if(!this.isMatrixQuestionComplete(element)){
+      //     return  false;
+      //    }
+      // }else if(!this.isQuestionComplete(element)){
+      //  return  false;
+      // }
+      if(!element.isCompleted) {
+        return false
       }
     }
     return true;
@@ -144,7 +148,7 @@ export class UtilsProvider {
   }
 
   createFormGroup(formFields): any {
-    console.log(JSON.stringify(formFields));
+    // console.log(JSON.stringify(formFields));
     let formGrp = {};
     formFields.forEach(formfield => {
       formGrp[formfield.field] = formfield.validation.required ? new FormControl(formfield.value || "", Validators.required) : new FormControl(formfield.value || "");
