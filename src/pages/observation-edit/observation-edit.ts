@@ -21,6 +21,7 @@ export class ObservationEditPage {
   data;
   assessmentIndex;
   assessmentName;
+  allObservations;
   formGroup: FormGroup;
   formFields = [
     {
@@ -62,7 +63,8 @@ export class ObservationEditPage {
 
   ionViewDidLoad() {
     this.localStorage.getLocalStorage(this.assessmentName).then(success => {
-      this.data = success[this.assessmentIndex];
+      this.allObservations = success;
+      this.data = this.allObservations[this.assessmentIndex];
       this.formFields[0].value = this.data.name;
       this.formFields[1].value = this.data.description;
       this.formGroup = this.utils.createFormGroup(this.formFields)
@@ -78,9 +80,9 @@ export class ObservationEditPage {
       this.utils.startLoader();
       this.apiService.httpPost(AppConfigs.cro.observationUpdate + this.data._id, this.formGroup.value, success => {
         this.utils.stopLoader();
-        this.data.name = this.formGroup.value.title;
+        this.data.name = this.formGroup.value.name;
         this.data.description = this.formGroup.value.description;
-        this.localStorage.setLocalStorage(this.assessmentName, this.data);
+        this.localStorage.setLocalStorage(this.assessmentName, this.allObservations);
         this.navCtrl.pop();
       }, error => {
         this.utils.stopLoader();
