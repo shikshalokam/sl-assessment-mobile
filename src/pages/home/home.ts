@@ -17,6 +17,7 @@ import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { ObservationDetailsPage } from '../observation-details/observation-details';
 import { GenericMenuPopOverComponent } from '../../components/generic-menu-pop-over/generic-menu-pop-over';
+import { ObservationProvider } from '../../providers/observation/observation';
 
 declare var cordova: any;
 
@@ -76,6 +77,7 @@ export class HomePage {
   institutionalAssessments ;
   individualAssessments;
   observations;
+  observationSubscription
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
     private network: Network,
@@ -92,12 +94,13 @@ export class HomePage {
     private localStorage: LocalStorageProvider,
     private apiProvider: ApiProvider,
     private utils: UtilsProvider,
-    private assessmentService: AssessmentServiceProvider
+    private assessmentService: AssessmentServiceProvider,
+    private observationService: ObservationProvider
   ) {
 
 
     this.isIos = this.platform.is('ios') ? true : false;
-
+    
 
 
   }
@@ -273,7 +276,16 @@ export class HomePage {
   }
 
   ionViewWillLeave() {
+    console.log("inside will leave")
     this.events.unsubscribe('multipleRole');
+    this.observationSubscription ? this.observationSubscription.unsubscribe() : null;
+  }
+
+  ionViewWillEnter() {
+    this.observationSubscription = this.observationService.observationListUpdate.subscribe(success => {
+      this.getObservationsFromApi();
+    }, error => {
+    })
   }
 
 
