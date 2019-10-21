@@ -33,5 +33,5 @@
   </div>
 
 </ion-content>
-<footer-buttons [isFirst]="!start" [isSubmitted]="isCurrentEvidenceSubmitted" [isLast]="questions?.length === end" [completedQuestionCount]="countCompletedQuestion"  [questionCount] ="questions?.length"  (nextAction)="next()" (backAction)="back()">
+<footer-buttons [isFirst]="!start" [enableGps]="captureGpsLocationAtQuestionLevel" [isSubmitted]="isCurrentEvidenceSubmitted" [isLast]="questions?.length === end" [completedQuestionCount]="countCompletedQuestion"  [questionCount] ="questions?.length"  (nextAction)="next()" (backAction)="back()">
 </footer-buttons>
