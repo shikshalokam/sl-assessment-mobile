@@ -10,14 +10,14 @@ export class FooterButtonsComponent implements OnChanges {
 
   text: string;
   _data;
-  
-  @Input()updatedData;
+
+  @Input() updatedData;
   @Input()
   get data() {
     return this._data
   }
   set data(data) {
-    this._data = {...data};
+    this._data = { ...data };
   }
   @Input() isFirst: boolean;
   @Input() isLast: boolean;
@@ -27,7 +27,7 @@ export class FooterButtonsComponent implements OnChanges {
   @Input() questionCount = 0;
   @Input() isSubmitted;
   @Input() enableGps;
-  
+
   percentage: number = 0;
 
   constructor(private ngps: NetworkGpsProvider, private utils: UtilsProvider) {
@@ -52,24 +52,44 @@ export class FooterButtonsComponent implements OnChanges {
     this.backAction.emit();
   }
 
-  gpsFlowChecks(action,status) {
+  gpsFlowChecks(action, status) {
     // console.log(JSON.stringify(this.data))
-    if(JSON.stringify(this._data.value) === JSON.stringify(this.updatedData.value)){
-    } else {
-      this.utils.startLoader();
-      this.ngps.getGpsStatus().then(success => {
-        this.updatedData.gpsLocation = success;
-        this.utils.stopLoader();
-        if(action ==='next'){
+    if (this.updatedData.responseType.toLowerCase() === 'slider') {
+      if ((!this.updatedData.gpsLocation) || (JSON.stringify(this._data.value) !== JSON.stringify(this.updatedData.value))) {
+        this.getGpsLocation(action, status)
+      } else if (JSON.stringify(this._data.value) === JSON.stringify(this.updatedData.value)) {
+        if (action === 'next') {
           this.next(status);
         } else {
           this.back();
         }
-      }).catch(error => {
-        this.utils.stopLoader();
-      })
+      }
+    } else if (JSON.stringify(this._data.value) !== JSON.stringify(this.updatedData.value)) {
+      this.getGpsLocation(action, status)
+    } else {
+      if (action === 'next') {
+        this.next(status);
+      } else {
+        this.back();
+      }
     }
 
+  }
+
+
+  getGpsLocation(action, status) {
+    this.utils.startLoader();
+    this.ngps.getGpsStatus().then(success => {
+      this.updatedData.gpsLocation = success;
+      this.utils.stopLoader();
+      if (action === 'next') {
+        this.next(status);
+      } else {
+        this.back();
+      }
+    }).catch(error => {
+      this.utils.stopLoader();
+    })
   }
 
 }

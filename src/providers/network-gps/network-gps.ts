@@ -74,7 +74,7 @@ export class NetworkGpsProvider {
             }
             this.geolocation.getCurrentPosition(options).then((resp) => {
               const location = `${resp.coords.latitude},${resp.coords.longitude}`;
-              this.utils.openToast(location)
+              // this.utils.openToast(location)
               resolve(location)
             }).catch((error) => {
               this.utils.openToast("Something went wrnog. Please try again.")
