@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 @Component({
   selector: 'footer-buttons',
@@ -8,7 +9,16 @@ import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 export class FooterButtonsComponent implements OnChanges {
 
   text: string;
-  @Input() data;
+  _data;
+  
+  @Input()updatedData;
+  @Input()
+  get data() {
+    return this._data
+  }
+  set data(data) {
+    this._data = {...data};
+  }
   @Input() isFirst: boolean;
   @Input() isLast: boolean;
   @Output() nextAction = new EventEmitter();
@@ -20,7 +30,7 @@ export class FooterButtonsComponent implements OnChanges {
   
   percentage: number = 0;
 
-  constructor(private ngps: NetworkGpsProvider) {
+  constructor(private ngps: NetworkGpsProvider, private utils: UtilsProvider) {
 
   }
   ngOnChanges() {
@@ -43,15 +53,23 @@ export class FooterButtonsComponent implements OnChanges {
   }
 
   gpsFlowChecks(action,status) {
-    this.ngps.getGpsStatus().then(success => {
-      if(action ==='next'){
-        this.next(status);
-      } else {
-        this.back();
-      }
-    }).catch(error => {
-    })
-  }
+    // console.log(JSON.stringify(this.data))
+    if(JSON.stringify(this._data.value) === JSON.stringify(this.updatedData.value)){
+    } else {
+      this.utils.startLoader();
+      this.ngps.getGpsStatus().then(success => {
+        this.updatedData.gpsLocation = success;
+        this.utils.stopLoader();
+        if(action ==='next'){
+          this.next(status);
+        } else {
+          this.back();
+        }
+      }).catch(error => {
+        this.utils.stopLoader();
+      })
+    }
 
+  }
 
 }
