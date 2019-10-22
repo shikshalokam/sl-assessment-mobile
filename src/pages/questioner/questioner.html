@@ -21,7 +21,8 @@
         <multiple-choice-type [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'multiselect'"></multiple-choice-type>
         <matrix-type [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'">
+          [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" 
+          *ngSwitchCase="'matrix'" [enableGps]="captureGpsLocationAtQuestionLevel">
         </matrix-type>
         <page-question  [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
         [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" *ngSwitchCase="'pagequestions'">
