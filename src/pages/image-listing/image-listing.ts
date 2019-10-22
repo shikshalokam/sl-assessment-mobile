@@ -318,6 +318,7 @@ export class ImageListingPage {
             value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
             remarks: question.remarks,
             fileName: [],
+            gpsLocation: question.gpsLocation,
             payload: {
               question: question.question,
               labels: [],
@@ -416,6 +417,7 @@ export class ImageListingPage {
           value: qst.value,
           remarks: qst.remarks,
           fileName: [],
+          gpsLocation: qst.gpsLocation,
           payload: {
             question: qst.question,
             labels: [],
