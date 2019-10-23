@@ -21,7 +21,8 @@
         <multiple-choice-type [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'multiselect'"></multiple-choice-type>
         <matrix-type [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'">
+          [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" 
+          *ngSwitchCase="'matrix'" [enableGps]="captureGpsLocationAtQuestionLevel">
         </matrix-type>
         <page-question  [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
         [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" *ngSwitchCase="'pagequestions'">
@@ -33,5 +34,5 @@
   </div>
 
 </ion-content>
-<footer-buttons [isFirst]="!start" [isSubmitted]="isCurrentEvidenceSubmitted" [isLast]="questions?.length === end" [completedQuestionCount]="countCompletedQuestion"  [questionCount] ="questions?.length"  (nextAction)="next()" (backAction)="back()">
+<footer-buttons *ngIf="questions" [updatedData]="questions[start]" [data]="questions[start]" [isFirst]="!start" [enableGps]="captureGpsLocationAtQuestionLevel" [isSubmitted]="isCurrentEvidenceSubmitted" [isLast]="questions?.length === end" [completedQuestionCount]="countCompletedQuestion"  [questionCount] ="questions?.length"  (nextAction)="next()" (backAction)="back()">
 </footer-buttons>

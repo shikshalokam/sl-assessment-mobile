@@ -19,7 +19,7 @@
   <ion-toolbar position="bottom">
     <ion-row>
       <ion-col>
-        <button ion-button icon-start color="light" (click)="back()" *ngIf="!isFirst">
+        <button ion-button icon-start color="light" (click)="enableGps ? gpsFlowChecks('back') :back()" *ngIf="!isFirst">
           <ion-icon name="arrow-back"></ion-icon>{{'buttons.back'| translate}}
         </button>
       </ion-col>
@@ -29,9 +29,9 @@
 
       </ion-col>
       <ion-col>
-        <button ion-button icon-end float-right color="light" (click)="next()" *ngIf="!isLast">{{'buttons.next'|
+        <button ion-button icon-end float-right color="light" (click)="enableGps ? gpsFlowChecks('next') : next()" *ngIf="!isLast">{{'buttons.next'|
           translate}} <ion-icon name="arrow-forward"></ion-icon></button>
-        <button ion-button icon-start float-right color="light" (click)="next('completed')" *ngIf="isLast">
+        <button ion-button icon-start float-right color="light" (click)="enableGps ? gpsFlowChecks('next', 'completed') :next('completed')" *ngIf="isLast">
           <ion-icon name="filing"></ion-icon>{{'buttons.save'| translate}}
         </button>
       </ion-col>
