@@ -318,6 +318,7 @@ export class ImageListingPage {
             value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
             remarks: question.remarks,
             fileName: [],
+            gpsLocation: question.gpsLocation,
             payload: {
               question: question.question,
               labels: [],
@@ -385,10 +386,11 @@ export class ImageListingPage {
     let questionsArray = [];
         section.questions.forEach((question) => {
         if(question.responseType === 'pageQuestions'){
-            // question.pageQuestions.forEach(pageQuestion => {
-            //   questionsArray.push(pageQuestion)
-            //   console.log("pageQuestion")
-            // });
+          const parentquestionGpsLocation = question.gpsLocation;
+            question.pageQuestions.forEach(pageQuestion => {
+              pageQuestion.gpsLocation = parentquestionGpsLocation;
+              questionsArray.push(pageQuestion)
+            });
             questionsArray = [ ...questionsArray , ...question.pageQuestions]
         }else{
           questionsArray.push(question)
@@ -416,6 +418,7 @@ export class ImageListingPage {
           value: qst.value,
           remarks: qst.remarks,
           fileName: [],
+          gpsLocation: qst.gpsLocation,
           payload: {
             question: qst.question,
             labels: [],
