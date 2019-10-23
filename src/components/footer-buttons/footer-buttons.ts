@@ -17,7 +17,7 @@ export class FooterButtonsComponent implements OnChanges {
     return this._data
   }
   set data(data) {
-    this._data = { ...data };
+    this._data = JSON.parse(JSON.stringify(data));
   }
   @Input() isFirst: boolean;
   @Input() isLast: boolean;
@@ -53,11 +53,22 @@ export class FooterButtonsComponent implements OnChanges {
   }
 
   gpsFlowChecks(action, status) {
+    // console.log("GPS: "+this.enableGps)
     // console.log(JSON.stringify(this.data))
     if (this.updatedData.responseType.toLowerCase() === 'slider') {
       if ((!this.updatedData.gpsLocation) || (JSON.stringify(this._data.value) !== JSON.stringify(this.updatedData.value))) {
         this.getGpsLocation(action, status)
       } else if (JSON.stringify(this._data.value) === JSON.stringify(this.updatedData.value)) {
+        if (action === 'next') {
+          this.next(status);
+        } else {
+          this.back();
+        }
+      }
+    } else if (this.updatedData.responseType.toLowerCase() === 'pagequestions') {
+      if(((JSON.stringify(this._data.pageQuestions) !== JSON.stringify(this.updatedData.pageQuestions)) && this.utils.isPageQuestionComplete(this.updatedData))) {
+        this.getGpsLocation(action, status)
+      } else {
         if (action === 'next') {
           this.next(status);
         } else {
