@@ -386,10 +386,11 @@ export class ImageListingPage {
     let questionsArray = [];
         section.questions.forEach((question) => {
         if(question.responseType === 'pageQuestions'){
-            // question.pageQuestions.forEach(pageQuestion => {
-            //   questionsArray.push(pageQuestion)
-            //   console.log("pageQuestion")
-            // });
+          const parentquestionGpsLocation = question.gpsLocation;
+            question.pageQuestions.forEach(pageQuestion => {
+              pageQuestion.gpsLocation = parentquestionGpsLocation;
+              questionsArray.push(pageQuestion)
+            });
             questionsArray = [ ...questionsArray , ...question.pageQuestions]
         }else{
           questionsArray.push(question)
