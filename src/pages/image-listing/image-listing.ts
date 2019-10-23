@@ -93,7 +93,7 @@ export class ImageListingPage {
        
       }
     }
-    console.log(JSON.stringify(imageArray));
+    // console.log(JSON.stringify(imageArray));
     this.uploadImages = imageArray;
     this.checkIfEcmSumittedByUser();
 
@@ -263,7 +263,7 @@ export class ImageListingPage {
     this.utils.startLoader('Please wait while submitting')
     console.log("submitting");
     const payload = this.constructPayload();
-    console.log(JSON.stringify(payload));
+    // console.log(JSON.stringify(payload));
     const submissionId = this.submissionId;
     const url = (this.schoolData.observation ? AppConfigs.cro.makeSubmission : AppConfigs.survey.submission) + submissionId + '/';
     this.apiService.httpPost(url, payload, response => {
@@ -285,6 +285,12 @@ export class ImageListingPage {
     }, error => {
       this.utils.stopLoader();
     })
+  }
+
+  ionViewDidLeave(){
+    this.schoolData.observation ? 
+    this.events.unsubscribe('updateSubmissionStatus'): 
+    null
   }
 
   constructPayload(): any {
@@ -312,6 +318,7 @@ export class ImageListingPage {
             value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
             remarks: question.remarks,
             fileName: [],
+            gpsLocation: question.gpsLocation,
             payload: {
               question: question.question,
               labels: [],
@@ -362,7 +369,7 @@ export class ImageListingPage {
             obj[key] = question.payload[key];
           }
           evidence.answers[obj.qid] = obj;
-          console.log("i m here")
+          // console.log("i m here")
         }
        
       }
@@ -373,16 +380,17 @@ export class ImageListingPage {
 
   pullOutPageQuestion(){
     console.log("Pull Out page Questions");
-    console.log(JSON.stringify(this.evidenceSections))
+    // console.log(JSON.stringify(this.evidenceSections))
     let sections = this.evidenceSections ;
       sections.forEach((section,sectionIndex) => {
     let questionsArray = [];
         section.questions.forEach((question) => {
         if(question.responseType === 'pageQuestions'){
-            // question.pageQuestions.forEach(pageQuestion => {
-            //   questionsArray.push(pageQuestion)
-            //   console.log("pageQuestion")
-            // });
+          const parentquestionGpsLocation = question.gpsLocation;
+            question.pageQuestions.forEach(pageQuestion => {
+              pageQuestion.gpsLocation = parentquestionGpsLocation;
+              questionsArray.push(pageQuestion)
+            });
             questionsArray = [ ...questionsArray , ...question.pageQuestions]
         }else{
           questionsArray.push(question)
@@ -392,7 +400,7 @@ export class ImageListingPage {
     });
     
     console.log("After Pull Out page Questions");
-    console.log(JSON.stringify(this.evidenceSections))
+    // console.log(JSON.stringify(this.evidenceSections))
     return this.evidenceSections;
   }
 
@@ -410,6 +418,7 @@ export class ImageListingPage {
           value: qst.value,
           remarks: qst.remarks,
           fileName: [],
+          gpsLocation: qst.gpsLocation,
           payload: {
             question: qst.question,
             labels: [],

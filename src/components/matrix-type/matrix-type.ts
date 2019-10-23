@@ -3,6 +3,7 @@ import { ModalController, AlertController } from 'ionic-angular';
 import { MatrixActionModalPage } from '../../pages/matrix-action-modal/matrix-action-modal';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { TranslateService } from '@ngx-translate/core';
+import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 
 @Component({
   selector: 'matrix-type',
@@ -22,10 +23,13 @@ export class MatrixTypeComponent implements OnInit {
   @Input() generalQuestion: boolean;
   @Input() submissionId: string;
   @Input() inputIndex;
+  @Input() enableGps;
   mainInstance: any;
+  initilaData;
 
   constructor(private modalCntrl: ModalController,
     private translate: TranslateService,
+    private ngps: NetworkGpsProvider,
     private utils: UtilsProvider, private alertCtrl: AlertController) {
     console.log('Hello MatrixTypeComponent Component');
 
@@ -33,6 +37,7 @@ export class MatrixTypeComponent implements OnInit {
 
   ngOnInit() {
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
+    this.initilaData = JSON.parse(JSON.stringify(this.data));
   }
 
   next(status?: any) {
@@ -64,31 +69,54 @@ export class MatrixTypeComponent implements OnInit {
     }
     let matrixModal = this.modalCntrl.create(MatrixActionModalPage, obj);
     matrixModal.onDidDismiss(instanceValue => {
-      if (instanceValue) {
-        this.data.completedInstance = this.data.completedInstance ? this.data.completedInstance : [];
-        this.data.value[i] = instanceValue;
-        console.log("saved isntance" + JSON.stringify(instanceValue));
-        let instanceCompletion = this.checkCompletionOfInstance(this.data.value[i]);
-        if (instanceCompletion) {
-          if (this.data.completedInstance.indexOf(i) < 0) {
-            this.data.completedInstance.push(i);
-          }
-        } else {
-          const index = this.data.completedInstance.indexOf(i);
-          if (index >= 0) {
-            this.data.completedInstance.splice(index, 1);
-          }
-        }
-        this.checkForValidation();
+      if (this.enableGps) {
+        this.checkForGpsLocation(i, instanceValue)
+      } else {
+        this.updateInstance(i, instanceValue)
       }
     })
     matrixModal.present();
   }
 
-  checkCompletionOfInstance(data): boolean {
+  checkForGpsLocation(instanceIndex, instanceValue) {
+    if (JSON.stringify(instanceValue) !== JSON.stringify(this.data.value[instanceIndex]) && this.checkCompletionOfInstance(instanceValue, null)) {
+      this.utils.startLoader();
+      this.ngps.getGpsStatus().then(success => {
+        this.utils.stopLoader();
+        this.updateInstance(instanceIndex, instanceValue, success)
+      }).catch(error => {
+        this.utils.stopLoader();
+        this.utils.openToast("Please try again.");
+      })
+    } else {
+      this.updateInstance(instanceIndex, instanceValue)
+    }
+  }
+
+  updateInstance(instanceIndex, instanceValue, gpsLocation?: any) {
+    if (instanceValue) {
+      this.data.completedInstance = this.data.completedInstance ? this.data.completedInstance : [];
+      this.data.value[instanceIndex] = instanceValue;
+      let instanceCompletion = this.checkCompletionOfInstance(this.data.value[instanceIndex], gpsLocation);
+      if (instanceCompletion) {
+        if (this.data.completedInstance.indexOf(instanceIndex) < 0) {
+          this.data.completedInstance.push(instanceIndex);
+        }
+      } else {
+        const index = this.data.completedInstance.indexOf(instanceIndex);
+        if (index >= 0) {
+          this.data.completedInstance.splice(index, 1);
+        }
+      }
+      this.checkForValidation();
+    }
+  }
+
+  checkCompletionOfInstance(data, gpsLocation): boolean {
     let isCompleted = true;
     for (const question of data) {
       // question.isCompleted = this.utils.isQuestionComplete(question);
+      question.gpsLocation = gpsLocation ? gpsLocation : "";
       if (!question.isCompleted) {
         isCompleted = false;
         return false
@@ -114,9 +142,7 @@ export class MatrixTypeComponent implements OnInit {
     console.log("innn");
     this.data.isCompleted = this.utils.isMatrixQuestionComplete(this.data);
     this.data.endTime = this.data.isCompleted ? Date.now() : "";
-
     this.updateLocalData.emit();
-    console.log(this.data.isCompleted)
   }
 
 

@@ -46,7 +46,9 @@ export class ObservationReportsPage {
       "observationId": this.observationId
     }
     this.isIos = this.platform.is('ios') ? true : false;
-    this.appFolderPath = this.isIos ? cordova.file.externalRootDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
+    this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
+
+    // this.appFolderPath = this.isIos ? cordova.file.externalRootDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
     this.getObservationReports();
   }
 
@@ -143,14 +145,38 @@ export class ObservationReportsPage {
 
 
   downloadSubmissionDoc(fileRemoteUrl) {
-    console.log("file dowload")
-    this.utils.startLoader();
-    const fileName = "submissionDoc_" + this.fileName;
-    const fileTransfer: FileTransferObject = this.fileTransfer.create();
+    // console.log("file dowload")
+    // this.utils.startLoader();
+    // const fileName = "submissionDoc_" + this.fileName;
+    // const fileTransfer: FileTransferObject = this.fileTransfer.create();
 
-    fileTransfer.download(fileRemoteUrl, this.appFolderPath + fileName).then(success => {
+    // fileTransfer.download(fileRemoteUrl, this.appFolderPath + fileName).then(success => {
+    //   console.log("file dowload success")
+    //   this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + fileName)
+    //   this.utils.stopLoader();
+    //   console.log(JSON.stringify(success))
+    // }).catch(error => {
+    //   console.log("file dowload error")
+
+    //   this.utils.stopLoader();
+    //   console.log(JSON.stringify(error))
+    // })
+    this.utils.startLoader();
+    if (this.isIos) {
+      this.checkForDowloadDirectory(fileRemoteUrl)
+    } else {
+      this.filedownload(fileRemoteUrl)
+    }
+
+  }
+
+
+  filedownload(fileRemoteUrl) {
+    // const fileName = this.solutionName.replace(/\s/g, '') + "_" + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a') + ".pdf";
+    const fileTransfer: FileTransferObject = this.fileTransfer.create();
+    fileTransfer.download(fileRemoteUrl, this.appFolderPath + this.fileName).then(success => {
       console.log("file dowload success")
-      this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + fileName)
+      this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
       this.utils.stopLoader();
       console.log(JSON.stringify(success))
     }).catch(error => {
@@ -159,6 +185,28 @@ export class ObservationReportsPage {
       this.utils.stopLoader();
       console.log(JSON.stringify(error))
     })
+  }
+
+
+  checkForDowloadDirectory(fileRemoteUrl) {
+    console.log("check for download")
+    this.file.checkDir(this.file.documentsDirectory, 'Download').then(success => {
+      this.filedownload(fileRemoteUrl);
+    }).catch(err => {
+      console.log("check for download")
+
+      this.file.createDir(cordova.file.documentsDirectory, 'Download', false).then(success => {
+        // this.fileName = 'record' + new Date().getDate() + new Date().getMonth() + new Date().getFullYear() + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds() + '.mp3';
+        // this.filesPath = this.file.documentsDirectory + "images/" + this.fileName;
+        // this.audio = this.media.create(this.filesPath);
+        // this.audio.startRecord();
+        // this.startTimer();
+        this.filedownload(fileRemoteUrl);
+
+      }, error => {
+        console.log(JSON.stringify(error))
+      })
+    });
   }
 
 }
