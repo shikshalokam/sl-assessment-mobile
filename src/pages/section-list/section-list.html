@@ -72,7 +72,7 @@
   </ion-toolbar>
 </ion-footer>
 
-<ion-footer no-shadow *ngIf="sectionData?.observation && !currentEvidence?.isSubmitted">
+<ion-footer no-shadow *ngIf="((allAnsweredForEvidence && !currentEvidence.isSubmitted) || currentEvidence?.enableSubmit)">
   <ion-toolbar position="bottom">
     <ion-row>
       <button ion-button full (click)="previewSubmission()">
