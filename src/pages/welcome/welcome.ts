@@ -6,6 +6,7 @@ import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { AppConfigs } from '../../providers/appConfig';
 
 @Component({
   selector: 'page-welcome',
@@ -28,6 +29,7 @@ export class WelcomePage {
   token: any;
   networkAvailable: boolean;
   subscription: any;
+  appVersion = AppConfigs.appVersion;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage,
     private auth: AuthProvider,
