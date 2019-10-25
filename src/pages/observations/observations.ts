@@ -28,6 +28,7 @@ export class ObservationsPage {
   draftListLength: Number = 0;
   activeListLength: number = 0;
   completeListLength: number = 0;
+  observationSubscription;
 
   constructor(
     public navCtrl: NavController,
@@ -39,15 +40,23 @@ export class ObservationsPage {
     private localStorage: LocalStorageProvider,
     private assessmentService: AssessmentServiceProvider,
     private apiProviders: ApiProvider,
-    private translate : TranslateService,
-    private popoverCtrl : PopoverController,
+    private translate: TranslateService,
+    private popoverCtrl: PopoverController,
     private events: Events,
-    public actionSheetCtrl: ActionSheetController
+    public actionSheetCtrl: ActionSheetController,
+    private observationService: ObservationProvider
   ) {
     this.events.subscribe('draftObservationArrayReload', () => {
       this.getDraftObservation();
     })
-  
+
+    this.observationSubscription = this.observationService.observationListUpdate.subscribe(success => {
+      this.utils.startLoader()
+      this.getCreatedObservation();
+    }, error => {
+
+    })
+
   }
 
   ionViewDidLoad() {
@@ -55,8 +64,12 @@ export class ObservationsPage {
     // console.log("observation Module loaded");
   }
 
+  ionViewWillLeave() {
+    this.observationSubscription ? this.observationSubscription.unsubscribe() : null;
+  }
+
   getFromLocal() {
-      this.utils.startLoader();
+    this.utils.startLoader();
 
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       if (data) {
@@ -73,6 +86,8 @@ export class ObservationsPage {
 
     })
   }
+
+
   ionViewDidEnter() {
     this.getDraftObservation();
     this.getFromLocal();
@@ -101,8 +116,8 @@ export class ObservationsPage {
         if (element.entities.length >= 0) {
           element.entities.forEach(entity => {
             // entity.downloaded = false;
-            if(entity.submissions && entity.submissions.length > 0){
-              entity.submissions.forEach( submission =>{
+            if (entity.submissions && entity.submissions.length > 0) {
+              entity.submissions.forEach(submission => {
                 submission['downloaded'] = false;
               })
             }
@@ -117,7 +132,7 @@ export class ObservationsPage {
     }, error => {
       this.utils.stopLoader();
 
-     })
+    })
 
   }
   countCompleteActive() {
@@ -141,15 +156,15 @@ export class ObservationsPage {
   }
 
   refresh(event?: any) {
-      
-      event ? this.utils.startLoader() :"";
-    this.observationProvider.refreshObservationList(this.createdObservation , event).then(observationList =>{
-      this.createdObservation =observationList;
-      // console.log(JSON.stringify(observationList))
-      event ? this.utils.stopLoader() :"";
 
-    }).catch(()=>{
-      event ? this.utils.stopLoader() :"";
+    event ? this.utils.startLoader() : "";
+    this.observationProvider.refreshObservationList(this.createdObservation, event).then(observationList => {
+      this.createdObservation = observationList;
+      // console.log(JSON.stringify(observationList))
+      event ? this.utils.stopLoader() : "";
+
+    }).catch(() => {
+      event ? this.utils.stopLoader() : "";
 
     });
 
@@ -157,48 +172,48 @@ export class ObservationsPage {
     // const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
     // event ? "" : this.utils.startLoader();
     // this.apiProviders.httpGet(url, successData => {
-      // console.log(JSON.stringify(this.createdObservation))
-      // const downloadedAssessments = []
-      // const currentObservation = successData.result;
-      // for (const observation of this.createdObservation) {
-      //   for (const entity of observation.entities) {
-      //     if (entity.submissionId) {
-      //       downloadedAssessments.push({
-      //         id: entity._id,
-      //         observationId: observation._id,
-      //         submissionId: entity.submissionId
-      //       });
-      //     }
-      //   }
+    // console.log(JSON.stringify(this.createdObservation))
+    // const downloadedAssessments = []
+    // const currentObservation = successData.result;
+    // for (const observation of this.createdObservation) {
+    //   for (const entity of observation.entities) {
+    //     if (entity.submissionId) {
+    //       downloadedAssessments.push({
+    //         id: entity._id,
+    //         observationId: observation._id,
+    //         submissionId: entity.submissionId
+    //       });
+    //     }
+    //   }
 
-      // }
+    // }
 
-      // if (!downloadedAssessments.length) {
-      //   this.createdObservation = successData.result;
-      //   this.localStorage.setLocalStorage('createdObservationList', successData.result);
-      //   event ? event.complete() : this.utils.stopLoader();
+    // if (!downloadedAssessments.length) {
+    //   this.createdObservation = successData.result;
+    //   this.localStorage.setLocalStorage('createdObservationList', successData.result);
+    //   event ? event.complete() : this.utils.stopLoader();
 
-      // } else {
-      //   downloadedAssessments.forEach(element => {
+    // } else {
+    //   downloadedAssessments.forEach(element => {
 
-      //     for (const observation of successData.result) {
-      //       if (observation._id === element.observationId) {
-      //         for (const entity of observation.entities) {
-      //           if (element.id === entity._id) {
-      //             // entity.downloaded = true;
-      //             entity.submissionId = element.submissionId;
+    //     for (const observation of successData.result) {
+    //       if (observation._id === element.observationId) {
+    //         for (const entity of observation.entities) {
+    //           if (element.id === entity._id) {
+    //             // entity.downloaded = true;
+    //             entity.submissionId = element.submissionId;
 
-      //           }
-      //         }
-      //       }
-      //     }
-      //   });
-      //   this.localStorage.setLocalStorage('createdObservationList', successData.result);
-      //   this.createdObservation = successData.result;
-      //   event ? event.complete() : this.utils.stopLoader();
+    //           }
+    //         }
+    //       }
+    //     }
+    //   });
+    //   this.localStorage.setLocalStorage('createdObservationList', successData.result);
+    //   this.createdObservation = successData.result;
+    //   event ? event.complete() : this.utils.stopLoader();
 
-      // }
-      this.countCompleteActive();
+    // }
+    this.countCompleteActive();
 
     // }, error => {
     // });
@@ -232,26 +247,26 @@ export class ObservationsPage {
     })
   }
 
-  openMenu(event , index) {
+  openMenu(event, index) {
     // this.assessmentService.openMenu(event, this.programs, false);
-    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { "isObservation": true,"showAbout" : true ,"showEdit" : true , "assessmentIndex" : index , "assessmentName" :'createdObservationList'})
-  
+    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent, { "isObservation": true, "showAbout": true, "showEdit": true, "assessmentIndex": index, "assessmentName": 'createdObservationList' })
+
     popover.present(
-      {ev:event}
-      );
-      
+      { ev: event }
+    );
+
   }
 
 
   actionOnDraftObservation(index, observation) {
-    let translateObject ;
-    this.translate.get(['actionSheet.edit','actionSheet.chooseAction','actionSheet.delete','actionSheet.confirm','actionSheet.deleteObservation','actionSheet.yes','actionSheet.no','actionSheet.publish']).subscribe(translations =>{
+    let translateObject;
+    this.translate.get(['actionSheet.edit', 'actionSheet.chooseAction', 'actionSheet.delete', 'actionSheet.confirm', 'actionSheet.deleteObservation', 'actionSheet.yes', 'actionSheet.no', 'actionSheet.publish']).subscribe(translations => {
       translateObject = translations;
       // console.log(JSON.stringify(translations))
     })
     let actionArray = [
       {
-        text:translateObject['actionSheet.edit'],
+        text: translateObject['actionSheet.edit'],
         role: 'edit',
         icon: 'create',
 
@@ -267,16 +282,16 @@ export class ObservationsPage {
         handler: () => {
           let alert = this.alertCntrl.create({
             title: translateObject['actionSheet.confirm'],
-            message:translateObject['actionSheet.deleteObservation'],
+            message: translateObject['actionSheet.deleteObservation'],
             buttons: [
               {
-                text:translateObject['actionSheet.no'],
+                text: translateObject['actionSheet.no'],
                 role: 'cancel',
                 handler: () => {
                 }
               },
               {
-                text:translateObject['actionSheet.yes'],
+                text: translateObject['actionSheet.yes'],
                 handler: () => {
                   this.draftObservation.splice(index, 1);
                   this.localStorage.setLocalStorage('draftObservation', this.draftObservation);
@@ -317,7 +332,7 @@ export class ObservationsPage {
           this.apiProviders.httpPost(AppConfigs.cro.createObservation + observation.data.solutionId, obj, success => {
             // console.log(JSON.stringify(success));
             // console.log("published obs")
-            this.translate.get('toastMessage.ok').subscribe(translations =>{
+            this.translate.get('toastMessage.ok').subscribe(translations => {
               this.utils.openToast(success.message, translations);
             })
             this.refresh();
