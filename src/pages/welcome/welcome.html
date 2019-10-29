@@ -2,13 +2,16 @@
 
   <ion-slides pager>
     <ion-slide *ngFor="let slide of slidesList">
-      <ion-toolbar>
+      <!-- <ion-toolbar>
         <ion-buttons end>
           <button ion-button color="primary" (click)="gotToLastSlide()">{{'buttons.skip'|translate}}</button>
         </ion-buttons>
-      </ion-toolbar>
+      </ion-toolbar> -->
       <div>
         <img [src]="slide.image" *ngIf="slide.image" class="imageAdj" />
+      </div>
+      <div class="_flex-box _justify-content-center">
+        Version {{appVersion}}
       </div>
       <h2 class="slide-title" [innerHTML]="slide.title"></h2>
     </ion-slide>

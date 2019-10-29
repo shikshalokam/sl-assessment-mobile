@@ -40,7 +40,8 @@ export class UserLoginPage {
         grant_type: 'password',
         username: username,
         password: AppConfigs.adminCredentials.userPassword,
-        client_id: AppConfigs.clientId
+        client_id: AppConfigs.clientId,
+        scope:"offline_access"
       }
     });
 
@@ -88,6 +89,7 @@ export class UserLoginPage {
         this.adminToken = data.access_token;
         this.createUser();
       }, error => {
+        console.log(JSON.stringify(error))
         this.utils.stopLoader();
         this.utils.openToast("Please try again.");
       });
