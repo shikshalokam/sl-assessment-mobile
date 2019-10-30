@@ -29,6 +29,7 @@ import { SectionListPageModule } from '../pages/section-list/section-list.module
 import { QuestionerPageModule } from '../pages/questioner/questioner.module';
 import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
+
 import { FaqPage } from '../pages/faq/faq';
 import { SocialSharing } from '@ionic-native/social-sharing';
 
@@ -100,6 +101,7 @@ import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
 import { ProgramListingPage } from '../pages/program-listing/program-listing';
 import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
+// import { DashboardAssessmentListingPageModule } from '../pages/dashboard-assessment-listing/dashboard-assessment-listing.module';
 
 @NgModule({
   declarations: [

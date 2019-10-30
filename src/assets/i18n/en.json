@@ -181,7 +181,10 @@
         "hint":"Hint",
         "submissionPreview":"Submission Preview",
         "observationReports":"Report",
-        "observationUpdate":"Observation Update"
+        "observationUpdate":"Observation Update",
+        "dashboardAssessmentListing" :"Assessments",
+        "selectAssessment":"Select Assessment type",
+        "observationList":"Observations List"
     },
     "labels": {
         "welcome": "Welcome",

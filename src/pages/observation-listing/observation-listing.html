@@ -1,0 +1,14 @@
+<ion-header>
+  <header [title]="'headings.observationList'  |translate" [hideBack]="false">
+  </header>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let observation of observationList?.data" (click)="goToReportsOfObservation(observation?.entityId)">
+      <ion-icon name="eye" item-start></ion-icon>
+      {{observation?.observationName}}
+    </ion-item>
+  </ion-list>
+</ion-content>
