@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
+import { UtilsProvider } from '../../providers/utils/utils';
 
 
 @IonicPage()
@@ -14,7 +15,7 @@ export class ObservationListingPage {
   entityDetails;
   observationList;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
+  constructor(public navCtrl: NavController, public navParams: NavParams, private utils: UtilsProvider,
     private apiProvide: ApiProvider) {
   }
 
@@ -47,7 +48,7 @@ export class ObservationListingPage {
   }
 
   goToReportsOfObservation(observationId) {
-
+    this.utils.openToast("Coming soon")
   }
 
 }
