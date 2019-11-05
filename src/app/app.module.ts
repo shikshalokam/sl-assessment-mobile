@@ -100,6 +100,7 @@ import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
 import { ProgramListingPage } from '../pages/program-listing/program-listing';
 import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
+import { NotificationProvider } from '../providers/notification/notification';
 
 @NgModule({
   declarations: [
@@ -246,6 +247,7 @@ import { ObservationEditPage } from '../pages/observation-edit/observation-edit'
     DownloadAndPreviewProvider,
     UpdateTrackerProvider,
     TextToSpeechProvider,
+    NotificationProvider,
   ]
 })
 export class AppModule { }

@@ -181,7 +181,8 @@
         "hint":"Hint",
         "submissionPreview":"Submission Preview",
         "observationReports":"Report",
-        "observationUpdate":"Observation Update"
+        "observationUpdate":"Observation Update",
+        "notifications":"Notifications"
     },
     "labels": {
         "welcome": "Welcome",
@@ -232,7 +233,8 @@
         "noSolutionFound":"No Solutions",
         "noProgramsFound":"No Programs found.",
         "deleteObservation":"Are you sure you want to delete the observation?",
-        "confirmDeleteObservation":"You will not see this observation anymore. Do you wish to delete?"
+        "confirmDeleteObservation":"You will not see this observation anymore. Do you wish to delete?",
+        "viewAll":"View all"
         },
     "toastMessage":{
         "selectSolution":"Select a Solution",

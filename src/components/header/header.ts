@@ -3,34 +3,38 @@ import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { Events, ModalController, ViewController } from 'ionic-angular';
 import { QuestionDashboardPage } from '../../pages/question-dashboard/question-dashboard';
+import { NotificationProvider } from '../../providers/notification/notification';
+import { PopoverController } from 'ionic-angular';
+import { NotificationCardComponent } from '../notification-card/notification-card';
 
 @Component({
   selector: 'header',
   templateUrl: 'header.html'
 })
-export class HeaderComponent implements OnDestroy{
+export class HeaderComponent implements OnDestroy {
   @Input() title: string;
   @Input() showLogout: boolean;
-  @Input() hideBack: boolean; 
+  @Input() hideBack: boolean;
   @Input() dashbordData: any;
   @Input() enableDashboard: boolean;
   @Input() disableNetwork: boolean;
   @Input() showClose: boolean;
   @Input() showMenu: boolean = true;
   @Output() onDashboardOpen = new EventEmitter();
-  
+
   text: string;
   networkSubscription: any;
   networkAvailable: boolean;
   subscription: any;
   dashboardModal: any;
+  newNotificationPresent: boolean;
 
-  constructor(private ngps: NetworkGpsProvider, 
-    private feedbackService: FeedbackProvider, 
+  constructor(private ngps: NetworkGpsProvider,
+    private feedbackService: FeedbackProvider,
     private events: Events,
+    public popoverCtrl: PopoverController,
     private modalcntrl: ModalController,
-    private viewCtrl: ViewController) {
-
+    private viewCtrl: ViewController, private notificationServ: NotificationProvider) {
     this.subscription = this.events.subscribe('network:offline', () => {
       // this.utils.openToast("Network disconnected");
       this.networkAvailable = false;
@@ -43,11 +47,11 @@ export class HeaderComponent implements OnDestroy{
     });
 
     this.networkAvailable = this.ngps.getNetworkStatus();
-    
+
   }
 
   ngOnDestroy() {
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
@@ -57,9 +61,16 @@ export class HeaderComponent implements OnDestroy{
   }
 
   openDashboard(): void {
-    this.dashboardModal = this.modalcntrl.create(QuestionDashboardPage, {"questions":this.dashbordData});
+    this.dashboardModal = this.modalcntrl.create(QuestionDashboardPage, { "questions": this.dashbordData });
     this.onDashboardOpen.emit(this.dashboardModal);
     this.dashboardModal.present();
+  }
+
+  onNotificationClick(evt) {
+    let popover = this.popoverCtrl.create(NotificationCardComponent, {showViewMore: true}, { cssClass: 'customPopOver', showBackdrop: true });
+    popover.present({
+      ev: evt
+    });
   }
 
   closeDashboard() {

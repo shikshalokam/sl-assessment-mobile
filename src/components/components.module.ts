@@ -38,6 +38,7 @@ import { ReportEntityListComponent } from './report-entity-list/report-entity-li
 import { PercentageColumnChartsComponent } from './percentage-column-charts/percentage-column-charts';
 import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
 import { PageQuestionComponent } from './page-question/page-question';
+import { NotificationCardComponent } from './notification-card/notification-card';
 
 @NgModule({
 	declarations: [
@@ -69,7 +70,8 @@ import { PageQuestionComponent } from './page-question/page-question';
     ReportEntityListComponent,
     PercentageColumnChartsComponent,
     ExpansionPanelComponent,
-    PageQuestionComponent
+    PageQuestionComponent,
+    NotificationCardComponent
   ],
 	imports: [
 		IonicModule,
@@ -108,7 +110,8 @@ import { PageQuestionComponent } from './page-question/page-question';
     ReportEntityListComponent,
     PercentageColumnChartsComponent,
     ExpansionPanelComponent,
-    PageQuestionComponent
+    PageQuestionComponent,
+    NotificationCardComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
@@ -116,7 +119,8 @@ import { PageQuestionComponent } from './page-question/page-question';
 		MatrixModalComponent,
     MenuItemComponent,
     EntityListingComponent,
-    GenericMenuPopOverComponent
+    GenericMenuPopOverComponent,
+    NotificationCardComponent
 	],
 	providers:[
 		Network, DatePipe, SlackProvider

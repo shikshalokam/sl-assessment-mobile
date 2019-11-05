@@ -78,7 +78,7 @@ export class ObservationReportsPage {
     }, error => {
       this.error = "No data found";
       this.utils.stopLoader();
-    }, { dhiti: true })
+    }, { baseUrl:"dhiti" })
 
   }
 
@@ -140,7 +140,7 @@ export class ObservationReportsPage {
       this.utils.openToast(error.message)
 
       this.utils.stopLoader();
-    }, { dhiti: true })
+    }, { baseUrl:"dhiti" })
   }
 
 

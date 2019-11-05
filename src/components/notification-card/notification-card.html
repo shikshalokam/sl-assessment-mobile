@@ -1,0 +1,15 @@
+<ion-list text-wrap class="container">
+  <ion-item class="old-notification" [ngClass]="{
+    'new-notification': notification.is_read === 'false}'
+  }" *ngFor="let notification of notifications">
+    <div class=" _flex-box">
+      <div class="dot"></div>
+      <div style="flex:1"> {{notification?.text}}</div>
+    </div>
+  </ion-item>
+  <ion-item *ngIf="showViewMore">
+    <div class=" _flex-box" (click)="goToAllNotifications()">
+      {{'message.viewAll'| translate  }} <ion-icon name="arrow-forward" margin-left></ion-icon>
+    </div>
+  </ion-item>
+</ion-list>
