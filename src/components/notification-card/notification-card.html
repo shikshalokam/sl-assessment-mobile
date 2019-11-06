@@ -7,9 +7,13 @@
       <div style="flex:1"> {{notification?.text}}</div>
     </div>
   </ion-item>
-  <ion-item *ngIf="showViewMore">
+  <ion-item *ngIf="showViewMore ">
     <div class=" _flex-box" (click)="goToAllNotifications()">
       {{'message.viewAll'| translate  }} <ion-icon name="arrow-forward" margin-left></ion-icon>
     </div>
   </ion-item>
+
+  <div *ngIf="!notifications?.length" class="_errorBox _flex-box _justify-content-center">
+    No notifications available
+  </div>
 </ion-list>

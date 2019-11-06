@@ -115,8 +115,8 @@ export class ApiProvider {
     })
   }
 
-  OnTokenExpired(url, payload, successCallback, errorCallback, requestType) {
-    const apiUrl = AppConfigs.api_base_url + url;
+  OnTokenExpired(url, payload, successCallback, errorCallback, requestType, config?) {
+    const apiUrl = this.getApiUrl(url, config);
     if (this.errorTokenRetryCount >= 3) {
       errorCallback({});
       const errorObject = { ...this.errorObj };
@@ -181,7 +181,7 @@ export class ApiProvider {
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
-          this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
+          this.OnTokenExpired(url, payload, successCallback, errorCallback, "post", config);
         } else {
           this.utils.openToast(errorDetails.message, 'Ok');
           const errorObject = { ...this.errorObj };
@@ -191,7 +191,7 @@ export class ApiProvider {
         errorCallback(JSON.parse(error['error']))
       })
     }).catch(error => {
-      this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
+      this.OnTokenExpired(url, payload, successCallback, errorCallback, "post", config);
     })
   }
 
@@ -203,7 +203,6 @@ export class ApiProvider {
     // options['version'] = (config && config.version) ? config.version : "v1";
     // options['dhiti'] = (config && config.dhiti) ? config.dhiti : false;
     // }
-
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation();
       const obj = {
@@ -225,7 +224,7 @@ export class ApiProvider {
         const errorDetails = error['error'] ? JSON.parse(error['error']) : error;
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
-          this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
+          this.OnTokenExpired(url, " ", successCallback, errorCallback, "get", config);
         } else {
           this.translate.get('toastMessage.ok').subscribe(translations => {
             this.utils.openToast(errorDetails.message, translations);
@@ -237,7 +236,7 @@ export class ApiProvider {
         }
       })
     }).catch(error => {
-      this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
+      this.OnTokenExpired(url, " ", successCallback, errorCallback, "get", config);
     })
   }
 
@@ -246,7 +245,7 @@ export class ApiProvider {
     if (config && config.baseUrl &&  config.baseUrl === 'dhiti') {
       return AppConfigs.dhiti_base_url + version + url;
     } else if (config && config.baseUrl && config.baseUrl === 'kendra') {
-      return AppConfigs.dhiti_base_url + version + url;
+      return AppConfigs.kendra_base_url + version + url;
     } else {
       return AppConfigs.api_base_url + version + url;
     }

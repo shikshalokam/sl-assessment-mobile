@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { Events, ModalController, ViewController } from 'ionic-angular';
@@ -11,7 +11,7 @@ import { NotificationCardComponent } from '../notification-card/notification-car
   selector: 'header',
   templateUrl: 'header.html'
 })
-export class HeaderComponent implements OnDestroy {
+export class HeaderComponent implements OnInit,OnDestroy {
   @Input() title: string;
   @Input() showLogout: boolean;
   @Input() hideBack: boolean;
@@ -28,6 +28,8 @@ export class HeaderComponent implements OnDestroy {
   subscription: any;
   dashboardModal: any;
   newNotificationPresent: boolean;
+  notificationSubscription;
+  notificationData;
 
   constructor(private ngps: NetworkGpsProvider,
     private feedbackService: FeedbackProvider,
@@ -35,6 +37,16 @@ export class HeaderComponent implements OnDestroy {
     public popoverCtrl: PopoverController,
     private modalcntrl: ModalController,
     private viewCtrl: ViewController, private notificationServ: NotificationProvider) {
+    console.log("construct");
+
+    this.notificationSubscription = this.notificationServ.$notificationSubject.subscribe(data => {
+      this.notificationData = data;
+      if (this.notificationData.count) {
+        this.newNotificationPresent = true;
+      }
+    })
+
+
     this.subscription = this.events.subscribe('network:offline', () => {
       // this.utils.openToast("Network disconnected");
       this.networkAvailable = false;
@@ -50,9 +62,25 @@ export class HeaderComponent implements OnDestroy {
 
   }
 
+  ngOnInit() {
+    console.log("oninit")
+    this.notificationSubscription = this.notificationServ.$notificationSubject.subscribe(data => {
+      this.notificationData = data;
+      if (this.notificationData.count) {
+        this.newNotificationPresent = true;
+      }
+    })
+    this.notificationData = this.notificationServ.notificationsData;
+    this.newNotificationPresent = (this.notificationData && this.notificationData.count) ? true : false;
+  }
+
   ngOnDestroy() {
+    console.log("destroy");
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+    if(this.notificationSubscription) {
+      this.notificationSubscription.unsubscribe();
     }
   }
 
@@ -67,7 +95,11 @@ export class HeaderComponent implements OnDestroy {
   }
 
   onNotificationClick(evt) {
-    let popover = this.popoverCtrl.create(NotificationCardComponent, {showViewMore: true}, { cssClass: 'customPopOver', showBackdrop: true });
+    let popover = this.popoverCtrl.create(
+      NotificationCardComponent,
+      { showViewMore: true, data: this.notificationData.data },
+      { cssClass: 'customPopOver', showBackdrop: true }
+    );
     popover.present({
       ev: evt
     });

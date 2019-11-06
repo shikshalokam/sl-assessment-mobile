@@ -23,6 +23,7 @@ import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { RoleListingPage } from '../pages/role-listing/role-listing';
 import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
 import * as Highcharts from 'highcharts';
+import { NotificationProvider } from '../providers/notification/notification';
 
 
 @Component({
@@ -97,7 +98,8 @@ export class MyApp {
     private menuCntrl: MenuController,
     private deepLinks: Deeplinks,
     private utils: UtilsProvider,
-    private localStorageProvider: LocalStorageProvider
+    private localStorageProvider: LocalStorageProvider,
+    private notifctnService: NotificationProvider
   ) {
 
 
@@ -150,6 +152,7 @@ export class MyApp {
       this.networkGpsProvider.initializeNetworkEvents();
       this.registerBAckButtonAction();
       this.initTranslate();
+      
       // this.networkListenerInitialize();
       // Offline event
       // this.events.subscribe('network:offline', () => {
@@ -294,6 +297,8 @@ export class MyApp {
           console.error('Got a deeplink that didn\'t match', nomatch);
         });
       }
+      this.notifctnService.checkForNotificationApi();
+
 
     }).catch(error => {
       this.rootPage = WelcomePage;
