@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   @Input() showClose: boolean;
   @Input() showMenu: boolean = true;
   @Output() onDashboardOpen = new EventEmitter();
+  @Input() hideNotification;
 
   text: string;
   networkSubscription: any;
@@ -41,9 +42,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
     this.notificationSubscription = this.notificationServ.$notificationSubject.subscribe(data => {
       this.notificationData = data;
-      if (this.notificationData.count) {
-        this.newNotificationPresent = true;
-      }
+      this.newNotificationPresent = this.notificationData.count ? true : false
     })
 
 
@@ -97,7 +96,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   onNotificationClick(evt) {
     let popover = this.popoverCtrl.create(
       NotificationCardComponent,
-      { showViewMore: true, data: this.notificationData.data },
+      { showViewMore: true, data: this.notificationData ? this.notificationData.data : []},
       { cssClass: 'customPopOver', showBackdrop: true }
     );
     popover.present({

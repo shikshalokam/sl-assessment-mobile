@@ -9,6 +9,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { TranslateService } from '@ngx-translate/core';
+import { NotificationProvider } from '../../providers/notification/notification';
 
 @Component({
   selector: 'page-detail',
@@ -26,6 +27,7 @@ export class DetailPage {
     private currentUser: CurrentUserProvider,
     private auth: AuthProvider,
     private localStorage: LocalStorageProvider,
+    private notifictnProvider: NotificationProvider,
     private apiService: ApiProvider,
     private utils: UtilsProvider) {
   }
@@ -71,6 +73,7 @@ export class DetailPage {
               this.auth.doLogout().then(success => {
                 this.currentUser.removeUser();
                 let nav = this.app.getRootNav();
+                this.notifictnProvider.stopNotificationPooling();
                 nav.setRoot(WelcomePage);
               }).catch(error => {
 

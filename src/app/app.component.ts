@@ -139,7 +139,7 @@ export class MyApp {
 
     platform.ready().then(() => {
       Highcharts.setOptions({
-        colors: ['#D35400','#F1C40F', '#3498DB', '#8E44AD', '#154360', '#145A32']
+        colors: ['#D35400', '#F1C40F', '#3498DB', '#8E44AD', '#154360', '#145A32']
       })
 
       // this.goToPage(0);
@@ -152,8 +152,8 @@ export class MyApp {
       this.networkGpsProvider.initializeNetworkEvents();
       this.registerBAckButtonAction();
       this.initTranslate();
-      
-      // this.networkListenerInitialize();
+
+      this.networkListenerInitialize();
       // Offline event
       // this.events.subscribe('network:offline', () => {
       //   alert('network:offline ==> ' + this.network.type);
@@ -258,7 +258,6 @@ export class MyApp {
     });
 
     this.networkSubscription.add(connectSubscription);
-
     this.networkAvailable = this.network.type !== 'none' ? true : false;
     this.networkGpsProvider.setNetworkStatus(this.networkAvailable);
   }
@@ -276,6 +275,7 @@ export class MyApp {
         }
         this.splashScreen.hide()
       } else {
+        this.notifctnService.startNotificationPooling();
         this.rootPage = HomePage;
         for (const page of this.allPages) {
           page['active'] = false;
@@ -297,7 +297,7 @@ export class MyApp {
           console.error('Got a deeplink that didn\'t match', nomatch);
         });
       }
-      this.notifctnService.checkForNotificationApi();
+      // this.notifctnService.checkForNotificationApi();
 
 
     }).catch(error => {

@@ -116,4 +116,8 @@ export class WelcomePage {
     this.slides.slideTo(3);
   }
 
+  gotToNextSlide() {
+    this.slides.slideTo(2);
+  }
+
 }

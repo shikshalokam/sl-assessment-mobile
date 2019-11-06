@@ -32,6 +32,7 @@ page-welcome {
         bottom: 1px;
         left: 0;
         right: 0;
+        padding: 10px;
         // padding: 10px;
     }
     .alignLeft {
@@ -41,6 +42,14 @@ page-welcome {
     .skipBtn {
         padding: 30px ;
         font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .getstarted {
+        padding: 25px ;
+        font-size: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
     }
     .poweredBy {
         font-size: 12px;

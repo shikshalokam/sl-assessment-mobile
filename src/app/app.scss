@@ -20,9 +20,9 @@ $dark-grey-color: #808080;
 $font-size-base: 14px;
 $font-size-large: 18px;
 $white-color : #fff;
+$medium-grey-color: #edf2fa;
 
-$blue-color: #a63936,
-;
+$blue-color: #a63936;
 
 $primary-color: $blue-color;
 $red-color: #DC143C;
@@ -291,4 +291,8 @@ ion-step-header .ionic-step-header-icon-active {
 
 ._full-width {
     width: 100%;
+}
+
+.swiper-pagination-bullet-active {
+    background: $primary-color !important;
 }

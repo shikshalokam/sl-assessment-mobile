@@ -1,10 +1,15 @@
 <ion-list text-wrap class="container">
-  <ion-item class="old-notification" [ngClass]="{
-    'new-notification': notification.is_read === 'false}'
-  }" *ngFor="let notification of notifications">
+  <div *ngIf="!notifications?.length" class="_errorBox _flex-box errorMessage _justify-content-center">
+    {{'message.noUnreadNotifications' | translate}}
+  </div>
+  <ion-item class="old-notification" [ngClass]="{'new-notification': !notification?.is_read }"
+    *ngFor="let notification of notifications;let i = index" (click)="onNotificationClick(notification, i)">
     <div class=" _flex-box">
-      <div class="dot"></div>
-      <div style="flex:1"> {{notification?.text}}</div>
+      <div class="dot" [ngClass]="{'inactiveDot' : notification?.is_read }"></div>
+      <div style="flex:1">
+        <div>{{notification?.text}}</div>
+        <div class="time">{{notification?.created_at| date:'medium'}}</div>
+      </div>
     </div>
   </ion-item>
   <ion-item *ngIf="showViewMore ">
@@ -13,7 +18,5 @@
     </div>
   </ion-item>
 
-  <div *ngIf="!notifications?.length" class="_errorBox _flex-box _justify-content-center">
-    No notifications available
-  </div>
+
 </ion-list>

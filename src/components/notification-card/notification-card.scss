@@ -7,20 +7,33 @@ notification-card {
         border-radius: 50%;
     }
 
+    .inactiveDot {
+        background-color: $dark-grey-color;
+    }
+
     .action-notifications {
         text-align: center;
     }
 
     .old-notification {
-        background: $grey-color;
+        background: $white-color;
     }
 
     .new-notification {
-        background: $white-color;
+        background: $medium-grey-color;
     }
 
     .container {
         margin: 0 !important;
+    }
+
+    .time {
+        color: $dark-grey-color;
+        font-size: 12px;
+    }
+
+    .errorMessage {
+        color: $dark-grey-color;
     }
 
 }

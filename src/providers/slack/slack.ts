@@ -57,7 +57,7 @@ export class SlackProvider {
         {
           "fallback": "User Details",
           "title": `User Details`,
-          "text": `${this.currentUser.getCurrentUserData()['name']}, ${this.currentUser.getCurrentUserData()['email']}`
+          "text": `${this.currentUser.getCurrentUserData() ? this.currentUser.getCurrentUserData()['name']: null}, ${this.currentUser.getCurrentUserData() ? this.currentUser.getCurrentUserData()['email'] : null}`
         },
         {
           "fallback": "App version",
