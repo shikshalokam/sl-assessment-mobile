@@ -1,0 +1,39 @@
+notification-card {
+    .dot {
+        width: 10px;
+        height: 10px;
+        margin-right: 10px;
+        background-color: $primary-color;
+        border-radius: 50%;
+    }
+
+    .inactiveDot {
+        background-color: $dark-grey-color;
+    }
+
+    .action-notifications {
+        text-align: center;
+    }
+
+    .old-notification {
+        background: $white-color;
+    }
+
+    .new-notification {
+        background: $medium-grey-color;
+    }
+
+    .container {
+        margin: 0 !important;
+    }
+
+    .time {
+        color: $dark-grey-color;
+        font-size: 12px;
+    }
+
+    .errorMessage {
+        color: $dark-grey-color;
+    }
+
+}

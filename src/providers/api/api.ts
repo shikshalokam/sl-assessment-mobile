@@ -19,14 +19,14 @@ export class ApiProvider {
 
   constructor(public http: HTTP,
     public currentUser: CurrentUserProvider,
-    private appCtrls: App, 
+    private appCtrls: App,
     private utils: UtilsProvider,
     private alertCntrl: AlertController,
-    private translate : TranslateService,
-    private ngps: NetworkGpsProvider, 
+    private translate: TranslateService,
+    private ngps: NetworkGpsProvider,
     private slack: SlackProvider,
     private ngHttp: Http
-    ) {
+  ) {
   }
 
   errorObj = {
@@ -115,17 +115,17 @@ export class ApiProvider {
     })
   }
 
-  OnTokenExpired(url, payload, successCallback, errorCallback, requestType) {
-    const apiUrl = AppConfigs.api_base_url + url;
+  OnTokenExpired(url, payload, successCallback, errorCallback, requestType, config?) {
+    const apiUrl = this.getApiUrl(url, config);
     if (this.errorTokenRetryCount >= 3) {
       errorCallback({});
       const errorObject = { ...this.errorObj };
       errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(errorObject)}.Toke expired. Relogin enabled.`;
       this.slack.pushException(errorObject);
-      this.translate.get(['toastMessage.someThingWentWrongTryLater','toastMessage.ok']).subscribe(translations =>{
-        this.utils.openToast(translations.someThingWentWrongTryLater , translations.ok);
+      this.translate.get(['toastMessage.someThingWentWrongTryLater', 'toastMessage.ok']).subscribe(translations => {
+        this.utils.openToast(translations.someThingWentWrongTryLater, translations.ok);
       })
-      
+
       this.doLogout().then(success => {
         this.reLoginAlert();
       }).catch(error => {
@@ -141,8 +141,8 @@ export class ApiProvider {
         const errorObject = { ...this.errorObj };
         errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
         this.slack.pushException(errorObject);
-        this.translate.get(['toastMessage.someThingWentWrongTryLater','toastMessage.ok']).subscribe(translations =>{
-          this.utils.openToast(translations.someThingWentWrongTryLater , translations.ok);
+        this.translate.get(['toastMessage.someThingWentWrongTryLater', 'toastMessage.ok']).subscribe(translations => {
+          this.utils.openToast(translations.someThingWentWrongTryLater, translations.ok);
         })
         errorCallback(error);
         this.doLogout().then(success => {
@@ -154,12 +154,11 @@ export class ApiProvider {
   }
 
 
-  httpPost(url, payload, successCallback, errorCallback , config?) {
+  httpPost(url, payload, successCallback, errorCallback, config?) {
     // let nav = this.appCtrls.getActiveNav();
     let options = {};
-    console.log("httpPost" + JSON.stringify(options)+"post call")
-    options['version'] = (config && config.version )? config.config :"v1";
-    options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
+    options['version'] = (config && config.version) ? config.config : "v1";
+    options['dhiti'] = (config && config.dhiti) ? config.dhiti : false;
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
       const obj = {
@@ -169,7 +168,9 @@ export class ApiProvider {
         'appVersion': AppConfigs.appVersion
       }
       // const apiUrl = AppConfigs.api_base_url + url;
-      const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
+      const apiUrl = this.getApiUrl(url, config);
+
+      // const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url + options['version'] + url : AppConfigs.api_base_url + options['version'] + url;
       console.log(apiUrl)
       // console.log(JSON.stringify(payload))
       this.http.setDataSerializer('json');
@@ -180,7 +181,7 @@ export class ApiProvider {
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
-          this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
+          this.OnTokenExpired(url, payload, successCallback, errorCallback, "post", config);
         } else {
           this.utils.openToast(errorDetails.message, 'Ok');
           const errorObject = { ...this.errorObj };
@@ -190,19 +191,18 @@ export class ApiProvider {
         errorCallback(JSON.parse(error['error']))
       })
     }).catch(error => {
-      this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
+      this.OnTokenExpired(url, payload, successCallback, errorCallback, "post", config);
     })
   }
 
 
-  httpGet(url, successCallback, errorCallback , config?) {
+  httpGet(url, successCallback, errorCallback, config?) {
     // console.log("httpget" + JSON.stringify(options))
     // if(options && options.version){
-      let options = {};
-      options['version'] = (config && config.version )? config.version :"v1";
-      options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
+    // let options = {};
+    // options['version'] = (config && config.version) ? config.version : "v1";
+    // options['dhiti'] = (config && config.dhiti) ? config.dhiti : false;
     // }
-
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation();
       const obj = {
@@ -212,7 +212,7 @@ export class ApiProvider {
         'appVersion': AppConfigs.appVersion
       }
       this.http.setDataSerializer('json');
-      const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
+      const apiUrl = this.getApiUrl(url, config);
       console.log(apiUrl)
       this.http.get(apiUrl, {}, obj).then(data => {
         console.log(JSON.stringify(data))
@@ -221,12 +221,12 @@ export class ApiProvider {
       }).catch(error => {
         errorCallback(error)
         console.log(JSON.stringify(error));
-        const errorDetails = error['error'] ? JSON.parse(error['error']) : error ;
+        const errorDetails = error['error'] ? JSON.parse(error['error']) : error;
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
-          this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
+          this.OnTokenExpired(url, " ", successCallback, errorCallback, "get", config);
         } else {
-          this.translate.get('toastMessage.ok').subscribe(translations =>{
+          this.translate.get('toastMessage.ok').subscribe(translations => {
             this.utils.openToast(errorDetails.message, translations);
             errorCallback(error)
           })
@@ -236,8 +236,19 @@ export class ApiProvider {
         }
       })
     }).catch(error => {
-      this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
+      this.OnTokenExpired(url, " ", successCallback, errorCallback, "get", config);
     })
+  }
+
+  getApiUrl(url, config?) {
+    let version = (config && config['version'] )? config['version'] : 'v1';
+    if (config && config.baseUrl &&  config.baseUrl === 'dhiti') {
+      return AppConfigs.dhiti_base_url + version + url;
+    } else if (config && config.baseUrl && config.baseUrl === 'kendra') {
+      return AppConfigs.kendra_base_url + version + url;
+    } else {
+      return AppConfigs.api_base_url + version + url;
+    }
   }
 
 
@@ -246,8 +257,8 @@ export class ApiProvider {
     this.currentUser.deactivateActivateSession(true);
     let nav = this.appCtrls.getRootNav();
     nav.setRoot(WelcomePage);
-    let translateObject ;
-    this.translate.get(['actionSheet.sessionExpired','actionSheet.login']).subscribe(translations =>{
+    let translateObject;
+    this.translate.get(['actionSheet.sessionExpired', 'actionSheet.login']).subscribe(translations => {
       translateObject = translations;
       console.log(JSON.stringify(translations))
     })
@@ -257,7 +268,7 @@ export class ApiProvider {
         {
           text: translateObject['actionSheet.login'],
           role: 'role',
-          handler: data => {}
+          handler: data => { }
         }
       ],
       enableBackdropDismiss: false
@@ -288,9 +299,9 @@ export class ApiProvider {
     });
   }
 
-  getLocalJson(url ){
+  getLocalJson(url) {
     console.log(url);
-   return this.ngHttp.get(url);
+    return this.ngHttp.get(url);
     // this.ngHttp.get("assets/addObservation.json").subscribe(data => {
     // }).catch(error => {
 
