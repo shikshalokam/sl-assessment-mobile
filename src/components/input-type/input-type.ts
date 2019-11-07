@@ -30,7 +30,12 @@ export class InputTypeComponent implements OnInit {
   ngOnInit() {
     console.log(this.imageLocalCopyId);
     this.isaNumber();
+    console.log(JSON.stringify(this.data))
+
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
+    if(!this.data.validation.required) {
+      this.data.isCompleted = true;
+    }
     this.getErrorMsg();
     // this.checkForValidation();
   }
