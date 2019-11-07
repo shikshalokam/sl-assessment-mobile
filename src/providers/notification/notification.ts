@@ -55,13 +55,13 @@ export class NotificationProvider {
 
   startNotificationPooling() {
     this.timeInterval = setInterval(() => {
-      if(this.networkAvailable){
+      if (this.networkAvailable) {
         this.checkForNotificationApi();
-      } 
+      }
       // else {
       //   console.log("no internet");
       // }
-      console.log("network = ",this.networkAvailable)
+      console.log("network = ", this.networkAvailable)
     }, 120000);
     this.checkForNotificationApi();
 
@@ -82,9 +82,9 @@ export class NotificationProvider {
       { baseUrl: "kendra" })
   }
 
-  getAllNotifications() {
+  getAllNotifications(pageCount, limit) {
     return new Promise((resolve, reject) => {
-      this.apiService.httpGet(AppConfigs.notification.getAllNotifications, success => {
+      this.apiService.httpGet(AppConfigs.notification.getAllNotifications + "?page=" + pageCount+'&limit='+limit, success => {
         resolve(success.result)
       }, error => {
         reject();

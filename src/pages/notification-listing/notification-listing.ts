@@ -9,7 +9,10 @@ import { UtilsProvider } from '../../providers/utils/utils';
   templateUrl: 'notification-listing.html',
 })
 export class NotificationListingPage {
-  notifications;
+  notifications = [];
+  page = 1;
+  limit = 100;
+  totalCount;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private notificationService: NotificationProvider,
@@ -21,14 +24,25 @@ export class NotificationListingPage {
     this.fetchAllNotifications();
   }
 
-  fetchAllNotifications() {
-    this.utils.startLoader()
-    this.notificationService.getAllNotifications().then(success => {
-      this.notifications = success;
-      this.utils.stopLoader();
+  fetchAllNotifications(infinateScrollRefrnc?) {
+    infinateScrollRefrnc ? null : this.utils.startLoader()
+    this.notificationService.getAllNotifications(this.page, this.limit).then(success => {
+      this.totalCount = success['count'];
+      this.notifications = this.notifications.concat(success['data']);
+      infinateScrollRefrnc ? infinateScrollRefrnc.complete() :this.utils.stopLoader();
     }).catch(error => {
-      this.utils.stopLoader();
+      infinateScrollRefrnc ? infinateScrollRefrnc.complete() :this.utils.stopLoader();
     })
+  }
+
+  doInfinite(infiniteScroll) {
+    console.log('Begin async operation');
+    if((this.page * this.limit) < this.totalCount){
+      this.page++
+      this.fetchAllNotifications(infiniteScroll)
+    } else {
+      infiniteScroll.enable(false)
+    }
   }
 
 
