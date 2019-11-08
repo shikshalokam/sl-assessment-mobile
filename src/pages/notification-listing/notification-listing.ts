@@ -11,7 +11,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 export class NotificationListingPage {
   notifications = [];
   page = 1;
-  limit = 100;
+  limit = 20;
   totalCount;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -33,6 +33,11 @@ export class NotificationListingPage {
     }).catch(error => {
       infinateScrollRefrnc ? infinateScrollRefrnc.complete() :this.utils.stopLoader();
     })
+  }
+
+  loadMore() {
+    this.page++;
+    this.fetchAllNotifications()
   }
 
   doInfinite(infiniteScroll) {
