@@ -20,20 +20,41 @@ $dark-grey-color: #808080;
 $font-size-base: 14px;
 $font-size-large: 18px;
 $white-color : #fff;
-$medium-grey-color: #edf2fa;
+$medium-grey-color: #EBEBEB;
 
 $blue-color: #a63936;
 
 $primary-color: $blue-color;
-$red-color: #DC143C;
+$red-color:#ff0000;
 $orange-color: #FF8C00;
 $toolbar-background: $blue-color;
 $black-color: #222;
 $medium-black: #707070;
 $secondry-color: #5CB843;
 
-ion-content {
+
+
+@font-face{
+    font-family: 'Raleway-Regular' ;
+    src: url('../assets/fonts/Raleway-Regular.ttf') format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: 'Raleway-Bold' ;
+    src: url('../assets/fonts/Raleway-Bold.ttf') format("truetype");
+    // font-style: normal;
+    // font-weight: normal;
+}
+
+ion-content, body {
     background: $grey-color !important;
+    font-family: 'Raleway-Regular';
+}
+
+h1,h2,h3,h4 {
+    font-family: 'Raleway-Bold';
 }
 
 .tabs-md .tabbar {
