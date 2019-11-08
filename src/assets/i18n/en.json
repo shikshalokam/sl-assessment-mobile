@@ -108,7 +108,8 @@
         "viewObservationReport":"View Observation report",
         "viewEntityReport":"View Entity Report",
         "edit":"Edit",
-        "observation":"Observation"
+        "observation":"Observation",
+        "loadMore":"Load More"
     },
     "tabs": {
         "home": "Home",

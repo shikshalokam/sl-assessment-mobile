@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
-import { Events, ModalController, ViewController } from 'ionic-angular';
+import { Events, ModalController, ViewController, App } from 'ionic-angular';
 import { QuestionDashboardPage } from '../../pages/question-dashboard/question-dashboard';
 import { NotificationProvider } from '../../providers/notification/notification';
 import { PopoverController } from 'ionic-angular';
@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     private events: Events,
     public popoverCtrl: PopoverController,
     private modalcntrl: ModalController,
+    private app:App,
     private viewCtrl: ViewController, private notificationServ: NotificationProvider) {
     console.log("construct");
 
@@ -94,14 +95,15 @@ export class HeaderComponent implements OnInit,OnDestroy {
   }
 
   onNotificationClick(evt) {
-    let popover = this.popoverCtrl.create(
-      NotificationCardComponent,
-      { showViewMore: true, data: this.notificationData ? this.notificationData.data : []},
-      { cssClass: 'customPopOver', showBackdrop: true }
-    );
-    popover.present({
-      ev: evt
-    });
+    // let popover = this.popoverCtrl.create(
+    //   NotificationCardComponent,
+    //   { showViewMore: true, data: this.notificationData ? this.notificationData.data : []},
+    //   { cssClass: 'customPopOver', showBackdrop: true }
+    // );
+    // popover.present({
+    //   ev: evt
+    // });
+      this.app.getRootNav().push('NotificationListingPage');
   }
 
   closeDashboard() {
