@@ -7,6 +7,14 @@ notification-card {
         border-radius: 50%;
     }
 
+    .notificationCard {
+        border-radius: 15px;
+        margin: 15px 0;
+        box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.16);
+        // padding: 10px;
+        padding: 5px 30px;
+    }
+
     .inactiveDot {
         background-color: $dark-grey-color;
     }
@@ -16,15 +24,30 @@ notification-card {
     }
 
     .old-notification {
-        background: $white-color;
-    }
-
-    .new-notification {
         background: $medium-grey-color;
     }
 
+    .new-notification {
+        background: $primary-color;
+        color: $white-color;
+    }
+
+    .notificationTitle {
+        font-family: 'Raleway-Bold' !important;
+        justify-content: space-between;
+    }
+
     .container {
-        margin: 0 !important;
+        padding: 0 15px !important;
+    }
+
+    .errorContainer {
+        padding: 0 15px !important;
+        height: 80vh !important;
+    }
+
+    .childContainer {
+        text-align: center;
     }
 
     .time {

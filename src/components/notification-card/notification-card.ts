@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { App, NavParams, ViewController } from 'ionic-angular';
 import { NotificationProvider } from '../../providers/notification/notification';
+import * as moment from 'moment';
 
 @Component({
   selector: 'notification-card',
@@ -13,6 +14,8 @@ export class NotificationCardComponent {
 
   @Input() notifications;
   @Input() showViewMore;
+  time = Date.now()
+  momentInstance = moment;
 
   constructor(private appCtrl: App, private navParams: NavParams,
     private viewCtrl: ViewController, private notificationProvider: NotificationProvider) {

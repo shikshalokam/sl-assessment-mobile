@@ -7,7 +7,13 @@
   <ion-list class="noPadding">
     <notification-card [notifications]="notifications"></notification-card>
   </ion-list>
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+  <div class="_flex-box _justify-content-center" *ngIf="(page * limit) < totalCount">
+    <button ion-button full  [round]="true" class="loadMore" (click)="loadMore()" >
+     {{'buttons.loadMore'|translate}}
+    </button>
+  </div>
+
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+  </ion-infinite-scroll> -->
 </ion-content>
