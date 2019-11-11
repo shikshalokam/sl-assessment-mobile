@@ -7,8 +7,8 @@
   <ion-list class="noPadding">
     <notification-card [notifications]="notifications"></notification-card>
   </ion-list>
-  <div class="_flex-box _justify-content-center">
-    <button ion-button full  [round]="true" class="loadMore" (click)="loadMore()" *ngIf="(page * limit) < totalCount">
+  <div class="_flex-box _justify-content-center" *ngIf="(page * limit) < totalCount">
+    <button ion-button full  [round]="true" class="loadMore" (click)="loadMore()" >
      {{'buttons.loadMore'|translate}}
     </button>
   </div>

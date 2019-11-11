@@ -6,10 +6,11 @@ notification-card {
         background-color: $primary-color;
         border-radius: 50%;
     }
+
     .notificationCard {
         border-radius: 15px;
         margin: 15px 0;
-        box-shadow: 0px 6px 5px rgba(0 ,0 ,0 ,0.16) ;
+        box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.16);
         // padding: 10px;
         padding: 5px 30px;
     }
@@ -30,13 +31,23 @@ notification-card {
         background: $primary-color;
         color: $white-color;
     }
+
     .notificationTitle {
         font-family: 'Raleway-Bold' !important;
         justify-content: space-between;
     }
 
     .container {
-        padding: 0 15px!important;
+        padding: 0 15px !important;
+    }
+
+    .errorContainer {
+        padding: 0 15px !important;
+        height: 80vh !important;
+    }
+
+    .childContainer {
+        text-align: center;
     }
 
     .time {
@@ -47,8 +58,5 @@ notification-card {
     .errorMessage {
         color: $dark-grey-color;
     }
-    // .time {
-    //     text-transform: capitalize;
-    // }
 
 }

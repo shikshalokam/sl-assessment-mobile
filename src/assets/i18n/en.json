@@ -236,7 +236,7 @@
         "deleteObservation":"Are you sure you want to delete the observation?",
         "confirmDeleteObservation":"You will not see this observation anymore. Do you wish to delete?",
         "viewAll":"View all",
-        "noUnreadNotifications":"No  unread notifications"
+        "noUnreadNotifications":"You have no new Notifications!"
         },
     "toastMessage":{
         "selectSolution":"Select a Solution",
