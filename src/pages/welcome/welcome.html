@@ -26,14 +26,14 @@
       <h2 class="slide-title" [innerHTML]="slide?.title"></h2>
     </ion-slide> -->
 
-    
+
     <ion-slide>
-        <!-- <ion-toolbar>
+      <!-- <ion-toolbar>
             <ion-buttons end>
               <button ion-button color="primary" (click)="gotToNextSlide()">{{'buttons.skip'|translate}}</button>
             </ion-buttons>
           </ion-toolbar> -->
-      <div >
+      <div class="mainContainer">
         <div class="conatiner">
           <img src="assets/imgs/group_65.png" class="maxSize" />
         </div>
@@ -45,39 +45,39 @@
           </p>
         </div>
       </div>
-      <div class="sticky-footer" (click)="gotToNextSlide()">
-          <button ion-button full class="skipBtn">{{'buttons.skip'|translate}}</button>
+      <div class="bottomFooter" (click)="gotToNextSlide()">
+        <button ion-button full class="skipBtn">{{'buttons.skip'|translate}}</button>
       </div>
     </ion-slide>
 
     <ion-slide>
-        <div >
-          <div class="conatiner">
-            <img src="assets/imgs/analyse_straight.png" class="maxSize" />
-          </div>
-          <div class="_flex-box _justify-content-center conatiner">
-            <h4 class="blackText">Collate information, Analyse data</h4>
-            <p class="alignLeft content">
-              Generate reports, analyse data and draw insights to take an informed decision.
-            </p>
-          </div>
+      <div class="mainContainer">
+        <div class="conatiner">
+          <img src="assets/imgs/analyse_straight.png" class="maxSize" />
         </div>
-        <div class="sticky-footer">
-            <button ion-button  class="getstarted" (click)="slides.slideTo(3)">Get Started</button>
+        <div class="_flex-box _justify-content-center conatiner">
+          <h4 class="blackText">Collate information, Analyse data</h4>
+          <p class="alignLeft content">
+            Generate reports, analyse data and draw insights to take an informed decision.
+          </p>
         </div>
-      </ion-slide>
+      </div>
+      <div class="bottomFooter">
+        <button ion-button class="getstarted" (click)="slides.slideTo(3)">Get Started</button>
+      </div>
+    </ion-slide>
 
     <ion-slide>
-      <ion-toolbar>
-      </ion-toolbar>
-      <div>
-        <img src="assets/imgs/login.png" class="imageAdj" />
-      </div>
+      <div class="mainContainer">
+        <div>
+          <img src="assets/imgs/login.png" class="imageAdj" />
+        </div>
 
-      <button ion-button large clear icon-end color="primary" (click)="signIn()">
-        Login
-        <ion-icon name="arrow-forward"></ion-icon>
-      </button>
+        <button ion-button large clear icon-end color="primary" (click)="signIn()">
+          Login
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </div>
     </ion-slide>
   </ion-slides>
 </ion-content>

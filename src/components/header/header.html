@@ -10,13 +10,23 @@
 
     <ion-icon name="map" isActive="true" *ngIf="enableDashboard" class="_headerIcon margin" (click)="openDashboard()"
       float-right></ion-icon>
-    <ion-icon name="wifi" class="_headerIcon margin" *ngIf="!disableNetwork"
-      [ngClass]="{'_disconnectedConnection': !networkAvailable}" float-right></ion-icon>
 
-    <div class="margin relative" (click)="onNotificationClick($event)">
+
+    <!-- <div class="margin relative" (click)="onNotificationClick($event)">
       <ion-icon name="notifications" class="_headerIcon notificationIcon " float-right></ion-icon>
       <span class="dot _flex-box" *ngIf="newNotificationPresent">{{notificationData.count}}</span>
-    </div>
+    </div> -->
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="wifi" class="_headerIcon margin" *ngIf="!disableNetwork"
+          [ngClass]="{'_disconnectedConnection': !networkAvailable}" ></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="onNotificationClick($event)">
+        <ion-icon name="notifications" class="_headerIcon notificationIcon " ></ion-icon>
+        <span class="dot _flex-box" *ngIf="newNotificationPresent">{{notificationData.count}}</span>
+      </button>
+
+    </ion-buttons>
     <!-- <ion-icon name="log-out" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px" (click)="logout()" float-right></ion-icon> -->
   </div>
 </ion-navbar>

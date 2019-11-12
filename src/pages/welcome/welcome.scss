@@ -20,37 +20,29 @@ page-welcome {
         width: 50%;
     }
     .conatiner {
-        // width: 90%;
-        padding:0 20px;
+        padding: 0 20px;
     }
     .content {
         color: $medium-black;
         margin-top: 10px;
     }
-    .sticky-footer {
-        position: fixed;
-        bottom: 1px;
-        left: 0;
-        right: 0;
-        padding: 10px;
-        // padding: 10px;
-    }
+
     .alignLeft {
         text-align: left;
-        text-justify:justify;
+        text-justify: justify;
     }
+
     .skipBtn {
-        padding: 30px ;
+        padding: 30px;
         font-size: 20px;
-        margin-bottom: 15px;
     }
 
     .getstarted {
-        padding: 25px ;
+        padding: 20px 30px;
         font-size: 20px;
-        border-radius: 10px;
-        margin-bottom: 15px;
+        border-radius: 15px;
     }
+
     .poweredBy {
         font-size: 12px;
     }
@@ -61,5 +53,17 @@ page-welcome {
 
     .maxSize {
         max-width: 350px;
+    }
+
+    .mainContainer {
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bottomFooter {
+        margin-bottom: 22px;;
     }
 }
