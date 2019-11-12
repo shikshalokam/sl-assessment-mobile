@@ -318,3 +318,9 @@ ion-step-header .ionic-step-header-icon-active {
 .swiper-pagination-bullet-active {
     background: $primary-color !important;
 }
+
+.slide-zoom{
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+}

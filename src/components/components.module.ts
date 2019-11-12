@@ -39,6 +39,7 @@ import { PercentageColumnChartsComponent } from './percentage-column-charts/perc
 import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
 import { PageQuestionComponent } from './page-question/page-question';
 import { NotificationCardComponent } from './notification-card/notification-card';
+import { MatrixChartComponent } from './matrix-chart/matrix-chart';
 
 @NgModule({
 	declarations: [
@@ -71,7 +72,8 @@ import { NotificationCardComponent } from './notification-card/notification-card
     PercentageColumnChartsComponent,
     ExpansionPanelComponent,
     PageQuestionComponent,
-    NotificationCardComponent
+    NotificationCardComponent,
+    MatrixChartComponent
   ],
 	imports: [
 		IonicModule,
@@ -111,7 +113,8 @@ import { NotificationCardComponent } from './notification-card/notification-card
     PercentageColumnChartsComponent,
     ExpansionPanelComponent,
     PageQuestionComponent,
-    NotificationCardComponent
+    NotificationCardComponent,
+    MatrixChartComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
