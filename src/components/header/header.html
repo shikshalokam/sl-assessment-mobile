@@ -21,7 +21,7 @@
         <ion-icon name="wifi" class="_headerIcon margin" *ngIf="!disableNetwork"
           [ngClass]="{'_disconnectedConnection': !networkAvailable}" ></ion-icon>
       </button>
-      <button ion-button icon-only (click)="onNotificationClick($event)">
+      <button ion-button icon-only (click)="onNotificationClick($event)" *ngIf="!hideNotification">
         <ion-icon name="notifications" class="_headerIcon notificationIcon " ></ion-icon>
         <span class="dot _flex-box" *ngIf="newNotificationPresent">{{notificationData.count}}</span>
       </button>
