@@ -29,7 +29,7 @@ export class NotificationCardComponent {
     this.appCtrl.getRootNav().push('NotificationListingPage');
   }
 
-  onNotificationClick(notificationMeta) {
+  onNotificationClick(notificationMeta, index) {
     switch (notificationMeta.action) {
       case 'mapping':
         this.notificationProvider.getMappedAssessment(notificationMeta)
@@ -43,13 +43,14 @@ export class NotificationCardComponent {
         break
     }
     if (!notificationMeta.is_read) {
-      this.markAsRead(notificationMeta.id);
+      this.markAsRead(notificationMeta.id, index);
     }
   }
 
-  markAsRead(id) {
+  markAsRead(id, index) {
     this.notificationProvider.markAsRead(id).then(success => {
       this.notificationProvider.checkForNotificationApi();
+      this.notifications[index].is_read = true;
     }).catch(error => {
     })
   }

@@ -19,7 +19,7 @@ export class NotificationListingPage {
     private utils: UtilsProvider) {
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     console.log('ionViewDidLoad NotificationListingPage');
     this.fetchAllNotifications();
   }

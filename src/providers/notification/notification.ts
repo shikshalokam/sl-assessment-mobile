@@ -157,8 +157,13 @@ export class NotificationProvider {
         }
       }
     }).catch(error => {
-      this.utils.openToast("No assessment available.")
       this.utils.stopLoader();
+      // this.utils.openToast("No assessment available.")
+      if(notificationMeta.payload.type === 'observation') {
+        this.getMappedObservation(notificationMeta);
+      } else {
+        this.getMappedInstitutionalAssessment(notificationMeta);
+      }
     })
   }
 
