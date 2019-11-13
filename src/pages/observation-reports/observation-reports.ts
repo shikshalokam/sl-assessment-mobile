@@ -116,17 +116,17 @@ export class ObservationReportsPage {
   getObservationReportUrl() {
     this.utils.startLoader();
     // + "type=submission&"
-    let url = AppConfigs.observationReports.getReportsPdfUrls ;
-    const timeStamp = '_'+this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a')
+    let url = AppConfigs.observationReports.getReportsPdfUrls;
+    const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a')
     if (this.submissionId) {
-      url = url + "submissionId="+ this.submissionId;
-      this.fileName = this.submissionId+timeStamp + ".pdf";
+      url = url + "submissionId=" + this.submissionId;
+      this.fileName = this.submissionId + timeStamp + ".pdf";
     } else if (!this.submissionId && !this.entityId) {
       url = url + "observationId=" + this.observationId
-      this.fileName = this.observationId +timeStamp+ ".pdf";
+      this.fileName = this.observationId + timeStamp + ".pdf";
     } else {
       url = url + "entityId=" + this.entityId + "&observationId=" + this.observationId
-      this.fileName = this.entityId + '_' + this.observationId +timeStamp+ ".pdf";
+      this.fileName = this.entityId + '_' + this.observationId + timeStamp + ".pdf";
     }
 
     this.apiService.httpGet(url, success => {
@@ -140,7 +140,7 @@ export class ObservationReportsPage {
       this.utils.openToast(error.message)
 
       this.utils.stopLoader();
-    }, { baseUrl:"dhiti" })
+    }, { baseUrl: "dhiti" })
   }
 
 

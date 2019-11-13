@@ -11,6 +11,7 @@ import { UtilsProvider } from '../utils/utils';
 import { AssessmentServiceProvider } from '../assessment-service/assessment-service';
 import { EntityListingPage } from '../../pages/entity-listing/entity-listing';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
+import { EvidenceProvider } from '../evidence/evidence';
 
 @Injectable()
 export class NotificationProvider {
@@ -35,6 +36,7 @@ export class NotificationProvider {
     private observationProvider: ObservationServiceProvider,
     private ngps: NetworkGpsProvider,
     private events: Events,
+    private evindenceProvider: EvidenceProvider,
     private assessmentService: AssessmentServiceProvider) {
 
     console.log('Hello NotificationProvider Provider');
@@ -84,7 +86,7 @@ export class NotificationProvider {
 
   getAllNotifications(pageCount, limit) {
     return new Promise((resolve, reject) => {
-      this.apiService.httpGet(AppConfigs.notification.getAllNotifications + "?page=" + pageCount+'&limit='+limit, success => {
+      this.apiService.httpGet(AppConfigs.notification.getAllNotifications + "?page=" + pageCount + '&limit=' + limit, success => {
         resolve(success.result)
       }, error => {
         reject();
@@ -115,6 +117,53 @@ export class NotificationProvider {
         this.getMappedInstitutionalAssessment(notificationMeta);
         break
     }
+  }
+
+  goToDetails(notificationMeta) {
+    switch (notificationMeta.payload.type) {
+      case 'observation':
+        // this.getMappedObservation(notificationMeta);
+        this.goToAssessmentDetails(notificationMeta);
+        break
+
+      case 'institutional':
+      case 'individual':
+        this.goToAssessmentDetails(notificationMeta);
+        break
+    }
+  }
+
+  openAction(assessment, aseessmemtData, evidenceIndex) {
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
+    const options = { _id: assessment._id, name: assessment.name, recentlyUpdatedEntity: assessment.recentlyUpdatedEntity, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
+    this.evindenceProvider.openActionSheet(options);
+  }
+
+  goToAssessmentDetails(notificationMeta) {
+    let submissionId = notificationMeta.payload.submission_id;
+    let heading = notificationMeta.payload.entity_name;
+    this.utils.startLoader();
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
+      this.utils.stopLoader();
+      if (successData.assessment.evidences.length > 1) {
+        this.app.getActiveNav().push('EvidenceListPage', { _id: submissionId, name: heading, recentlyUpdatedEntity: {} })
+      } else {
+        if (successData.assessment.evidences[0].startTime) {
+          this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
+          this.app.getActiveNav().push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0, recentlyUpdatedEntity: {} })
+        } else {
+          const assessment = { _id: submissionId, name: heading, recentlyUpdatedEntity: {} }
+          this.openAction(assessment, successData, 0);
+        }
+      }
+    }).catch(error => {
+      this.utils.openToast("No assessment available.")
+      this.utils.stopLoader();
+    })
+  }
+
+  goToObservationDetails(notificationMeta) {
+
   }
 
   getMappedInstitutionalAssessment(notificationMeta) {
