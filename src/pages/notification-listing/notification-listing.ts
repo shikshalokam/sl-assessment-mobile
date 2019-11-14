@@ -19,7 +19,7 @@ export class NotificationListingPage {
     private utils: UtilsProvider) {
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     console.log('ionViewDidLoad NotificationListingPage');
     this.fetchAllNotifications();
   }
@@ -29,9 +29,9 @@ export class NotificationListingPage {
     this.notificationService.getAllNotifications(this.page, this.limit).then(success => {
       this.totalCount = success['count'];
       this.notifications = this.notifications.concat(success['data']);
-      infinateScrollRefrnc ? infinateScrollRefrnc.complete() :this.utils.stopLoader();
+      infinateScrollRefrnc ? infinateScrollRefrnc.complete() : this.utils.stopLoader();
     }).catch(error => {
-      infinateScrollRefrnc ? infinateScrollRefrnc.complete() :this.utils.stopLoader();
+      infinateScrollRefrnc ? infinateScrollRefrnc.complete() : this.utils.stopLoader();
     })
   }
 
@@ -42,7 +42,7 @@ export class NotificationListingPage {
 
   doInfinite(infiniteScroll) {
     console.log('Begin async operation');
-    if((this.page * this.limit) < this.totalCount){
+    if ((this.page * this.limit) < this.totalCount) {
       this.page++
       this.fetchAllNotifications(infiniteScroll)
     } else {

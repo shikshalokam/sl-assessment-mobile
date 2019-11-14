@@ -8,7 +8,7 @@
       <div>{{notification?.title ? notification?.title : notification?.text}}</div>
       <div class="_flex-box" *ngIf="notification?.created_at">
         <ion-icon name="time" style="margin-right:5px"></ion-icon>
-        <div>{{momentInstance(notification?.created_at).fromNow(true)}}</div>
+        <div>{{momentInstance(notification?.created_at).fromNow(true) +' ago'}}</div>
       </div>
     </div>
     <div class=" _flex-box">

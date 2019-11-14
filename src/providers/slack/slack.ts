@@ -71,6 +71,7 @@ export class SlackProvider {
     if(errorDetails) {
         payload.attachments.push(errorDetails)
     }
+    console.log(JSON.stringify(payload))
    if(AppConfigs.enableSlack)
    {
     this.http.post(AppConfigs.slack.exceptionUrl, JSON.stringify(payload)).subscribe(result => {
