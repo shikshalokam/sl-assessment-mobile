@@ -8,7 +8,6 @@ import { Subject } from 'rxjs/Subject';
 import { Network } from '@ionic-native/network';
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { Diagnostic } from '@ionic-native/diagnostic';
 
 export enum ConnectionStatusEnum {
   Online,
@@ -28,7 +27,6 @@ export class NetworkGpsProvider {
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
     private utils: UtilsProvider,
-    private diagnostic: Diagnostic,
     private network: Network,
     private eventCtrl: Events, private storage: Storage) {
     console.log('Hello NetworkGpsProvider Provider');
@@ -77,7 +75,13 @@ export class NetworkGpsProvider {
               // this.utils.openToast(location)
               resolve(location)
             }).catch((error) => {
-              this.utils.openToast("Something went wrnog. Please try again.")
+              this.utils.openToast("Something went wrong. Please try again.");
+              const errorObj = {
+                "fallback": "User Details",
+                "title": `Error Details`,
+                "text": `GPS capture failed. Error details ${error}`
+              }
+              // this.slackServ.pushException(errorObj)
               reject()
             });
           }, error => {
