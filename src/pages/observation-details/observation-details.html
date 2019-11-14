@@ -1,14 +1,14 @@
 <ion-header>
-    <header [title]="'headings.observationDetails'|translate" [hideBack]="false">
-    </header>
-  </ion-header>
+  <header [title]="'headings.observationDetails'|translate" [hideBack]="false">
+  </header>
+</ion-header>
 
 
-<ion-content >
-  <observation-entity-listing *ngIf="selectedObservationIndex >= 0" [entityList]="observationDetails" [entityType]="'observations'"
-    [observationList]="observationList"
-    (refreshEvent)="refresh($event)" [selectedObservationIndex]="selectedObservationIndex"
-    (openMenuEvent)="openMenu($event)" >
+<ion-content>
+  <ion-searchbar (ionInput)="fileterList($event)" [(ngModel)]="search" placeholder="Search for schools"></ion-searchbar>
+  <observation-entity-listing *ngIf="selectedObservationIndex >= 0" [entityList]="observationDetails"
+    [entityType]="'observations'" [observationList]="observationList" (refreshEvent)="refresh($event)"
+    [selectedObservationIndex]="selectedObservationIndex" (openMenuEvent)="openMenu($event)" #entityComponent>
   </observation-entity-listing>
 
 </ion-content>
