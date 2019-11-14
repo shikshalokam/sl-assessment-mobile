@@ -28,6 +28,9 @@ export class DateTypeComponent implements OnInit{
 
   next(status?: string) {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
+    if(!this.data.validation.required) {
+      this.data.isCompleted = true;
+    }
     this.nextCallBack.emit(status);
   }
 
