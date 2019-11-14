@@ -32,6 +32,9 @@ export class SliderComponent {
   ngOnInit() {
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
     this.data.value = this.data.value !== "" ? this.data.value : this.data.validation.min;
+    if(!this.data.validation.required) {
+      this.data.isCompleted = true;
+    }
     this.checkForValidation();
   }
 
