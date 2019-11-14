@@ -19,11 +19,14 @@
     <ion-buttons end>
       <button ion-button icon-only>
         <ion-icon name="wifi" class="_headerIcon margin" *ngIf="!disableNetwork"
-          [ngClass]="{'_disconnectedConnection': !networkAvailable}" ></ion-icon>
+          [ngClass]="{'_disconnectedConnection': !networkAvailable}"></ion-icon>
       </button>
       <button ion-button icon-only (click)="onNotificationClick($event)" *ngIf="!hideNotification">
-        <ion-icon name="notifications" class="_headerIcon notificationIcon " ></ion-icon>
-        <span class="dot _flex-box" *ngIf="newNotificationPresent">{{notificationData.count}}</span>
+        <ion-icon name="notifications" class="_headerIcon notificationIcon "></ion-icon>
+        <span class="dot _flex-box"
+          *ngIf="newNotificationPresent && notificationData.count < 100">{{notificationData.count}}</span>
+        <span class="dot _flex-box" *ngIf="newNotificationPresent && notificationData.count >= 100">99+</span>
+
       </button>
 
     </ion-buttons>
