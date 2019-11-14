@@ -32,7 +32,9 @@ export class MultipleChoiceTypeComponent implements OnInit {
   ngOnInit() {
     this.data.value = this.data.value ? this.data.value : [];
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
-
+    if(!this.data.validation.required) {
+      this.data.isCompleted = true;
+    }
   }
 
   updateModelValue(val) {

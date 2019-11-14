@@ -38,6 +38,9 @@ export class RadioTypeComponent implements OnInit{
   ngOnInit() {
     // console.log(JSON.stringify(this.data))
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
+    if(!this.data.validation.required) {
+      this.data.isCompleted = true;
+    }
     console.log("Evidence id"+ this.evidenceId)
     
 

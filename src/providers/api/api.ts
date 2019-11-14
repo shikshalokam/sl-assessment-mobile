@@ -171,10 +171,10 @@ export class ApiProvider {
       // const apiUrl = AppConfigs.api_base_url + url;
       const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
       console.log(apiUrl)
-      console.log(JSON.stringify(payload))
+      // console.log(JSON.stringify(payload))
       this.http.setDataSerializer('json');
       this.http.post(apiUrl, payload, obj).then(data => {
-        console.log(JSON.stringify(data))
+        console.log(data)
         successCallback(data.data ? JSON.parse(data.data) : null);
       }).catch(error => {
         const errorDetails = JSON.parse(error['error']);

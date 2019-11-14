@@ -232,7 +232,9 @@
         "noEntity":"No Entity"  ,
         "no":"No",
         "noSolutionFound":"No Solutions",
-        "noProgramsFound":"No Programs found."
+        "noProgramsFound":"No Programs found.",
+        "deleteObservation":"Are you sure you want to delete the observation?",
+        "confirmDeleteObservation":"You will not see this observation anymore. Do you wish to delete?"
         },
     "toastMessage":{
         "selectSolution":"Select a Solution",

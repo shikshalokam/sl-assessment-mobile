@@ -8,13 +8,67 @@
         </ion-buttons>
       </ion-toolbar> -->
       <div>
-        <img [src]="slide.image" *ngIf="slide.image" class="imageAdj" />
+        <div>
+          <img src="assets/imgs/just-logo.png" class="imageAdj" />
+        </div>
+        <div class="_flex-box _justify-content-center content" margin>
+          Version {{appVersion}}
+        </div>
+        <div class="_flex-box _justify-content-center">
+            <span class="poweredBy"> By </span> <img src="assets/imgs/sl-logo.png" style="max-width: 150px;padding: 10px;" />
+        </div>
+      </div>
+
+      <div class="sticky-footer">
+         <img src="assets/imgs/sl-logo.png" style="max-width: 50%;padding: 10px;" />
+      </div>
+      <h2 class="slide-title" [innerHTML]="slide?.title"></h2>
+    </ion-slide> -->
+
+    
+    <ion-slide>
+        <ion-toolbar>
+            <ion-buttons end>
+              <button ion-button color="primary" (click)="gotToLastSlide()">{{'buttons.skip'|translate}}</button>
+            </ion-buttons>
+          </ion-toolbar>
+      <div >
+        <div class="conatiner">
+          <img src="assets/imgs/group_65.png" class="maxSize" />
+        </div>
+        <div class="_flex-box _justify-content-center conatiner">
+          <h4 class="blackText">Conduct Observation and Assessments</h4>
+          <p class="alignLeft content">
+            Enables educational leaders to Observe and assess individuals or institutions to plan area of improvement.
+          </p>
+        </div>
+      </div>
+      <div class="sticky-footer" (click)="slides.slideTo(2)">
+          <button ion-button full class="skipBtn">Next</button>
       </div>
       <div class="_flex-box _justify-content-center">
         Version {{appVersion}}
       </div>
       <h2 class="slide-title" [innerHTML]="slide.title"></h2>
     </ion-slide>
+
+    <ion-slide>
+        <div >
+          <div class="conatiner">
+            <img src="assets/imgs/analyse_straight.png" class="maxSize" />
+          </div>
+          <div class="_flex-box _justify-content-center conatiner">
+            <h4 class="blackText">Collate information, Analyse data</h4>
+            <p class="alignLeft content">
+              User can generate reports, analyse data and draw insights to take an informed decision.
+            </p>
+          </div>
+        </div>
+        <div class="sticky-footer">
+            <button ion-button full class="skipBtn" (click)="slides.slideTo(3)">Login</button>
+        </div>
+      </ion-slide>
+
     <ion-slide>
       <ion-toolbar>
       </ion-toolbar>
