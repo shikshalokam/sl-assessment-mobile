@@ -21,12 +21,14 @@ export class NotificationListingPage {
 
   ionViewWillEnter() {
     console.log('ionViewDidLoad NotificationListingPage');
+    this.notifications = [];
     this.fetchAllNotifications();
   }
 
   fetchAllNotifications(infinateScrollRefrnc?) {
     infinateScrollRefrnc ? null : this.utils.startLoader()
     this.notificationService.getAllNotifications(this.page, this.limit).then(success => {
+      this.notificationService.checkForNotificationApi();
       this.totalCount = success['count'];
       this.notifications = this.notifications.concat(success['data']);
       infinateScrollRefrnc ? infinateScrollRefrnc.complete() : this.utils.stopLoader();
