@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.shikshalokam.samiksha.dcpcr" version="1.1.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.shikshalokam.samiksha.dcpcr" version="1.1.11" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>SDI</name>
-    <description>An awesome Ionic/Cordova app.</description>
+    <description>A survey app for school development</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -153,6 +153,6 @@
     </plugin>
     <allow-navigation href="http://localhost:8100" sessionid="5aace2df" />
     <engine name="browser" spec="5.0.4" />
-    <engine name="android" spec="7.1.4" />
-    <engine name="ios" spec="latest" />
+    <engine name="ios" spec="^5.0.1" />
+    <engine name="android" spec="^7.1.4" />
 </widget>
