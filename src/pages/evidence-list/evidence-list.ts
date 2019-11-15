@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App, Platform } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { UpdateTrackerProvider } from '../../providers/update-tracker/update-tracker';
 
 @IonicPage()
 @Component({
@@ -13,67 +13,68 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class EvidenceListPage {
 
-  schoolId: any;
-  schoolName: string;
-  schoolEvidences: any;
-  schoolData: any;
+  entityId: any;
+  entityName: string;
+  entityEvidences: any;
+  entityData: any;
   currentEvidenceStatus: string;
   isIos: boolean = this.platform.is('ios');
   generalQuestions: any;
+  submissionId: any;
+  recentlyUpdatedEntity: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage, private appCtrl: App, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
+    private updateTracker :UpdateTrackerProvider,
+    private appCtrl: App, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
     private feedback: FeedbackProvider, private evdnsServ: EvidenceProvider, private platform: Platform) {
-      this.schoolId = this.navParams.get('_id');
-      this.schoolName = this.navParams.get('name');
+    this.entityId = this.navParams.get('_id');
+    this.entityName = this.navParams.get('name');
+    this.recentlyUpdatedEntity = this.navParams.get('recentlyUpdatedEntity');
+    // this.submissionId = this.navParams.get('submissionId');
   }
-
+ 
   ionViewWillEnter() {
+    console.log(JSON.stringify(this.recentlyUpdatedEntity))
+
     console.log('ionViewDidLoad EvidenceListPage');
-
-    // this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then(data => {
-    //   this.generalQuestions = data[this.schoolId];
-    // }).catch(error => {
-    // })
-    // this.storage.get('generalQuestions_'+this.schoolId).then(data => {
-    //   this.generalQuestions = JSON.parse(data)[this.schoolId];
-    // }).catch(error => {
-
-    // })
     this.utils.startLoader();
-
-    this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( successData => {
-      // console.log("general questions")
-      this.generalQuestions = successData;
-    }).then(error => {
-    })
-    this.localStorage.getLocalStorage("schoolDetails_"+this.schoolId).then( successData => {
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.entityId)).then(successData => {
       this.utils.stopLoader();
-      console.log(successData)
-      this.schoolData = successData;
-      this.schoolEvidences = this.schoolData['assessments'][0]['evidences'];
+      this.entityData = successData;
+      // console.log(JSON.stringify(successData));
+      this.entityEvidences = this.updateTracker.getLastModifiedInEvidences(this.entityData['assessment']['evidences'],this.recentlyUpdatedEntity) ;
+      this.mapCompletedAndTotalQuestions();
       this.checkForProgressStatus();
+      this.localStorage.getLocalStorage('generalQuestions_' + this.entityId).then(successData => {
+        this.generalQuestions = successData;
+      }).catch(error => {
+      });
     }).catch(error => {
-      this.utils.stopLoader()      
+      this.utils.stopLoader()
     })
-
-  //   this.storage.get('schoolsDetails').then(data => {
-  //     // this.utils.stopLoader()
-  //     this.schoolData = JSON.parse(data);
-  //     this.schoolEvidences = this.schoolData[this.schoolId]['assessments'][0]['evidences'];
-  //     this.checkForProgressStatus();
-  //   }).catch(error => {
-  //     // this.utils.stopLoader()
-  //   })
   }
 
-  goToGeneralQuestionList() : void {
-    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: this.schoolId, name: this.schoolName})
+  mapCompletedAndTotalQuestions() {
+    for (const evidence of this.entityEvidences) {
+      let totalQuestions = 0;
+      let completedQuestions = 0;
+      for (const section of evidence.sections) {
+        totalQuestions = totalQuestions + section.totalQuestions;
+        completedQuestions = completedQuestions + section.completedQuestions;
+      }
+      let percentage = totalQuestions ? (completedQuestions/totalQuestions)*100 : 0;
+      if(!completedQuestions) {
+        percentage = 0;
+      }
+      evidence.completePercentage = Math.trunc(percentage) ;
+    }
+  }
 
+  goToGeneralQuestionList(): void {
+    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: this.entityId, name: this.entityName })
   }
 
   checkForProgressStatus() {
-    for (const evidence of this.schoolEvidences) {
-      // console.log(evidence.startTime);
+    for (const evidence of this.entityEvidences) {
       if (evidence.isSubmitted) {
         evidence.progressStatus = 'submitted';
       } else if (!evidence.startTime) {
@@ -89,39 +90,28 @@ export class EvidenceListPage {
     }
   }
 
-  openAction(school, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(this.schoolEvidences[evidenceIndex].externalId.externalId, school._id)
-    const options = { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolData };
+  openAction(assessment, evidenceIndex) {
+    this.utils.setCurrentimageFolderName(this.entityEvidences[evidenceIndex].externalId, assessment._id)
+    const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: this.entityData };
     this.evdnsServ.openActionSheet(options);
   }
 
   navigateToEvidence(index): void {
-    if (this.schoolEvidences[index].startTime) {
-      this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
-      this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
+    if (this.entityEvidences[index].startTime) {
+      this.utils.setCurrentimageFolderName(this.entityEvidences[index].externalId, this.entityId)
+      this.navCtrl.push('SectionListPage', { _id: this.entityId, name: this.entityName, selectedEvidence: index })
     } else {
-      const school = {_id: this.schoolId, name: this.schoolName}
-      this.openAction(school, index);
+      const entity = { _id: this.entityId, name: this.entityName }
+      this.openAction(entity, index);
     }
-    // this.navCtrl.setRoot('SectionListPage');
-    // this.appCtrl.getRootNav().push('SectionListPage', {_id:this.schoolId, name: this.schoolName, selectedEvidence: index});
-    // if (!this.schoolEvidences[index].startTime) {
-    //   this.schoolEvidences[index].startTime = Date.now();
-    //   this.utils.setLocalSchoolData(this.schoolData)
-    // }
-    // this.utils.setCurrentimageFolderName(this.schoolEvidences[index].externalId, this.schoolId)
-    // this.navCtrl.push('SectionListPage', { _id: this.schoolId, name: this.schoolName, selectedEvidence: index })
   }
 
-  ionViewWillLeave(){
-    if(this.navParams.get('parent')){
-      this.navParams.get('parent').onInit();
-    }
+  ionViewWillLeave() {
   }
 
   feedBack() {
     this.feedback.sendFeedback()
   }
-  
+
 
 }

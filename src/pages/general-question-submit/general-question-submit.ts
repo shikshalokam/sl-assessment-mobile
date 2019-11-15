@@ -8,6 +8,7 @@ import { AppConfigs } from '../../providers/appConfig';
 import { Storage } from '@ionic/storage';
 import { SlackProvider } from '../../providers/slack/slack';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { TranslateService } from '@ngx-translate/core';
 
 declare var cordova: any;
 
@@ -21,13 +22,11 @@ export class GeneralQuestionSubmitPage {
   uploadImages: any;
   imageList = [];
   appFolderPath: string = this.platform.is('ios') ? cordova.file.documentsDirectory + 'images' : cordova.file.externalDataDirectory + 'images';
-  schoolId: any;
+  // schoolId: any;
   schoolName: string
   selectedEvidenceIndex: any;
-  // currentEvidenceId: any;
   uploadIndex: number = 0;
   schoolData: any;
-  // currentEvidence: any;
   evidenceSections: any;
   selectedEvidenceName: any;
   imageLocalCopyId: any;
@@ -44,93 +43,55 @@ export class GeneralQuestionSubmitPage {
   }
   failedUploadImageNames = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: Storage, private file: File, private fileTransfer: FileTransfer,
-    private apiService: ApiProvider, private utils: UtilsProvider, private localStorage: LocalStorageProvider,
-    private app: App, private platform: Platform, private slack: SlackProvider) {
-    this.schoolId = this.navParams.get('_id');
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private storage: Storage,
+    private file: File,
+    private translate:TranslateService,
+    private fileTransfer: FileTransfer,
+    private apiService: ApiProvider,
+    private utils: UtilsProvider,
+    private localStorage: LocalStorageProvider,
+    private platform: Platform,
+    private slack: SlackProvider) {
+    this.submissionId = this.navParams.get('_id');
 
   }
 
   ionViewDidLoad() {
-    this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then( success => {
-        this.submissionId = success['assessments'][0]['submissionId'];
-        this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( data => {
-          this.allGeneralQuestions = data;
-          this.generalQuestions = this.allGeneralQuestions;
-          this.localStorage.getLocalStorage("genericQuestionsImages").then(success => {
-            const data = JSON.parse(success)
-            if (data && data[this.schoolId]) {
-              this.uploadImages = data[this.schoolId] ? data[this.schoolId] : [];
-            } else {
-              this.uploadImages = [];
-            }
-            if (this.uploadImages.length) {
-              this.createImageFromName(this.uploadImages);
-            } else {
-              // this.submitEvidence();
-              this.tempSubmit();
-            }
-          }).catch (error => {
-
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(success => {
+      // this.submissionId = success['assessment']['submissionId'];
+      this.localStorage.getLocalStorage('generalQuestions_' + this.submissionId).then(data => {
+        this.allGeneralQuestions = data;
+        this.generalQuestions = this.allGeneralQuestions;
+        this.localStorage.getLocalStorage("genericQuestionsImages").then(data => {
+          if (data && data[this.submissionId]) {
+            this.uploadImages = data[this.submissionId] ? data[this.submissionId] : [];
+          } else {
+            this.uploadImages = [];
+          }
+          if (this.uploadImages.length) {
+            this.createImageFromName(this.uploadImages);
+          } else {
             this.tempSubmit();
-          })
+          }
         }).catch(error => {
+
+          this.tempSubmit();
         })
+      }).catch(error => {
+      })
     }).catch(error => {
-
     })
-
-
-
-    this.localStorage.getLocalStorage('generalQuestionsCopy_'+this.schoolId).then( data => {
+    this.localStorage.getLocalStorage('generalQuestionsCopy_' + this.submissionId).then(data => {
       this.copyOfOriginalGeneralQuestions = data;
     }).catch(error => {
-      
     })
-
-
-    // this.storage.get('generalQuestions').then(data => {
-    //   this.allGeneralQuestions = JSON.parse(data)
-    //   this.generalQuestions = this.allGeneralQuestions[this.schoolId];
-    //   // console.log(JSON.stringify(this.generalQuestions))
-    // }).catch(error => {
-
-    // })
-    // this.storage.get('generalQuestionsCopy').then(data => {
-    //   this.copyOfOriginalGeneralQuestions = JSON.parse(data)[this.schoolId];
-    //   // console.log(JSON.stringify(this.generalQuestions))
-    // }).catch(error => {
-
-    // })
-    // this.storage.get("genericQuestionsImages").then(data => {
-    //   if (data && JSON.parse(data)[this.schoolId]) {
-    //     this.uploadImages = (JSON.parse(data)[this.schoolId]) ? (JSON.parse(data)[this.schoolId]) : [];
-    //   } else {
-    //     this.uploadImages = [];
-    //   }
-    //   if (this.uploadImages.length) {
-    //     this.createImageFromName(this.uploadImages);
-    //   } else {
-    //     // this.submitEvidence();
-    //     this.tempSubmit();
-    //   }
-    // })
-
   }
 
   createImageFromName(imageList) {
     this.utils.startLoader();
-    // for (const image of imageList) {
-    //   this.file.checkFile(this.appFolderPath + '/', image.name).then(response => {
-    //     this.file.readAsDataURL(this.appFolderPath, image.name).then(data => {
-    //       this.imageList.push({ data: data, uploaded: false, file: image.name, url: "" });
-    //     }).catch(err => {
-    //     })
-    //   }).catch(error => {
-    //   })
-    // }
-
     for (const image of imageList) {
       this.imageList.push({ uploaded: false, file: image.name, url: "" });
     }
@@ -138,7 +99,6 @@ export class GeneralQuestionSubmitPage {
   }
 
   getImageUploadUrls() {
-    // const submissionId = this.schoolData[this.schoolId]['assessments'][0]['submissionId'];
     const files = {
       "files": [],
       submissionId: this.submissionId
@@ -152,19 +112,19 @@ export class GeneralQuestionSubmitPage {
         this.imageList[i]['url'] = success.result[i].url;
         this.imageList[i]['sourcePath'] = success.result[i].payload.sourcePath;
       }
-      // this.cloudImageUpload();
-      // this.fileTransfer.create()
       this.checkForLocalFolder();
 
     }, error => {
       this.utils.stopLoader();
-      this.utils.openToast('Unable to get google urls')
+      this.translate.get('toastMessage.enableToGetGoogleUrls').subscribe(translations =>{
+        this.utils.openToast(translations);
+      })
+     
     })
   }
 
   checkForLocalFolder() {
     if (this.platform.is('ios')) {
-      console.log("Ios ")
       this.file.checkDir(this.file.documentsDirectory, 'images').then(success => {
         this.fileTransfer.create()
         this.cloudImageUpload();
@@ -179,7 +139,6 @@ export class GeneralQuestionSubmitPage {
 
       });
     }
-
   }
 
   cloudImageUpload() {
@@ -195,59 +154,38 @@ export class GeneralQuestionSubmitPage {
     };
     let targetPath = this.pathForImage(this.imageList[this.uploadIndex].file);
     let fileTrns: FileTransferObject = this.fileTransfer.create();
-    this.file.checkFile((this.platform.is('ios') ? this.file.documentsDirectory : this.file.externalDataDirectory)+'images/', this.imageList[this.uploadIndex].file ).then(success => {
+    this.file.checkFile((this.platform.is('ios') ? this.file.documentsDirectory : this.file.externalDataDirectory) + 'images/', this.imageList[this.uploadIndex].file).then(success => {
       fileTrns.upload(targetPath, this.imageList[this.uploadIndex].url, options).then(result => {
         this.retryCount = 0;
-        console.log("Uploaded image");
         this.imageList[this.uploadIndex].uploaded = true;
         if (this.uploadIndex < (this.imageList.length - 1)) {
           this.uploadIndex++;
           this.cloudImageUpload();
         } else {
-          // this.utils.stopLoader();
-          // this.submitEvidence();
           this.tempSubmit()
         }
       }).catch(err => {
-        const errorObject = {... this.errorObj};
-        // this.utils.openToast("Something went wrong. Please try afetr 30 mins.")
-        // errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}. Details: ${JSON.stringify(err)}`;
-        // this.slack.pushException(errorObject);
-        // this.navCtrl.pop();
+        const errorObject = { ... this.errorObj };
         this.retryCount++;
-        if(this.retryCount > 3) {
-          this.utils.openToast("Something went wrong. Please try after sometime.")
-          errorObject.text= `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
+        if (this.retryCount > 3) {
+          this.translate.get('toastMessage.someThingWentWrongTryLater').subscribe(translations =>{
+            this.utils.openToast(translations);
+          })
+          errorObject.text = `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
           Details: ${JSON.stringify(err)}`;
-         this.slack.pushException(errorObject);
-         this.navCtrl.pop();
-
-          // if (this.uploadIndex < (this.imageList.length - 1)) {
-          //   this.uploadIndex++;
-          //   this.cloudImageUpload();
-          // } else {
-          //   this.tempSubmit();
-          // }
+          this.slack.pushException(errorObject);
+          this.navCtrl.pop();
         } else {
           this.cloudImageUpload();
         }
-        // if (this.uploadIndex < (this.imageList.length - 1)) {
-        //   this.uploadIndex++;
-        //   this.cloudImageUpload();
-        // } else {
-        //   this.tempSubmit();
-        // }
       })
-    }).catch (error => {
-      console.log("In error Could not find images");
+    }).catch(error => {
       this.failedUploadImageNames.push(this.imageList[this.uploadIndex].file)
       if (this.uploadIndex < (this.imageList.length - 1)) {
         this.uploadIndex++;
-        // this.file.removeFile()
         this.cloudImageUpload();
 
       } else {
-        // this.utils.stopLoader();
         this.tempSubmit();
       }
     });
@@ -266,23 +204,15 @@ export class GeneralQuestionSubmitPage {
   submitEvidence() {
     this.utils.startLoader('Please wait while submitting')
     const payload = this.constructPayload();
-    // const submissionId = this.schoolData[this.schoolId]['assessments'][0].submissionId;
     const url = AppConfigs.survey.submitGeneralQuestions + this.submissionId;
-    console.log(url)
-    console.log(JSON.stringify(payload))
     this.apiService.httpPost(url, payload, response => {
       this.utils.openToast(response.message);
-      console.log(JSON.stringify(response))
-      // if(response.status ===);
       this.allGeneralQuestions = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
-      // this.generalQuestions = this.copyOfOriginalGeneralQuestions;
-      this.localStorage.setLocalStorage('generalQuestions_'+this.schoolId, this.allGeneralQuestions)
-      // this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
+      this.localStorage.setLocalStorage('generalQuestions_' + this.submissionId, this.allGeneralQuestions)
       this.storage.remove('genericQuestionsImages');
       this.utils.stopLoader();
       this.navCtrl.pop();
     }, error => {
-      console.dir(error)
       this.utils.stopLoader();
       this.navCtrl.pop();
 
@@ -292,34 +222,21 @@ export class GeneralQuestionSubmitPage {
 
   makeApiCall(payload) {
     const url = AppConfigs.survey.submitGeneralQuestions + this.submissionId;
-      console.log("before success "+this.tempIndex)
-      // console.log(JSON.stringify(payload))
     this.apiService.httpPost(url, payload, response => {
-      // if(!this.tempIndex){
-      //   this.utils.startLoader('Please wait while submitting')
-      // }
-      console.log(JSON.stringify(response))
-      // if(response.status ===);
       this.allGeneralQuestions = JSON.parse(JSON.stringify(this.copyOfOriginalGeneralQuestions))
-      // this.generalQuestions = this.copyOfOriginalGeneralQuestions;
-      // this.tempIndex  = this.tempIndex+1
-      console.log("success "+this.tempIndex)
-      if(this.tempIndex < (this.tempPayload.length -1)){
+      if (this.tempIndex < (this.tempPayload.length - 1)) {
         this.tempIndex = this.tempIndex + 1;
-        console.log(this.tempIndex + " " +this.tempPayload.length + " hi")
         this.makeApiCall(this.tempPayload[this.tempIndex])
       } else {
-        this.localStorage.setLocalStorage('generalQuestions_'+this.schoolId, this.allGeneralQuestions);
-        // this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
+        this.localStorage.setLocalStorage('generalQuestions_' + this.submissionId, this.allGeneralQuestions);
         this.storage.remove('genericQuestionsImages');
         this.utils.stopLoader();
-      this.utils.openToast(response.message);
+        this.utils.openToast(response.message);
 
         this.navCtrl.pop();
       }
 
     }, error => {
-      console.dir(error)
       this.utils.stopLoader();
       this.navCtrl.pop();
 
@@ -327,17 +244,13 @@ export class GeneralQuestionSubmitPage {
   }
 
   tempSubmit() {
-    const payload = [];
     this.utils.startLoader('Please wait while submitting')
 
     for (const question of this.generalQuestions) {
-      if(question.isCompleted){
+      if (question.isCompleted) {
         this.tempPayload.push(this.constructTempPayload(question))
       }
     }
-    // console.log(JSON.stringify(this.tempPayload))
-
-   
     this.makeApiCall(this.tempPayload[this.tempIndex])
 
   }
@@ -348,25 +261,21 @@ export class GeneralQuestionSubmitPage {
     }
     payload.answers[question._id] = {
       "qid": question._id,
-      "value":question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
+      "value": question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
       "remarks": question.remarks,
-      "fileName":[
+      "fileName": [
       ],
-      "payload":{
+      "payload": {
         question: question.question,
         labels: [],
         responseType: question.responseType
       },
-      "startTime":question.startTime,
-      "endTime":question.endTime,
+      "startTime": question.startTime,
+      "endTime": question.endTime,
       "countOfInstances": question.responseType === 'matrix' ? question.value.length : 1,
     };
-    console.log(JSON.stringify(question.payload));
     for (const key of Object.keys(question.payload)) {
-      console.log(key)
-      console.log(question.payload[key])
       payload.answers[question._id][key] = question.payload[key];
-      console.log("done")
     }
 
     if (question.fileName && question.fileName.length) {
@@ -413,32 +322,27 @@ export class GeneralQuestionSubmitPage {
     const payload = {
       'answers': {}
     }
-    console.log("innnnnn")
     for (const question of this.generalQuestions) {
-      if(question.isCompleted) {
+      if (question.isCompleted) {
         payload.answers[question._id] = {
           "qid": question._id,
-          "value":question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
+          "value": question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
           "remarks": question.remarks,
-          "fileName":[
+          "fileName": [
           ],
-          "payload":{
+          "payload": {
             question: question.question,
             labels: [],
             responseType: question.responseType
           },
-          "startTime":question.startTime,
-          "endTime":question.endTime,
+          "startTime": question.startTime,
+          "endTime": question.endTime,
           "countOfInstances": question.responseType === 'matrix' ? question.value.length : 1,
         };
-        console.log(JSON.stringify(question.payload));
         for (const key of Object.keys(question.payload)) {
-          console.log(key)
-          console.log(question.payload[key])
           payload.answers[question._id][key] = question.payload[key];
-          console.log("done")
         }
-  
+
         if (question.fileName && question.fileName.length) {
           const filePaylaod = []
           for (const fileName of question.fileName) {
@@ -454,7 +358,7 @@ export class GeneralQuestionSubmitPage {
           }
           payload.answers[question._id].fileName = filePaylaod;
         }
-  
+
         if (question.responseType === 'multiselect') {
           for (const val of question.value) {
             for (const option of question.options) {
@@ -463,102 +367,26 @@ export class GeneralQuestionSubmitPage {
               }
             }
           }
-  
+
         } else if (question.responseType === 'radio') {
-  
+
           for (const option of question.options) {
             if (payload.answers[question._id].value === option.value && payload.answers[question._id].payload.labels.indexOf(option.label) <= 0) {
               payload.answers[question._id].payload.labels.push(option.label);
             }
           }
-  
+
         } else {
           payload.answers[question._id].payload.labels.push(question.value);
         }
       }
- 
+
     }
-
-    // console.log(JSON.stringify(payload))
-  //   const evidence = {
-  //     id: "",
-  //     externalId: "",
-  //     answers: {},
-  //     startTime: 0,
-  //     endTime: 0
-  //   };
-  //   const currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]
-  //   evidence.id = currentEvidence._id;
-  //   evidence.externalId = currentEvidence.externalId;
-  //   evidence.startTime = currentEvidence.startTime;
-  //   evidence.endTime = Date.now();
-  //   for (const section of this.evidenceSections) {
-  //     for (const question of section.questions) {
-  //       let obj = {
-  //         qid: question._id,
-  //         value: question.responseType === 'matrix' ? this.constructMatrixObject(question) : question.value,
-  //         remarks: question.remarks,
-  //         fileName: [],
-  //         payload: {
-            // question: question.question,
-            // labels: [],
-            // responseType: question.responseType
-  //         },
-  //         startTime: question.startTime,
-  //         endTime: question.endTime
-  //       };
-
-        // if (question.fileName && question.fileName.length) {
-        //   const filePaylaod = []
-        //   for (const fileName of question.fileName) {
-        //     for (const updatedFileDetails of this.imageList) {
-        //       if (fileName === updatedFileDetails.file) {
-        //         const obj = {
-        //           name: fileName,
-        //           sourcePath: updatedFileDetails.sourcePath
-        //         }
-        //         filePaylaod.push(obj);
-        //       }
-        //     }
-        //   }
-        //   obj.fileName = filePaylaod;
-        // }
-
-        // if (question.responseType === 'multiselect') {
-        //   for (const val of question.value) {
-        //     for (const option of question.options) {
-        //       if (val === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
-        //         obj.payload.labels.push(option.label);
-        //       }
-        //     }
-        //   }
-
-        // } else if (question.responseType === 'radio') {
-
-        //   for (const option of question.options) {
-        //     if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
-        //       obj.payload.labels.push(option.label);
-        //     }
-        //   }
-
-        // } else {
-        //   obj.payload.labels.push(question.value);
-        // }
-  //       for (const key of Object.keys(question.payload)) {
-  //         obj[key] = question.payload[key];
-  //       }
-  //       evidence.answers[obj.qid] = obj;
-  //     }
-  //   }
-  //   payload.evidence = evidence;
     return payload
   }
 
   constructMatrixObject(question) {
-    console.log("contr")
     const value = [];
-    // const currentEvidence = this.schoolData[this.schoolId]['assessments'][0]['evidences'][this.selectedEvidenceIndex]
-
     for (const instance of question.value) {
       let eachInstance = {};
       for (let qst of instance) {
@@ -617,7 +445,6 @@ export class GeneralQuestionSubmitPage {
       }
       value.push(eachInstance)
     }
-    console.log('return')
     return value
   }
 

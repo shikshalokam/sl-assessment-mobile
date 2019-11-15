@@ -9,17 +9,19 @@ import { AppConfigs } from '../appConfig';
 import { ApiProvider } from '../api/api';
 import { RemarksPage } from '../../pages/remarks/remarks';
 import { LocalStorageProvider } from '../local-storage/local-storage';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class EvidenceProvider {
   schoolData: any;
-  schoolDetails: any;
+  entityDetails: any;
   schoolId: any;
   evidenceIndex: any;
 
   constructor(public http: HttpClient, private actionSheet: ActionSheetController,
     private appCtrl: App, private storage: Storage, private utils: UtilsProvider,
-    private diagnostic: Diagnostic, private netwrkGpsProvider: NetworkGpsProvider, private localStorage: LocalStorageProvider,
+    private diagnostic: Diagnostic, private translate : TranslateService,
+    private netwrkGpsProvider: NetworkGpsProvider, private localStorage: LocalStorageProvider,
     private apiService: ApiProvider, private alertCtrl: AlertController, private modalCtrl: ModalController) {
     console.log('Hello EvidenceProvider Provider');
     this.storage.get('schools').then(data => {
@@ -27,33 +29,36 @@ export class EvidenceProvider {
     })
   }
 
-  openActionSheet(params): void {
-    this.schoolDetails = params.schoolDetails;
+  openActionSheet(params,type?): void {
+    type = type ? type : "Survey";
+    console.log(JSON.stringify(params) +  " test")
+    this.entityDetails = params.entityDetails;
     this.schoolId = params._id;
     this.evidenceIndex = params.selectedEvidence;
-    const selectedECM = this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex];
-
-    let action = this.actionSheet.create({
-      title: "Survey actions",
+    const selectedECM =  this.entityDetails['assessment']['evidences'][this.evidenceIndex] ;
+    let translateObject ;
+    this.translate.get(['actionSheet.surveyAction','actionSheet.view','actionSheet.start','actionSheet.ecmNotApplicable','actionSheet.cancel','actionSheet.ecmNotAllowed']).subscribe(translations =>{
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    let action = this.actionSheet.create(
+      {
+      title: translateObject['actionSheet.surveyAction'],
       buttons: [
         {
-          text: "View Survey",
-          icon: "eye",
-          handler: () => {
-            delete params.schoolDetails;
-            this.appCtrl.getRootNav().push('SectionListPage', params);
-          }
-        },
-        {
-          text: "Start Survey",
+          text: translateObject['actionSheet.start']+" "+type,
           icon: 'arrow-forward',
           handler: () => {
             this.diagnostic.isLocationEnabled().then(success => {
               if (success) {
-                params.schoolDetails['assessments'][0]['evidences'][params.selectedEvidence].startTime = Date.now();
-                // this.utils.setLocalSchoolData(params.schoolDetails);
-                this.localStorage.setLocalStorage("schoolDetails_"+this.schoolId, params.schoolDetails)
-                delete params.schoolDetails;
+                // if(params.entityDetails['assessment']) {
+                //   params.entityDetails['assessments']['evidences'][params.selectedEvidence].startTime = Date.now();
+                // } else {
+                  params.entityDetails['assessment']['evidences'][params.selectedEvidence].startTime = Date.now();
+                // }
+                //  ?  :  = ;
+                // this.utils.setLocalSchoolData(params.entityDetails);
+                this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), params.entityDetails)
+                delete params.entityDetails;
                 this.appCtrl.getRootNav().push('SectionListPage', params);
               } else {
                 this.netwrkGpsProvider.checkForLocationPermissions();
@@ -64,7 +69,15 @@ export class EvidenceProvider {
           }
         },
         {
-          text: selectedECM.canBeNotApplicable ? "ECM Not Applicable" : 'Cancel',
+          text:translateObject['actionSheet.view']+" "+type,
+          icon: "eye",
+          handler: () => {
+            delete params.entityDetails;
+            this.appCtrl.getRootNav().push('SectionListPage', params);
+          }
+        },
+        {
+          text: selectedECM.canBeNotApplicable ? translateObject['actionSheet.ecmNotApplicable'] : translateObject['actionSheet.cancel'],
           role: !selectedECM.canBeNotApplicable ? 'destructive' : "",
           icon: selectedECM.canBeNotApplicable ? "alert" : "",
           handler: () => {
@@ -78,15 +91,15 @@ export class EvidenceProvider {
     })
     // console.dir(action);
      const notAvailable =({
-      text: "ECM Not Allowed",
+      text: translateObject['actionSheet.ecmNotAllowed'],
       icon: "alert",
       handler: () => {
-        delete params.schoolDetails;
+        delete params.entityDetails;
         this.openAlert(selectedECM)
       }
     })
     if(selectedECM.canBeNotAllowed) {
-      action.data.buttons.splice(action.data.buttons.length-1, 0, notAvailable);
+      action.data.buttons.splice(action.data.buttons.length-1, 0 , notAvailable);
     }
     // if(selectedECM.canBeNotApplicable) {
     //   action['buttons'].push(
@@ -99,7 +112,10 @@ export class EvidenceProvider {
     // }
     //   )
     // }
+    
     action.present();
+  })
+
   }
 
   openRemarksModal(selectedECM): void {
@@ -114,19 +130,24 @@ export class EvidenceProvider {
   }
 
   openAlert(selectedECM): void {
+    let translateObject ;
+          this.translate.get(['actionSheet.confirm','actionSheet.cancel','actionSheet.confirm','actionSheet.ecmNotApplicableMessage']).subscribe(translations =>{
+            translateObject = translations;
+            console.log(JSON.stringify(translations))
+          })
     let alert = this.alertCtrl.create({
-      title: 'Confirm ',
-      message: 'Do you want mark ECM as not applicable / not allowed?',
+      title: translateObject['actionSheet.confirm'],
+      message: translateObject['actionSheet.ecmNotApplicableMessage'],
       buttons: [
         {
-          text: 'Cancel',
+          text: translateObject['actionSheet.cancel'],
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
           }
         },
         {
-          text: 'Confirm',
+          text:translateObject['actionSheet.confirm'],
           handler: () => {
             // console.log('Buy clicked');
             // this.notApplicable(selectedECM);
@@ -141,15 +162,15 @@ export class EvidenceProvider {
   notApplicable(selectedECM) {
     this.utils.startLoader()
     const payload = this.constructPayload(selectedECM);
-    const submissionId = this.schoolDetails['assessments'][0].submissionId;
+    const submissionId = this.entityDetails['assessment'].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
     this.apiService.httpPost(url, payload, response => {
       console.log(JSON.stringify(response));
       this.utils.openToast(response.message);
-      this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].isSubmitted = true;
-      this.schoolDetails['assessments'][0]['evidences'][this.evidenceIndex].notApplicable = true;
-      this.localStorage.setLocalStorage("schoolDetails_"+this.schoolId, this.schoolDetails)
-      // this.utils.setLocalSchoolData(this.schoolDetails);
+      this.entityDetails['assessment']['evidences'][this.evidenceIndex].isSubmitted = true;
+      this.entityDetails['assessment']['evidences'][this.evidenceIndex].notApplicable = true;
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.entityDetails)
+      // this.utils.setLocalSchoolData(this.entityDetails);
       this.utils.stopLoader();
 
     }, error => {

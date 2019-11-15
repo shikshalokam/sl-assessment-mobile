@@ -1,0 +1,77 @@
+<ion-header>
+  <header [title]="'headings.schoolProfile'|translate" [hideBack]="false">
+  </header>
+</ion-header>
+
+<ion-content>
+  <ion-item-group>
+    <ion-item-divider color="light">
+      <h3 class="headerText _flex-box">
+        <ion-icon name="book" margin-right></ion-icon>
+        <span text-wrap style="flex: 1">{{entityName}} </span>
+        <ion-icon name="create" float-right margin-right margin-left  (click)="goToEditProfile()"></ion-icon>
+      </h3>
+    </ion-item-divider>
+
+  </ion-item-group>
+
+  <ion-item-group>
+    <ng-container *ngFor="let field of entityProfile">
+      <ion-item *ngIf="field?.field != 'gpsLocation' && field?.visible && field?.field != 'name'">
+        <div class="customLabel">{{field?.label}}</div>
+        <div class="_pt-5"  *ngIf=" field?.input === 'text' || field?.input === 'number' || field?.input === 'date' || field?.input === 'textarea' || field?.input === 'slider' ">{{field?.value}}</div>
+        <div class="_pt-5"  *ngIf=" field?.input === 'radio' || field?.input === 'select' || field?.input === 'multiselect' ||field?.input === 'checkbox' ">
+          <span  text-wrap>
+              <span *ngFor="let value of field?.value">
+                <span *ngFor="let option of field?.options; let last = isLast">
+                  <span *ngIf = " value === option.value">
+                    {{ option.label}} , 
+                  </span>
+                </span>
+              </span>
+          </span>
+          
+        </div>
+
+        <!-- <div  *ngIf="field?.value[0]">
+          <div class="_pt-5" *ngFor="let value of field?.value">
+          {{field?.value}}
+          </div>
+        </div> -->
+        <!-- <ng-container *ngFor="let field of fields| slice:start:end; let i=index">
+            <ng-container [ngSwitch]="field.input.toLowerCase()">
+              <input-type   [data]="field"
+              *ngSwitchCase="'text'"></input-type>
+              <input-type  [data]="field"
+                 *ngSwitchCase="'number'"></input-type>
+              <radio-type  [data]="field"
+                 *ngSwitchCase="'radio'"></radio-type>
+              <date-type  [data]="field"
+                 *ngSwitchCase="'date'"></date-type>
+              <multiple-choice-type  [data]="field"
+                 *ngSwitchCase="'multiselect'"></multiple-choice-type>
+              <matrix-type  [data]="field"
+                 (updateLocalData)="updateLocalData()" *ngSwitchCase="'matrix'">
+              </matrix-type>
+              <slider  [data]="field"
+                 *ngSwitchCase="'slider'"></slider>
+            </ng-container>
+          </ng-container> -->
+      </ion-item>
+    </ng-container>
+  </ion-item-group>
+
+</ion-content>
+
+<ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button full (click)="goToPage()" class="btnText">
+          {{'buttons.start' | translate}} {{'buttons.survey' | translate}}
+          <ion-icon name="arrow-forward" margin-left></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

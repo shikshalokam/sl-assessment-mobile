@@ -1,20 +1,11 @@
 <ion-header>
-  <!-- <header [title]="'headings.remarks'|translate" [hideBack]="true" [showClose]="true" [disableNetwork]="true"> 
-
-  </header> -->
   <ion-navbar color="primary" hideBackButton="{{hideBack}}">
     <div class="_flex-box">
       <ion-title class="_ellipsis titleAdj">{{ 'headings.remarks'|translate  }} </ion-title>
-      <!-- <ion-icon name="chatboxes" isActive="true" class="_headerIcon" (click)="feedback()" margin-right float-right></ion-icon> -->
-      <!-- <ion-icon name="close" isActive="true" class="_headerIcon margin" (click)="closeDashboard()" *ngIf="showClose" float-right></ion-icon> -->
-
-      <!-- <ion-icon name="map" isActive="true" *ngIf="enableDashboard" class="_headerIcon margin" (click)="openDashboard()" float-right></ion-icon>
-      <ion-icon name="wifi" class="_headerIcon margin" *ngIf="!disableNetwork" [ngClass]="{'_disconnectedConnection': !networkAvailable}"
-        float-right></ion-icon> -->
-      <!-- <ion-icon name="log-out" isActive="true" style="color: white !important ;font-size: 24px;padding-right: 10px" (click)="logout()" float-right></ion-icon> -->
-      <button ion-button icon-start clear color="light" (click)="update()" [disabled]="required ? !data.remarks : false" >
-        Done
-    </button>
+      <button ion-button icon-start clear color="light" (click)="update()"
+        [disabled]="required ? !data.remarks : false">
+        {{'buttons.done'|translate}}
+      </button>
     </div>
   </ion-navbar>
 </ion-header>
@@ -27,16 +18,17 @@
 </ion-content>
 
 <div class="_footer" no-padding>
-    <ion-row>
-      <ion-col>
-          <button ion-button icon-start full color="light" (click)="close()" >
-              {{'buttons.cancel'|translate}}
-          </button>
-        </ion-col>
-        <ion-col>
-          <button ion-button icon-start full float-right color="primary" (click)="update()" [disabled]="required ? !data.remarks : false">
-              {{'buttons.' + button |translate}}
-          </button>
-        </ion-col>
-    </ion-row>
-  </div>
+  <ion-row>
+    <ion-col>
+      <button ion-button icon-start full color="light" (click)="close()">
+        {{'buttons.cancel'|translate}}
+      </button>
+    </ion-col>
+    <ion-col>
+      <button ion-button icon-start full float-right color="primary" (click)="update()"
+        [disabled]="required ? !data.remarks : false">
+        {{'buttons.' + button |translate}}
+      </button>
+    </ion-col>
+  </ion-row>
+</div>

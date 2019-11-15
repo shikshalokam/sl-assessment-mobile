@@ -1,12 +1,13 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { SchoolListProvider } from '../../providers/school-list/school-list';
 
 @Component({
   selector: 'input-type',
   templateUrl: 'input-type.html'
 })
 export class InputTypeComponent implements OnInit {
-
+  @Input() inputIndex ;
   @Input() data: any;
   @Input() isLast: boolean;
   @Input() isFirst: boolean;
@@ -14,25 +15,38 @@ export class InputTypeComponent implements OnInit {
   @Output() previousCallBack = new EventEmitter()
   @Input() evidenceId: string;
   @Input() hideButton: boolean;
-  @Input() schoolId: string;
+  @Input() submissionId: any;
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
+  @Input() schoolId;
 
   
   notNumber: boolean;
   questionValid: boolean;
 
   constructor(private utils: UtilsProvider) {
-    console.log('Hello RadioTypeComponent Component');
-
+    console.log('Hello InputTypeComponent Component');
   }
   ngOnInit() {
     console.log(this.imageLocalCopyId);
     this.isaNumber();
+    console.log(JSON.stringify(this.data))
+
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
+    if(!this.data.validation.required) {
+      this.data.isCompleted = true;
+    }
     this.getErrorMsg();
     // this.checkForValidation();
   }
+
+  // getErrorMsg() {
+  //   if(this.data.validation.regex){
+  //     let string = this.data.validation.regex.split("[");
+  //     string = string[1].split("]")[0];
+  //     return "Should contain only values "+ string;
+  //   }
+  // }
 
 
   next(status?: any) {
@@ -53,10 +67,10 @@ export class InputTypeComponent implements OnInit {
   //   this.questionValid = this.utils.isQuestionComplete(this.data);
   // }
   checkForValidation(): void {
-    console.log("innn");
+    console.log(this.submissionId)
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
     this.data.endTime = this.data.isCompleted ? Date.now() : "";
-
+    this.isaNumber();
   }
 
   getErrorMsg() {

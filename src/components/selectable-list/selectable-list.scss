@@ -1,0 +1,54 @@
+selectable-list {
+   .noDataMsg {
+      // flex-direction: column;
+      height: 500px;
+      font-size: 18px;
+      color: $dark-grey-color;
+   }
+}
+.columnFlex{
+    display: flex;
+    flex-direction: column;
+}
+.listDiv{
+    overflow:auto;
+}
+
+
+.table {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+.table-row {
+   display: table-row;
+}
+.table-cell {
+   display: table-cell;
+}
+.last-row {
+   height: 100%;
+}
+.cell-content-outer-wrapper {
+   height: 100%;
+}
+.cell-content-inner-wrapper {
+   height: 100%;
+   position: relative;
+   overflow: auto;
+}
+.cell-content {
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+}
+
+.cell-content-infinite {
+    position: absolute;
+    // top: 0;
+    bottom: 0;
+    // left: 0;
+    // right: 0;
+ }

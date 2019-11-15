@@ -10,28 +10,31 @@
 
 <ion-content padding>
   <div class="container">
-    <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
-      <h4 *ngFor="let question of data.question">{{question}}</h4>
-    </ion-col>
+      <ion-col class="_flex-box _justify-content-center _flex-direction-column ">
+          <h4 *ngFor="let question of data.question">{{question}}</h4>
+        </ion-col>
+    
 
     <div *ngFor="let instance of data?.value; let i = index">
       <ng-container *ngIf="selectedIndex ===i">
-        <!-- <div text-capitalize padding-top padding-bottom>{{datas?.instanceIdentifier}} {{i+1}}</div> -->
         <ng-container [ngSwitch]="question?.responseType" *ngFor="let question of instance; let j=index" margin-bottom>
+            <ion-item-divider color="light" *ngIf="question?.sectionHeader">
+              <h4  class="bold _flex-box sectionHeader"  text-wrap  >{{question?.sectionHeader}}</h4>
+              </ion-item-divider>
           <div class="_fullScreenCard" *ngIf="checkForVisibility(j)">
-            <input-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId" [schoolId]="schoolId"
-              *ngSwitchCase="'text'" [hideButton]="true"></input-type>
-            <input-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId" [schoolId]="schoolId"
-              *ngSwitchCase="'number'" [hideButton]="true"></input-type>
-            <radio-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId" [schoolId]="schoolId"
-              *ngSwitchCase="'radio'" [hideButton]="true"></radio-type>
-            <date-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId" [schoolId]="schoolId"
-              *ngSwitchCase="'date'" [hideButton]="true"></date-type>
-            <slider [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question" [imageLocalCopyId]="localImageListKey"
-              *ngSwitchCase="'slider'"></slider>
+            <input-type [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
+              [schoolId]="schoolId" *ngSwitchCase="'text'" [hideButton]="true" [submissionId]="submissionId"></input-type>
+            <input-type  [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
+              [schoolId]="schoolId" *ngSwitchCase="'number'" [submissionId]="submissionId" [hideButton]="true"></input-type>
+            <radio-type [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
+              [schoolId]="schoolId" *ngSwitchCase="'radio'" [submissionId]="submissionId" [hideButton]="true"></radio-type>
+            <date-type  [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
+              [schoolId]="schoolId" *ngSwitchCase="'date'" [submissionId]="submissionId" [hideButton]="true"></date-type>
+            <slider [inputIndex]="j+1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+              [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'slider'"></slider>
 
-            <multiple-choice-type [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-              [schoolId]="schoolId" *ngSwitchCase="'multiselect'" [hideButton]="true"></multiple-choice-type>
+            <multiple-choice-type  [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
+              [schoolId]="schoolId" *ngSwitchCase="'multiselect'" [submissionId]="submissionId" [hideButton]="true"></multiple-choice-type>
           </div>
         </ng-container>
       </ng-container>
@@ -47,14 +50,9 @@
       </button>
     </ion-col>
     <ion-col>
-      <!-- <button ion-button icon-end  full float-right color="light" (click)="next()" *ngIf="!isLast">Next <ion-icon name="arrow-forward"></ion-icon></button> -->
       <button ion-button icon-start full float-right color="primary" (click)="update()">
         {{'buttons.save'|translate}}
       </button>
     </ion-col>
-    <!-- <button ion-button icon-start full color="primary" (click)="update()" *ngIf="!isLast">
-      <ion-icon name="filing"></ion-icon>Save
-    </button> -->
-
   </ion-row>
 </div>

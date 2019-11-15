@@ -1,8 +1,8 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule, HttpClient} from '@angular/common/http';
-import { HttpModule, Http } from '@angular/http';
+import { HttpModule } from '@angular/http';
 
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { IonicStorageModule } from '@ionic/storage';
@@ -10,10 +10,7 @@ import { Network} from '@ionic-native/network';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
-
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -21,12 +18,9 @@ import { LoginPageModule } from '../pages/login/login.module';
 import { AuthProvider } from '../providers/auth/auth';
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { WelcomePage } from '../pages/welcome/welcome';
-import { SchoolListPage } from '../pages/school-list/school-list';
 import { SchoolListProvider } from '../providers/school-list/school-list';
-import { HttpInterceptorProvider } from '../providers/http-interceptor/http-interceptor';
 import { UtilsProvider } from '../providers/utils/utils';
 import { ApiProvider } from '../providers/api/api';
-import { SchoolProfilePageModule } from '../pages/school-profile/school-profile.module';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -36,12 +30,18 @@ import { QuestionerPageModule } from '../pages/questioner/questioner.module';
 import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
 import { FaqPage } from '../pages/faq/faq';
-import { SchoolProfileEditPage } from '../pages/school-profile-edit/school-profile-edit';
+import { SocialSharing } from '@ionic-native/social-sharing';
+
+import { EntityProfileEditPage } from '../pages/entity-profile-edit/entity-profile-edit';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { FileTransfer} from '@ionic-native/file-transfer';
 import { ImagePicker } from '@ionic-native/image-picker';
+import { FileChooser } from '@ionic-native/file-chooser';
+import { IOSFilePicker } from '@ionic-native/file-picker';
+import { FileOpener } from '@ionic-native/file-opener';
+
 import { ImageListingPage } from '../pages/image-listing/image-listing';
 import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
@@ -57,7 +57,7 @@ import { EvidenceProvider } from '../providers/evidence/evidence';
 import { QuestionDashboardPage } from '../pages/question-dashboard/question-dashboard';
 import { PhotoLibrary } from '@ionic-native/photo-library';
 import { RemarksPage } from '../pages/remarks/remarks';
-import { ParentsListPageModule } from '../pages/parents-list/parents-list.module';
+import { RegistryListPageModule } from '../pages/registry-list/registry-list.module';
 import { UpdateLocalSchoolDataProvider } from '../providers/update-local-school-data/update-local-school-data';
 import { FeedbackPage } from '../pages/feedback/feedback';
 import { DetailPage } from '../pages/detail/detail';
@@ -70,32 +70,74 @@ import { SlackProvider } from '../providers/slack/slack';
 import { Keyboard } from '@ionic-native/keyboard';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { HTTP } from '@ionic-native/http';
-import { AccessActionsProvider } from '../providers/access-actions/access-actions';
+import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
+import { ProgramDetailsPage } from '../pages/program-details/program-details';
+import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
+import { EntityProfilePageModule } from '../pages/entity-profile/entity-profile.module';
+import { ObservationsPageModule } from '../pages/observations/observations.module';
+import { AssessmentServiceProvider } from '../providers/assessment-service/assessment-service';
+import { Deeplinks } from '@ionic-native/deeplinks';
+import { SolutionDetailsPage } from '../pages/solution-details/solution-details';
+import { IonicStepperModule } from 'ionic-stepper';
+import { ObservationProvider } from '../providers/observation/observation';
+import { AssessmentAboutPage } from '../pages/assessment-about/assessment-about';
+import { EntityListingPage } from '../pages/entity-listing/entity-listing';
+import { SharingFeaturesProvider } from '../providers/sharing-features/sharing-features';
+import { HintProvider } from '../providers/hint/hint';
+import { HintPage } from '../pages/hint/hint';
+import { Media } from '@ionic-native/media';
+import { PreviewPage } from '../pages/preview/preview';
+import { SubmissionListPage } from '../pages/submission-list/submission-list';
+import { ObservationServiceProvider } from '../providers/observation-service/observation-service';
+import { DownloadAndPreviewProvider } from '../providers/download-and-preview/download-and-preview';
+import { ObservationReportsPage } from '../pages/observation-reports/observation-reports';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracker';
+import { RoleListingPage } from '../pages/role-listing/role-listing';
+import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
+import { DashboardPage } from '../pages/dashboard/dashboard';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
+import { ProgramListingPage } from '../pages/program-listing/program-listing';
+import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
 
 @NgModule({
   declarations: [
     MyApp,
     AboutPage,
-    ContactPage,
     HomePage,
-    TabsPage,
+    AssessmentAboutPage,
     WelcomePage,
-    SchoolListPage,
+    ProgramListingPage,
+    InstitutionsEntityList,
     FaqPage,
-    SchoolProfileEditPage,
+    EntityProfileEditPage,
     ImageListingPage,
+    EntityListingPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
+    SolutionDetailsPage,
     RemarksPage,
     FeedbackPage,
     DetailPage,
     GeneralQuestionPage,
-    GeneralQuestionSubmitPage
+    GeneralQuestionSubmitPage,
+    IndividualListingPage,
+    ProgramDetailsPage,
+    HintPage,
+    PreviewPage,
+    SubmissionListPage,
+    ObservationReportsPage,
+    RoleListingPage,
+    ReportEntityListingPage,
+    DashboardPage,
+    ObservationEditPage
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
+    HighchartsChartModule,
     TranslateModule.forRoot(
       {
         loader: {
@@ -108,7 +150,7 @@ import { AccessActionsProvider } from '../providers/access-actions/access-action
     LoginPageModule,
     HttpModule,
     HttpClientModule,
-    SchoolProfilePageModule,
+    EntityProfilePageModule,
     EvidenceListPageModule,
     SectionListPageModule,
     QuestionerPageModule,
@@ -117,28 +159,42 @@ import { AccessActionsProvider } from '../providers/access-actions/access-action
     RatingCriteriaListingPageModule,
     RatingPageModule,
     RatedCriteriaListPageModule,
-    ParentsListPageModule,
-    GeneralQuestionListPageModule
-  ],
+    RegistryListPageModule,
+    GeneralQuestionListPageModule,
+    IonicStepperModule,
+    ObservationsPageModule  ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     AboutPage,
-    ContactPage,
     HomePage,
-    TabsPage,
     WelcomePage,
-    SchoolListPage,
+    InstitutionsEntityList,
     FaqPage,
-    SchoolProfileEditPage,
+    EntityProfileEditPage,
     ImageListingPage,
+    SolutionDetailsPage,
     MatrixActionModalPage,
     QuestionDashboardPage,
     RemarksPage,
     FeedbackPage,
     DetailPage,
+    AssessmentAboutPage,
     GeneralQuestionPage,
-    GeneralQuestionSubmitPage
+    GeneralQuestionSubmitPage,
+    IndividualListingPage,
+    ProgramDetailsPage,
+    EntityListingPage,
+    HintPage,
+    PreviewPage,
+    SubmissionListPage,
+    DashboardPage,
+    ProgramListingPage,
+
+    ObservationReportsPage,
+    RoleListingPage,
+    ReportEntityListingPage,
+    ObservationEditPage
   ],
   providers: [
     StatusBar,
@@ -146,10 +202,12 @@ import { AccessActionsProvider } from '../providers/access-actions/access-action
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     InAppBrowser,
     AuthProvider,
+    FileChooser,
+
     CurrentUserProvider,
     Network,
     SchoolListProvider,
-    HttpInterceptorProvider,
+    // HttpInterceptorProvider,
     // {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorProvider, multi: true},
     UtilsProvider,
     ApiProvider,
@@ -174,7 +232,20 @@ import { AccessActionsProvider } from '../providers/access-actions/access-action
     Keyboard,
     LocalStorageProvider,
     HTTP,
-    AccessActionsProvider
+    AssessmentServiceProvider,
+    Deeplinks,
+    ObservationProvider,
+    SocialSharing,
+    SharingFeaturesProvider,
+    IOSFilePicker,
+    FileOpener,
+    HintProvider,
+    TextToSpeech,
+    Media,
+    ObservationServiceProvider,
+    DownloadAndPreviewProvider,
+    UpdateTrackerProvider,
+    TextToSpeechProvider,
   ]
 })
 export class AppModule { }

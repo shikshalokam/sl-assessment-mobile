@@ -1,20 +1,23 @@
 import { Component } from '@angular/core';
-import { NavController, App, Events, Platform, AlertController } from 'ionic-angular';
+import { NavController, Events, Platform , PopoverController} from 'ionic-angular';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
-import { ApiProvider } from '../../providers/api/api';
-import { Storage } from '@ionic/storage';
-import { UtilsProvider } from '../../providers/utils/utils';
-import { SchoolConfig } from '../../providers/school-list/schoolConfig';
-import { WelcomePage } from '../welcome/welcome';
-import { RatingProvider } from '../../providers/rating/rating';
-import { PopoverController } from 'ionic-angular';
-import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { Network } from '@ionic-native/network';
-import { EvidenceProvider } from '../../providers/evidence/evidence';
+import { InstitutionsEntityList } from '../institutions-entity-list/institutions-entity-list';
+import { IndividualListingPage } from '../individual-listing/individual-listing';
+import { ObservationsPage } from '../observations/observations';
+import { SharingFeaturesProvider } from '../../providers/sharing-features/sharing-features';
+import { Media, MediaObject } from '@ionic-native/media';
+import { File } from '@ionic-native/file';
+import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
-import { UpdateLocalSchoolDataProvider } from '../../providers/update-local-school-data/update-local-school-data';
-import { AuthProvider } from '../../providers/auth/auth';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { UtilsProvider } from '../../providers/utils/utils';
+import { RoleListingPage } from '../role-listing/role-listing';
+import { EvidenceProvider } from '../../providers/evidence/evidence';
+import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
+import { ObservationDetailsPage } from '../observation-details/observation-details';
+import { GenericMenuPopOverComponent } from '../../components/generic-menu-pop-over/generic-menu-pop-over';
+import { ObservationProvider } from '../../providers/observation/observation';
 
 @Component({
   selector: 'page-home',
@@ -34,347 +37,306 @@ export class HomePage {
   generalQuestions: any;
   schoolIndex = 0;
   currentProgramId: any;
+  profileRoles;
+  dashboardEnable: boolean;
+  allPages: Array<Object> = [
 
+    {
+      name: "institutional",
+      subName: 'assessments',
+      icon: "book",
+      component: InstitutionsEntityList,
+      active: false
+    },
+    {
+      name: "individual",
+      subName: 'assessments',
+      icon: "person",
+      component: IndividualListingPage,
+      active: false
+    },
+    {
+      name: "observations",
+      subName: '',
+      icon: "eye",
+      component: ObservationsPage,
+      active: false
+    },
+
+  ]
+  recording: boolean = false;
+  filePath: string;
+  fileName: string;
+  audio: MediaObject;
+  audioList: any[] = [];
+  canViewLoad: boolean = false;
+  pages;
+  recentlyModifiedAssessment: any;
+  institutionalAssessments ;
+  individualAssessments;
+  observations;
+  observationSubscription
   constructor(public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
-    private apiService: ApiProvider,
-    private utils: UtilsProvider, private appCtrl: App,
-    private storage: Storage,
-    private ratingService: RatingProvider,
-    private popoverCtrl: PopoverController,
     private network: Network,
+    private evdnsServ :EvidenceProvider,
+    private popoverCtrl : PopoverController,
+    private media: Media,
+    private currentUserProvider: CurrentUserProvider,
+    private localStorageProvider: LocalStorageProvider,
+    private file: File,
     private events: Events,
-    private evdnsServ: EvidenceProvider,
+    private sharingFeature: SharingFeaturesProvider,
     private platform: Platform,
-    private ulsd: UpdateLocalSchoolDataProvider,
-    private alertCntrl: AlertController,
-    private app: App,
-    private auth: AuthProvider,
-    private localStorage: LocalStorageProvider
+    private apiService: ApiProvider,
+    private localStorage: LocalStorageProvider,
+    private apiProvider: ApiProvider,
+    private utils: UtilsProvider,
+    private assessmentService: AssessmentServiceProvider,
+    private observationService: ObservationProvider
   ) {
-    this.subscription = this.events.subscribe('localDataUpdated', () => {
-      // console.log("Updated")
-      this.getLocalSchoolDetails();
-    });
 
-    // Online event
-    // constthis.events.subscribe('localDataUpdated', () => {
-    // });
-    // this.networkAvailable = this.ngps.getNetworkStatus()
+
+    this.isIos = this.platform.is('ios') ? true : false;
+    
+
+
   }
 
+  ionViewDidLoad() {
+    this.userData = this.currentUser.getCurrentUserData();
+    this.navCtrl.id = "HomePage";
+    this.localStorageProvider.getLocalStorage('profileRole').then(success => {
+      this.profileRoles = success;
+      if (success.roles.length > 0) {
+        this.dashboardEnable = true;
+        this.canViewLoad = true;
+        this.pages = this.allPages;
+        this.events.publish('multipleRole', true);
+      } 
 
-  ionViewWillEnter() {
-    // console.log("Inside view will enetr");
-    this.onInit();
+    }).catch(error => {
+      this.getRoles();
+    })
     if (this.network.type != 'none') {
       this.networkAvailable = true;
     }
-  }
 
-  getSchoolListApi(): void {
-    this.utils.startLoader();
-    this.apiService.httpGet(SchoolConfig.getSchoolsOfAssessors + '/', response => {
-      this.schoolList = response.result;
-      this.storage.set('schools', this.schoolList);
-      if (!this.schoolList.length) {
-        this.utils.stopLoader();
-        this.errorMsg = response.message;
-        this.unauthorized(response.message);
+    this.localStorage.getLocalStorage('staticLinks').then(success => {
+      if (success) {
       } else {
-        this.getSchoolDetails();
-
-      }
-    }, error => {
-      this.utils.stopLoader();
-      if (error.status == '401') {
-        // this.currentUser.removeUser();
-        this.appCtrl.getRootNav().push(WelcomePage);
-      }
-    })
-  }
-
-  mapGeneralQuesions() {
-
-  }
-
-  unauthorized(msg) {
-    let alert = this.alertCntrl.create({
-      title: "Unauthorized",
-      subTitle: msg,
-      buttons: [
-        {
-          text: 'Ok',
-          role: 'role',
-          handler: data => {
-            this.auth.doLogout();
-            this.currentUser.removeUser();
-            let nav = this.app.getRootNav();
-            nav.setRoot(WelcomePage);
-          }
-        }
-      ],
-      enableBackdropDismiss: false
-    });
-    alert.present();
-  }
-
-
-
-  getSchoolDetails(): void {
-    if (!this.schoolIndex) {
-      this.utils.stopLoader();
-      this.utils.startLoader(`Please wait while fetching school details.`)
-    }
-    // console.log(this.schoolIndex)
-    // for (const school of this.schoolList) {
-    this.apiService.httpGet(SchoolConfig.getSchoolDetails + this.schoolList[this.schoolIndex]['_id'] + '/', response => {
-      // console.log(this.schoolList[this.schoolIndex]['_id'])
-      // console.log(JSON.stringify(response))
-      // const generalQuestions = {}
-
-      this.localStorage.setLocalStorage("schoolDetails_" + this.schoolList[this.schoolIndex]['_id'], response.result);
-      console.log(response.result['assessments'][0]['generalQuestions'])
-      this.localStorage.setLocalStorage("generalQuestions_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
-      this.localStorage.setLocalStorage("generalQuestionsCopy_" + this.schoolList[this.schoolIndex]['_id'], response.result['assessments'][0]['generalQuestions']);
-      this.schoolList[this.schoolIndex]['submissionId'] = response.result['assessments'][0].submissionId;
-      this.schoolList[this.schoolIndex]['programId'] = response.result.program._id;
-      this.mappSubmissionData(response.result);
-      this.schoolList[this.schoolIndex]['schoolDetailsFetched'] = true;
-      this.localStorage.setLocalStorage('schools', this.schoolList);
-      if (this.schoolIndex === this.schoolList.length - 1) {
-        // this.localStorage.setLocalStorage('schools', this.schoolList);
-        this.getParentRegistry();
-      } else {
-        this.schoolIndex++;
-        this.getSchoolDetails();
-      }
-    }, error => {
-    })
-    // }
-  }
-
-  // successCallback = (response) => {
-  //   this.localStorage.setLocalStorage("schoolDetails_"+ this.schoolList[this.schoolIndex]['_id'], response)
-  //   this.schoolDetails.push(response.result);
-  //   if (this.schoolDetails.length === this.schoolList.length) {
-  //     const schoolDetailsObj = {}
-  //     const generalQuestions = {}
-  //     for (const school of this.schoolDetails) {
-  //       schoolDetailsObj[school['schoolProfile']._id] = school;
-  //       generalQuestions[school['schoolProfile']._id] = school.assessments[0].generalQuestions;
-  //     }
-  //     this.storage.set('schoolsDetails', JSON.stringify(schoolDetailsObj));
-  //     this.storage.set("generalQuestions", JSON.stringify(generalQuestions));
-  //     this.storage.set("generalQuestionsCopy", JSON.stringify(generalQuestions));
-
-  //     this.generalQuestions = generalQuestions;
-
-  //     this.getLocalSchoolDetails();
-  //     this.mappSubmissionData(schoolDetailsObj);
-  //     this.getParentRegistry();
-  //     this.mapGeneralQuesions()
-  //     // this.utils.stopLoader();
-
-  //   } else {
-  //     console.log("End of loader")
-  //     this.schoolIndex++;
-  //     this.getSchoolDetails();
-  //   }
-  // }
-
-  mappSubmissionData(schoolDetailsObj): void {
-    // for (const school of this.schoolList ) {
-    //   const obj = {
-    //     _id: school['_id'],
-    //   }
-    //   if(schoolDetailsObj[school['_id']].assessments[0].submissions) {
-    //     this.ulsd.getLocalData(obj, schoolDetailsObj[school['_id']].assessments[0].submissions);
-    //   }
-    // }
-    // this.getLocalSchoolDetails();
-    console.log("in map submissions")
-    this.ulsd.mapSubmissionDataToQuestion(schoolDetailsObj);
-
-  }
-
-  openAction(school, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
-    const options = { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, schoolDetails: this.schoolDetails, parent: this };
-    this.evdnsServ.openActionSheet(options);
-  }
-
-
-
-  goToRating(school): void {
-    const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
-    this.ratingService.checkForRatingDetails(submissionId, school);
-  }
-
-  getParentRegistryForm(): void {
-    this.apiService.httpGet(AppConfigs.parentInfo.getParentRegisterForm, success => {
-      this.localStorage.setLocalStorage('parentRegisterForm', success.result)
-      // this.storage.set('parentRegisterForm', JSON.stringify(success.result));
-    }, error => {
-
-    })
-  }
-
-  getLocalSchoolDetails(): void {
-    this.storage.get('schoolsDetails').then(details => {
-      this.schoolDetails = JSON.parse(details);
-      for (const schoolId of Object.keys(this.schoolDetails)) {
-        this.checkForProgressStatus(this.schoolDetails[schoolId]['assessments'][0]['evidences'])
-      }
-    })
-    // this.localStorage.getLocalStorage()
-    this.localStorage.getLocalStorage('generalQuestions').then(questions => {
-      if (questions) {
-        this.generalQuestions = questions;
+        this.getStaticLinks();
       }
     }).catch(error => {
-
+      this.getStaticLinks();
     })
-    // this.storage.get('generalQuestions').then(questions => {
-    //   if(questions) {
-    //     // JSON.stringify
-    //     this.generalQuestions = JSON.parse(questions);
-    //     // console.log(questions);
-    //   }
-    // })
+
+   
   }
 
-  goToSections(school, evidenceIndex) {
-    if (this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].startTime) {
-      this.utils.setCurrentimageFolderName(this.schoolDetails[school._id.toString()]['assessments'][0]['evidences'][evidenceIndex].externalId, school._id)
-      this.appCtrl.getRootNav().push('SectionListPage', { _id: school._id, name: school.name, selectedEvidence: evidenceIndex, parent: this })
-    } else {
-      this.openAction(school, evidenceIndex);
-    }
-  }
-
-  goToGeneralQuestionList(school): void {
-    this.appCtrl.getRootNav().push('GeneralQuestionListPage', { _id: school._id, name: school.name })
-
-  }
-
-  gotToEvidenceList(school) {
-    this.appCtrl.getRootNav().push('EvidenceListPage', { _id: school._id, name: school.name, parent: this })
-  }
-
-  goToProfile(school): void {
-    this.appCtrl.getRootNav().push('SchoolProfilePage', { _id: school._id, name: school.name, parent: this })
-  }
-
-  getParentRegistry() {
-    for (const school of this.schoolList) {
-      // console.log(school['_id']);
-      this.apiService.httpGet(AppConfigs.parentInfo.getParentList + school['_id'], data => {
-        this.parentListSuccessCallback(data.result)
-      }, error => {
-
-      })
-    }
-  }
-
-  parentListSuccessCallback = (parentdata) => {
-    this.parentList.push(parentdata);
-    for (const parent of parentdata) {
-      if (parent) {
-        parent.uploaded = true;
-      }
-    }
-    const schoolId = parentdata.length ? parentdata[0]['schoolId'] : null;
-    this.localStorage.setLocalStorage("parentDetails_" + schoolId, parentdata)
-    if (this.parentList.length === this.schoolList.length) {
-      this.getParentRegistryForm();
-      this.utils.stopLoader();
-      for (const parent of parentdata) {
-        if (parent) {
-          parent.uploaded = true;
-        }
-      }
-    }
-  }
-
-
-  checkForProgressStatus(evidences) {
-    // console.log("yeee")
-    for (const evidence of evidences) {
-      // console.log(evidence.startTime);
-      if (evidence.isSubmitted) {
-        evidence.progressStatus = 'submitted';
-      } else if (!evidence.startTime) {
-        // console.log(evidence.startTime)
-        evidence.progressStatus = '';
+  getIndividualAssessmentFromLocal() {
+    this.localStorage.getLocalStorage('individualList').then(data => {
+      if (data) {
+        this.individualAssessments = data;
       } else {
-        evidence.progressStatus = 'completed';
-        for (const section of evidence.sections) {
-          if (section.progressStatus === 'inProgress' || !section.progressStatus) {
-            evidence.progressStatus = 'inProgress';
-          }
-        }
+        this.getIndividualAssessmentsApi();
       }
-    }
-  }
-
-  onInit() {
-    this.navCtrl.id = "HomePage";
-    // this.storage.get('parentRegisterForm').then(form => {
-    //   if (!form) {
-    //     this.getParentRegistryForm();
-    //   }
-    // })
-    this.userData = this.currentUser.getCurrentUserData();
-    this.localStorage.getLocalStorage('schools').then(schools => {
-      this.schoolList = schools;
-      this.checkForAllSchoolDetailsFetchedStatus();
     }).catch(error => {
-      this.getSchoolListApi();
+      this.getIndividualAssessmentsApi();
     })
   }
 
-  checkForAllSchoolDetailsFetchedStatus() {
-    let index = 0;
-    // console.log(JSON.stringify(this.schoolList))
-    for (const school of this.schoolList) {
-      // console.log("in check mode")
-      if (!school['schoolDetailsFetched']) {
-        // console.log("found incmplete index" + index)
-        this.schoolIndex = index;
-        this.getSchoolDetails();
-        break;
+  getInstitutionalAssessmentsFromLocal() {
+    this.localStorage.getLocalStorage('institutionalList').then(data => {
+      if (data) {
+        this.institutionalAssessments = data;
+
+      } else {
+        this.getInstitutionalAssessmentsApi();
       }
-      index++;
-    }
-    // this.schoolList.forEach((key, value) => {
-
-    // })
+    }).catch(error => {
+      this.getInstitutionalAssessmentsApi();
+    })
   }
 
-  getRatedQuestions(school): void {
-    const submissionId = this.schoolDetails[school._id]['assessments'][0].submissionId;
-    this.ratingService.fetchRatedQuestions(submissionId, school);
+
+
+  getIndividualAssessmentsApi() {
+    this.assessmentService.getAssessmentsApi ('individual', true).then(programs =>{
+      this.individualAssessments = programs;
+    }).catch(error=>{
+    })
+    
+
   }
 
-  openMenu(myEvent, index) {
-    let popover = this.popoverCtrl.create(MenuItemComponent, {
-      submissionId: this.schoolList[index]['submissionId'],
-      _id: this.schoolList[index]['_id'],
-      name: this.schoolList[index]['name'],
-      parent: this,
-      programId: this.schoolList['programId']
+  getInstitutionalAssessmentsApi() {
+    this.assessmentService.getAssessmentsApi('institutional', true).then(programs => {
+      this.institutionalAssessments = programs;
+    }).catch(error=>{
+    })
+  }
+
+  getObservationListFromLocal() {
+    this.localStorage.getLocalStorage('createdObservationList').then(data => {
+      if (data) {
+        this.observations = data;
+      } else {
+        this.getObservationsFromApi();
+      }
+
+    }).catch(error => {
+      this.getObservationsFromApi();
+
+    })
+  }
+
+  navigateToCreatedObservationDetails(index) {
+    this.navCtrl.push(ObservationDetailsPage, { selectedObservationIndex: index })
+
+  }
+
+  getObservationsFromApi() {
+    this.apiProvider.httpGet(AppConfigs.cro.observationList, success => {
+      this.observations = success.result;
+      this.observations.forEach(element => {
+        if (element.entities.length >= 0) {
+          element.entities.forEach(entity => {
+            // entity.downloaded = false;
+            if(entity.submissions && entity.submissions.length > 0){
+              entity.submissions.forEach( submission =>{
+                submission['downloaded'] = false;
+              })
+            }
+          });
+        }
+      });
+      this.localStorage.setLocalStorage('createdObservationList', this.observations);
+    }, error => {
+     })
+  }
+
+  openMenu(event , index) {
+    // this.assessmentService.openMenu(event, this.programs, false);
+    // console.log("open menu")
+    // let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { showAbout : true ,showEdit : true , assessmentIndex : index , assessmentName :'createdObservationList'})
+    let popover = this.popoverCtrl.create(GenericMenuPopOverComponent , { "isObservation": true,"showAbout" : true ,"showEdit" : true , "assessmentIndex" : index , "assessmentName" :'createdObservationList'})
+  
+    popover.present(
+      {ev:event}
+      );
+      
+  }
+
+  ionViewDidEnter(){
+    // console.log("home page enter")
+    // this.localStorage.getLocalStorage('recentlyModifiedAssessment').then(succcess=>{
+    //   this.recentlyModifiedAssessment = succcess;
+    //   console.log(JSON.stringify(this.recentlyModifiedAssessment));
+    //   console.log("LAST MODEFIED AT ARRAY")
+    // }).catch(error =>{
+    //   console.log("LAST MODEFIED AT ARRAY IS BLANK")
+    // });
+
+    this.getInstitutionalAssessmentsFromLocal();
+    this.getIndividualAssessmentFromLocal();
+    this.getObservationListFromLocal();
+  }
+  getRoles() {
+    // return new Promise((resolve, reject) => {
+    let currentUser = this.currentUserProvider.getCurrentUserData();
+    this.apiProvider.httpGet(AppConfigs.roles.getProfile + currentUser.sub, success => {
+      this.profileRoles = success.result;
+      this.localStorage.setLocalStorage('profileRole', this.profileRoles);
+      console.log(JSON.stringify(success))
+      if (success.result.roles && success.result.roles.length > 0) {
+        this.dashboardEnable = true;
+        this.events.publish('multipleRole', true);
+      }
+    }, error => {
+      this.utils.openToast(error);
+    })
+  }
+
+  socialSharingInApp() {
+    this.sharingFeature.sharingThroughApp();
+  }
+
+  getStaticLinks() {
+    this.apiService.httpGet(AppConfigs.externalLinks.getStaticLinks, success => {
+      this.localStorage.setLocalStorage('staticLinks', success.result);
+    }, error => {
     });
-    popover.present({
-      ev: myEvent
-    });
+  }
+
+  goToPage(index) {
+    this.events.publish('navigateTab', index >= 0 ? this.allPages[index]['name'] : 'dashboard')
   }
 
   ionViewWillLeave() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    console.log("inside will leave")
+    this.events.unsubscribe('multipleRole');
+    this.observationSubscription ? this.observationSubscription.unsubscribe() : null;
   }
 
+  ionViewWillEnter() {
+    this.observationSubscription = this.observationService.observationListUpdate.subscribe(success => {
+      this.getObservationsFromApi();
+    }, error => {
+    })
+  }
+
+
+  goToRecentlyUpdatedAssessment(assessment){
+    // this.utils.getAssessmentLocalStorageKey(assessment.submissionId)
+
+
+
+    let submissionId = assessment.submissionId
+    let heading = assessment.EntityName;
+    let recentlyUpdatedEntity = {
+      programName :assessment.programName,
+      ProgramId :assessment.ProgramId,
+      EntityName : assessment.EntityName,
+      EntityId :assessment.EntityId,
+      submissionId:submissionId,
+      isObservation : assessment.isObservation
+    }
+    // console.log("go to ecm called" + submissionId );
+
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
+
+      // console.log(JSON.stringify(successData));
+      //console.log("go to ecm called");
+
+      // successData = this.updateTracker.getLastModified(successData , submissionId)
+      // console.log("after modification")
+      if (successData.assessment.evidences.length > 1) {
+
+        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading ,recentlyUpdatedEntity : recentlyUpdatedEntity})
+
+      } else {
+        if (successData.assessment.evidences[0].startTime) {
+          //console.log("if loop " + successData.assessment.evidences[0].externalId)
+          this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
+          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0  ,recentlyUpdatedEntity : recentlyUpdatedEntity})
+        } else {
+
+          const assessment = { _id: submissionId, name: heading ,recentlyUpdatedEntity : recentlyUpdatedEntity}
+          this.openAction(assessment, successData, 0);
+          //console.log("else loop");
+
+        }
+      }
+    }).catch(error => {
+    });
+
+  }
+
+  openAction(assessment, aseessmemtData, evidenceIndex) {
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
+    const options = { _id: assessment._id, name: assessment.name,recentlyUpdatedEntity : assessment.recentlyUpdatedEntity ,selectedEvidence: evidenceIndex, entityDetails: aseessmemtData };
+    this.evdnsServ.openActionSheet(options);
+  }
 
 }

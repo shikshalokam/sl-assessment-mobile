@@ -9,6 +9,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { AccessActionsProvider } from '../../providers/access-actions/access-actions';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'page-detail',
@@ -21,9 +22,10 @@ export class DetailPage {
     public navParams: NavParams,
     private iab: InAppBrowser,
     private app: App,
+    private translate : TranslateService,
     private alertctrl: AlertController,
     private currentUser: CurrentUserProvider,
-    private auth: AuthProvider, 
+    private auth: AuthProvider,
     private localStorage: LocalStorageProvider,
     private apiService: ApiProvider,
     private accessAction: AccessActionsProvider,
@@ -40,36 +42,42 @@ export class DetailPage {
   }
 
   openUrl(url) {
-    console.log("innnn")
     const browser = this.iab.create(url);
     browser.show();
   }
 
   clearData() {
+    let translateObject ;
+          this.translate.get(['actionSheet.warning','actionSheet.schoolSurveyEarse','actionSheet.no','actionSheet.yes']).subscribe(translations =>{
+            translateObject = translations;
+            console.log(JSON.stringify(translations))
+          })
     let alert = this.alertctrl.create({
-      title: 'WARNING',
-      subTitle:'All schools survey data will be erased. This action is irreversable.Do you want to continue?',
-      // message:'hiii',
+      title: translateObject['actionSheet.warning'],
+      subTitle: translateObject['actionSheet.schoolSurveyEarse'],
       buttons: [
         {
-          text: 'No',
+          text:  translateObject['actionSheet.no'],
           role: 'role',
           handler: data => {
 
           }
         },
         {
-          text: 'Yes',
+          text:  translateObject['actionSheet.yes'],
           role: 'role',
           handler: data => {
             this.utils.startLoader()
             this.localStorage.deleteAllStorage().then(success => {
               this.utils.stopLoader();
-              this.auth.doLogout();
-              this.currentUser.removeUser();
-              let nav = this.app.getRootNav();
-              nav.setRoot(WelcomePage);
-            }).catch (error => {
+              this.auth.doLogout().then(success => {
+                this.currentUser.removeUser();
+                let nav = this.app.getRootNav();
+                nav.setRoot(WelcomePage);
+              }).catch(error => {
+
+              })
+            }).catch(error => {
               this.utils.stopLoader();
             })
           }
@@ -78,29 +86,33 @@ export class DetailPage {
       enableBackdropDismiss: false
     });
     alert.present();
+    
   }
 
   openAlert() {
+    let translateObject ;
+    this.translate.get(['actionSheet.pleaseEnterPasscode','actionSheet.passcode','actionSheet.cancel','actionSheet.submit']).subscribe(translations =>{
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
     const alert = this.alertctrl.create({
-      title: 'Please enter the passcode.',
+      title: translateObject['actionSheet.pleaseEnterPasscode'],
       inputs: [
         {
-          name: 'passcode',
-          placeholder: 'Passcode'
+          name: translateObject['actionSheet.passcode'],
+          placeholder: translateObject['actionSheet.passcode']
         },
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: translateObject['actionSheet.cancel'],
           handler: data => {
-            console.log('Cancel clicked');
           }
         },
         {
-          text: 'Submit',
+          text: translateObject['actionSheet.submit'],
           handler: data => {
             this.getAccessTokenForAction(data)
-            console.log('Cancel clicked');
           }
         }
       ]
@@ -122,7 +134,7 @@ export class DetailPage {
         this.accessAction.ActionEnableSubmit(successData.result);
       }
       this.utils.stopLoader();
-    } , error => {
+    }, error => {
       this.utils.stopLoader();
       this.utils.openToast(error.result.message);
 

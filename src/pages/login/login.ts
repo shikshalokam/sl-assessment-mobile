@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { TabsPage } from '../tabs/tabs';
 import { Network } from '@ionic-native/network';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { HomePage } from '../home/home';
+import { TranslateService } from '@ngx-translate/core';
+
 
 @IonicPage()
 @Component({
@@ -24,6 +26,8 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage,
     private auth: AuthProvider,
+    private events : Events,
+    private translate : TranslateService,
     private toastCtrl: ToastController, private network: Network,
     private permissions: AndroidPermissions, private geolocation: Geolocation,
     private diagnostic: Diagnostic, private utils: UtilsProvider) {
@@ -61,23 +65,26 @@ export class LoginPage {
 
   
   getCurrentLocation(): void {
-    console.log('getting current location')
+    //console.log('getting current location')
     this.geolocation.getCurrentPosition().then((resp) => {
       this.utils.openToast(JSON.stringify(resp))
   
     }).catch((error) => {
-      this.utils.openToast('Error getting location' + JSON.stringify(error))
+      this.translate.get('toastMessage.errorGettingLoaction').subscribe(translations =>{
+        this.utils.openToast(translations + JSON.stringify(error));
+      })
+     
     });
   }
 
   isLocationEnabled() {
-    console.log('Is location enabled');
+    //console.log('Is location enabled');
     this.diagnostic.isLocationAvailable().then(isAvailable => {
-      console.log("Location enabled" + isAvailable)
+      //console.log("Location enabled" + isAvailable)
       if (isAvailable) {
         this.getCurrentLocation();
       } else {
-        console.log('GPS offf')
+        //console.log('GPS offf')
       }
     }).catch(error => {
 
@@ -85,25 +92,25 @@ export class LoginPage {
   }
 
   checkForLocationPermissions(): void {
-    console.log('Check permissions');
+    //console.log('Check permissions');
     this.permissions.checkPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(
       result => {
-        console.log('Has permission?', result.hasPermission)
+        //console.log('Has permission?', result.hasPermission)
         if (!result.hasPermission) {
-          console.log("ask permission");
+          //console.log("ask permission");
           this.permissions.requestPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(result => {
             if(result.hasPermission) {
               this.isLocationEnabled();
             }
           }).catch(error => {
-            console.log('error')
+            //console.log('error')
           })
         } else {
-          console.log('yes, Has permission');
+          //console.log('yes, Has permission');
           this.isLocationEnabled();
         }
       }).catch(error => {
-        console.log("Error check for permission" + JSON.stringify(error))
+        //console.log("Error check for permission" + JSON.stringify(error))
       });
   }
 
@@ -115,7 +122,7 @@ export class LoginPage {
     });
 
     toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
+      //console.log('Dismissed toast');
     });
 
     toast.present();
@@ -127,7 +134,7 @@ export class LoginPage {
         this.responseData = JSON.stringify(code);
         return this.auth.doOAuthStepTwo(code);
       }).then(response => {
-        this.navCtrl.push(TabsPage);
+        this.navCtrl.push(HomePage);
         this.presentToast("Login Successful")
       })
   }

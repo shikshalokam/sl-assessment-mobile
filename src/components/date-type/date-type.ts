@@ -16,7 +16,8 @@ export class DateTypeComponent implements OnInit{
   @Input() schoolId: string;
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
-
+  @Input() submissionId: any;
+  @Input() inputIndex ;
   @Input() hideButton: boolean;
   questionValid: boolean;
   currentDate;
@@ -27,6 +28,9 @@ export class DateTypeComponent implements OnInit{
 
   next(status?: string) {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
+    if(!this.data.validation.required) {
+      this.data.isCompleted = true;
+    }
     this.nextCallBack.emit(status);
   }
 
@@ -36,7 +40,7 @@ export class DateTypeComponent implements OnInit{
     // this.datePipe.transform(Date.now(), 'yyyy-MM-dd')
     // this.data.value = this.datePipe.transform(Date.now(), 'full');
     this.data.value = new Date(Date.now()).toISOString();
-
+    this.checkForValidation();
   }
 
   back() {
@@ -49,6 +53,7 @@ export class DateTypeComponent implements OnInit{
   }
 
   ngOnInit() {
+    // this.data.autoCapture = false
     const dateTime = new Date();
     // this.currentDate = dateTime.split('T')[0];
     console.log(dateTime);

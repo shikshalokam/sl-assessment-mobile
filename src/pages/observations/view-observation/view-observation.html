@@ -1,0 +1,35 @@
+<ion-header>
+  <header [title]="'headings.observations'|translate" [hideBack]="false">
+  </header>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div style="padding: 0 0 60px 0">
+    <entity-listing [entityList]="programs" [entityType]="'observations'"
+      (getAssessmentDetailsEvent)="getAssessmentDetails($event)" (refreshEvent)="refresh($event)"
+      (openMenuEvent)="openMenu($event)">
+    </entity-listing>
+  </div>
+
+
+  
+
+</ion-content>
+<ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button full (click)="refresh()" class="btnText">
+          <ion-icon name="refresh" margin-right></ion-icon>
+          {{'buttons.refresh' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

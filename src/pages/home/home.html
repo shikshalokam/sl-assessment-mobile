@@ -1,83 +1,103 @@
 <ion-header>
   <header [title]="'headings.home'|translate" [hideBack]="true">
-
   </header>
 </ion-header>
-
-
 
 <ion-content>
   <ion-card>
     <ion-card-content>
-      <h2 >{{'labels.welcome'|translate}} !</h2>
+      <h2 class="bold">{{'labels.welcome'|translate}} {{userData?.name}}! </h2>
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngFor="let school of schoolList; let i = index">
+  <!-- <div padding *ngIf="canViewLoad"> -->
+  <!-- <div padding *ngIf="!recentlyModifiedAssessment">
+    <div>
+      <h4>{{'labels.goTo'| translate}}</h4>
+    </div>
+    <div class="_flex-box ">
+      <ion-card class="_flex-box _justify-content-space-between" *ngFor="let page of allPages;let i = index"
+        (click)="goToPage(i)">
+        <div padding class="_flex-box _justify-content-center">
+          <ion-icon name="{{page.icon}}" class="sizeAdj"></ion-icon>
+          <div margin-left>{{'tabs.'+page?.name|translate}} <span
+              *ngIf="page.subName">{{'labels.'+page.subName | translate}}</span></div>
+        </div>
+        <ion-icon *ngIf="!isIos" name="arrow-forward" margin-right></ion-icon>
 
-    <ion-item-group>
-      <ion-item-divider text-wrap >
-        <h3 class="headerText _flex-box">
-          <div class="_flex-box" style="flex:1" (click)="gotToEvidenceList(school)">
-              <ion-icon name="book" margin-right ></ion-icon>
-              <div style="flex:1" >{{school?.name}} - {{school?.externalId}}</div>
+      </ion-card>
+
+      <ion-card class="_flex-box _justify-content-space-between" *ngIf="dashboardEnable"
+        (click)="goToPage(i)">
+        <div padding class="_flex-box _justify-content-center">
+          <ion-icon name="analytics" class="sizeAdj"></ion-icon>
+          <div margin-left>{{'tabs.dashboard'|translate}} 
+            </div>
+        </div>
+        <ion-icon *ngIf="!isIos" name="arrow-forward" margin-right></ion-icon>
+      </ion-card>
+
+    </div>
+  </div> -->
+  <!-- <ion-input></ion-input> -->
+
+  <!-- <high-charts></high-charts>
+  <expansion-panel ></expansion-panel> -->
+  <!-- <button (click)="speechFromText()">speech</button> -->
+
+
+  <!-- <div margin *ngIf="recentlyModifiedAssessment">
+    <h2 margin-bottom>{{'headings.myActiveAssessment' | translate}}</h2>
+      <ion-card  class="_flex-box" *ngFor="let assessment of recentlyModifiedAssessment;let i = index"
+      (click)="goToRecentlyUpdatedAssessment(assessment)">
+      <div padding  style="flex:1"  class="_flex-box">
+        <ion-icon name="eye" *ngIf="assessment.isObservation" class="sizeAdj"></ion-icon>
+        <ion-icon name="book" *ngIf="!(assessment.isObservation)" class="sizeAdj"></ion-icon>
+        <div margin-left style="flex: 1" text-wrap>{{assessment.EntityName}} 
           </div>
-          <ion-icon name='more' class="viewIcon"  large (click)="openMenu($event,i)"></ion-icon>
-          <!-- <span float-right class="more">View </span> -->
-        </h3>
-      </ion-item-divider>
-    </ion-item-group>
-
-    <!-- <ion-card-content no-padding *ngIf="school && schoolDetails[school._id.toString()]">
-
-      <ion-list>
-        <button ion-item   [disabled]="evidence?.notApplicable" (click)="goToSections(school, j)" *ngFor="let evidence of schoolDetails[school._id.toString()]['assessments'][0]['evidences'] |slice:0:3; let j = index">
-          <ion-icon name="albums" margin-right></ion-icon> <span class="homeLi">{{ evidence?.name }}</span> 
-          <span float-right *ngIf="evidence.progressStatus === 'completed' && !evidence?.notApplicable" class="_completed _flex-box">
-              {{'labels.completed'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left></ion-icon>
-          </span>
-          <span float-right *ngIf="!evidence.progressStatus && !evidence?.notApplicable && !isIos" class=" _flex-box">
-            <ion-icon name="arrow-forward" class="_progressIcon" margin-left></ion-icon>
-          </span>
-          <span float-right *ngIf="evidence.progressStatus === 'inProgress' && !evidence?.notApplicable" class="_inProgress _flex-box">
-              {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
-          </span>
-          <span float-right *ngIf="evidence.progressStatus === 'submitted' && !evidence?.notApplicable" class="_submitted _flex-box">
-              {{'labels.submitted'|translate}} <ion-icon name="cloud-done" class="_progressIcon" margin-left></ion-icon>
-          </span>
-          <span float-right *ngIf="evidence?.notApplicable" class="_na _flex-box">
-            {{'labels.notApplicable'|translate}} <ion-icon name="alert" class="_progressIcon" margin-left></ion-icon>
-        </span>
-        </button>
-        <button ion-item (click)="goToGeneralQuestionList(school)" *ngIf="generalQuestions && generalQuestions[school?._id]?.length">
-          <ion-icon name="albums" margin-right></ion-icon> <span class="homeLi">General Questions</span>
-        </button>
-        <button ion-item class="more" (click)="gotToEvidenceList(school)" *ngIf="schoolDetails[school._id.toString()]['assessments'][0]['evidences'].length > 3">
-          More
-        </button>
-      </ion-list>
-
-      <div *ngIf="errorMsg" class="_errorBox">
-         <span class="_errorMsg">{{errorMsg}}</span> 
+          
       </div>
-    </ion-card-content> -->
-<!-- 
-    <ion-row no-padding class="separation">
-      <ion-col class="_justify-content-space-between">
-        <button ion-button clear small color="primary" icon-end (click)="goToProfile(school)" >
-          <ion-icon name='eye' margin-right></ion-icon>
-          {{'buttons.view'|translate}} {{'buttons.profile'|translate}}
-        </button>
-        <button ion-button clear small color="primary" icon-end (click)="getRatedQuestions(school)">
-            <ion-icon name='flag' margin-right></ion-icon>
-            {{'buttons.flag'|translate}}
-          </button>
-        <button ion-button clear small color="primary" icon-end (click)="goToRating(school)">
-          <ion-icon name='star' margin-right></ion-icon>
-          {{'buttons.ratings'|translate}}
-        </button>
-      </ion-col>
-    </ion-row> -->
-    
-  </ion-card>
+      <div margin-right>
+        <div class="colorText">{{'headings.lastModified'|translate}}</div>
+        <div >
+        {{assessment.lastModified | date}}
+
+        </div>
+      </div>
+      <ion-icon *ngIf="!isIos" name="arrow-forward" margin-right></ion-icon>
+    </ion-card>
+  </div> -->
+
+
+  <div>
+    <h2 margin>{{'headings.myActiveAssessment' | translate}}</h2>
+    <!--institutional assessment  List -->
+
+    <program-listing *ngIf="institutionalAssessments?.length" [programList]="institutionalAssessments" [homePage]="true"
+      [assessmentlocalStorageName]="institutionalList" [entityType]="'institutional'" (refreshEvent)="refresh($event)">
+    </program-listing>
+
+    <!--Individual assessment Listing -->
+
+    <program-listing *ngIf="individualAssessments?.length" [programList]="individualAssessments" [homePage]="true"
+      [assessmentlocalStorageName]="'individualList'" [entityType]="'individual'">
+    </program-listing>
+
+
+    <!-- Observation List-->
+
+
+    <div style="padding: 0 0 60px 0">
+      <span *ngFor="let observation of observations; let i=index">
+        <ion-card *ngIf="observation.status !== 'completed'" text-capitalize padding margin-right
+          class="_flex-box _justify-content-space-between">
+          <ion-icon name="eye" class="observationIcon"></ion-icon>
+
+          <div style="flex:1" (click)="navigateToCreatedObservationDetails(i)"> {{ observation?.name }}</div>
+          <ion-icon name="more" class="menuIcon" (click)="openMenu($event,i)"></ion-icon>
+        </ion-card>
+      </span>
+    </div>
+
+  </div>
 </ion-content>
