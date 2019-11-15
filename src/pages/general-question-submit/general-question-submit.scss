@@ -1,41 +1,38 @@
 page-general-question-submit {
-        ion-spinner {
-            // stroke: $white-color !important;
-            position: absolute;
-            top: 39%;
-            left: 39%;
-            z-index: 2;
-            background: $white-color;
-            // color: $red-color;
+    ion-spinner {
+        position: absolute;
+        top: 39%;
+        left: 39%;
+        z-index: 2;
+        background: $white-color;
+    }
+
+    .doneMark {
+        background: $white-color;
+        position: absolute;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+
+        ion-icon {
+            color: $green-color;
+            font-size: 3rem;
+            font-weight: bold;
         }
-    
-        .doneMark {
-            background: $white-color;
-            position: absolute;
-            z-index: 2;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-    
-            ion-icon {
-                color: $green-color;
-                font-size: 3rem;
-                font-weight: bold;
-            }
-        }
-    
-        .fullContainer {
-            height: 85vh;
-        }
-    
-        .uploadIcon {
-            font-size: 30rem;
-            color: $blue-color;
-        }
-    
-        .uploadMsg {
-            font-size: 25px;
-            font-weight: 500;
-            // line-height: 20px;
-        }
+    }
+
+    .fullContainer {
+        height: 85vh;
+    }
+
+    .uploadIcon {
+        font-size: 30rem;
+        color: $blue-color;
+    }
+
+    .uploadMsg {
+        font-size: 25px;
+        font-weight: 500;
+    }
 }

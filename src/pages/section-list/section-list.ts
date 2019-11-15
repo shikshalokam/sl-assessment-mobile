@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Events, Platform , AlertController} from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { IonicPage, NavController, NavParams, App, Events, Platform, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ApiProvider } from '../../providers/api/api';
@@ -11,6 +11,10 @@ import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { Network } from '@ionic-native/network';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { TranslateService } from '@ngx-translate/core';
+import { PreviewPage } from '../preview/preview';
+import { ObservationReportsPage } from '../observation-reports/observation-reports';
+import { UpdateTrackerProvider } from '../../providers/update-tracker/update-tracker';
 
 @IonicPage()
 @Component({
@@ -20,16 +24,17 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 export class SectionListPage {
 
   evidenceSections: any;
-  schoolName: string;
-  schoolId: any;
+  entityName: string;
+  submissionId: any;
   selectedEvidenceIndex: any;
   selectedEvidenceName: string;
-  schoolData: any;
+  sectionData: any;
   allAnsweredForEvidence: boolean;
   userData: any;
   currentEvidence: any;
   networkAvailable: any;
   isIos: boolean = this.platform.is('ios');
+  recentlyUpdatedEntity: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private appCtrl: App,
@@ -37,37 +42,44 @@ export class SectionListPage {
     private apiService: ApiProvider, private utils: UtilsProvider,
     private diagnostic: Diagnostic, private ngps: NetworkGpsProvider,
     private feedback: FeedbackProvider,
+    private translate: TranslateService,
     private events: Events, private platform: Platform,
-    private alertCtrl: AlertController, private network: Network, private localStorage : LocalStorageProvider) {
-
+    private updateTracker : UpdateTrackerProvider,
+    private alertCtrl: AlertController, private network: Network, private localStorage: LocalStorageProvider) {
+      
     this.events.subscribe('network:offline', () => {
       this.networkAvailable = false;
     });
-
+   
     // Online event
     this.events.subscribe('network:online', () => {
       this.networkAvailable = true;
-
     });
     this.networkAvailable = this.ngps.getNetworkStatus()
+    
   }
+
+ 
   ionViewWillEnter() {
-    console.log('Entered')
-    // console.log(JSON.stringify(this.userData))
-    console.log('ionViewDidLoad SectionListPage');
+  
     this.utils.startLoader();
     this.userData = this.currentUser.getCurrentUserData();
-    this.schoolId = this.navParams.get('_id');
-    this.schoolName = this.navParams.get('name');
+    
+    this.submissionId = this.navParams.get('_id');
+    this.entityName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
-    this.localStorage.getLocalStorage('schoolDetails_'+this.schoolId).then(data => {
-      this.schoolData = data;
-      this.currentEvidence = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex];
-      this.evidenceSections = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['sections'];
-      this.selectedEvidenceName = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]['name'];
+    this.recentlyUpdatedEntity = this.navParams.get('recentlyUpdatedEntity');
+    
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
+      this.sectionData = data;
+      let assessmentDetails = this.updateTracker.getLastModifiedInSection(data,this.selectedEvidenceIndex ,this.submissionId,this.recentlyUpdatedEntity);
+      this.currentEvidence = assessmentDetails['assessment']['evidences'][this.selectedEvidenceIndex];
+      // console.log(JSON.stringify(this.currentEvidence))
+      this.evidenceSections = this.currentEvidence['sections'];
+      this.selectedEvidenceName = this.currentEvidence['name'];
       this.checkForEvidenceCompletion();
       this.utils.stopLoader();
-    }).catch( error => {
+    }).catch(error => {
       this.utils.stopLoader();
     })
     // this.storage.get('schoolsDetails').then(data => {
@@ -86,9 +98,9 @@ export class SectionListPage {
     this.diagnostic.isLocationEnabled().then(success => {
       this.ngps.checkForLocationPermissions();
     }).catch(error => {
-      
-    })
 
+    })
+     
   }
 
 
@@ -97,48 +109,48 @@ export class SectionListPage {
     for (const section of this.evidenceSections) {
       allAnswered = true;
       for (const question of section.questions) {
-        // console.log(question.isCompleted)
-        // console.log("is completed: " + question.isCompleted)
+        // if( question.responseType === 'pageQuestions'){
+        //   for (const questions of question.pageQuestions){
+        //       if(!questions.isCompleted){
+        //         allAnswered = false
+        //         break;
+        //       }
+        //       // break;
+        //     }    
+        //     break;    
+        // }else  
         if (!question.isCompleted) {
-          console.log("not completed " + section.name + "qid " + question._id)
           allAnswered = false;
           break;
         }
       }
-      // console.log("All answere: "+ allAnswered)
       if (this.currentEvidence.isSubmitted) {
         section.progressStatus = 'submitted';
       } else if (!this.currentEvidence.startTime) {
         section.progressStatus = '';
-      }else if (allAnswered) {
-        // console.log("hiiiii")
+      } else if (allAnswered) {
         section.progressStatus = 'completed';
       } else if (!allAnswered && section.progressStatus) {
         section.progressStatus = 'inProgress';
       } else if (!section.progressStatus) {
         section.progressStatus = '';
       }
-      // console.log("Progress status " + section.progressStatus)
-      // section.progressStatus = allAnswered ? 'completed' : section.progressStatus;
     }
     this.allAnsweredForEvidence = true;
-    // console.log(JSON.stringify(this.evidenceSections))
-
     for (const section of this.evidenceSections) {
       if (section.progressStatus !== 'completed') {
         this.allAnsweredForEvidence = false;
         break;
       }
     }
-    this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
-    // this.utils.setLocalSchoolData(this.schoolData);
-    // this.allAnsweredForEvidence = allAnswered;
+    this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.sectionData)
   }
 
   goToQuestioner(selectedSection): void {
+    // console.log(this.submissionId + "sectionlist")
     const params = {
-      _id: this.schoolId,
-      name: this.schoolName,
+      _id: this.submissionId,
+      name: this.entityName,
       selectedEvidence: this.selectedEvidenceIndex,
       selectedSection: selectedSection
     };
@@ -146,27 +158,32 @@ export class SectionListPage {
     if (!this.evidenceSections[selectedSection].progressStatus) {
       this.evidenceSections[selectedSection].progressStatus = this.currentEvidence.startTime ? 'inProgress' : '';
       // this.utils.setLocalSchoolData(this.schoolData)
-    this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
+      this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.sectionData)
 
     }
     this.navCtrl.push('QuestionerPage', params);
   }
 
   checkForNetworkTypeAlert() {
-    if(this.network.type !== ('3g' || '4g' || 'wifi')){
+    if (this.network.type !== ('3g' || '4g' || 'wifi')) {
+      let translateObject;
+      this.translate.get(['actionSheet.confirm', 'actionSheet.yes', 'actionSheet.no', 'actionSheet.slowInternet']).subscribe(translations => {
+        translateObject = translations;
+        // console.log(JSON.stringify(translations))
+      })
       let alert = this.alertCtrl.create({
-        title: 'Confirm',
-        message: 'You are connected to a slower data network. Image upload may take longer time. Do you want to continue?',
+        title: translateObject['actionSheet.confirm'],
+        message: translateObject['actionSheet.slowInternet'],
         buttons: [
           {
-            text: 'No',
+            text: translateObject['actionSheet.no'],
             role: 'cancel',
             handler: () => {
-              console.log('Cancel clicked');
+              //console.log('Cancel clicked');
             }
           },
           {
-            text: 'Yes',
+            text: translateObject['actionSheet.yes'],
             handler: () => {
               this.goToImageListing()
             }
@@ -177,15 +194,19 @@ export class SectionListPage {
     }
   }
 
+  viewReport() {
+    this.navCtrl.push(ObservationReportsPage, { submissionId: this.submissionId })
+  }
+
 
   goToImageListing() {
-    if(this.networkAvailable) {
+    if (this.networkAvailable) {
       this.diagnostic.isLocationEnabled().then(success => {
         if (success) {
           const params = {
             selectedEvidenceId: this.currentEvidence._id,
-            _id: this.schoolId,
-            name: this.schoolName,
+            _id: this.submissionId,
+            name: this.entityName,
             selectedEvidence: this.selectedEvidenceIndex,
           }
           this.navCtrl.push(ImageListingPage, params);
@@ -196,29 +217,38 @@ export class SectionListPage {
         this.ngps.checkForLocationPermissions();
       })
     } else {
-      this.utils.openToast("Please enable data to continue.");
+      this.translate.get('toastMessage.connectToInternet').subscribe(translations => {
+        this.utils.openToast(translations);
+      })
     }
-    
+
 
   }
 
   submitEvidence() {
     const payload = this.constructPayload();
-    console.log(JSON.stringify(payload));
+    //console.log(JSON.stringify(payload));
 
-    const submissionId = this.schoolData['assessments'][0].submissionId;
+    const submissionId = this.sectionData['assessment'][0].submissionId;
     const url = AppConfigs.survey.submission + submissionId;
-    this.apiService.httpPost(url, payload, response => {
-      this.utils.openToast(response.message);
-      this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
-      // this.utils.setLocalSchoolData(this.schoolData);
-      this.localStorage.setLocalStorage('schoolDetails_'+this.schoolId, this.schoolData)
+    if (this.networkAvailable) {
+      this.apiService.httpPost(url, payload, response => {
+        this.utils.openToast(response.message);
+        this.sectionData['assessment'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+        // this.utils.setLocalSchoolData(this.schoolData);
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.sectionData)
 
-      // console.log(JSON.stringify(response))
-    }, error => {
-      console.log(JSON.stringify(error))
-    })
-    // console.log(JSON.stringify(this.constructPayload()));
+        // //console.log(JSON.stringify(response))
+      }, error => {
+        //console.log(JSON.stringify(error))
+      })
+    } else {
+      this.translate.get('toastMessage.networkConnectionForAction').subscribe(translations => {
+        this.utils.openToast(translations);
+      })
+    }
+
+    // //console.log(JSON.stringify(this.constructPayload()));
 
   }
 
@@ -233,14 +263,14 @@ export class SectionListPage {
       externalId: "",
       answers: []
     };
-    for (const field of this.schoolData['schoolProfile']['form']) {
+    for (const field of this.sectionData['schoolProfile']['form']) {
       schoolProfile[field.field] = field.value
     }
     // schoolProfile['updatedBy'] =  this.userData.sub;
     schoolProfile['updatedDate'] = Date.now();
 
-    evidence.id = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex]._id;
-    evidence.externalId = this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].externalId;
+    evidence.id = this.sectionData['assessment']['evidences'][this.selectedEvidenceIndex]._id;
+    evidence.externalId = this.sectionData['assessment']['evidences'][this.selectedEvidenceIndex].externalId;
 
     for (const section of this.evidenceSections) {
       for (const question of section.questions) {
@@ -266,5 +296,12 @@ export class SectionListPage {
     if (this.navParams.get('parent')) {
       this.navParams.get('parent').onInit();
     }
+  }
+
+  previewSubmission() {
+    this.submissionId = this.navParams.get('_id');
+    this.entityName = this.navParams.get('name');
+    this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
+    this.navCtrl.push(PreviewPage, { _id: this.submissionId, name: this.entityName, selectedEvidence: this.selectedEvidenceIndex })
   }
 }

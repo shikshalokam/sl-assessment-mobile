@@ -1,1 +1,30 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu side="start" swipeGesture="true" [content]="content">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title color="primary" padding-top>{{appName}}</ion-title>
+      <!-- <div  padding-left padding-bottom class="lightGrey">
+       {{currentUser?.getCurrentUserData()?.email}}</div> -->
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="whiteBg">
+    <ion-list no-lines>
+      <ion-item *ngFor="let page of allPages; let i = index" (click)="goToPage(i)"
+        [ngClass]="{activePage: page.active}">
+        <ion-icon name="{{page.icon}}" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>
+        <span>{{'tabs.'+page.name | translate}}</span>
+      </ion-item>
+      <!-- <ion-item><ion-icon name="book" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>{{'tabs.mySchool' | translate}}</ion-item>
+    <ion-item><ion-icon name="help" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>{{'tabs.faqs' | translate}}</ion-item>
+    <ion-item><ion-icon name="information-circle" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>{{'tabs.about'| translate}}</ion-item> -->
+      <!-- <ion-item>Menu Item</ion-item> -->
+      <ion-item class="info">
+        <div class="appVersion _flex-box _justify-content-space-between">
+          <span *ngIf="appEnvironment !== 'Production'" margin-right>{{appEnvironment}} </span>
+          <span>{{appVersion}}</span>
+        </div>
+        <!-- <div>hii</div> -->
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<ion-nav [root]="rootPage" #content swipeBackEnabled="true"></ion-nav>

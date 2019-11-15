@@ -2,26 +2,31 @@
 import { Http, URLSearchParams, Headers } from '@angular/http';
 
 import { Injectable } from '@angular/core';
+import { App, AlertController } from 'ionic-angular';
+import { HTTP } from '@ionic-native/http';
+
 import { CurrentUserProvider } from '../current-user/current-user';
 import { AppConfigs } from '../appConfig';
-import { App, AlertController } from 'ionic-angular'
 import { WelcomePage } from '../../pages/welcome/welcome';
 import { UtilsProvider } from '../utils/utils';
-import { AuthProvider } from '../auth/auth';
+// import { AuthProvider } from '../auth/auth';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { SlackProvider } from '../slack/slack';
-import { HTTP } from '@ionic-native/http';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class ApiProvider {
 
   constructor(public http: HTTP,
     public currentUser: CurrentUserProvider,
-    private appCtrls: App, private utils: UtilsProvider,
-    private auth: AuthProvider,
+    private appCtrls: App, 
+    private utils: UtilsProvider,
     private alertCntrl: AlertController,
-    private ngHttp: Http,
-    private ngps: NetworkGpsProvider, private slack: SlackProvider) {
+    private translate : TranslateService,
+    private ngps: NetworkGpsProvider, 
+    private slack: SlackProvider,
+    private ngHttp: Http
+    ) {
   }
 
   errorObj = {
@@ -117,8 +122,11 @@ export class ApiProvider {
       const errorObject = { ...this.errorObj };
       errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(errorObject)}.Toke expired. Relogin enabled.`;
       this.slack.pushException(errorObject);
-      this.auth.doLogout().then(success => {
-        this.errorTokenRetryCount = 0;
+      this.translate.get(['toastMessage.someThingWentWrongTryLater','toastMessage.ok']).subscribe(translations =>{
+        this.utils.openToast(translations.someThingWentWrongTryLater , translations.ok);
+      })
+      
+      this.doLogout().then(success => {
         this.reLoginAlert();
       }).catch(error => {
       })
@@ -133,9 +141,11 @@ export class ApiProvider {
         const errorObject = { ...this.errorObj };
         errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
         this.slack.pushException(errorObject);
-        this.utils.openToast("Something went wrong. Please try again", 'Ok');
+        this.translate.get(['toastMessage.someThingWentWrongTryLater','toastMessage.ok']).subscribe(translations =>{
+          this.utils.openToast(translations.someThingWentWrongTryLater , translations.ok);
+        })
         errorCallback(error);
-        this.auth.doLogout().then(success => {
+        this.doLogout().then(success => {
           this.reLoginAlert();
         }).catch(error => {
         })
@@ -144,31 +154,40 @@ export class ApiProvider {
   }
 
 
-  httpPost(url, payload, successCallback, errorCallback) {
+  httpPost(url, payload, successCallback, errorCallback , config?) {
     // let nav = this.appCtrls.getActiveNav();
+    let options = {};
+    console.log("httpPost" + JSON.stringify(options)+"post call")
+    options['version'] = (config && config.version )? config.config :"v1";
+    options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
       const obj = {
+        'x-auth-token': this.currentUser.curretUser.accessToken,
         'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
         'appVersion': AppConfigs.appVersion
       }
-      const apiUrl = AppConfigs.api_base_url + url;
+      // const apiUrl = AppConfigs.api_base_url + url;
+      const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
+      console.log(apiUrl)
+      // console.log(JSON.stringify(payload))
       this.http.setDataSerializer('json');
       this.http.post(apiUrl, payload, obj).then(data => {
-
-        successCallback(JSON.parse(data.data));
+        console.log(data)
+        successCallback(data.data ? JSON.parse(data.data) : null);
       }).catch(error => {
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
           this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
         } else {
-          this.utils.openToast(error.message, 'Ok');
+          this.utils.openToast(errorDetails.message, 'Ok');
           const errorObject = { ...this.errorObj };
           errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}. Payload: ${JSON.stringify(payload)}.`;
           this.slack.pushException(errorObject);
         }
+        errorCallback(JSON.parse(error['error']))
       })
     }).catch(error => {
       this.OnTokenExpired(url, payload, successCallback, errorCallback, "post");
@@ -176,25 +195,41 @@ export class ApiProvider {
   }
 
 
-  httpGet(url, successCallback, errorCallback) {
+  httpGet(url, successCallback, errorCallback , config?) {
+    // console.log("httpget" + JSON.stringify(options))
+    // if(options && options.version){
+      let options = {};
+      options['version'] = (config && config.version )? config.version :"v1";
+      options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
+    // }
+
     this.validateApiToken().then(response => {
-      const gpsLocation = this.ngps.getGpsLocation()
+      const gpsLocation = this.ngps.getGpsLocation();
       const obj = {
+        'x-auth-token': this.currentUser.curretUser.accessToken,
         'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
         'appVersion': AppConfigs.appVersion
       }
       this.http.setDataSerializer('json');
-      const apiUrl = AppConfigs.api_base_url + url;
+      const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
+      console.log(apiUrl)
       this.http.get(apiUrl, {}, obj).then(data => {
-        successCallback(JSON.parse(data.data));
+        console.log(JSON.stringify(data))
+        successCallback(data.data ? JSON.parse(data.data) : null);
+        console.log("success data")
       }).catch(error => {
+        errorCallback(error)
+        console.log(JSON.stringify(error));
         const errorDetails = error['error'] ? JSON.parse(error['error']) : error ;
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
           this.OnTokenExpired(url, " ", successCallback, errorCallback, "get");
         } else {
-          this.utils.openToast(error.message, 'Ok');
+          this.translate.get('toastMessage.ok').subscribe(translations =>{
+            this.utils.openToast(errorDetails.message, translations);
+            errorCallback(error)
+          })
           const errorObject = { ...this.errorObj };
           errorObject.text = `API failed. URL: ${apiUrl}. Error  Details ${JSON.stringify(error)}`;
           this.slack.pushException(errorObject);
@@ -205,15 +240,22 @@ export class ApiProvider {
     })
   }
 
+
+
   reLoginAlert() {
     this.currentUser.deactivateActivateSession(true);
     let nav = this.appCtrls.getRootNav();
     nav.setRoot(WelcomePage);
+    let translateObject ;
+    this.translate.get(['actionSheet.sessionExpired','actionSheet.login']).subscribe(translations =>{
+      translateObject = translations;
+      console.log(JSON.stringify(translations))
+    })
     let alert = this.alertCntrl.create({
-      title: 'Session has expired. Please login again to continue',
+      title: translateObject['actionSheet.sessionExpired'],
       buttons: [
         {
-          text: 'Login',
+          text: translateObject['actionSheet.login'],
           role: 'role',
           handler: data => {}
         }
@@ -223,4 +265,56 @@ export class ApiProvider {
     alert.present();
   }
 
+  doLogout(): Promise<any> {
+    return new Promise(function (resolve) {
+      let logout_redirect_url = AppConfigs.keyCloak.logout_redirect_url;
+      let logout_url = AppConfigs.app_url + "/auth/realms/sunbird/protocol/openid-connect/logout?redirect_uri=" + logout_redirect_url;
+      console.log(logout_url);
+
+      let closeCallback = function (event) {
+      };
+
+      let browserRef = (<any>window).cordova.InAppBrowser.open(logout_url, "_blank", "zoom=no");
+      browserRef.addEventListener('loadstart', function (event) {
+        console.log('in listener')
+        if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
+          browserRef.removeEventListener("exit", closeCallback);
+          browserRef.close();
+          console.log(event.url);
+          resolve()
+        }
+      });
+
+    });
+  }
+
+  getLocalJson(url ){
+    console.log(url);
+   return this.ngHttp.get(url);
+    // this.ngHttp.get("assets/addObservation.json").subscribe(data => {
+    // }).catch(error => {
+
+    //   console.log(JSON.stringify(error));
+    //   const errorDetails = error['error'] ? JSON.parse(error['error']) : error ;
+    //   if (errorDetails.status === "ERR_TOKEN_INVALID") {
+    //     this.errorTokenRetryCount++;
+    //   } else {
+    //     this.utils.openToast(error.message, 'Ok');
+    //     const errorObject = { ...this.errorObj };
+    //     errorObject.text = `API failed. URL: ${url}. Error  Details ${JSON.stringify(error)}`;
+    //     this.slack.pushException(errorObject);
+    //   }
+    // })
+    // console.log(url);
+
+    // this.http.get(url , { } , {}).then(data => 
+    //   {
+    //     console.log("function sucess");
+    //     console.log(JSON.stringify(data.data));
+    //   successCallback(JSON.parse(data.data));
+
+    //   }).catch( error =>{
+
+    //   });  
+  }
 } 

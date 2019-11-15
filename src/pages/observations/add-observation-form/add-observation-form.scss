@@ -1,0 +1,14 @@
+page-add-observation-form {
+
+}
+.fixBox{
+    height: calc(70vh );
+    overflow-y: auto;
+}
+
+.active{
+    background-color: $primary-color;
+}
+.whiteColor{
+    color : $white-color !important;
+}

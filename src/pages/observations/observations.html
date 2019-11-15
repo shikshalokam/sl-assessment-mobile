@@ -1,0 +1,125 @@
+<ion-header>
+  <header [title]="'headings.observations'|translate" [hideBack]="false">
+  </header>
+</ion-header>
+<ion-content>
+  <!-- <ion-tabs selectedIndex="0">
+    <ion-tab [root]="viewObservationPage" [tabTitle]="'tabs.view' | translate" tabIcon="eye"></ion-tab>
+    <ion-tab [root]="myObservationPage" [tabTitle]="'tabs.myObservation' | translate" tabIcon="glasses"></ion-tab>
+  </ion-tabs> -->
+
+  <div padding>
+    <ion-segment [(ngModel)]="selectedTab">
+      <ion-segment-button value="active" (click)="onTabChange('active')">
+        {{'buttons.active' | translate}}
+        <ion-badge color="primary"  item-right>{{activeListLength}}</ion-badge>
+
+      </ion-segment-button>
+      <ion-segment-button value="draft" (click)="onTabChange('draft')">
+        {{'buttons.draft' | translate}}
+        <ion-badge color="primary"  item-right>{{draftListLength}}</ion-badge>
+
+      </ion-segment-button>
+      <!-- <ion-segment-button value="completed" (click)="onTabChange('completed')">
+        {{'buttons.completed' | translate}}
+        <ion-badge color="primary"  item-right>{{completeListLength}}</ion-badge>
+
+      </ion-segment-button> -->
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="selectedTab">
+    <div *ngSwitchCase="'active'">
+      <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+          refreshingText="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
+
+      <div style="padding: 0 0 60px 0">
+        <span *ngFor="let observation of createdObservation; let i=index" >
+        <ion-card *ngIf="observation.status !== 'completed'" text-capitalize padding margin-right   class="_flex-box _justify-content-space-between">
+         <div  style="flex:1"  (click)="navigateToCreatedObservationDetails(i)" > {{ observation?.name }}</div> 
+          <ion-icon  name="more"  class="menuIcon" (click)="openMenu($event,i)" ></ion-icon>
+        </ion-card>
+      </span>
+        
+      </div>
+    </div>
+    <div *ngSwitchCase="'draft'">
+      <ion-list *ngIf="draftObservation">
+            
+          <button text-wrap  *ngFor="let draft of draftObservation;let i = index"  ion-item (click)="actionOnDraftObservation(i,draft)">
+          <h2>
+          <span *ngIf="draft?.data?.name ; else noName">
+              {{ draft?.data.name }} 
+          </span>
+          <ng-template #noName>
+            (No Name)
+          </ng-template>
+        <span float-right *ngIf="draft?.data?.isComplete"
+          class="_completed _flex-box">
+          {{'labels.readytoPublish'|translate}} <ion-icon name="checkmark-circle" class="_progressIcon" margin-left>
+          </ion-icon>
+        </span>
+        
+        <span float-right *ngIf="!draft?.data?.isComplete "
+          class="_inProgress _flex-box">
+          {{'labels.inprogress'|translate}} <ion-icon name="contrast" class="_progressIcon" margin-left></ion-icon>
+        </span>
+       
+      </h2>
+    </button>
+      </ion-list>
+      <ion-list *ngIf="!draftObservation.length " >
+       <span class="_flex-box _justify-content-center">
+        {{'message.noDraft' | translate}}
+       </span>
+        </ion-list>
+    </div>
+    <div *ngSwitchCase="'completed'">
+      <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+          refreshingText="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
+
+      <div style="padding: 0 0 60px 0">
+        <span *ngFor="let observation of createdObservation; let i=index" >
+        <ion-card *ngIf="observation.status === 'completed'" text-capitalize padding margin-right   class="_flex-box _justify-content-space-between">
+          <div style="flex:1" (click)="navigateToCreatedObservationDetails(i)" >{{ observation?.name }}</div>
+          <ion-icon name="more"  class="menuIcon" (click)="openMenu($event,i)" ></ion-icon>
+        </ion-card>
+      </span>
+      </div>
+    </div>
+  </div>
+
+  <ion-fab bottom right >
+    <!-- <button ion-fab mini color="secondary" (click)="addObservation()">
+      <ion-icon name="add"></ion-icon>
+    </button> -->
+    <button ion-fab mini (click)="refresh()" >
+      <ion-icon name="refresh"></ion-icon>
+      <!-- {{'buttons.refresh' | translate}} -->
+    </button>
+  </ion-fab>
+</ion-content>
+
+<ion-footer no-shadow *ngIf="selectedTab === 'active'">
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <!-- <button ion-button full (click)="refresh()" class="btnText">
+          <ion-icon name="refresh" margin-right></ion-icon>
+          {{'buttons.refresh' | translate}}
+        </button> -->
+
+        <button ion-button full class="btnText" (click)="addObservation()">
+          <ion-icon name="add" padding-right></ion-icon> 
+          {{ 'buttons.addNew' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

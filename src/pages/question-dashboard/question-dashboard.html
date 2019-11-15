@@ -1,5 +1,5 @@
 <ion-header>
-  <header [title]="'headings.questionMap'|translate" [showClose]="true" [disableNetwork]="true">
+  <header [title]="'headings.questionMap'|translate" [showMenu]="false" [showClose]="true" [disableNetwork]="true">
   </header>
 </ion-header>
 
@@ -10,21 +10,21 @@
   </div>
   <div class="_flex-box _flex-wrap" margin-top *ngIf="questions?.length">
     <ng-container *ngFor="let question of questions; let i = index">
-      <div class="container _flex-box _justify-content-center" (click)="goToQuestion(i)" *ngIf="checkForQuestionDisplay(question)">
+      <div class="container _flex-box _justify-content-center" (click)="goToQuestion(i)"
+        *ngIf="checkForQuestionDisplay(question)">
         <span class="wrapper _flex-box _justify-content-center" [ngClass]="{'currentView': i === currentViewIndex}">
-          <!-- <ion-icon class="block pending _flex-box color-green _justify-content-center" name="checkmark" *ngIf="isQuestionComplete(question)" ></ion-icon> -->
-          <!-- <ion-icon name="checkmark-circle-outline" *ngIf="isQuestionComplete(question)"></ion-icon>
-                 -->
-          <!-- <ion-icon class="block pending black-color _flex-box _justify-content-center" name="help" *ngIf="!isQuestionComplete(question)"></ion-icon> -->
-          <span class="block pending black-color _flex-box _justify-content-center" [ngClass]="{'color-green': isQuestionComplete(question)}">{{i+1}}</span>
+          <span class="block pending black-color _flex-box _justify-content-center"
+            [ngClass]="{'color-green': isQuestionComplete(question)}">{{i+1}}</span>
         </span>
       </div>
 
-      <div class="container _flex-box _justify-content-center" (click)="openToast()" *ngIf="!checkForQuestionDisplay(question)">
-          <span class="wrapper _flex-box _justify-content-center" [ngClass]="{'currentView': i === currentViewIndex}">
-            <span class="block pending black-color _flex-box _justify-content-center" [ngClass]="{'color-green': isQuestionComplete(question)}">{{i+1}}</span>
-          </span>
-        </div>
+      <div class="container _flex-box _justify-content-center" (click)="openToast()"
+        *ngIf="!checkForQuestionDisplay(question)">
+        <span class="wrapper _flex-box _justify-content-center" [ngClass]="{'currentView': i === currentViewIndex}">
+          <span class="block pending black-color _flex-box _justify-content-center"
+            [ngClass]="{'color-green': isQuestionComplete(question)}">{{i+1}}</span>
+        </span>
+      </div>
     </ng-container>
 
 

@@ -8,6 +8,8 @@ import { Subject } from 'rxjs/Subject';
 import { Network } from '@ionic-native/network';
 import { Events , ToastController} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { UtilsProvider } from '../utils/utils';
 
 export enum ConnectionStatusEnum {
   Online,
@@ -20,13 +22,14 @@ export class NetworkGpsProvider {
   networkStatus$ = new Subject();
   networkStatus: boolean;
   previousStatus: any;
-  gpsLocation : string;
+  gpsLocation: string;
   constructor(
     public http: HttpClient,
     private permissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
-    // private utils: UtilsProvider,
+    private utils: UtilsProvider,
+    private diagnostic: Diagnostic,
     private network: Network,
     private toastCntrl: ToastController,
     private eventCtrl: Events, private storage: Storage) {
@@ -35,7 +38,7 @@ export class NetworkGpsProvider {
   }
 
   getNetowrkDetails() {
-    const network = {type:this.network.type, downMax: this.network.downlinkMax};
+    const network = { type: this.network.type, downMax: this.network.downlinkMax };
     return network
   }
 
@@ -62,28 +65,78 @@ export class NetworkGpsProvider {
       });
   }
 
+  getGpsStatus() {
+    return new Promise((resolve, reject) => {
+      this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+        if (canRequest) {
+          // the accuracy option will be ignored by iOS
+          this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
+            const options = {
+              timeout: 20000
+            }
+            this.geolocation.getCurrentPosition(options).then((resp) => {
+              const location = `${resp.coords.latitude},${resp.coords.longitude}`;
+              // this.utils.openToast(location)
+              resolve(location)
+            }).catch((error) => {
+              this.utils.openToast("Something went wrnog. Please try again.")
+              reject()
+            });
+          }, error => {
+            console.log("GPS on permission denied");
+            reject()
+
+          });
+        } else {
+          console.log("hiiiiiii")
+          this.permissions.requestPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(result => {
+            console.log("permission");
+            console.log(JSON.stringify(result))
+            if (result.hasPermission) {
+              this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
+                const options = {
+                  timeout: 20000
+                }
+                this.geolocation.getCurrentPosition(options).then((resp) => {
+                  const location = `${resp.coords.latitude},${resp.coords.longitude}`;
+                  // this.utils.openToast(location)
+                  resolve(location)
+                }).catch((error) => {
+                  this.utils.openToast("Please enable location permission to continue.")
+                  reject()
+                });
+              }, error => {
+                console.log("GPS on permission denied");
+                reject()
+
+              });
+            } else {
+              console.log("errrrrrrrrr")
+              this.utils.openToast("Please enable location permission to continue.")
+              reject();
+            }
+          }).catch(error => {
+            console.log('error');
+            this.utils.openToast("Please grand permission for location.")
+            reject();
+
+          })
+        }
+      });
+    })
+  }
+
 
   enableGPSRequest() {
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if (canRequest) {
         // the accuracy option will be ignored by iOS
-        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-          () => {
-            this.getCurrentLocation();
-          },
-          error => {
-            // this.utils.openToast("Location should be turned on for this action");
-            let toast = this.toastCntrl.create({
-              message: "Location should be turned on for this action",
-              duration:  3000,
-              position: 'bottom',
-              showCloseButton: false
-            });
-          toast.present();
+        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
+          this.getCurrentLocation();
+        }
+        ).catch(errror => {
 
-            // this.enableGPSRequest()
-          }
-        );
+        });
       } else {
         //For ios devices
         this.getCurrentLocation();
@@ -93,35 +146,35 @@ export class NetworkGpsProvider {
     });
   }
 
-  getCurrentLocation(){
+  getCurrentLocation() {
     console.log("Getting current location");
     const options = {
       timeout: 20000
     }
     // return new Promise(resolve => {
-      this.geolocation.getCurrentPosition(options).then((resp) => {
-        this.gpsLocation = resp.coords.latitude + "," + resp.coords.longitude;
-        this.storage.set('gpsLocation',this.gpsLocation )
-        // this.utils.openToast(resp.coords.latitude + " " + resp.coords.longitude);
-        console.log(resp.coords.latitude + " " + resp.coords.longitude)
-        // return gpsLocation
-      }).catch((error) => {
-        // this.utils.openToast('Error getting location' + JSON.stringify(error));
-        console.log(error.message + " " + error.code);
+    this.geolocation.getCurrentPosition(options).then((resp) => {
+      this.gpsLocation = resp.coords.latitude + "," + resp.coords.longitude;
+      this.storage.set('gpsLocation', this.gpsLocation)
+      // this.utils.openToast(resp.coords.latitude + " " + resp.coords.longitude);
+      console.log(resp.coords.latitude + " " + resp.coords.longitude)
+      // return gpsLocation
+    }).catch((error) => {
+      // this.utils.openToast('Error getting location' + JSON.stringify(error));
+      console.log(error.message + " " + error.code);
 
-        this.storage.get('gpsLocation').then(success => {
-          this.gpsLocation = success
-          // resolve(success);
-        }).catch(error => {
+      this.storage.get('gpsLocation').then(success => {
+        this.gpsLocation = success
+        // resolve(success);
+      }).catch(error => {
 
-        })
-      });
+      })
+    });
     // })
 
   }
 
-   getGpsLocation(): string{
-     this.getCurrentLocation();
+  getGpsLocation(): string {
+    this.getCurrentLocation();
     return this.gpsLocation
   }
 

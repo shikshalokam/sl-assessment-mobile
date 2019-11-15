@@ -8,8 +8,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class DynamicFormComponent implements OnChanges {
 
   @Input() formFields: any;
-  form: FormGroup;
-
+  @Input() form: FormGroup;
+  minDate = new Date().toJSON().split('T')[0];
   constructor() {
     console.log('Hello DynamicFormComponent Component');
   }
@@ -33,16 +33,16 @@ export class DynamicFormComponent implements OnChanges {
     const changesCount = (changes && changes['formFields']['currentValue'] && changes['formFields']['currentValue'].length) ? changes['formFields']['currentValue'].length : 0;
     if (changes && changesCount > 0) {
       this.formFields = changes['formFields']['currentValue'];
-      this.form = this.createFormGroup();
+      this.form = this.form ? this.form : this.createFormGroup();
       console.dir(this.form);
     }
   }
 
   checkForVisibility(field) {
     if(this.form.valid){
-      console.log("valid form")
+      // console.log("valid form")
     } else {
-      console.log("invalid form")
+      // console.log("invalid form")
 
     }
     if (field.visibleIf) {

@@ -1,6 +1,6 @@
 <ion-list class="wrapper">
-  <button ion-item clear small icon-start class="_flex-box _justify-content-center" (click)="goToProfile()">
-    <ion-icon name="eye" margin-left margin-right></ion-icon>
+  <button ion-item clear small padding-left class="_flex-box _justify-content-center" (click)="goToProfile()">
+    <!-- <ion-icon name="eye" margin-left margin-right></ion-icon> -->
     {{'buttons.view'|translate}} {{'buttons.profile'|translate}}
   </button>
   <!-- <button ion-item clear small icon-end (click)="goToRating()">
@@ -11,16 +11,24 @@
     <ion-icon name="flag" margin-right></ion-icon>
     {{'buttons.flag'|translate}}
   </button> -->
-  <button ion-item clear small icon-start (click)="goToParentRegistry()">
+  <!-- <button ion-item clear small padding-left (click)="goToRegistry('schoolLeader')" *ngIf="hideLeaderRegistry">
     <ion-icon name="contacts" margin-left margin-right></ion-icon>
-     {{'buttons.parent' | translate}} {{'buttons.registry'| translate}}
+     {{'buttons.Leader' | translate}} {{'buttons.registry'| translate}} 
   </button>
-  <button ion-item clear small icon-start (click)="refreshSchoolData()">
-      <ion-icon name="refresh-circle" margin-left margin-right></ion-icon>
+  <button ion-item clear small padding-left (click)="goToRegistry('teacher')" *ngIf="hideTeacherRegistry">
+    <ion-icon name="contacts" margin-left margin-right></ion-icon>
+     {{'buttons.Teacher' | translate}} {{'buttons.registry'| translate}}
+  </button> -->
+  <button *ngFor="let menuItem of showMenuArray" ion-item clear small padding-left (click)="goToRegistry(menuItem)" >
+    <!-- <ion-icon name="contacts" margin-left margin-right></ion-icon> -->
+     {{menuItem | camelcase }} {{'buttons.registry'| translate}}
+  </button>
+  <button ion-item clear small padding-left (click)="refreshSchoolData()">
+      <!-- <ion-icon name="refresh-circle" margin-left margin-right></ion-icon> -->
       {{'buttons.refresh'| translate}} 
     </button>
-    <button ion-item clear small icon-start (click)="feedback()">
-      <ion-icon name="chatboxes" margin-left margin-right></ion-icon>
+    <button ion-item clear small padding-left (click)="feedback()" *ngIf="hideFeedback">
+      <!-- <ion-icon name="chatboxes" margin-left margin-right></ion-icon> -->
       {{'buttons.feedback'| translate}} 
     </button>
 </ion-list>

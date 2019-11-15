@@ -6,6 +6,7 @@ import { GeneralQuestionSubmitPage } from '../general-question-submit/general-qu
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Network } from '@ionic-native/network';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
@@ -15,14 +16,16 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 export class GeneralQuestionListPage {
 
   generalQuestions: any;
-  schoolId: any;
+  submissionId: any;
   allGeneralQuestions: any;
   enableSubmitBtn: boolean = false;
   networkAvailable: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private utils: UtilsProvider,
     private modal: ModalController, private events: Events, private ngps: NetworkGpsProvider,
-    private alertCntrl: AlertController, private network: Network, private localStorage: LocalStorageProvider) {
+    private alertCntrl: AlertController, 
+    private translate : TranslateService,
+    private network: Network, private localStorage: LocalStorageProvider) {
     this.events.subscribe('network:offline', () => {
     });
 
@@ -33,38 +36,24 @@ export class GeneralQuestionListPage {
   }
 
   ionViewWillEnter() {
-    console.log('ionViewDidLoad GeneralQuestionListPage');
-    this.schoolId = this.navParams.get('_id');
-    this.localStorage.getLocalStorage('generalQuestions_'+this.schoolId).then( data => {
-      if(data){
+    this.submissionId = this.navParams.get('_id');
+    this.localStorage.getLocalStorage('generalQuestions_' + this.submissionId).then(data => {
+      if (data) {
         this.allGeneralQuestions = data;
         this.generalQuestions = this.allGeneralQuestions;
         this.enableSubmitBtn = this.enableGeneralaSubmission();
       }
     }).catch(error => {
-
     })
-    // this.storage.get('generalQuestions').then( data => {
-    //   if(data){
-    //     this.allGeneralQuestions = JSON.parse(data);
-    //     this.generalQuestions = this.allGeneralQuestions[this.schoolId];
-    //     this.enableSubmitBtn = this.enableGeneralaSubmission();
-    //   }
-    // }).catch(error => {
-
-    // })
   }
 
   OpenQuestionModal(index) {
-    // console.log(JSON.stringify(this.generalQuestions[index]));
-    const modal = this.modal.create(GeneralQuestionPage, {"question":JSON.parse(JSON.stringify(this.generalQuestions[index])), schoolId: this.schoolId});
+    const modal = this.modal.create(GeneralQuestionPage, { "question": JSON.parse(JSON.stringify(this.generalQuestions[index])), submissionId: this.submissionId });
     modal.onDidDismiss(data => {
-      if(data) {
+      if (data) {
         this.generalQuestions[index] = data;
-        console.log(JSON.stringify(data));
         this.enableSubmitBtn = this.enableGeneralaSubmission();
-        this.localStorage.setLocalStorage('generalQuestions_'+this.schoolId, this.allGeneralQuestions)
-        // this.storage.set('generalQuestions', JSON.stringify(this.allGeneralQuestions));
+        this.localStorage.setLocalStorage('generalQuestions_' + this.submissionId, this.allGeneralQuestions)
       }
     })
     modal.present();
@@ -73,7 +62,7 @@ export class GeneralQuestionListPage {
   enableGeneralaSubmission(): boolean {
     let completed = false;
     for (const question of this.generalQuestions) {
-      if(question.isCompleted){
+      if (question.isCompleted) {
         return true
       }
     }
@@ -81,20 +70,19 @@ export class GeneralQuestionListPage {
   }
 
   checkForNetworkTypeAlert() {
-    if(this.network.type !== ('3g' || '4g' || 'wifi')){
+    if (this.network.type !== ('3g' || '4g' || 'wifi')) {
       let alert = this.alertCntrl.create({
-        title: 'Confirm',
-        message: 'You are connected to a slower data network. Image upload may take longer time. Do you want to continue?',
+        title: `{{'actionSheet.confirm' | translate}}`,
+        message: `{{'actionSheet.networkSlowAlert' | translate }}` , 
         buttons: [
           {
-            text: 'No',
+            text:  `{{'actionSheet.no'|translate}}`,
             role: 'cancel',
             handler: () => {
-              console.log('Cancel clicked');
             }
           },
           {
-            text: 'Yes',
+            text: `{{'actionSheet.yes'|translate}}`,
             handler: () => {
               this.goToImageListing()
             }
@@ -108,22 +96,17 @@ export class GeneralQuestionListPage {
 
   goToImageListing() {
     this.ngps.checkForLocationPermissions();
-    if(this.networkAvailable) {
-      // this.diagnostic.isLocationEnabled().then(success => {
-        // if (success) {
-          const params = {
-            _id: this.schoolId,
-          }
-          this.navCtrl.push(GeneralQuestionSubmitPage, params);
-        // } else {
-          // this.ngps.checkForLocationPermissions();
-        // }
-      // }).catch(error => {
-      // })
+    if (this.networkAvailable) {
+      const params = {
+        _id: this.submissionId,
+      }
+      this.navCtrl.push(GeneralQuestionSubmitPage, params);
     } else {
-      this.utils.openToast("Please enable network to continue");
+      this.translate.get('toastMessage.enableInternet').subscribe(translations =>{
+        this.utils.openToast(translations);
+      })
     }
-    
+
 
   }
 
