@@ -12,6 +12,7 @@ import { AssessmentServiceProvider } from '../assessment-service/assessment-serv
 import { EntityListingPage } from '../../pages/entity-listing/entity-listing';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { EvidenceProvider } from '../evidence/evidence';
+import { AppIconBadgeProvider } from '../app-icon-badge/app-icon-badge';
 
 @Injectable()
 export class NotificationProvider {
@@ -37,6 +38,7 @@ export class NotificationProvider {
     private ngps: NetworkGpsProvider,
     private events: Events,
     private evindenceProvider: EvidenceProvider,
+    private appBadge: AppIconBadgeProvider,
     private assessmentService: AssessmentServiceProvider) {
 
     console.log('Hello NotificationProvider Provider');
@@ -76,6 +78,7 @@ export class NotificationProvider {
   checkForNotificationApi() {
     this.apiService.httpGet(AppConfigs.notification.getUnreadNotificationCount, success => {
       this.notificationsData = success.result;
+      success.result.count ? this.appBadge.setBadge(success.result.count) : this.appBadge.clearTheBadge();
       this.$notificationSubject.next(success.result);
     }, error => {
       this.notificationsData = {};

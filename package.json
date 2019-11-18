@@ -21,6 +21,7 @@
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
     "@ionic-native/android-permissions": "4.14.0",
+    "@ionic-native/badge": "^4.20.0",
     "@ionic-native/camera": "4.15.0",
     "@ionic-native/core": "4.12.0",
     "@ionic-native/deeplinks": "4.20.0",
@@ -59,6 +60,7 @@
     "cordova-plugin-add-swift-support": "1.7.2",
     "cordova-plugin-advanced-http": "2.0.9",
     "cordova-plugin-android-permissions": "1.0.0",
+    "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-extended-device-information": "2.2.0",
@@ -178,7 +180,8 @@
       "cordova-plugin-file-opener2": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
-      "cordova-plugin-tts": {}
+      "cordova-plugin-tts": {},
+      "cordova-plugin-badge": {}
     },
     "platforms": [
       "browser",
