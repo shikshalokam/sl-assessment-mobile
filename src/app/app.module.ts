@@ -101,6 +101,8 @@ import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech
 import { ProgramListingPage } from '../pages/program-listing/program-listing';
 import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
 import { NotificationProvider } from '../providers/notification/notification';
+import { Badge } from '@ionic-native/badge'
+import { AppIconBadgeProvider } from '../providers/app-icon-badge/app-icon-badge';
 
 @NgModule({
   declarations: [
@@ -248,6 +250,8 @@ import { NotificationProvider } from '../providers/notification/notification';
     UpdateTrackerProvider,
     TextToSpeechProvider,
     NotificationProvider,
+    Badge,
+    AppIconBadgeProvider
   ]
 })
 export class AppModule { }
