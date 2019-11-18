@@ -154,5 +154,6 @@
     <allow-navigation href="http://localhost:8100" sessionid="36b632ef" />
     <engine name="browser" spec="5.0.4" />
     <engine name="ios" spec="^5.0.1" />
-    <engine name="android" spec="7.1.4" />
+    <engine name="android" spec="latest" />
+    <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="4.1.0" />
 </widget>

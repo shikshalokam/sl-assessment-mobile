@@ -24,6 +24,7 @@ import { RoleListingPage } from '../pages/role-listing/role-listing';
 import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
 import * as Highcharts from 'highcharts';
 import { NotificationProvider } from '../providers/notification/notification';
+import { FcmProvider } from '../providers/fcm/fcm';
 
 
 @Component({
@@ -99,7 +100,8 @@ export class MyApp {
     private deepLinks: Deeplinks,
     private utils: UtilsProvider,
     private localStorageProvider: LocalStorageProvider,
-    private notifctnService: NotificationProvider
+    private notifctnService: NotificationProvider,
+    private fcmService: FcmProvider
   ) {
 
 
@@ -154,6 +156,7 @@ export class MyApp {
       this.initTranslate();
 
       this.networkListenerInitialize();
+      this.fcmService.initializeFCM();
       // Offline event
       // this.events.subscribe('network:offline', () => {
       //   alert('network:offline ==> ' + this.network.type);
