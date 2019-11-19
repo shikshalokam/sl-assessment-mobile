@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FCM } from '@ionic-native/fcm';
 import { Platform } from 'ionic-angular';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 @Injectable()
 export class FcmProvider {
@@ -9,16 +10,10 @@ export class FcmProvider {
   constructor(
     public http: HttpClient,
     private fcm: FCM,
+    private localNotification: LocalNotifications,
     private platform: Platform) {
     console.log('Hello FcmProvider Provider');
-  }
 
-  getDeviceToken(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      // if (deviceToken) {
-
-      // }
-    })
 
   }
 
@@ -31,42 +26,55 @@ export class FcmProvider {
   }
 
   initializeFirebaseAndroid() {
-    this.fcm.getToken().then(token => { 
+    this.fcm.getToken().then(token => {
       console.log("Device Token  ", token);
-      this.subscribeToChannels();
-
+      this.subscribeToChannels('allUsers');
+      this.localNotificationClickHandler();
     });
     this.fcm.onTokenRefresh().subscribe(token => { })
+  }
+
+
+  localNotificationClickHandler() {
+    this.localNotification.on('click').subscribe(success => {
+      this.notificationClickActions(success);
+      console.log(JSON.stringify(success))
+    })
+  }
+
+  triggerLocalNotification(notificationData) {
+    console.log("inside trigger")
+    this.localNotification.schedule(notificationData)
   }
 
   initializeFirebaseIOS() {
 
   }
 
-  subscribeToChannels() {
-    console.log("inside subscribe channel")
-    this.fcm.subscribeToTopic('allUsers').then(success => {
-      console.log("subscribed");
-      console.log(JSON.stringify(success));
+  subscribeToChannels(topic: string) {
+    this.fcm.subscribeToTopic(topic).then(success => {
       this.subscribeToPushNotifications();
-    }).catch(error => {
-      console.log("not subscribed");
-      console.log(JSON.stringify(error))
-    })
+    }).catch(error => { })
   }
 
   subscribeToPushNotifications() {
-    this.fcm.onNotification().subscribe(data => {
-      console.log("On notification received");
-      console.log(JSON.stringify(data))
-      if (data.wasTapped) {
+    this.fcm.onNotification().subscribe(notificationData => {
+      //Will be triggered if the user clicks on the notification and come to the app
+      if (notificationData.wasTapped) {
         console.log("Received in background");
+        this.notificationClickActions(notificationData);
       } else {
-        console.log("Received in foreground");
+      //Will be triggered if the user is using the app(foreground)
+        this.triggerLocalNotification(notificationData);
       };
-    },error => {
+    }, error => {
       console.log("Error of subscribeTo Push notification");
     });
+  }
+
+
+  notificationClickActions(notificationMeta) {
+    alert()
   }
 
 }
