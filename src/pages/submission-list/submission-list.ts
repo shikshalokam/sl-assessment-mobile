@@ -30,8 +30,12 @@ export class SubmissionListPage {
   entityIndex: any;
   observationIndex: any;
   submissionList: any;
-  recentlyUpdatedEntity :any;
+  recentlyUpdatedEntity: any;
   assessmentDetails: any;
+  currentTab = 'all';
+  inProgressObservations = [];
+  completedObservations = [];
+  submissions;
   // firstLoad = true;
   constructor(
     public navCtrl: NavController,
@@ -71,6 +75,12 @@ export class SubmissionListPage {
     // this.firstLoad = false;
   }
 
+  splitCompletedAndInprogressObservations() {
+    for (const submission of this.submissionList) {
+      (submission.status === 'completed') ? this.completedObservations.push(submission) : this.inProgressObservations.push(submission)
+    }
+  }
+
   ionViewDidEnter() {
     // if(this.firstLoad === false)
     // this.observationService.refreshObservationList(this.programs).then(success=>{
@@ -78,29 +88,37 @@ export class SubmissionListPage {
     //   this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
     // }).catch();
     this.selectedObservationIndex = this.navParams.get('selectedObservationIndex');
-    this.recentlyUpdatedEntity =  this.navParams.get('recentlyUpdatedEntity');
+    this.recentlyUpdatedEntity = this.navParams.get('recentlyUpdatedEntity');
     this.entityIndex = this.navParams.get('entityIndex');
     this.observationIndex = this.navParams.get('observationIndex');
     this.getLocalStorageData();
     // this.firstLoad = false;
   }
+
+  clearAllObservations() {
+    this.submissions = [];
+    this.inProgressObservations = [];
+    this.completedObservations = [];
+  }
   getLocalStorageData() {
     this.observationDetails = [];
     console.log("Getting data from local storage ")
     this.utils.startLoader();
+    this.clearAllObservations();
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       this.programs = data;
       console.log(this.selectedObservationIndex + "" + this.entityIndex + "" + this.observationIndex)
       this.observationDetails.push(data[this.selectedObservationIndex]);
-      // console.log(JSON.stringify(this.observationDetails[0]))
 
       this.submissionList = this.observationDetails[0].entities[this.entityIndex].submissions;
+      this.splitCompletedAndInprogressObservations();
+      this.tabChange(this.currentTab ? this.currentTab :'all');
       console.log(JSON.stringify(this.submissionList))
 
       this.utils.stopLoader();
 
     }).catch(error => {
-    this.utils.stopLoader();
+      this.utils.stopLoader();
 
     })
   }
@@ -146,27 +164,27 @@ export class SubmissionListPage {
     // console.log(JSON.stringify(this.programs))
     let submissionId = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].submissions[index]._id
     let heading = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].name;
-//  let recentlyUpdatedEntity = {
-//       EntityName :this.programs[this.selectedObservationIndex].name,
-//       EntityId :this.programs[this.selectedObservationIndex]._id,
-//       programName  : this.programs[this.selectedObservationIndex].entities[this.entityIndex].name,
-//       ProgramId  : this.programs[this.selectedObservationIndex].entities[this.entityIndex]._id,
-//       submissionId :submissionId
-//     }
+    //  let recentlyUpdatedEntity = {
+    //       EntityName :this.programs[this.selectedObservationIndex].name,
+    //       EntityId :this.programs[this.selectedObservationIndex]._id,
+    //       programName  : this.programs[this.selectedObservationIndex].entities[this.entityIndex].name,
+    //       ProgramId  : this.programs[this.selectedObservationIndex].entities[this.entityIndex]._id,
+    //       submissionId :submissionId
+    //     }
     this.recentlyUpdatedEntity['submissionId'] = submissionId;
     // console.log(this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].submissions[index])
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       // console.log(JSON.stringify(successData))
       if (successData.assessment.evidences.length > 1) {
         // console.log("more then one evedince method")
-        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading ,recentlyUpdatedEntity:this.recentlyUpdatedEntity})
+        this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading, recentlyUpdatedEntity: this.recentlyUpdatedEntity })
       } else {
         console.log("  one evedince method")
 
         // console.log(successData.assessment.evidences[0].startTime + "start time")
         if (successData.assessment.evidences[0].startTime) {
           this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId)
-          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0 , recentlyUpdatedEntity : this.recentlyUpdatedEntity })
+          this.navCtrl.push('SectionListPage', { _id: submissionId, name: heading, selectedEvidence: 0, recentlyUpdatedEntity: this.recentlyUpdatedEntity })
         } else {
           const assessment = { _id: submissionId, name: heading }
           this.openAction(assessment, successData, 0);
@@ -194,13 +212,13 @@ export class SubmissionListPage {
     // console.log(JSON.stringify(assessment))
 
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
-    const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData , recentlyUpdatedEntity :this.recentlyUpdatedEntity };
+    const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData, recentlyUpdatedEntity: this.recentlyUpdatedEntity };
     this.evdnsServ.openActionSheet(options, "Observation");
 
   }
   observeAgain() {
     // this.getAssessmentDetails(this.submissionList.length , this.submissionList.length + 1)
-    let submissionNumber = this.submissionList[this.submissionList.length-1].submissionNumber + 1;
+    let submissionNumber = this.submissionList[this.submissionList.length - 1].submissionNumber + 1;
 
     //  console.log(submissionNumber)
     //  this.apiProvider.httpGet(AppConfigs.cro.observationDetails + this.programs[this.selectedObservationIndex]._id + "?entityId=" + this.programs[this.selectedObservationIndex].entities[this.entityIndex]._id + "&submissionNumber=" + submissionNumber, success => {
@@ -232,8 +250,10 @@ export class SubmissionListPage {
         this.programs = success;
         this.observationDetails[0] = success[this.selectedObservationIndex];
         this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+        this.getLocalStorageData();
+
         // this.utils.stopLoader();
-        
+
         this.goToEcm(this.submissionList.length)
       }).catch(error => {
         // this.utils.stopLoader();
@@ -281,18 +301,17 @@ export class SubmissionListPage {
               this.observationService.refreshObservationList(this.programs).then(success => {
                 this.programs = success;
                 this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
-
                 this.utils.stopLoader();
+                this.getLocalStorageData();
+                this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions.length > 0 ? null : this.navCtrl.pop();
 
-                this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions.length > 0 ? null : this.navCtrl.pop(); 
-                
                 // this.goToEcm(this.submissionList.length)
               }).catch(error => {
                 this.utils.stopLoader();
-               });
+              });
             }, error => {
               this.utils.stopLoader();
-             })
+            })
           }
         }
       ]
@@ -300,5 +319,22 @@ export class SubmissionListPage {
     alert.present();
   }
 
+  tabChange(value) {
+    this.submissions = [];
+    this.currentTab = value;
+    switch (value) {
+      case 'inProgress':
+        this.submissions = this.inProgressObservations;
+        break
+      case 'completed':
+        this.submissions = this.completedObservations;
+        break
+      case 'all':
+        this.submissions = this.submissions.concat(this.inProgressObservations, this.completedObservations)
+        break
+      default:
+        this.submissions = this.submissions.concat(this.inProgressObservations, this.completedObservations)
+    }
+  }
 
 }
