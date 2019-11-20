@@ -43,8 +43,9 @@ export class FcmProvider {
   }
 
   triggerLocalNotification(notificationData) {
-    console.log("inside trigger")
-    this.localNotification.schedule(notificationData)
+    delete notificationData.body
+    delete notificationData.wasTapped;
+    this.localNotification.schedule(notificationData);
   }
 
   initializeFirebaseIOS() {
@@ -64,7 +65,8 @@ export class FcmProvider {
         console.log("Received in background");
         this.notificationClickActions(notificationData);
       } else {
-      //Will be triggered if the user is using the app(foreground)
+      //Will be triggered if the user is using the app(foreground);
+      // console.log(JSON.stringify(notificationData))
         this.triggerLocalNotification(notificationData);
       };
     }, error => {
