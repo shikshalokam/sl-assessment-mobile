@@ -6,6 +6,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AppConfigs } from '../appConfig';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { CurrentUserProvider } from '../current-user/current-user';
+import { NotificationProvider } from '../notification/notification';
 
 @Injectable()
 export class FcmProvider {
@@ -18,10 +19,9 @@ export class FcmProvider {
     private localNotification: LocalNotifications,
     private localStorage: LocalStorageProvider,
     private currentUser: CurrentUserProvider,
+    private notificationProvider : NotificationProvider,
     private platform: Platform) {
     console.log('Hello FcmProvider Provider');
-
-
   }
 
   initializeFCM() {
@@ -34,18 +34,16 @@ export class FcmProvider {
 
 
   async initializeFirebaseAndroid() {
+    this.subscribeToPushNotifications();
+    this.localNotificationClickHandler();
     this.localStorage.getLocalStorage('deviceId').then(token => {
       this.fcmDeviceId = token;
     }).catch(error => {
       this.fcm.getToken().then(token => {
-        console.log("Device Token  ", token);
         this.fcmDeviceId = token;
         this.localStorage.setLocalStorage('deviceId', token);
         // this.subscribeToChannels('allUsers');
-        this.subscribeToPushNotifications();
-        this.localNotificationClickHandler();
       }).catch(error => {
-
       });
     })
 
@@ -61,11 +59,9 @@ export class FcmProvider {
     this.fcm.onNotification().subscribe(notificationData => {
       //Will be triggered if the user clicks on the notification and come to the app
       if (notificationData.wasTapped) {
-        console.log("Received in background");
         this.notificationClickActions(notificationData);
       } else {
         //Will be triggered if the user is using the app(foreground);
-        // console.log(JSON.stringify(notificationData))
         this.triggerLocalNotification(notificationData);
       };
     }, error => {
@@ -76,14 +72,22 @@ export class FcmProvider {
 
   localNotificationClickHandler() {
     this.localNotification.on('click').subscribe(success => {
-      this.notificationClickActions(success);
+      this.notificationClickActions(success.data);
     })
   }
 
   triggerLocalNotification(notificationData) {
-    delete notificationData.body
-    delete notificationData.wasTapped;
-    this.localNotification.schedule(notificationData);
+    const obj = {
+      title:notificationData.title,
+      text:notificationData.text,
+      foreground: true,
+      priority: 2,
+      id: notificationData.id,
+      data:notificationData,
+      color: AppConfigs.primary_color,
+      icon:"notification_icon"
+    }
+    this.localNotification.schedule(obj);
   }
 
   registerDeviceID(token?: string) {
@@ -102,7 +106,6 @@ export class FcmProvider {
       console.log("==========================================================================")
       console.log("Successfully registered token");
       console.log("==========================================================================")
-
     }, error => {
       console.log("Error while registering token");
     })
@@ -119,7 +122,20 @@ export class FcmProvider {
   // }
 
   notificationClickActions(notificationMeta) {
-    alert(JSON.stringify(notificationMeta))
+    notificationMeta.payload = JSON.parse(notificationMeta.payload)
+    switch (notificationMeta.action) {
+      case 'mapping':
+        this.notificationProvider.getMappedAssessment(notificationMeta)
+        break
+      case 'viewOnly':
+      case 'view_only':
+        break
+      case 'Pending':
+      case 'pending':
+        this.notificationProvider.goToDetails(notificationMeta);
+        break
+    }
+    this.notificationProvider.markAsRead(notificationMeta.id);
   }
 
 }

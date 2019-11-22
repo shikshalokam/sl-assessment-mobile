@@ -3,7 +3,7 @@
     <name>Samiksha</name>
     <description>A survey app for school development</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://localhost:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -12,7 +12,7 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <preference name="ScrollEnabled" value="false" />
-    <preference name="android-minSdkVersion" value="28" />
+    <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
@@ -42,6 +42,7 @@
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="true" />
         </edit-config>
+        <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="21" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -155,5 +156,5 @@
     <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="^4.1.0" />
     <engine name="browser" spec="5.0.4" />
     <engine name="ios" spec="^5.0.1" />
-    <engine name="android" spec="^8.1.0" />
+    <engine name="android" spec="latest" />
 </widget>
