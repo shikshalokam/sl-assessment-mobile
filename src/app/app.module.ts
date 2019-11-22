@@ -103,6 +103,9 @@ import { ObservationEditPage } from '../pages/observation-edit/observation-edit'
 import { NotificationProvider } from '../providers/notification/notification';
 import { Badge } from '@ionic-native/badge'
 import { AppIconBadgeProvider } from '../providers/app-icon-badge/app-icon-badge';
+import { FCM } from '@ionic-native/fcm';
+import { FcmProvider } from '../providers/fcm/fcm';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 @NgModule({
   declarations: [
@@ -251,7 +254,10 @@ import { AppIconBadgeProvider } from '../providers/app-icon-badge/app-icon-badge
     TextToSpeechProvider,
     NotificationProvider,
     Badge,
-    AppIconBadgeProvider
+    AppIconBadgeProvider, 
+    FCM,
+    FcmProvider,
+    LocalNotifications
   ]
 })
 export class AppModule { }

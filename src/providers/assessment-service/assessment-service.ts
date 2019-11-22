@@ -220,7 +220,6 @@ openMenu(event , programs , showMenu?:any) {
     }
 
 
-    console.log(JSON.stringify(programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id']));
     let popover = this.popoverCtrl.create(MenuItemComponent, {
       submissionId:programs[programIndex].solutions[assessmentIndex].entities[schoolIndex].submissionId ,
       _id:programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]['_id'],
