@@ -95,7 +95,8 @@
     "rxjs": "5.5.11",
     "save": "2.3.2",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "cordova-ios": "latest"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.0",
@@ -180,7 +181,8 @@
     },
     "platforms": [
       "browser",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
