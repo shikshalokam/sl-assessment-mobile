@@ -7,7 +7,6 @@ import { EntityListPage } from '../../pages/observations/add-observation-form/en
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { TranslateService } from '@ngx-translate/core';
-import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
 import { SubmissionListPage } from '../../pages/submission-list/submission-list';
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
@@ -29,6 +28,7 @@ export class ObservationEntityListingComponent implements OnInit, OnDestroy {
   @Input() showMenu = true;
   @Output() getAssessmentDetailsEvent = new EventEmitter();
   @Output() openMenuEvent = new EventEmitter();
+  @Output() refreshEvent = new EventEmitter();
   @Input() selectedObservationIndex;
   @Input() observationList;
   copyOfEntityList;
@@ -274,7 +274,8 @@ export class ObservationEntityListingComponent implements OnInit, OnDestroy {
               console.log(JSON.stringify(success));
 
               this.entityList[params[0]].entities.splice(params[1], 1);
-              this.updatedLocalStorage.emit(params[1]);
+              this.refreshEvent.emit();
+              // this.updatedLocalStorage.emit(params[1]);
             }, error => {
               this.utils.stopLoader();
 
