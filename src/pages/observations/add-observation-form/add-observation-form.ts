@@ -1,12 +1,10 @@
 import { Component, ViewChild, ElementRef, ɵConsole } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, App, Config, Events, AlertController } from 'ionic-angular';
-import { FormGroup, Validators } from '@angular/forms';
+import { IonicPage, NavController, NavParams, ModalController, App, Events, AlertController } from 'ionic-angular';
+import { FormGroup } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
 import { SolutionDetailsPage } from '../../solution-details/solution-details';
-import { NetworkGpsProvider } from '../../../providers/network-gps/network-gps';
 import { LocalStorageProvider } from '../../../providers/local-storage/local-storage';
-import { Diagnostic } from '@ionic-native/diagnostic';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
@@ -63,12 +61,10 @@ export class AddObservationFormPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private translate: TranslateService,
-
     private permissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
     public apiProviders: ApiProvider,
-    private diagnostic: Diagnostic,
     public utils: UtilsProvider,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,

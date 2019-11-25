@@ -8,6 +8,8 @@ import { Subject } from 'rxjs/Subject';
 import { Network } from '@ionic-native/network';
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { TranslateService } from '@ngx-translate/core';
+import { SlackProvider } from '../slack/slack';
 
 export enum ConnectionStatusEnum {
   Online,
@@ -21,6 +23,11 @@ export class NetworkGpsProvider {
   networkStatus: boolean;
   previousStatus: any;
   gpsLocation: string;
+  errorObj = {
+    "fallback": "User Details",
+    "title": `GPS Error Details`,
+    "text": ``
+  }
   constructor(
     public http: HttpClient,
     private permissions: AndroidPermissions,
@@ -28,6 +35,8 @@ export class NetworkGpsProvider {
     private geolocation: Geolocation,
     private utils: UtilsProvider,
     private network: Network,
+    private translate: TranslateService,
+    private slackService: SlackProvider,
     private eventCtrl: Events, private storage: Storage) {
     console.log('Hello NetworkGpsProvider Provider');
     this.previousStatus = ConnectionStatusEnum.Online;
@@ -68,23 +77,27 @@ export class NetworkGpsProvider {
           // the accuracy option will be ignored by iOS
           this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
             const options = {
-              timeout: 20000
+              enableHighAccuracy: true,
+              timeout: 20000,
+              maximumAge: 0
             }
             this.geolocation.getCurrentPosition(options).then((resp) => {
               const location = `${resp.coords.latitude},${resp.coords.longitude}`;
               // this.utils.openToast(location)
               resolve(location)
             }).catch((error) => {
-              this.utils.openToast("Something went wrong. Please try again.");
-              const errorObj = {
-                "fallback": "User Details",
-                "title": `Error Details`,
-                "text": `GPS capture failed. Error details ${error}`
-              }
-              // this.slackServ.pushException(errorObj)
+              this.translate.get(['toastMessage.unableToFetchGps']).subscribe(translations => {
+                this.utils.openToast(translations.unableToFetchGps);
+              });
+              this.errorObj.text = `getCurrentPosition error. ${JSON.stringify(error)}`;
+              this.slackService.pushException(this.errorObj);
+              // this.utils.openToast("Something went wrnog. Please try again.")
               reject()
             });
           }, error => {
+            this.translate.get(['toastMessage.enableGPS']).subscribe(translations => {
+              this.utils.openToast(translations['toastMessage.enableGPS']);
+            })
             console.log("GPS on permission denied");
             reject()
 
@@ -97,18 +110,30 @@ export class NetworkGpsProvider {
             if (result.hasPermission) {
               this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
                 const options = {
-                  timeout: 20000
+                  enableHighAccuracy: true,
+                  timeout: 20000,
+                  maximumAge: 0
                 }
                 this.geolocation.getCurrentPosition(options).then((resp) => {
                   const location = `${resp.coords.latitude},${resp.coords.longitude}`;
                   // this.utils.openToast(location)
                   resolve(location)
                 }).catch((error) => {
-                  this.utils.openToast("Please enable location permission to continue.")
+                  // this.utils.openToast("Please enable location permission to continue.")
+                  this.translate.get(['toastMessage.unableToFetchGps']).subscribe(translations => {
+                    this.utils.openToast(translations.unableToFetchGps);
+                  });
+                  this.errorObj.text = `getCurrentPosition error. ${JSON.stringify(error)}`;
+                  this.slackService.pushException(this.errorObj);
                   reject()
                 });
               }, error => {
-                console.log("GPS on permission denied");
+                this.translate.get(['toastMessage.enableGPS']).subscribe(translations => {
+                  this.utils.openToast(translations['toastMessage.enableGPS']);
+                })
+                this.errorObj.text = `locationAccuracy.request error. ${JSON.stringify(error)}`;
+                this.slackService.pushException(this.errorObj);
+                console.log("GPS on permission denieddddd");
                 reject()
 
               });
