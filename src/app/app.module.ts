@@ -233,6 +233,7 @@ import { AccessActionsProvider } from '../providers/access-actions/access-action
     Keyboard,
     LocalStorageProvider,
     HTTP,
+    AccessActionsProvider,
     AssessmentServiceProvider,
     Deeplinks,
     ObservationProvider,

@@ -13,17 +13,13 @@
     <div [innerHTML]="content?.content"></div>
   </div>
 
-  <!-- <button ion-item clear small color ="primary" icon-start class="_justify-content-center" (click)="clearData()()">
-    <ion-icon name="trash"></ion-icon> Erase Data</button> -->
-    <button ion-button  block  icon-start color="danger" *ngIf="content?.heading==='App Info'" (click)="clearData()">
-      <ion-icon name="trash" margin-right></ion-icon>
-      Erase Data
-    </button>
-    <button ion-button margin-top  block  icon-start color="light" *ngIf="content?.heading==='App Info'" (click)="openAlert()">
-        Access Token
-      </button>
-      <!-- <button ion-button margin-top  block  icon-start color="light" *ngIf="content?.heading==='App Info'" (click)="relogin()">
-        Relogin
-      </button> -->
-  
+  <button ion-button block icon-start color="danger" *ngIf="content?.heading==='App Info'" (click)="clearData()">
+    <ion-icon name="trash" margin-right></ion-icon>
+    Erase Data
+  </button>
+  <button ion-button margin-top block icon-start color="light" *ngIf="content?.heading==='App Info'"
+    (click)="openAlert()">
+    Access Token
+  </button>
+
 </ion-content>

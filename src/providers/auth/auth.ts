@@ -6,8 +6,8 @@ import { App, AlertController } from "ionic-angular";
 
 import { UtilsProvider } from "../utils/utils";
 import { HomePage } from "../../pages/home/home";
-import { TranslateService } from "@ngx-translate/core";
 import { WelcomePage } from "../../pages/welcome/welcome";
+import { TranslateService } from "@ngx-translate/core";
 
 @Injectable()
 export class AuthProvider {
