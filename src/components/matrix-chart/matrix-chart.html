@@ -1,0 +1,18 @@
+<div  class="matrixContainer">
+  <div class="heading">
+    <h4>{{questionNumber}}) {{data?.question}}</h4>
+  </div>
+
+
+  <div *ngFor="let element of data?.instanceQuestions;let i = index">
+    <ion-card [ngSwitch]="element?.responseType">
+      <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'text'"></reports-text>
+      <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'number'"></reports-text>
+      <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'date'"></reports-text>
+      <pie-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'radio'"></pie-chart>
+      <bar-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'multiselect'"></bar-chart>
+      <!-- <matrix-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'matrix'"></matrix-chart> -->
+      <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchDefault></reports-text>
+    </ion-card>
+  </div>
+</div>
