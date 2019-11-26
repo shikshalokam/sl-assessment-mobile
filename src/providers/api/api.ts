@@ -158,7 +158,7 @@ export class ApiProvider {
     // let nav = this.appCtrls.getActiveNav();
     let options = {};
     console.log("httpPost" + JSON.stringify(options)+"post call")
-    options['version'] = (config && config.version )? config.config :"v1";
+    options['version'] = (config && config.version )? config.version :"v1";
     options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()

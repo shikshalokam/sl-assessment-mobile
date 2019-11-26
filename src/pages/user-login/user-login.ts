@@ -9,6 +9,7 @@ import { HomePage } from '../home/home';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { HTTP } from '@ionic-native/http';
 
 @Component({
   selector: 'page-user-login',
@@ -26,7 +27,7 @@ export class UserLoginPage {
   userDetails;
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private utils: UtilsProvider,
-    private currentUser: CurrentUserProvider, private app: App, private navCtrl: NavController,
+    private currentUser: CurrentUserProvider, private app: App, private navCtrl: NavController, private ionicHttp: HTTP,
     private localStorage: LocalStorageProvider) {
     this.signIn = this.formBuilder.group({
       staffID: ['', Validators.required],
@@ -41,7 +42,7 @@ export class UserLoginPage {
         username: username,
         password: AppConfigs.adminCredentials.userPassword,
         client_id: AppConfigs.clientId,
-        scope:"offline_access"
+        scope: "offline_access"
       }
     });
 
@@ -158,11 +159,39 @@ export class UserLoginPage {
     })
   }
 
+  login() {
+    const payload = {
+      staffID: this.paylod['staffID'],
+      password: this.paylod['password'],
+      key: AppConfigs.punjabApiKey
+    };
+    const obj = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    }
+    this.ionicHttp.post(AppConfigs.punjabBaseUrl + AppConfigs.punjab.login, payload, obj).then(success => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(success.data, "text/xml");
+      try {
+        this.userDetails = JSON.parse(xmlDoc.getElementsByTagName('string')[0].childNodes[0].nodeValue)[0];
+        this.localStorage.setLocalStorage("partnerLoginDetails", this.userDetails);
+        this.checkForKeycloakUser(this.signIn.value.staffID, this.signIn.value.password)
+      } catch (e) {
+        this.utils.stopLoader();
+        this.utils.openToast("Invalid UserID & Password !!!");
+      }
+    }).catch(error => {
+      this.signIn.reset();
+      this.utils.stopLoader();
+      this.paylod = {};
+      console.log(JSON.stringify(error));
+      this.staffID =""
+      this.utils.openToast(error.error);
+    })
+  }
+
   goToForgotPassword() {
     this.navCtrl.push(ForgotPasswordPage)
   }
-
-
 
   encryptParams(stringToEncrypt) {
     if (this.counter === 0) {
@@ -194,8 +223,9 @@ export class UserLoginPage {
           password: encryptedString,
           key: AppConfigs.punjabApiKey
         };
+        console.log(JSON.stringify(this.paylod))
         this.counter = 0;
-        this.logForm();
+        this.login();
       }
     })
 
