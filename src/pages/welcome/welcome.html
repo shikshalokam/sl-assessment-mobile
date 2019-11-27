@@ -1,6 +1,6 @@
-<ion-content>
+<ion-content style="margin-top: 0;">
   <!-- Use pager as attribute to show bottom paginator -->
-  <ion-slides pager>
+  <ion-slides pager (ionSlideDidChange)="slideChanged()">
     <!-- *ngFor="let slide of slidesList" -->
     <!-- <ion-slide>
       <ion-toolbar>
@@ -45,15 +45,15 @@
           </p>
         </div>
       </div>
-      <div class="bottomFooter" (click)="gotToNextSlide()">
+      <!-- <div class="bottomFooter" (click)="gotToNextSlide()">
         <button ion-button full class="skipBtn">{{'buttons.skip'|translate}}</button>
-      </div>
+      </div> -->
     </ion-slide>
 
     <ion-slide>
       <div class="mainContainer">
         <div class="conatiner">
-          <img src="assets/imgs/analyse_straight.png" class="maxSize" />
+          <img src="assets/imgs/analyse_straight.png" class="slideTwoMaxSize" />
         </div>
         <div class="_flex-box _justify-content-center conatiner">
           <h4 class="blackText">Collate information, Analyse data</h4>
@@ -62,9 +62,9 @@
           </p>
         </div>
       </div>
-      <div class="bottomFooter">
+      <!-- <div class="bottomFooter">
         <button ion-button class="getstarted" (click)="slides.slideTo(3)">Get Started</button>
-      </div>
+      </div> -->
     </ion-slide>
 
     <ion-slide>
@@ -81,3 +81,8 @@
     </ion-slide>
   </ion-slides>
 </ion-content>
+
+<ion-footer class="_flex-box _justify-content-center">
+  <button ion-button full class="skipBtn" *ngIf="activeSlide === 0">{{'buttons.skip'|translate}}</button>
+  <button ion-button class="getstarted" (click)="slides.slideTo(3)" *ngIf="activeSlide === 1">Get Started</button>
+</ion-footer>

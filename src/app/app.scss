@@ -60,6 +60,19 @@ $secondry-color: #5CB843;
     font-weight: normal;
 }
 
+@font-face{
+    font-family: 'Helvetica-Regular' ;
+    src: url('../assets/fonts/HelveticaNeueLt.ttf') format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: 'Helvetica-Bold' ;
+    src: url('../assets/fonts/HelveticaNeueBd.ttf') format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
 ion-content, body {
     background: $grey-color !important;
     // font-family: 'Raleway-Regular';
@@ -335,4 +348,8 @@ ion-step-header .ionic-step-header-icon-active {
     height: 100%;
     flex-direction: column;
     display: flex;
+}
+
+.header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
+    background-image: url('') !important;
 }
