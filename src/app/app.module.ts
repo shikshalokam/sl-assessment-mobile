@@ -106,6 +106,8 @@ import { AppIconBadgeProvider } from '../providers/app-icon-badge/app-icon-badge
 import { FCM } from '@ionic-native/fcm';
 import { FcmProvider } from '../providers/fcm/fcm';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Market } from '@ionic-native/market';
+import { AppVersion } from '@ionic-native/app-version';
 import { SettingsPage } from '../pages/settings/settings';
 
 @NgModule({
@@ -259,7 +261,9 @@ import { SettingsPage } from '../pages/settings/settings';
     AppIconBadgeProvider, 
     FCM,
     FcmProvider,
-    LocalNotifications
+    LocalNotifications,
+    Market,
+    AppVersion
   ]
 })
 export class AppModule { }

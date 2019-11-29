@@ -2,7 +2,7 @@
 import { Http, URLSearchParams, Headers } from '@angular/http';
 
 import { Injectable } from '@angular/core';
-import { App, AlertController } from 'ionic-angular';
+import { App, AlertController, Platform } from 'ionic-angular';
 import { HTTP } from '@ionic-native/http';
 
 import { CurrentUserProvider } from '../current-user/current-user';
@@ -25,6 +25,7 @@ export class ApiProvider {
     private translate: TranslateService,
     private ngps: NetworkGpsProvider,
     private slack: SlackProvider,
+    private platform : Platform,
     private ngHttp: Http
   ) {
   }
@@ -165,7 +166,9 @@ export class ApiProvider {
         'x-auth-token': this.currentUser.curretUser.accessToken,
         'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
-        'appVersion': AppConfigs.appVersion
+        'appVersion': AppConfigs.appVersion,
+        'appName': AppConfigs.appName,
+        'platform': this.platform.is('ios') ? 'ios' : 'android'
       }
       // const apiUrl = AppConfigs.api_base_url + url;
       const apiUrl = this.getApiUrl(url, config);
@@ -209,7 +212,9 @@ export class ApiProvider {
         'x-auth-token': this.currentUser.curretUser.accessToken,
         'x-authenticated-user-token': this.currentUser.curretUser.accessToken,
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
-        'appVersion': AppConfigs.appVersion
+        'appVersion': AppConfigs.appVersion,
+        'appName': AppConfigs.appName,
+        'platform': this.platform.is('ios') ? 'ios' : 'android'
       }
       this.http.setDataSerializer('json');
       const apiUrl = this.getApiUrl(url, config);
