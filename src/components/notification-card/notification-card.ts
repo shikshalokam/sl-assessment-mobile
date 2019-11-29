@@ -41,6 +41,8 @@ export class NotificationCardComponent {
       case 'pending':
         this.notificationProvider.goToDetails(notificationMeta);
         break
+      case 'alertModal':
+        this.notificationProvider.$alertModalSubject.next(notificationMeta)  
     }
     if (!notificationMeta.is_read) {
       this.markAsRead(notificationMeta.id, index);

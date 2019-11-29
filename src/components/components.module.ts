@@ -40,6 +40,7 @@ import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
 import { PageQuestionComponent } from './page-question/page-question';
 import { NotificationCardComponent } from './notification-card/notification-card';
 import { MatrixChartComponent } from './matrix-chart/matrix-chart';
+import { AlertModalComponent } from './alert-modal/alert-modal';
 
 @NgModule({
 	declarations: [
@@ -73,7 +74,8 @@ import { MatrixChartComponent } from './matrix-chart/matrix-chart';
     ExpansionPanelComponent,
     PageQuestionComponent,
     NotificationCardComponent,
-    MatrixChartComponent
+    MatrixChartComponent,
+    AlertModalComponent
   ],
 	imports: [
 		IonicModule,
@@ -114,7 +116,8 @@ import { MatrixChartComponent } from './matrix-chart/matrix-chart';
     ExpansionPanelComponent,
     PageQuestionComponent,
     NotificationCardComponent,
-    MatrixChartComponent
+    MatrixChartComponent,
+    AlertModalComponent
 	],
 	entryComponents: [
 		InputTypeComponent,

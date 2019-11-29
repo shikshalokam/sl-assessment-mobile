@@ -6,7 +6,7 @@ import { AppConfigs } from '../appConfig';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { ObservationServiceProvider } from '../observation-service/observation-service';
 import { ObservationDetailsPage } from '../../pages/observation-details/observation-details';
-import { App, Events } from 'ionic-angular';
+import { App } from 'ionic-angular';
 import { UtilsProvider } from '../utils/utils';
 import { AssessmentServiceProvider } from '../assessment-service/assessment-service';
 import { EntityListingPage } from '../../pages/entity-listing/entity-listing';
@@ -23,11 +23,13 @@ export class NotificationProvider {
   // Save the notification list in local storage in notification listing page. Manage is_read in front end
 
   $notificationSubject = new Subject<any>();
+  $alertModalSubject = new Subject<any>();
   notificationsData;
   subscription;
   onlineSubscription;
   networkAvailable;
   timeInterval;
+
 
   constructor(
     public http: HttpClient, private apiService: ApiProvider,
@@ -36,13 +38,10 @@ export class NotificationProvider {
     private utils: UtilsProvider,
     private observationProvider: ObservationServiceProvider,
     private ngps: NetworkGpsProvider,
-    private events: Events,
     private evindenceProvider: EvidenceProvider,
     private appBadge: AppIconBadgeProvider,
     private assessmentService: AssessmentServiceProvider) {
-
     console.log('Hello NotificationProvider Provider');
-
     //offline event
     this.subscription = this.ngps.networkStatus$.subscribe(success => {
       this.networkAvailable = success;
@@ -79,6 +78,28 @@ export class NotificationProvider {
     this.apiService.httpGet(AppConfigs.notification.getUnreadNotificationCount, success => {
       this.notificationsData = success.result;
       success.result.count ? this.appBadge.setBadge(success.result.count) : this.appBadge.clearTheBadge();
+      // success.result.data = [
+      //   {
+      //     "is_read": false,
+      //     "internal": true,
+      //     "payload": {
+      //       "appVersion": "1.1.4",
+      //       "updateType": "minor/major",
+      //       "type": "appUpdate",
+      //       "platform": "ios/android"
+      //     },
+      //     "appName": "samiksha",
+      //     "action": "alertModal",
+      //     "created_at": "2019-11-25T23:30:02.292Z",
+      //     "text": "A new version of this app is available.",
+      //     "id": 303,
+      //     "type": "Information",
+      //     "title": "New update available !"
+      //   }
+      // ]
+      if (success.result.data && success.result.data.length) {
+        this.internalNotificationsHandler(success.result.data)
+      }
       this.$notificationSubject.next(success.result);
     }, error => {
       this.notificationsData = {};
@@ -86,6 +107,22 @@ export class NotificationProvider {
     },
       { baseUrl: "kendra" })
   }
+
+  internalNotificationsHandler(notifications) {
+    console.log("inside internal")
+    for (const notification of notifications) {
+      if (notification.internal) {
+        switch (notification.action) {
+          case 'alertModal':
+            this.$alertModalSubject.next(notification);
+            break
+        }
+      }
+    }
+  }
+
+
+
 
   getAllNotifications(pageCount, limit) {
     return new Promise((resolve, reject) => {
@@ -162,7 +199,7 @@ export class NotificationProvider {
     }).catch(error => {
       this.utils.stopLoader();
       // this.utils.openToast("No assessment available.")
-      if(notificationMeta.payload.type === 'observation') {
+      if (notificationMeta.payload.type === 'observation') {
         this.getMappedObservation(notificationMeta);
       } else {
         this.getMappedInstitutionalAssessment(notificationMeta);

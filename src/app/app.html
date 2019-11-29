@@ -28,3 +28,4 @@
   </ion-content>
 </ion-menu>
 <ion-nav [root]="rootPage" #content swipeBackEnabled="true"></ion-nav>
+<alert-modal *ngIf="appUpdateData" [notificationMeta]="appUpdateData" (closeModal)="closeModal()"></alert-modal>
