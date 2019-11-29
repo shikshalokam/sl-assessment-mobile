@@ -106,6 +106,7 @@ import { AppIconBadgeProvider } from '../providers/app-icon-badge/app-icon-badge
 import { FCM } from '@ionic-native/fcm';
 import { FcmProvider } from '../providers/fcm/fcm';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { SettingsPage } from '../pages/settings/settings';
 
 @NgModule({
   declarations: [
@@ -137,7 +138,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     RoleListingPage,
     ReportEntityListingPage,
     DashboardPage,
-    ObservationEditPage
+    ObservationEditPage,
+    SettingsPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -196,7 +198,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     SubmissionListPage,
     DashboardPage,
     ProgramListingPage,
-
+    SettingsPage,
     ObservationReportsPage,
     RoleListingPage,
     ReportEntityListingPage,

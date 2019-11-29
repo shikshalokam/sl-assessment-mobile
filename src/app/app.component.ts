@@ -25,6 +25,7 @@ import { ReportEntityListingPage } from '../pages/report-entity-listing/report-e
 import * as Highcharts from 'highcharts';
 import { NotificationProvider } from '../providers/notification/notification';
 import { FcmProvider } from '../providers/fcm/fcm';
+import { SettingsPage } from '../pages/settings/settings';
 
 
 @Component({
@@ -78,6 +79,12 @@ export class MyApp {
       name: "about",
       icon: "information-circle",
       component: AboutPage,
+      active: false
+    },
+    {
+      name: "setting",
+      icon: "settings",
+      component: SettingsPage,
       active: false
     }
   ]
