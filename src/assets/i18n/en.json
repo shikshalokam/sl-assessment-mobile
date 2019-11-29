@@ -127,7 +127,8 @@
         "userRolePage": "Roles",
         "dashboard": "Dashboard",
         "inProgress": "In progress",
-        "completed": "Completed"
+        "completed": "Completed",
+        "setting":"Settings"
     },
     "headings": {
         "zone": "Zones",
@@ -184,7 +185,8 @@
         "submissionPreview": "Submission Preview",
         "observationReports": "Report",
         "observationUpdate": "Observation Update",
-        "notifications": "Notifications"
+        "notifications": "Notifications",
+        "settings":"Settings"
     },
     "labels": {
         "welcome": "Welcome",
@@ -201,7 +203,8 @@
         "submitted": "Submitted",
         "notApplicable": "NA",
         "readytoPublish": "Ready to Publish",
-        "files": "Files"
+        "files": "Files",
+        "languages":"Languages"
     },
     "languages": {
         "english": "English",
