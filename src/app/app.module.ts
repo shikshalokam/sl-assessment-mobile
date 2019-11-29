@@ -108,6 +108,7 @@ import { FcmProvider } from '../providers/fcm/fcm';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Market } from '@ionic-native/market';
 import { AppVersion } from '@ionic-native/app-version';
+import { SettingsPage } from '../pages/settings/settings';
 
 @NgModule({
   declarations: [
@@ -139,7 +140,8 @@ import { AppVersion } from '@ionic-native/app-version';
     RoleListingPage,
     ReportEntityListingPage,
     DashboardPage,
-    ObservationEditPage
+    ObservationEditPage,
+    SettingsPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -198,7 +200,7 @@ import { AppVersion } from '@ionic-native/app-version';
     SubmissionListPage,
     DashboardPage,
     ProgramListingPage,
-
+    SettingsPage,
     ObservationReportsPage,
     RoleListingPage,
     ReportEntityListingPage,
