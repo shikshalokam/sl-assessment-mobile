@@ -351,7 +351,7 @@ export class AddObservationFormPage {
     console.log(JSON.stringify(success))
     },error =>{
 
-    },{version:"v2" , dhiti : false});
+    },{version:"v2" });
     return true;
   }
   doInfinite(infiniteScroll,type = 'solutions') {

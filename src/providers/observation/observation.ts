@@ -26,7 +26,7 @@ export class ObservationProvider {
       for (const observation of observations) {
         for (const entity of observation.entities) {
           if (entity.submissionId === submissionId) {
-            console.log(JSON.stringify(entity))
+            // console.log(JSON.stringify(entity))
             entity.submissionStatus = 'completed';
           }
         }

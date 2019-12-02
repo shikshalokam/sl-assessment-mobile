@@ -57,7 +57,7 @@ export class SlackProvider {
         {
           "fallback": "User Details",
           "title": `User Details`,
-          "text": `${this.currentUser.getCurrentUserData()['name']}, ${this.currentUser.getCurrentUserData()['email']}`
+          "text": `${this.currentUser.getCurrentUserData() ? this.currentUser.getCurrentUserData()['name']: null}, ${this.currentUser.getCurrentUserData() ? this.currentUser.getCurrentUserData()['email'] : null}`
         },
         {
           "fallback": "App version",
@@ -71,6 +71,7 @@ export class SlackProvider {
     if(errorDetails) {
         payload.attachments.push(errorDetails)
     }
+    console.log(JSON.stringify(payload))
    if(AppConfigs.enableSlack)
    {
     this.http.post(AppConfigs.slack.exceptionUrl, JSON.stringify(payload)).subscribe(result => {
