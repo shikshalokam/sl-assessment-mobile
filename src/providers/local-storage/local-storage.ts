@@ -21,7 +21,7 @@ export class LocalStorageProvider {
         if(data) {
           resolve(data)
         } else {
-          reject()
+          reject(null)
         }
         // resolve(data)
       }).catch(error => {

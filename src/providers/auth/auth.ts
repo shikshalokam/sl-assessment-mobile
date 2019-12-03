@@ -7,6 +7,9 @@ import { App, AlertController } from "ionic-angular";
 import { UtilsProvider } from "../utils/utils";
 import { HomePage } from "../../pages/home/home";
 import { TranslateService } from "@ngx-translate/core";
+import { NotificationProvider } from "../notification/notification";
+import { FcmProvider } from "../fcm/fcm";
+
 
 @Injectable()
 export class AuthProvider {
@@ -26,6 +29,8 @@ export class AuthProvider {
     private app: App, private alertCntrl: AlertController,
     private translate:TranslateService,
     private transate : TranslateService,
+    private notifctnService: NotificationProvider,
+    private fcm :FcmProvider,
     private utils: UtilsProvider) { }
 
   doOAuthStepOne(): Promise<any> {
@@ -100,6 +105,8 @@ export class AuthProvider {
       };
       this.currentUser.setCurrentUserDetails(userTokens);
       let nav = this.app.getActiveNav();
+      this.notifctnService.startNotificationPooling();
+      this.fcm.registerDeviceID();
       nav.setRoot(HomePage);
       // this.confirmPreviousUserName('as1@shikshalokamdev', tokens);
 

@@ -27,12 +27,15 @@ export class PieChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    for (const outer of this.data.chart.data) {
-      for (const inner of outer.data) {
+    if (this.data && this.data.chart && this.data.chart.data) {
+      for (const outer of this.data.chart.data) {
+        for (const inner of outer.data) {
           inner.y = parseInt(inner.y)
+        }
       }
-  }
-  this.chartObj = {
+    }
+
+    this.chartObj = {
       chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,
@@ -52,7 +55,7 @@ export class PieChartComponent implements OnInit {
           showInLegend: true
         },
       },
-      series: this.data.chart.data
+      series: this.data ? this.data.chart.data : null
 
     }
 

@@ -17,6 +17,7 @@ export class WelcomePage {
   @ViewChild(Slides) slides: Slides;
 
   skipMsg: string;
+  activeSlide = 0;
   slidesList = [
     {
       // title: "Slide 1",
@@ -57,6 +58,7 @@ export class WelcomePage {
       this.subscription.unsubscribe();
     }
   }
+
 
 
   presentToast(msg) {
@@ -105,15 +107,20 @@ export class WelcomePage {
   }
 
   slideChanged(): void {
-    if (this.slides.isEnd()) {
-      this.skipMsg = 'Got it';
-    } else {
-      this.skipMsg = "Skip";
-    }
+    // if (this.slides.isEnd()) {
+    //   this.skipMsg = 'Got it';
+    // } else {
+    //   this.skipMsg = "Skip";
+    // }
+    this.activeSlide = this.slides.getActiveIndex();
   }
 
   gotToLastSlide() {
     this.slides.slideTo(3);
+  }
+
+  gotToNextSlide() {
+    this.slides.slideTo(2);
   }
 
 }

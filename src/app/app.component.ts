@@ -18,11 +18,13 @@ import { UtilsProvider } from '../providers/utils/utils';
 import { ObservationsPage } from '../pages/observations/observations';
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { IonicApp } from 'ionic-angular';
-import { ApiProvider } from '../providers/api/api';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 import { RoleListingPage } from '../pages/role-listing/role-listing';
 import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
 import * as Highcharts from 'highcharts';
+import { NotificationProvider } from '../providers/notification/notification';
+import { FcmProvider } from '../providers/fcm/fcm';
+import { SettingsPage } from '../pages/settings/settings';
 
 
 @Component({
@@ -39,6 +41,8 @@ export class MyApp {
   appName: string = AppConfigs.appName;
   appVersion = AppConfigs.appVersion;
   appEnvironment = AppConfigs.environment;
+  subscription;
+  appUpdateData;
   // rootPage: any = "LoginPage";
   allPages: Array<Object> = [
     {
@@ -77,6 +81,12 @@ export class MyApp {
       icon: "information-circle",
       component: AboutPage,
       active: false
+    },
+    {
+      name: "setting",
+      icon: "settings",
+      component: SettingsPage,
+      active: false
     }
   ]
   profileRoles = [];
@@ -91,13 +101,13 @@ export class MyApp {
     private network: Network,
     private events: Events,
     private ionicApp: IonicApp,
-    private currentUserProvider: CurrentUserProvider,
-    private apiProvider: ApiProvider,
     private networkGpsProvider: NetworkGpsProvider,
     private menuCntrl: MenuController,
     private deepLinks: Deeplinks,
     private utils: UtilsProvider,
-    private localStorageProvider: LocalStorageProvider
+    private localStorageProvider: LocalStorageProvider,
+    private notifctnService: NotificationProvider,
+    private fcmService: FcmProvider
   ) {
 
 
@@ -106,7 +116,12 @@ export class MyApp {
 
 
 
-
+    this.subscription = this.notifctnService.$alertModalSubject.subscribe(success => {
+      console.log("insideeeeeee ==========================================================================================");
+      console.log(JSON.stringify(success))
+      this.appUpdateData = success;
+    }, error => {
+    })
     this.events.subscribe('navigateTab', data => {
       console.log(data);
       let index: number = this.findIndex(data);
@@ -137,7 +152,7 @@ export class MyApp {
 
     platform.ready().then(() => {
       Highcharts.setOptions({
-        colors: ['#D35400','#F1C40F', '#3498DB', '#8E44AD', '#154360', '#145A32']
+        colors: ['#D35400', '#F1C40F', '#3498DB', '#8E44AD', '#154360', '#145A32']
       })
 
       // this.goToPage(0);
@@ -150,7 +165,9 @@ export class MyApp {
       this.networkGpsProvider.initializeNetworkEvents();
       this.registerBAckButtonAction();
       this.initTranslate();
-      // this.networkListenerInitialize();
+
+      this.networkListenerInitialize();
+      this.fcmService.initializeFCM();
       // Offline event
       // this.events.subscribe('network:offline', () => {
       //   alert('network:offline ==> ' + this.network.type);
@@ -259,7 +276,6 @@ export class MyApp {
     });
 
     this.networkSubscription.add(connectSubscription);
-
     this.networkAvailable = this.network.type !== 'none' ? true : false;
     this.networkGpsProvider.setNetworkStatus(this.networkAvailable);
   }
@@ -277,6 +293,7 @@ export class MyApp {
         }
         this.splashScreen.hide()
       } else {
+        this.notifctnService.startNotificationPooling();
         this.rootPage = HomePage;
         for (const page of this.allPages) {
           page['active'] = false;
@@ -298,6 +315,8 @@ export class MyApp {
           console.error('Got a deeplink that didn\'t match', nomatch);
         });
       }
+      // this.notifctnService.checkForNotificationApi();
+
 
     }).catch(error => {
       this.rootPage = WelcomePage;
@@ -363,6 +382,10 @@ export class MyApp {
       }
     });
     return currentIndex;
+  }
+
+  closeModal() {
+    this.appUpdateData = null;
   }
 
 }

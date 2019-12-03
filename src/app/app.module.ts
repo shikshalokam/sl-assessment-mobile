@@ -101,7 +101,15 @@ import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
 import { ProgramListingPage } from '../pages/program-listing/program-listing';
 import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
-// import { DashboardAssessmentListingPageModule } from '../pages/dashboard-assessment-listing/dashboard-assessment-listing.module';
+import { NotificationProvider } from '../providers/notification/notification';
+import { Badge } from '@ionic-native/badge'
+import { AppIconBadgeProvider } from '../providers/app-icon-badge/app-icon-badge';
+import { FCM } from '@ionic-native/fcm';
+import { FcmProvider } from '../providers/fcm/fcm';
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Market } from '@ionic-native/market';
+import { AppVersion } from '@ionic-native/app-version';
+import { SettingsPage } from '../pages/settings/settings';
 
 @NgModule({
   declarations: [
@@ -133,7 +141,8 @@ import { ObservationEditPage } from '../pages/observation-edit/observation-edit'
     RoleListingPage,
     ReportEntityListingPage,
     DashboardPage,
-    ObservationEditPage
+    ObservationEditPage,
+    SettingsPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -192,7 +201,7 @@ import { ObservationEditPage } from '../pages/observation-edit/observation-edit'
     SubmissionListPage,
     DashboardPage,
     ProgramListingPage,
-
+    SettingsPage,
     ObservationReportsPage,
     RoleListingPage,
     ReportEntityListingPage,
@@ -248,6 +257,14 @@ import { ObservationEditPage } from '../pages/observation-edit/observation-edit'
     DownloadAndPreviewProvider,
     UpdateTrackerProvider,
     TextToSpeechProvider,
+    NotificationProvider,
+    Badge,
+    AppIconBadgeProvider, 
+    FCM,
+    FcmProvider,
+    LocalNotifications,
+    Market,
+    AppVersion
   ]
 })
 export class AppModule { }

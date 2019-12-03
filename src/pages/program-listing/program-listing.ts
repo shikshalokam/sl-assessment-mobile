@@ -45,7 +45,7 @@ export class ProgramListingPage {
       this.utils.stopLoader();
       console.log("error");
       this.utils.openToast(error)
-    }, { "dhiti": true })
+    }, { baseUrl:"dhiti" })
   }
   getReportsAccordingToSolution(programId , solutionId, solutionName){
     this.navCtrl.push(DashboardPage , { "entity" :this.entity,"programId" : programId , "solutionId":solutionId, solutionName:solutionName} )

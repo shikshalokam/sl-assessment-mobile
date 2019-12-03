@@ -59,6 +59,7 @@ export class AddObservationFormPage {
   searchEntity: string = "";
   entityCount: any;
   isPublished: boolean = false;
+  selectAll: boolean;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -101,7 +102,7 @@ export class AddObservationFormPage {
     //     });
     //   }
     //   console.log(JSON.stringify(this.entityTypeData))
-      // this.getSolutionList()
+    // this.getSolutionList()
     //   this.utils.stopLoader();
     // }, error => {
     //   this.utils.stopLoader();
@@ -138,10 +139,10 @@ export class AddObservationFormPage {
                       });
                     }).catch(
                       error => {
-                        this.translate.get('toastMessage.locationForAction').subscribe(translations =>{
-                          this.utils.openToast( translations);
+                        this.translate.get('toastMessage.locationForAction').subscribe(translations => {
+                          this.utils.openToast(translations);
                         })
-                                                this.utils.stopLoader();
+                        this.utils.stopLoader();
                       }
                     );
                 } else {
@@ -180,9 +181,10 @@ export class AddObservationFormPage {
                   });
                 }).catch(
                   error => {
-                    this.translate.get('toastMessage.locationForAction').subscribe(translations =>{
-                      this.utils.openToast( translations);
-                    })                  }
+                    this.translate.get('toastMessage.locationForAction').subscribe(translations => {
+                      this.utils.openToast(translations);
+                    })
+                  }
                 );
             } else {
               this.geolocation.getCurrentPosition(options).then((resp) => {
@@ -212,7 +214,7 @@ export class AddObservationFormPage {
     this.selectedFrameWork = frameWork._id;
     this.ObservationFromTitle = frameWork.name;
     this.ObservationFromDescription = frameWork.description
-    if( this.editData && (this.editData.data.solutionId !== frameWork._id || this.selectedFrameWork == this.editData.data.solutionId)){
+    if (this.editData && (this.editData.data.solutionId !== frameWork._id || this.selectedFrameWork == this.editData.data.solutionId)) {
       this.editData.data.name = frameWork.name;
       this.editData.data.description = frameWork.description;
       console.log("changed sol")
@@ -224,13 +226,13 @@ export class AddObservationFormPage {
     contactModal.present();
   }
 
-  getSolutionList(event ? ) {
+  getSolutionList(event?) {
     let solutionFlag = false;
-    event ? this.solutionPage ++ : this.solutionPage ;
+    event ? this.solutionPage++ : this.solutionPage;
     this.utils.startLoader();
     // this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType + "?search="+this.searchSolutionUrl+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
-    this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + "?search="+this.searchSolutionUrl+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
-    // console.log(JSON.stringify(success.result))
+    this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + "?search=" + this.searchSolutionUrl + "&limit=" + this.solutionLimit + "&page=" + this.solutionPage, success => {
+      // console.log(JSON.stringify(success.result))
       // this.listOfSolution = event ? [...this.listOfSolution ,...success.result] :[...success.result];
       // // this.totalCount = success.result[0].count;
       // console.log(JSON.stringify(this.listOfSolution))
@@ -241,15 +243,15 @@ export class AddObservationFormPage {
       //   });
       // }
       console.log(JSON.stringify(success.result[0].data))
-      this.listOfSolution = event ? [...this.listOfSolution ,...success.result[0].data] :[...success.result[0].data];
+      this.listOfSolution = event ? [...this.listOfSolution, ...success.result[0].data] : [...success.result[0].data];
       this.totalCount = success.result[0].count;
       console.log(JSON.stringify(this.listOfSolution))
       if (this.editData && this.editData.data.solutionId) {
         this.listOfSolution.forEach(element => {
           if (element._id === this.editData.data.solutionId)
             this.selectedFrameWork = element._id;
-            this.ObservationFromTitle = element.name;
-            this.ObservationFromDescription = element.description;
+          this.ObservationFromTitle = element.name;
+          this.ObservationFromDescription = element.description;
         });
       }
       solutionFlag = true;
@@ -265,28 +267,28 @@ export class AddObservationFormPage {
     this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork, success => {
       this.addObservationData = success.result;
       console.log(JSON.stringify(this.addObservationData))
-      if (this.editData) { 
-        if((! this.editData.data.name ||! this.editData.data.description)  && this.editData.data.solutionId){
+      if (this.editData) {
+        if ((!this.editData.data.name || !this.editData.data.description) && this.editData.data.solutionId) {
           this.addObservationData.forEach(element => {
-          if (element.field == 'name') 
-            element.value = this.ObservationFromTitle;
-          if (element.field == 'description')
-            element.value = this.ObservationFromDescription;
-        });
-        }else{
+            if (element.field == 'name')
+              element.value = this.ObservationFromTitle;
+            if (element.field == 'description')
+              element.value = this.ObservationFromDescription;
+          });
+        } else {
           this.addObservationData.forEach(element => {
-          element.value = this.editData.data[element.field];
-          if (element.field === 'status') {
-            element.value = 'draft';
-          }
-        });
+            element.value = this.editData.data[element.field];
+            if (element.field === 'status') {
+              element.value = 'draft';
+            }
+          });
         }
-      }else{
+      } else {
         this.addObservationData.forEach(element => {
-          switch(element.field){
-            case "name" : element.value = this.ObservationFromTitle;
-                          break;
-            case "description" : element.value = this.ObservationFromDescription;
+          switch (element.field) {
+            case "name": element.value = this.ObservationFromTitle;
+              break;
+            case "description": element.value = this.ObservationFromDescription;
           }
         });
 
@@ -309,11 +311,11 @@ export class AddObservationFormPage {
       //   actionFlag = this.selectedFrameWork ? this.getObservationMetaForm() : false;
       //   break;
       case 0:
-        actionFlag = this.selectedFrameWork ? this.getObservationMetaForm() : false;        break;
+        actionFlag = this.selectedFrameWork ? this.getObservationMetaForm() : false; break;
       case 1:
-         actionFlag = this.addObservationForm.valid ? this.getEntityList() : false;
+        actionFlag = this.addObservationForm.valid ? this.getEntityList() : false;
         // actionFlag = true;
-        
+
 
         break;
     }
@@ -324,100 +326,110 @@ export class AddObservationFormPage {
 
     return actionFlag;
   }
-  getEntityList(event ?) {
-    event ? this.entityListPage ++ : this.entityListPage ;
+  getEntityList(event?) {
+    event ? this.entityListPage++ : this.entityListPage;
 
-    this.apiProviders.httpGet(AppConfigs.cro.searchEntity+'?solutionId='+this.selectedFrameWork+"&search="+this.searchEntity+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
+    this.apiProviders.httpGet(AppConfigs.cro.searchEntity + '?solutionId=' + this.selectedFrameWork + "&search=" + this.searchEntity + "&page=" + this.entityListPage + "&limit=" + this.entityListLimit, success => {
       this.entityListTotalCount = success.result[0].count;
-      if(this.editData && this.editData.data.entities.length == 0 ){
-          success.result[0].data.forEach(element => {
-            element["selected"]= false;
-          });
-        }else if(this.editData && this.editData.data.entities.length == 0 ) {
-          success.result[0].data.forEach(element => {
-            
-            element["selected"] = this.editData.data.entities.includes(element._id) > -1 ? true : false;
-          });
-        }else{
-          success.result[0].data.forEach(element => {
-            element["selected"]= true;
-          });
-        }
-    this.entityList = success.result[0].data;
-    this.entityCount = 0;
-    this.entityList.forEach(element => {
-      element.selected ? this.entityCount++ : this.entityCount
-    });
-    console.log(JSON.stringify(success))
-    },error =>{
+      // if (this.editData && this.editData.data.entities.length == 0) {
+      //   success.result[0].data.forEach(element => {
+      //     element["selected"] = false;
+      //   });
+      // } else 
+      console.log("inside entityyyy")
+      console.log(JSON.stringify(this.editData))
+      if (this.editData && this.editData.data.entities.length) {
+        success.result[0].data.forEach(element => {
+          element["selected"] = this.editData.data.entities.includes(element._id)   ? true : false;
+        });
+      } else {
+        success.result[0].data.forEach(element => {
+          element["selected"] = this.selectAll ? true : false;
+        });
+      }
+      this.entityList = success.result[0].data;
+      this.entityCount = 0;
+      this.entityList.forEach(element => {
+        element.selected ? this.entityCount++ : this.entityCount
+      });
+      console.log(JSON.stringify(success))
+    }, error => {
 
-    },{version:"v2" , dhiti : false});
+    }, { version: "v2" });
     return true;
   }
-  doInfinite(infiniteScroll,type = 'solutions') {
+
+  selectUnselectAllEntity(status) {
+    for (const entity of this.entityList) {
+      entity['selected'] = status;
+    }
+    this.entityCount = status ? this.entityList.length : 0
+    this.selectAll = status;
+  }
+  doInfinite(infiniteScroll, type = 'solutions') {
     console.log("doInfinite function called");
     setTimeout(() => {
       type == 'solutions' ? this.getSolutionList('infiniteScroll') : this.getEntityList('infiniteScroll')
       infiniteScroll.complete();
     }, 500);
   }
-  searchSolution(event){
-    if(!event.value){
+  searchSolution(event) {
+    if (!event.value) {
       // this.listOfSolution = [];
       this.clearSolution();
       return
     }
-    if(!event.value || event.value.length < 3){
-        return;
+    if (!event.value || event.value.length < 3) {
+      return;
     }
     this.searchSolutionUrl = event.value;
     this.getSolutionList();
-     
+
     // console.log("search entity called")
     // console.log(event.value);
     // this.searchUrl.emit(event.value)
     // this.filterSelected();
   }
-  clearSolution(){
+  clearSolution() {
     // this.listOfSolution = []
-    this.searchSolutionUrl ="";
+    this.searchSolutionUrl = "";
     this.getSolutionList();
   }
 
-  searchEntities(event){
-    if(!event.value){
+  searchEntities(event) {
+    if (!event.value) {
       // this.listOfSolution = [];
       this.clearSolution();
       return
     }
-    if(!event.value || event.value.length < 3){
-        return;
+    if (!event.value || event.value.length < 3) {
+      return;
     }
     this.searchEntity = event.value;
     this.getEntityList();
-     
+
     // console.log("search entity called")
     // console.log(event.value);
     // this.searchUrl.emit(event.value)
     // this.filterSelected();
   }
-  clearEntity(){
+  clearEntity() {
     // this.listOfSolution = []
-    this.searchEntity ="";
+    this.searchEntity = "";
     this.getEntityList();
   }
-  tmpFunc() { 
-    let message ; 
-     this.selectedIndex === 0 ? this.translate.get('toastMessage.selectSolution').subscribe(translations => {
+  tmpFunc() {
+    let message;
+    this.selectedIndex === 0 ? this.translate.get('toastMessage.selectSolution').subscribe(translations => {
       //  console.log(JSON.stringify(translations))
       message = translations;
-     })
+    })
 
-    : this.translate.get('toastMessage.allValueAreMandatory').subscribe(translations => {
-      
-      message = translations;
-     });
-     this.utils.openToast(message) ;
+      : this.translate.get('toastMessage.allValueAreMandatory').subscribe(translations => {
+
+        message = translations;
+      });
+    this.utils.openToast(message);
 
   }
 
@@ -428,7 +440,7 @@ export class AddObservationFormPage {
       };
       // obsData['data']['entities'] = [];
       obsData['data'] = this.creatPayLoad('draft');
-      obsData['data']['isComplete'] = this.addObservationForm && obsData['data']['entities'].length > 0 ?(this.addObservationForm && this.addObservationForm.valid)? true : false : false;
+      obsData['data']['isComplete'] = this.addObservationForm && obsData['data']['entities'].length > 0 ? (this.addObservationForm && this.addObservationForm.valid) ? true : false : false;
       this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
         let draft = draftObs;
         this.editDataIndex >= 0 ? draft[this.editDataIndex] = obsData : draft.push(obsData);
@@ -447,7 +459,7 @@ export class AddObservationFormPage {
 
   creatPayLoad(type = 'publish') {
     let payLoad = this.addObservationForm ? this.addObservationForm.getRawValue() : {};
-    payLoad['entities'] = ( this.addObservationForm && this.addObservationForm.valid )?   this.getSelectedEntities() : [];
+    payLoad['entities'] = (this.addObservationForm && this.addObservationForm.valid) ? this.getSelectedEntities() : [];
     if (type === 'draft') {
       payLoad['isComplete'] = false;
       payLoad['solutionId'] = this.selectedFrameWork ? this.selectedFrameWork : null;
@@ -457,11 +469,11 @@ export class AddObservationFormPage {
   }
   getSelectedEntities(): any {
     let entityIdList = []
-    if(this.entityList){
-    this.entityList.forEach(entity => {
-      entity.selected ? entityIdList.push(entity._id) : null;
-    });
-  }
+    if (this.entityList) {
+      this.entityList.forEach(entity => {
+        entity.selected ? entityIdList.push(entity._id) : null;
+      });
+    }
 
     return entityIdList;
   }
@@ -469,15 +481,15 @@ export class AddObservationFormPage {
 
   ionViewWillUnload() {
     if (this.saveDraftType !== 'normal' && !this.isPublished)
-        this.editData ?  null : this.saveDraft('force');
+      this.editData ? null : this.saveDraft('force');
   }
 
-  publishObservation(){
-   let obj = {
-      data :{}
+  publishObservation() {
+    let obj = {
+      data: {}
     }
     let observation = {
-      data:{}
+      data: {}
     }
     observation['data'] = this.creatPayLoad('draft');
     obj['data']['status'] = 'published';
@@ -491,48 +503,48 @@ export class AddObservationFormPage {
     this.apiProviders.httpPost(AppConfigs.cro.createObservation + observation.data['solutionId'], obj, success => {
       console.log(JSON.stringify(success));
       // console.log("published obs")
-        this.utils.openToast(success.message);
-        this.isPublished = true;
-        console.log(this.editDataIndex)
-        if(this.editData){
-          this.localStorage.getLocalStorage('draftObservation').then(draftObs=>{
-            draftObs.splice(this.editDataIndex, 1);
-            console.log(JSON.stringify(draftObs))
-            console.log("DRAFTOBS")
-            this.localStorage.setLocalStorage('draftObservation', draftObs);
-          }).catch( error=>{
+      this.utils.openToast(success.message);
+      this.isPublished = true;
+      console.log(this.editDataIndex)
+      if (this.editData) {
+        this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
+          draftObs.splice(this.editDataIndex, 1);
+          console.log(JSON.stringify(draftObs))
+          console.log("DRAFTOBS")
+          this.localStorage.setLocalStorage('draftObservation', draftObs);
+        }).catch(error => {
 
-          })
-        }
-        this.navCtrl.pop();
+        })
+      }
+      this.navCtrl.pop();
 
-     
+
     }, error => {
 
     })
   }
 
-  countEntity(entity){
-    entity.selected ? this.entityCount-- : this.entityCount++ ;
+  countEntity(entity) {
+    entity.selected ? this.entityCount-- : this.entityCount++;
     console.log(this.entityCount)
   }
 
   async ionViewCanLeave() {
     console.log(this.saveDraftType + "  " + this.editDataIndex)
-    if(this.isPublished){
+    if (this.isPublished) {
       return true
     }
-    if(this.saveDraftType != 'normal'  && this.editDataIndex >= -1 ){
+    if (this.saveDraftType != 'normal' && this.editDataIndex >= -1) {
       const shouldLeave = await this.confirmLeave();
       return shouldLeave;
     }
   }
-  
+
   confirmLeave(): Promise<Boolean> {
     let resolveLeaving;
     const canLeave = new Promise<Boolean>(resolve => resolveLeaving = resolve);
-    let translateObject ;
-    this.translate.get(['actionSheet.confirmLeave','actionSheet.saveCurrentDataConfirmation','actionSheet.yes','actionSheet.no']).subscribe(translations =>{
+    let translateObject;
+    this.translate.get(['actionSheet.confirmLeave', 'actionSheet.saveCurrentDataConfirmation', 'actionSheet.yes', 'actionSheet.no']).subscribe(translations => {
       translateObject = translations;
       console.log(JSON.stringify(translations))
     })
@@ -548,9 +560,9 @@ export class AddObservationFormPage {
         },
         {
           text: translateObject['actionSheet.yes'],
-          handler: () =>{
+          handler: () => {
             this.saveDraft('force')
-           resolveLeaving(true)
+            resolveLeaving(true)
           }
         }
       ]
