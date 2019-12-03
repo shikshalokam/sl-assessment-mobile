@@ -5,10 +5,13 @@
 
 
 <ion-content padding>
-  <ion-list>
-    <ion-item *ngFor="let observation of observationList?.data" (click)="goToReportsOfObservation(observation?.entityId)">
+  <ion-list *ngIf="observationList?.length">
+    <ion-item *ngFor="let observation of observationList" (click)="goToReportsOfObservation(observation?.observationId)">
       <ion-icon name="eye" item-start></ion-icon>
       {{observation?.observationName}}
     </ion-item>
   </ion-list>
+  <div *ngIf="!observationList?.length" class="_errorBox _flex-box _justify-content-center">
+    {{'message.noObservationfound' | translate}}
+  </div>
 </ion-content>

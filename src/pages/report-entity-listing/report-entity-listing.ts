@@ -59,6 +59,7 @@ export class ReportEntityListingPage {
 
   }
   viewInstanceReport(entity){
+    console.log(JSON.stringify(entity))
     // console.log("api called")
     // this.utils.startLoader();
     // this.apiProvider.httpPost(AppConfigs.roles.instanceReport,{"entityId" : entity._id},success =>{

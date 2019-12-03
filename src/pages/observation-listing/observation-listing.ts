@@ -4,7 +4,6 @@ import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
 
-
 @IonicPage()
 @Component({
   selector: 'page-observation-listing',
@@ -15,24 +14,18 @@ export class ObservationListingPage {
   entityDetails;
   observationList;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private utils: UtilsProvider,
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private utils: UtilsProvider,
     private apiProvide: ApiProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ObservationListingPage');
     this.entityDetails = this.navParams.get('entity');
-    // this.getObservationList();
-    this.observationList = {
-      "result": true,
-      "data": [
-        {
-          "observationName": "School safety checklist",
-          "observationId": "5d5cfff56fe163341eeb9787"
-        }
-      ]
-    }
     console.log(JSON.stringify(this.entityDetails))
+    this.getObservationList();
   }
 
   getObservationList() {
@@ -40,15 +33,24 @@ export class ObservationListingPage {
       entityType: this.entityDetails.entityType,
       entityId: this.entityDetails._id
     }
+    this.utils.startLoader();
     this.apiProvide.httpPost(AppConfigs.observationReports.observationList, payload, success => {
-      console.log(JSON.stringify(success))
+      this.observationList = success.data;
+      this.utils.stopLoader();
     }, error => {
-
-    }, { "dhiti": true })
+      this.utils.stopLoader();
+    }, { baseUrl: "dhiti" })
   }
 
   goToReportsOfObservation(observationId) {
     this.utils.openToast("Coming soon")
+    this.navCtrl.push('ObservationReportsPage',
+      {
+        "entityType": this.entityDetails.entityType,
+        "entityId": this.entityDetails._id,
+        "observationId": observationId,
+        "immediateChildEntityType": this.entityDetails.immediateChildEntityType
+      })
   }
 
 }
