@@ -108,7 +108,9 @@
         "viewEntityReport": "View Entity Report",
         "edit": "Edit",
         "observation": "Observation",
-        "loadMore": "Load More"
+        "loadMore": "Load More",
+        "selectAll":"Select All",
+        "undo":"Undo"
     },
     "tabs": {
         "home": "Home",
