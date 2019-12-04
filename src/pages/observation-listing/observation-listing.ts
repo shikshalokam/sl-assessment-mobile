@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { ObservationReportsPage } from '../observation-reports/observation-reports';
 
 @IonicPage()
 @Component({
@@ -24,7 +25,6 @@ export class ObservationListingPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ObservationListingPage');
     this.entityDetails = this.navParams.get('entity');
-    console.log(JSON.stringify(this.entityDetails))
     this.getObservationList();
   }
 
@@ -43,8 +43,8 @@ export class ObservationListingPage {
   }
 
   goToReportsOfObservation(observationId) {
-    this.utils.openToast("Coming soon")
-    this.navCtrl.push('ObservationReportsPage',
+    // this.utils.openToast("Coming soon")
+    this.navCtrl.push(ObservationReportsPage,
       {
         "entityType": this.entityDetails.entityType,
         "entityId": this.entityDetails._id,
