@@ -8,7 +8,7 @@
       <!-- <ion-icon name="eye" class="bigIcon" (click)="$event.stopPropagation() ;viewInstanceReport(entity)" margin-right></ion-icon> -->
       <button ion-button round  class="viewReportBtn" (click)="$event.stopPropagation() ;viewInstanceReport(entity)">{{'buttons.viewReport' | translate}}</button>
 
-      <ion-icon name="arrow-round-forward"  *ngIf="entity?.immediateSubEntityType"></ion-icon>
+      <ion-icon name="arrow-round-forward" margin *ngIf="entity?.immediateSubEntityType"></ion-icon>
     </div>
   </ion-item>
 
