@@ -7,6 +7,8 @@ import { App, AlertController } from "ionic-angular";
 import { UtilsProvider } from "../utils/utils";
 import { HomePage } from "../../pages/home/home";
 import { TranslateService } from "@ngx-translate/core";
+import { DomSanitizer } from "@angular/platform-browser";
+import { InAppBrowser } from "@ionic-native/in-app-browser";
 
 @Injectable()
 export class AuthProvider {
@@ -24,40 +26,77 @@ export class AuthProvider {
   constructor(public http: Http,
     private currentUser: CurrentUserProvider,
     private app: App, private alertCntrl: AlertController,
-    private translate:TranslateService,
-    private transate : TranslateService,
+    private translate: TranslateService,
+    private transate: TranslateService,
+    private samnitizer: DomSanitizer,
+    private iab: InAppBrowser,
     private utils: UtilsProvider) { }
+
+  sanitizeUrl(url) {
+    return this.samnitizer.bypassSecurityTrustUrl;
+  }
 
   doOAuthStepOne(): Promise<any> {
 
 
     this.base_url = AppConfigs.app_url;
     this.redirect_url = AppConfigs.keyCloak.redirection_url;
-    this.auth_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/auth?response_type=code&scope=offline_access&client_id="+AppConfigs.clientId+"&redirect_uri=" +
+    this.auth_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/auth?response_type=code&scope=offline_access&client_id=" + AppConfigs.clientId + "&redirect_uri=" +
       this.redirect_url;
 
     let that = this;
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
 
       let closeCallback = function (event) {
         reject("The Sunbird sign in flow was canceled");
       };
+      console.log(this.sanitizeUrl(this.auth_url))
+      const browserReference = this.iab.create(that.auth_url, "_system");
+      browserReference.show();
+      browserReference.on('loadstart').subscribe(event => {
 
-      let browserRef = (<any>window).cordova.InAppBrowser.open(that.auth_url, "_blank", "zoom=no");
-      browserRef.addEventListener('loadstart', function (event) {
-        if (event.url && ((event.url).indexOf(that.redirect_url) === 0)) {
-          browserRef.removeEventListener("exit", closeCallback);
-          browserRef.close();
-          let responseParameters = (((event.url).split("?")[1]).split("="))[1];
+        console.log("loadstart")
+        console.log(JSON.stringify(event))
+        resolve();
 
-          if (responseParameters !== undefined) {
-            console.log(JSON.stringify(responseParameters))
-            resolve(responseParameters);
-          } else {
-            reject("Problem authenticating with Sunbird");
-          }
-        }
       });
+      browserReference.on('loadstop').subscribe(event => {
+
+        console.log("loadstop")
+        console.log(JSON.stringify(event))
+        resolve();
+
+      });
+      browserReference.on('loaderror').subscribe(event => {
+
+        console.log("loaderror")
+        console.log(JSON.stringify(event))
+        resolve();
+
+      });
+      browserReference.on('exit').subscribe(event => {
+
+        console.log("exit")
+        console.log(JSON.stringify(event))
+        resolve();
+      });
+
+      // let browserRef = (<any>window).cordova.InAppBrowser.open(that.auth_url , "_self", "usewkwebview=yes");
+      // browserRef.addEventListener('loadstart', function (event) {
+      //   if (event.url && ((event.url).indexOf(that.redirect_url) === 0)) {
+      //     browserRef.removeEventListener("exit", closeCallback);
+      //     browserRef.close();
+      //     let responseParameters = (((event.url).split("?")[1]).split("="))[1];
+
+      //     if (responseParameters !== undefined) {
+      //       console.log("hiiiiiiiiiii")
+      //       console.log(JSON.stringify(responseParameters))
+      //       resolve(responseParameters);
+      //     } else {
+      //       reject("Problem authenticating with Sunbird");
+      //     }
+      //   }
+      // });
 
     });
   }
@@ -109,8 +148,8 @@ export class AuthProvider {
   }
 
   confirmPreviousUserName(previousUserEmail, tokens): void {
-    let translateObject ;
-    this.translate.get(['actionSheet.previousUserName','actionSheet.email','actionSheet.cancel','actionSheet.send']).subscribe(translations =>{
+    let translateObject;
+    this.translate.get(['actionSheet.previousUserName', 'actionSheet.email', 'actionSheet.cancel', 'actionSheet.send']).subscribe(translations => {
       translateObject = translations;
       console.log(JSON.stringify(translations))
     })
@@ -136,15 +175,15 @@ export class AuthProvider {
           text: translateObject['actionSheet.send'],
           role: 'role',
           handler: data => {
-            console.log(data.email + " " +previousUserEmail )
+            console.log(data.email + " " + previousUserEmail)
             if (data.email && (previousUserEmail.toLowerCase() === data.email.toLowerCase())) {
               this.confirmDataClear(tokens);
             } else {
               this.currentUser.deactivateActivateSession(true);
 
               this.doLogout();
-              this.translate.get(['toastMessage.userNameMisMatch','toastMessage.ok']).subscribe(translations =>{
-                this.utils.openToast(translations.userNameMisMatch , translations.ok);
+              this.translate.get(['toastMessage.userNameMisMatch', 'toastMessage.ok']).subscribe(translations => {
+                this.utils.openToast(translations.userNameMisMatch, translations.ok);
               })
             }
 
@@ -156,11 +195,11 @@ export class AuthProvider {
   }
 
   confirmDataClear(tokens): void {
-    let translateObject ;
-    this.translate.get(['actionSheet.dataLooseConfirm','actionSheet.no','actionSheet.yes']).subscribe(translations =>{
+    let translateObject;
+    this.translate.get(['actionSheet.dataLooseConfirm', 'actionSheet.no', 'actionSheet.yes']).subscribe(translations => {
       translateObject = translations;
       console.log(JSON.stringify(translations))
-    }) 
+    })
 
     let alert = this.alertCntrl.create({
       title: translateObject['actionSheet.dataLooseConfirm'],
@@ -173,13 +212,13 @@ export class AuthProvider {
             this.currentUser.deactivateActivateSession(true);
 
             this.doLogout();
-            this.translate.get(['toastMessage.loginAgain','toastMessage.ok']).subscribe(translations =>{
-              this.utils.openToast(translations.loginAgain , translations.ok);
+            this.translate.get(['toastMessage.loginAgain', 'toastMessage.ok']).subscribe(translations => {
+              this.utils.openToast(translations.loginAgain, translations.ok);
             })
           }
         },
         {
-          text:  translateObject['actionSheet.yes'],
+          text: translateObject['actionSheet.yes'],
           role: 'role',
           handler: data => {
             this.currentUser.removeUser();
@@ -242,16 +281,16 @@ export class AuthProvider {
       let closeCallback = function (event) {
       };
 
-      let browserRef = (<any>window).cordova.InAppBrowser.open(logout_url, "_blank", "zoom=no");
-      browserRef.addEventListener('loadstart', function (event) {
-        console.log('in listener')
-        if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
-          browserRef.removeEventListener("exit", closeCallback);
-          browserRef.close();
-          console.log(event.url);
-          resolve()
-        }
-      });
+      // let browserRef = (<any>window).cordova.InAppBrowser.open(logout_url, "_blank", "zoom=no");
+      // browserRef.addEventListener('loadstart', function (event) {
+      //   console.log('in listener')
+      //   if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
+      //     browserRef.removeEventListener("exit", closeCallback);
+      //     browserRef.close();
+      //     console.log(event.url);
+      //     resolve()
+      //   }
+      // });
 
     });
   }
