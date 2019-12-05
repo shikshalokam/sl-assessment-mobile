@@ -183,6 +183,9 @@
         "generalQuestions": "General Questions",
         "individualAssessments": "Individual Assessments",
         "observationDetails": "Observation Details",
+        "dashboardAssessmentListing" :"Assessments",
+        "selectAssessment":"Select an Assessment type",
+        "observationList":"Observations List",
         "hint": "Hint",
         "submissionPreview": "Submission Preview",
         "observationReports": "Report",
@@ -242,7 +245,8 @@
         "deleteObservation": "Are you sure you want to delete the observation?",
         "confirmDeleteObservation": "You will not see this observation anymore. Do you wish to delete?",
         "viewAll": "View all",
-        "noUnreadNotifications": "You have no new Notifications!"
+        "noUnreadNotifications": "You have no new Notifications!",
+        "noObservationfound": "No observation found"
     },
     "toastMessage": {
         "selectSolution": "Select a Solution",

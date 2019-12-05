@@ -29,6 +29,7 @@ import { SectionListPageModule } from '../pages/section-list/section-list.module
 import { QuestionerPageModule } from '../pages/questioner/questioner.module';
 import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
+
 import { FaqPage } from '../pages/faq/faq';
 import { SocialSharing } from '@ionic-native/social-sharing';
 
