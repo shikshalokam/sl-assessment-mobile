@@ -30,8 +30,8 @@
           <div class="observationTitle">{{'buttons.observation'|translate}} {{submission?.submissionNumber}}</div>
           <div class="time">{{submission?.createdAt | date :'medium'}} </div>
         </div>
-        <ion-icon name="cloud-download" class="downloadIcon"
-          *ngIf="!submission?.downloaded && (submission.status === 'started')"></ion-icon>
+        <!-- <ion-icon name="cloud-download" class="downloadIcon"
+          *ngIf="!submission?.downloaded && (submission.status === 'started')"></ion-icon> -->
         <button *ngIf="submission?.status == 'completed'" class="viewReport" ion-button round
           (click)="$event.stopPropagation() ; actions(submission?._id, 'preview') ">{{'buttons.viewReport'|translate}}</button>
         <ion-icon *ngIf="!(submission.status === 'completed')" name="trash" class="downloadIcon" margin-left

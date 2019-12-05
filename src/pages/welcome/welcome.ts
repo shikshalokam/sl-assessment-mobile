@@ -59,8 +59,6 @@ export class WelcomePage {
     }
   }
 
-
-
   presentToast(msg) {
     let toast = this.toastCtrl.create({
       message: msg,
@@ -107,16 +105,13 @@ export class WelcomePage {
   }
 
   slideChanged(): void {
-    // if (this.slides.isEnd()) {
-    //   this.skipMsg = 'Got it';
-    // } else {
-    //   this.skipMsg = "Skip";
-    // }
     this.activeSlide = this.slides.getActiveIndex();
   }
 
   gotToLastSlide() {
-    this.slides.slideTo(3);
+    this.slides.slideNext();
+    this.slides.slideNext();
+
   }
 
   gotToNextSlide() {
