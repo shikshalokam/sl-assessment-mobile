@@ -206,7 +206,10 @@
         "notApplicable": "NA",
         "readytoPublish": "Ready to Publish",
         "files": "Files",
-        "languages":"Languages"
+        "languages":"Languages",
+        "totalScore":"Total score",
+        "scoreAchieved":"Score achieved",
+        "totalObservations":"Total Observations"
     },
     "languages": {
         "english": "English",
@@ -265,10 +268,5 @@
         "userNameMisMatch": "Username didnot match. Please login again.",
         "loactionForAction": "Location should be turned on for this action.",
         "questionResponseNotRequiredForCompleteAssessment": "This questions response is not required to complete the assessment."
-    },
-    "observationsReport":{
-        "totalScore":"Total score",
-        "scoreAchieved":"Score achieved",
-        "totalObservations":"Total Observations"
     }
 }

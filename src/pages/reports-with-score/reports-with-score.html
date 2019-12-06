@@ -8,8 +8,6 @@
   <header [title]="'headings.observationReports'|translate" [hideBack]="false">
   </header>
 </ion-header>
-
-
 <ion-content  style="background-color: #fff !important;">
   <div *ngIf="!error">
     <div padding style="text-transform: capitalize; border:1px solid #ccc; margin: 10px 10px;" *ngIf="reportObj?.observationName || reportObj?.observationName">
@@ -19,26 +17,20 @@
     <!-- Scores details bar -->
     <ion-grid *ngIf="reportObj?.totalScore && reportObj?.scoreAchieved">
       <ion-row style="text-align: center;">
-         <ion-col> {{'observationsReport.totalScore' | translate}} : {{reportObj?.totalScore}}</ion-col>
-        <ion-col> {{'observationsReport.scoreAchieved' | translate}} : {{reportObj?.scoreAchieved}}</ion-col>
+         <ion-col> {{'labels.totalScore' | translate}} : {{reportObj?.totalScore}}</ion-col>
+        <ion-col> {{'labels.scoreAchieved' | translate}} : {{reportObj?.scoreAchieved}}</ion-col>
       </ion-row>
     </ion-grid>
     <ion-grid *ngIf="reportObj?.totalObservations">
       <ion-row >
-        <ion-col style="margin-left: 15px;"> {{'observationsReport.totalObservations' | translate}} : {{reportObj?.totalObservations}}</ion-col>
+        <ion-col style="margin-left: 15px;"> {{'labels.totalObservations' | translate}} : {{reportObj?.totalObservations}}</ion-col>
       </ion-row>
     </ion-grid>
     <!-- Scores details bar ends here-->
     <div *ngFor="let element of reportObj?.response;let i = index">
       <ion-card >
-        <!-- <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'text'"></reports-text>
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'number'"></reports-text>
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'date'"></reports-text> -->
         <pie-chart [data]="element" [questionNumber]="i+1" *ngIf="!this.entityId"></pie-chart>
         <scatter-chart [data]="element" [questionNumber]="i+1" *ngIf="this.entityId"></scatter-chart>
-        <!-- <bar-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'multiselect'"></bar-chart>
-        <matrix-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'matrix'"></matrix-chart> -->
-        <!-- <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchDefault></reports-text> -->
       </ion-card>
     </div>
   </div>
