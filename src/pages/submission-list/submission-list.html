@@ -4,7 +4,6 @@
 </ion-header>
 
 <ion-content>
-
   <ion-card *ngIf="submissionList" class="cardWrapper submissionCard">
     <ion-card-content class="observationTitle">
       {{ submissionList[0]['entityInformation']['name']}}
@@ -24,7 +23,7 @@
   </ion-segment>
 
   <ion-card *ngFor="let submission of submissions ; let i = index" class="submissionCard">
-    <ion-card-content>
+    <ion-card-content style="position:relative">
       <div class="_flex-box" (click)="submission?.downloaded === true ? goToEcm(i) : getAssessmentDetails(i)">
         <div style="flex:1" text-capitalize>
           <div class="observationTitle">{{'buttons.observation'|translate}} {{submission?.submissionNumber}}</div>
@@ -33,31 +32,43 @@
         <!-- <ion-icon name="cloud-download" class="downloadIcon"
           *ngIf="!submission?.downloaded && (submission.status === 'started')"></ion-icon> -->
         <button *ngIf="submission?.status == 'completed'" class="viewReport" ion-button round
-          (click)="$event.stopPropagation() ; actions(submission?._id, 'preview') ">{{'buttons.viewReport'|translate}}</button>
+          (click)="$event.stopPropagation() ; openActions(submission)">{{'buttons.viewReport'|translate}}</button>
         <ion-icon *ngIf="!(submission.status === 'completed')" name="trash" class="downloadIcon" margin-left
           (click)="$event.stopPropagation() ; deleteSubmission(submission?._id) "></ion-icon>
-
       </div>
     </ion-card-content>
+    <div *ngIf="submission.showActionsheet">
+      <div class="actions-events">
+        <div class="action-btn" (click)="actionsWithScore(submission?._id,'preview',submission)"> {{'actionSheet.reportWithScore' | translate}} </div>
+        <div class="action-btn" (click)="actions(submission?._id,'preview',submission)">
+          {{'actionSheet.reportWithoutScore' | translate}}</div>
+      </div>
+    </div>
   </ion-card>
-
   <div *ngIf="!(submissions?.length > 0)" class="_flex-box _justify-content-center">
     {{'message.noSubmission'|translate}}
   </div>
+  
+    <div class="overlay"  *ngIf="showActionsheet" (click)="closeAction()" [ngStyle]="{'height': height+'%'}"></div>
 </ion-content>
 <ion-footer no-shadow>
+    <div *ngIf="showEntityActionsheet" style="margin-bottom: 22%;">
+        <div class="actions-events-1">
+          <div class="action-btn" (click)="viewEntityReportsWithScore()"> {{'actionSheet.reportWithScore' | translate}} </div>
+          <div class="action-btn" (click)="viewEntityReports()">
+            {{'actionSheet.reportWithoutScore' | translate}}</div>
+        </div>
+      </div>
   <ion-toolbar position="bottom">
     <ion-row>
       <ion-col>
         <button ion-button full (click)="observeAgain()" class="footerButton">
           {{'buttons.observeAgain'|translate}}</button>
-
       </ion-col>
       <ion-col>
-        <button ion-button full (click)="viewEntityReports()" class="footerButton">
+        <button ion-button full (click)="entityActions()" class="footerButton">
           {{'buttons.viewEntityReport'|translate}}</button>
       </ion-col>
-
     </ion-row>
   </ion-toolbar>
 </ion-footer>

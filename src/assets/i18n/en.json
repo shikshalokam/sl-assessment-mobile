@@ -54,7 +54,9 @@
         "publish": "Publish",
         "chooseAction": "Choose a action",
         "deleteObservation": "Are you sure you want to delete the observation?",
-        "networkSlowAlert": "You are connected to a slower data network. Image upload may take longer time. Do you want to continue?"
+        "networkSlowAlert": "You are connected to a slower data network. Image upload may take longer time. Do you want to continue?",
+        "reportWithScore":"Report with score",
+        "reportWithoutScore":"Report without score"
     },
     "buttons": {
         "observeAgain": "Observe Again",
@@ -209,7 +211,10 @@
         "notApplicable": "NA",
         "readytoPublish": "Ready to Publish",
         "files": "Files",
-        "languages":"Languages"
+        "languages":"Languages",
+        "totalScore":"Total score",
+        "scoreAchieved":"Score achieved",
+        "totalObservations":"Total Observations"
     },
     "languages": {
         "english": "English",

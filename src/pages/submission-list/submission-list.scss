@@ -39,4 +39,45 @@ page-submission-list {
         border-radius: 5px;
         font-size: 16px;
     }
+    .overlay
+    {
+        position: fixed; /* Sit on top of the page content */
+        width: 100%; /* Full width (cover the whole page) */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color:#d1d1d191; /* Black background with opacity */
+        z-index: 2;
+    }
+    .actions-events
+    {
+        position: absolute;
+        z-index: 999999;
+        text-align: right;
+        margin-top: -37px;
+        float: right;
+        right: 54px;
+    .action-btn
+    {
+        background: #fff;
+        padding: 10px;
+        margin: 5px 0px;
+        text-align: center;
+    }
+    }
+    .actions-events-1
+    {
+        position: absolute;
+        z-index: 999999;
+        text-align: right;
+        right: 15px;
+    .action-btn
+    {
+        background: #fff;
+        padding: 10px;
+        margin: 5px 0px;
+        text-align: center;
+    }
+    }
 }
