@@ -413,6 +413,7 @@ export class SubmissionListPage {
       this.activatedSubmission = submission;
       submission.showActionsheet = true;
       this.showActionsheet = true;
+      this.showEntityActionsheet = false;
     } else {
       this.actions(submission._id, 'preview', submission)
     }
