@@ -54,7 +54,9 @@
         "publish": "Publish",
         "chooseAction": "Choose a action",
         "deleteObservation": "Are you sure you want to delete the observation?",
-        "networkSlowAlert": "You are connected to a slower data network. Image upload may take longer time. Do you want to continue?"
+        "networkSlowAlert": "You are connected to a slower data network. Image upload may take longer time. Do you want to continue?",
+        "reportWithScore":"Report with score",
+        "reportWithoutScore":"Report without score"
     },
     "buttons": {
         "observeAgain": "Observe Again",
@@ -263,5 +265,10 @@
         "userNameMisMatch": "Username didnot match. Please login again.",
         "loactionForAction": "Location should be turned on for this action.",
         "questionResponseNotRequiredForCompleteAssessment": "This questions response is not required to complete the assessment."
+    },
+    "observationsReport":{
+        "totalScore":"Total score",
+        "scoreAchieved":"Score achieved",
+        "totalObservations":"Total Observations"
     }
 }

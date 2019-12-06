@@ -366,9 +366,14 @@ export class ObservationReportsPage {
     //     }
     //   ]
     // }
+
+
+
+    
     this.apiService.httpPost(url, this.payload, (success) => {
       if (success) {
         this.reportObj = success;
+        console.log('reportObj', this.reportObj);
       } else {
         this.error = "No data found"
       }
