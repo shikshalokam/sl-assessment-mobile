@@ -102,7 +102,6 @@ import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech
 import { ProgramListingPage } from '../pages/program-listing/program-listing';
 import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
 import { NotificationProvider } from '../providers/notification/notification';
-import {ReportsWithScorePage} from '../pages/reports-with-score/reports-with-score';
 import { Badge } from '@ionic-native/badge'
 import { AppIconBadgeProvider } from '../providers/app-icon-badge/app-icon-badge';
 import { FCM } from '@ionic-native/fcm';
@@ -139,7 +138,6 @@ import { SettingsPage } from '../pages/settings/settings';
     PreviewPage,
     SubmissionListPage,
     ObservationReportsPage,
-    ReportsWithScorePage,
     RoleListingPage,
     ReportEntityListingPage,
     DashboardPage,
@@ -205,7 +203,6 @@ import { SettingsPage } from '../pages/settings/settings';
     ProgramListingPage,
     SettingsPage,
     ObservationReportsPage,
-    ReportsWithScorePage,
     RoleListingPage,
     ReportEntityListingPage,
     ObservationEditPage
