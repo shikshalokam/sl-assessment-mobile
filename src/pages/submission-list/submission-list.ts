@@ -134,8 +134,8 @@ export class SubmissionListPage {
 
     })
   }
-  getAssessmentDetails(index, submissionNum = null) {
-    let submissionNumber = submissionNum ? submissionNum : this.submissionList[index].submissionNumber
+  getAssessmentDetails(submission) {
+    // let submissionNumber = submission.submissionNumber;
     if (this.activatedSubmission) {
       this.activatedSubmission.showActionsheet = false;
     }
@@ -158,21 +158,48 @@ export class SubmissionListPage {
     // }, error => {
 
     // });
+    // let event = {
+    //   entityIndex: this.navParams.get('entityIndex'),
+    //   observationIndex: this.navParams.get('selectedObservationIndex'),
+    //   submissionNumber: submission.submissionNumber
+    //   // submissionIndex: index
+    // }
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submission._id)).then(data => {
+      if (!data) {
+        this.getObservationDetailsApi(submission);
+      } else {
+        this.goToEcm(submission)
+      }
+    }).catch(error => {
+      this.getObservationDetailsApi(submission);
+    })
+    // this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(success => {
+    //   this.programs = success;
+    //   this.observationDetails[0] = success[this.selectedObservationIndex]
+    //   this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+    //   this.goToEcm(submission)
+    // }).catch(error => {
+    // })
+  }
+
+  getObservationDetailsApi(submission) {
     let event = {
       entityIndex: this.navParams.get('entityIndex'),
       observationIndex: this.navParams.get('selectedObservationIndex'),
-      submissionIndex: index
+      submissionNumber: submission.submissionNumber
+      // submissionIndex: index
     }
     this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(success => {
       this.programs = success;
       this.observationDetails[0] = success[this.selectedObservationIndex]
       this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
-      this.goToEcm(index)
+      this.goToEcm(submission)
     }).catch(error => {
     })
   }
-  goToEcm(index) {
-    let submissionId = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].submissions[index]._id
+
+  goToEcm(submission) {
+    let submissionId = submission._id
     let heading = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].name;
     //  let recentlyUpdatedEntity = {
     //       EntityName :this.programs[this.selectedObservationIndex].name,
@@ -203,6 +230,7 @@ export class SubmissionListPage {
 
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData, recentlyUpdatedEntity: this.recentlyUpdatedEntity };
+    console.log(JSON.stringify(options))
     this.evdnsServ.openActionSheet(options, "Observation");
 
   }
@@ -215,7 +243,20 @@ export class SubmissionListPage {
       submissionNumber: submissionNumber
     }
     // this.utils.startLoader();
-    this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(result => {
+    // this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(result => {
+    // this.observationService.refreshObservationList(this.programs).then(success => {
+    //   this.programs = success;
+    //   this.observationDetails[0] = success[this.selectedObservationIndex];
+    //   this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+    //   this.getLocalStorageData();
+    //   this.goToEcm(this.submissionList.length)
+    // }).catch(error => {
+    // })
+    // }).catch(error => {
+    // })
+    const entityId = this.observationDetails[0].entities[this.entityIndex]._id;
+
+    this.apiProvider.httpPost(AppConfigs.cro.observationSubmissionCreate + this.observationDetails[0]._id + "?entityId=" + entityId, {}, success => {
       this.observationService.refreshObservationList(this.programs).then(success => {
         this.programs = success;
         this.observationDetails[0] = success[this.selectedObservationIndex];
@@ -224,7 +265,8 @@ export class SubmissionListPage {
         this.goToEcm(this.submissionList.length)
       }).catch(error => {
       })
-    }).catch(error => {
+    }, error => {
+      // console.log(error, "error here")
     })
   }
   viewEntityReports() {
