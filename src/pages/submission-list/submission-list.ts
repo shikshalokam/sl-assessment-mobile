@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events, Config, AlertController } from 'ionic-angular';
+import { NavController, NavParams, Events, AlertController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
@@ -7,16 +7,11 @@ import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
-import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
+// import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 import { TranslateService } from '@ngx-translate/core';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
 
-/**
- * Generated class for the SubmissionListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 
 @Component({
   selector: 'page-submission-list',
@@ -46,7 +41,7 @@ export class SubmissionListPage {
     private utils: UtilsProvider,
     private events: Events,
     private alertCntrl: AlertController,
-    private dap: DownloadAndPreviewProvider,
+    // private dap: DownloadAndPreviewProvider,
     private translate: TranslateService,
     private observationService: ObservationServiceProvider,
     private assessmentService: AssessmentServiceProvider

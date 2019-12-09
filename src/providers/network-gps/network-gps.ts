@@ -8,7 +8,6 @@ import { Subject } from 'rxjs/Subject';
 import { Network } from '@ionic-native/network';
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { Diagnostic } from '@ionic-native/diagnostic';
 
 export enum ConnectionStatusEnum {
   Online,
@@ -28,7 +27,6 @@ export class NetworkGpsProvider {
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
     private utils: UtilsProvider,
-    private diagnostic: Diagnostic,
     private network: Network,
     private eventCtrl: Events, private storage: Storage) {
     console.log('Hello NetworkGpsProvider Provider');

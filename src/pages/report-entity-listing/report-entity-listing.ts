@@ -3,7 +3,6 @@ import { NavController, NavParams } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
-import { DashboardPage } from '../dashboard/dashboard';
 import { ProgramListingPage } from '../program-listing/program-listing';
 
 /**

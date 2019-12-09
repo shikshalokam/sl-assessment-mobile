@@ -122,10 +122,9 @@ export class DetailPage {
   }
 
   getAccessTokenForAction(passcode) {
-    const payload = {
-      "passcode": passcode
-    }
-    let currentEcm = {}
+    // const payload = {
+    //   "passcode": passcode
+    // }
     this.utils.startLoader();
     this.apiService.httpPost(AppConfigs.help.getHelpToken, passcode, successData => {
       this.utils.ActionEnableSubmit(successData.result);
