@@ -145,9 +145,7 @@ export class ReportsWithScorePage {
     const fileTransfer: FileTransferObject = this.fileTransfer.create();
     fileTransfer.download(fileRemoteUrl, this.appFolderPath + this.fileName).then(success => {
       this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
-      this.utils.stopLoader();
     }).catch(error => {
-      this.utils.stopLoader();
     })
   }
 
