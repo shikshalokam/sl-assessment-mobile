@@ -10,7 +10,6 @@ import { ObservationServiceProvider } from '../../providers/observation-service/
 // import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 import { TranslateService } from '@ngx-translate/core';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
-import { ReportsWithScorePage } from '../reports-with-score/reports-with-score';
 import { Content } from 'ionic-angular'
 /**
  * Generated class for the SubmissionListPage page.
@@ -285,7 +284,7 @@ export class SubmissionListPage {
       entityId: this.submissionList[0].entityId,
       observationId: this.submissionList[0].observationId
     }
-    this.navCtrl.push(ReportsWithScorePage, payload);
+    this.navCtrl.push('ReportsWithScorePage', payload);
   }
   actions(submissionId, action, submission) {
     // this.dap.checkForSubmissionDoc(submissionId, action);
@@ -297,7 +296,7 @@ export class SubmissionListPage {
     // this.dap.checkForSubmissionDoc(submissionId, action);
     submission.showActionsheet = false;
     this.showActionsheet = false;
-    this.navCtrl.push(ReportsWithScorePage, { submissionId: submissionId })
+    this.navCtrl.push('ReportsWithScorePage', { submissionId: submissionId })
   }
   deleteSubmission(submissionId) {
     let translateObject;
