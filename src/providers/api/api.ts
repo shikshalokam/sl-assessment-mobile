@@ -158,7 +158,6 @@ export class ApiProvider {
   httpPost(url, payload, successCallback, errorCallback, config?) {
     // let nav = this.appCtrls.getActiveNav();
     let options = {};
-    console.log(url,"url");
     options['version'] = (config && config.version) ? config.config : "v1";
     options['dhiti'] = (config && config.dhiti) ? config.dhiti : false;
     this.validateApiToken().then(response => {
@@ -171,7 +170,6 @@ export class ApiProvider {
         'appName': AppConfigs.appName,
         'platform': this.platform.is('ios') ? 'ios' : 'android'
       }
-      console.log(obj,"objects");
       // const apiUrl = AppConfigs.api_base_url + url;
       const apiUrl = this.getApiUrl(url, config);
 
@@ -180,10 +178,8 @@ export class ApiProvider {
       // console.log(JSON.stringify(payload))
       this.http.setDataSerializer('json');
       this.http.post(apiUrl, payload, obj).then(data => {
-        console.log(data.data,"data.data ****")
         successCallback(data.data ? JSON.parse(data.data) : null);
       }).catch(error => {
-        console.log(error,"error 186");
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;

@@ -104,7 +104,6 @@ export class ObservationServiceProvider {
         });
         event ? event.complete() : ""
         // console.log(JSON.stringify(createdObservation))
-        console.log("if no previous thing found");
 
         this.localStorage.setLocalStorage('createdObservationList', createdObservation);
         resolve(createdObservation);
@@ -119,7 +118,6 @@ export class ObservationServiceProvider {
               if(submissionId == submission._id){
                 submission.downloaded = true ;
                 // console.log(submission._id)
-                console.log(JSON.stringify(submission._id ))
               }
               else{
                 if(! submission.downloaded )
@@ -131,7 +129,6 @@ export class ObservationServiceProvider {
         });
         // console.log(JSON.stringify(createdObservation))
         // console.log(JSON.stringify(success))
-        console.log("else - previous thing found");
         this.localStorage.setLocalStorage('createdObservationList', createdObservation);
         event ? event.complete() :""
         // this.
