@@ -26,6 +26,8 @@ export class ObservationReportsPage {
   isIos;
   fileName;
   action;
+  entityType;
+  immediateChildEntityType;
 
   constructor(public navCtrl: NavController, private dap: DownloadAndPreviewProvider,
     public navParams: NavParams, private platform: Platform,
@@ -40,10 +42,12 @@ export class ObservationReportsPage {
     this.submissionId = this.navParams.get('submissionId');
     this.observationId = this.navParams.get('observationId')
     this.entityId = this.navParams.get('entityId');
+    this.entityType = this.navParams.get('entityType');
+    this.immediateChildEntityType = this.navParams.get('immediateChildEntityType')
     this.payload = {
       "entityId": this.entityId,
       "submissionId": this.submissionId,
-      "observationId": this.observationId
+      "observationId": this.observationId,
     }
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
@@ -58,7 +62,15 @@ export class ObservationReportsPage {
   getObservationReports(download = false) {
     this.utils.startLoader();
     let url;
-    if (this.submissionId) {
+    if (this.entityType) {
+      this.payload = {
+        "entityId": this.entityId,
+        "entityType": this.entityType,
+        "observationId": this.observationId,
+        "immediateChildEntityType": this.immediateChildEntityType
+      }
+      url = AppConfigs.observationReports.entityObservationReport
+    } else if (this.submissionId) {
       url = AppConfigs.observationReports.instanceReport;
     } else if (!this.submissionId && !this.entityId) {
       url = AppConfigs.observationReports.observationReport;
@@ -366,9 +378,11 @@ export class ObservationReportsPage {
     //     }
     //   ]
     // }
+
     this.apiService.httpPost(url, this.payload, (success) => {
       if (success) {
         this.reportObj = success;
+        console.log('reportObj', this.reportObj);
       } else {
         this.error = "No data found"
       }
@@ -377,7 +391,7 @@ export class ObservationReportsPage {
     }, error => {
       this.error = "No data found";
       this.utils.stopLoader();
-    }, { baseUrl:"dhiti" })
+    }, { baseUrl: "dhiti" })
 
   }
 
@@ -385,7 +399,6 @@ export class ObservationReportsPage {
     this.action = action;
 
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(status => {
-      console.log(JSON.stringify(status))
       if (status.hasPermission) {
         this.getObservationReportUrl()
       } else {
@@ -394,19 +407,15 @@ export class ObservationReportsPage {
             this.getObservationReportUrl()
           }
         }).catch(error => {
-          console.log(JSON.stringify(error))
         })
       }
     })
   }
 
   // checkForSubmissionDoc(submissiond) {
-  //   console.log("Check for file")
   //   this.file.checkFile(this.appFolderPath, this.fileName).then(success => {
-  //     console.log("Check for file available")
   //     this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
   //   }).catch(error => {
-  //     console.log("Check for file not available")
   //     // this.getObservationReports(true)
   //     this.getObservationReportUrl();
   //   })
@@ -416,8 +425,11 @@ export class ObservationReportsPage {
     this.utils.startLoader();
     // + "type=submission&"
     let url = AppConfigs.observationReports.getReportsPdfUrls;
-    const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a')
-    if (this.submissionId) {
+    const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a');
+    if (this.entityType) {
+      url = url +  "entityId=" + this.entityId + "&observationId=" + this.observationId + '&entityType='+ this.entityType+ (this.immediateChildEntityType ? ('&immediateChildEntityType='+ this.immediateChildEntityType) : "");
+      this.fileName = this.observationId+'_'+this.entityId+'_'+this.immediateChildEntityType+'.pdf';
+    } else if (this.submissionId) {
       url = url + "submissionId=" + this.submissionId;
       this.fileName = this.submissionId + timeStamp + ".pdf";
     } else if (!this.submissionId && !this.entityId) {
@@ -444,21 +456,15 @@ export class ObservationReportsPage {
 
 
   downloadSubmissionDoc(fileRemoteUrl) {
-    // console.log("file dowload")
     // this.utils.startLoader();
     // const fileName = "submissionDoc_" + this.fileName;
     // const fileTransfer: FileTransferObject = this.fileTransfer.create();
 
     // fileTransfer.download(fileRemoteUrl, this.appFolderPath + fileName).then(success => {
-    //   console.log("file dowload success")
     //   this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + fileName)
     //   this.utils.stopLoader();
-    //   console.log(JSON.stringify(success))
     // }).catch(error => {
-    //   console.log("file dowload error")
-
     //   this.utils.stopLoader();
-    //   console.log(JSON.stringify(error))
     // })
     this.utils.startLoader();
     if (this.isIos) {
@@ -474,26 +480,18 @@ export class ObservationReportsPage {
     // const fileName = this.solutionName.replace(/\s/g, '') + "_" + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a') + ".pdf";
     const fileTransfer: FileTransferObject = this.fileTransfer.create();
     fileTransfer.download(fileRemoteUrl, this.appFolderPath + this.fileName).then(success => {
-      console.log("file dowload success")
       this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
       this.utils.stopLoader();
-      console.log(JSON.stringify(success))
     }).catch(error => {
-      console.log("file dowload error")
-
       this.utils.stopLoader();
-      console.log(JSON.stringify(error))
     })
   }
 
 
   checkForDowloadDirectory(fileRemoteUrl) {
-    console.log("check for download")
     this.file.checkDir(this.file.documentsDirectory, 'Download').then(success => {
       this.filedownload(fileRemoteUrl);
     }).catch(err => {
-      console.log("check for download")
-
       this.file.createDir(cordova.file.documentsDirectory, 'Download', false).then(success => {
         // this.fileName = 'record' + new Date().getDate() + new Date().getMonth() + new Date().getFullYear() + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds() + '.mp3';
         // this.filesPath = this.file.documentsDirectory + "images/" + this.fileName;
@@ -503,7 +501,6 @@ export class ObservationReportsPage {
         this.filedownload(fileRemoteUrl);
 
       }, error => {
-        console.log(JSON.stringify(error))
       })
     });
   }

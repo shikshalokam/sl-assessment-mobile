@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, PopoverController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { AppConfigs } from '../../providers/appConfig';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
-import { MenuItemComponent } from '../../components/menu-item/menu-item';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
-import { UtilsProvider } from '../../providers/utils/utils';
-import { EntityListingPage } from '../entity-listing/entity-listing';
 
 // @IonicPage()
 @Component({
@@ -20,10 +17,8 @@ export class IndividualListingPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private popoverCtrl: PopoverController,
     private localStorage: LocalStorageProvider,
     private assessmentService :AssessmentServiceProvider,
-    private utils : UtilsProvider
     ) {
   }
 

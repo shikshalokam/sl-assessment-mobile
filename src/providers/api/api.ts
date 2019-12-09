@@ -174,11 +174,10 @@ export class ApiProvider {
       const apiUrl = this.getApiUrl(url, config);
 
       // const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url + options['version'] + url : AppConfigs.api_base_url + options['version'] + url;
-      console.log(apiUrl)
+      console.log(apiUrl,"apiUrl")
       // console.log(JSON.stringify(payload))
       this.http.setDataSerializer('json');
       this.http.post(apiUrl, payload, obj).then(data => {
-        console.log(data.data)
         successCallback(data.data ? JSON.parse(data.data) : null);
       }).catch(error => {
         const errorDetails = JSON.parse(error['error']);
@@ -194,6 +193,7 @@ export class ApiProvider {
         errorCallback(JSON.parse(error['error']))
       })
     }).catch(error => {
+      console.log(error,"error 200");
       this.OnTokenExpired(url, payload, successCallback, errorCallback, "post", config);
     })
   }
