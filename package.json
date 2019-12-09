@@ -56,11 +56,12 @@
     "@ngx-translate/core": "9.1.1",
     "@ngx-translate/http-loader": "3.0.1",
     "angular-font-awesome": "^3.1.2",
-    "cordova-android": "^8.1.0",
+    "cordova": "^8.1.2",
+    "cordova-android": "8.1.0",
     "cordova-android-play-services-gradle-release": "^1.4.6",
     "cordova-android-support-gradle-release": "^3.0.1",
     "cordova-browser": "5.0.4",
-    "cordova-ios": "^5.0.1",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-add-swift-support": "^1.7.2",
     "cordova-plugin-advanced-http": "^2.3.0",
     "cordova-plugin-android-permissions": "^1.0.2",
@@ -207,8 +208,8 @@
     },
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }

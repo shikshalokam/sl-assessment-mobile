@@ -41,6 +41,7 @@ import { PageQuestionComponent } from './page-question/page-question';
 import { NotificationCardComponent } from './notification-card/notification-card';
 import { MatrixChartComponent } from './matrix-chart/matrix-chart';
 import { AlertModalComponent } from './alert-modal/alert-modal';
+import { ScatterChartComponent } from './scatter-chart/scatter-chart';
 
 @NgModule({
 	declarations: [
@@ -75,7 +76,8 @@ import { AlertModalComponent } from './alert-modal/alert-modal';
     PageQuestionComponent,
     NotificationCardComponent,
     MatrixChartComponent,
-    AlertModalComponent
+    AlertModalComponent,
+    ScatterChartComponent
   ],
 	imports: [
 		IonicModule,
@@ -117,7 +119,8 @@ import { AlertModalComponent } from './alert-modal/alert-modal';
     PageQuestionComponent,
     NotificationCardComponent,
     MatrixChartComponent,
-    AlertModalComponent
+    AlertModalComponent,
+    ScatterChartComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
