@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { Events } from 'ionic-angular';
 import { Subject } from 'rxjs/Subject';
-import { ApiProvider } from '../api/api';
-import { AppConfigs } from '../appConfig';
 
 
 @Injectable()
@@ -15,8 +13,7 @@ export class ObservationProvider {
   constructor(
     public http: HttpClient, 
     private localstorage: LocalStorageProvider, 
-    private events: Events,
-    private apiProviders:ApiProvider
+    private events: Events
     ) {
     console.log('Hello ObservationProvider Provider');
   }

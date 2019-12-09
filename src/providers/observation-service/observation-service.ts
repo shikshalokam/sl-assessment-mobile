@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, ɵConsole } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AppConfigs } from '../appConfig';
 import { ApiProvider } from '../api/api';
 import { UtilsProvider } from '../utils/utils';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { UpdateLocalSchoolDataProvider } from '../update-local-school-data/update-local-school-data';
-import { PopoverController, Events } from 'ionic-angular';
-import { resolve } from 'url';
+import { Events } from 'ionic-angular';
 
 /*
   Generated class for the ObservationServiceProvider provider.

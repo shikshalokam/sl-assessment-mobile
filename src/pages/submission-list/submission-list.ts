@@ -7,11 +7,10 @@ import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
-import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
+// import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 import { TranslateService } from '@ngx-translate/core';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
 import { ReportsWithScorePage } from '../reports-with-score/reports-with-score';
-import { isRightSide } from 'ionic-angular/umd/util/util';
 import { Content } from 'ionic-angular'
 /**
  * Generated class for the SubmissionListPage page.
@@ -53,7 +52,7 @@ export class SubmissionListPage {
     private utils: UtilsProvider,
     private events: Events,
     private alertCntrl: AlertController,
-    private dap: DownloadAndPreviewProvider,
+    // private dap: DownloadAndPreviewProvider,
     private translate: TranslateService,
     private observationService: ObservationServiceProvider,
     private assessmentService: AssessmentServiceProvider,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, ViewController, App, AlertController } from 'ionic-angular';
+import {  NavParams, ViewController, App, AlertController } from 'ionic-angular';
 import { AssessmentAboutPage } from '../../pages/assessment-about/assessment-about';
 import { ObservationEditPage } from '../../pages/observation-edit/observation-edit';
 import { ApiProvider } from '../../providers/api/api';
@@ -75,9 +75,6 @@ export class GenericMenuPopOverComponent implements OnInit {
 
   deleteObservation() {
     this.utils.startLoader();
-    const payload = {
-
-    }
     this.apiProvider.httpPost(AppConfigs.cro.observationDelete + this.data._id, {}, success => {
       this.observationService.updateObservationLocalStorage();
       this.utils.openToast(success.message);
