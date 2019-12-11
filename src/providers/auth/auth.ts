@@ -22,6 +22,7 @@ export class AuthProvider {
   base_url: string;
 
   logout_redirect_url: string;
+  browserReference;
 
   constructor(public http: Http,
     private currentUser: CurrentUserProvider,
@@ -37,67 +38,23 @@ export class AuthProvider {
   }
 
   doOAuthStepOne(): Promise<any> {
-
-
     this.base_url = AppConfigs.app_url;
     this.redirect_url = AppConfigs.keyCloak.redirection_url;
     this.auth_url = this.base_url + "/auth/realms/sunbird/protocol/openid-connect/auth?response_type=code&scope=offline_access&client_id=" + AppConfigs.clientId + "&redirect_uri=" +
       this.redirect_url;
 
-    let that = this;
     return new Promise((resolve, reject) => {
+      this.browserReference = this.iab.create(this.auth_url, "_blank");
+      this.browserReference.show();
 
-      let closeCallback = function (event) {
-        reject("The Sunbird sign in flow was canceled");
-      };
-      console.log(this.sanitizeUrl(this.auth_url))
-      const browserReference = this.iab.create(that.auth_url, "_system");
-      browserReference.show();
-      browserReference.on('loadstart').subscribe(event => {
-
-        console.log("loadstart")
-        console.log(JSON.stringify(event))
-        resolve();
-
+      this.browserReference.on('loadstop').subscribe(event => {
+        let responseParameters = (((event.url).split("?")[1]).split("="))[1];
+        if (responseParameters !== undefined && responseParameters !== "code&scope") {
+          resolve(responseParameters);
+        } else if (!responseParameters) {
+          reject("Problem authenticating with Sunbird");
+        }
       });
-      browserReference.on('loadstop').subscribe(event => {
-
-        console.log("loadstop")
-        console.log(JSON.stringify(event))
-        resolve();
-
-      });
-      browserReference.on('loaderror').subscribe(event => {
-
-        console.log("loaderror")
-        console.log(JSON.stringify(event))
-        resolve();
-
-      });
-      browserReference.on('exit').subscribe(event => {
-
-        console.log("exit")
-        console.log(JSON.stringify(event))
-        resolve();
-      });
-
-      // let browserRef = (<any>window).cordova.InAppBrowser.open(that.auth_url , "_self", "usewkwebview=yes");
-      // browserRef.addEventListener('loadstart', function (event) {
-      //   if (event.url && ((event.url).indexOf(that.redirect_url) === 0)) {
-      //     browserRef.removeEventListener("exit", closeCallback);
-      //     browserRef.close();
-      //     let responseParameters = (((event.url).split("?")[1]).split("="))[1];
-
-      //     if (responseParameters !== undefined) {
-      //       console.log("hiiiiiiiiiii")
-      //       console.log(JSON.stringify(responseParameters))
-      //       resolve(responseParameters);
-      //     } else {
-      //       reject("Problem authenticating with Sunbird");
-      //     }
-      //   }
-      // });
-
     });
   }
 
@@ -108,19 +65,17 @@ export class AuthProvider {
     body.set('code', token);
     body.set('redirect_uri', this.redirect_url);
     body.set('scope', "offline_access");
-    return new Promise(resolve => {
+    this.utils.startLoader();
+    return new Promise((resolve, reject) => {
       this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, body)
         .subscribe((data: any) => {
-          console.log(JSON.stringify(data))
+          this.utils.stopLoader();
           let parsedData = JSON.parse(data._body);
-          // let userTokens = {
-          //   accessToken: parsedData.access_token,
-          //   refreshToken: parsedData.refresh_token,
-          //   idToken: parsedData.id_token
-          // };
+          this.browserReference.close();
           resolve(parsedData);
         }, error => {
-          resolve(error);
+          this.utils.stopLoader();
+          reject(error);
         });
     });
   }
@@ -129,7 +84,6 @@ export class AuthProvider {
   checkForCurrentUserLocalData(tokens) {
     const loggedinUserId = this.currentUser.getDecodedAccessToken(tokens.access_token).sub;
     const currentUserId = this.currentUser.getCurrentUserData() ? this.currentUser.getCurrentUserData().sub : null;
-    console.log(currentUserId)
     if (loggedinUserId === currentUserId || !currentUserId) {
       let userTokens = {
         accessToken: tokens.access_token,
@@ -137,9 +91,11 @@ export class AuthProvider {
         idToken: tokens.id_token,
         isDeactivated: false
       };
-      this.currentUser.setCurrentUserDetails(userTokens);
-      let nav = this.app.getActiveNav();
-      nav.setRoot(HomePage);
+      this.currentUser.setCurrentUserDetails(userTokens).then(success => {
+        let nav = this.app.getActiveNav();
+        nav.setRoot(HomePage);
+      });
+
       // this.confirmPreviousUserName('as1@shikshalokamdev', tokens);
 
     } else {
@@ -151,7 +107,6 @@ export class AuthProvider {
     let translateObject;
     this.translate.get(['actionSheet.previousUserName', 'actionSheet.email', 'actionSheet.cancel', 'actionSheet.send']).subscribe(translations => {
       translateObject = translations;
-      console.log(JSON.stringify(translations))
     })
     let alert = this.alertCntrl.create({
       title: translateObject['actionSheet.previousUserName'],
@@ -166,7 +121,6 @@ export class AuthProvider {
           text: translateObject['actionSheet.cancel'],
           role: 'cancel',
           handler: data => {
-            console.log('Cancel clicked');
             this.currentUser.deactivateActivateSession(true);
             this.doLogout();
           }
@@ -175,7 +129,6 @@ export class AuthProvider {
           text: translateObject['actionSheet.send'],
           role: 'role',
           handler: data => {
-            console.log(data.email + " " + previousUserEmail)
             if (data.email && (previousUserEmail.toLowerCase() === data.email.toLowerCase())) {
               this.confirmDataClear(tokens);
             } else {
@@ -198,7 +151,6 @@ export class AuthProvider {
     let translateObject;
     this.translate.get(['actionSheet.dataLooseConfirm', 'actionSheet.no', 'actionSheet.yes']).subscribe(translations => {
       translateObject = translations;
-      console.log(JSON.stringify(translations))
     })
 
     let alert = this.alertCntrl.create({
@@ -241,20 +193,14 @@ export class AuthProvider {
   getRefreshToken(): Promise<any> {
 
     return new Promise(function (resolve, reject) {
-      console.log("Refres token function");
       const body = new URLSearchParams();
       body.set('grant_type', "refresh_token");
       body.set('client_id', AppConfigs.clientId);
       body.set('refresh_token', this.currentUser.curretUser.refreshToken);
       // body.set('scope', "offline_access");
-      console.log('refresh_token ' + this.currentUser.curretUser)
-      console.log(this.currentUser.curretUser.refreshToken);
-      console.log(AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken);
 
       this.http.post(AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken, body)
         .subscribe((data: any) => {
-          console.log(JSON.stringify(data))
-          console.log(JSON.parse(data._data));
           let parsedData = JSON.parse(data._body);
 
           let userTokens = {
@@ -265,7 +211,6 @@ export class AuthProvider {
           this.currentUser.setCurrentUserDetails(userTokens);
           resolve(userTokens)
         }, error => {
-          console.log('error ' + JSON.stringify(error));
           reject();
         })
     })
@@ -273,24 +218,17 @@ export class AuthProvider {
   }
 
   doLogout(): Promise<any> {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
       let logout_redirect_url = AppConfigs.keyCloak.logout_redirect_url;
       let logout_url = AppConfigs.app_url + "/auth/realms/sunbird/protocol/openid-connect/logout?redirect_uri=" + logout_redirect_url;
-      console.log(logout_url);
-
-      let closeCallback = function (event) {
-      };
-
-      // let browserRef = (<any>window).cordova.InAppBrowser.open(logout_url, "_blank", "zoom=no");
-      // browserRef.addEventListener('loadstart', function (event) {
-      //   console.log('in listener')
-      //   if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
-      //     browserRef.removeEventListener("exit", closeCallback);
-      //     browserRef.close();
-      //     console.log(event.url);
-      //     resolve()
-      //   }
-      // });
+      let browserRef = this.iab.create(logout_url, "_blank");
+      browserRef.show();
+      browserRef.on('loadstart').subscribe(event => {
+        if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
+          browserRef.close();
+          resolve()
+        }
+      })
 
     });
   }
