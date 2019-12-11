@@ -9,6 +9,7 @@ import { HomePage } from "../../pages/home/home";
 import { TranslateService } from "@ngx-translate/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { HTTP } from "@ionic-native/http";
 
 @Injectable()
 export class AuthProvider {
@@ -24,7 +25,7 @@ export class AuthProvider {
   logout_redirect_url: string;
   browserReference;
 
-  constructor(public http: Http,
+  constructor(public http: HTTP,
     private currentUser: CurrentUserProvider,
     private app: App, private alertCntrl: AlertController,
     private translate: TranslateService,
@@ -44,7 +45,7 @@ export class AuthProvider {
       this.redirect_url;
 
     return new Promise((resolve, reject) => {
-      this.browserReference = this.iab.create(this.auth_url, "_blank");
+      this.browserReference = this.iab.create(this.auth_url, "_target");
       this.browserReference.show();
 
       this.browserReference.on('loadstop').subscribe(event => {
@@ -59,24 +60,46 @@ export class AuthProvider {
   }
 
   doOAuthStepTwo(token: string): Promise<any> {
+    console.log("inside auth 2 action")
     const body = new URLSearchParams();
     body.set('grant_type', "authorization_code");
     body.set('client_id', AppConfigs.clientId);
     body.set('code', token);
     body.set('redirect_uri', this.redirect_url);
     body.set('scope', "offline_access");
+    const obj = {
+      "grant_type":"authorization_code",
+      "client_id":AppConfigs.clientId,
+      "code":token,
+      "redirect_uri":this.redirect_url,
+      "scope":"offline_access"
+    }
     this.utils.startLoader();
     return new Promise((resolve, reject) => {
-      this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, body)
-        .subscribe((data: any) => {
-          this.utils.stopLoader();
-          let parsedData = JSON.parse(data._body);
-          this.browserReference.close();
-          resolve(parsedData);
-        }, error => {
-          this.utils.stopLoader();
-          reject(error);
-        });
+      // this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, body)
+      //   .subscribe((data: any) => {
+      //     this.utils.stopLoader();
+      //     let parsedData = JSON.parse(data._body);
+      //     this.browserReference.close();
+      //     resolve(parsedData);
+      //   }, error => {
+      //     this.utils.stopLoader();
+      //     reject(error);
+      //   });
+
+      this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, obj,{}).then(data => {
+        console.log("=======================Success =============================================")
+        console.log(JSON.stringify(data));
+        this.utils.stopLoader();
+            let parsedData = JSON.parse(data.data);
+            this.browserReference.close();
+            resolve(parsedData);
+      }).catch(error => {
+        console.log("=======================Error =============================================")
+
+        console.log(JSON.stringify(error))
+
+      })
     });
   }
 
