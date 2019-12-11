@@ -28,6 +28,7 @@ export class EntityListPage {
     count: 0
   }
   solutionId: any;
+  searchQuery;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -90,14 +91,14 @@ export class EntityListPage {
       infiniteScroll.complete();
     }, 500);
   }
-  searchEntity(event) {
-    if (!event.value) {
-      this.selectableList = [];
-      return
-    }
-    if (!event.value || event.value.length < 3) {
-      return;
-    }
-    this.search(event.value)
+  searchEntity() {
+    // if (!event.value) {
+    //   this.selectableList = [];
+    //   return
+    // }
+    // if (!event.value || event.value.length < 3) {
+    //   return;
+    // }
+    this.search(this.searchQuery)
   }
 }
