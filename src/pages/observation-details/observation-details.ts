@@ -32,6 +32,8 @@ export class ObservationDetailsPage {
   isIos: boolean;
   appFolderPath;
   search;
+  submissionCount;
+
   showActionsheet:boolean = false;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -40,8 +42,8 @@ export class ObservationDetailsPage {
     private utils: UtilsProvider,
     private evdnsServ: EvidenceProvider,
     private translate: TranslateService,
-    private observationService:ObservationServiceProvider,
-    private observationProvider : ObservationServiceProvider,
+    private observationService: ObservationServiceProvider,
+    private observationProvider: ObservationServiceProvider,
     private apiProvider: ApiProvider,
     private localStorage: LocalStorageProvider,
     private fileTransfr: FileTransfer,
@@ -54,7 +56,7 @@ export class ObservationDetailsPage {
     })
 
     this.events.subscribe('refreshObservationListOnAddEntity', type => {
-    this.refresh();
+      this.refresh();
       console.log("refresh obs list")
     })
   }
@@ -84,20 +86,22 @@ export class ObservationDetailsPage {
     this.utils.startLoader();
 
     const url = AppConfigs.cro.observationList;
-    this.observationProvider.refreshObservationList(this.observationList).then(observationList =>{
+    this.observationProvider.refreshObservationList(this.observationList).then(observationList => {
       this.programs = observationList;
       this.observationList = observationList;
-      this.observationDetails[0]= (observationList[this.selectedObservationIndex]);
-      this.enableCompleteBtn = this.isAllEntitysCompleted();    
-        // console.log(JSON.stringify(observationList))
+      this.observationDetails[0] = (observationList[this.selectedObservationIndex]);
+      this.enableCompleteBtn = this.isAllEntitysCompleted();
+      // console.log(JSON.stringify(observationList))
       this.utils.stopLoader();
 
     }).catch(
-      error =>{
-      this.utils.stopLoader();
+      error => {
+        this.utils.stopLoader();
 
       }
     );
+
+
 
     // const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
     // event ? "" : this.utils.startLoader();
@@ -149,7 +153,7 @@ export class ObservationDetailsPage {
     //           });
     //         }
     //       }
-  
+
     //     }
 
     //   if (!downloadedAssessments.length) {
@@ -174,7 +178,7 @@ export class ObservationDetailsPage {
     //                       if (element.id === entity._id) {
     //                         // entity.downloaded = true;
     //                         entity.submissionId = element.submissionId;
-          
+
     //                       }
     //                     }
     //                   }
@@ -204,6 +208,7 @@ export class ObservationDetailsPage {
       this.programs = data;
       this.observationList = data;
       this.observationDetails.push(data[this.selectedObservationIndex]);
+      this.checkForAnySubmissionsMade()
       console.log(JSON.stringify(this.observationDetails))
       this.enableCompleteBtn = this.isAllEntitysCompleted();
       this.firstVisit = false;
@@ -271,6 +276,16 @@ export class ObservationDetailsPage {
       observationId: this.observationDetails[0]._id
     }
     this.navCtrl.push(ObservationReportsPage, payload);
+  }
+
+  checkForAnySubmissionsMade() {
+    const payload = {
+      observationId: this.observationDetails[0]._id
+    }
+    this.apiProvider.httpPost(AppConfigs.cro.observationSubmissionCount, payload, success => {
+      this.submissionCount = success.data.noOfSubmissions;
+    }, error => {
+    }, { baseUrl: "dhiti" })
   }
 
   // getAssessmentDetails(event) {
