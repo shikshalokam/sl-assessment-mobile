@@ -173,7 +173,8 @@ import { SettingsPage } from '../pages/settings/settings';
     RegistryListPageModule,
     GeneralQuestionListPageModule,
     IonicStepperModule,
-    ObservationsPageModule  ],
+    ObservationsPageModule  
+  ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
@@ -205,7 +206,7 @@ import { SettingsPage } from '../pages/settings/settings';
     ObservationReportsPage,
     RoleListingPage,
     ReportEntityListingPage,
-    ObservationEditPage
+    ObservationEditPage,
   ],
   providers: [
     StatusBar,

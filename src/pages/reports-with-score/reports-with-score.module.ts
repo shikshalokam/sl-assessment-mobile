@@ -13,5 +13,6 @@ import { ComponentsModule } from '../../components/components.module';
     TranslateModule,
     ComponentsModule
   ],
+  entryComponents:[ReportsWithScorePage]
 })
 export class ReportsWithScorePageModule {}
