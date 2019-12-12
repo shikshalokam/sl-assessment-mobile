@@ -42,6 +42,7 @@ import { NotificationCardComponent } from './notification-card/notification-card
 import { MatrixChartComponent } from './matrix-chart/matrix-chart';
 import { AlertModalComponent } from './alert-modal/alert-modal';
 import { ScatterChartComponent } from './scatter-chart/scatter-chart';
+import { ScoreReportMenusComponent } from './score-report-menus/score-report-menus';
 
 @NgModule({
 	declarations: [
@@ -77,7 +78,8 @@ import { ScatterChartComponent } from './scatter-chart/scatter-chart';
     NotificationCardComponent,
     MatrixChartComponent,
     AlertModalComponent,
-    ScatterChartComponent
+    ScatterChartComponent,
+    ScoreReportMenusComponent
   ],
 	imports: [
 		IonicModule,
@@ -120,7 +122,8 @@ import { ScatterChartComponent } from './scatter-chart/scatter-chart';
     NotificationCardComponent,
     MatrixChartComponent,
     AlertModalComponent,
-    ScatterChartComponent
+    ScatterChartComponent,
+    ScoreReportMenusComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
@@ -129,7 +132,8 @@ import { ScatterChartComponent } from './scatter-chart/scatter-chart';
     MenuItemComponent,
     EntityListingComponent,
     GenericMenuPopOverComponent,
-    NotificationCardComponent
+    NotificationCardComponent,
+    ScoreReportMenusComponent
 	],
 	providers:[
 		Network, DatePipe, SlackProvider
