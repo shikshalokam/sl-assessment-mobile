@@ -133,7 +133,7 @@ export class MyApp {
         this.allPages.splice(this.allPages.length - 2, 0, {
           name: "dashboard",
           icon: "analytics",
-          component: RoleListingPage,
+          component: "DashboardAssessmentListingPage",
           extenalLink: false,
           active: false
         })
@@ -228,23 +228,27 @@ export class MyApp {
         page['active'] = false;
       }
       this.allPages[0]['active'] = true;
-      if (this.allPages[index]['name'] === 'dashboard') {
-        this.localStorageProvider.getLocalStorage('profileRole').then(success => {
-          // this.roles = success.result.roles;
-          success.roles.length === 1 ?
-            this.nav.push(ReportEntityListingPage, { "currentEntityType": success.roles[0].immediateSubEntityType, "data": success.roles[0].entities, "entityType": success.roles[0].entities[0].immediateSubEntityType })
-            :
-            this.nav.push(this.allPages[index]['component']);
+      if (this.allPages[index]['name'] !== 'home') {
+        this.nav.push(this.allPages[index]['component']);
 
-        }).catch(error => {
-        });
       }
-      else {
-        if (this.allPages[index]['name'] !== 'home') {
-          this.nav.push(this.allPages[index]['component']);
+      // if (this.allPages[index]['name'] === 'dashboard') {
+      //   this.localStorageProvider.getLocalStorage('profileRole').then(success => {
+      //     // this.roles = success.result.roles;
+      //     success.roles.length === 1 ?
+      //       this.nav.push(ReportEntityListingPage, { "currentEntityType": success.roles[0].immediateSubEntityType, "data": success.roles[0].entities, "entityType": success.roles[0].entities[0].immediateSubEntityType })
+      //       :
+      //       this.nav.push(this.allPages[index]['component']);
 
-        }
-      }
+      //   }).catch(error => {
+      //   });
+      // }
+      // else {
+      //   if (this.allPages[index]['name'] !== 'home') {
+      //     this.nav.push(this.allPages[index]['component']);
+
+      //   }
+      // }
       // this.utils.setAssessmentLocalStorageKey(this.allPages[index]['name'] === "individual" ? "assessmentDetails_" : "schoolDetails_")
       //     }
       //   }

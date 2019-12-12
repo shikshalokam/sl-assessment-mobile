@@ -27,6 +27,7 @@ export class SlackProvider {
       // this.utils.openToast("Network connected");
       this.networkAvailable = true;
     });
+    
 
     this.networkAvailable = this.ngps.getNetworkStatus();
   }

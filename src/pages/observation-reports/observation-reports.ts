@@ -26,6 +26,8 @@ export class ObservationReportsPage {
   isIos;
   fileName;
   action;
+  entityType;
+  immediateChildEntityType;
 
   constructor(public navCtrl: NavController, private dap: DownloadAndPreviewProvider,
     public navParams: NavParams, private platform: Platform,
@@ -39,10 +41,12 @@ export class ObservationReportsPage {
     this.submissionId = this.navParams.get('submissionId');
     this.observationId = this.navParams.get('observationId')
     this.entityId = this.navParams.get('entityId');
+    this.entityType = this.navParams.get('entityType');
+    this.immediateChildEntityType = this.navParams.get('immediateChildEntityType')
     this.payload = {
       "entityId": this.entityId,
       "submissionId": this.submissionId,
-      "observationId": this.observationId
+      "observationId": this.observationId,
     }
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
@@ -52,7 +56,15 @@ export class ObservationReportsPage {
   getObservationReports(download = false) {
     this.utils.startLoader();
     let url;
-    if (this.submissionId) {
+    if (this.entityType) {
+      this.payload = {
+        "entityId": this.entityId,
+        "entityType": this.entityType,
+        "observationId": this.observationId,
+        "immediateChildEntityType": this.immediateChildEntityType
+      }
+      url = AppConfigs.observationReports.entityObservationReport
+    } else if (this.submissionId) {
       url = AppConfigs.observationReports.instanceReport;
     } else if (!this.submissionId && !this.entityId) {
       url = AppConfigs.observationReports.observationReport;
@@ -89,12 +101,9 @@ export class ObservationReportsPage {
   }
 
   // checkForSubmissionDoc(submissiond) {
-  //   console.log("Check for file")
   //   this.file.checkFile(this.appFolderPath, this.fileName).then(success => {
-  //     console.log("Check for file available")
   //     this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
   //   }).catch(error => {
-  //     console.log("Check for file not available")
   //     // this.getObservationReports(true)
   //     this.getObservationReportUrl();
   //   })
@@ -104,8 +113,11 @@ export class ObservationReportsPage {
     this.utils.startLoader();
     // + "type=submission&"
     let url = AppConfigs.observationReports.getReportsPdfUrls;
-    const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a')
-    if (this.submissionId) {
+    const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a');
+    if (this.entityType) {
+      url = url +  "entityId=" + this.entityId + "&observationId=" + this.observationId + '&entityType='+ this.entityType+ (this.immediateChildEntityType ? ('&immediateChildEntityType='+ this.immediateChildEntityType) : "");
+      this.fileName = this.observationId+'_'+this.entityId+'_'+this.immediateChildEntityType+'.pdf';
+    } else if (this.submissionId) {
       url = url + "submissionId=" + this.submissionId;
       this.fileName = this.submissionId + timeStamp + ".pdf";
     } else if (!this.submissionId && !this.entityId) {
@@ -152,12 +164,9 @@ export class ObservationReportsPage {
 
 
   checkForDowloadDirectory(fileRemoteUrl) {
-    console.log("check for download")
     this.file.checkDir(this.file.documentsDirectory, 'Download').then(success => {
       this.filedownload(fileRemoteUrl);
     }).catch(err => {
-      console.log("check for download")
-
       this.file.createDir(cordova.file.documentsDirectory, 'Download', false).then(success => {
         // this.fileName = 'record' + new Date().getDate() + new Date().getMonth() + new Date().getFullYear() + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds() + '.mp3';
         // this.filesPath = this.file.documentsDirectory + "images/" + this.fileName;
@@ -167,7 +176,6 @@ export class ObservationReportsPage {
         this.filedownload(fileRemoteUrl);
 
       }, error => {
-        console.log(JSON.stringify(error))
       })
     });
   }

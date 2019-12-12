@@ -54,7 +54,6 @@ export class UpdateLocalSchoolDataProvider {
   }
 
   mapSubmissionDataToQuestion(schoolDetails, isObservation?:boolean): void {
-    const schoolObj = {};
     let mappedData
     // for (const schoolId of Object.keys(schoolDetails)) {
     //   mappedData = this.updateSubmissionsOnLogin(schoolDetails);

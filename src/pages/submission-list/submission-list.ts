@@ -7,11 +7,9 @@ import { EvidenceProvider } from '../../providers/evidence/evidence';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { ObservationServiceProvider } from '../../providers/observation-service/observation-service';
-import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
+// import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 import { TranslateService } from '@ngx-translate/core';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
-import { ReportsWithScorePage } from '../reports-with-score/reports-with-score';
-import { isRightSide } from 'ionic-angular/umd/util/util';
 import { Content } from 'ionic-angular'
 import { ScoreReportMenusComponent } from '../../components/score-report-menus/score-report-menus';
 /**
@@ -55,7 +53,7 @@ export class SubmissionListPage {
     private utils: UtilsProvider,
     private events: Events,
     private alertCntrl: AlertController,
-    private dap: DownloadAndPreviewProvider,
+    // private dap: DownloadAndPreviewProvider,
     private translate: TranslateService,
     private observationService: ObservationServiceProvider,
     private assessmentService: AssessmentServiceProvider,
@@ -137,8 +135,8 @@ export class SubmissionListPage {
 
     })
   }
-  getAssessmentDetails(index, submissionNum = null) {
-    let submissionNumber = submissionNum ? submissionNum : this.submissionList[index].submissionNumber
+  getAssessmentDetails(submission) {
+    // let submissionNumber = submission.submissionNumber;
     if (this.activatedSubmission) {
       this.activatedSubmission.showActionsheet = false;
     }
@@ -161,21 +159,48 @@ export class SubmissionListPage {
     // }, error => {
 
     // });
+    // let event = {
+    //   entityIndex: this.navParams.get('entityIndex'),
+    //   observationIndex: this.navParams.get('selectedObservationIndex'),
+    //   submissionNumber: submission.submissionNumber
+    //   // submissionIndex: index
+    // }
+    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submission._id)).then(data => {
+      if (!data) {
+        this.getObservationDetailsApi(submission);
+      } else {
+        this.goToEcm(submission)
+      }
+    }).catch(error => {
+      this.getObservationDetailsApi(submission);
+    })
+    // this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(success => {
+    //   this.programs = success;
+    //   this.observationDetails[0] = success[this.selectedObservationIndex]
+    //   this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+    //   this.goToEcm(submission)
+    // }).catch(error => {
+    // })
+  }
+
+  getObservationDetailsApi(submission) {
     let event = {
       entityIndex: this.navParams.get('entityIndex'),
       observationIndex: this.navParams.get('selectedObservationIndex'),
-      submissionIndex: index
+      submissionNumber: submission.submissionNumber
+      // submissionIndex: index
     }
     this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(success => {
       this.programs = success;
       this.observationDetails[0] = success[this.selectedObservationIndex]
       this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
-      this.goToEcm(index)
+      this.goToEcm(submission)
     }).catch(error => {
     })
   }
-  goToEcm(index) {
-    let submissionId = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].submissions[index]._id
+
+  goToEcm(submission) {
+    let submissionId = submission._id
     let heading = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].name;
     this.recentlyUpdatedEntity['submissionId'] = submissionId;
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
@@ -199,6 +224,7 @@ export class SubmissionListPage {
 
     this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id)
     const options = { _id: assessment._id, name: assessment.name, selectedEvidence: evidenceIndex, entityDetails: aseessmemtData, recentlyUpdatedEntity: this.recentlyUpdatedEntity };
+    console.log(JSON.stringify(options))
     this.evdnsServ.openActionSheet(options, "Observation");
 
   }
@@ -211,7 +237,20 @@ export class SubmissionListPage {
       submissionNumber: submissionNumber
     }
     // this.utils.startLoader();
-    this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(result => {
+    // this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(result => {
+    // this.observationService.refreshObservationList(this.programs).then(success => {
+    //   this.programs = success;
+    //   this.observationDetails[0] = success[this.selectedObservationIndex];
+    //   this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+    //   this.getLocalStorageData();
+    //   this.goToEcm(this.submissionList.length)
+    // }).catch(error => {
+    // })
+    // }).catch(error => {
+    // })
+    const entityId = this.observationDetails[0].entities[this.entityIndex]._id;
+
+    this.apiProvider.httpPost(AppConfigs.cro.observationSubmissionCreate + this.observationDetails[0]._id + "?entityId=" + entityId, {}, success => {
       this.observationService.refreshObservationList(this.programs).then(success => {
         this.programs = success;
         this.observationDetails[0] = success[this.selectedObservationIndex];
@@ -220,7 +259,8 @@ export class SubmissionListPage {
         this.goToEcm(this.submissionList.length)
       }).catch(error => {
       })
-    }).catch(error => {
+    }, error => {
+      // console.log(error, "error here")
     })
   }
   viewEntityReports() {
@@ -239,7 +279,7 @@ export class SubmissionListPage {
       entityId: this.submissionList[0].entityId,
       observationId: this.submissionList[0].observationId
     }
-    this.navCtrl.push(ReportsWithScorePage, payload);
+    this.navCtrl.push('ReportsWithScorePage', payload);
   }
   actions(submissionId, action, submission) {
     // this.dap.checkForSubmissionDoc(submissionId, action);
@@ -251,7 +291,7 @@ export class SubmissionListPage {
     // this.dap.checkForSubmissionDoc(submissionId, action);
     submission.showActionsheet = false;
     this.showActionsheet = false;
-    this.navCtrl.push(ReportsWithScorePage, { submissionId: submissionId })
+    this.navCtrl.push('ReportsWithScorePage', { submissionId: submissionId })
   }
   deleteSubmission(submissionId) {
     let translateObject;

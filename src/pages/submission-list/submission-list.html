@@ -23,13 +23,13 @@
   </ion-segment>
   <ion-card *ngFor="let submission of submissions ; let i = index" class="submissionCard">
     <ion-card-content style="position:relative">
-      <div class="_flex-box" (click)="submission?.downloaded === true ? goToEcm(i) : getAssessmentDetails(i)">
+      <div class="_flex-box" (click)="submission?.downloaded === true ? goToEcm(i) : getAssessmentDetails(submission)">
         <div style="flex:1" text-capitalize>
           <div class="observationTitle">{{'buttons.observation'|translate}} {{submission?.submissionNumber}}</div>
           <div class="time">{{submission?.createdAt | date :'medium'}} </div>
         </div>
-        <ion-icon name="cloud-download" class="downloadIcon"
-          *ngIf="!submission?.downloaded && (submission.status === 'started')"></ion-icon>
+        <!-- <ion-icon name="cloud-download" class="downloadIcon"
+          *ngIf="!submission?.downloaded && (submission.status === 'started')"></ion-icon> -->
         <button *ngIf="submission?.status == 'completed'" class="viewReport" ion-button round
           (click)="$event.stopPropagation() ; openMenu($event,submission, i)">{{'buttons.viewReport'|translate}}</button>
         <ion-icon *ngIf="!(submission.status === 'completed')" name="trash" class="downloadIcon" margin-left

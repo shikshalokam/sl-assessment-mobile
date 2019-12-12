@@ -140,9 +140,7 @@ export class ReportsWithScorePage {
     this.utils.startLoader();
     fileTransfer.download(fileRemoteUrl, this.appFolderPath + this.fileName).then(success => {
       this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
-      this.utils.stopLoader();
     }).catch(error => {
-      this.utils.stopLoader();
     })
   }
   checkForDowloadDirectory(fileRemoteUrl) {
