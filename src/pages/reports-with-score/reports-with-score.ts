@@ -137,7 +137,6 @@ export class ReportsWithScorePage {
   filedownload(fileRemoteUrl) {
     // const fileName = this.solutionName.replace(/\s/g, '') + "_" + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a') + ".pdf";
     const fileTransfer: FileTransferObject = this.fileTransfer.create();
-    this.utils.startLoader();
     fileTransfer.download(fileRemoteUrl, this.appFolderPath + this.fileName).then(success => {
       this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
     }).catch(error => {

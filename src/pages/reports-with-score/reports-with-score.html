@@ -37,8 +37,8 @@
     <!-- Scores details bar ends here-->
     <div *ngFor="let element of reportObj?.response;let i = index">
       <ion-card>
-        <pie-chart [data]="element" [questionNumber]="i+1" *ngIf="submissionId"></pie-chart>
-        <scatter-chart [data]="element" [questionNumber]="i+1" *ngIf="(entityId && observationId) || observationId"></scatter-chart>
+        <pie-chart [data]="element" [questionNumber]="i+1" *ngIf="element.chart.type == 'pie'"></pie-chart>
+        <scatter-chart [data]="element" [questionNumber]="i+1" *ngIf="element.chart.type == 'scatter'"></scatter-chart>
       </ion-card>
     </div>
   </div>

@@ -61,12 +61,12 @@ export class ScoreReportMenusComponent {
       observationId: this.observationDetail.observationId
     }
     this.viewCtrl.dismiss();
-    this.appCtrl.getRootNav().push(ReportsWithScorePage, payload)
+    this.appCtrl.getRootNav().push('ReportsWithScorePage', payload)
   }
   actionsWithScore() {
     this.viewCtrl.dismiss();
     this.showActionsheet = false;
-    this.appCtrl.getRootNav().push(ReportsWithScorePage, { submissionId: this.submission._id });
+    this.appCtrl.getRootNav().push('ReportsWithScorePage', { submissionId: this.submission._id });
   }
   actions() {
     this.viewCtrl.dismiss();
@@ -79,7 +79,7 @@ export class ScoreReportMenusComponent {
       entityId: this.entity,
       observationId: this.observationId
     }
-    this.appCtrl.getRootNav().push(ReportsWithScorePage, payload);
+    this.appCtrl.getRootNav().push('ReportsWithScorePage', payload);
   }
   viewEntityReports() {
     this.viewCtrl.dismiss();

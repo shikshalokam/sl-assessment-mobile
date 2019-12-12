@@ -376,7 +376,6 @@ export class SubmissionListPage {
 
   // Menu for Submissions
   openMenu(event,submission, index) {
-    console.log(submission,"submission 339");
     let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
       submission: submission,
       showEntityActionsheet:"false",

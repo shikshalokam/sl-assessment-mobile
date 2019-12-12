@@ -2,14 +2,12 @@
   <header [title]="'headings.submissionListPage'|translate" [hideBack]="false">
   </header>
 </ion-header>
-
 <ion-content>
   <ion-card *ngIf="submissionList" class="cardWrapper submissionCard">
     <ion-card-content class="observationTitle">
       {{ submissionList[0]['entityInformation']['name']}}
     </ion-card-content>
   </ion-card>
-
   <ion-segment [(ngModel)]="currentTab" (ionChange)="tabChange($event.value)">
     <ion-segment-button value="all">
       {{'tabs.view'|translate}}
@@ -28,22 +26,18 @@
           <div class="observationTitle">{{'buttons.observation'|translate}} {{submission?.submissionNumber}}</div>
           <div class="time">{{submission?.createdAt | date :'medium'}} </div>
         </div>
-        <!-- <ion-icon name="cloud-download" class="downloadIcon"
-          *ngIf="!submission?.downloaded && (submission.status === 'started')"></ion-icon> -->
         <button *ngIf="submission?.status == 'completed'" class="viewReport" ion-button round
           (click)="$event.stopPropagation() ; openMenu($event,submission, i)">{{'buttons.viewReport'|translate}}</button>
         <ion-icon *ngIf="!(submission.status === 'completed')" name="trash" class="downloadIcon" margin-left
           (click)="$event.stopPropagation() ; deleteSubmission(submission?._id) "></ion-icon>
       </div>
     </ion-card-content>
-   <!-- <score-report-menus *ngIf="submission.showActionsheet" [showEntityActionsheet]="false"  [showSubmissionAction]="true"   [submission]="submission"></score-report-menus> -->
   </ion-card>
   <div *ngIf="!(submissions?.length > 0)" class="_flex-box _justify-content-center">
     {{'message.noSubmission'|translate}}
   </div>
 </ion-content>
 <ion-footer no-shadow>
-  <!-- <score-report-menus *ngIf="showEntityActionsheet" [showEntityActionsheet]="true" [showSubmissionAction]="false" [submissionList]="submissionList"  [submission]="submission"></score-report-menus> -->
   <ion-toolbar position="bottom">
     <ion-row>
       <ion-col>
