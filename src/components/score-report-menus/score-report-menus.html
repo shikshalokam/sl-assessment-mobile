@@ -1,0 +1,19 @@
+<!-- Generated template for the ScoreReportMenusComponent component -->
+<ion-list class="wrapper">
+  <button ion-item clear small padding-left class="_flex-box _justify-content-center"
+    (click)="navigateToScoreReport()">
+    {{'actionSheet.reportWithScore' | translate}}
+  </button>
+  <button ion-item clear small padding-left class="_flex-box _justify-content-center" (click)="navigateToWithoutScoreReport()">
+    {{'actionSheet.reportWithoutScore' | translate}}
+  </button>
+</ion-list>
+<!-- 
+<ion-list *ngIf="!showEntityActionsheet" class="wrapper">
+    <button *ngIf="showAbout" ion-item clear small padding-left class="_flex-box _justify-content-center"  (click)="actionsWithScore()">
+        {{'actionSheet.reportWithScore' | translate}}
+    </button>
+    <button *ngIf="showAbout" ion-item clear small padding-left class="_flex-box _justify-content-center"  (click)="actions()">
+        {{'actionSheet.reportWithScore' | translate}}
+    </button>
+  </ion-list> -->

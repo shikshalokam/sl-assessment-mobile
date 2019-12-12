@@ -8,29 +8,37 @@
   <header [title]="'headings.observationReports'|translate" [hideBack]="false">
   </header>
 </ion-header>
-<ion-content  style="background-color: #fff !important;">
+<ion-content style="background-color: #fff !important;">
   <div *ngIf="!error">
-    <div padding style="text-transform: capitalize; border:1px solid #ccc; margin: 10px 10px;" *ngIf="reportObj?.observationName || reportObj?.observationName">
+    <div padding style="text-transform: capitalize; border:1px solid #ccc; margin: 10px 10px;"
+      *ngIf="reportObj?.observationName || reportObj?.observationName">
       <!-- {{reportObj?.observationName}} {{reportObj?.entityName ? ' > ' : ''}} {{reportObj?.entityName }} -->
       {{reportObj?.observationName}} {{reportObj?.schoolName}}
     </div>
     <!-- Scores details bar -->
     <ion-grid *ngIf="reportObj?.totalScore && reportObj?.scoreAchieved">
       <ion-row style="text-align: center;">
-         <ion-col> {{'labels.totalScore' | translate}} : {{reportObj?.totalScore}}</ion-col>
+        <ion-col> {{'labels.totalScore' | translate}} : {{reportObj?.totalScore}}</ion-col>
         <ion-col> {{'labels.scoreAchieved' | translate}} : {{reportObj?.scoreAchieved}}</ion-col>
       </ion-row>
     </ion-grid>
+    <ion-grid *ngIf="reportObj?.schoolsObserved && reportObj?.totalSchools">
+      <ion-row style="text-align: center;">
+        <ion-col> {{'labels.totalSchools' | translate}} : {{reportObj?.totalSchools}}</ion-col>
+        <ion-col> {{'labels.schoolsObserved' | translate}} : {{reportObj?.schoolsObserved}}</ion-col>
+      </ion-row>
+    </ion-grid>
     <ion-grid *ngIf="reportObj?.totalObservations">
-      <ion-row >
-        <ion-col style="margin-left: 15px;"> {{'labels.totalObservations' | translate}} : {{reportObj?.totalObservations}}</ion-col>
+      <ion-row>
+        <ion-col style="margin-left: 15px;"> {{'labels.totalObservations' | translate}} :
+          {{reportObj?.totalObservations}}</ion-col>
       </ion-row>
     </ion-grid>
     <!-- Scores details bar ends here-->
     <div *ngFor="let element of reportObj?.response;let i = index">
-      <ion-card >
-        <pie-chart [data]="element" [questionNumber]="i+1" *ngIf="!this.entityId"></pie-chart>
-        <scatter-chart [data]="element" [questionNumber]="i+1" *ngIf="this.entityId"></scatter-chart>
+      <ion-card>
+        <pie-chart [data]="element" [questionNumber]="i+1" *ngIf="submissionId"></pie-chart>
+        <scatter-chart [data]="element" [questionNumber]="i+1" *ngIf="(entityId && observationId) || observationId"></scatter-chart>
       </ion-card>
     </div>
   </div>

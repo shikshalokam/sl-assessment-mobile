@@ -1,5 +1,5 @@
 import { Component , ViewChild} from '@angular/core';
-import { NavController, NavParams, AlertController, Events, Platform } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Events, Platform, PopoverController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -12,7 +12,7 @@ import { ObservationServiceProvider } from '../../providers/observation-service/
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
-
+import { ScoreReportMenusComponent } from '../../components/score-report-menus/score-report-menus';
 declare var cordova: any;
 
 
@@ -32,7 +32,7 @@ export class ObservationDetailsPage {
   isIos: boolean;
   appFolderPath;
   search;
-
+  showActionsheet:boolean = false;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public alertCntrl: AlertController,
@@ -46,6 +46,7 @@ export class ObservationDetailsPage {
     private localStorage: LocalStorageProvider,
     private fileTransfr: FileTransfer,
     private platform: Platform,
+    private popoverCtrl: PopoverController,
     private events: Events) {
 
     this.events.subscribe('observationLocalstorageUpdated', success => {
@@ -61,7 +62,7 @@ export class ObservationDetailsPage {
   ionViewDidEnter() {
     this.selectedObservationIndex = this.navParams.get('selectedObservationIndex');
 
-    console.log('ionViewDidLoad ObservationDetailsPage');
+    console.log('ionViewDidLoad ObservationDetailsPage', this.observationDetails);
     this.getLocalStorageData();
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'submissionDocs' : cordova.file.externalDataDirectory + 'submissionDocs';
@@ -227,7 +228,6 @@ export class ObservationDetailsPage {
     let translateObject;
     this.translate.get(['actionSheet.confirm', 'actionSheet.completeobservation', 'actionSheet.restrictAction', 'actionSheet.no', 'actionSheet.yes']).subscribe(translations => {
       translateObject = translations;
-      console.log(JSON.stringify(translations))
     })
     let alert = this.alertCntrl.create({
       title: translateObject['actionSheet.confirm'],
@@ -264,6 +264,7 @@ export class ObservationDetailsPage {
   fileterList(event) {
     this.childEntityList.fileterList(event)
   }
+
 
   viewObservationReports() {
     const payload = {
@@ -327,5 +328,36 @@ export class ObservationDetailsPage {
     this.evdnsServ.openActionSheet(options, "Observation");
 
   }
-  
+  openObservationMenu($event) {
+    let noScore: boolean = true;
+    this.observationDetails.forEach(observation => {
+      console.log(observation.entities[0].submissions,"observation");
+      observation.entities[0].submissions.forEach(submission=> {
+        console.log(submission.ratingCompletedAt,"submission.ratingCompletedAt");
+        if (submission.ratingCompletedAt) {
+        this.showActionsheet = true;
+        noScore = false;
+      }
+      });
+    });
+    if (noScore) {
+    this.viewObservationReports();
+    }else {
+      this.openMenu(event);
+    }
+  }
+
+  // Menu for Submissions
+  openMenu(event) {
+    let payload = {
+      observationId: this.observationDetails[0]._id
+    }
+    let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
+      observationDetail: payload,
+      navigateToobservationReport:"true",
+    })
+    popover.present(
+      { ev: event }
+    );
+  }
 }

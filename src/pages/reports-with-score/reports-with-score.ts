@@ -50,16 +50,15 @@ export class ReportsWithScorePage {
       "submissionId": this.submissionId,
       "observationId": this.observationId
     }
-
+    console.log(this.payload,"payload");
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
-
     // this.appFolderPath = this.isIos ? cordova.file.externalRootDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
     this.getObservationReports();
   }
 
   getObservationReports(download = false) {
-    this.utils.startLoader();
+    // this.utils.startLoader();
     let url;
     if (this.submissionId) {
       // view submission report
@@ -67,26 +66,26 @@ export class ReportsWithScorePage {
     } else if (this.observationId && this.entityId) {
       // view entity report
       url = AppConfigs.observationReportsWithScore.entityReport;
+    } else {
+      url = AppConfigs.observationReportsWithScore.observationReport;
     }
-
     this.apiService.httpPost(url, this.payload, (success) => {
       if (success) {
         this.reportObj = success;
       } else {
-        this.error = "No data found"
+        this.error = "No data found";
+        this.utils.openToast(this.error)
       }
       this.utils.stopLoader();
-
     }, error => {
       this.error = "No data found";
+      this.utils.openToast(error.message)
       this.utils.stopLoader();
     }, { baseUrl: "dhiti" })
-
   }
 
   downloadSharePdf(action) {
     this.action = action;
-
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(status => {
       if (status.hasPermission) {
         this.getObservationReportUrl()
@@ -107,7 +106,7 @@ export class ReportsWithScorePage {
     const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a')
     if (this.submissionId) {
       // url = url + "submissionId=" + this.submissionId;
-      url =url;
+      url = url;
       this.fileName = this.submissionId + timeStamp + ".pdf";
     } else if (this.observationId && this.entityId) {
       url = url
@@ -121,14 +120,11 @@ export class ReportsWithScorePage {
         this.utils.openToast(success.message)
       }
       this.utils.stopLoader();
-
     }, error => {
       this.error = "No data found";
       this.utils.stopLoader();
     }, { baseUrl: "dhiti" })
   }
-
-
   downloadSubmissionDoc(fileRemoteUrl) {
     this.utils.startLoader();
     if (this.isIos) {
@@ -136,13 +132,12 @@ export class ReportsWithScorePage {
     } else {
       this.filedownload(fileRemoteUrl)
     }
-
   }
-
 
   filedownload(fileRemoteUrl) {
     // const fileName = this.solutionName.replace(/\s/g, '') + "_" + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a') + ".pdf";
     const fileTransfer: FileTransferObject = this.fileTransfer.create();
+    this.utils.startLoader();
     fileTransfer.download(fileRemoteUrl, this.appFolderPath + this.fileName).then(success => {
       this.action === 'share' ? this.dap.shareSubmissionDoc(this.appFolderPath + this.fileName) : this.dap.previewSubmissionDoc(this.appFolderPath + this.fileName)
       this.utils.stopLoader();
@@ -150,18 +145,14 @@ export class ReportsWithScorePage {
       this.utils.stopLoader();
     })
   }
-
-
   checkForDowloadDirectory(fileRemoteUrl) {
     this.file.checkDir(this.file.documentsDirectory, 'Download').then(success => {
       this.filedownload(fileRemoteUrl);
     }).catch(err => {
       this.file.createDir(cordova.file.documentsDirectory, 'Download', false).then(success => {
         this.filedownload(fileRemoteUrl);
-
       }, error => {
       })
     });
   }
-
 }

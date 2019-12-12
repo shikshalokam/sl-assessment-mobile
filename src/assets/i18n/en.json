@@ -209,7 +209,9 @@
         "languages":"Languages",
         "totalScore":"Total score",
         "scoreAchieved":"Score achieved",
-        "totalObservations":"Total Observations"
+        "totalObservations":"Total Observations",
+        "totalSchools":"Total schools",
+        "schoolsObserved":"Schools observed"
     },
     "languages": {
         "english": "English",

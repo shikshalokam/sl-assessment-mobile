@@ -183,7 +183,6 @@ export class ApiProvider {
         console.log(data.data,"data.data ****")
         successCallback(data.data ? JSON.parse(data.data) : null);
       }).catch(error => {
-        console.log(error,"error 186");
         const errorDetails = JSON.parse(error['error']);
         if (errorDetails.status === "ERR_TOKEN_INVALID") {
           this.errorTokenRetryCount++;
@@ -259,8 +258,6 @@ export class ApiProvider {
       return AppConfigs.api_base_url + version + url;
     }
   }
-
-
 
   reLoginAlert() {
     this.currentUser.deactivateActivateSession(true);
