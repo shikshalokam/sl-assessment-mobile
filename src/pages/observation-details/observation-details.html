@@ -14,7 +14,7 @@
 </ion-content>
 
 
-<ion-footer no-shadow>
+<ion-footer no-shadow *ngIf="submissionCount">
   <ion-toolbar position="bottom">
     <ion-row>
       <button ion-button full (click)="viewObservationReports()">
