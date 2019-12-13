@@ -225,7 +225,7 @@ export class AddObservationFormPage {
     event ? this.solutionPage ++ : this.solutionPage ;
     this.utils.startLoader();
     // this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType + "?search="+this.searchSolutionUrl+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
-    this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + "?search="+this.searchSolutionUrl+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
+    this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + "?search="+encodeURIComponent(this.searchSolutionUrl)+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
     // console.log(JSON.stringify(success.result))
       // this.listOfSolution = event ? [...this.listOfSolution ,...success.result] :[...success.result];
       // // this.totalCount = success.result[0].count;
@@ -323,7 +323,7 @@ export class AddObservationFormPage {
   getEntityList(event ?) {
     event ? this.entityListPage ++ : this.entityListPage ;
 
-    this.apiProviders.httpGet(AppConfigs.cro.searchEntity+'?solutionId='+this.selectedFrameWork+"&search="+this.searchEntity+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
+    this.apiProviders.httpGet(AppConfigs.cro.searchEntity+'?solutionId='+this.selectedFrameWork+"&search="+encodeURIComponent(this.searchEntity)+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
       this.entityListTotalCount = success.result[0].count;
       if(this.editData && this.editData.data.entities.length == 0 ){
           success.result[0].data.forEach(element => {
