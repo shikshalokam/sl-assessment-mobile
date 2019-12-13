@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, Events, Config, AlertController, ActionSheetController } from 'ionic-angular';
+import { NavController, NavParams, Events, Config, AlertController, ActionSheetController, PopoverController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
@@ -11,6 +11,7 @@ import { ObservationServiceProvider } from '../../providers/observation-service/
 import { TranslateService } from '@ngx-translate/core';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
 import { Content } from 'ionic-angular'
+import { ScoreReportMenusComponent } from '../../components/score-report-menus/score-report-menus';
 /**
  * Generated class for the SubmissionListPage page.
  *
@@ -44,6 +45,7 @@ export class SubmissionListPage {
   // firstLoad = true;
   constructor(
     public navCtrl: NavController,
+    private popoverCtrl: PopoverController,
     public navParams: NavParams,
     private apiProvider: ApiProvider,
     private localStorage: LocalStorageProvider,
@@ -200,13 +202,6 @@ export class SubmissionListPage {
   goToEcm(submission) {
     let submissionId = submission._id
     let heading = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].name;
-    //  let recentlyUpdatedEntity = {
-    //       EntityName :this.programs[this.selectedObservationIndex].name,
-    //       EntityId :this.programs[this.selectedObservationIndex]._id,
-    //       programName  : this.programs[this.selectedObservationIndex].entities[this.entityIndex].name,
-    //       ProgramId  : this.programs[this.selectedObservationIndex].entities[this.entityIndex]._id,
-    //       submissionId :submissionId
-    //     }
     this.recentlyUpdatedEntity['submissionId'] = submissionId;
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       if (successData.assessment.evidences.length > 1) {
@@ -379,6 +374,31 @@ export class SubmissionListPage {
     this.showEntityActionsheet = false;
   }
 
+  // Menu for Submissions
+  openMenu(event,submission, index) {
+    let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
+      submission: submission,
+      showEntityActionsheet:"false",
+      showSubmissionAction:'true'
+    })
+    popover.present(
+      { ev: event }
+    );
+
+  }
+  // Menu for Entity reports
+  openEntityReportMenu(event) {
+    let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
+      observationId: this.submissionList[0].observationId,
+      entityId:this.submissionList[0].entityId,
+      showEntityActionsheet:"true",
+      showSubmissionAction:'false'
+    })
+    popover.present(
+      { ev: event }
+    );
+
+  }
   //  entity actions
   entityActions() {
     let noScore: boolean = true;

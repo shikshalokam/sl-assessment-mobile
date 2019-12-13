@@ -20,7 +20,7 @@
       (ngModelChange)="checkForValidation()"></ion-datetime>
 
     <ion-datetime [disabled]="data?.autoCapture" displayFormat="{{data?.dateFormat}}" *ngIf="data?.validation.min && !data?.validation.max"
-      [min]='(data?.validation.min) ? data?.validation.min : ""' (ionCancel)="canceled()" [(ngModel)]="data.value"
+      [min]='(data?.validation.min) ? data?.validation.min : ""' [max]="futureDate" (ionCancel)="canceled()" [(ngModel)]="data.value"
       (ngModelChange)="checkForValidation()"
       ></ion-datetime>
 
@@ -29,7 +29,7 @@
       (ngModelChange)="checkForValidation()"></ion-datetime>
 
       <ion-datetime [disabled]="data?.autoCapture" displayFormat="{{data?.dateFormat}}" *ngIf="!data?.validation.min && !data?.validation.max"
-       (ionCancel)="canceled()" [(ngModel)]="data.value"
+       (ionCancel)="canceled()" [(ngModel)]="data.value" [max]="futureDate"
       (ngModelChange)="checkForValidation()"></ion-datetime>
 
   </ion-item>

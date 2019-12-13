@@ -256,8 +256,6 @@ export class ApiProvider {
     }
   }
 
-
-
   reLoginAlert() {
     this.currentUser.deactivateActivateSession(true);
     let nav = this.appCtrls.getRootNav();
