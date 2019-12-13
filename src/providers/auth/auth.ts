@@ -48,12 +48,14 @@ export class AuthProvider {
       this.browserReference = this.iab.create(this.auth_url, "_target");
       this.browserReference.show();
 
-      this.browserReference.on('loadstop').subscribe(event => {
-        let responseParameters = (((event.url).split("?")[1]).split("="))[1];
-        if (responseParameters !== undefined && responseParameters !== "code&scope") {
-          resolve(responseParameters);
-        } else if (!responseParameters) {
-          reject("Problem authenticating with Sunbird");
+      this.browserReference.on('loadstart').subscribe(event => {
+        if (event.url && ((event.url).indexOf(this.redirect_url) === 0)) {
+          let responseParameters = (((event.url).split("?")[1]).split("="))[1];
+          if (responseParameters !== undefined) {
+            resolve(responseParameters);
+          } else {
+            reject("Problem authenticating with Sunbird");
+          }
         }
       });
     });
@@ -68,11 +70,11 @@ export class AuthProvider {
     body.set('redirect_uri', this.redirect_url);
     body.set('scope', "offline_access");
     const obj = {
-      "grant_type":"authorization_code",
-      "client_id":AppConfigs.clientId,
-      "code":token,
-      "redirect_uri":this.redirect_url,
-      "scope":"offline_access"
+      "grant_type": "authorization_code",
+      "client_id": AppConfigs.clientId,
+      "code": token,
+      "redirect_uri": this.redirect_url,
+      "scope": "offline_access"
     }
     this.utils.startLoader();
     return new Promise((resolve, reject) => {
@@ -87,17 +89,13 @@ export class AuthProvider {
       //     reject(error);
       //   });
 
-      this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, obj,{}).then(data => {
-        console.log("=======================Success =============================================")
-        console.log(JSON.stringify(data));
+      this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, obj, {}).then(data => {
         this.utils.stopLoader();
-            let parsedData = JSON.parse(data.data);
-            this.browserReference.close();
-            resolve(parsedData);
+        let parsedData = JSON.parse(data.data);
+        this.browserReference.close();
+        resolve(parsedData);
       }).catch(error => {
-        console.log("=======================Error =============================================")
-
-        console.log(JSON.stringify(error))
+        this.utils.stopLoader();
 
       })
     });
