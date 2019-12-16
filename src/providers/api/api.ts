@@ -169,7 +169,7 @@ export class ApiProvider {
         'appVersion': AppConfigs.appVersion
       }
       // const apiUrl = AppConfigs.api_base_url + url;
-      const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
+      const apiUrl = (options['dhiti'] ? (AppConfigs.dhiti_base_url+options['version']+ url) : (AppConfigs.api_base_url)) + options['version']+ url;
       console.log(apiUrl)
       // console.log(JSON.stringify(payload))
       this.http.setDataSerializer('json');
@@ -199,7 +199,7 @@ export class ApiProvider {
     // console.log("httpget" + JSON.stringify(options))
     // if(options && options.version){
       let options = {};
-      options['version'] = (config && config.version )? config.version :"v1";
+      options['version'] = (config && config.version && config.version.trim() !== "" )? config.version :"v1";
       options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
     // }
 
@@ -212,7 +212,7 @@ export class ApiProvider {
         'appVersion': AppConfigs.appVersion
       }
       this.http.setDataSerializer('json');
-      const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + options['version']+ url;
+      const apiUrl = options['dhiti'] ? AppConfigs.dhiti_base_url+options['version']+ url : AppConfigs.api_base_url + (options['version'])+ url;
       console.log(apiUrl)
       this.http.get(apiUrl, {}, obj).then(data => {
         console.log(JSON.stringify(data))
