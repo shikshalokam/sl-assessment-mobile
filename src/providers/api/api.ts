@@ -158,8 +158,8 @@ export class ApiProvider {
   httpPost(url, payload, successCallback, errorCallback, config?) {
     // let nav = this.appCtrls.getActiveNav();
     let options = {};
-    options['version'] = (config && config.version) ? config.config : "v1";
-    options['dhiti'] = (config && config.dhiti) ? config.dhiti : false;
+    options['version'] = (config && config.version && config.version.trim() !== "" )? config.version :"v1";
+    options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation()
       const obj = {
@@ -202,9 +202,9 @@ export class ApiProvider {
   httpGet(url, successCallback, errorCallback, config?) {
     // console.log("httpget" + JSON.stringify(options))
     // if(options && options.version){
-    // let options = {};
-    // options['version'] = (config && config.version) ? config.version : "v1";
-    // options['dhiti'] = (config && config.dhiti) ? config.dhiti : false;
+      let options = {};
+      options['version'] = (config && config.version && config.version.trim() !== "" )? config.version :"v1";
+      options['dhiti'] = (config && config.dhiti ) ? config.dhiti :false;
     // }
     this.validateApiToken().then(response => {
       const gpsLocation = this.ngps.getGpsLocation();

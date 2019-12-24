@@ -1,6 +1,5 @@
 <!--
   Generated template for the ObservationReportsPage page.
-
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
@@ -10,7 +9,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content >
   <div *ngIf="!error">
     <h4 padding style="text-transform: capitalize">
       {{reportObj?.observationName}} {{reportObj?.entityName ? ' > ' : ''}} {{reportObj?.entityName }}
@@ -22,7 +21,7 @@
         <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'text'"></reports-text>
         <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'number'"></reports-text>
         <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'date'"></reports-text>
-        <pie-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'radio'"></pie-chart>
+        <pie-chart  [data]="element" [questionNumber]="i+1" *ngSwitchCase="'radio'"></pie-chart>
         <bar-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'multiselect'"></bar-chart>
         <matrix-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'matrix'"></matrix-chart>
         <!-- <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchDefault></reports-text> -->

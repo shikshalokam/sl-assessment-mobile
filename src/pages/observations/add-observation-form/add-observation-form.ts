@@ -1,12 +1,10 @@
 import { Component, ViewChild, ElementRef, ɵConsole } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, App, Config, Events, AlertController } from 'ionic-angular';
-import { FormGroup, Validators } from '@angular/forms';
+import { IonicPage, NavController, NavParams, ModalController, App, Events, AlertController } from 'ionic-angular';
+import { FormGroup } from '@angular/forms';
 import { ApiProvider } from '../../../providers/api/api';
 import { UtilsProvider } from '../../../providers/utils/utils';
 import { SolutionDetailsPage } from '../../solution-details/solution-details';
-import { NetworkGpsProvider } from '../../../providers/network-gps/network-gps';
 import { LocalStorageProvider } from '../../../providers/local-storage/local-storage';
-import { Diagnostic } from '@ionic-native/diagnostic';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
@@ -64,12 +62,10 @@ export class AddObservationFormPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private translate: TranslateService,
-
     private permissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
     public apiProviders: ApiProvider,
-    private diagnostic: Diagnostic,
     public utils: UtilsProvider,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
@@ -231,8 +227,8 @@ export class AddObservationFormPage {
     event ? this.solutionPage++ : this.solutionPage;
     this.utils.startLoader();
     // this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType + "?search="+this.searchSolutionUrl+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
-    this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + "?search=" + this.searchSolutionUrl + "&limit=" + this.solutionLimit + "&page=" + this.solutionPage, success => {
-      // console.log(JSON.stringify(success.result))
+    this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + "?search="+encodeURIComponent(this.searchSolutionUrl)+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
+    // console.log(JSON.stringify(success.result))
       // this.listOfSolution = event ? [...this.listOfSolution ,...success.result] :[...success.result];
       // // this.totalCount = success.result[0].count;
       // console.log(JSON.stringify(this.listOfSolution))
@@ -329,7 +325,7 @@ export class AddObservationFormPage {
   getEntityList(event?) {
     event ? this.entityListPage++ : this.entityListPage;
 
-    this.apiProviders.httpGet(AppConfigs.cro.searchEntity + '?solutionId=' + this.selectedFrameWork + "&search=" + this.searchEntity + "&page=" + this.entityListPage + "&limit=" + this.entityListLimit, success => {
+    this.apiProviders.httpGet(AppConfigs.cro.searchEntity+'?solutionId='+this.selectedFrameWork+"&search="+encodeURIComponent(this.searchEntity)+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
       this.entityListTotalCount = success.result[0].count;
       // if (this.editData && this.editData.data.entities.length == 0) {
       //   success.result[0].data.forEach(element => {
