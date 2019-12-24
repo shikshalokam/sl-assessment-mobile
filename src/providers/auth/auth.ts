@@ -247,6 +247,7 @@ export class AuthProvider {
       browserRef.on('loadstart').subscribe(event => {
         if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
           browserRef.close();
+          window.location.reload()
           resolve()
         }
       })
