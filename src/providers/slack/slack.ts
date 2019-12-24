@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { AppConfigs } from '../appConfig';
 import { Device } from '@ionic-native/device';
 import { Network } from '@ionic-native/network';
-import { NetworkGpsProvider } from '../network-gps/network-gps';
+// import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { CurrentUserProvider } from '../current-user/current-user';
 import { Events } from 'ionic-angular';
 
@@ -14,7 +14,8 @@ export class SlackProvider {
   subscription: any;
   networkAvailable: boolean;
 
-  constructor(public http: Http, private device: Device, private network: Network, private ngps: NetworkGpsProvider,
+  constructor(public http: Http, private device: Device, private network: Network, 
+    // private ngps: NetworkGpsProvider,
     private currentUser: CurrentUserProvider, private events: Events) {
     console.log('Hello SlackProvider Provider');
     this.subscription = this.events.subscribe('network:offline', () => {
@@ -29,7 +30,7 @@ export class SlackProvider {
     });
     
 
-    this.networkAvailable = this.ngps.getNetworkStatus();
+    // this.networkAvailable = this.ngps.getNetworkStatus();
   }
 
   pushException(errorDetails?: any): void {
@@ -53,7 +54,7 @@ export class SlackProvider {
         }, {
           "fallback": "Network",
           "title": `Network`,
-          "text": `${this.network.type}. Network Connected= ${this.ngps.networkStatus}`
+          "text": `${this.network.type}. Network Connected= connected`
         },
         {
           "fallback": "User Details",

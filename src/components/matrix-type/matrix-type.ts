@@ -114,14 +114,19 @@ export class MatrixTypeComponent implements OnInit {
 
   checkCompletionOfInstance(data, gpsLocation): boolean {
     let isCompleted = true;
-    for (const question of data) {
-      // question.isCompleted = this.utils.isQuestionComplete(question);
-      question.gpsLocation = gpsLocation ? gpsLocation : "";
-      if (!question.isCompleted) {
-        isCompleted = false;
-        return false
+    if(data){
+      for (const question of data) {
+        // question.isCompleted = this.utils.isQuestionComplete(question);
+        question.gpsLocation = gpsLocation ? gpsLocation : "";
+        if (!question.isCompleted) {
+          isCompleted = false;
+          return false
+        }
       }
+    } else {
+      isCompleted = false
     }
+
     return isCompleted
 
   }
