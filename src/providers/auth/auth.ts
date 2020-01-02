@@ -11,8 +11,9 @@ import { NotificationProvider } from "../notification/notification";
 import { FcmProvider } from "../fcm/fcm";
 
 import { DomSanitizer } from "@angular/platform-browser";
-import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { InAppBrowser, InAppBrowserOptions } from "@ionic-native/in-app-browser";
 import { HTTP } from "@ionic-native/http";
+import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 
 @Injectable()
 export class AuthProvider {
@@ -31,11 +32,12 @@ export class AuthProvider {
   constructor(public http: HTTP,
     private currentUser: CurrentUserProvider,
     private app: App, private alertCntrl: AlertController,
-    private translate:TranslateService,
+    private translate: TranslateService,
     private notifctnService: NotificationProvider,
-    private fcm :FcmProvider,
+    private fcm: FcmProvider,
     private samnitizer: DomSanitizer,
     private iab: InAppBrowser,
+    private spinnerModal: SpinnerDialog,
     private utils: UtilsProvider) { }
 
   sanitizeUrl(url) {
@@ -49,7 +51,11 @@ export class AuthProvider {
       this.redirect_url;
 
     return new Promise((resolve, reject) => {
-      this.browserReference = this.iab.create(this.auth_url, "_target");
+      const options: InAppBrowserOptions = {
+        hideurlbar: 'yes',
+        clearcache: 'yes'
+      }
+      this.browserReference = this.iab.create(this.auth_url, "_target", options);
       this.browserReference.show();
 
       this.browserReference.on('loadstart').subscribe(event => {
@@ -67,20 +73,12 @@ export class AuthProvider {
 
   doOAuthStepTwo(token: string): Promise<any> {
     console.log("inside auth 2 action")
-    const body = new URLSearchParams();
-    body.set('grant_type', "authorization_code");
-    body.set('client_id', AppConfigs.clientId);
-    body.set('code', token);
-    body.set('redirect_uri', this.redirect_url);
-    body.set('scope', "offline_access");
-    const obj = {
-      "grant_type": "authorization_code",
-      "client_id": AppConfigs.clientId,
-      "code": token,
-      "redirect_uri": this.redirect_url,
-      "scope": "offline_access"
-    }
-    this.utils.startLoader();
+    this.spinnerModal.show(
+      "Please wait ...",
+      "Authenticating",
+      true,
+
+    )
     return new Promise((resolve, reject) => {
       // this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, body)
       //   .subscribe((data: any) => {
@@ -92,14 +90,21 @@ export class AuthProvider {
       //     this.utils.stopLoader();
       //     reject(error);
       //   });
-
-      this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, obj, {}).then(data => {
-        this.utils.stopLoader();
+      let obj = {
+        "grant_type": "authorization_code",
+        "client_id": AppConfigs.clientId,
+        "code": token,
+        "redirect_uri": this.redirect_url,
+        "scope": "offline_access"
+      }
+      this.http.setDataSerializer('urlencoded');
+      this.http.post((this.base_url + AppConfigs.keyCloak.getAccessToken), obj, {}).then(data => {
+        this.spinnerModal.hide();
         let parsedData = JSON.parse(data.data);
         this.browserReference.close();
         resolve(parsedData);
       }).catch(error => {
-        this.utils.stopLoader();
+        this.spinnerModal.hide();
 
       })
     });
@@ -248,10 +253,15 @@ export class AuthProvider {
     return new Promise((resolve) => {
       let logout_redirect_url = AppConfigs.keyCloak.logout_redirect_url;
       let logout_url = AppConfigs.app_url + "/auth/realms/sunbird/protocol/openid-connect/logout?redirect_uri=" + logout_redirect_url;
-      let browserRef = this.iab.create(logout_url, "_blank");
+      const options: InAppBrowserOptions = {
+        hidden: 'yes',
+        hideurlbar: 'yes',
+        clearcache: 'yes'
+      }
+      let browserRef = this.iab.create(logout_url, "_target", options);
       browserRef.show();
       browserRef.on('loadstart').subscribe(event => {
-        if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
+        if (event.url && ((event.url).indexOf(logout_redirect_url) >= 0)) {
           browserRef.close();
           resolve()
         }
