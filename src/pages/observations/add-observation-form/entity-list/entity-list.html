@@ -3,8 +3,14 @@
     [disableNetwork]="true">
   </header>
   <ion-toolbar>
-    <ion-searchbar debounce="500" type="3" (ionClear)="clearEntity()" autofocus (ionChange)="searchEntity($event)"
-      placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar>
+    <!-- <ion-searchbar debounce="500" type="3" (ionClear)="clearEntity()" autofocus (ionChange)="searchEntity($event)"
+      placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar> -->
+    <div class="_flex-box searchCard">
+      <ion-input type="text" [(ngModel)]="searchQuery" (keyup.enter)="searchEntity()" placeholder="{{'message.startSearchEntity' | translate}}" class="seacrhInput"></ion-input>
+        <button ion-button icon-only (click)="searchEntity()" [disabled]="!searchQuery">
+          <ion-icon name="search" class="searchIcon"></ion-icon>
+        </button>
+      </div>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>

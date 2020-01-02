@@ -275,6 +275,8 @@
         "loginAgain": "Please login again.",
         "userNameMisMatch": "Username didnot match. Please login again.",
         "loactionForAction": "Location should be turned on for this action.",
-        "questionResponseNotRequiredForCompleteAssessment": "This questions response is not required to complete the assessment."
+        "questionResponseNotRequiredForCompleteAssessment": "This questions response is not required to complete the assessment.",
+        "unableToFetchGps":"Unable to fetch GPS location",
+        "enableGPS":"Please enable GPS to proceed."
     }
 }
