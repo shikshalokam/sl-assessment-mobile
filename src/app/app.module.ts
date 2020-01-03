@@ -110,6 +110,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Market } from '@ionic-native/market';
 import { AppVersion } from '@ionic-native/app-version';
 import { SettingsPage } from '../pages/settings/settings';
+import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 
 @NgModule({
   declarations: [
@@ -265,7 +266,8 @@ import { SettingsPage } from '../pages/settings/settings';
     FcmProvider,
     LocalNotifications,
     Market,
-    AppVersion
+    AppVersion,
+    SpinnerDialog
   ]
 })
 export class AppModule { }

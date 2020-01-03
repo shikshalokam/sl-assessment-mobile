@@ -69,13 +69,14 @@ export class DetailPage {
           handler: data => {
             this.utils.startLoader()
             this.localStorage.deleteAllStorage().then(success => {
-              this.utils.stopLoader();
               this.auth.doLogout().then(success => {
+                this.utils.stopLoader();
                 this.currentUser.removeUser();
                 let nav = this.app.getRootNav();
                 this.notifictnProvider.stopNotificationPooling();
                 nav.setRoot(WelcomePage);
               }).catch(error => {
+                this.utils.stopLoader();
 
               })
             }).catch(error => {
