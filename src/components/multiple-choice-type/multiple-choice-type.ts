@@ -21,6 +21,7 @@ export class MultipleChoiceTypeComponent implements OnInit {
   @Input() generalQuestion: boolean;
   @Input() submissionId: any;
   @Input() inputIndex ;
+  @Input() enableQuestionReadOut: boolean;
   constructor(private utils: UtilsProvider,  private hintService: HintProvider) {
     console.log('Hello checkboxTypeComponent Component');
     this.text = 'Hello World';
