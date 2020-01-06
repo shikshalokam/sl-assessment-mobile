@@ -99,9 +99,9 @@ export class AuthProvider {
       }
       this.http.setDataSerializer('urlencoded');
       this.http.post((this.base_url + AppConfigs.keyCloak.getAccessToken), obj, {}).then(data => {
-        this.spinnerModal.hide();
         let parsedData = JSON.parse(data.data);
         this.browserReference.close();
+        this.spinnerModal.hide();
         resolve(parsedData);
       }).catch(error => {
         this.spinnerModal.hide();
