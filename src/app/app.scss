@@ -353,3 +353,7 @@ ion-step-header .ionic-step-header-icon-active {
 .header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
     background-image: url('') !important;
 }
+
+.serachBar {
+    width: calc(100% - 50px)!important;
+}

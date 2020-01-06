@@ -19,6 +19,7 @@ export class ObservationReportsPage {
   reportObj;
   submissionId;
   observationId;
+  solutionId;
   entityId;
   error;
   payload;
@@ -39,10 +40,11 @@ export class ObservationReportsPage {
 
   ionViewDidLoad() {
     this.submissionId = this.navParams.get('submissionId');
-    this.observationId = this.navParams.get('observationId')
+    this.observationId = this.navParams.get('observationId');
+    this.solutionId = this.navParams.get('solutionId')
     this.entityId = this.navParams.get('entityId');
     this.entityType = this.navParams.get('entityType');
-    this.immediateChildEntityType = this.navParams.get('immediateChildEntityType')
+    this.immediateChildEntityType = this.navParams.get('immediateChildEntityType');
     this.payload = {
       "entityId": this.entityId,
       "submissionId": this.submissionId,
@@ -60,22 +62,22 @@ export class ObservationReportsPage {
       this.payload = {
         "entityId": this.entityId,
         "entityType": this.entityType,
-        "observationId": this.observationId,
+        "solutionId": this.solutionId,
         "immediateChildEntityType": this.immediateChildEntityType
-      }
-      url = AppConfigs.observationReports.entityObservationReport
+      };
+      url = AppConfigs.observationReports.entitySolutionReport;
     } else if (this.submissionId) {
       url = AppConfigs.observationReports.instanceReport;
     } else if (!this.submissionId && !this.entityId) {
       url = AppConfigs.observationReports.observationReport;
     } else {
-      url = AppConfigs.observationReports.entityReport
+      url = AppConfigs.observationReports.entityReport;
     }
     this.apiService.httpPost(url, this.payload, (success) => {
       if (success) {
         this.reportObj = success;
       } else {
-        this.error = "No data found"
+        this.error = "No data found";
       }
       this.utils.stopLoader();
     }, error => {
@@ -88,11 +90,11 @@ export class ObservationReportsPage {
     this.action = action;
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(status => {
       if (status.hasPermission) {
-        this.getObservationReportUrl()
+        this.getObservationReportUrl();
       } else {
         this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(success => {
           if (success.hasPermission) {
-            this.getObservationReportUrl()
+            this.getObservationReportUrl();
           }
         }).catch(error => {
         })
@@ -115,16 +117,16 @@ export class ObservationReportsPage {
     let url = AppConfigs.observationReports.getReportsPdfUrls;
     const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a');
     if (this.entityType) {
-      url = url +  "entityId=" + this.entityId + "&observationId=" + this.observationId + '&entityType='+ this.entityType+ (this.immediateChildEntityType ? ('&immediateChildEntityType='+ this.immediateChildEntityType) : "");
-      this.fileName = this.observationId+'_'+this.entityId+'_'+this.immediateChildEntityType+'.pdf';
+      url = url + "entityId=" + this.entityId + "&solutionId=" + this.solutionId + '&entityType=' + this.entityType + (this.immediateChildEntityType ? ('&immediateChildEntityType=' + this.immediateChildEntityType) : "");
+      this.fileName = this.solutionId + '_' + this.entityId + '_' + this.immediateChildEntityType + '.pdf';
     } else if (this.submissionId) {
       url = url + "submissionId=" + this.submissionId;
       this.fileName = this.submissionId + timeStamp + ".pdf";
     } else if (!this.submissionId && !this.entityId) {
-      url = url + "observationId=" + this.observationId
+      url = url + "observationId=" + this.observationId;
       this.fileName = this.observationId + timeStamp + ".pdf";
     } else {
-      url = url + "entityId=" + this.entityId + "&observationId=" + this.observationId
+      url = url + "entityId=" + this.entityId + "&observationId=" + this.observationId;
       this.fileName = this.entityId + '_' + this.observationId + timeStamp + ".pdf";
     }
 
@@ -133,10 +135,10 @@ export class ObservationReportsPage {
       if (success.status === 'success' && success.pdfUrl) {
         this.downloadSubmissionDoc(success.pdfUrl);
       } else {
-        this.utils.openToast(success.message)
+        this.utils.openToast(success.message);
       }
     }, error => {
-      this.utils.openToast(error.message)
+      this.utils.openToast(error.message);
 
       this.utils.stopLoader();
     }, { baseUrl: "dhiti" })
@@ -146,9 +148,9 @@ export class ObservationReportsPage {
   downloadSubmissionDoc(fileRemoteUrl) {
     this.utils.startLoader();
     if (this.isIos) {
-      this.checkForDowloadDirectory(fileRemoteUrl)
+      this.checkForDowloadDirectory(fileRemoteUrl);
     } else {
-      this.filedownload(fileRemoteUrl)
+      this.filedownload(fileRemoteUrl);
     }
   }
   filedownload(fileRemoteUrl) {

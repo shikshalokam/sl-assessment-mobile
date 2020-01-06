@@ -111,6 +111,7 @@ import { Market } from '@ionic-native/market';
 import { AppVersion } from '@ionic-native/app-version';
 import { SettingsPage } from '../pages/settings/settings';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
+import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
 
 @NgModule({
   declarations: [
@@ -267,7 +268,8 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog';
     LocalNotifications,
     Market,
     AppVersion,
-    SpinnerDialog
+    SpinnerDialog,
+    SidemenuProvider
   ]
 })
 export class AppModule { }
