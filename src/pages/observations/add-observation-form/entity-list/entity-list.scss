@@ -3,7 +3,7 @@ page-school-list {
         margin: 0;
         padding: 0;
         width: 100% !important;
-        background: $grey-color;
+        background: $white-color;
     }
     .searchIcon {
         font-size: 20px !important;
@@ -11,6 +11,6 @@ page-school-list {
 
     .seacrhInput {
         padding-left: 15px;
-
+        background-color: $white-color !important;
     }
 }
