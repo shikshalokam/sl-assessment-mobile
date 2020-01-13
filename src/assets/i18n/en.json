@@ -4,7 +4,7 @@
         "generalQuestions": "General Questions",
         "selectObservationType": "Select a observation Type",
         "selectSolution": "Select a Solution",
-        "selectSchool": "Select Schools"
+        "selectSchool": "Select All Schools"
     },
     "actionSheet": {
         "confirmLeave": "Are you sure to leave.",
@@ -111,7 +111,7 @@
         "edit": "Edit",
         "observation": "Observation",
         "loadMore": "Load More",
-        "selectAll":"Select All",
+        "selectAll":"Select All Schools",
         "undo":"Undo"
     },
     "tabs": {
