@@ -39,6 +39,7 @@
       <ion-card>
         <pie-chart [data]="element" [questionNumber]="i+1" *ngIf="element.chart.type == 'pie'"></pie-chart>
         <scatter-chart [data]="element" [questionNumber]="i+1" *ngIf="element.chart.type == 'scatter'"></scatter-chart>
+        <bar-chart [data]="element" [questionNumber]="i+1" *ngIf="element.chart.type === 'bar'"></bar-chart>
       </ion-card>
     </div>
   </div>
