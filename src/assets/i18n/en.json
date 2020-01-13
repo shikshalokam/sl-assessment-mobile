@@ -193,7 +193,8 @@
         "observationReports": "Report",
         "observationUpdate": "Observation Update",
         "notifications": "Notifications",
-        "settings":"Settings"
+        "settings":"Settings",
+        "solutionList":"Solution List"
     },
     "labels": {
         "welcome": "Welcome",
