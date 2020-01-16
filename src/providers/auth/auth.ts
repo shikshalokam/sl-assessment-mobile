@@ -60,6 +60,7 @@ export class AuthProvider {
 
       this.browserReference.on('loadstart').subscribe(event => {
         if (event.url && ((event.url).indexOf(this.redirect_url) === 0)) {
+          this.browserReference.hide();
           let responseParameters = (((event.url).split("?")[1]).split("="))[1];
           if (responseParameters !== undefined) {
             resolve(responseParameters);
@@ -104,6 +105,7 @@ export class AuthProvider {
         this.spinnerModal.hide();
         resolve(parsedData);
       }).catch(error => {
+        this.browserReference.show();
         this.spinnerModal.hide();
 
       })
