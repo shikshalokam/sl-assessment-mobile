@@ -1,16 +1,24 @@
 page-school-list {
     .searchCard {
-        margin: 0;
-        padding: 0;
-        width: 100% !important;
-        background: $white-color;
+        // margin: 0;
+        // padding: 0;
+        // // width: 100% !important;
+        // background: $green-color !important;
+        // align-items: stretch;
     }
     .searchIcon {
-        font-size: 20px !important;
+        // font-size: 30px !important;
     }
 
     .seacrhInput {
         padding-left: 15px;
-        background-color: $white-color !important;
+        border: 1px solid $grey-color !important;
+        // background-color: $white-color !important;
+    }
+    .toolbar-background-md{
+        background-color: $white-color;
+    }
+    .serachBar {
+        flex: 1;
     }
 }

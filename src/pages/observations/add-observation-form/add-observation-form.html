@@ -117,7 +117,7 @@
         <div *ngIf="entityList?.length == 0" class="_flex-box msgContainer">
           {{'message.noSchoolFound' | translate}}
         </div>
-        <div class="_flex-box _justify-content-center" *ngIf="entityList?.length && (entityList?.length <= entityListTotalCount)">
+        <div class="_flex-box _justify-content-center" *ngIf="(entityList?.length && (entityList?.length <= entityListTotalCount)) && (entityListTotalCount > entityListLimit)">
           <button ion-button full  class="btnText" color="light" (click)="doInfinite($event,'entity')">
             {{'buttons.loadMore' | translate}}
           </button>

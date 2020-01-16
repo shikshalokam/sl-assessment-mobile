@@ -2,20 +2,36 @@
   <header [title]="'headings.addSchools'|translate" [hideBack]="false" [showMenu]="false" [showClose]="true"
     [disableNetwork]="true" [hideNotification]="true">
   </header>
-  <ion-toolbar>
+  <ion-toolbar style="background-color: white !important;">
     <!-- <ion-searchbar debounce="500" type="3" (ionClear)="clearEntity()" autofocus (ionChange)="searchEntity($event)"
       placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar> -->
     <div class="_flex-box searchCard">
-      <ion-select [(ngModel)]="selectedState" class="whiteSelection" *ngIf="selectedState && !isProfileAssignedWithState" (ionChange)="search();onStateChange($event)"  >
-        <ion-option *ngFor="let state of allStates" [value]="state._id">
-          <b>{{state?.name}}</b>
-        </ion-option>
-      </ion-select>
-      <ion-input type="text" [(ngModel)]="searchQuery" (keyup.enter)="searchEntity()" placeholder="{{'message.startSearchEntity' | translate}}" class="seacrhInput"></ion-input>
+      <ion-item>
+        <ion-label>{{'labels.selectState'|translate}}</ion-label>
+        <ion-select [(ngModel)]="selectedState" class="whiteSelection"
+          *ngIf="selectedState && !isProfileAssignedWithState" (ionChange)="onStateChange($event)">
+          <ion-option *ngFor="let state of allStates" [value]="state._id">
+            <b>{{state?.name}}</b>
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <!-- <ion-input type="text" [(ngModel)]="searchQuery" (keyup.enter)="searchEntity()" placeholder="{{'message.startSearchEntity' | translate}}" class="seacrhInput"></ion-input>
         <button ion-button icon-only (click)="searchEntity()" >
           <ion-icon name="search" class="searchIcon"></ion-icon>
-        </button>
-      </div>
+        </button> -->
+    </div>
+    <div class="_flex-box searchCard">
+      <!-- <ion-select [(ngModel)]="selectedState" class="whiteSelection" *ngIf="selectedState && !isProfileAssignedWithState" (ionChange)="search();onStateChange($event)"  >
+          <ion-option *ngFor="let state of allStates" [value]="state._id">
+            <b>{{state?.name}}</b>
+          </ion-option>
+        </ion-select> -->
+      <ion-searchbar debounce="500" class="serachBar" (keyup.enter)="searchEntity()"
+        placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar>
+      <button ion-button icon-only (click)="searchEntity()" class="serachBtn">
+        <ion-icon name="search" class="searchIcon"></ion-icon>
+      </button>
+    </div>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>

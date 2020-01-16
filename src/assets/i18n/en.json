@@ -217,7 +217,8 @@
         "scoreAchieved":"Score achieved",
         "totalObservations":"Total Observations",
         "totalSchools":"Total schools",
-        "schoolsObserved":"Schools observed"
+        "schoolsObserved":"Schools observed",
+        "selectState":"Select State"
     },
     "languages": {
         "english": "English",
