@@ -44,7 +44,7 @@ export class ImageUploadComponent implements OnInit {
   audioFormats = ["AIF", "cda", "mpa", "ogg", "wav", "wma", 'mp3'];
   pptFormats = ["ppt", "pptx", "pps", "ppsx"];
   wordFormats = ["docx", "doc", "docm", "dotx"];
-  imageFormats = ['jpg', 'png']
+  imageFormats = ['jpg', 'png', 'jpeg']
   pdfFormats = ["pdf"];
   spreadSheetFormats = ["xls", "xlsx"];
 
@@ -52,7 +52,6 @@ export class ImageUploadComponent implements OnInit {
   @Input()
   set data(data) {
     this.datas = data;
-    console.log("added anew file")
     this.createImageFromName(data['fileName'])
   }
 
@@ -88,6 +87,20 @@ export class ImageUploadComponent implements OnInit {
     private alertCtrl: AlertController) {
     console.log('Hello ImageUploadComponent Component');
     this.text = 'Hello World';
+    this.isIos = this.platform.is('ios') ? true : false;
+    if (this.isIos) {
+      this.file.checkDir(this.file.documentsDirectory, 'images').then(success => {
+      }).catch(err => {
+        this.file.createDir(cordova.file.documentsDirectory, 'images', false).then(success => {
+        }, error => { })
+      });
+    } else {
+      this.file.checkDir(this.file.externalDataDirectory, 'images').then(success => {
+      }).catch(err => {
+        this.file.createDir(cordova.file.externalDataDirectory, 'images', false).then(success => {
+        }, error => { })
+      });
+    }
   }
 
   ngOnInit() {
@@ -114,8 +127,7 @@ export class ImageUploadComponent implements OnInit {
     //   // this.allLocalImageList = JSON.parse(data) ? JSON.parse(data) : {};
     //   // this.localEvidenceImageList = (this.allLocalImageList && this.allLocalImageList[this.evidenceId]) ? this.allLocalImageList[this.evidenceId] : [];
     // })
-    this.isIos = this.platform.is('ios') ? true : false;
-    this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'images' : cordova.file.externalDataDirectory + 'images';
+    this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'images' :cordova.file.externalDataDirectory + 'images';
   }
 
   openActionSheet(): void {
