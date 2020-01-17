@@ -88,7 +88,7 @@ export class AuthProvider {
       //     this.utils.stopLoader();
       //     reject(error);
       //   });
-
+      this.http.setDataSerializer('urlencoded');
       this.http.post(this.base_url + AppConfigs.keyCloak.getAccessToken, obj, {}).then(data => {
         this.utils.stopLoader();
         let parsedData = JSON.parse(data.data);
@@ -245,7 +245,7 @@ export class AuthProvider {
       let browserRef = this.iab.create(logout_url, "_blank");
       browserRef.show();
       browserRef.on('loadstart').subscribe(event => {
-        if (event.url && ((event.url).indexOf(logout_redirect_url) === 0)) {
+        if (event.url && ((event.url).indexOf(logout_redirect_url) >= 0)) {
           browserRef.close();
           window.location.reload()
           resolve()
