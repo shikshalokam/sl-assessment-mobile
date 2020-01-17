@@ -255,17 +255,29 @@ export class ImageUploadComponent implements OnInit {
 
   pushToFileList(fileName) {
     this.file.checkFile(this.appFolderPath + '/', fileName).then(response => {
-      if (this.imageFormats.indexOf(this.getExtensionFromName(fileName)) >= 0) {
-        this.file.readAsDataURL(this.appFolderPath, fileName).then(data => {
-          this.imageList.push({ data: data, imageName: fileName, extension: this.getExtensionFromName(fileName) });
-          this.setLocalDatas(fileName);
-        }).catch(err => {
-        })
-      } else {
+      // if (this.imageFormats.indexOf(this.getExtensionFromName(fileName)) >= 0) {
+      //   console.log("check file if readAsDataURL")
+
+      //   setTimeout(()=>{
+      //     console.log()
+      //     this.file.readAsDataURL(this.appFolderPath, fileName).then(data => {
+      //       console.log("read as dataurl success");
+  
+      //       this.imageList.push({ data: data, imageName: fileName, extension: this.getExtensionFromName(fileName) });
+      //       this.setLocalDatas(fileName);
+      //     }).catch(err => {
+      //       console.log(JSON.stringify(err))
+      //       console.log("read as dataurl failure");
+  
+      //     })
+      //   })
+
+
+      // } else {
         this.imageList.push({ data: "", imageName: fileName, extension: this.getExtensionFromName(fileName) });
         this.setLocalDatas(fileName);
         // this.updateLocalImageList();
-      }
+      // }
 
     }).catch(error => {
     })
@@ -293,17 +305,17 @@ export class ImageUploadComponent implements OnInit {
     for (const image of imageList) {
       this.file.checkFile(this.appFolderPath + '/', image).then(response => {
 
-        if (this.imageFormats.indexOf(this.getExtensionFromName(image)) >= 0) {
-          this.file.readAsDataURL(this.appFolderPath, image).then(data => {
-            this.imageList.push({ data: data, imageName: image, extension: this.getExtensionFromName(image) });
-            // this.setLocalDatas(fileName);
-          }).catch(err => {
-          })
-        } else {
+        // if (this.imageFormats.indexOf(this.getExtensionFromName(image)) >= 0) {
+        //   this.file.readAsDataURL(this.appFolderPath, image).then(data => {
+        //     this.imageList.push({ data: data, imageName: image, extension: this.getExtensionFromName(image) });
+        //     // this.setLocalDatas(fileName);
+        //   }).catch(err => {
+        //   })
+        // } else {
           this.imageList.push({ data: "", imageName: image, extension: this.getExtensionFromName(image) });
           // this.setLocalDatas(image);
           // this.updateLocalImageList();
-        }
+        // }
       }).catch(error => {
         this.imageList.push(image);
       })
