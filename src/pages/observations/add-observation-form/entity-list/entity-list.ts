@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , ViewChild} from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { AppConfigs } from '../../../../providers/appConfig';
 import { ApiProvider } from '../../../../providers/api/api';
@@ -11,6 +11,7 @@ import { LocalStorageProvider } from '../../../../providers/local-storage/local-
   templateUrl: 'entity-list.html',
 })
 export class EntityListPage {
+  @ViewChild('selectStateRef') selectStateRef;
   entityList;
   observationId;
   searchUrl;
@@ -71,7 +72,8 @@ export class EntityListPage {
     this.localStorage.getLocalStorage('allStates').then(data => {
       data ? this.allStates = data : this.getAllStatesApi();
       if(data && data.length){
-        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : data[0]._id;
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : null;
+        this.openSelect();
       } ;
     }).catch(error => {
       this.getAllStatesApi();
@@ -82,13 +84,19 @@ export class EntityListPage {
     this.apiProviders.httpGet(AppConfigs.cro.entityListBasedOnEntityType + 'state', success => {
       this.allStates = success.result;
       if(this.allStates && this.allStates.length){
-        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected :this.allStates[0]['_id'];
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected :null;
+        this.openSelect();
       } 
       this.localStorage.setLocalStorage('allStates', this.allStates);
     }, error => {
       this.allStates = [];
     })
   }
+
+  openSelect() {
+    this.selectedState ? null : setTimeout(() => {this.selectStateRef ? this.selectStateRef.open(): null}, 100);
+  }
+
   onStateChange(event) {
     this.profileData.stateSelected = event;
     this.localStorage.setLocalStorage('profileRole', this.profileData);
