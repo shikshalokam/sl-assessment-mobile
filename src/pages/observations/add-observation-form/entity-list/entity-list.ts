@@ -49,6 +49,7 @@ export class EntityListPage {
         for (const entity of success.relatedEntities) {
           if(entity.entityType === 'state'){
             this.profileMappedState = entity._id;
+            this.selectedState = entity._id;
             this.isProfileAssignedWithState = true;
             break
           }
@@ -72,7 +73,7 @@ export class EntityListPage {
     this.localStorage.getLocalStorage('allStates').then(data => {
       data ? this.allStates = data : this.getAllStatesApi();
       if(data && data.length){
-        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : null;
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : this.profileMappedState;
         this.openSelect();
       } ;
     }).catch(error => {
@@ -84,7 +85,7 @@ export class EntityListPage {
     this.apiProviders.httpGet(AppConfigs.cro.entityListBasedOnEntityType + 'state', success => {
       this.allStates = success.result;
       if(this.allStates && this.allStates.length){
-        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected :null;
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected :this.profileMappedState;
         this.openSelect();
       } 
       this.localStorage.setLocalStorage('allStates', this.allStates);
@@ -128,7 +129,7 @@ export class EntityListPage {
     !event ? this.utils.startLoader() : "";
     this.page = !event ? 1 : this.page + 1;
     let apiUrl = this.searchUrl +"?observationId="+ this.observationId + "&search=" + encodeURIComponent(this.searchQuery ? this.searchQuery :"") + "&page=" + this.page + "&limit=" + this.limit;
-    apiUrl = (apiUrl+`&parentEntityId=${encodeURIComponent(this.isProfileAssignedWithState ? this.profileMappedState :this.selectedState)}`) ;
+    apiUrl = (apiUrl+`&parentEntityId=${encodeURIComponent(this.selectedState)}`) ;
     this.apiProviders.httpGet(apiUrl, success => {
       this.selectableList = !event ? [] : this.selectableList;
       for (let i = 0; i < success.result[0].data.length; i++) {

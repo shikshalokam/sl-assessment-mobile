@@ -5,7 +5,8 @@
   <ion-toolbar style="background-color: white !important;">
     <!-- <ion-searchbar debounce="500" type="3" (ionClear)="clearEntity()" autofocus (ionChange)="searchEntity($event)"
       placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar> -->
-    <div class="_flex-box searchCard" *ngIf="!isProfileAssignedWithState">
+      <!-- *ngIf="!isProfileAssignedWithState" -->
+    <div class="_flex-box searchCard" >
       <ion-item>
         <ion-label>{{'labels.selectState'|translate}}</ion-label>
         <ion-select [(ngModel)]="selectedState" class="whiteSelection" (ionChange)="onStateChange($event)"
@@ -34,7 +35,7 @@
     </div>
   </ion-toolbar>
 </ion-header>
-<ion-content padding>
+<ion-content padding style="margin-top: 50px;">
 
   <div *ngIf="selectedState || profileMappedState">
     <ion-list *ngIf="selectableList" (ionScroll)="detectBottom()">
