@@ -128,7 +128,7 @@ export class EntityListPage {
     !event ? this.utils.startLoader() : "";
     this.page = !event ? 1 : this.page + 1;
     let apiUrl = this.searchUrl +"?observationId="+ this.observationId + "&search=" + encodeURIComponent(this.searchQuery ? this.searchQuery :"") + "&page=" + this.page + "&limit=" + this.limit;
-    apiUrl = !this.isProfileAssignedWithState ? (apiUrl+`&parentEntityId=${encodeURIComponent(this.selectedState)}`) : apiUrl;
+    apiUrl = (apiUrl+`&parentEntityId=${encodeURIComponent(this.isProfileAssignedWithState ? this.profileMappedState :this.selectedState)}`) ;
     this.apiProviders.httpGet(apiUrl, success => {
       this.selectableList = !event ? [] : this.selectableList;
       for (let i = 0; i < success.result[0].data.length; i++) {

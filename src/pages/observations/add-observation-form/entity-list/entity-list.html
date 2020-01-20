@@ -26,7 +26,7 @@
             <b>{{state?.name}}</b>
           </ion-option>
         </ion-select> -->
-      <ion-searchbar debounce="500" class="serachBar" (keyup.enter)="searchEntity()"
+      <ion-searchbar debounce="500" class="serachBar" (keyup.enter)="searchEntity()" [(ngModel)]="searchQuery"
         placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar>
       <button ion-button icon-only (click)="searchEntity()" class="serachBtn">
         <ion-icon name="search" class="searchIcon"></ion-icon>
