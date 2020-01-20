@@ -5,11 +5,11 @@
   <ion-toolbar style="background-color: white !important;">
     <!-- <ion-searchbar debounce="500" type="3" (ionClear)="clearEntity()" autofocus (ionChange)="searchEntity($event)"
       placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar> -->
-    <div class="_flex-box searchCard">
+    <div class="_flex-box searchCard" *ngIf="!isProfileAssignedWithState">
       <ion-item>
         <ion-label>{{'labels.selectState'|translate}}</ion-label>
-        <ion-select [(ngModel)]="selectedState" class="whiteSelection"
-          *ngIf="selectedState && !isProfileAssignedWithState" (ionChange)="onStateChange($event)">
+        <ion-select [(ngModel)]="selectedState" class="whiteSelection" (ionChange)="onStateChange($event)"
+          #selectStateRef interface="action-sheet">
           <ion-option *ngFor="let state of allStates" [value]="state._id">
             <b>{{state?.name}}</b>
           </ion-option>
@@ -20,7 +20,7 @@
           <ion-icon name="search" class="searchIcon"></ion-icon>
         </button> -->
     </div>
-    <div class="_flex-box searchCard">
+    <div class="_flex-box searchCard" *ngIf="selectedState || profileMappedState">
       <!-- <ion-select [(ngModel)]="selectedState" class="whiteSelection" *ngIf="selectedState && !isProfileAssignedWithState" (ionChange)="search();onStateChange($event)"  >
           <ion-option *ngFor="let state of allStates" [value]="state._id">
             <b>{{state?.name}}</b>
@@ -36,19 +36,22 @@
 </ion-header>
 <ion-content padding>
 
-  <ion-list *ngIf="selectableList" (ionScroll)="detectBottom()">
-    <ng-container *ngFor="let listItem of selectableList">
-      <ion-item *ngIf="!listItem.isSelected">
-        <ion-label text-wrap>{{listItem.name}}</ion-label>
-        <ion-checkbox color="dark" [checked]="listItem.selected" (click)="checkItem(listItem)"></ion-checkbox>
-      </ion-item>
-    </ng-container>
-  </ion-list>
-  <ion-list *ngIf="!selectableList?.length">
-    <div class="_flex-box _justify-content-center noDataMsg">
-      {{ 'message.searchEntities' | translate}}
-    </div>
-  </ion-list>
+  <div *ngIf="selectedState || profileMappedState">
+    <ion-list *ngIf="selectableList" (ionScroll)="detectBottom()">
+      <ng-container *ngFor="let listItem of selectableList">
+        <ion-item *ngIf="!listItem.isSelected">
+          <ion-label text-wrap>{{listItem.name}}</ion-label>
+          <ion-checkbox color="dark" [checked]="listItem.selected" (click)="checkItem(listItem)"></ion-checkbox>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+    <ion-list *ngIf="!selectableList?.length">
+      <div class="_flex-box _justify-content-center noDataMsg">
+        {{ 'message.searchEntities' | translate}}
+      </div>
+    </ion-list>
+  </div>
+
 
   <div *ngIf="!(this.selectableList?.length == totalCount) && this.selectableList?.length > 0">
     <ion-infinite-scroll [enabled]="!(this.selectableList?.length == totalCount) && this.selectableList?.length > 0"
