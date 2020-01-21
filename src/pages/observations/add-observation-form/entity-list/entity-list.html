@@ -5,11 +5,11 @@
   <ion-toolbar style="background-color: white !important;">
     <!-- <ion-searchbar debounce="500" type="3" (ionClear)="clearEntity()" autofocus (ionChange)="searchEntity($event)"
       placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar> -->
-      <!-- *ngIf="!isProfileAssignedWithState" -->
-    <div class="_flex-box searchCard" >
+    <!-- *ngIf="!isProfileAssignedWithState" -->
+    <div class="_flex-box searchCard">
       <ion-item>
         <ion-label>{{'labels.selectState'|translate}}</ion-label>
-        <ion-select [(ngModel)]="selectedState" class="whiteSelection" (ionChange)="onStateChange($event)"
+        <ion-select [(ngModel)]="selectedState" class="whiteSelection" (ionChange)="searchQuery='';search();onStateChange($event)"
           #selectStateRef interface="action-sheet">
           <ion-option *ngFor="let state of allStates" [value]="state._id">
             <b>{{state?.name}}</b>
@@ -21,7 +21,7 @@
           <ion-icon name="search" class="searchIcon"></ion-icon>
         </button> -->
     </div>
-    <div class="_flex-box searchCard" *ngIf="selectedState || profileMappedState">
+    <div class="_flex-box searchCard" *ngIf="selectedState">
       <!-- <ion-select [(ngModel)]="selectedState" class="whiteSelection" *ngIf="selectedState && !isProfileAssignedWithState" (ionChange)="search();onStateChange($event)"  >
           <ion-option *ngFor="let state of allStates" [value]="state._id">
             <b>{{state?.name}}</b>
@@ -37,7 +37,7 @@
 </ion-header>
 <ion-content padding style="margin-top: 50px;">
 
-  <div *ngIf="selectedState || profileMappedState">
+  <div *ngIf="selectedState">
     <ion-list *ngIf="selectableList" (ionScroll)="detectBottom()">
       <ng-container *ngFor="let listItem of selectableList">
         <ion-item *ngIf="!listItem.isSelected">
@@ -46,9 +46,9 @@
         </ion-item>
       </ng-container>
     </ion-list>
-    <ion-list *ngIf="!selectableList?.length">
+    <ion-list *ngIf="!selectableList?.length && !loading">
       <div class="_flex-box _justify-content-center noDataMsg">
-        {{ 'message.searchEntities' | translate}}
+        {{ 'message.noSchoolFound' | translate}}
       </div>
     </ion-list>
   </div>

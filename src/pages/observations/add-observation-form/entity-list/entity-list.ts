@@ -1,4 +1,4 @@
-import { Component , ViewChild} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { AppConfigs } from '../../../../providers/appConfig';
 import { ApiProvider } from '../../../../providers/api/api';
@@ -28,10 +28,11 @@ export class EntityListPage {
   solutionId: any;
   searchQuery;
   allStates: Array<Object>;
-  profileMappedState: any;
-  isProfileAssignedWithState: boolean;
+  // profileMappedState: any;
+  // isProfileAssignedWithState: boolean;
   profileData: any;
   selectedState;
+  loading: boolean = false;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -43,24 +44,25 @@ export class EntityListPage {
     this.searchUrl = AppConfigs.cro.searchEntity;
     this.observationId = this.navParams.get('data');
     this.solutionId = this.navParams.get('solutionId');
+    // this.getAllStatesFromLocal();
     this.localStorage.getLocalStorage('profileRole').then(success => {
       this.profileData = success;
-      if(success && success.relatedEntities && success.relatedEntities.length){
-        for (const entity of success.relatedEntities) {
-          if(entity.entityType === 'state'){
-            this.profileMappedState = entity._id;
-            this.selectedState = entity._id;
-            this.isProfileAssignedWithState = true;
-            break
-          }
-        }
-        this.isProfileAssignedWithState =this.profileMappedState ? true : false 
-      } else {
-        this.isProfileAssignedWithState = false;
-      }
+      // if(success && success.relatedEntities && success.relatedEntities.length){
+        // for (const entity of success.relatedEntities) {
+        //   if(entity.entityType === 'state'){
+            // this.profileMappedState = entity._id;
+            // this.selectedState = entity._id;
+            // this.isProfileAssignedWithState = true;
+        //     break
+        //   }
+        // }
+        // this.isProfileAssignedWithState =this.profileMappedState ? true : false 
+      // } else {
+        // this.isProfileAssignedWithState = false;
+      // }
       this.getAllStatesFromLocal();
     }).catch(error => {
-      this.isProfileAssignedWithState = false;
+      // this.isProfileAssignedWithState = false;
       this.getAllStatesFromLocal()
     })
     console.log(this.observationId)
@@ -72,10 +74,10 @@ export class EntityListPage {
   getAllStatesFromLocal() {
     this.localStorage.getLocalStorage('allStates').then(data => {
       data ? this.allStates = data : this.getAllStatesApi();
-      if(data && data.length){
-        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : this.profileMappedState;
+      if (data && data.length) {
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : null;
         this.openSelect();
-      } ;
+      };
     }).catch(error => {
       this.getAllStatesApi();
     })
@@ -84,10 +86,10 @@ export class EntityListPage {
   getAllStatesApi() {
     this.apiProviders.httpGet(AppConfigs.cro.entityListBasedOnEntityType + 'state', success => {
       this.allStates = success.result;
-      if(this.allStates && this.allStates.length){
-        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected :this.profileMappedState;
+      if (this.allStates && this.allStates.length) {
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : null;
         this.openSelect();
-      } 
+      }
       this.localStorage.setLocalStorage('allStates', this.allStates);
     }, error => {
       this.allStates = [];
@@ -95,7 +97,8 @@ export class EntityListPage {
   }
 
   openSelect() {
-    this.selectedState ? null : setTimeout(() => {this.selectStateRef ? this.selectStateRef.open(): null}, 100);
+    this.profileData.stateSelected ? this.search() : null;
+    this.selectedState ? null : setTimeout(() => { this.selectStateRef.open() }, 100);
   }
 
   onStateChange(event) {
@@ -114,7 +117,7 @@ export class EntityListPage {
     console.log(selectedSchools.length);
     this.viewCntrl.dismiss(selectedSchools);
   }
-  clearEntity(){
+  clearEntity() {
     this.selectableList = []
   }
   cancel() {
@@ -128,9 +131,11 @@ export class EntityListPage {
     // this.searchValue = event ? event : this.searchValue;
     !event ? this.utils.startLoader() : "";
     this.page = !event ? 1 : this.page + 1;
-    let apiUrl = this.searchUrl +"?observationId="+ this.observationId + "&search=" + encodeURIComponent(this.searchQuery ? this.searchQuery :"") + "&page=" + this.page + "&limit=" + this.limit;
-    apiUrl = (apiUrl+`&parentEntityId=${encodeURIComponent(this.selectedState)}`) ;
+    let apiUrl = this.searchUrl + "?observationId=" + this.observationId + "&search=" + encodeURIComponent(this.searchQuery ? this.searchQuery : "") + "&page=" + this.page + "&limit=" + this.limit;
+    apiUrl = (apiUrl + `&parentEntityId=${encodeURIComponent(this.selectedState)}`);
+    this.loading = true;
     this.apiProviders.httpGet(apiUrl, success => {
+      this.loading = false;
       this.selectableList = !event ? [] : this.selectableList;
       for (let i = 0; i < success.result[0].data.length; i++) {
         success.result[0].data[i].isSelected = success.result[0].data[i].selected;
@@ -140,8 +145,9 @@ export class EntityListPage {
       this.selectableList = [... this.selectableList, ...success.result[0].data]
       !event ? this.utils.stopLoader() : event.complete();
     }, error => {
+      this.loading = false;
       !event ? this.utils.stopLoader() : event.complete();
-    },{version:"v2"})
+    }, { version: "v2" })
   }
 
 
