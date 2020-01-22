@@ -6,7 +6,7 @@
     <!-- <ion-searchbar debounce="500" type="3" (ionClear)="clearEntity()" autofocus (ionChange)="searchEntity($event)"
       placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar> -->
     <!-- *ngIf="!isProfileAssignedWithState" -->
-    <div class="_flex-box searchCard">
+    <div class="_flex-box searchCard" *ngIf="!isProfileAssignedWithState">
       <ion-item>
         <ion-label>{{'labels.selectState'|translate}}</ion-label>
         <ion-select [(ngModel)]="selectedState" class="whiteSelection" (ionChange)="searchQuery='';search();onStateChange($event)"
@@ -21,23 +21,23 @@
           <ion-icon name="search" class="searchIcon"></ion-icon>
         </button> -->
     </div>
-    <div class="_flex-box searchCard" *ngIf="selectedState">
+    <div class="_flex-box searchCard" *ngIf="selectedState || profileMappedState">
       <!-- <ion-select [(ngModel)]="selectedState" class="whiteSelection" *ngIf="selectedState && !isProfileAssignedWithState" (ionChange)="search();onStateChange($event)"  >
           <ion-option *ngFor="let state of allStates" [value]="state._id">
             <b>{{state?.name}}</b>
           </ion-option>
         </ion-select> -->
       <ion-searchbar debounce="500" class="serachBar" (keyup.enter)="searchEntity()" [(ngModel)]="searchQuery"
-        placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar>
+        placeholder="{{'message.startSearchEntity' | translate}}" (ionClear)="searchQuery='';searchEntity()"></ion-searchbar>
       <button ion-button icon-only (click)="searchEntity()" class="serachBtn">
         <ion-icon name="search" class="searchIcon"></ion-icon>
       </button>
     </div>
   </ion-toolbar>
 </ion-header>
-<ion-content padding style="margin-top: 50px;">
+<ion-content padding [ngStyle]="{'margin-top': profileMappedState ? '0px' :'50px'}">
 
-  <div *ngIf="selectedState">
+  <div *ngIf="selectedState || profileMappedState">
     <ion-list *ngIf="selectableList" (ionScroll)="detectBottom()">
       <ng-container *ngFor="let listItem of selectableList">
         <ion-item *ngIf="!listItem.isSelected">

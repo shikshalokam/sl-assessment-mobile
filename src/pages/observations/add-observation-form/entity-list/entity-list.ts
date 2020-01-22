@@ -28,8 +28,8 @@ export class EntityListPage {
   solutionId: any;
   searchQuery;
   allStates: Array<Object>;
-  // profileMappedState: any;
-  // isProfileAssignedWithState: boolean;
+  profileMappedState: any;
+  isProfileAssignedWithState: boolean;
   profileData: any;
   selectedState;
   loading: boolean = false;
@@ -47,19 +47,19 @@ export class EntityListPage {
     // this.getAllStatesFromLocal();
     this.localStorage.getLocalStorage('profileRole').then(success => {
       this.profileData = success;
-      // if(success && success.relatedEntities && success.relatedEntities.length){
-        // for (const entity of success.relatedEntities) {
-        //   if(entity.entityType === 'state'){
-            // this.profileMappedState = entity._id;
-            // this.selectedState = entity._id;
-            // this.isProfileAssignedWithState = true;
-        //     break
-        //   }
-        // }
-        // this.isProfileAssignedWithState =this.profileMappedState ? true : false 
-      // } else {
-        // this.isProfileAssignedWithState = false;
-      // }
+      if(success && success.relatedEntities && success.relatedEntities.length){
+        for (const entity of success.relatedEntities) {
+          if(entity.entityType === 'state'){
+            this.profileMappedState = entity._id;
+            this.selectedState = entity._id;
+            this.isProfileAssignedWithState = true;
+            break
+          }
+        }
+        this.isProfileAssignedWithState =this.profileMappedState ? true : false 
+      } else {
+        this.isProfileAssignedWithState = false;
+      }
       this.getAllStatesFromLocal();
     }).catch(error => {
       // this.isProfileAssignedWithState = false;
@@ -72,10 +72,12 @@ export class EntityListPage {
   }
 
   getAllStatesFromLocal() {
+    this.utils.startLoader();
     this.localStorage.getLocalStorage('allStates').then(data => {
+      this.utils.stopLoader();
       data ? this.allStates = data : this.getAllStatesApi();
       if (data && data.length) {
-        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : null;
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : this.profileMappedState;
         this.openSelect();
       };
     }).catch(error => {
@@ -85,19 +87,21 @@ export class EntityListPage {
 
   getAllStatesApi() {
     this.apiProviders.httpGet(AppConfigs.cro.entityListBasedOnEntityType + 'state', success => {
+      this.utils.stopLoader();
       this.allStates = success.result;
       if (this.allStates && this.allStates.length) {
-        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : null;
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : this.profileMappedState;
         this.openSelect();
       }
       this.localStorage.setLocalStorage('allStates', this.allStates);
     }, error => {
+      this.utils.stopLoader();
       this.allStates = [];
     })
   }
 
   openSelect() {
-    this.profileData.stateSelected ? this.search() : null;
+    (this.profileData.stateSelected || this.profileMappedState) ? this.search() : null;
     this.selectedState ? null : setTimeout(() => { this.selectStateRef.open() }, 100);
   }
 
@@ -132,7 +136,7 @@ export class EntityListPage {
     !event ? this.utils.startLoader() : "";
     this.page = !event ? 1 : this.page + 1;
     let apiUrl = this.searchUrl + "?observationId=" + this.observationId + "&search=" + encodeURIComponent(this.searchQuery ? this.searchQuery : "") + "&page=" + this.page + "&limit=" + this.limit;
-    apiUrl = (apiUrl + `&parentEntityId=${encodeURIComponent(this.selectedState)}`);
+    apiUrl = (apiUrl + `&parentEntityId=${encodeURIComponent(this.isProfileAssignedWithState ? this.profileMappedState :this.selectedState)}`);
     this.loading = true;
     this.apiProviders.httpGet(apiUrl, success => {
       this.loading = false;
