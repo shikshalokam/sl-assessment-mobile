@@ -18,6 +18,7 @@ import { AssessmentServiceProvider } from '../../providers/assessment-service/as
 import { ObservationDetailsPage } from '../observation-details/observation-details';
 import { GenericMenuPopOverComponent } from '../../components/generic-menu-pop-over/generic-menu-pop-over';
 import { ObservationProvider } from '../../providers/observation/observation';
+import { SidemenuProvider } from '../../providers/sidemenu/sidemenu';
 
 declare var cordova: any;
 
@@ -95,7 +96,8 @@ export class HomePage {
     private apiProvider: ApiProvider,
     private utils: UtilsProvider,
     private assessmentService: AssessmentServiceProvider,
-    private observationService: ObservationProvider
+    private observationService: ObservationProvider,
+    private sidemenuProvider: SidemenuProvider
   ) {
 
 
@@ -108,18 +110,8 @@ export class HomePage {
   ionViewDidLoad() {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
-    this.localStorageProvider.getLocalStorage('profileRole').then(success => {
-      this.profileRoles = success;
-      if (success.roles.length > 0) {
-        this.dashboardEnable = true;
-        this.canViewLoad = true;
-        this.pages = this.allPages;
-        this.events.publish('multipleRole', true);
-      } 
+    this.sidemenuProvider.getUserRoles();
 
-    }).catch(error => {
-      this.getRoles();
-    })
     if (this.network.type != 'none') {
       this.networkAvailable = true;
     }
@@ -244,21 +236,7 @@ export class HomePage {
     this.getIndividualAssessmentFromLocal();
     this.getObservationListFromLocal();
   }
-  getRoles() {
-    // return new Promise((resolve, reject) => {
-    let currentUser = this.currentUserProvider.getCurrentUserData();
-    this.apiProvider.httpGet(AppConfigs.roles.getProfile + currentUser.sub, success => {
-      this.profileRoles = success.result;
-      this.localStorage.setLocalStorage('profileRole', this.profileRoles);
-      console.log(JSON.stringify(success))
-      if (success.result.roles && success.result.roles.length > 0) {
-        this.dashboardEnable = true;
-        this.events.publish('multipleRole', true);
-      }
-    }, error => {
-      this.utils.openToast(error);
-    })
-  }
+
 
   socialSharingInApp() {
     this.sharingFeature.sharingThroughApp();
