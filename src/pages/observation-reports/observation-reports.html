@@ -24,7 +24,7 @@
         <pie-chart  [data]="element" [questionNumber]="i+1" *ngSwitchCase="'radio'"></pie-chart>
         <bar-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'multiselect'"></bar-chart>
         <matrix-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'matrix'"></matrix-chart>
-        <!-- <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchDefault></reports-text> -->
+        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchDefault></reports-text>
       </ion-card>
     </div>
   </div>
