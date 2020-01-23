@@ -28,6 +28,7 @@ export class EntityListPage {
     count: 0
   }
   solutionId: any;
+  searchQuery;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -69,7 +70,7 @@ export class EntityListPage {
     this.searchValue = event ? event : this.searchValue;
     event ? this.utils.startLoader() : "";
     this.page = event ? this.page : this.page + 1;
-    this.apiProviders.httpGet(this.searchUrl +"?observationId="+ this.observationId + "&search=" + this.searchValue + "&page=" + this.page + "&limit=" + this.limit, success => {
+    this.apiProviders.httpGet(this.searchUrl +"?observationId="+ this.observationId + "&search=" + encodeURIComponent(this.searchValue) + "&page=" + this.page + "&limit=" + this.limit, success => {
       this.selectableList = event ? [] : this.selectableList;
       for (let i = 0; i < success.result[0].data.length; i++) {
         success.result[0].data[i].isSelected = success.result[0].data[i].selected;
@@ -90,14 +91,14 @@ export class EntityListPage {
       infiniteScroll.complete();
     }, 500);
   }
-  searchEntity(event) {
-    if (!event.value) {
-      this.selectableList = [];
-      return
-    }
-    if (!event.value || event.value.length < 3) {
-      return;
-    }
-    this.search(event.value)
+  searchEntity() {
+    // if (!event.value) {
+    //   this.selectableList = [];
+    //   return
+    // }
+    // if (!event.value || event.value.length < 3) {
+    //   return;
+    // }
+    this.search(this.searchQuery)
   }
 }

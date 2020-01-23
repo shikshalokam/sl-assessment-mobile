@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Content } from 'ionic-angular';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
@@ -11,6 +11,7 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class QuestionerPage {
   @ViewChild('sample') nameInputRef: ElementRef;
+  @ViewChild('pageTop') pageTop: Content;
 
   questions: any;
   schoolName: string;
@@ -97,6 +98,7 @@ export class QuestionerPage {
   // images_CO_5bebcfcf92ec921dcf114828
 
   next(status?: string) {
+    this.pageTop.scrollToTop();
     if (this.questions[this.start].responseType === 'pageQuestions'){
       this.questions[this.start].endTime =  this.questions[this.start] ? Date.now() : "";
       this.questions[this.start].isCompleted = this.utils.isPageQuestionComplete(this.questions[this.start]);
@@ -151,6 +153,7 @@ export class QuestionerPage {
   }
 
   back() {
+    this.pageTop.scrollToTop();
     if (this.questions[this.start].responseType === 'pageQuestions'){
       this.questions[this.start].endTime =  this.questions[this.start] ? Date.now() : "";
       this.questions[this.start].isCompleted = this.utils.isPageQuestionComplete(this.questions[this.start]);
