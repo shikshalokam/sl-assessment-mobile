@@ -32,6 +32,7 @@ export class QuestionerPage {
   localImageListKey: any;
   countCompletedQuestion: number;
   captureGpsLocationAtQuestionLevel: boolean;
+  enableQuestionReadOut:boolean;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -51,6 +52,7 @@ export class QuestionerPage {
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.schoolData = data;
       const currentEvidences =  this.schoolData['assessment']['evidences'] ;
+      this.enableQuestionReadOut = this.schoolData['solution']['enableQuestionReadOut'];
       this.captureGpsLocationAtQuestionLevel = this.schoolData['solution']['captureGpsLocationAtQuestionLevel'];
       this.countCompletedQuestion = this.utils.getCompletedQuestionsCount(this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions']);
 

@@ -17,6 +17,7 @@ export class MatrixActionModalPage {
   evidenceId: string;
   generalQuestion: boolean;
   submissionId: string;
+  enableQuestionReadOut: boolean;
 
   constructor(public navCtrl: NavController, private utils: UtilsProvider,
     public navParams: NavParams, private viewCntrl: ViewController) {
@@ -27,6 +28,7 @@ export class MatrixActionModalPage {
     this.generalQuestion = navParams.data.generalQuestion;
     this.submissionId = navParams.data.submissionId;
     this.inputIndex = navParams.data.questionIndex;
+    this.enableQuestionReadOut = navParams.data.enableQuestionReadOut;
   }
 
   ionViewDidLoad() {
