@@ -1,6 +1,4 @@
-<!-- Generated template for the ReportsTextComponent component -->
-
-<ion-item-group>
-  <ion-item-divider color="light"> {{questionNumber}}) {{data?.question}}</ion-item-divider>
-  <ion-item *ngFor="let answer of data?.answers">{{data?.responseType === 'date' ? ( answer| date:'medium'):answer}}</ion-item>
+<ion-item-group class="text-container" text-wrap>
+  <ion-item-divider color="light"> <h4>{{questionNumber}}) {{data?.question}}</h4></ion-item-divider>
+  <ion-item *ngFor="let answer of data?.answers">{{ answer}}</ion-item>
 </ion-item-group>
