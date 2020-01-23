@@ -54,7 +54,7 @@ export class ReportsWithScorePage {
       "submissionId": this.submissionId,
       "observationId": this.observationId
     }
-    console.log(this.payload,"payload");
+    console.log(this.payload, "payload");
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
     // this.appFolderPath = this.isIos ? cordova.file.externalRootDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
@@ -64,7 +64,7 @@ export class ReportsWithScorePage {
   getObservationReports(download = false) {
     this.utils.startLoader();
     let url;
-    if(this.solutionId){
+    if (this.solutionId) {
       this.payload.solutionId = this.solutionId;
       this.payload.entityType = this.entityType;
       url = AppConfigs.observationReportsWithScore.solutionReport;
@@ -112,11 +112,13 @@ export class ReportsWithScorePage {
     // + "type=submission&"
     let url = AppConfigs.observationReportsWithScore.getReportsPdfUrls;
     const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a');
-    if(this.solutionId){
+    if (this.solutionId) {
       this.fileName = this.solutionId + timeStamp + ".pdf";
     } else if (this.submissionId) {
       this.fileName = this.submissionId + timeStamp + ".pdf";
     } else if (this.observationId && this.entityId) {
+      this.fileName = this.observationId + `_${this.entityId}_` + timeStamp + ".pdf";
+    } else if (this.observationId) {
       this.fileName = this.observationId + timeStamp + ".pdf";
     }
     this.apiService.httpPost(url, this.payload, (success) => {
