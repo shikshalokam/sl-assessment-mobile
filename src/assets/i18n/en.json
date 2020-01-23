@@ -4,7 +4,7 @@
         "generalQuestions": "General Questions",
         "selectObservationType": "Select a observation Type",
         "selectSolution": "Select a Solution",
-        "selectSchool": "Select Schools"
+        "selectSchool": "Select All Schools"
     },
     "actionSheet": {
         "confirmLeave": "Are you sure to leave.",
@@ -111,7 +111,7 @@
         "edit": "Edit",
         "observation": "Observation",
         "loadMore": "Load More",
-        "selectAll":"Select All",
+        "selectAll":"Select All Schools",
         "undo":"Undo"
     },
     "tabs": {
@@ -193,7 +193,8 @@
         "observationReports": "Report",
         "observationUpdate": "Observation Update",
         "notifications": "Notifications",
-        "settings":"Settings"
+        "settings":"Settings",
+        "solutionList":"Solution List"
     },
     "labels": {
         "welcome": "Welcome",
@@ -216,7 +217,8 @@
         "scoreAchieved":"Score achieved",
         "totalObservations":"Total Observations",
         "totalSchools":"Total schools",
-        "schoolsObserved":"Schools observed"
+        "schoolsObserved":"Schools observed",
+        "selectState":"Select State *"
     },
     "languages": {
         "english": "English",
@@ -231,7 +233,7 @@
         "noReportsFound": "No reports found",
         "noSubmission": "No Submissions",
         "startSearchSchool": "search school",
-        "noSchoolFound": "No Schools Found",
+        "noSchoolFound": "No schools found",
         "searchEntities": "Search for entities",
         "startSearchSolution": "Search for solutions",
         "dontCloseApp": "Please don't close the app or go back.",

@@ -19,6 +19,7 @@ export class DateTypeComponent implements OnInit {
   @Input() submissionId: any;
   @Input() inputIndex;
   @Input() hideButton: boolean;
+  @Input() enableQuestionReadOut: boolean;
   questionValid: boolean;
   currentDate;
   futureDate;
@@ -73,7 +74,7 @@ export class DateTypeComponent implements OnInit {
 
   getFutureDate() {
     let currentDate = new Date();
-    this.futureDate = currentDate.getFullYear()+10
+    this.futureDate = currentDate.getFullYear() + 10
   }
 
   checkForValidation(): void {

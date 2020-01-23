@@ -90,14 +90,23 @@
     <ion-step label="Add Schools">
       <div class="fixBox" *ngIf="entityList">
         <ion-label class="header _flex-box ">
-          {{'ionLabel.selectSchool' | translate}} 
-          <button ion-button class="selectAll" (click)="selectUnselectAllEntity(selectAll ? false : true)" [ngClass]="{'undo': selectAll}">
+          <!-- {{'ionLabel.selectSchool' | translate}} -->
+          <ion-select [(ngModel)]="selectedState" class="whiteSelection" *ngIf="selectedState && !isProfileAssignedWithState" (ionChange)="getEntityList();onStateChange($event)" >
+            <ion-option *ngFor="let state of allStates" [value]="state._id">
+              <b>{{state?.name}}</b>
+            </ion-option>
+          </ion-select>
+          <button ion-button class="selectAll" (click)="selectUnselectAllEntity(selectAll ? false : true)"
+            [ngClass]="{'undo': selectAll}">
             {{!selectAll ? ('buttons.selectAll' | translate) : ('buttons.undo' | translate)}}
-          \</button>
+            </button>
         </ion-label>
-        <ion-searchbar debounce="500" (ionClear)="clearEntity()" autofocus
-          (ionChange)="searchEntities($event ,'entity')" placeholder="{{'message.startSearchSchool' | translate}}">
-        </ion-searchbar>
+        <div>
+          <ion-searchbar debounce="500" 
+            (ionChange)="searchEntities($event ,'entity')" placeholder="{{'message.startSearchSchool' | translate}}">
+          </ion-searchbar>
+        </div>
+
         <ion-list margin-top *ngFor="let entity of entityList">
           <ion-item>
             <ion-label text-wrap>{{entity.name}}</ion-label>
@@ -108,13 +117,19 @@
         <div *ngIf="entityList?.length == 0" class="_flex-box msgContainer">
           {{'message.noSchoolFound' | translate}}
         </div>
+        <div class="_flex-box _justify-content-center" *ngIf="(entityList?.length && (entityList?.length <= entityListTotalCount)) && (entityListTotalCount > entityListLimit)">
+          <button ion-button full  class="btnText" color="light" (click)="doInfinite($event,'entity')">
+            {{'buttons.loadMore' | translate}}
+          </button>
+        </div>
+  
       </div>
-      <ion-infinite-scroll
+      <!-- <ion-infinite-scroll
         [enabled]="!(this.entityList?.length === entityListTotalCount) && this.entityList?.length > 0"
-        (ionInfinite)="doInfinite($event,entity)">
+        (ionInfinite)="doInfinite($event,'entity')">
         <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
         </ion-infinite-scroll-content>
-      </ion-infinite-scroll>
+      </ion-infinite-scroll> -->
 
 
       <ion-fab bottom right>
