@@ -27,13 +27,16 @@ export class BarChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    for (const instance of this.data.chart.data) {
-      const array = []
-      for (let value of instance.data) {
-        array.push(parseFloat(value));
+    if(this.data && this.data.chart && this.data.chart.data) {
+      for (const instance of this.data.chart.data) {
+        const array = []
+        for (let value of instance.data) {
+          array.push(parseFloat(value));
+        }
+        instance.data = array;
       }
-      instance.data = array;
     }
+
     this.chartObj = {
       chart: {
         plotBackgroundColor: null,

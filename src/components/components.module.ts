@@ -38,6 +38,7 @@ import { ReportEntityListComponent } from './report-entity-list/report-entity-li
 import { PercentageColumnChartsComponent } from './percentage-column-charts/percentage-column-charts';
 import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
 import { PageQuestionComponent } from './page-question/page-question';
+import { MatrixChartComponent } from './matrix-chart/matrix-chart';
 
 @NgModule({
 	declarations: [
@@ -69,7 +70,8 @@ import { PageQuestionComponent } from './page-question/page-question';
     ReportEntityListComponent,
     PercentageColumnChartsComponent,
     ExpansionPanelComponent,
-    PageQuestionComponent
+    PageQuestionComponent,
+    MatrixChartComponent
   ],
 	imports: [
 		IonicModule,
@@ -108,7 +110,8 @@ import { PageQuestionComponent } from './page-question/page-question';
     ReportEntityListComponent,
     PercentageColumnChartsComponent,
     ExpansionPanelComponent,
-    PageQuestionComponent
+    PageQuestionComponent,
+    MatrixChartComponent
 	],
 	entryComponents: [
 		InputTypeComponent,

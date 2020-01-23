@@ -11,12 +11,12 @@
       <h4 class="bold" text-wrap text-capitalize> {{data?.name}} </h4>
     </ion-item-divider>
 
-    <ion-item class="_flex-box _justify-content-space-between">
+    <ion-item class="_flex-box _justify-content-space-between" *ngIf="data?.startDate">
       <h3>{{'headings.startDate' | translate}}</h3>
       {{data?.startDate | date}}
     </ion-item>
 
-    <ion-item class="_flex-box _justify-content-space-between">
+    <ion-item class="_flex-box _justify-content-space-between" *ngIf="data?.endDate">
       <h3>{{'headings.endDate' | translate}}</h3>
       {{data?.endDate | date}}
     </ion-item>
