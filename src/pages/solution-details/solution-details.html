@@ -5,7 +5,7 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <header [title]="'headings.solutionDetails'|translate" [showMenu]="false" [showClose]="true" [disableNetwork]="true">
+  <header [title]="'headings.solutionDetails'|translate" [hideNotification]="true" [showMenu]="false" [showClose]="true" [disableNetwork]="true">
   </header>
 </ion-header>
 
@@ -15,22 +15,33 @@
 <ion-content padding>
   <h2>{{frameWork.name}} </h2>
   <p>{{frameWork.description}}</p>
-  <!-- <p>Start Date : {{frameWork.startDate}}</p> -->
-  <!-- <p>End Date : {{frameWork.endDate}}</p> -->
-  <!-- <p>Solution Type : {{frameWork.type}}</p>
-  <p>Solution Sub Type : {{frameWork.subType}}</p>
-  <p>language : {{frameWork.language}}</p> -->
-  <!-- <p>Level To Score Mapping</p> -->
-  <!-- <table>
-    <tr>
-      <th>Levels</th>
-      <th>Scores</th>
-    </tr>
-    <tr *ngFor="let level of Obj.keys(frameWork.levelToScoreMapping)">
-      <th>{{level.point}}</th>
-      <th>{{level.label}}</th>
-    </tr>
-  </table> -->
+  <div class="disableOverLay"></div>
+  <h3 class="caption">Questions</h3>
+  <div class="_container">
+    <ng-container *ngFor="let question of questions;let i=index" margin >
+      <ng-container [ngSwitch]="question.responseType.toLowerCase()">
+        <input-type [inputIndex]="i + 1" [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'"></input-type>
+        <input-type [inputIndex]="i + 1"  [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'"></input-type>
+        <radio-type  [inputIndex]="i + 1" [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'"></radio-type>
+        <date-type  [inputIndex]="i + 1" [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
+        <multiple-choice-type [inputIndex]="i + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+        <matrix-type [inputIndex]="i + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" 
+          *ngSwitchCase="'matrix'" [enableGps]="captureGpsLocationAtQuestionLevel">
+        </matrix-type>
+        <page-question  [inputIndex]="i + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
+        [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" *ngSwitchCase="'pagequestions'">
+        </page-question>
+        <slider [inputIndex]="i + 1" [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'slider'"></slider>
+      </ng-container>
+    </ng-container>
+  </div>
 
 
 </ion-content>

@@ -6,23 +6,23 @@
   <div class="_fullScreenCard" *ngIf="checkForVisibility(j)">
     <!-- <div class="_fullScreenCard" *ngIf="checkForVisibility(j)"> -->
     <input-type [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-      [schoolId]="schoolId" *ngSwitchCase="'text'" [hideButton]="true" [submissionId]="submissionId"></input-type>
+      [schoolId]="schoolId" *ngSwitchCase="'text'" [hideButton]="true" [submissionId]="submissionId" [enableQuestionReadOut] ="enableQuestionReadOut"></input-type>
     <input-type [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-      [schoolId]="schoolId" *ngSwitchCase="'number'" [submissionId]="submissionId" [hideButton]="true"></input-type>
+      [schoolId]="schoolId" *ngSwitchCase="'number'" [submissionId]="submissionId" [hideButton]="true" [enableQuestionReadOut] ="enableQuestionReadOut"></input-type>
     <radio-type [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-      [schoolId]="schoolId" *ngSwitchCase="'radio'" [submissionId]="submissionId" [hideButton]="true"></radio-type>
+      [schoolId]="schoolId" *ngSwitchCase="'radio'" [submissionId]="submissionId" [hideButton]="true" [enableQuestionReadOut] ="enableQuestionReadOut"></radio-type>
     <date-type [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion" [evidenceId]="evidenceId"
-      [schoolId]="schoolId" *ngSwitchCase="'date'" [submissionId]="submissionId" [hideButton]="true"></date-type>
+      [schoolId]="schoolId" *ngSwitchCase="'date'" [submissionId]="submissionId" [hideButton]="true" [enableQuestionReadOut] ="enableQuestionReadOut"></date-type>
     <slider [inputIndex]="j+1" [evidenceId]="evidenceId" [schoolId]="schoolId" [data]="question"
-      [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'slider'"></slider>
+      [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'slider'" [enableQuestionReadOut] ="enableQuestionReadOut"></slider>
 
     <multiple-choice-type [inputIndex]="j+1" [data]="question" [generalQuestion]="generalQuestion"
       [evidenceId]="evidenceId" [schoolId]="schoolId" *ngSwitchCase="'multiselect'" [submissionId]="submissionId"
-      [hideButton]="true"></multiple-choice-type>
+      [hideButton]="true" [enableQuestionReadOut] ="enableQuestionReadOut"></multiple-choice-type>
 
     <matrix-type [inputIndex]="j + 1" [evidenceId]="evidenceId" [schoolId]="schoolId" [data]="question"
       [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId"
-      (updateLocalData)="updateLocalDataInPageQuestion()" *ngSwitchCase="'matrix'">
+      (updateLocalData)="updateLocalDataInPageQuestion()" *ngSwitchCase="'matrix'" [enableQuestionReadOut] ="enableQuestionReadOut">
     </matrix-type>
   </div>
 </ng-container>

@@ -12,12 +12,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { AppConfigs } from '../../../providers/appConfig';
 import { TranslateService } from '@ngx-translate/core';
 
-/**
- * Generated class for the AddObservationFormPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 export interface draftData {
 
 }
@@ -31,6 +26,7 @@ export class AddObservationFormPage {
   addObservationForm: FormGroup;
   selectedFrameWork;
   selectedSchools = [];
+  selectedState: string;
 
   index = 0;
   @ViewChild('stepper') stepper1: ElementRef;
@@ -58,6 +54,10 @@ export class AddObservationFormPage {
   entityCount: any;
   isPublished: boolean = false;
   selectAll: boolean;
+  allStates: Array<Object>;
+  profileMappedState: any;
+  isProfileAssignedWithState: boolean;
+  profileData: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -76,12 +76,31 @@ export class AddObservationFormPage {
   ) {
     this.editData = this.navParams.get('data');
     this.editDataIndex = this.navParams.get('index');
+    this.localStorage.getLocalStorage('profileRole').then(success => {
+      this.profileData = success;
+      if(success && success.relatedEntities && success.relatedEntities.length){
+        for (const entity of success.relatedEntities) {
+          if(entity.entityType === 'state'){
+            this.profileMappedState = entity._id;
+            this.isProfileAssignedWithState = true;
+            break
+          }
+        }
+        this.isProfileAssignedWithState =this.profileMappedState ? true : false 
+      } else {
+        this.isProfileAssignedWithState = false;
+      }
+      this.getAllStatesFromLocal();
+    }).catch(error => {
+      this.isProfileAssignedWithState = false;
+      this.getAllStatesFromLocal()
+    })
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddObservationPage');
     this.getSolutionList()
-
     // this.utils.startLoader();
     // this.apiProviders.httpGet(AppConfigs.cro.getEntityListType, success => {
     //   this.entityTypeData = success.result;
@@ -206,14 +225,12 @@ export class AddObservationFormPage {
   }
 
   selectSolution(frameWork) {
-    console.log("solution select")
     this.selectedFrameWork = frameWork._id;
     this.ObservationFromTitle = frameWork.name;
     this.ObservationFromDescription = frameWork.description
     if (this.editData && (this.editData.data.solutionId !== frameWork._id || this.selectedFrameWork == this.editData.data.solutionId)) {
       this.editData.data.name = frameWork.name;
       this.editData.data.description = frameWork.description;
-      console.log("changed sol")
     }
   }
 
@@ -227,8 +244,8 @@ export class AddObservationFormPage {
     event ? this.solutionPage++ : this.solutionPage;
     this.utils.startLoader();
     // this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType + "?search="+this.searchSolutionUrl+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
-    this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + "?search="+encodeURIComponent(this.searchSolutionUrl)+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
-    // console.log(JSON.stringify(success.result))
+    this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + "?search=" + encodeURIComponent(this.searchSolutionUrl) + "&limit=" + this.solutionLimit + "&page=" + this.solutionPage, success => {
+      // console.log(JSON.stringify(success.result))
       // this.listOfSolution = event ? [...this.listOfSolution ,...success.result] :[...success.result];
       // // this.totalCount = success.result[0].count;
       // console.log(JSON.stringify(this.listOfSolution))
@@ -238,10 +255,8 @@ export class AddObservationFormPage {
       //       this.selectedFrameWork = element._id;
       //   });
       // }
-      console.log(JSON.stringify(success.result[0].data))
       this.listOfSolution = event ? [...this.listOfSolution, ...success.result[0].data] : [...success.result[0].data];
       this.totalCount = success.result[0].count;
-      console.log(JSON.stringify(this.listOfSolution))
       if (this.editData && this.editData.data.solutionId) {
         this.listOfSolution.forEach(element => {
           if (element._id === this.editData.data.solutionId)
@@ -262,7 +277,6 @@ export class AddObservationFormPage {
     this.utils.startLoader();
     this.apiProviders.httpGet(AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork, success => {
       this.addObservationData = success.result;
-      console.log(JSON.stringify(this.addObservationData))
       if (this.editData) {
         if ((!this.editData.data.name || !this.editData.data.description) && this.editData.data.solutionId) {
           this.addObservationData.forEach(element => {
@@ -323,34 +337,38 @@ export class AddObservationFormPage {
     return actionFlag;
   }
   getEntityList(event?) {
-    event ? this.entityListPage++ : this.entityListPage;
-
-    this.apiProviders.httpGet(AppConfigs.cro.searchEntity+'?solutionId='+this.selectedFrameWork+"&search="+encodeURIComponent(this.searchEntity)+"&page="+this.entityListPage+"&limit="+this.entityListLimit,success =>{
+    // !event ?  this.utils.startLoader():"";
+    this.utils.startLoader()
+    this.entityListPage = event ? this.entityListPage+1 : 1;
+    let apiUrl = AppConfigs.cro.searchEntity + '?solutionId=' + this.selectedFrameWork + "&search=" + encodeURIComponent(this.searchEntity) + "&page=" + this.entityListPage + "&limit=" + this.entityListLimit;
+    apiUrl = !this.isProfileAssignedWithState ? (apiUrl+`&parentEntityId=${encodeURIComponent(this.selectedState)}`) : apiUrl;
+    this.apiProviders.httpGet(apiUrl, success => {
+      // event ? event.complete() : this.utils.stopLoader();
+      this.utils.stopLoader()
       this.entityListTotalCount = success.result[0].count;
       // if (this.editData && this.editData.data.entities.length == 0) {
       //   success.result[0].data.forEach(element => {
       //     element["selected"] = false;
       //   });
       // } else 
-      console.log("inside entityyyy")
-      console.log(JSON.stringify(this.editData))
       if (this.editData && this.editData.data.entities.length) {
         success.result[0].data.forEach(element => {
-          element["selected"] = this.editData.data.entities.includes(element._id)   ? true : false;
+          element["selected"] = this.editData.data.entities.includes(element._id) ? true : false;
         });
       } else {
         success.result[0].data.forEach(element => {
           element["selected"] = this.selectAll ? true : false;
         });
       }
-      this.entityList = success.result[0].data;
+      const previousEntityList = this.entityList ? JSON.parse(JSON.stringify(this.entityList)) :[];
+      this.entityList = event ? [...previousEntityList,...success.result[0].data] : success.result[0].data;
       this.entityCount = 0;
       this.entityList.forEach(element => {
         element.selected ? this.entityCount++ : this.entityCount
       });
-      console.log(JSON.stringify(success))
     }, error => {
-
+      this.utils.stopLoader();
+      // event ? event.complete() : this.utils.stopLoader();
     }, { version: "v2" });
     return true;
   }
@@ -363,12 +381,17 @@ export class AddObservationFormPage {
     this.selectAll = status;
   }
   doInfinite(infiniteScroll, type = 'solutions') {
-    console.log("doInfinite function called");
     setTimeout(() => {
-      type == 'solutions' ? this.getSolutionList('infiniteScroll') : this.getEntityList('infiniteScroll')
-      infiniteScroll.complete();
+      type === 'solutions' ? this.getSolutionList(infiniteScroll) : this.getEntityList(infiniteScroll)
+      // infiniteScroll.complete();
     }, 500);
   }
+
+  onStateChange(event) {
+    this.profileData.stateSelected = event;
+    this.localStorage.setLocalStorage('profileRole', this.profileData)
+  }
+
   searchSolution(event) {
     if (!event.value) {
       // this.listOfSolution = [];
@@ -392,10 +415,10 @@ export class AddObservationFormPage {
     this.getSolutionList();
   }
 
-  searchEntities(event) {
+  searchEntities(event, type) {
     if (!event.value) {
       // this.listOfSolution = [];
-      this.clearSolution();
+      type !== 'entity' ? this.clearSolution() : this.clearEntity()
       return
     }
     if (!event.value || event.value.length < 3) {
@@ -495,18 +518,13 @@ export class AddObservationFormPage {
     obj['data']['description'] = observation.data['description'];
     obj['data']['entities'] = observation.data['entities'];
 
-    console.log(JSON.stringify(obj));
     this.apiProviders.httpPost(AppConfigs.cro.createObservation + observation.data['solutionId'], obj, success => {
-      console.log(JSON.stringify(success));
       // console.log("published obs")
       this.utils.openToast(success.message);
       this.isPublished = true;
-      console.log(this.editDataIndex)
       if (this.editData) {
         this.localStorage.getLocalStorage('draftObservation').then(draftObs => {
           draftObs.splice(this.editDataIndex, 1);
-          console.log(JSON.stringify(draftObs))
-          console.log("DRAFTOBS")
           this.localStorage.setLocalStorage('draftObservation', draftObs);
         }).catch(error => {
 
@@ -522,11 +540,9 @@ export class AddObservationFormPage {
 
   countEntity(entity) {
     entity.selected ? this.entityCount-- : this.entityCount++;
-    console.log(this.entityCount)
   }
 
   async ionViewCanLeave() {
-    console.log(this.saveDraftType + "  " + this.editDataIndex)
     if (this.isPublished) {
       return true
     }
@@ -536,13 +552,35 @@ export class AddObservationFormPage {
     }
   }
 
+  getAllStatesFromLocal() {
+    this.localStorage.getLocalStorage('allStates').then(data => {
+      data ? this.allStates = data : this.getAllStatesApi();
+      if(data && data.length){
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected : data[0]._id;
+      } ;
+    }).catch(error => {
+      this.getAllStatesApi();
+    })
+  }
+
+  getAllStatesApi() {
+    this.apiProviders.httpGet(AppConfigs.cro.entityListBasedOnEntityType + 'state', success => {
+      this.allStates = success.result;
+      if(this.allStates && this.allStates.length){
+        this.selectedState = this.profileData.stateSelected ? this.profileData.stateSelected :this.allStates[0]['_id'];
+      } 
+      this.localStorage.setLocalStorage('allStates', this.allStates);
+    }, error => {
+      this.allStates = [];
+    })
+  }
+
   confirmLeave(): Promise<Boolean> {
     let resolveLeaving;
     const canLeave = new Promise<Boolean>(resolve => resolveLeaving = resolve);
     let translateObject;
     this.translate.get(['actionSheet.confirmLeave', 'actionSheet.saveCurrentDataConfirmation', 'actionSheet.yes', 'actionSheet.no']).subscribe(translations => {
       translateObject = translations;
-      console.log(JSON.stringify(translations))
     })
 
     const alert = this.alertCtrl.create({

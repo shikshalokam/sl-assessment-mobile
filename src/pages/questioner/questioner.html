@@ -11,24 +11,24 @@
     <ng-container *ngFor="let question of questions| slice:start:end; let i=index">
       <ng-container [ngSwitch]="question.responseType.toLowerCase()">
         <input-type [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'"></input-type>
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'text'" [enableQuestionReadOut] ="enableQuestionReadOut"></input-type>
         <input-type [inputIndex]="start + 1"  [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'"></input-type>
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'number'" [enableQuestionReadOut] ="enableQuestionReadOut"></input-type>
         <radio-type  [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'"></radio-type>
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'radio'" [enableQuestionReadOut] ="enableQuestionReadOut"></radio-type>
         <date-type  [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'"></date-type>
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'date'" [enableQuestionReadOut] ="enableQuestionReadOut"></date-type>
         <multiple-choice-type [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'multiselect'"></multiple-choice-type>
+          [imageLocalCopyId]="localImageListKey" [submissionId]="submissionId" *ngSwitchCase="'multiselect'" [enableQuestionReadOut] ="enableQuestionReadOut"></multiple-choice-type>
         <matrix-type [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
           [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" 
-          *ngSwitchCase="'matrix'" [enableGps]="captureGpsLocationAtQuestionLevel">
+          *ngSwitchCase="'matrix'" [enableGps]="captureGpsLocationAtQuestionLevel" [enableQuestionReadOut] ="enableQuestionReadOut" >
         </matrix-type>
         <page-question  [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [schoolId]="schoolId" [data]="question"
-        [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" *ngSwitchCase="'pagequestions'">
+        [imageLocalCopyId]="localImageListKey" [submissionId] = "submissionId" (updateLocalData)="updateLocalData()" *ngSwitchCase="'pagequestions'" [enableQuestionReadOut] ="enableQuestionReadOut">
         </page-question>
         <slider [inputIndex]="start + 1" [evidenceId]="selectedEvidenceId" [submissionId]="submissionId" [schoolId]="schoolId" [data]="question"
-          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'slider'"></slider>
+          [imageLocalCopyId]="localImageListKey" *ngSwitchCase="'slider'" [enableQuestionReadOut] ="enableQuestionReadOut"></slider>
       </ng-container>
     </ng-container>
   </div>

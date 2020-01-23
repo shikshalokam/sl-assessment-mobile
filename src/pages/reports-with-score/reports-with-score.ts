@@ -32,6 +32,8 @@ export class ReportsWithScorePage {
   isIos;
   fileName;
   action;
+  solutionId: string;
+  entityType: string;
 
   constructor(public navCtrl: NavController, private dap: DownloadAndPreviewProvider,
     public navParams: NavParams, private platform: Platform,
@@ -45,6 +47,8 @@ export class ReportsWithScorePage {
     this.submissionId = this.navParams.get('submissionId');
     this.observationId = this.navParams.get('observationId')
     this.entityId = this.navParams.get('entityId');
+    this.solutionId = this.navParams.get('solutionId');
+    this.entityType = this.navParams.get('entityType');
     this.payload = {
       "entityId": this.entityId,
       "submissionId": this.submissionId,
@@ -58,9 +62,13 @@ export class ReportsWithScorePage {
   }
 
   getObservationReports(download = false) {
-    // this.utils.startLoader();
+    this.utils.startLoader();
     let url;
-    if (this.submissionId) {
+    if(this.solutionId){
+      this.payload.solutionId = this.solutionId;
+      this.payload.entityType = this.entityType;
+      url = AppConfigs.observationReportsWithScore.solutionReport;
+    } else if (this.submissionId) {
       // view submission report
       url = AppConfigs.observationReportsWithScore.instanceReport;
     } else if (this.observationId && this.entityId) {
@@ -103,13 +111,12 @@ export class ReportsWithScorePage {
     this.utils.startLoader();
     // + "type=submission&"
     let url = AppConfigs.observationReportsWithScore.getReportsPdfUrls;
-    const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a')
-    if (this.submissionId) {
-      // url = url + "submissionId=" + this.submissionId;
-      url = url;
+    const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a');
+    if(this.solutionId){
+      this.fileName = this.solutionId + timeStamp + ".pdf";
+    } else if (this.submissionId) {
       this.fileName = this.submissionId + timeStamp + ".pdf";
     } else if (this.observationId && this.entityId) {
-      url = url
       this.fileName = this.observationId + timeStamp + ".pdf";
     }
     this.apiService.httpPost(url, this.payload, (success) => {
