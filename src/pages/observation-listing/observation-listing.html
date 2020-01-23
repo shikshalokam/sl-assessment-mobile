@@ -1,0 +1,19 @@
+<ion-header>
+  <header [title]="'headings.solutionList'  |translate" [hideBack]="false">
+  </header>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list *ngIf="solutionList?.length" text-wrap>
+    <ion-item *ngFor="let solution of solutionList" 
+    (click)="solution?.scoring ?  presentActionSheet(solution?.solutionId) : goToReportsOfSolution(solution?.solutionId)"
+    >
+      <ion-icon name="eye" item-start></ion-icon>
+      {{solution?.solutionName}}
+    </ion-item>
+  </ion-list>
+  <div *ngIf="!solutionList?.length" class="_errorBox _flex-box _justify-content-center">
+    {{'message.noSolutionFound' | translate}}
+  </div>
+</ion-content>

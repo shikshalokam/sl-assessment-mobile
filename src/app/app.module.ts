@@ -29,6 +29,7 @@ import { SectionListPageModule } from '../pages/section-list/section-list.module
 import { QuestionerPageModule } from '../pages/questioner/questioner.module';
 import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
+
 import { FaqPage } from '../pages/faq/faq';
 import { SocialSharing } from '@ionic-native/social-sharing';
 
@@ -100,6 +101,17 @@ import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
 import { ProgramListingPage } from '../pages/program-listing/program-listing';
 import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
+import { NotificationProvider } from '../providers/notification/notification';
+import { Badge } from '@ionic-native/badge'
+import { AppIconBadgeProvider } from '../providers/app-icon-badge/app-icon-badge';
+import { FCM } from '@ionic-native/fcm';
+import { FcmProvider } from '../providers/fcm/fcm';
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Market } from '@ionic-native/market';
+import { AppVersion } from '@ionic-native/app-version';
+import { SettingsPage } from '../pages/settings/settings';
+import { SpinnerDialog } from '@ionic-native/spinner-dialog';
+import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
 
 @NgModule({
   declarations: [
@@ -131,7 +143,8 @@ import { ObservationEditPage } from '../pages/observation-edit/observation-edit'
     RoleListingPage,
     ReportEntityListingPage,
     DashboardPage,
-    ObservationEditPage
+    ObservationEditPage,
+    SettingsPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -162,7 +175,8 @@ import { ObservationEditPage } from '../pages/observation-edit/observation-edit'
     RegistryListPageModule,
     GeneralQuestionListPageModule,
     IonicStepperModule,
-    ObservationsPageModule  ],
+    ObservationsPageModule  
+  ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
@@ -190,11 +204,11 @@ import { ObservationEditPage } from '../pages/observation-edit/observation-edit'
     SubmissionListPage,
     DashboardPage,
     ProgramListingPage,
-
+    SettingsPage,
     ObservationReportsPage,
     RoleListingPage,
     ReportEntityListingPage,
-    ObservationEditPage
+    ObservationEditPage,
   ],
   providers: [
     StatusBar,
@@ -246,6 +260,16 @@ import { ObservationEditPage } from '../pages/observation-edit/observation-edit'
     DownloadAndPreviewProvider,
     UpdateTrackerProvider,
     TextToSpeechProvider,
+    NotificationProvider,
+    Badge,
+    AppIconBadgeProvider, 
+    FCM,
+    FcmProvider,
+    LocalNotifications,
+    Market,
+    AppVersion,
+    SpinnerDialog,
+    SidemenuProvider
   ]
 })
 export class AppModule { }

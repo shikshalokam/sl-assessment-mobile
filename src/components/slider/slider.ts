@@ -20,6 +20,7 @@ export class SliderComponent {
   @Input() generalQuestion: boolean;
   @Input() submissionId: any;
   @Input() inputIndex ;
+  @Input() enableQuestionReadOut: boolean;
   color: string = 'light';
   isComplete: boolean;
 

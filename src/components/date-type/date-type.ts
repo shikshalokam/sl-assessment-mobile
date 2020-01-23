@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
   selector: 'date-type',
   templateUrl: 'date-type.html'
 })
-export class DateTypeComponent implements OnInit{
+export class DateTypeComponent implements OnInit {
   @Input() data: any;
   @Input() isLast: boolean;
   @Input() isFirst: boolean;
@@ -17,24 +17,28 @@ export class DateTypeComponent implements OnInit{
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
   @Input() submissionId: any;
-  @Input() inputIndex ;
+  @Input() inputIndex;
   @Input() hideButton: boolean;
+  @Input() enableQuestionReadOut: boolean;
   questionValid: boolean;
   currentDate;
+  futureDate;
 
   constructor(private utils: UtilsProvider, private datePipe: DatePipe) {
     console.log('Hello DateTypeComponent Component');
+    this.getFutureDate();
+
   }
 
   next(status?: string) {
     this.data.isCompleted = this.utils.isQuestionComplete(this.data);
-    if(!this.data.validation.required) {
+    if (!this.data.validation.required) {
       this.data.isCompleted = true;
     }
     this.nextCallBack.emit(status);
   }
 
-  captureTime() : void {
+  captureTime(): void {
     const parseString = this.data.dateFormat;
     console.log(this.datePipe.transform(Date.now(), 'full'));
     // this.datePipe.transform(Date.now(), 'yyyy-MM-dd')
@@ -58,14 +62,19 @@ export class DateTypeComponent implements OnInit{
     // this.currentDate = dateTime.split('T')[0];
     console.log(dateTime);
     // if(this.data.validation.max === "currentDate") {
-      this.data.validation.max = this.data.validation.max ==="currentDate" ? new Date().toISOString().split('T')[0] : this.data.validation.max;
-      this.data.validation.min = this.data.validation.min ==="currentDate" ? new Date().toISOString().split('T')[0] : this.data.validation.min;
+    this.data.validation.max = this.data.validation.max === "currentDate" ? new Date().toISOString().split('T')[0] : this.data.validation.max;
+    this.data.validation.min = this.data.validation.min === "currentDate" ? new Date().toISOString().split('T')[0] : this.data.validation.min;
 
     // }
     // this.data.validation.max = this.data.validation.max === "currentDate" ? new Date().toISOString().split('T')[0] : ;
     console.log(JSON.stringify(this.data.validation))
     this.checkForValidation();
     this.data.startTime = this.data.startTime ? this.data.startTime : Date.now();
+  }
+
+  getFutureDate() {
+    let currentDate = new Date();
+    this.futureDate = currentDate.getFullYear() + 10
   }
 
   checkForValidation(): void {

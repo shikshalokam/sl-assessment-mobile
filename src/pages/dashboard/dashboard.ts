@@ -93,7 +93,7 @@ export class DashboardPage {
       this.utils.stopLoader();
       console.log("error");
       this.utils.openToast(error)
-    }, { "dhiti": true })
+    }, { baseUrl:"dhiti" })
   }
 
 
@@ -137,7 +137,7 @@ export class DashboardPage {
       this.utils.openToast(error.message)
 
       this.utils.stopLoader();
-    }, { dhiti: true })
+    }, { baseUrl:"dhiti" })
   }
 
 

@@ -26,6 +26,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
   @Input() schoolId;
+  @Input() enableQuestionReadOut: boolean;
   notNumber: boolean;
   questionValid: boolean;
   text: string;

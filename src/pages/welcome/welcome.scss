@@ -10,47 +10,73 @@ page-welcome {
         background: $grey-color !important;
     }
 
-    ion-toolbar {
-        position: absolute;
-        top: 0;
+    // ion-toolbar {
+    //     position: absolute;
+    //     top: 0;
 
-    }
+    // }
 
     .imageAdj {
         width: 50%;
     }
+
     .conatiner {
-        // width: 90%;
-        padding:0 20px;
+        padding: 0 20px;
+        width: 100%;
+        flex-direction: column;
     }
+
     .content {
         color: $medium-black;
         margin-top: 10px;
     }
-    .sticky-footer {
-        position: fixed;
-        bottom: 1px;
-        left: 0;
-        right: 0;
-        // padding: 10px;
-    }
+
     .alignLeft {
-        text-align: left;
-        text-justify:justify;
+        text-align: center;
+        text-justify: justify;
     }
+
     .skipBtn {
-        padding: 30px ;
-        font-size: 20px;
+        padding: 25px 0;
+        // font-size: 20px;
+        font-size: 16px;
+        margin-bottom: 0;
     }
+
+    .getstarted {
+        padding: 20px 30px;
+        font-size: 16px;
+        border-radius: 15px;
+        margin: 15px 0;
+    }
+
+    .slideTwoMaxSize {
+        // max-width: 300px;
+        max-height: 300px;
+    }
+
     .poweredBy {
         font-size: 12px;
     }
 
     .blackText {
         color: $black-color;
+        margin-top: 30px;
     }
 
     .maxSize {
-        max-width: 350px;
+        max-height: 300px;
+    }
+
+    .mainContainer {
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bottomFooter {
+        margin-bottom: 22px;;
     }
 }

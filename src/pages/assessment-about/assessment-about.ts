@@ -1,8 +1,7 @@
-import { Component, ɵConsole } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { ObservationDetailsPage } from '../observation-details/observation-details';
-import { EntityListPage } from '../observations/add-observation-form/entity-list/entity-list';
 import { EntityListingPage } from '../entity-listing/entity-listing';
 
 /**
