@@ -16,7 +16,7 @@
     </div>
 
   </div>
-  <div>
+  <div *ngIf="enableQuestionReadOut">
     <ion-icon *ngIf="!play" margin-left class="noWrap" name="volume-off"
       (click)="playQuestion(data.question[0],data.options,data.responseType)"></ion-icon>
     <ion-icon *ngIf="play"  margin-left class="noWrap" name="volume-up" (click)="pauseQuestion()">

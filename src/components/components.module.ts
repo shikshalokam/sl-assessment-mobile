@@ -38,7 +38,11 @@ import { ReportEntityListComponent } from './report-entity-list/report-entity-li
 import { PercentageColumnChartsComponent } from './percentage-column-charts/percentage-column-charts';
 import { ExpansionPanelComponent } from './expansion-panel/expansion-panel';
 import { PageQuestionComponent } from './page-question/page-question';
+import { NotificationCardComponent } from './notification-card/notification-card';
 import { MatrixChartComponent } from './matrix-chart/matrix-chart';
+import { AlertModalComponent } from './alert-modal/alert-modal';
+import { ScatterChartComponent } from './scatter-chart/scatter-chart';
+import { ScoreReportMenusComponent } from './score-report-menus/score-report-menus';
 
 @NgModule({
 	declarations: [
@@ -71,7 +75,11 @@ import { MatrixChartComponent } from './matrix-chart/matrix-chart';
     PercentageColumnChartsComponent,
     ExpansionPanelComponent,
     PageQuestionComponent,
-    MatrixChartComponent
+    NotificationCardComponent,
+    MatrixChartComponent,
+    AlertModalComponent,
+    ScatterChartComponent,
+    ScoreReportMenusComponent
   ],
 	imports: [
 		IonicModule,
@@ -111,7 +119,11 @@ import { MatrixChartComponent } from './matrix-chart/matrix-chart';
     PercentageColumnChartsComponent,
     ExpansionPanelComponent,
     PageQuestionComponent,
-    MatrixChartComponent
+    NotificationCardComponent,
+    MatrixChartComponent,
+    AlertModalComponent,
+    ScatterChartComponent,
+    ScoreReportMenusComponent
 	],
 	entryComponents: [
 		InputTypeComponent,
@@ -119,7 +131,9 @@ import { MatrixChartComponent } from './matrix-chart/matrix-chart';
 		MatrixModalComponent,
     MenuItemComponent,
     EntityListingComponent,
-    GenericMenuPopOverComponent
+    GenericMenuPopOverComponent,
+    NotificationCardComponent,
+    ScoreReportMenusComponent
 	],
 	providers:[
 		Network, DatePipe, SlackProvider

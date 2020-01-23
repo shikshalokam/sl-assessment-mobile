@@ -5,6 +5,7 @@ header {
         // overflow: hidden !important;
         // white-space: nowrap !important;
         flex: 1;
+        font-family: 'SourceSansPro-Bold';
     }
 
      .margin {
@@ -13,4 +14,26 @@ header {
     .textCapital{
         text-transform: capitalize;
     }
+    .dot{
+        width: 20px;
+        height: 20px;
+        background: $red-color;
+        border-radius: 10px;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        z-index: 2;
+        justify-content: center;
+        color: $white-color;
+        font-size: 10px;
+        font-weight: bold;
+    }
+    .relative {
+        position: relative;
+    }
+
+    .notificationIcon {
+        font-size: 28px;
+    }
+  
 }

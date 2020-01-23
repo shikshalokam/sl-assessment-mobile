@@ -19,6 +19,7 @@ export class InputTypeComponent implements OnInit {
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
   @Input() schoolId;
+  @Input() enableQuestionReadOut : boolean;
 
   
   notNumber: boolean;

@@ -25,6 +25,7 @@ export class RadioTypeComponent implements OnInit{
   @Input() imageLocalCopyId: string;
   @Input() generalQuestion: boolean;
   @Input() submissionId: any;
+  @Input() enableQuestionReadOut: boolean;
 
   color: string = 'light';
   isComplete: boolean;
