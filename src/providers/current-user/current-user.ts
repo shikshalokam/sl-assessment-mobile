@@ -20,7 +20,7 @@ export class CurrentUserProvider {
     console.log('Hello CurrentUserProvider Provider');
   }
 
-  setCurrentUserDetails(userTokens): void {
+  setCurrentUserDetails(userTokens): Promise<any> {
     // let userDetails = jwt_decode(userTokens.accessToken);
     // let userId = userDetails.sub;
     // this.sqlite.create({
@@ -37,8 +37,14 @@ export class CurrentUserProvider {
     //       .catch(e => console.log(e));
     //   })
     //   .catch(e => console.log(e));
-    this.curretUser = userTokens;
-    this.storage.set('tokens', JSON.stringify(userTokens));
+    return new Promise((resolve, reject) => {
+      this.curretUser = userTokens;
+      this.storage.set('tokens', JSON.stringify(userTokens)).then(success => {
+        resolve()
+      }).catch(error => {
+      });
+    })
+    
   }
 
   getCurrentUserData(): any {

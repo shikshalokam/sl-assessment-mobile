@@ -1,3 +1,16 @@
 page-school-list {
+    .searchCard {
+        margin: 0;
+        padding: 0;
+        width: 100% !important;
+        background: $grey-color;
+    }
+    .searchIcon {
+        font-size: 20px !important;
+    }
 
+    .seacrhInput {
+        padding-left: 15px;
+
+    }
 }
