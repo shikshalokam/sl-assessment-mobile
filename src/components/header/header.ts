@@ -1,35 +1,51 @@
-import { Component, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
-import { Events, ModalController, ViewController } from 'ionic-angular';
+import { Events, ModalController, ViewController, App } from 'ionic-angular';
 import { QuestionDashboardPage } from '../../pages/question-dashboard/question-dashboard';
+import { NotificationProvider } from '../../providers/notification/notification';
+import { PopoverController } from 'ionic-angular';
+import { NotificationCardComponent } from '../notification-card/notification-card';
 
 @Component({
   selector: 'header',
   templateUrl: 'header.html'
 })
-export class HeaderComponent implements OnDestroy{
+export class HeaderComponent implements OnInit,OnDestroy {
   @Input() title: string;
   @Input() showLogout: boolean;
-  @Input() hideBack: boolean; 
+  @Input() hideBack: boolean;
   @Input() dashbordData: any;
   @Input() enableDashboard: boolean;
   @Input() disableNetwork: boolean;
   @Input() showClose: boolean;
   @Input() showMenu: boolean = true;
   @Output() onDashboardOpen = new EventEmitter();
-  
+  @Input() hideNotification;
+
   text: string;
   networkSubscription: any;
   networkAvailable: boolean;
   subscription: any;
   dashboardModal: any;
+  newNotificationPresent: boolean;
+  notificationSubscription;
+  notificationData;
 
-  constructor(private ngps: NetworkGpsProvider, 
-    private feedbackService: FeedbackProvider, 
+  constructor(private ngps: NetworkGpsProvider,
+    private feedbackService: FeedbackProvider,
     private events: Events,
+    public popoverCtrl: PopoverController,
     private modalcntrl: ModalController,
-    private viewCtrl: ViewController) {
+    private app:App,
+    private viewCtrl: ViewController, private notificationServ: NotificationProvider) {
+    console.log("construct");
+
+    this.notificationSubscription = this.notificationServ.$notificationSubject.subscribe(data => {
+      this.notificationData = data;
+      this.newNotificationPresent = this.notificationData.count ? true : false
+    })
+
 
     this.subscription = this.events.subscribe('network:offline', () => {
       // this.utils.openToast("Network disconnected");
@@ -43,12 +59,28 @@ export class HeaderComponent implements OnDestroy{
     });
 
     this.networkAvailable = this.ngps.getNetworkStatus();
-    
+
+  }
+
+  ngOnInit() {
+    console.log("oninit")
+    this.notificationSubscription = this.notificationServ.$notificationSubject.subscribe(data => {
+      this.notificationData = data;
+      if (this.notificationData.count) {
+        this.newNotificationPresent = true;
+      }
+    })
+    this.notificationData = this.notificationServ.notificationsData;
+    this.newNotificationPresent = (this.notificationData && this.notificationData.count) ? true : false;
   }
 
   ngOnDestroy() {
-    if(this.subscription){
+    console.log("destroy");
+    if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+    if(this.notificationSubscription) {
+      this.notificationSubscription.unsubscribe();
     }
   }
 
@@ -57,9 +89,21 @@ export class HeaderComponent implements OnDestroy{
   }
 
   openDashboard(): void {
-    this.dashboardModal = this.modalcntrl.create(QuestionDashboardPage, {"questions":this.dashbordData});
+    this.dashboardModal = this.modalcntrl.create(QuestionDashboardPage, { "questions": this.dashbordData });
     this.onDashboardOpen.emit(this.dashboardModal);
     this.dashboardModal.present();
+  }
+
+  onNotificationClick(evt) {
+    // let popover = this.popoverCtrl.create(
+    //   NotificationCardComponent,
+    //   { showViewMore: true, data: this.notificationData ? this.notificationData.data : []},
+    //   { cssClass: 'customPopOver', showBackdrop: true }
+    // );
+    // popover.present({
+    //   ev: evt
+    // });
+      this.app.getRootNav().push('NotificationListingPage');
   }
 
   closeDashboard() {

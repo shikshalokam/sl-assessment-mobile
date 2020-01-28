@@ -1,98 +1,110 @@
-<ion-content>
-
-  <ion-slides pager>
-    <ion-slide *ngFor="let slide of slidesList">
-      <!-- <ion-toolbar>
-        <ion-buttons end>
-          <button ion-button color="primary" (click)="gotToLastSlide()">{{'buttons.skip'|translate}}</button>
-        </ion-buttons>
-      </ion-toolbar> -->
-      <div>
-        <div>
-          <img src="assets/imgs/image1.jpg" class="imageAdj" />
-        </div>
-        <div class="_flex-box _justify-content-center content" margin>
-          Version {{appVersion}}
-        </div>
-        <!-- <div class="_flex-box _justify-content-center">
-            <span class="poweredBy"> By </span> <img src="assets/imgs/sl-logo.png" style="max-width: 150px;padding: 10px;" />
-        </div> -->
-      </div>
-      <!-- 
-      <div class="sticky-footer">
-         <img src="assets/imgs/sl-logo.png" style="max-width: 50%;padding: 10px;" />
-      </div> -->
-      <h2 class="slide-title" [innerHTML]="slide?.title"></h2>
-    </ion-slide>
-
-
-    <ion-slide>
+<ion-content style="margin-top: 0;">
+  <!-- Use pager as attribute to show bottom paginator -->
+  <ion-slides pager (ionSlideDidChange)="slideChanged()" [paginationType]="'bullet'" >
+    <!-- *ngFor="let slide of slidesList" -->
+    <!-- <ion-slide>
       <ion-toolbar>
         <ion-buttons end>
           <button ion-button color="primary" (click)="gotToLastSlide()">{{'buttons.skip'|translate}}</button>
         </ion-buttons>
       </ion-toolbar>
       <div>
+        <div>
+          <img src="assets/imgs/just-logo.png" class="imageAdj" />
+        </div>
+        <div class="_flex-box _justify-content-center content" margin>
+          Version {{appVersion}}
+        </div>
+        <div class="_flex-box _justify-content-center">
+            <span class="poweredBy"> By </span> <img src="assets/imgs/sl-logo.png" style="max-width: 150px;padding: 10px;" />
+        </div>
+      </div>
+
+      <div class="sticky-footer">
+         <img src="assets/imgs/sl-logo.png" style="max-width: 50%;padding: 10px;" />
+      </div>
+      <h2 class="slide-title" [innerHTML]="slide?.title"></h2>
+    </ion-slide> -->
+
+    <ion-slide>
+      <!-- <ion-toolbar>
+            <ion-buttons end>
+              <button ion-button color="primary" (click)="gotToNextSlide()">{{'buttons.skip'|translate}}</button>
+            </ion-buttons>
+          </ion-toolbar> -->
+      <div class="mainContainer">
+        <div class="conatiner">
+          <img src="assets/imgs/image1.jpg" class="maxSize" />
+        </div>
+        <div class="_flex-box _justify-content-center conatiner">
+          <h4 >Version {{appVersion}}</h4>
+          <!-- <p class="alignLeft content">
+            Observe and assess individuals or institutions to plan areas of improvements.
+          </p> -->
+        </div>
+      </div>
+      <!-- <div class="bottomFooter" (click)="gotToNextSlide()">
+        <button ion-button full class="skipBtn">{{'buttons.skip'|translate}}</button>
+      </div> -->
+    </ion-slide>
+
+
+    <ion-slide>
+      <!-- <ion-toolbar>
+            <ion-buttons end>
+              <button ion-button color="primary" (click)="gotToNextSlide()">{{'buttons.skip'|translate}}</button>
+            </ion-buttons>
+          </ion-toolbar> -->
+      <div class="mainContainer">
         <div class="conatiner">
           <img src="assets/imgs/group_65.png" class="maxSize" />
         </div>
         <div class="_flex-box _justify-content-center conatiner">
           <h4 class="blackText">Conduct Observation and Assessments</h4>
           <p class="alignLeft content">
-            Enables educational leaders to Observe and assess individuals or institutions to plan area of improvement.
+            <!-- Enables educational leaders to Observe and assess individuals or institutions to plan area of improvement. -->
+            Observe and assess individuals or institutions to plan areas of improvements.
           </p>
         </div>
       </div>
-      <!-- <div class="sticky-footer" (click)="slides.slideTo(2)">
-          <button ion-button full class="skipBtn">Next</button>
+      <!-- <div class="bottomFooter" (click)="gotToNextSlide()">
+        <button ion-button full class="skipBtn">{{'buttons.skip'|translate}}</button>
       </div> -->
-      <ion-footer no-shadow>
-        <!-- <ion-toolbar position="bottom"> -->
-        <button ion-button full class="skipBtn" (click)="slides.slideTo(2)">Next</button>
-        <!-- </ion-toolbar> -->
-      </ion-footer>
-      <!-- <div class="_flex-box _justify-content-center">
-        Version {{appVersion}}
-      </div> -->
-      <h2 class="slide-title" [innerHTML]="slide?.title"></h2>
     </ion-slide>
 
     <ion-slide>
-      <div>
+      <div class="mainContainer">
         <div class="conatiner">
-          <img src="assets/imgs/analyse_straight.png" class="maxSize" />
+          <img src="assets/imgs/analyse_straight.png" class="slideTwoMaxSize" />
         </div>
         <div class="_flex-box _justify-content-center conatiner">
           <h4 class="blackText">Collate information, Analyse data</h4>
           <p class="alignLeft content">
-            User can generate reports, analyse data and draw insights to take an informed decision.
+            Generate reports, analyse data and draw insights to take an informed decision.
           </p>
         </div>
       </div>
-      <!-- <div class="sticky-footer">
-            <button ion-button full class="skipBtn" (click)="slides.slideTo(3)">Login</button>
-        </div> -->
-      <ion-footer no-shadow>
-        <button ion-button full class="skipBtn" (click)="slides.slideTo(3)">Login</button>
-
-      </ion-footer>
+      <!-- <div class="bottomFooter">
+        <button ion-button class="getstarted" (click)="slides.slideTo(3)">Get Started</button>
+      </div> -->
     </ion-slide>
 
     <ion-slide>
-      <ion-toolbar>
-      </ion-toolbar>
-      <div>
-        <img src="assets/imgs/login.png" class="imageAdj" />
-      </div>
-      <!-- <button ion-button large clear icon-end color="primary" (click)="signIn()">
-        Login
-        <ion-icon name="arrow-forward"></ion-icon>
-      </button> -->
+      <div class="mainContainer">
+        <div>
+          <img src="assets/imgs/login.png" class="imageAdj" />
+        </div>
 
-      <button ion-button large clear icon-end color="primary" (click)="goToLogin()">
-        Login
-        <ion-icon name="arrow-forward"></ion-icon>
-      </button>
+        <button ion-button large clear icon-end color="primary" (click)="goToLogin()">
+          Login
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </div>
     </ion-slide>
   </ion-slides>
 </ion-content>
+
+<ion-footer class="_flex-box _justify-content-center">
+  <button ion-button full class="skipBtn" (click)="gotToLastSlide()" *ngIf="activeSlide === 0 || activeSlide === 1">{{'buttons.skip'|translate}}</button>
+  <button ion-button class="getstarted" (click)="gotToLastSlide()" *ngIf="activeSlide === 2">Get Started</button>
+</ion-footer>

@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, ɵConsole } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AppConfigs } from '../appConfig';
 import { ApiProvider } from '../api/api';
 import { UtilsProvider } from '../utils/utils';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { UpdateLocalSchoolDataProvider } from '../update-local-school-data/update-local-school-data';
-import { PopoverController, Events } from 'ionic-angular';
-import { resolve } from 'url';
+import { Events } from 'ionic-angular';
 
 /*
   Generated class for the ObservationServiceProvider provider.
@@ -105,7 +104,6 @@ export class ObservationServiceProvider {
         });
         event ? event.complete() : ""
         // console.log(JSON.stringify(createdObservation))
-        console.log("if no previous thing found");
 
         this.localStorage.setLocalStorage('createdObservationList', createdObservation);
         resolve(createdObservation);
@@ -120,7 +118,6 @@ export class ObservationServiceProvider {
               if(submissionId == submission._id){
                 submission.downloaded = true ;
                 // console.log(submission._id)
-                console.log(JSON.stringify(submission._id ))
               }
               else{
                 if(! submission.downloaded )
@@ -132,7 +129,6 @@ export class ObservationServiceProvider {
         });
         // console.log(JSON.stringify(createdObservation))
         // console.log(JSON.stringify(success))
-        console.log("else - previous thing found");
         this.localStorage.setLocalStorage('createdObservationList', createdObservation);
         event ? event.complete() :""
         // this.

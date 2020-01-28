@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
-import { CurrentUserProvider } from '../../providers/current-user/current-user';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
@@ -26,7 +25,6 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage,
     private auth: AuthProvider,
-    private events : Events,
     private translate : TranslateService,
     private toastCtrl: ToastController, private network: Network,
     private permissions: AndroidPermissions, private geolocation: Geolocation,

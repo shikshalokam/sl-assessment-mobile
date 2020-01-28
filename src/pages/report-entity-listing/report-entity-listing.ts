@@ -3,7 +3,6 @@ import { NavController, NavParams } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { UtilsProvider } from '../../providers/utils/utils';
-import { DashboardPage } from '../dashboard/dashboard';
 import { ProgramListingPage } from '../program-listing/program-listing';
 
 /**
@@ -22,6 +21,7 @@ export class ReportEntityListingPage {
   instanceReportData: any;
   entityType ;
   currentEntityType: any;
+  assessmentType;
   constructor(public navCtrl: NavController,
     private utils : UtilsProvider,
     private apiProvider : ApiProvider , public navParams: NavParams) {
@@ -32,7 +32,7 @@ export class ReportEntityListingPage {
     this.entities = this.navParams.get('data');
     this.entityType = this.navParams.get('entityType');
     this.currentEntityType = this.navParams.get('currentEntityType');
-
+    this.assessmentType = this.navParams.get('assessmentType');
     this.currentEntityType = this.currentEntityType ? this.currentEntityType : this.entityType
     console.log(JSON.stringify(this.navParams))
   }
@@ -44,7 +44,7 @@ export class ReportEntityListingPage {
     let url = entity._id ? AppConfigs.roles.entityList+entity._id+"?type="+entity.immediateSubEntityType : AppConfigs.roles.entityList+entity.entityId+"?type="+entity.entityType
     this.apiProvider.httpGet(url,success =>{
       console.log(success.result[0].entityType)
-      this.navCtrl.push(ReportEntityListingPage , {data :  success.result , "entityType":entity.immediateSubEntityType } );
+      this.navCtrl.push(ReportEntityListingPage , {data :  success.result , "entityType":entity.immediateSubEntityType, "assessmentType": this.assessmentType } );
       this.utils.stopLoader();
       
     },error=>{
@@ -58,11 +58,16 @@ export class ReportEntityListingPage {
 
   }
   viewInstanceReport(entity){
+    console.log(JSON.stringify(entity))
     // console.log("api called")
     // this.utils.startLoader();
     // this.apiProvider.httpPost(AppConfigs.roles.instanceReport,{"entityId" : entity._id},success =>{
     //   this.instanceReportData = success;
-      this.navCtrl.push(ProgramListingPage , { "entity" :entity} )
+    if(this.assessmentType !== 'observation'){
+      this.navCtrl.push(ProgramListingPage , { "entity" :entity, "assessmentType": this.assessmentType} )
+    } else {
+      this.navCtrl.push('ObservationListingPage', { "entity" :entity, "assessmentType": this.assessmentType})
+    }
     //   console.log(JSON.stringify(success))
     //   this.utils.stopLoader();
     // },error=>{

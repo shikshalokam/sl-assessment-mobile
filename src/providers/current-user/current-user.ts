@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import * as jwt_decode from "jwt-decode";
+import { AppIconBadgeProvider } from '../app-icon-badge/app-icon-badge';
+
 // import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 /*
@@ -14,7 +16,7 @@ export class CurrentUserProvider {
 
   public curretUser: any;
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage, private appBadge: AppIconBadgeProvider) {
     console.log('Hello CurrentUserProvider Provider');
   }
 
@@ -64,7 +66,7 @@ export class CurrentUserProvider {
     this.storage.remove('allImageList');
     this.storage.remove('genericQuestionsImages');
     this.storage.remove('generalQuestions');
-    console.log("alldeleted")
+    this.appBadge.clearTheBadge();
   }
 
   fetchUser(): void {

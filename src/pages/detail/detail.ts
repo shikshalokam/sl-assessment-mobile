@@ -9,6 +9,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { TranslateService } from '@ngx-translate/core';
+import { NotificationProvider } from '../../providers/notification/notification';
 
 @Component({
   selector: 'page-detail',
@@ -26,6 +27,7 @@ export class DetailPage {
     private currentUser: CurrentUserProvider,
     private auth: AuthProvider,
     private localStorage: LocalStorageProvider,
+    private notifictnProvider: NotificationProvider,
     private apiService: ApiProvider,
     private utils: UtilsProvider) {
   }
@@ -67,12 +69,14 @@ export class DetailPage {
           handler: data => {
             this.utils.startLoader()
             this.localStorage.deleteAllStorage().then(success => {
-              this.utils.stopLoader();
               this.auth.doLogout().then(success => {
+                this.utils.stopLoader();
                 this.currentUser.removeUser();
                 let nav = this.app.getRootNav();
+                this.notifictnProvider.stopNotificationPooling();
                 nav.setRoot(WelcomePage);
               }).catch(error => {
+                this.utils.stopLoader();
 
               })
             }).catch(error => {
@@ -119,10 +123,9 @@ export class DetailPage {
   }
 
   getAccessTokenForAction(passcode) {
-    const payload = {
-      "passcode": passcode
-    }
-    let currentEcm = {}
+    // const payload = {
+    //   "passcode": passcode
+    // }
     this.utils.startLoader();
     this.apiService.httpPost(AppConfigs.help.getHelpToken, passcode, successData => {
       this.utils.ActionEnableSubmit(successData.result);

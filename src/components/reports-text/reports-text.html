@@ -1,4 +1,10 @@
+<!-- Generated template for the ReportsTextComponent component -->
+
 <ion-item-group class="text-container" text-wrap>
-  <ion-item-divider color="light"> <h4>{{questionNumber}}) {{data?.question}}</h4></ion-item-divider>
+  <ion-item-divider color="light">
+    <h4 *ngIf="questionNumber">{{ questionNumber+' )'}} {{data?.question}}</h4>
+    <h4 *ngIf="!questionNumber">Responses</h4>
+
+  </ion-item-divider>
   <ion-item *ngFor="let answer of data?.answers">{{ answer}}</ion-item>
 </ion-item-group>
