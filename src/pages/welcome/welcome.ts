@@ -106,7 +106,7 @@ export class WelcomePage {
   gotToLastSlide() {
     this.slides.slideNext();
     this.slides.slideNext();
-
+    this.slides.slideNext();
   }
 
   gotToNextSlide() {

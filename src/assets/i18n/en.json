@@ -132,7 +132,8 @@
         "dashboard": "Dashboard",
         "inProgress": "In progress",
         "completed": "Completed",
-        "setting":"Settings"
+        "setting":"Settings",
+        "resetPassword": "Reset Password"
     },
     "headings": {
         "zone": "Zones",
@@ -194,7 +195,8 @@
         "observationUpdate": "Observation Update",
         "notifications": "Notifications",
         "settings":"Settings",
-        "solutionList":"Solution List"
+        "solutionList":"Solution List",
+        "resetPassword": "Reset Password"
     },
     "labels": {
         "welcome": "Welcome",

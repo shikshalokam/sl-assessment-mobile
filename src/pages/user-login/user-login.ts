@@ -10,6 +10,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { HTTP } from '@ionic-native/http';
+import { FcmProvider } from '../../providers/fcm/fcm';
 
 @Component({
   selector: 'page-user-login',
@@ -28,7 +29,7 @@ export class UserLoginPage {
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private utils: UtilsProvider,
     private currentUser: CurrentUserProvider, private app: App, private navCtrl: NavController, private ionicHttp: HTTP,
-    private localStorage: LocalStorageProvider) {
+    private localStorage: LocalStorageProvider, private fcm: FcmProvider) {
     this.signIn = this.formBuilder.group({
       staffID: ['', Validators.required],
       password: ['', Validators.required],
@@ -55,15 +56,16 @@ export class UserLoginPage {
     this.http.post(url, params, httpOptions)
       .subscribe((data: any) => {
         this.utils.stopLoader();
-
         let userTokens = {
           accessToken: data.access_token,
           refreshToken: data.refresh_token,
           // idToken: data.id_token
         };
-        this.currentUser.setCurrentUserDetails(userTokens);
-        let nav = this.app.getActiveNav();
-        nav.setRoot(HomePage);
+        this.currentUser.setCurrentUserDetails(userTokens).then(success => {
+          this.fcm.registerDeviceID();
+          let nav = this.app.getActiveNav();
+          nav.setRoot(HomePage);
+        })
       }, error => {
         this.adminLogin();
       });
