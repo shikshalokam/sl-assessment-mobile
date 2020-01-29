@@ -207,7 +207,7 @@ export class HomePage {
       });
       this.localStorage.setLocalStorage('createdObservationList', this.observations);
     }, error => {
-     })
+     }, {version:"v2"})
   }
 
   openMenu(event , index) {
