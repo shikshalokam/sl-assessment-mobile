@@ -204,12 +204,15 @@
       "cordova-plugin-local-notification": {},
       "cordova-plugin-market": {},
       "cordova-plugin-app-version": {},
-      "cordova-plugin-native-spinner": {}
+      "cordova-plugin-native-spinner": {},
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      }
     },
     "platforms": [
       "browser",
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

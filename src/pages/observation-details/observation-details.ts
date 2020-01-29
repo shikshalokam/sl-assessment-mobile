@@ -209,7 +209,7 @@ export class ObservationDetailsPage {
       this.observationList = data;
       this.observationDetails.push(data[this.selectedObservationIndex]);
       this.checkForAnySubmissionsMade()
-      console.log(JSON.stringify(this.observationDetails))
+
       this.enableCompleteBtn = this.isAllEntitysCompleted();
       this.firstVisit = false;
     }).catch(error => {
