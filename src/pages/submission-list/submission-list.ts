@@ -126,6 +126,7 @@ export class SubmissionListPage {
       this.observationDetails.push(data[this.selectedObservationIndex]);
 
       this.submissionList = this.observationDetails[0].entities[this.entityIndex].submissions;
+      console.log(JSON.stringify(this.submissionList))
       this.splitCompletedAndInprogressObservations();
       this.tabChange(this.currentTab ? this.currentTab : 'all');
       this.utils.stopLoader();
@@ -379,14 +380,20 @@ export class SubmissionListPage {
 
   // Menu for Submissions
   openMenu(event,submission, index) {
-    let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
-      submission: submission,
-      showEntityActionsheet:"false",
-      showSubmissionAction:'true'
-    })
-    popover.present(
-      { ev: event }
-    );
+    console.log(JSON.stringify(submission))
+    if(submission.ratingCompletedAt){
+      let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
+        submission: submission,
+        // showEntityActionsheet:"false",
+        // showSubmissionAction:'true'
+      })
+      popover.present(
+        { ev: event }
+      );
+    } else {
+      this.navCtrl.push(ObservationReportsPage, { submissionId: submission._id })
+    }
+
 
   }
   // Menu for Entity reports
@@ -403,18 +410,20 @@ export class SubmissionListPage {
 
   }
   //  entity actions
-  entityActions() {
+  entityActions(e) {
     let noScore: boolean = true;
     this.submissions.forEach(submission => {
       submission.showActionsheet = false;
       if (submission.ratingCompletedAt) {
-        this.showActionsheet = true;
-        this.showEntityActionsheet = true;
+        // this.showActionsheet = true;
+        // this.showEntityActionsheet = true;
         noScore = false;
       }
     });
     if (noScore) {
       this.viewEntityReports();
+    } else {
+      this.openEntityReportMenu(e);
     }
   }
 }
