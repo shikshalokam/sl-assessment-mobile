@@ -126,6 +126,7 @@ export class SubmissionListPage {
       this.observationDetails.push(data[this.selectedObservationIndex]);
 
       this.submissionList = this.observationDetails[0].entities[this.entityIndex].submissions;
+      console.log(JSON.stringify(this.submissionList))
       this.splitCompletedAndInprogressObservations();
       this.tabChange(this.currentTab ? this.currentTab : 'all');
       this.utils.stopLoader();
@@ -229,6 +230,7 @@ export class SubmissionListPage {
 
   }
   observeAgain() {
+    this.utils.startLoader('Creating an Obseravation');
     // this.getAssessmentDetails(this.submissionList.length , this.submissionList.length + 1)
     let submissionNumber = this.submissionList[this.submissionList.length - 1].submissionNumber + 1;
     let event = {
@@ -252,6 +254,7 @@ export class SubmissionListPage {
 
     this.apiProvider.httpPost(AppConfigs.cro.observationSubmissionCreate + this.observationDetails[0]._id + "?entityId=" + entityId, {}, success => {
       this.observationService.refreshObservationList(this.programs).then(success => {
+        this.utils.stopLoader();
         this.programs = success;
         this.observationDetails[0] = success[this.selectedObservationIndex];
         this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
@@ -260,6 +263,7 @@ export class SubmissionListPage {
       }).catch(error => {
       })
     }, error => {
+      this.utils.stopLoader();
       // console.log(error, "error here")
     })
   }
@@ -376,14 +380,20 @@ export class SubmissionListPage {
 
   // Menu for Submissions
   openMenu(event,submission, index) {
-    let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
-      submission: submission,
-      showEntityActionsheet:"false",
-      showSubmissionAction:'true'
-    })
-    popover.present(
-      { ev: event }
-    );
+    console.log(JSON.stringify(submission))
+    if(submission.ratingCompletedAt){
+      let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
+        submission: submission,
+        // showEntityActionsheet:"false",
+        // showSubmissionAction:'true'
+      })
+      popover.present(
+        { ev: event }
+      );
+    } else {
+      this.navCtrl.push(ObservationReportsPage, { submissionId: submission._id })
+    }
+
 
   }
   // Menu for Entity reports
@@ -400,18 +410,20 @@ export class SubmissionListPage {
 
   }
   //  entity actions
-  entityActions() {
+  entityActions(e) {
     let noScore: boolean = true;
     this.submissions.forEach(submission => {
       submission.showActionsheet = false;
       if (submission.ratingCompletedAt) {
-        this.showActionsheet = true;
-        this.showEntityActionsheet = true;
+        // this.showActionsheet = true;
+        // this.showEntityActionsheet = true;
         noScore = false;
       }
     });
     if (noScore) {
       this.viewEntityReports();
+    } else {
+      this.openEntityReportMenu(e);
     }
   }
 }
