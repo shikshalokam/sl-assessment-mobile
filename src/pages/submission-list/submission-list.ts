@@ -229,6 +229,7 @@ export class SubmissionListPage {
 
   }
   observeAgain() {
+    this.utils.startLoader('Creating an Obseravation');
     // this.getAssessmentDetails(this.submissionList.length , this.submissionList.length + 1)
     let submissionNumber = this.submissionList[this.submissionList.length - 1].submissionNumber + 1;
     let event = {
@@ -252,6 +253,7 @@ export class SubmissionListPage {
 
     this.apiProvider.httpPost(AppConfigs.cro.observationSubmissionCreate + this.observationDetails[0]._id + "?entityId=" + entityId, {}, success => {
       this.observationService.refreshObservationList(this.programs).then(success => {
+        this.utils.stopLoader();
         this.programs = success;
         this.observationDetails[0] = success[this.selectedObservationIndex];
         this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
@@ -260,6 +262,7 @@ export class SubmissionListPage {
       }).catch(error => {
       })
     }, error => {
+      this.utils.stopLoader();
       // console.log(error, "error here")
     })
   }
