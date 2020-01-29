@@ -157,6 +157,7 @@ export class ImageListingPage {
       for (let i = 0; i < success.result.length; i++) {
         this.imageList[i]['url'] = success.result[i].url;
         this.imageList[i]['sourcePath'] = success.result[i].payload.sourcePath;
+        success.result[i].cloudStorage ? this.imageList[i]['cloudStorage'] = success.result[i].cloudStorage : null;
       }
       this.checkForLocalFolder();
     }, error => {
@@ -189,7 +190,7 @@ export class ImageListingPage {
   createImageFromName(imageList) {
     this.utils.startLoader();
     for (const image of imageList) {
-      this.imageList.push({ uploaded: false, file: image, url: "" });
+      this.imageList.push({ uploaded: false, file: image, url: "",  });
     }
     this.getImageUploadUrls();
   }
@@ -202,7 +203,8 @@ export class ImageListingPage {
       chunkedMode: false,
       mimeType: "image/jpeg",
       headers: {
-        "Content-Type": 'multipart/form-data'
+        "Content-Type": 'multipart/form-data',
+        "x-ms-blob-type" : (this.imageList[this.uploadIndex].cloudStorage && this.imageList[this.uploadIndex].cloudStorage === 'AZURE') ? "BlockBlob": null
       },
       httpMethod: 'PUT',
     };
