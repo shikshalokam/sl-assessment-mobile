@@ -24,15 +24,61 @@ $white-color : #fff;
 // $blue-color: #a62400;
 $blue-color: #FD7F23;
 $primary-color: $blue-color;
-$red-color: #DC143C;
+$red-color:#ff0000;
 $orange-color: #FF8C00;
 $toolbar-background: $blue-color;
 $black-color: #222;
 $medium-black: #707070;
 $secondry-color: #5CB843;
 
-ion-content {
+
+
+@font-face{
+    font-family: 'Raleway-Regular' ;
+    src: url('../assets/fonts/Raleway-Regular.ttf') format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: 'Raleway-Bold' ;
+    src: url('../assets/fonts/Raleway-Bold.ttf') format("truetype");
+}
+
+@font-face{
+    font-family: 'SourceSansPro-Regular' ;
+    src: url('../assets/fonts/SourceSansPro-Regular.ttf') format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: 'SourceSansPro-Bold' ;
+    src: url('../assets/fonts/SourceSansPro-Bold.ttf') format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: 'Helvetica-Regular' ;
+    src: url('../assets/fonts/HelveticaNeueLt.ttf') format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: 'Helvetica-Bold' ;
+    src: url('../assets/fonts/HelveticaNeueBd.ttf') format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+ion-content, body {
     background: $grey-color !important;
+    // font-family: 'Raleway-Regular';
+}
+
+h1,h2,h3,h4 {
+    // font-family: 'Raleway-Bold';
 }
 
 .tabs-md .tabbar {
@@ -40,20 +86,30 @@ ion-content {
 }
 
 
+.customPopOver {
+    .popover-content {
+        top: 57px !important;
+        width: 310px;
+    }
+}
+
 ion-step-header .ionic-step-header-icon-active {
     background-color: $secondry-color !important;
 }
+
 ._flex-box {
     display: flex;
     align-items: center;
 
 }
+
 ._justify-content-center {
     justify-content: center;
 }
-._vertical-center{
+
+._vertical-center {
     display: flex;
-    flex:1;
+    flex: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -63,13 +119,15 @@ ion-step-header .ionic-step-header-icon-active {
     flex-direction: column;
 }
 
-._justify-content-space-between{
+._justify-content-space-between {
     justify-content: space-between
 }
-._noWrap{
-    flex-wrap:nowrap;
+
+._noWrap {
+    flex-wrap: nowrap;
     white-space: nowrap;
 }
+
 ._tips {
     color: $blue-color;
     position: absolute;
@@ -100,7 +158,7 @@ ion-step-header .ionic-step-header-icon-active {
 ._cards {
     // color: $white-color !important;
     width: calc(25% - 8px) !important;
-    margin:  4px;
+    margin: 4px;
     background: $white-color;
     // margin-bottom: 10px;
     position: relative;
@@ -126,7 +184,7 @@ ion-step-header .ionic-step-header-icon-active {
 ._fullScreenCard {
     background: $white-color;
     margin-bottom: 10px;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
     width: 100%;
     border: 1px solid #e8eaed;
     border-radius: 6px;
@@ -143,15 +201,17 @@ ion-step-header .ionic-step-header-icon-active {
     font-size: 25px;
     cursor: pointer;
 }
-._wrap-text{
+
+._wrap-text {
     white-space: pre-wrap;
 }
+
 ._container {
     flex-wrap: wrap;
     padding-bottom: 60px;
 }
 
-._flex-box{
+._flex-box {
     flex-wrap: wrap;
 }
 
@@ -210,7 +270,7 @@ ion-step-header .ionic-step-header-icon-active {
 }
 
 ._headerIcon {
-    color: white !important ;
+    color: white !important;
     font-size: 24px;
     padding-right: 10px;
 }
@@ -236,14 +296,15 @@ ion-step-header .ionic-step-header-icon-active {
 }
 
 ._toolbar-background-md {
-    background-color:  $white-color !important;
+    background-color: $white-color !important;
 }
 
 .sizeAdj {
     min-width: 30px;
-   
+
     font-size: 25px;
 }
+
 .activePage {
     color: $primary-color;
     background: $grey-color;
@@ -268,6 +329,7 @@ ion-step-header .ionic-step-header-icon-active {
     border-top: 1px solid $dark-grey-color !important;
     font-size: 14px;
 }
+
 .appVersion {
     color: $dark-grey-color;
 
@@ -275,4 +337,22 @@ ion-step-header .ionic-step-header-icon-active {
 
 ._full-width {
     width: 100%;
+}
+
+.swiper-pagination-bullet-active {
+    background: $primary-color !important;
+}
+
+.slide-zoom{
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+}
+
+.header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
+    background-image: url('') !important;
+}
+
+.serachBar {
+    width: calc(100% - 50px)!important;
 }

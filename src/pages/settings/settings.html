@@ -1,0 +1,24 @@
+<ion-header>
+  <header [title]="'headings.settings'|translate" [hideBack]="false">
+
+  </header>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>{{'labels.languages'|translate}}</ion-label>
+      <ion-select [(ngModel)]="language" (ionChange)="setLanguage($event)">
+        <ion-option value="en">{{'languages.english'|translate}}</ion-option>
+        <ion-option value="hi">{{'languages.hindi'|translate}}</ion-option>
+        <ion-option value="te">{{'languages.telugu'|translate}}</ion-option>
+        <ion-option value="ml">{{'languages.malayalam'|translate}}</ion-option>
+        <ion-option value="ta">{{'languages.tamil'|translate}}</ion-option>
+        <ion-option value="kn">{{'languages.kannada'|translate}}</ion-option>
+        <ion-option value="gu">{{'languages.gujarati'|translate}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+</ion-content>

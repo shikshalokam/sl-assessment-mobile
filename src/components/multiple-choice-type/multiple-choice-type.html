@@ -7,7 +7,7 @@
         {{question}}
       </div>
     </div> -->
-    <question-heading [inputIndex]="inputIndex" [data]="data"></question-heading>
+    <question-heading [inputIndex]="inputIndex" [data]="data" [enableQuestionReadOut] ="enableQuestionReadOut"></question-heading>
 
   </h4>
 </ion-col>
@@ -21,7 +21,7 @@
         <ion-icon name="bulb" class="help" (click)="openHint(option?.hint)" *ngIf="option?.hint"></ion-icon>
         <div style="flex: 1" [ngStyle]="{'margin-right': option?.hint ? '35px' :'0px'}"> {{option?.label}} </div>
       </ion-label>
-      <ion-checkbox [checked]="data?.value?.includes(option?.value)" (ionChange)="updateModelValue(option?.value)">
+      <ion-checkbox [checked]="data?.value?.indexOf(option?.value) >-1" (ionChange)="updateModelValue(option?.value)">
       </ion-checkbox>
       <!-- <ion-label>{{option?.label}}</ion-label> -->
 

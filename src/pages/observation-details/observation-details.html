@@ -10,14 +10,13 @@
     [entityType]="'observations'" [observationList]="observationList" (refreshEvent)="refresh($event)"
     [selectedObservationIndex]="selectedObservationIndex" (openMenuEvent)="openMenu($event)" #entityComponent>
   </observation-entity-listing>
-
 </ion-content>
 
 
-<ion-footer no-shadow>
+<ion-footer no-shadow *ngIf="submissionCount">
   <ion-toolbar position="bottom">
     <ion-row>
-      <button ion-button full (click)="viewObservationReports()">
+      <button ion-button full (click)="openObservationMenu($event)">
         {{'buttons.viewObservationReport'|translate}}</button>
     </ion-row>
   </ion-toolbar>

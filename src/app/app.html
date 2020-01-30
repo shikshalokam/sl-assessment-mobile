@@ -8,11 +8,13 @@
   </ion-header>
   <ion-content class="whiteBg">
     <ion-list no-lines>
-      <ion-item *ngFor="let page of allPages; let i = index" (click)="goToPage(i)"
-        [ngClass]="{activePage: page.active}">
-        <ion-icon name="{{page.icon}}" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>
-        <span>{{'tabs.'+page.name | translate}}</span>
-      </ion-item>
+      <ng-container *ngFor="let page of allPages; let i = index">
+        <ion-item (click)="goToPage(i)" [ngClass]="{activePage: page.active}" *ngIf="page?.show">
+          <ion-icon name="{{page.icon}}" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>
+          <span>{{'tabs.'+page.name | translate}}</span>
+        </ion-item>
+      </ng-container>
+
       <!-- <ion-item><ion-icon name="book" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>{{'tabs.mySchool' | translate}}</ion-item>
     <ion-item><ion-icon name="help" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>{{'tabs.faqs' | translate}}</ion-item>
     <ion-item><ion-icon name="information-circle" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>{{'tabs.about'| translate}}</ion-item> -->
@@ -28,3 +30,4 @@
   </ion-content>
 </ion-menu>
 <ion-nav [root]="rootPage" #content swipeBackEnabled="true"></ion-nav>
+<alert-modal *ngIf="appUpdateData" [notificationMeta]="appUpdateData" (closeModal)="closeModal()"></alert-modal>

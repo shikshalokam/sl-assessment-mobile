@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import * as jwt_decode from "jwt-decode";
+import { AppIconBadgeProvider } from '../app-icon-badge/app-icon-badge';
+
 // import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 /*
@@ -14,11 +16,11 @@ export class CurrentUserProvider {
 
   public curretUser: any;
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage, private appBadge: AppIconBadgeProvider) {
     console.log('Hello CurrentUserProvider Provider');
   }
 
-  setCurrentUserDetails(userTokens): void {
+  setCurrentUserDetails(userTokens): Promise<any> {
     // let userDetails = jwt_decode(userTokens.accessToken);
     // let userId = userDetails.sub;
     // this.sqlite.create({
@@ -35,8 +37,14 @@ export class CurrentUserProvider {
     //       .catch(e => console.log(e));
     //   })
     //   .catch(e => console.log(e));
-    this.curretUser = userTokens;
-    this.storage.set('tokens', JSON.stringify(userTokens));
+    return new Promise((resolve, reject) => {
+      this.curretUser = userTokens;
+      this.storage.set('tokens', JSON.stringify(userTokens)).then(success => {
+        resolve()
+      }).catch(error => {
+      });
+    })
+    
   }
 
   getCurrentUserData(): any {
@@ -58,7 +66,7 @@ export class CurrentUserProvider {
     this.storage.remove('allImageList');
     this.storage.remove('genericQuestionsImages');
     this.storage.remove('generalQuestions');
-    console.log("alldeleted")
+    this.appBadge.clearTheBadge();
   }
 
   fetchUser(): void {

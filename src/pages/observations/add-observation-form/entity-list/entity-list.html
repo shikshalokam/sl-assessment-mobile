@@ -1,27 +1,58 @@
 <ion-header>
   <header [title]="'headings.addSchools'|translate" [hideBack]="false" [showMenu]="false" [showClose]="true"
-    [disableNetwork]="true">
+    [disableNetwork]="true" [hideNotification]="true">
   </header>
-  <ion-toolbar>
-    <ion-searchbar debounce="500" type="3" (ionClear)="clearEntity()" autofocus (ionChange)="searchEntity($event)"
-      placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar>
+  <ion-toolbar style="background-color: white !important;">
+    <!-- <ion-searchbar debounce="500" type="3" (ionClear)="clearEntity()" autofocus (ionChange)="searchEntity($event)"
+      placeholder="{{'message.startSearchEntity' | translate}}"></ion-searchbar> -->
+    <!-- *ngIf="!isProfileAssignedWithState" -->
+    <div class="_flex-box searchCard" *ngIf="!isProfileAssignedWithState">
+      <ion-item>
+        <ion-label>{{'labels.selectState'|translate}}</ion-label>
+        <ion-select [(ngModel)]="selectedState" class="whiteSelection" (ionChange)="searchQuery='';search();onStateChange($event)"
+          #selectStateRef interface="action-sheet">
+          <ion-option *ngFor="let state of allStates" [value]="state._id">
+            <b>{{state?.name}}</b>
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <!-- <ion-input type="text" [(ngModel)]="searchQuery" (keyup.enter)="searchEntity()" placeholder="{{'message.startSearchEntity' | translate}}" class="seacrhInput"></ion-input>
+        <button ion-button icon-only (click)="searchEntity()" >
+          <ion-icon name="search" class="searchIcon"></ion-icon>
+        </button> -->
+    </div>
+    <div class="_flex-box searchCard" *ngIf="selectedState || profileMappedState">
+      <!-- <ion-select [(ngModel)]="selectedState" class="whiteSelection" *ngIf="selectedState && !isProfileAssignedWithState" (ionChange)="search();onStateChange($event)"  >
+          <ion-option *ngFor="let state of allStates" [value]="state._id">
+            <b>{{state?.name}}</b>
+          </ion-option>
+        </ion-select> -->
+      <ion-searchbar debounce="500" class="serachBar" (keyup.enter)="searchEntity()" [(ngModel)]="searchQuery"
+        placeholder="{{'message.startSearchEntity' | translate}}" (ionClear)="searchQuery='';searchEntity()"></ion-searchbar>
+      <button ion-button icon-only (click)="searchEntity()" class="serachBtn">
+        <ion-icon name="search" class="searchIcon"></ion-icon>
+      </button>
+    </div>
   </ion-toolbar>
 </ion-header>
-<ion-content padding>
+<ion-content padding [ngStyle]="{'margin-top': profileMappedState ? '0px' :'50px'}">
 
-  <ion-list *ngIf="selectableList" (ionScroll)="detectBottom()">
-    <ng-container *ngFor="let listItem of selectableList">
-      <ion-item *ngIf="!listItem.isSelected">
-        <ion-label text-wrap>{{listItem.name}}</ion-label>
-        <ion-checkbox color="dark" [checked]="listItem.selected" (click)="checkItem(listItem)"></ion-checkbox>
-      </ion-item>
-    </ng-container>
-  </ion-list>
-  <ion-list *ngIf="!selectableList?.length">
-    <div class="_flex-box _justify-content-center noDataMsg">
-      {{ 'message.searchEntities' | translate}}
-    </div>
-  </ion-list>
+  <div *ngIf="selectedState || profileMappedState">
+    <ion-list *ngIf="selectableList" (ionScroll)="detectBottom()">
+      <ng-container *ngFor="let listItem of selectableList">
+        <ion-item *ngIf="!listItem.isSelected">
+          <ion-label text-wrap>{{listItem.name}}</ion-label>
+          <ion-checkbox color="dark" [checked]="listItem.selected" (click)="checkItem(listItem)"></ion-checkbox>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+    <ion-list *ngIf="!selectableList?.length && !loading">
+      <div class="_flex-box _justify-content-center noDataMsg">
+        {{ 'message.noSchoolFound' | translate}}
+      </div>
+    </ion-list>
+  </div>
+
 
   <div *ngIf="!(this.selectableList?.length == totalCount) && this.selectableList?.length > 0">
     <ion-infinite-scroll [enabled]="!(this.selectableList?.length == totalCount) && this.selectableList?.length > 0"

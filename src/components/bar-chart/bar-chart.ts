@@ -27,7 +27,7 @@ export class BarChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.data && this.data.chart && this.data.chart.data) {
+    if (this.data && this.data.chart && this.data.chart.data) {
       for (const instance of this.data.chart.data) {
         const array = []
         for (let value of instance.data) {
@@ -52,15 +52,18 @@ export class BarChartComponent implements OnInit {
       tooltip: {
         // pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
       },
-      plotOptions: {
+      plotOptions: this.data.chart.plotOptions ? this.data.chart.plotOptions : ({
         bar: {
           dataLabels: {
             enabled: false
           },
           showInLegend: false
         }
-      },
-      series: this.data.chart.data
+      }),
+      series: this.data.chart.data,
+      legend: this.data.chart.legend ? this.data.chart.legend : ({
+        "enabled": false
+      })
 
     }
 

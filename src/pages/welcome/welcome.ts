@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Slides, Events } from 'ionic-angular';
-// import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
@@ -17,6 +16,7 @@ export class WelcomePage {
   @ViewChild(Slides) slides: Slides;
 
   skipMsg: string;
+  activeSlide = 0;
   slidesList = [
     {
       // title: "Slide 1",
@@ -33,7 +33,7 @@ export class WelcomePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage,
     private auth: AuthProvider,
-    private events : Events,
+    private events: Events,
     private toastCtrl: ToastController, private network: Network, private netwrkGpsProvider: NetworkGpsProvider) {
     this.subscription = this.network.onDisconnect().subscribe(() => {
       // this.presentToast('Network was disconnected :-(');
@@ -53,11 +53,10 @@ export class WelcomePage {
   }
 
   ionViewWillLeave() {
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
-
 
   presentToast(msg) {
     let toast = this.toastCtrl.create({
@@ -66,33 +65,24 @@ export class WelcomePage {
       position: 'bottom'
     });
 
-    toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
-    });
-
+    toast.onDidDismiss(() => {});
     toast.present();
   }
 
   signIn() {
-    // this.diagnostic.isLocationEnabled().then(success => {
-    //   console.log(success)
-    //   if (success) {
-        this.auth.doOAuthStepOne().then(code => {
-          this.responseData = JSON.stringify(code);
-          return this.auth.doOAuthStepTwo(code);
-        }).then(response => {
-          this.auth.checkForCurrentUserLocalData(response);
-        })
-      // } else {
-      //   this.netwrkGpsProvider.checkForLocationPermissions();
-      // }
-    // }).catch(error => {
-    //   this.netwrkGpsProvider.checkForLocationPermissions();
-    // })
+
+
+    this.auth.doOAuthStepOne().then(code => {
+      this.responseData = JSON.stringify(code);
+      this.auth.doOAuthStepTwo(code).then(success => {
+        this.auth.checkForCurrentUserLocalData(success);
+      }).catch(error => {})
+    }).then(response => {
+    })
   }
 
   ionViewDidLoad() {
-    this.events.publish('loginSuccess' , true);
+    this.events.publish('loginSuccess', true);
     this.skipMsg = "Skip";
     console.log('ionViewDidLoad WelcomePage');
     this.netwrkGpsProvider.checkForLocationPermissions();
@@ -105,15 +95,17 @@ export class WelcomePage {
   }
 
   slideChanged(): void {
-    if (this.slides.isEnd()) {
-      this.skipMsg = 'Got it';
-    } else {
-      this.skipMsg = "Skip";
-    }
+    this.activeSlide = this.slides.getActiveIndex();
   }
 
   gotToLastSlide() {
-    this.slides.slideTo(3);
+    this.slides.slideNext();
+    this.slides.slideNext();
+
+  }
+
+  gotToNextSlide() {
+    this.slides.slideTo(2);
   }
 
 }
