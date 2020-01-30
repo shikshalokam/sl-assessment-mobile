@@ -24,6 +24,7 @@ export class MatrixTypeComponent implements OnInit {
   @Input() submissionId: string;
   @Input() inputIndex;
   @Input() enableGps;
+  @Input() enableQuestionReadOut: boolean;
   mainInstance: any;
   initilaData;
 
@@ -65,7 +66,8 @@ export class MatrixTypeComponent implements OnInit {
       schoolId: this.schoolId,
       generalQuestion: this.generalQuestion,
       submissionId: this.submissionId,
-      questionIndex: this.inputIndex
+      questionIndex: this.inputIndex,
+      enableQuestionReadOut: this.enableQuestionReadOut
     }
     let matrixModal = this.modalCntrl.create(MatrixActionModalPage, obj);
     matrixModal.onDidDismiss(instanceValue => {
@@ -114,14 +116,19 @@ export class MatrixTypeComponent implements OnInit {
 
   checkCompletionOfInstance(data, gpsLocation): boolean {
     let isCompleted = true;
-    for (const question of data) {
-      // question.isCompleted = this.utils.isQuestionComplete(question);
-      question.gpsLocation = gpsLocation ? gpsLocation : "";
-      if (!question.isCompleted) {
-        isCompleted = false;
-        return false
+    if(data){
+      for (const question of data) {
+        // question.isCompleted = this.utils.isQuestionComplete(question);
+        question.gpsLocation = gpsLocation ? gpsLocation : "";
+        if (!question.isCompleted) {
+          isCompleted = false;
+          return false
+        }
       }
+    } else {
+      isCompleted = false
     }
+
     return isCompleted
 
   }

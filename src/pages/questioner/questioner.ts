@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Content } from 'ionic-angular';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
@@ -11,6 +11,7 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class QuestionerPage {
   @ViewChild('sample') nameInputRef: ElementRef;
+  @ViewChild('pageTop') pageTop: Content;
 
   questions: any;
   schoolName: string;
@@ -31,6 +32,7 @@ export class QuestionerPage {
   localImageListKey: any;
   countCompletedQuestion: number;
   captureGpsLocationAtQuestionLevel: boolean;
+  enableQuestionReadOut:boolean;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -50,6 +52,7 @@ export class QuestionerPage {
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.schoolData = data;
       const currentEvidences =  this.schoolData['assessment']['evidences'] ;
+      this.enableQuestionReadOut = this.schoolData['solution']['enableQuestionReadOut'];
       this.captureGpsLocationAtQuestionLevel = this.schoolData['solution']['captureGpsLocationAtQuestionLevel'];
       this.countCompletedQuestion = this.utils.getCompletedQuestionsCount(this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions']);
 
@@ -57,6 +60,7 @@ export class QuestionerPage {
       this.localImageListKey = "images_" + this.selectedEvidenceId + "_" + this.submissionId;
       this.isViewOnly = !currentEvidences[this.selectedEvidenceIndex]['startTime'] ? true : false;
       this.questions = currentEvidences[this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex]['questions'];
+      console.log(this.questions,"questions");
       this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections'][this.selectedSectionIndex].totalQuestions = this.questions.length;
       this.dashbordData = {
         questions: this.questions,
@@ -96,6 +100,7 @@ export class QuestionerPage {
   // images_CO_5bebcfcf92ec921dcf114828
 
   next(status?: string) {
+    this.pageTop.scrollToTop();
     if (this.questions[this.start].responseType === 'pageQuestions'){
       this.questions[this.start].endTime =  this.questions[this.start] ? Date.now() : "";
       this.questions[this.start].isCompleted = this.utils.isPageQuestionComplete(this.questions[this.start]);
@@ -150,6 +155,7 @@ export class QuestionerPage {
   }
 
   back() {
+    this.pageTop.scrollToTop();
     if (this.questions[this.start].responseType === 'pageQuestions'){
       this.questions[this.start].endTime =  this.questions[this.start] ? Date.now() : "";
       this.questions[this.start].isCompleted = this.utils.isPageQuestionComplete(this.questions[this.start]);

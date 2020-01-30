@@ -29,6 +29,7 @@ plugins/ios.json
 www/
 $RECYCLE.BIN/
 src/providers/appConfig.ts
+google-services.json
 
 .sourcemaps/
 

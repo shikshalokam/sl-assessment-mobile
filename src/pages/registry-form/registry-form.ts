@@ -92,7 +92,6 @@ export class RegistryFormPage {
   update(): void {
     // //console.log(JSON.stringify(this.schoolDetails));
 
-    const key = this.registryType ;
     const payload = { data : [] }
     const obj = this.form.value;
     obj.programId = this.schoolDetails['program']._id;

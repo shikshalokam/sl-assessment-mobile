@@ -18,6 +18,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 export class RoleListingPage {
   roles = [];
   entityType: any;
+  assessmentType;
 
   constructor(public navCtrl: NavController,
     private utils : UtilsProvider,
@@ -29,6 +30,7 @@ export class RoleListingPage {
     this.utils.startLoader();
     this.localStorageProvider.getLocalStorage('profileRole').then(success =>{
       this.roles = success.result.roles;
+      this.assessmentType = this.navParams.get('assessmentType');
       // this.entityType = success.result.roles.entityType
        console.log(JSON.stringify(success))
       this.utils.stopLoader();
@@ -42,7 +44,11 @@ export class RoleListingPage {
     );
   }
   roleSelected(role){
-    console.log(JSON.stringify(role))
-    this.navCtrl.push(ReportEntityListingPage ,{  "currentEntityType" : role.immediateSubEntityType, "data" : role.entities  , "entityType" : role.entities[0].immediateSubEntityType})
+    this.navCtrl.push(ReportEntityListingPage ,{  
+      "currentEntityType" : role.immediateSubEntityType, 
+      "data" : role.entities  , 
+      "entityType" : role.entities[0].immediateSubEntityType,
+      "assessmentType": this.assessmentType
+    })
   }
 }

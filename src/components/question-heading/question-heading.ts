@@ -17,6 +17,7 @@ export class QuestionHeadingComponent {
   text: string;
   @Input()data ;
   @Input()inputIndex;
+  @Input() enableQuestionReadOut: boolean;
   showQuestionNumber = false;
 
   play = false;

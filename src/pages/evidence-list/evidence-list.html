@@ -15,7 +15,7 @@
 
     <button ion-item [disabled]="evidence?.notApplicable" *ngFor="let evidence of entityEvidences; let i= index"
       (click)="navigateToEvidence(i)" text-wrap>
-      <h3 class="_flex-box" style="flex-wrap: wrap">
+      <div class="_flex-box" style="flex-wrap: wrap">
         <ion-icon name="albums" margin-right></ion-icon>
         <div style="flex: 1">{{ evidence?.name }}</div>
         <div float-right *ngIf="evidence.progressStatus === 'completed' && !evidence?.notApplicable"
@@ -39,7 +39,7 @@
         <div float-right *ngIf="evidence?.notApplicable" class="_na _flex-box">
           {{'labels.notApplicable'|translate}} <ion-icon name="alert" class="_progressIcon" margin-left></ion-icon>
         </div>
-      </h3>
+      </div>
     </button>
 
     <button ion-item (click)="goToGeneralQuestionList()" *ngIf="generalQuestions && generalQuestions?.length">

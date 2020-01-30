@@ -1,5 +1,5 @@
 import { Component , ViewChild} from '@angular/core';
-import { NavController, NavParams, AlertController, Events, Platform } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Events, Platform, PopoverController } from 'ionic-angular';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { AssessmentServiceProvider } from '../../providers/assessment-service/assessment-service';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -12,7 +12,7 @@ import { ObservationServiceProvider } from '../../providers/observation-service/
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { DownloadAndPreviewProvider } from '../../providers/download-and-preview/download-and-preview';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
-
+import { ScoreReportMenusComponent } from '../../components/score-report-menus/score-report-menus';
 declare var cordova: any;
 
 
@@ -32,7 +32,9 @@ export class ObservationDetailsPage {
   isIos: boolean;
   appFolderPath;
   search;
+  submissionCount;
 
+  showActionsheet:boolean = false;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public alertCntrl: AlertController,
@@ -40,12 +42,13 @@ export class ObservationDetailsPage {
     private utils: UtilsProvider,
     private evdnsServ: EvidenceProvider,
     private translate: TranslateService,
-    private observationService:ObservationServiceProvider,
-    private observationProvider : ObservationServiceProvider,
+    private observationService: ObservationServiceProvider,
+    private observationProvider: ObservationServiceProvider,
     private apiProvider: ApiProvider,
     private localStorage: LocalStorageProvider,
     private fileTransfr: FileTransfer,
     private platform: Platform,
+    private popoverCtrl: PopoverController,
     private events: Events) {
 
     this.events.subscribe('observationLocalstorageUpdated', success => {
@@ -53,7 +56,7 @@ export class ObservationDetailsPage {
     })
 
     this.events.subscribe('refreshObservationListOnAddEntity', type => {
-    this.refresh();
+      this.refresh();
       console.log("refresh obs list")
     })
   }
@@ -61,7 +64,7 @@ export class ObservationDetailsPage {
   ionViewDidEnter() {
     this.selectedObservationIndex = this.navParams.get('selectedObservationIndex');
 
-    console.log('ionViewDidLoad ObservationDetailsPage');
+    console.log('ionViewDidLoad ObservationDetailsPage', this.observationDetails);
     this.getLocalStorageData();
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + 'submissionDocs' : cordova.file.externalDataDirectory + 'submissionDocs';
@@ -83,20 +86,22 @@ export class ObservationDetailsPage {
     this.utils.startLoader();
 
     const url = AppConfigs.cro.observationList;
-    this.observationProvider.refreshObservationList(this.observationList).then(observationList =>{
+    this.observationProvider.refreshObservationList(this.observationList).then(observationList => {
       this.programs = observationList;
       this.observationList = observationList;
-      this.observationDetails[0]= (observationList[this.selectedObservationIndex]);
-      this.enableCompleteBtn = this.isAllEntitysCompleted();    
-        // console.log(JSON.stringify(observationList))
+      this.observationDetails[0] = (observationList[this.selectedObservationIndex]);
+      this.enableCompleteBtn = this.isAllEntitysCompleted();
+      // console.log(JSON.stringify(observationList))
       this.utils.stopLoader();
 
     }).catch(
-      error =>{
-      this.utils.stopLoader();
+      error => {
+        this.utils.stopLoader();
 
       }
     );
+
+
 
     // const url = AppConfigs.survey.fetchIndividualAssessments + "?type=assessment&subType=individual&status=active";
     // event ? "" : this.utils.startLoader();
@@ -148,7 +153,7 @@ export class ObservationDetailsPage {
     //           });
     //         }
     //       }
-  
+
     //     }
 
     //   if (!downloadedAssessments.length) {
@@ -173,7 +178,7 @@ export class ObservationDetailsPage {
     //                       if (element.id === entity._id) {
     //                         // entity.downloaded = true;
     //                         entity.submissionId = element.submissionId;
-          
+
     //                       }
     //                     }
     //                   }
@@ -203,7 +208,8 @@ export class ObservationDetailsPage {
       this.programs = data;
       this.observationList = data;
       this.observationDetails.push(data[this.selectedObservationIndex]);
-      console.log(JSON.stringify(this.observationDetails))
+      this.checkForAnySubmissionsMade()
+
       this.enableCompleteBtn = this.isAllEntitysCompleted();
       this.firstVisit = false;
     }).catch(error => {
@@ -227,7 +233,6 @@ export class ObservationDetailsPage {
     let translateObject;
     this.translate.get(['actionSheet.confirm', 'actionSheet.completeobservation', 'actionSheet.restrictAction', 'actionSheet.no', 'actionSheet.yes']).subscribe(translations => {
       translateObject = translations;
-      console.log(JSON.stringify(translations))
     })
     let alert = this.alertCntrl.create({
       title: translateObject['actionSheet.confirm'],
@@ -265,11 +270,22 @@ export class ObservationDetailsPage {
     this.childEntityList.fileterList(event)
   }
 
+
   viewObservationReports() {
     const payload = {
       observationId: this.observationDetails[0]._id
     }
     this.navCtrl.push(ObservationReportsPage, payload);
+  }
+
+  checkForAnySubmissionsMade() {
+    const payload = {
+      observationId: this.observationDetails[0]._id
+    }
+    this.apiProvider.httpPost(AppConfigs.cro.observationSubmissionCount, payload, success => {
+      this.submissionCount = success.data.noOfSubmissions;
+    }, error => {
+    }, { baseUrl: "dhiti" })
   }
 
   // getAssessmentDetails(event) {
@@ -327,5 +343,36 @@ export class ObservationDetailsPage {
     this.evdnsServ.openActionSheet(options, "Observation");
 
   }
-  
+  openObservationMenu($event) {
+    let noScore: boolean = true;
+    this.observationDetails.forEach(observation => {
+      console.log(observation.entities[0].submissions,"observation");
+      observation.entities[0].submissions.forEach(submission=> {
+        console.log(submission.ratingCompletedAt,"submission.ratingCompletedAt");
+        if (submission.ratingCompletedAt) {
+        this.showActionsheet = true;
+        noScore = false;
+      }
+      });
+    });
+    if (noScore) {
+    this.viewObservationReports();
+    }else {
+      this.openMenu(event);
+    }
+  }
+
+  // Menu for Submissions
+  openMenu(event) {
+    let payload = {
+      observationId: this.observationDetails[0]._id
+    }
+    let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
+      observationDetail: payload,
+      navigateToobservationReport:"true",
+    })
+    popover.present(
+      { ev: event }
+    );
+  }
 }

@@ -132,7 +132,7 @@ export class ObservationsPage {
     }, error => {
       this.utils.stopLoader();
 
-    })
+    }, {version:"v2"})
 
   }
   countCompleteActive() {
