@@ -168,7 +168,8 @@ export class ApiProvider {
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
         'appVersion': AppConfigs.appVersion,
         'appName': AppConfigs.appName,
-        'platform': this.platform.is('ios') ? 'ios' : 'android'
+        'appType':"assessment",
+        'os': this.platform.is('ios') ? 'ios' : 'android'
       }
       // const apiUrl = AppConfigs.api_base_url + url;
       const apiUrl = this.getApiUrl(url, config);
@@ -214,7 +215,8 @@ export class ApiProvider {
         'gpsLocation': gpsLocation ? gpsLocation : '0,0',
         'appVersion': AppConfigs.appVersion,
         'appName': AppConfigs.appName,
-        'platform': this.platform.is('ios') ? 'ios' : 'android'
+        'os': this.platform.is('ios') ? 'ios' : 'android',
+        'appType':"assessment",
       }
       this.http.setDataSerializer('json');
       const apiUrl = this.getApiUrl(url, config);
