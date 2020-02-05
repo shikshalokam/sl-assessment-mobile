@@ -7,6 +7,7 @@ import { AppConfigs } from '../appConfig';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { CurrentUserProvider } from '../current-user/current-user';
 import { NotificationProvider } from '../notification/notification';
+import { ApiProvider } from '../api/api';
 
 @Injectable()
 export class FcmProvider {
@@ -19,7 +20,8 @@ export class FcmProvider {
     private localNotification: LocalNotifications,
     private localStorage: LocalStorageProvider,
     private currentUser: CurrentUserProvider,
-    private notificationProvider : NotificationProvider,
+    private notificationProvider: NotificationProvider,
+    private apiProvider: ApiProvider,
     private platform: Platform) {
     console.log('Hello FcmProvider Provider');
   }
@@ -28,7 +30,7 @@ export class FcmProvider {
     if (this.platform.is('android')) {
       this.initializeFirebaseAndroid()
     } else {
-      this.initializeFirebaseIOS()
+      this.initializeFirebaseAndroid()
     }
   }
 
@@ -78,37 +80,47 @@ export class FcmProvider {
 
   triggerLocalNotification(notificationData) {
     const obj = {
-      title:notificationData.title,
-      text:notificationData.text,
+      title: notificationData.title,
+      text: notificationData.text,
       foreground: true,
       priority: 2,
       id: notificationData.id,
-      data:notificationData,
+      data: notificationData,
       color: AppConfigs.primary_color,
-      icon:"notification_icon"
+      icon: "notification_icon"
     }
     this.localNotification.schedule(obj);
   }
 
   registerDeviceID(token?: string) {
-    const url = AppConfigs.kendra_base_url + AppConfigs.notification.registerDevice;
+    // const url = AppConfigs.kendra_base_url + AppConfigs.notification.registerDevice;
     const payload = {
       deviceId: this.fcmDeviceId
     }
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'x-authenticated-user-token': token ? token : this.currentUser.curretUser.accessToken,
-        'app': AppConfigs.appName.toLowerCase(),
-        'os': this.platform.is('android') ? 'android' : 'ios'
-      })
-    };
-    this.http.post(url, payload, httpOptions).subscribe(success => {
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'x-authenticated-user-token': token ? token : this.currentUser.curretUser.accessToken,
+    //     'appName': AppConfigs.appName.toLowerCase(),
+    //     'os': this.platform.is('android') ? 'android' : 'ios',
+    //     appType: "assessment"
+    //   })
+    // };
+    // this.http.post(url, payload, httpOptions).subscribe(success => {
+    //   console.log("==========================================================================")
+    //   console.log("Successfully registered token");
+    //   console.log("==========================================================================")
+    // }, error => {
+    //   console.log("Error while registering token");
+    // })
+
+    this.apiProvider.httpPost(AppConfigs.notification.registerDevice, payload, success => {
       console.log("==========================================================================")
       console.log("Successfully registered token");
+      console.log(JSON.stringify(success));
       console.log("==========================================================================")
     }, error => {
       console.log("Error while registering token");
-    })
+    }, {"baseUrl":"kendra"})
   }
 
   initializeFirebaseIOS() {
