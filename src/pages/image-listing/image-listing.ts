@@ -282,7 +282,7 @@ export class ImageListingPage {
       this.utils.stopLoader();
       this.schoolData.observation ? this.events.publish('updateSubmissionStatus'): null;
 
-      this.navCtrl.remove(2, 1);
+      this.navCtrl.remove((this.navCtrl.getActive().index - 1), 1);
       this.navCtrl.pop();
     }, error => {
       this.utils.stopLoader();
@@ -290,9 +290,9 @@ export class ImageListingPage {
   }
 
   ionViewDidLeave(){
-    this.schoolData.observation ? 
-    this.events.unsubscribe('updateSubmissionStatus'): 
-    null
+    // this.schoolData.observation ? 
+    // this.events.unsubscribe('updateSubmissionStatus'): 
+    // null
   }
 
   constructPayload(): any {

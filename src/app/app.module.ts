@@ -113,6 +113,7 @@ import { AppVersion } from '@ionic-native/app-version';
 import { SettingsPage } from '../pages/settings/settings';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
   declarations: [
@@ -170,6 +171,7 @@ import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
     QuestionerPageModule,
     ComponentsModule,
     DirectivesModule,
+    PipesModule,
     RatingCriteriaListingPageModule,
     RatingPageModule,
     RatedCriteriaListPageModule,
