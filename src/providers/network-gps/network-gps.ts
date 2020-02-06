@@ -78,8 +78,8 @@ export class NetworkGpsProvider {
           this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
             const options = {
               enableHighAccuracy: true,
-              timeout: 20000,
-              maximumAge: 0
+              timeout: 10000,
+              maximumAge: 30000
             }
             this.geolocation.getCurrentPosition(options).then((resp) => {
               const location = `${resp.coords.latitude},${resp.coords.longitude}`;
@@ -91,6 +91,7 @@ export class NetworkGpsProvider {
               });
               this.errorObj.text = `getCurrentPosition error. ${JSON.stringify(error)}`;
               this.slackService.pushException(this.errorObj);
+              // this.getGpsStatus();
               // this.utils.openToast("Something went wrnog. Please try again.")
               reject()
             });
@@ -112,7 +113,7 @@ export class NetworkGpsProvider {
                 const options = {
                   enableHighAccuracy: true,
                   timeout: 20000,
-                  maximumAge: 0
+                  maximumAge: 300000
                 }
                 this.geolocation.getCurrentPosition(options).then((resp) => {
                   const location = `${resp.coords.latitude},${resp.coords.longitude}`;
