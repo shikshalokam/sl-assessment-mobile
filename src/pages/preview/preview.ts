@@ -23,6 +23,7 @@ export class PreviewPage {
   evidenceSections;
   allAnsweredForEvidence: boolean;
   networkAvailable: any;
+  loaded: boolean = false;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -51,13 +52,14 @@ export class PreviewPage {
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
     // this.utils.startLoader();
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
+      this.loaded = true;
       this.entityDetails = data;
       this.currentEvidence = data['assessment']['evidences'][this.selectedEvidenceIndex];
       this.evidenceSections = this.currentEvidence['sections'];
       this.checkForEvidenceCompletion();
-      console.log(JSON.stringify(data))
       // this.utils.stopLoader();
     }).catch(error => {
+      this.loaded = true;
       // this.utils.stopLoader();
     })
   }
@@ -94,28 +96,16 @@ export class PreviewPage {
     this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.entityDetails)
   }
 
-  getLabels(question) {
-    console.log(question.value)
-    // const value = question.value.split(',');
-    const labels = [];
-    for (const option of question.options) {
-      if (question.value.includes(option.value)) {
-        labels.push(option.label)
-      }
-    }
-    return labels
 
-  }
 
 
 
 
   checkForNetworkTypeAlert() {
-    if (this.network.type !== ('3g' || '4g' || 'wifi')) {
+    if (this.network.type === 'cellular' || this.network.type === 'unknown' || this.network.type === '2g' || this.network.type === 'ethernet') {
       let translateObject;
       this.translate.get(['actionSheet.confirm', 'actionSheet.yes', 'actionSheet.no', 'actionSheet.slowInternet']).subscribe(translations => {
         translateObject = translations;
-        console.log(JSON.stringify(translations))
       })
       let alert = this.alertCtrl.create({
         title: translateObject['actionSheet.confirm'],
@@ -131,12 +121,20 @@ export class PreviewPage {
           {
             text: translateObject['actionSheet.yes'],
             handler: () => {
-              this.goToImageListing()
+              this.goToImageListing();
             }
           }
         ]
       });
       alert.present();
+    } else if (this.network.type === 'wifi' || this.network.type === '3g' || this.network.type === '4g') {
+      this.goToImageListing()
+    } else if (this.network.type === 'none') {
+      let noInternetMsg;
+      this.translate.get(['toastMessage.networkConnectionForAction']).subscribe(translations => {
+        noInternetMsg = translations['toastMessage.networkConnectionForAction'];
+        this.utils.openToast(noInternetMsg);
+      })
     }
   }
 
