@@ -55,8 +55,11 @@
         "chooseAction": "Choose a action",
         "deleteObservation": "Are you sure you want to delete the observation?",
         "networkSlowAlert": "You are connected to a slower data network. Image upload may take longer time. Do you want to continue?",
-        "reportWithScore":"Report with score",
-        "reportWithoutScore":"Report without score"
+        "reportWithScore": "Report with score",
+        "reportWithoutScore": "Report without score",
+        "submitForm": "Submit the form",
+        "previewForm": "Preview the form",
+        "saveForm": "Save the form"
     },
     "buttons": {
         "observeAgain": "Observe Again",
@@ -111,8 +114,8 @@
         "edit": "Edit",
         "observation": "Observation",
         "loadMore": "Load More",
-        "selectAll":"Select All Schools",
-        "undo":"Undo"
+        "selectAll": "Select All Schools",
+        "undo": "Undo"
     },
     "tabs": {
         "home": "Home",
@@ -132,7 +135,7 @@
         "dashboard": "Dashboard",
         "inProgress": "In progress",
         "completed": "Completed",
-        "setting":"Settings"
+        "setting": "Settings"
     },
     "headings": {
         "zone": "Zones",
@@ -185,16 +188,16 @@
         "generalQuestions": "General Questions",
         "individualAssessments": "Individual Assessments",
         "observationDetails": "Observation Details",
-        "dashboardAssessmentListing" :"Assessments",
-        "selectAssessment":"Select an Assessment type",
-        "observationList":"Observations List",
+        "dashboardAssessmentListing": "Assessments",
+        "selectAssessment": "Select an Assessment type",
+        "observationList": "Observations List",
         "hint": "Hint",
         "submissionPreview": "Submission Preview",
         "observationReports": "Report",
         "observationUpdate": "Observation Update",
         "notifications": "Notifications",
-        "settings":"Settings",
-        "solutionList":"Solution List"
+        "settings": "Settings",
+        "solutionList": "Solution List"
     },
     "labels": {
         "welcome": "Welcome",
@@ -212,13 +215,13 @@
         "notApplicable": "NA",
         "readytoPublish": "Ready to Publish",
         "files": "Files",
-        "languages":"Languages",
-        "totalScore":"Total score",
-        "scoreAchieved":"Score achieved",
-        "totalObservations":"Total Observations",
-        "totalSchools":"Total schools",
-        "schoolsObserved":"Schools observed",
-        "selectState":"Select State *"
+        "languages": "Languages",
+        "totalScore": "Total score",
+        "scoreAchieved": "Score achieved",
+        "totalObservations": "Total Observations",
+        "totalSchools": "Total schools",
+        "schoolsObserved": "Schools observed",
+        "selectState": "Select State *"
     },
     "languages": {
         "english": "English",
@@ -278,7 +281,7 @@
         "userNameMisMatch": "Username didnot match. Please login again.",
         "loactionForAction": "Location should be turned on for this action.",
         "questionResponseNotRequiredForCompleteAssessment": "This questions response is not required to complete the assessment.",
-        "unableToFetchGps":"Unable to fetch GPS location",
-        "enableGPS":"Please enable GPS to proceed."
+        "unableToFetchGps": "Unable to fetch GPS location",
+        "enableGPS": "Please enable GPS to proceed."
     }
 }
