@@ -359,5 +359,6 @@ ion-step-header .ionic-step-header-icon-active {
 }
 
 .serachBar {
-    width: calc(100% - 50px)!important;
+    // width: calc(100% - 60px)!important;
+    flex: 1;
 }
