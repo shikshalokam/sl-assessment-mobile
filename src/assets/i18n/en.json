@@ -24,7 +24,7 @@
         "login": "Login",
         "ecmNotApplicableMessage": "Do you want mark ECM as not applicable / not allowed?",
         "dataLooseConfirm": "All your datas will be lost. Do you want to continue?",
-        "previousUserName": "Please enter previous username.",
+        "previousUserName": "Please enter previous user id.",
         "sessionExpired": "Session has expired. Please login again to continue",
         "slowInternet": "You are connected to a slower data network. Image upload may take longer time. Do you want to continue?",
         "name": "Name",
@@ -59,7 +59,8 @@
         "reportWithoutScore": "Report without score",
         "submitForm": "Submit the form",
         "previewForm": "Preview the form",
-        "saveForm": "Save the form"
+        "saveForm": "Save the form",
+        "userId":"User Id"
     },
     "buttons": {
         "observeAgain": "Observe Again",
@@ -278,7 +279,7 @@
         "errorGettingLoaction": "Error in getting location",
         "fillAllFields": "Please fill all the fields",
         "loginAgain": "Please login again.",
-        "userNameMisMatch": "Username didnot match. Please login again.",
+        "userNameMisMatch": "User Id did not match. Please try again.",
         "loactionForAction": "Location should be turned on for this action.",
         "questionResponseNotRequiredForCompleteAssessment": "This questions response is not required to complete the assessment.",
         "unableToFetchGps": "Unable to fetch GPS location",
