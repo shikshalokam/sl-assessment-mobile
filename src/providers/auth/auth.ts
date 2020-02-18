@@ -139,15 +139,15 @@ export class AuthProvider {
 
   confirmPreviousUserName(previousUserEmail, tokens): void {
     let translateObject;
-    this.translate.get(['actionSheet.previousUserName', 'actionSheet.email', 'actionSheet.cancel', 'actionSheet.send']).subscribe(translations => {
+    this.translate.get(['actionSheet.previousUserName', 'actionSheet.userId', 'actionSheet.cancel', 'actionSheet.send']).subscribe(translations => {
       translateObject = translations;
     })
     let alert = this.alertCntrl.create({
       title: translateObject['actionSheet.previousUserName'],
       inputs: [
         {
-          name: translateObject['actionSheet.email'],
-          placeholder: 'Email',
+          name: 'userName',
+          placeholder: translateObject['actionSheet.userId'],
         }
       ],
       buttons: [
@@ -163,14 +163,14 @@ export class AuthProvider {
           text: translateObject['actionSheet.send'],
           role: 'role',
           handler: data => {
-            if (data.email && (previousUserEmail.toLowerCase() === data.email.toLowerCase())) {
+            if (data.userName && (previousUserEmail.toLowerCase() === data.userName.toLowerCase())) {
               this.confirmDataClear(tokens);
             } else {
               this.currentUser.deactivateActivateSession(true);
 
               this.doLogout();
               this.translate.get(['toastMessage.userNameMisMatch', 'toastMessage.ok']).subscribe(translations => {
-                this.utils.openToast(translations.userNameMisMatch, translations.ok);
+                this.utils.openToast(translations['toastMessage.userNameMisMatch'], translations['toastMessage.ok']);
               })
             }
 
@@ -180,6 +180,7 @@ export class AuthProvider {
     });
     alert.present();
   }
+
 
   confirmDataClear(tokens): void {
     let translateObject;
@@ -199,7 +200,7 @@ export class AuthProvider {
 
             this.doLogout();
             this.translate.get(['toastMessage.loginAgain', 'toastMessage.ok']).subscribe(translations => {
-              this.utils.openToast(translations.loginAgain, translations.ok);
+              this.utils.openToast(translations['toastMessage.loginAgain'], translations['toastMessage.ok']);
             })
           }
         },
@@ -207,16 +208,17 @@ export class AuthProvider {
           text: translateObject['actionSheet.yes'],
           role: 'role',
           handler: data => {
-            this.currentUser.removeUser();
-            let userTokens = {
-              accessToken: tokens.access_token,
-              refreshToken: tokens.refresh_token,
-              idToken: tokens.id_token,
-              isDeactivated: false
-            };
-            this.currentUser.setCurrentUserDetails(userTokens);
-            let nav = this.app.getActiveNav();
-            nav.setRoot(HomePage);
+            this.currentUser.removeUser().then(success => {
+              let userTokens = {
+                accessToken: tokens.access_token,
+                refreshToken: tokens.refresh_token,
+                idToken: tokens.id_token,
+                isDeactivated: false
+              };
+              this.currentUser.setCurrentUserDetails(userTokens);
+              let nav = this.app.getActiveNav();
+              nav.setRoot(HomePage);
+            })
           }
         }
       ]
