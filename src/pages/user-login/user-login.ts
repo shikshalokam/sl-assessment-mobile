@@ -11,6 +11,7 @@ import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { HTTP } from '@ionic-native/http';
 import { FcmProvider } from '../../providers/fcm/fcm';
+import { AuthProvider } from '../../providers/auth/auth';
 
 @Component({
   selector: 'page-user-login',
@@ -27,7 +28,7 @@ export class UserLoginPage {
   adminToken;
   userDetails;
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private utils: UtilsProvider,
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private utils: UtilsProvider, private auth: AuthProvider,
     private currentUser: CurrentUserProvider, private app: App, private navCtrl: NavController, private ionicHttp: HTTP,
     private localStorage: LocalStorageProvider, private fcm: FcmProvider) {
     this.signIn = this.formBuilder.group({
@@ -56,16 +57,17 @@ export class UserLoginPage {
     this.http.post(url, params, httpOptions)
       .subscribe((data: any) => {
         this.utils.stopLoader();
-        let userTokens = {
-          accessToken: data.access_token,
-          refreshToken: data.refresh_token,
-          // idToken: data.id_token
-        };
-        this.currentUser.setCurrentUserDetails(userTokens).then(success => {
-          this.fcm.registerDeviceID();
-          let nav = this.app.getActiveNav();
-          nav.setRoot(HomePage);
-        })
+        this.auth.checkForCurrentUserLocalData(data);
+        // let userTokens = {
+        //   accessToken: data.access_token,
+        //   refreshToken: data.refresh_token,
+        //   // idToken: data.id_token
+        // };
+        // this.currentUser.setCurrentUserDetails(userTokens).then(success => {
+        //   this.fcm.registerDeviceID();
+        //   let nav = this.app.getActiveNav();
+        //   nav.setRoot(HomePage);
+        // })
       }, error => {
         this.adminLogin();
       });
@@ -170,6 +172,7 @@ export class UserLoginPage {
     const obj = {
       'Content-Type': 'application/x-www-form-urlencoded',
     }
+    this.ionicHttp.setDataSerializer('urlencoded');
     this.ionicHttp.post(AppConfigs.punjabBaseUrl + AppConfigs.punjab.login, payload, obj).then(success => {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(success.data, "text/xml");
@@ -199,22 +202,15 @@ export class UserLoginPage {
     if (this.counter === 0) {
       this.utils.startLoader()
     }
-    const params = new HttpParams({
-      fromObject: {
+    const payload = {
         'values': stringToEncrypt ? stringToEncrypt : this.signIn.value.staffID,
         'key': AppConfigs.punjabApiKey
-      }
-    });
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-      })
     };
 
-    this.http.post(AppConfigs.punjabBaseUrl + AppConfigs.punjab.encryptedMethod, params, httpOptions).subscribe(success => {
-    }, error => {
-      let encryptedString = (error.error.text.split('<string xmlns="http://tempuri.org/">'))[1].split('</string>')[0];
+    this.ionicHttp.setDataSerializer('urlencoded');
+
+    this.ionicHttp.post(AppConfigs.punjabBaseUrl + AppConfigs.punjab.encryptedMethod, payload, {}).then(success => {
+      let encryptedString = (success.data.split('<string xmlns="http://tempuri.org/">'))[1].split('</string>')[0];
       if (this.counter === 0) {
         this.staffID = encryptedString
         this.counter++;
@@ -229,6 +225,10 @@ export class UserLoginPage {
         this.counter = 0;
         this.login();
       }
+    }).catch(error => {
+      this.utils.stopLoader();
+      let errorMessage = ((error.status === 500) || (error.status === 400))  ? error.error: "Punjab server is currently unavailable. Please contact the support team for assistance." ;
+      this.utils.openToast(errorMessage);
     })
 
   }
