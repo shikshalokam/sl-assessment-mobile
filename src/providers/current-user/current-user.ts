@@ -56,17 +56,16 @@ export class CurrentUserProvider {
     return jwt_decode(token);
   }
 
-  removeUser() {
-    this.curretUser = "";
-    this.storage.remove('tokens');
-    this.storage.remove('schools');
-    this.storage.remove('images');
-    this.storage.remove('parentDetails');
-    this.storage.remove('schoolsDetails');
-    this.storage.remove('allImageList');
-    this.storage.remove('genericQuestionsImages');
-    this.storage.remove('generalQuestions');
-    this.appBadge.clearTheBadge();
+  removeUser(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.storage.clear().then(success => {
+        this.appBadge.clearTheBadge();
+        this.curretUser = "";
+        resolve();
+      }).catch(error => {
+        reject();
+      })
+    })
   }
 
   fetchUser(): void {
