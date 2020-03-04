@@ -12,6 +12,7 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 import { HTTP } from '@ionic-native/http';
 import { FcmProvider } from '../../providers/fcm/fcm';
 import { AuthProvider } from '../../providers/auth/auth';
+import * as jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'page-user-login',
@@ -27,6 +28,7 @@ export class UserLoginPage {
   staffID;
   adminToken;
   userDetails;
+  isNewUser: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private utils: UtilsProvider, private auth: AuthProvider,
     private currentUser: CurrentUserProvider, private app: App, private navCtrl: NavController, private ionicHttp: HTTP,
@@ -56,8 +58,12 @@ export class UserLoginPage {
     const url = AppConfigs.app_url + "/auth/realms/sunbird/protocol/openid-connect/token";
     this.http.post(url, params, httpOptions)
       .subscribe((data: any) => {
-        this.utils.stopLoader();
-        this.auth.checkForCurrentUserLocalData(data);
+        if (this.isNewUser) {
+          this.addUserToOrganization(data);
+        } else {
+          this.utils.stopLoader();
+          this.auth.checkForCurrentUserLocalData(data);
+        }
         // let userTokens = {
         //   accessToken: data.access_token,
         //   refreshToken: data.refresh_token,
@@ -70,6 +76,37 @@ export class UserLoginPage {
         // })
       }, error => {
         this.adminLogin();
+      });
+  }
+
+  addUserToOrganization(userDetails) {
+    console.log("inside add user to organisation");
+    const url = AppConfigs.app_url + AppConfigs.keyCloak.addUser;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        "X-authenticated-user-token": this.adminToken,
+        "Authorization": AppConfigs.adminCredentials.auterizationToken
+      })
+    };
+    const userId = userDetails.access_token ? jwt_decode(userDetails.access_token).sub : "";
+    const params = {
+      "params": {},
+      "request": {
+        "userId": userId,
+        "organisationId": AppConfigs.keyCloak.punjabOrgId,
+        "roles": AppConfigs.keyCloak.roles
+      }
+    }
+    this.http.post(url, params, httpOptions)
+      .subscribe((data: any) => {
+        this.utils.stopLoader();
+        this.auth.checkForCurrentUserLocalData(userDetails);
+        this.isNewUser = false;
+      }, error => {
+        this.utils.stopLoader();
+        this.utils.openToast("Unable to login. Please try again");
+        this.isNewUser = true;
       });
   }
 
@@ -127,6 +164,7 @@ export class UserLoginPage {
 
     this.http.post(url, body, httpOptions)
       .subscribe((data: any) => {
+        this.isNewUser = true;
         this.checkForKeycloakUser(this.signIn.value.staffID, this.signIn.value.password)
       }, error => {
         this.utils.stopLoader();
@@ -189,7 +227,7 @@ export class UserLoginPage {
       this.utils.stopLoader();
       this.paylod = {};
       console.log(JSON.stringify(error));
-      this.staffID =""
+      this.staffID = ""
       this.utils.openToast(error.error);
     })
   }
@@ -203,8 +241,8 @@ export class UserLoginPage {
       this.utils.startLoader()
     }
     const payload = {
-        'values': stringToEncrypt ? stringToEncrypt : this.signIn.value.staffID,
-        'key': AppConfigs.punjabApiKey
+      'values': stringToEncrypt ? stringToEncrypt : this.signIn.value.staffID,
+      'key': AppConfigs.punjabApiKey
     };
 
     this.ionicHttp.setDataSerializer('urlencoded');
@@ -223,11 +261,12 @@ export class UserLoginPage {
         };
         console.log(JSON.stringify(this.paylod))
         this.counter = 0;
+        // this.isNewUser = true;
         this.login();
       }
     }).catch(error => {
       this.utils.stopLoader();
-      let errorMessage = ((error.status === 500) || (error.status === 400))  ? error.error: "Punjab server is currently unavailable. Please contact the support team for assistance." ;
+      let errorMessage = ((error.status === 500) || (error.status === 400)) ? error.error : "Unable to fetch user details. Please contact the support team for assistance.";
       this.utils.openToast(errorMessage);
     })
 
