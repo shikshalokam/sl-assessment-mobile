@@ -5,7 +5,7 @@
 <ion-content>
   <ion-card *ngIf="submissionList" class="cardWrapper submissionCard">
     <ion-card-content class="observationTitle">
-      {{ submissionList[0]['entityInformation']['name']}}
+      {{ submissionList[0] ? submissionList[0]['entityInformation']['name'] :""}}
     </ion-card-content>
   </ion-card>
   <ion-segment [(ngModel)]="currentTab" (ionChange)="tabChange($event.value)">
