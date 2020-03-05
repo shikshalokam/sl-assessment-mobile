@@ -219,7 +219,8 @@
         "totalObservations":"Total Observations",
         "totalSchools":"Total schools",
         "schoolsObserved":"Schools observed",
-        "selectState":"Select State *"
+        "selectState":"Select State *",
+        "instanceName":"Instance Name"
     },
     "languages": {
         "english": "English",
