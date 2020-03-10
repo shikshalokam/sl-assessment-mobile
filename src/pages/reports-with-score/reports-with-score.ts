@@ -34,6 +34,7 @@ export class ReportsWithScorePage {
   action;
   solutionId: string;
   entityType: string;
+  reportType: string;
 
   constructor(public navCtrl: NavController, private dap: DownloadAndPreviewProvider,
     public navParams: NavParams, private platform: Platform,
@@ -49,12 +50,12 @@ export class ReportsWithScorePage {
     this.entityId = this.navParams.get('entityId');
     this.solutionId = this.navParams.get('solutionId');
     this.entityType = this.navParams.get('entityType');
+    this.reportType = this.navParams.get('reportType');
     this.payload = {
       "entityId": this.entityId,
       "submissionId": this.submissionId,
       "observationId": this.observationId
     }
-    console.log(this.payload, "payload");
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
     // this.appFolderPath = this.isIos ? cordova.file.externalRootDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
@@ -67,6 +68,7 @@ export class ReportsWithScorePage {
     if (this.solutionId) {
       this.payload.solutionId = this.solutionId;
       this.payload.entityType = this.entityType;
+      this.payload.reportType = this.reportType;
       url = AppConfigs.observationReportsWithScore.solutionReport;
     } else if (this.submissionId) {
       // view submission report
@@ -79,6 +81,7 @@ export class ReportsWithScorePage {
     }
     this.apiService.httpPost(url, this.payload, (success) => {
       if (success) {
+        this.error = !success.result ? success.message : null;
         this.reportObj = success;
       } else {
         this.error = "No data found";

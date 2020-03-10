@@ -29,6 +29,7 @@ export class ObservationReportsPage {
   action;
   entityType;
   immediateChildEntityType;
+  reportType: string;
 
   constructor(public navCtrl: NavController, private dap: DownloadAndPreviewProvider,
     public navParams: NavParams, private platform: Platform,
@@ -45,10 +46,11 @@ export class ObservationReportsPage {
     this.entityId = this.navParams.get('entityId');
     this.entityType = this.navParams.get('entityType');
     this.immediateChildEntityType = this.navParams.get('immediateChildEntityType');
+    this.reportType = this.navParams.get('reportType')
     this.payload = {
       "entityId": this.entityId,
       "submissionId": this.submissionId,
-      "observationId": this.observationId,
+      "observationId": this.observationId
     }
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
@@ -63,7 +65,8 @@ export class ObservationReportsPage {
         "entityId": this.entityId,
         "entityType": this.entityType,
         "solutionId": this.solutionId,
-        "immediateChildEntityType": this.immediateChildEntityType
+        "immediateChildEntityType": this.immediateChildEntityType,
+        "reportType":this.reportType
       };
       url = AppConfigs.observationReports.entitySolutionReport;
     } else if (this.submissionId) {
@@ -117,7 +120,7 @@ export class ObservationReportsPage {
     let url = AppConfigs.observationReports.getReportsPdfUrls;
     const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a');
     if (this.entityType) {
-      url = url + "entityId=" + this.entityId + "&solutionId=" + this.solutionId + '&entityType=' + this.entityType + (this.immediateChildEntityType ? ('&immediateChildEntityType=' + this.immediateChildEntityType) : "");
+      url = url + "entityId=" + this.entityId + "&solutionId=" + this.solutionId + '&reportType='+this.reportType +'&entityType=' + this.entityType + (this.immediateChildEntityType ? ('&immediateChildEntityType=' + this.immediateChildEntityType) : "");
       this.fileName = this.solutionId + '_' + this.entityId + '_' + this.immediateChildEntityType + '.pdf';
     } else if (this.submissionId) {
       url = url + "submissionId=" + this.submissionId;

@@ -44,7 +44,7 @@
     </div>
   </div>
   <div class="_flex-box _justify-content-center _errorBox" *ngIf="!reportObj?.response">
-    {{reportObj?.data}}
+    {{error}}
   </div>
 
   <ion-fab bottom right *ngIf="reportObj?.response">
