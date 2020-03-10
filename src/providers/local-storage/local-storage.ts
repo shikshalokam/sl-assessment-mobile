@@ -9,16 +9,22 @@ export class LocalStorageProvider {
     console.log('Hello LocalStorageProvider Provider');
   }
 
-  setLocalStorage(key, value) {
-    this.storage.set(key, value)
+  setLocalStorage(key, value): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.storage.set(key, value).then(success => {
+        resolve()
+      }).catch(error => {
+        reject()
+      })
+    })
   }
 
-  getLocalStorage(key) : Promise<any>{
+  getLocalStorage(key): Promise<any> {
     // console.log(key)
     return new Promise((resolve, reject) => {
-      this.storage.get(key).then( data => {
+      this.storage.get(key).then(data => {
         // console.log(data)
-        if(data) {
+        if (data) {
           resolve(data)
         } else {
           reject(null)
@@ -32,8 +38,8 @@ export class LocalStorageProvider {
 
   deleteAllStorage(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.storage.clear().then( data => {
-          resolve()
+      this.storage.clear().then(data => {
+        resolve()
       }).catch(error => {
         reject(error)
       })
