@@ -282,7 +282,8 @@
         "userNameMisMatch": "User Id did not match. Please try again.",
         "loactionForAction": "Location should be turned on for this action.",
         "questionResponseNotRequiredForCompleteAssessment": "This questions response is not required to complete the assessment.",
-        "unableToFetchGps": "Unable to fetch GPS location",
-        "enableGPS": "Please enable GPS to proceed."
+        "unableToFetchGps":"Unable to fetch GPS location",
+        "enableGPS":"Please enable GPS to proceed.",
+        "reEnableGPS":"Unable to fetch your location. Please turn off and turn on your "
     }
 }

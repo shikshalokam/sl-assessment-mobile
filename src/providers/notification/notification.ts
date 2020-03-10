@@ -13,6 +13,7 @@ import { EntityListingPage } from '../../pages/entity-listing/entity-listing';
 import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { EvidenceProvider } from '../evidence/evidence';
 import { AppIconBadgeProvider } from '../app-icon-badge/app-icon-badge';
+import { SubmissionListPage } from '../../pages/submission-list/submission-list';
 
 @Injectable()
 export class NotificationProvider {
@@ -200,7 +201,8 @@ export class NotificationProvider {
       this.utils.stopLoader();
       // this.utils.openToast("No assessment available.")
       if (notificationMeta.payload.type === 'observation') {
-        this.getMappedObservation(notificationMeta);
+        // this.getMappedObservation(notificationMeta);
+        this.getMappedObservation(notificationMeta)
       } else {
         this.getMappedInstitutionalAssessment(notificationMeta);
       }
@@ -208,6 +210,9 @@ export class NotificationProvider {
   }
 
   goToObservationDetails(notificationMeta) {
+    console.log("===============================================")
+    console.log(JSON.stringify(notificationMeta))
+    console.log("===============================================")
 
   }
 
@@ -241,15 +246,30 @@ export class NotificationProvider {
     this.localStorage.getLocalStorage('createdObservationList').then(data => {
       this.observationProvider.refreshObservationList(data, event).then((observationList: Array<any>) => {
         let index = 0;
+        let entityIndex;
         for (const observation of observationList) {
           if ((observation._id === notificationMeta.payload.observation_id) && (observation.solutionId === notificationMeta.payload.solution_id)) {
+            entityIndex = 0;
+            for (const entity of observation.entities) {
+                if(entity._id === notificationMeta.payload.entity_id){
+                  break
+                }
+                ((entityIndex+1) < observation.entities.length) ? entityIndex++ : observation.entities.length - 1 ;
+            }
             break
           }
-          index++
+          index++;
         }
         this.utils.stopLoader();
         if (index < observationList.length) {
-          this.app.getRootNav().push(ObservationDetailsPage, { selectedObservationIndex: index });
+          const params = {
+            selectedObservationIndex: index,
+            entityIndex: entityIndex
+          }
+          // this.app.getRootNav().push(ObservationDetailsPage, { selectedObservationIndex: index });
+          this.checkForSubmissionAvailable(params, observationList)
+          // this.app.getRootNav().push(SubmissionListPage, params);
+
         } else {
           this.utils.openToast("No observation found");
         }
@@ -259,6 +279,29 @@ export class NotificationProvider {
     }).catch(error => {
       this.utils.stopLoader();
     })
+  }
+
+  checkForSubmissionAvailable(params, observationList){
+    const submissions = observationList[params.selectedObservationIndex]['entities'][params.entityIndex]['submissions'];
+    if(submissions && submissions.length){
+      this.app.getRootNav().push(SubmissionListPage, params);
+    } else {
+      let event = {
+        entityIndex: params.entityIndex,
+        observationIndex: params.selectedObservationIndex,
+        submissionNumber: 1
+      }
+      this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, observationList, 'createdObservationList').then(result => {
+        this.observationProvider.refreshObservationList(observationList).then(success => {
+          this.app.getRootNav().push(SubmissionListPage, params);
+        }).catch(error => {
+          this.utils.stopLoader();
+  
+        })
+      }).catch(error => {
+        this.utils.stopLoader();
+      })
+    }
   }
 
   stopNotificationPooling() {
