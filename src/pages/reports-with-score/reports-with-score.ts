@@ -92,7 +92,7 @@ export class ReportsWithScorePage {
       this.error = "No data found";
       this.utils.openToast(error.message)
       this.utils.stopLoader();
-    }, { baseUrl: "dhiti" })
+    }, { baseUrl: "dhiti" ,version: (this.observationId && this.entityId )? "v2" : 'v1'});
   }
 
   downloadSharePdf(action) {
@@ -135,7 +135,7 @@ export class ReportsWithScorePage {
     }, error => {
       this.error = "No data found";
       this.utils.stopLoader();
-    }, { baseUrl: "dhiti" })
+    }, { baseUrl: "dhiti", version: (this.observationId && this.entityId )? "v2" : 'v1' });
   }
   downloadSubmissionDoc(fileRemoteUrl) {
     this.utils.startLoader();
