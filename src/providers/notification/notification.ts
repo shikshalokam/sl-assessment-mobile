@@ -5,7 +5,6 @@ import { ApiProvider } from '../api/api';
 import { AppConfigs } from '../appConfig';
 import { LocalStorageProvider } from '../local-storage/local-storage';
 import { ObservationServiceProvider } from '../observation-service/observation-service';
-import { ObservationDetailsPage } from '../../pages/observation-details/observation-details';
 import { App } from 'ionic-angular';
 import { UtilsProvider } from '../utils/utils';
 import { AssessmentServiceProvider } from '../assessment-service/assessment-service';
@@ -14,6 +13,7 @@ import { NetworkGpsProvider } from '../network-gps/network-gps';
 import { EvidenceProvider } from '../evidence/evidence';
 import { AppIconBadgeProvider } from '../app-icon-badge/app-icon-badge';
 import { SubmissionListPage } from '../../pages/submission-list/submission-list';
+import { AppVersion } from '@ionic-native/app-version';
 
 @Injectable()
 export class NotificationProvider {
@@ -30,6 +30,7 @@ export class NotificationProvider {
   onlineSubscription;
   networkAvailable;
   timeInterval;
+  appVersionNumber;
 
 
   constructor(
@@ -41,6 +42,7 @@ export class NotificationProvider {
     private ngps: NetworkGpsProvider,
     private evindenceProvider: EvidenceProvider,
     private appBadge: AppIconBadgeProvider,
+    private appVersion: AppVersion,
     private assessmentService: AssessmentServiceProvider) {
     console.log('Hello NotificationProvider Provider');
     //offline event
@@ -114,8 +116,18 @@ export class NotificationProvider {
     for (const notification of notifications) {
       if (notification.internal) {
         switch (notification.action) {
-          case 'alertModal':
-            this.$alertModalSubject.next(notification);
+          case 'versionUpdate':
+            this.appVersion.getVersionNumber().then(currentVersion => {
+              if (notification.payload.appVersion != currentVersion) {
+                this.localStorage.getLocalStorage('appUpdateVersions').then(statusObj => {
+                  if (statusObj && !statusObj[notification.payload.appVersion]) {
+                    this.$alertModalSubject.next(notification);
+                  }
+                }).catch(error => {
+                  this.$alertModalSubject.next(notification);
+                })
+              }
+            })
             break
         }
       }
@@ -251,10 +263,10 @@ export class NotificationProvider {
           if ((observation._id === notificationMeta.payload.observation_id) && (observation.solutionId === notificationMeta.payload.solution_id)) {
             entityIndex = 0;
             for (const entity of observation.entities) {
-                if(entity._id === notificationMeta.payload.entity_id){
-                  break
-                }
-                ((entityIndex+1) < observation.entities.length) ? entityIndex++ : observation.entities.length - 1 ;
+              if (entity._id === notificationMeta.payload.entity_id) {
+                break
+              }
+              ((entityIndex + 1) < observation.entities.length) ? entityIndex++ : observation.entities.length - 1;
             }
             break
           }
@@ -281,9 +293,9 @@ export class NotificationProvider {
     })
   }
 
-  checkForSubmissionAvailable(params, observationList){
+  checkForSubmissionAvailable(params, observationList) {
     const submissions = observationList[params.selectedObservationIndex]['entities'][params.entityIndex]['submissions'];
-    if(submissions && submissions.length){
+    if (submissions && submissions.length) {
       this.app.getRootNav().push(SubmissionListPage, params);
     } else {
       let event = {
@@ -296,7 +308,7 @@ export class NotificationProvider {
           this.app.getRootNav().push(SubmissionListPage, params);
         }).catch(error => {
           this.utils.stopLoader();
-  
+
         })
       }).catch(error => {
         this.utils.stopLoader();
