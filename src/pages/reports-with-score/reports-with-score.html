@@ -39,12 +39,12 @@
       <ion-card>
         <pie-chart [data]="element" [questionNumber]="i+1" *ngIf="element.chart.type == 'pie'"></pie-chart>
         <scatter-chart [data]="element" [questionNumber]="i+1" *ngIf="element.chart.type == 'scatter'"></scatter-chart>
-        <bar-chart [data]="element" [questionNumber]="i+1" *ngIf="element.chart.type === 'bar'"></bar-chart>
+        <bar-chart [data]="element" [questionNumber]="i+1" *ngIf="element.chart.type === 'bar' || element.chart.type === 'column'"></bar-chart>
       </ion-card>
     </div>
   </div>
   <div class="_flex-box _justify-content-center _errorBox" *ngIf="!reportObj?.response">
-    {{reportObj?.data}}
+    {{error}}
   </div>
 
   <ion-fab bottom right *ngIf="reportObj?.response">

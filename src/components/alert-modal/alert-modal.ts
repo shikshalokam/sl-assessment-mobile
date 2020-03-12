@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Market } from '@ionic-native/market';
 import { AppVersion } from '@ionic-native/app-version';
-import { NotificationProvider } from '../../providers/notification/notification';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @Component({
   selector: 'alert-modal',
@@ -11,31 +11,32 @@ export class AlertModalComponent {
 
   @Input() notificationMeta;
   @Output() closeModal = new EventEmitter();
+  currentAppVersionObj;
 
   constructor(
     private market: Market,
     private appVersion: AppVersion,
-    private notifctnServ: NotificationProvider) {
-    console.log('Hello AlertModalComponent Component');
-  }
-
-  openAppStore() {
-    this.markAsRead();
-    this.appVersion.getPackageName().then(success => {
-      this.market.open(success)
+    private localStorage: LocalStorageProvider) {
+    this.localStorage.getLocalStorage('appUpdateVersions').then(obj => {
+      this.currentAppVersionObj = obj;
+    }).catch(error => {
+      this.currentAppVersionObj = {};
     })
   }
 
-  markAsRead() {
-    if (!this.notificationMeta.is_read) {
-      this.notifctnServ.markAsRead(this.notificationMeta.id);
-      this.notificationMeta.is_read = true;
-    }
+  openAppStore() {
+    this.appVersion.getPackageName().then(success => {
+      this.currentAppVersionObj[this.notificationMeta.payload.appVersion] = 'accepted';
+      this.localStorage.setLocalStorage('appUpdateVersions', this.currentAppVersionObj);
+      this.market.open(success);
+      this.closeModal.emit();
+    })
   }
 
   close() {
-    this.markAsRead();
     this.closeModal.emit();
+    this.currentAppVersionObj[this.notificationMeta.payload.appVersion] = 'rejected';
+    this.localStorage.setLocalStorage('appUpdateVersions', this.currentAppVersionObj);
   }
 
 
