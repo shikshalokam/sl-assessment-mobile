@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Market } from '@ionic-native/market';
 import { AppVersion } from '@ionic-native/app-version';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
@@ -7,11 +7,12 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
   selector: 'alert-modal',
   templateUrl: 'alert-modal.html'
 })
-export class AlertModalComponent {
+export class AlertModalComponent implements OnInit {
 
   @Input() notificationMeta;
   @Output() closeModal = new EventEmitter();
   currentAppVersionObj;
+  releaseNote = [];
 
   constructor(
     private market: Market,
@@ -24,6 +25,19 @@ export class AlertModalComponent {
     })
   }
 
+  ngOnInit() {
+    this.createReleaseNote();
+  }
+
+  createReleaseNote() {
+    if (this.notificationMeta.payload && this.notificationMeta.payload.releaseNotes) {
+      this.releaseNote = this.notificationMeta.payload.releaseNotes.includes('.') ?
+        this.notificationMeta.payload.releaseNotes.split('.') :
+        [this.notificationMeta.payload.releaseNotes]
+    }
+
+  }
+
   openAppStore() {
     this.appVersion.getPackageName().then(success => {
       this.currentAppVersionObj[this.notificationMeta.payload.appVersion] = 'accepted';
@@ -32,6 +46,8 @@ export class AlertModalComponent {
       this.closeModal.emit();
     })
   }
+
+
 
   close() {
     this.closeModal.emit();
