@@ -112,7 +112,6 @@ export class NotificationProvider {
   }
 
   internalNotificationsHandler(notifications) {
-    console.log("inside internal")
     for (const notification of notifications) {
       if (notification.internal) {
         switch (notification.action) {
