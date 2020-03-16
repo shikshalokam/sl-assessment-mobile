@@ -34,7 +34,7 @@ export class ImageListingPage {
   // schoolId: any;
   schoolName: string
   selectedEvidenceIndex: any;
-  currentEvidenceId: any;
+  // currentEvidenceId: any;
   uploadIndex: number = 0;
   schoolData: any;
   currentEvidence: any;
@@ -55,7 +55,7 @@ export class ImageListingPage {
     this.submissionId = this.navParams.get('_id');
     this.schoolName = this.navParams.get('name');
     this.selectedEvidenceIndex = this.navParams.get('selectedEvidence');
-    this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
+    // this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
     // console.log(this.submissionId + "Image listing")
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId)).then(data => {
       this.schoolData = data;
