@@ -14,8 +14,8 @@ import { ActionSheetController } from 'ionic-angular';
 export class ObservationListingPage {
 
   entityDetails;
-  solutionList;
   solutionType = 'my';
+  solutionList = [];
 
   constructor(
     public navCtrl: NavController,
@@ -73,12 +73,13 @@ export class ObservationListingPage {
       reportType: this.solutionType
     }
     this.utils.startLoader();
+    this.solutionList = [];
     this.apiProvide.httpPost(AppConfigs.observationReports.solutionList, payload, success => {
       this.solutionList = success.data;
       this.utils.stopLoader();
     }, error => {
       this.utils.stopLoader();
-    }, { baseUrl: "dhiti" })
+    }, { baseUrl: "dhiti", version:'v2' })
   }
 
   goToReportsOfSolution(solutionId) {
