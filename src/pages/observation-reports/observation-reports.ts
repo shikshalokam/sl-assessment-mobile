@@ -86,7 +86,7 @@ export class ObservationReportsPage {
     }, error => {
       this.error = "No data found";
       this.utils.stopLoader();
-    }, { baseUrl: "dhiti" })
+    }, { baseUrl: "dhiti", version: this.entityType ? "v2" :"v1" })
   }
 
   downloadSharePdf(action) {
