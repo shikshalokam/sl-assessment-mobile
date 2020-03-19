@@ -195,7 +195,7 @@ export class SubmissionListPage {
     }
     this.assessmentService.getAssessmentDetailsOfCreatedObservation(event, this.programs, 'createdObservationList').then(success => {
       this.programs = success;
-      this.observationDetails[0] = success[this.selectedObservationIndex]
+      this.observationDetails[0] = success[this.selectedObservationIndex];
       this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
       this.goToEcm(submission)
     }).catch(error => {
@@ -203,9 +203,9 @@ export class SubmissionListPage {
   }
 
   goToEcm(submission) {
-    let submissionId = submission._id
+    let submissionId = submission._id;
     let heading = this.programs[this.selectedObservationIndex]['entities'][this.entityIndex].name;
-    this.recentlyUpdatedEntity['submissionId'] = submissionId;
+    // this.recentlyUpdatedEntity['submissionId'] = submissionId;
     this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId)).then(successData => {
       if (successData.assessment.evidences.length > 1) {
         this.navCtrl.push('EvidenceListPage', { _id: submissionId, name: heading, recentlyUpdatedEntity: this.recentlyUpdatedEntity })
