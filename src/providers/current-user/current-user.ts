@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import * as jwt_decode from "jwt-decode";
 import { AppIconBadgeProvider } from '../app-icon-badge/app-icon-badge';
+import { LocalStorageProvider } from '../local-storage/local-storage';
 
 // import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
@@ -16,7 +17,7 @@ export class CurrentUserProvider {
 
   public curretUser: any;
 
-  constructor(private storage: Storage, private appBadge: AppIconBadgeProvider) {
+  constructor(private storage: Storage, private appBadge: AppIconBadgeProvider, private localStorage: LocalStorageProvider) {
     console.log('Hello CurrentUserProvider Provider');
   }
 
@@ -44,7 +45,7 @@ export class CurrentUserProvider {
       }).catch(error => {
       });
     })
-    
+
   }
 
   getCurrentUserData(): any {
@@ -123,6 +124,18 @@ export class CurrentUserProvider {
   }
 
   refreshToken() {
+
+  }
+
+  getCurrentUserEntities(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.localStorage.getLocalStorage('profileRole').then(success => {
+        console.log(JSON.stringify(success))
+        resolve(success ? success.entities : null)
+      }).catch(error => {
+        reject(null)
+      })
+    })
 
   }
 }
