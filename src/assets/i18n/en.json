@@ -263,7 +263,8 @@
         "confirmDeleteObservation": "You will not see this observation anymore. Do you wish to delete?",
         "viewAll": "View all",
         "noUnreadNotifications": "You have no new Notifications!",
-        "noObservationfound": "No observation found"
+        "noObservationfound": "No observation found",
+        "noVideo":"No videos available"
     },
     "toastMessage": {
         "selectSolution": "Select a Solution",
@@ -289,5 +290,6 @@
         "unableToFetchGps":"Unable to fetch GPS location",
         "enableGPS":"Please enable GPS to proceed.",
         "reEnableGPS":"Unable to fetch your location. Please turn off and turn on your "
+        
     }
 }

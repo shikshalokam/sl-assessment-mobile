@@ -7,7 +7,7 @@
 
 <ion-content >
   <!-- if video presenet -->
-  <div *ngIf="videoList?.length>0">
+  <div *ngIf="videoList?.length">
     <div *ngFor="let video of videoList; let i = index">    
       <ion-card>
         <ion-item text-wrap (click)="playVideo(video.link)">
@@ -25,9 +25,9 @@
 
 
   <!-- if video not present -->
-  <div *ngIf="videoList?.length==0">
+  <div *ngIf="!videoList?.length">
     <div class="ion-diagnostics-sheet-title">
-      <h3>No videos available</h3>
+      <h3>{{'message.noVideo' | translate}}</h3>
     </div>
   </div>
     
