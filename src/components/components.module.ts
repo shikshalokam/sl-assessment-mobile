@@ -81,7 +81,9 @@ import { SubmissionActionsComponent } from './submission-actions/submission-acti
     AlertModalComponent,
     ScatterChartComponent,
     ScoreReportMenusComponent,
-    SubmissionActionsComponent
+    SubmissionActionsComponent,
+
+    
   ],
 	imports: [
 		IonicModule,
@@ -126,7 +128,8 @@ import { SubmissionActionsComponent } from './submission-actions/submission-acti
     AlertModalComponent,
     ScatterChartComponent,
     ScoreReportMenusComponent,
-    SubmissionActionsComponent
+    SubmissionActionsComponent,
+    
 	],
 	entryComponents: [
 		InputTypeComponent,

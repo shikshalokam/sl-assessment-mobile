@@ -114,6 +114,7 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
 import { PipesModule } from '../pipes/pipes.module';
 import { QuestionListPage } from '../pages/question-list/question-list';
+import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutorial-video-listing';
 
 @NgModule({
   declarations: [
@@ -147,7 +148,8 @@ import { QuestionListPage } from '../pages/question-list/question-list';
     DashboardPage,
     ObservationEditPage,
     SettingsPage,
-    QuestionListPage
+    QuestionListPage,
+    TutorialVideoListingPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -213,7 +215,8 @@ import { QuestionListPage } from '../pages/question-list/question-list';
     RoleListingPage,
     ReportEntityListingPage,
     ObservationEditPage,
-    QuestionListPage
+    QuestionListPage,
+    TutorialVideoListingPage
   ],
   providers: [
     StatusBar,
@@ -274,7 +277,8 @@ import { QuestionListPage } from '../pages/question-list/question-list';
     Market,
     AppVersion,
     SpinnerDialog,
-    SidemenuProvider
+    SidemenuProvider,
+    
   ]
 })
 export class AppModule { }
