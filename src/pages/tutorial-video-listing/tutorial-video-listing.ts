@@ -28,9 +28,9 @@ export class TutorialVideoListingPage {
   }
  
 
-  playVideo(){
+  playVideo(link){
     // this.youtube.openVideo('ovqDe_G7ct8');
-    window.open("https://youtu.be/ovqDe_G7ct8","_system")
+    window.open(link,"_system")
   }
  
  

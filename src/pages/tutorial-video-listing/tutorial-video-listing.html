@@ -6,13 +6,6 @@
 
 
 <ion-content>
-
-  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" *ngIf="enableRefresh">
-      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
-        refreshingText="Refreshing...">
-      </ion-refresher-content>
-    </ion-refresher>
-
     <div *ngFor="let video of videoList; let i = index">    
       <ion-card>
         <ion-item text-wrap>
@@ -21,7 +14,7 @@
             <div style="flex:1">
               {{video.title}}
             </div>          
-            <ion-icon name="play" class="menuIcon" (click)="playVideo()"></ion-icon>   
+            <ion-icon name="play" class="menuIcon" (click)="playVideo(video.link)"></ion-icon>   
           </div>
         </ion-item>
       </ion-card>
