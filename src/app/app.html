@@ -11,7 +11,7 @@
       <ng-container *ngFor="let page of allPages; let i = index">
         <ion-item (click)="goToPage(i)" [ngClass]="{activePage: page.active}" *ngIf="page?.show">
           <ion-icon name="{{page.icon}}" size="large" slot="start" class="sizeAdj" margin-right></ion-icon>
-          <span>{{'tabs.'+page.name | translate}}</span>
+          <span>{{'tabs.'+page.name | translate}}</span> 
         </ion-item>
       </ng-container>
 
