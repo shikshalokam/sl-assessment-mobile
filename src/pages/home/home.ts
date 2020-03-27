@@ -118,6 +118,7 @@ export class HomePage {
     }
 
     this.localStorage.getLocalStorage(storageKeys.staticLinks).then(success => {
+      console.log('from home')
       if (success) {
       } else {
         this.getStaticLinks();

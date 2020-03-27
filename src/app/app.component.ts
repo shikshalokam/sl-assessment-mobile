@@ -26,7 +26,6 @@ import { SettingsPage } from '../pages/settings/settings';
 import { ApiProvider } from '../providers/api/api';
 import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
 import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutorial-video-listing';
-import { storageKeys } from '../providers/storageKeys';
 
 @Component({
   templateUrl: 'app.html'
@@ -190,12 +189,6 @@ export class MyApp {
 
     });
 
-    this.localStorage.getLocalStorage(storageKeys.staticLinks).then(success => {
-     console.log(success)
-     if(success['tutorial-video'].metaInformation.videos.length==0)this.allPages[this.findIndex("tutorialvideo")]['show']=false
-    }).catch(error => {
-      
-    })
   }
   
   ionViewWillLeave() {
