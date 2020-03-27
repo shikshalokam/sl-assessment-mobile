@@ -136,7 +136,8 @@
         "dashboard": "Dashboard",
         "inProgress": "In progress",
         "completed": "Completed",
-        "setting": "Settings"
+        "setting": "Settings",
+        "tutorialvideo":"Tutorial Video"
     },
     "headings": {
         "zone": "Zones",
@@ -198,7 +199,9 @@
         "observationUpdate": "Observation Update",
         "notifications": "Notifications",
         "settings": "Settings",
-        "solutionList": "Solution List"
+        "solutionList": "Solution List",
+        "tutorialvideo":"Tutorial Video"
+
     },
     "labels": {
         "welcome": "Welcome",
