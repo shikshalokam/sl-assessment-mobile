@@ -116,7 +116,9 @@
         "observation": "Observation",
         "loadMore": "Load More",
         "selectAll": "Select All Schools",
-        "undo": "Undo"
+        "undo": "Undo",
+        "applyFilter":"Apply Filter",
+        "filter":"Filter"
     },
     "tabs": {
         "home": "Home",
@@ -200,8 +202,8 @@
         "notifications": "Notifications",
         "settings": "Settings",
         "solutionList": "Solution List",
+        "filter":"Filter",
         "tutorialvideo":"Tutorial Video"
-
     },
     "labels": {
         "welcome": "Welcome",
@@ -264,6 +266,7 @@
         "viewAll": "View all",
         "noUnreadNotifications": "You have no new Notifications!",
         "noObservationfound": "No observation found",
+        "selectFilter":"Select the questions to filter Reports",
         "noVideo":"No videos available"
     },
     "toastMessage": {
