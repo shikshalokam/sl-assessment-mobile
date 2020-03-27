@@ -10,13 +10,13 @@
   <div *ngIf="videoList?.length>0">
     <div *ngFor="let video of videoList; let i = index">    
       <ion-card>
-        <ion-item text-wrap>
+        <ion-item text-wrap (click)="playVideo(video.link)">
           <div class="_flex-box">
             <ion-icon name="video" class="logoIcon"></ion-icon>   
             <div style="flex:1">
               {{video.title}}
             </div>          
-            <ion-icon name="play" class="menuIcon" (click)="playVideo(video.link)"></ion-icon>   
+            <ion-icon name="play" class="menuIcon" ></ion-icon>   
           </div>
         </ion-item>
       </ion-card>
