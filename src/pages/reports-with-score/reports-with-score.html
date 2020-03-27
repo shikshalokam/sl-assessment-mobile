@@ -15,6 +15,13 @@
       <!-- {{reportObj?.observationName}} {{reportObj?.entityName ? ' > ' : ''}} {{reportObj?.entityName }} -->
       {{reportObj?.observationName}} {{reportObj?.schoolName}}
     </div>
+    <div *ngIf="allQuestions?.length">
+      <button ion-button icon-start (click)="openFilter()" margin style="float:right">
+        <ion-icon name="options"></ion-icon>
+        {{'buttons.filter'|translate}}
+      </button>
+      <!-- <ion-icon name="options" class="filterIcon" (click)="openFilter()"></ion-icon> -->
+    </div>
     <!-- Scores details bar -->
     <ion-grid *ngIf="reportObj?.totalScore && reportObj?.scoreAchieved">
       <ion-row style="text-align: center;">

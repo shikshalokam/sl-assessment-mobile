@@ -113,6 +113,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
 import { PipesModule } from '../pipes/pipes.module';
+import { QuestionListPage } from '../pages/question-list/question-list';
 
 @NgModule({
   declarations: [
@@ -145,7 +146,8 @@ import { PipesModule } from '../pipes/pipes.module';
     ReportEntityListingPage,
     DashboardPage,
     ObservationEditPage,
-    SettingsPage
+    SettingsPage,
+    QuestionListPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -211,6 +213,7 @@ import { PipesModule } from '../pipes/pipes.module';
     RoleListingPage,
     ReportEntityListingPage,
     ObservationEditPage,
+    QuestionListPage
   ],
   providers: [
     StatusBar,
