@@ -88,6 +88,7 @@ export class ReportsWithScorePage {
       questionId: this.filteredQuestions
     }
     this.apiService.httpPost(url, this.payload, (success) => {
+      console.log(JSON.stringify(success))
       this.allQuestions = (success.allQuestions && !this.allQuestions.length) ? success.allQuestions : this.allQuestions;
       if (success) {
         this.error = !success.result ? success.message : null;

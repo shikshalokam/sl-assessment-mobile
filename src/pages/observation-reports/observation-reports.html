@@ -12,8 +12,11 @@
 <ion-content >
 
   <div *ngIf="!error">
+    <h3 *ngIf="reportObj?.entityName" class="heading">
+      {{reportObj?.entityName }}
+    </h3>
     <h4 class="reportName">
-      {{reportObj?.observationName}} {{reportObj?.solutionName}} {{reportObj?.entityName ? ' > ' : ''}} {{reportObj?.entityName }}
+      {{reportObj?.observationName}} {{reportObj?.solutionName}} 
     </h4>
     <div *ngIf="allQuestions?.length">
       <button ion-button icon-start (click)="openFilter()" margin style="float:right">
