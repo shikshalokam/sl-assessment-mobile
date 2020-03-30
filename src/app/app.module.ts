@@ -113,6 +113,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
 import { PipesModule } from '../pipes/pipes.module';
+import { QuestionListPage } from '../pages/question-list/question-list';
 import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutorial-video-listing';
 
 @NgModule({
@@ -147,7 +148,8 @@ import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutori
     DashboardPage,
     ObservationEditPage,
     SettingsPage,
-    TutorialVideoListingPage,
+    QuestionListPage,
+    TutorialVideoListingPage
   ],
   imports: [
     BrowserAnimationsModule,
@@ -213,6 +215,7 @@ import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutori
     RoleListingPage,
     ReportEntityListingPage,
     ObservationEditPage,
+    QuestionListPage,
     TutorialVideoListingPage
   ],
   providers: [
