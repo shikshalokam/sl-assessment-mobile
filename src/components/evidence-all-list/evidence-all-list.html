@@ -1,0 +1,91 @@
+<!-- Generated template for the EvidenceAllListComponent component -->
+<ion-header>
+  <header [title]="'tabs.evidences'|translate" [hideBack]="false">
+  </header>
+</ion-header>
+
+
+
+
+
+
+<ion-content>
+  <div padding>
+    <ion-segment [(ngModel)]="selectedTab">
+      <ion-segment-button value="evidence" (click)="onTabChange('evidence')">
+        {{'buttons.evidence' | translate}}
+
+      </ion-segment-button>
+      <ion-segment-button value="remarks" (click)="onTabChange('remarks')">
+        {{'buttons.remarks' | translate}}
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="selectedTab">
+    <div *ngSwitchCase="'evidence'">
+      <!-- //for images -->
+      <div>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-12>
+              <h5>Images</h5>
+
+            </ion-col>
+            <ion-col col-4 *ngFor="let i of images;" (click)="openImage(i.url)">
+              <ion-card class="thumbnail-card">
+                <img [src]="i.url" />
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+
+      <!-- //for VIDEOS-->
+      <div>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-12>
+              <h5>Videos</h5>
+            </ion-col>
+            <ion-col col-4 *ngFor="let v of videos" (click)="playVideo(v.url)">
+              <ion-card class="thumbnail-card">
+                <ion-icon name="play"></ion-icon>
+                <p>Video 1</p>
+              </ion-card>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+      </div>
+
+
+      <!-- //for document -->
+      <div>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-12>
+              <h5>Documents</h5>
+
+
+            </ion-col>
+            <ion-col col-4 *ngFor="let d of documents" (click)="openDocument(d.url)">
+              <ion-card class="thumbnail-card">
+                <ion-icon name="document"></ion-icon>
+                <p>document</p>
+              </ion-card>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'remarks'">
+
+    </div>
+  </div>
+
+
+
+</ion-content>

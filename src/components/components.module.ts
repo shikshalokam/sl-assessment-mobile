@@ -44,6 +44,8 @@ import { AlertModalComponent } from './alert-modal/alert-modal';
 import { ScatterChartComponent } from './scatter-chart/scatter-chart';
 import { ScoreReportMenusComponent } from './score-report-menus/score-report-menus';
 import { SubmissionActionsComponent } from './submission-actions/submission-actions';
+import { EvidenceAllListComponent } from './evidence-all-list/evidence-all-list';
+import { PlayVideoComponent } from './play-video/play-video';
 
 @NgModule({
 	declarations: [
@@ -82,6 +84,9 @@ import { SubmissionActionsComponent } from './submission-actions/submission-acti
     ScatterChartComponent,
     ScoreReportMenusComponent,
     SubmissionActionsComponent,
+    EvidenceAllListComponent,
+    PlayVideoComponent,
+    
 
     
   ],
@@ -91,7 +96,7 @@ import { SubmissionActionsComponent } from './submission-actions/submission-acti
     PipesModule,
     TranslateModule,
     AngularFontAwesomeModule,
-    HighchartsChartModule
+    HighchartsChartModule,
 	],
 	exports: [
 		InputTypeComponent,
@@ -129,6 +134,8 @@ import { SubmissionActionsComponent } from './submission-actions/submission-acti
     ScatterChartComponent,
     ScoreReportMenusComponent,
     SubmissionActionsComponent,
+    EvidenceAllListComponent,
+    PlayVideoComponent,
     
 	],
 	entryComponents: [
@@ -140,7 +147,8 @@ import { SubmissionActionsComponent } from './submission-actions/submission-acti
     GenericMenuPopOverComponent,
     NotificationCardComponent,
     ScoreReportMenusComponent,
-    SubmissionActionsComponent
+    SubmissionActionsComponent,
+    PlayVideoComponent
 	],
 	providers:[
 		Network, DatePipe, SlackProvider

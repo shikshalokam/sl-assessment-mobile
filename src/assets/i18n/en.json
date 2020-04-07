@@ -118,7 +118,9 @@
         "selectAll": "Select All Schools",
         "undo": "Undo",
         "applyFilter":"Apply Filter",
-        "filter":"Filter"
+        "filter":"Filter",
+        "evidence":"Evidence",
+        "remarks":"Remarks"
     },
     "tabs": {
         "home": "Home",
@@ -139,7 +141,8 @@
         "inProgress": "In progress",
         "completed": "Completed",
         "setting": "Settings",
-        "tutorialvideo":"Tutorial Video"
+        "tutorialvideo":"Tutorial Video",
+        "evidences":"Evidences"
     },
     "headings": {
         "zone": "Zones",

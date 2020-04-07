@@ -9,6 +9,7 @@ import { UtilsProvider } from '../../providers/utils/utils';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { DatePipe } from '@angular/common';
 import { QuestionListPage } from '../question-list/question-list';
+import { EvidenceAllListComponent } from '../../components/evidence-all-list/evidence-all-list';
 
 declare var cordova: any;
 @Component({
@@ -215,6 +216,11 @@ export class ObservationReportsPage {
         this.getObservationReports();
       }
     })
+  }
+
+  allEvidence(){
+    this.navCtrl.push(EvidenceAllListComponent, { submissionId: this.submissionId })
+
   }
 
 }

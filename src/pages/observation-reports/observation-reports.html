@@ -14,9 +14,11 @@
   <div *ngIf="!error">
     <h3 *ngIf="reportObj?.entityName" class="heading">
       {{reportObj?.entityName }}
+      
     </h3>
+    
     <h4 class="reportName">
-      {{reportObj?.observationName}} {{reportObj?.solutionName}} 
+      {{reportObj?.observationName}} {{reportObj?.solutionName}}  
     </h4>
     <div *ngIf="allQuestions?.length">
       <button ion-button icon-start (click)="openFilter()" margin style="float:right">
@@ -36,6 +38,24 @@
         <matrix-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'matrix'"></matrix-chart>
         <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchDefault></reports-text>
       </ion-card>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-4>
+            <ion-card class="thumbnail-card" >
+              <img src="https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg" >
+            </ion-card>
+          </ion-col>
+          <ion-col col-4>
+            <ion-card class="thumbnail-card" >
+              <img src="https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg" >
+            </ion-card>
+          </ion-col>
+          <ion-col col-12>
+            <small class="pull-right text-ios-danger" (click)="allEvidence()">View All Evidences</small>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
     </div>
   </div>
   <div class="_flex-box _justify-content-center _errorBox" *ngIf="!reportObj?.response">
