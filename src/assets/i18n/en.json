@@ -139,7 +139,9 @@
         "inProgress": "In progress",
         "completed": "Completed",
         "setting": "Settings",
-        "tutorialvideo":"Tutorial Video"
+        "tutorialvideo":"Tutorial Video",
+        "allObservation": "All Observation"
+
     },
     "headings": {
         "zone": "Zones",
