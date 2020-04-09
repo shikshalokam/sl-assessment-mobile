@@ -12,6 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { ObservationReportsPage } from '../observation-reports/observation-reports';
 import { Content } from 'ionic-angular'
 import { ScoreReportMenusComponent } from '../../components/score-report-menus/score-report-menus';
+import { SubmissionActionsComponent } from '../../components/submission-actions/submission-actions';
+
 /**
  * Generated class for the SubmissionListPage page.
  *
@@ -229,6 +231,7 @@ export class SubmissionListPage {
     this.evdnsServ.openActionSheet(options, "Observation");
 
   }
+
   observeAgain() {
     this.utils.startLoader('Creating an Obseravation');
     // this.getAssessmentDetails(this.submissionList.length , this.submissionList.length + 1)
@@ -253,20 +256,13 @@ export class SubmissionListPage {
     const entityId = this.observationDetails[0].entities[this.entityIndex]._id;
 
     this.apiProvider.httpPost(AppConfigs.cro.observationSubmissionCreate + this.observationDetails[0]._id + "?entityId=" + entityId, {}, success => {
-      this.observationService.refreshObservationList(this.programs).then(success => {
-        this.utils.stopLoader();
-        this.programs = success;
-        this.observationDetails[0] = success[this.selectedObservationIndex];
-        this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
-        this.getLocalStorageData();
-        this.goToEcm(this.submissionList.length)
-      }).catch(error => {
-      })
+      this.refreshLocalObservationList();
     }, error => {
       this.utils.stopLoader();
       // console.log(error, "error here")
     })
   }
+
   viewEntityReports() {
     this.showEntityActionsheet = false;
     this.showActionsheet = false;
@@ -276,6 +272,7 @@ export class SubmissionListPage {
     }
     this.navCtrl.push(ObservationReportsPage, payload);
   }
+
   viewEntityReportsWithScore() {
     this.showEntityActionsheet = false;
     this.showActionsheet = false;
@@ -285,18 +282,19 @@ export class SubmissionListPage {
     }
     this.navCtrl.push('ReportsWithScorePage', payload);
   }
+
   actions(submissionId, action, submission) {
-    // this.dap.checkForSubmissionDoc(submissionId, action);
     submission.showActionsheet = false;
     this.showActionsheet = false;
     this.navCtrl.push(ObservationReportsPage, { submissionId: submissionId })
   }
+
   actionsWithScore(submissionId, action, submission) {
-    // this.dap.checkForSubmissionDoc(submissionId, action);
     submission.showActionsheet = false;
     this.showActionsheet = false;
     this.navCtrl.push('ReportsWithScorePage', { submissionId: submissionId })
   }
+
   deleteSubmission(submissionId) {
     let translateObject;
     this.translate.get(['actionSheet.confirm', 'actionSheet.deleteSubmission', 'actionSheet.no', 'actionSheet.yes']).subscribe(translations => {
@@ -317,17 +315,7 @@ export class SubmissionListPage {
           handler: () => {
             this.utils.startLoader();
             this.apiProvider.httpGet(AppConfigs.cro.obsrvationSubmissionDelete + submissionId, success => {
-              this.observationService.refreshObservationList(this.programs).then(success => {
-                this.programs = success;
-                this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
-                this.utils.stopLoader();
-                this.getLocalStorageData();
-                this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions.length > 0 ? null : this.navCtrl.pop();
-
-                // this.goToEcm(this.submissionList.length)
-              }).catch(error => {
-                this.utils.stopLoader();
-              });
+              this.refreshLocalObservationList();
             }, error => {
               this.utils.stopLoader();
             })
@@ -379,9 +367,8 @@ export class SubmissionListPage {
   }
 
   // Menu for Submissions
-  openMenu(event,submission, index) {
-    console.log(JSON.stringify(submission))
-    if(submission.ratingCompletedAt){
+  openMenu(event, submission, index) {
+    if (submission.ratingCompletedAt) {
       let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
         submission: submission,
         // showEntityActionsheet:"false",
@@ -400,9 +387,9 @@ export class SubmissionListPage {
   openEntityReportMenu(event) {
     let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
       observationId: this.submissionList[0].observationId,
-      entityId:this.submissionList[0].entityId,
-      showEntityActionsheet:"true",
-      showSubmissionAction:'false'
+      entityId: this.submissionList[0].entityId,
+      showEntityActionsheet: "true",
+      showSubmissionAction: 'false'
     })
     popover.present(
       { ev: event }
@@ -426,4 +413,52 @@ export class SubmissionListPage {
       this.openEntityReportMenu(e);
     }
   }
+
+  ediSubmissionName(data, i) {
+    const payload = {
+      title: data.title
+    };
+    this.utils.startLoader();
+    this.apiProvider.httpPost(AppConfigs.cro.editObservationName + data.submissionId, payload, success => {
+      this.refreshLocalObservationList();
+    }, error => {
+      this.utils.stopLoader();
+
+    })
+  }
+
+  refreshLocalObservationList() {
+    this.observationService.refreshObservationList(this.programs).then(success => {
+      this.programs = success;
+      this.submissionList = this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions;
+      this.utils.stopLoader();
+      this.getLocalStorageData();
+      this.programs[this.selectedObservationIndex].entities[this.entityIndex].submissions.length > 0 ? null : this.navCtrl.pop();
+    }).catch(error => {
+      this.utils.stopLoader();
+    });
+  }
+
+  // Actions on submissions
+  openActionMenu(event, submission, index) {
+    let popover = this.popoverCtrl.create(SubmissionActionsComponent, {
+      submission: submission,
+    })
+    popover.onDidDismiss(data => {
+
+      if (data && data.action === 'update') {
+        const payload = {
+          submissionId: submission._id,
+          title: data.name
+        }
+        this.ediSubmissionName(payload, index);
+      } else if ( data && data.action === 'delete') {
+        this.deleteSubmission(submission._id)
+      }
+    })
+    popover.present(
+      { ev: event }
+    );
+  }
+
 }
