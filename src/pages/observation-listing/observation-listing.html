@@ -7,10 +7,11 @@
 <ion-content padding>
   <ion-segment [(ngModel)]="solutionType">
     <ion-segment-button value="my" (click)="onTabChange('my')">
-      My Solutions
+      {{'tabs.myObservation' | translate}}
+
     </ion-segment-button>
     <ion-segment-button value="all" (click)="onTabChange('all')">
-      All Solutions
+      {{'tabs.allObservation' | translate}}
     </ion-segment-button>
   </ion-segment>
 

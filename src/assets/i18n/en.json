@@ -142,7 +142,9 @@
         "completed": "Completed",
         "setting": "Settings",
         "tutorialvideo":"Tutorial Video",
-        "evidences":"Evidences"
+        "evidences":"Evidences",
+        "allObservation": "All Observation"
+
     },
     "headings": {
         "zone": "Zones",
