@@ -18,7 +18,7 @@
       <ion-icon name="bulb" class="help" (click)="openHint(option?.hint)" *ngIf="option?.hint"></ion-icon>
       <div style="flex: 1" [ngStyle]="{'margin-left': option?.hint ? '35px' :'0px'}"> {{option?.label}} </div>
     </ion-label>
-    <ion-radio value="{{option?.value}}"></ion-radio>
+    <ion-radio value="{{option?.value}}" [disabled]="data.canEdit!=undefined && data.canEdit"></ion-radio>
   </ion-item>
 </ion-list>
 <remarks *ngIf="data?.showRemarks" [data]="data"></remarks>

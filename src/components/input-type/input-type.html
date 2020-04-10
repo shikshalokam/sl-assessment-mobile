@@ -20,7 +20,7 @@
     <ion-input type="{{data?.responseType}}" (input)="isaNumber()" (keyup.enter) = "keyboard.hide()" [(ngModel)]="data.value" (ngModelChange)="checkForValidation()"></ion-input>
   </ion-item>
   <ion-item text-center no-padding *ngIf="data?.responseType == 'text'">
-    <ion-textarea (keyup.enter) = "keyboard.hide()" [(ngModel)]="data.value" (ngModelChange)="checkForValidation()"></ion-textarea>
+    <ion-textarea (keyup.enter) = "keyboard.hide()" [(ngModel)]="data.value" (ngModelChange)="checkForValidation()" [disabled]="1"></ion-textarea>
   </ion-item>
   <div *ngIf="!notNumber" class="_errorMsg">{{getErrorMsg()}}</div>
 
