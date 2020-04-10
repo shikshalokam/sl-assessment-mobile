@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, ModalController } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { File } from '@ionic-native/file';
@@ -8,6 +8,8 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { DatePipe } from '@angular/common';
+import { QuestionListPage } from '../question-list/question-list';
+
 declare var cordova: any;
 /**
  * Generated class for the ReportsWithScorePage page.
@@ -34,13 +36,17 @@ export class ReportsWithScorePage {
   action;
   solutionId: string;
   entityType: string;
+  reportType: string;
+  allQuestions: Array<Object> = [];
+  filteredQuestions: Array<any> = []
 
   constructor(public navCtrl: NavController, private dap: DownloadAndPreviewProvider,
     public navParams: NavParams, private platform: Platform,
     private fileTransfer: FileTransfer, private utils: UtilsProvider,
     private androidPermissions: AndroidPermissions,
     private datepipe: DatePipe,
-    private apiService: ApiProvider, private file: File) {
+    private apiService: ApiProvider, private file: File,
+    private modal: ModalController,) {
   }
 
   ionViewDidEnter() {
@@ -49,12 +55,12 @@ export class ReportsWithScorePage {
     this.entityId = this.navParams.get('entityId');
     this.solutionId = this.navParams.get('solutionId');
     this.entityType = this.navParams.get('entityType');
+    this.reportType = this.navParams.get('reportType');
     this.payload = {
       "entityId": this.entityId,
       "submissionId": this.submissionId,
       "observationId": this.observationId
     }
-    console.log(this.payload, "payload");
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
     // this.appFolderPath = this.isIos ? cordova.file.externalRootDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
@@ -67,6 +73,7 @@ export class ReportsWithScorePage {
     if (this.solutionId) {
       this.payload.solutionId = this.solutionId;
       this.payload.entityType = this.entityType;
+      this.payload.reportType = this.reportType;
       url = AppConfigs.observationReportsWithScore.solutionReport;
     } else if (this.submissionId) {
       // view submission report
@@ -77,14 +84,21 @@ export class ReportsWithScorePage {
     } else {
       url = AppConfigs.observationReportsWithScore.observationReport;
     }
+    this.payload.filter = {
+      questionId: this.filteredQuestions
+    }
     this.apiService.httpPost(url, this.payload, (success) => {
+      console.log(JSON.stringify(success))
+      this.allQuestions = (success.allQuestions && !this.allQuestions.length) ? success.allQuestions : this.allQuestions;
       if (success) {
+        this.error = !success.result ? success.message : null;
         this.reportObj = success;
       } else {
         this.error = "No data found";
         this.utils.openToast(this.error)
       }
       this.utils.stopLoader();
+      !this.filteredQuestions.length ? this.markAllQuestionSelected() : null;
     }, error => {
       this.error = "No data found";
       this.utils.openToast(error.message)
@@ -160,5 +174,23 @@ export class ReportsWithScorePage {
       }, error => {
       })
     });
+  }
+
+  markAllQuestionSelected() {
+    for (const question of this.allQuestions) {
+      this.filteredQuestions.push(question['questionExternalId']);
+    }
+  }
+
+
+  openFilter() {
+    const modal = this.modal.create(QuestionListPage, { allQuestions: this.allQuestions, filteredQuestions: JSON.parse(JSON.stringify(this.filteredQuestions)) });
+    modal.present();
+    modal.onDidDismiss(response => {
+      if (response && (response.action === 'updated') && (JSON.stringify(response.filter) !== JSON.stringify(this.filteredQuestions))) {
+        this.filteredQuestions = response.filter;
+        this.getObservationReports();
+      }
+    })
   }
 }

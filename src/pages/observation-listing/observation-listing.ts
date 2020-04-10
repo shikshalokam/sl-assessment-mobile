@@ -14,7 +14,8 @@ import { ActionSheetController } from 'ionic-angular';
 export class ObservationListingPage {
 
   entityDetails;
-  solutionList;
+  solutionType = 'my';
+  solutionList = [];
 
   constructor(
     public navCtrl: NavController,
@@ -27,6 +28,11 @@ export class ObservationListingPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ObservationListingPage');
     this.entityDetails = this.navParams.get('entity');
+    this.entityDetails ? this.getObservationList() : null;
+  }
+
+  onTabChange(type) {
+    this.solutionType = type;
     this.getObservationList();
   }
 
@@ -63,15 +69,17 @@ export class ObservationListingPage {
   getObservationList() {
     const payload = {
       entityType: this.entityDetails.entityType,
-      entityId: this.entityDetails._id
+      entityId: this.entityDetails._id,
+      reportType: this.solutionType
     }
     this.utils.startLoader();
+    this.solutionList = [];
     this.apiProvide.httpPost(AppConfigs.observationReports.solutionList, payload, success => {
       this.solutionList = success.data;
       this.utils.stopLoader();
     }, error => {
       this.utils.stopLoader();
-    }, { baseUrl: "dhiti" })
+    }, { baseUrl: "dhiti", version:'v2' })
   }
 
   goToReportsOfSolution(solutionId) {
@@ -80,7 +88,8 @@ export class ObservationListingPage {
         "entityType": this.entityDetails.entityType,
         "entityId": this.entityDetails._id,
         "solutionId": solutionId,
-        "immediateChildEntityType": this.entityDetails.immediateChildEntityType
+        "immediateChildEntityType": this.entityDetails.immediateChildEntityType,
+        "reportType": this.solutionType
       })
   }
 
@@ -89,7 +98,8 @@ export class ObservationListingPage {
       "entityType": this.entityDetails.entityType,
       "entityId": this.entityDetails._id,
       "solutionId": solutionId,
-      "immediateChildEntityType": this.entityDetails.immediateChildEntityType
+      "immediateChildEntityType": this.entityDetails.immediateChildEntityType,
+      "reportType": this.solutionType
     }
     this.navCtrl.push('ReportsWithScorePage', payload);
   }

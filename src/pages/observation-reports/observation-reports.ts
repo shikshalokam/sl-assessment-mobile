@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Platform } from 'ionic-angular';
+import { NavController, NavParams, Platform, ModalController } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { AppConfigs } from '../../providers/appConfig';
 import { File } from '@ionic-native/file';
@@ -8,6 +8,7 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { DatePipe } from '@angular/common';
+import { QuestionListPage } from '../question-list/question-list';
 
 declare var cordova: any;
 @Component({
@@ -29,12 +30,16 @@ export class ObservationReportsPage {
   action;
   entityType;
   immediateChildEntityType;
+  reportType: string;
+  allQuestions: Array<Object> = [];
+  filteredQuestions: Array<any> = []
 
   constructor(public navCtrl: NavController, private dap: DownloadAndPreviewProvider,
     public navParams: NavParams, private platform: Platform,
     private fileTransfer: FileTransfer, private utils: UtilsProvider,
     private androidPermissions: AndroidPermissions,
     private datepipe: DatePipe,
+    private modal: ModalController,
     private apiService: ApiProvider, private file: File) {
   }
 
@@ -45,10 +50,11 @@ export class ObservationReportsPage {
     this.entityId = this.navParams.get('entityId');
     this.entityType = this.navParams.get('entityType');
     this.immediateChildEntityType = this.navParams.get('immediateChildEntityType');
+    this.reportType = this.navParams.get('reportType')
     this.payload = {
       "entityId": this.entityId,
       "submissionId": this.submissionId,
-      "observationId": this.observationId,
+      "observationId": this.observationId
     }
     this.isIos = this.platform.is('ios') ? true : false;
     this.appFolderPath = this.isIos ? cordova.file.documentsDirectory + '/Download/' : cordova.file.externalRootDirectory + '/Download/';
@@ -63,7 +69,8 @@ export class ObservationReportsPage {
         "entityId": this.entityId,
         "entityType": this.entityType,
         "solutionId": this.solutionId,
-        "immediateChildEntityType": this.immediateChildEntityType
+        "immediateChildEntityType": this.immediateChildEntityType,
+        "reportType": this.reportType
       };
       url = AppConfigs.observationReports.entitySolutionReport;
     } else if (this.submissionId) {
@@ -73,17 +80,30 @@ export class ObservationReportsPage {
     } else {
       url = AppConfigs.observationReports.entityReport;
     }
+    this.payload.filter = {
+      questionId: this.filteredQuestions
+    }
+    console.log(JSON.stringify(this.payload));
     this.apiService.httpPost(url, this.payload, (success) => {
+      //this will be initialized only on page load
+      this.allQuestions = (success.allQuestions && !this.allQuestions.length) ? success.allQuestions : this.allQuestions;
       if (success) {
         this.reportObj = success;
       } else {
         this.error = "No data found";
       }
       this.utils.stopLoader();
+      !this.filteredQuestions.length ? this.markAllQuestionSelected() : null;
     }, error => {
       this.error = "No data found";
       this.utils.stopLoader();
-    }, { baseUrl: "dhiti" })
+    }, { baseUrl: "dhiti", version: this.entityType ? "v2" : "v1" })
+  }
+
+  markAllQuestionSelected() {
+    for (const question of this.allQuestions) {
+      this.filteredQuestions.push(question['questionExternalId']);
+    }
   }
 
   downloadSharePdf(action) {
@@ -117,21 +137,24 @@ export class ObservationReportsPage {
     let url = AppConfigs.observationReports.getReportsPdfUrls;
     const timeStamp = '_' + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a');
     if (this.entityType) {
-      url = url + "entityId=" + this.entityId + "&solutionId=" + this.solutionId + '&entityType=' + this.entityType + (this.immediateChildEntityType ? ('&immediateChildEntityType=' + this.immediateChildEntityType) : "");
+      // url = url + "entityId=" + this.entityId + "&solutionId=" + this.solutionId + '&reportType=' + this.reportType + '&entityType=' + this.entityType + (this.immediateChildEntityType ? ('&immediateChildEntityType=' + this.immediateChildEntityType) : "");
       this.fileName = this.solutionId + '_' + this.entityId + '_' + this.immediateChildEntityType + '.pdf';
     } else if (this.submissionId) {
-      url = url + "submissionId=" + this.submissionId;
+      // url = url + "submissionId=" + this.submissionId;
       this.fileName = this.submissionId + timeStamp + ".pdf";
     } else if (!this.submissionId && !this.entityId) {
-      url = url + "observationId=" + this.observationId;
+      // url = url + "observationId=" + this.observationId;
       this.fileName = this.observationId + timeStamp + ".pdf";
     } else {
-      url = url + "entityId=" + this.entityId + "&observationId=" + this.observationId;
+      // url = url + "entityId=" + this.entityId + "&observationId=" + this.observationId;
       this.fileName = this.entityId + '_' + this.observationId + timeStamp + ".pdf";
     }
 
-    this.apiService.httpGet(url, success => {
+
+
+    this.apiService.httpPost(url, this.payload ,success => {
       this.utils.stopLoader();
+      console.log(JSON.stringify(success))
       if (success.status === 'success' && success.pdfUrl) {
         this.downloadSubmissionDoc(success.pdfUrl);
       } else {
@@ -141,7 +164,7 @@ export class ObservationReportsPage {
       this.utils.openToast(error.message);
 
       this.utils.stopLoader();
-    }, { baseUrl: "dhiti" })
+    }, { baseUrl: "dhiti", version:"v2" })
   }
 
 
@@ -153,6 +176,7 @@ export class ObservationReportsPage {
       this.filedownload(fileRemoteUrl);
     }
   }
+
   filedownload(fileRemoteUrl) {
     // const fileName = this.solutionName.replace(/\s/g, '') + "_" + this.datepipe.transform(new Date(), 'yyyy-MMM-dd-HH-mm-ss a') + ".pdf";
     const fileTransfer: FileTransferObject = this.fileTransfer.create();
@@ -176,10 +200,21 @@ export class ObservationReportsPage {
         // this.audio.startRecord();
         // this.startTimer();
         this.filedownload(fileRemoteUrl);
-
       }, error => {
       })
     });
+  }
+
+
+  openFilter() {
+    const modal = this.modal.create(QuestionListPage, { allQuestions: this.allQuestions, filteredQuestions: JSON.parse(JSON.stringify(this.filteredQuestions)) });
+    modal.present();
+    modal.onDidDismiss(response => {
+      if (response && (response.action === 'updated') && (JSON.stringify(response.filter) !== JSON.stringify(this.filteredQuestions))) {
+        this.filteredQuestions = response.filter;
+        this.getObservationReports();
+      }
+    })
   }
 
 }
