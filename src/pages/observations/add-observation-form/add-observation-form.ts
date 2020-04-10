@@ -11,6 +11,7 @@ import { Storage } from '@ionic/storage';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { AppConfigs } from '../../../providers/appConfig';
 import { TranslateService } from '@ngx-translate/core';
+import { CurrentUserProvider } from '../../../providers/current-user/current-user';
 
 
 export interface draftData {
@@ -72,7 +73,8 @@ export class AddObservationFormPage {
     private localStorage: LocalStorageProvider,
     private app: App,
     private storage: Storage,
-    private event: Events
+    private event: Events,
+    private currentUser: CurrentUserProvider
   ) {
     this.editData = this.navParams.get('data');
     this.editDataIndex = this.navParams.get('index');
@@ -101,6 +103,11 @@ export class AddObservationFormPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddObservationPage');
     this.getSolutionList()
+    this.currentUser.getCurrentUserEntities().then(success => {
+
+    }).catch(error => {
+
+    })
     // this.utils.startLoader();
     // this.apiProviders.httpGet(AppConfigs.cro.getEntityListType, success => {
     //   this.entityTypeData = success.result;
@@ -341,7 +348,8 @@ export class AddObservationFormPage {
     this.utils.startLoader()
     this.entityListPage = event ? this.entityListPage+1 : 1;
     let apiUrl = AppConfigs.cro.searchEntity + '?solutionId=' + this.selectedFrameWork + "&search=" + encodeURIComponent(this.searchEntity) + "&page=" + this.entityListPage + "&limit=" + this.entityListLimit;
-    apiUrl = !this.isProfileAssignedWithState ? (apiUrl+`&parentEntityId=${encodeURIComponent(this.selectedState)}`) : apiUrl;
+    // apiUrl = !this.isProfileAssignedWithState ? (apiUrl+`&parentEntityId=${encodeURIComponent(this.selectedState)}`) : apiUrl;
+    apiUrl = (apiUrl + `&parentEntityId=${encodeURIComponent(this.isProfileAssignedWithState ? this.profileMappedState :this.selectedState)}`);
     this.apiProviders.httpGet(apiUrl, success => {
       // event ? event.complete() : this.utils.stopLoader();
       this.utils.stopLoader()
