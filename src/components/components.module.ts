@@ -46,6 +46,7 @@ import { ScoreReportMenusComponent } from './score-report-menus/score-report-men
 import { SubmissionActionsComponent } from './submission-actions/submission-actions';
 import { EvidenceAllListComponent } from './evidence-all-list/evidence-all-list';
 import { PlayVideoComponent } from './play-video/play-video';
+import { AttachmentsComponent } from './attachments/attachments';
 
 @NgModule({
 	declarations: [
@@ -86,6 +87,7 @@ import { PlayVideoComponent } from './play-video/play-video';
     SubmissionActionsComponent,
     EvidenceAllListComponent,
     PlayVideoComponent,
+    AttachmentsComponent,
     
 
     
@@ -136,6 +138,7 @@ import { PlayVideoComponent } from './play-video/play-video';
     SubmissionActionsComponent,
     EvidenceAllListComponent,
     PlayVideoComponent,
+    AttachmentsComponent,
     
 	],
 	entryComponents: [

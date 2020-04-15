@@ -4,24 +4,29 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <header [title]="'headings.observationReports'|translate" [hideBack]="false">
-  </header>
+  <header
+    [title]="'headings.observationReports'|translate"
+    [hideBack]="false"
+  ></header>
 </ion-header>
 
-
-<ion-content >
-
+<ion-content>
   <div *ngIf="!error">
     <h3 *ngIf="reportObj?.entityName" class="heading">
       {{reportObj?.entityName }}
-      
     </h3>
-    
+
     <h4 class="reportName">
-      {{reportObj?.observationName}} {{reportObj?.solutionName}}  
+      {{reportObj?.observationName}} {{reportObj?.solutionName}}
     </h4>
     <div *ngIf="allQuestions?.length">
-      <button ion-button icon-start (click)="openFilter()" margin style="float:right">
+      <button
+        ion-button
+        icon-start
+        (click)="openFilter()"
+        margin
+        style="float: right;"
+      >
         <ion-icon name="options"></ion-icon>
         {{'buttons.filter'|translate}}
       </button>
@@ -30,35 +35,60 @@
     <!-- Scores details bar ends here-->
     <div *ngFor="let element of reportObj?.response;let i = index">
       <ion-card [ngSwitch]="element?.responseType">
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'text'"></reports-text>
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'number'"></reports-text>
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'date'"></reports-text>
-        <pie-chart  [data]="element" [questionNumber]="i+1" *ngSwitchCase="'radio'"></pie-chart>
-        <bar-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'multiselect'"></bar-chart>
-        <matrix-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'matrix'"></matrix-chart>
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchDefault></reports-text>
+        <reports-text
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchCase="'text'"
+        ></reports-text>
+        <reports-text
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchCase="'number'"
+        ></reports-text>
+        <reports-text
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchCase="'date'"
+        ></reports-text>
+        <pie-chart
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchCase="'radio'"
+        ></pie-chart>
+        <bar-chart
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchCase="'multiselect'"
+        ></bar-chart>
+        <matrix-chart
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchCase="'matrix'"
+        ></matrix-chart>
+        <reports-text
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchDefault
+        ></reports-text>
       </ion-card>
       <ion-grid>
         <ion-row>
-          <ion-col col-4>
-            <ion-card class="thumbnail-card" >
-              <img src="https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg" >
-            </ion-card>
+          <ion-col col-4 *ngFor="let e of dummyData">
+            <attachments [url]="e.url" [extension]="e.extension"></attachments>
           </ion-col>
-          <ion-col col-4>
-            <ion-card class="thumbnail-card" >
-              <img src="https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg" >
-            </ion-card>
-          </ion-col>
-          <ion-col col-12>
-            <small class="pull-right text-ios-danger" (click)="allEvidence()">View All Evidences</small>
+          <ion-col col-12 *ngIf="dummyData.length>2">
+            <small class="pull-right text-ios-danger" (click)="allEvidence()"
+              >{{'labels.viewAllEvidences' | translate}}</small
+            >
           </ion-col>
         </ion-row>
       </ion-grid>
-      
     </div>
   </div>
-  <div class="_flex-box _justify-content-center _errorBox" *ngIf="!reportObj?.response">
+  <div
+    class="_flex-box _justify-content-center _errorBox"
+    *ngIf="!reportObj?.response"
+  >
     {{reportObj?.data}}
   </div>
 

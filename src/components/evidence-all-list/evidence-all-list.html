@@ -1,20 +1,13 @@
 <!-- Generated template for the EvidenceAllListComponent component -->
 <ion-header>
-  <header [title]="'tabs.evidences'|translate" [hideBack]="false">
-  </header>
+  <header [title]="'tabs.evidences'|translate" [hideBack]="false"></header>
 </ion-header>
-
-
-
-
-
 
 <ion-content>
   <div padding>
     <ion-segment [(ngModel)]="selectedTab">
       <ion-segment-button value="evidence" (click)="onTabChange('evidence')">
         {{'buttons.evidence' | translate}}
-
       </ion-segment-button>
       <ion-segment-button value="remarks" (click)="onTabChange('remarks')">
         {{'buttons.remarks' | translate}}
@@ -29,13 +22,13 @@
         <ion-grid>
           <ion-row>
             <ion-col col-12>
-              <h5>Images</h5>
-
+              <h5>{{'headings.images' | translate}}</h5>
             </ion-col>
-            <ion-col col-4 *ngFor="let i of images;" (click)="openImage(i.url)">
-              <ion-card class="thumbnail-card">
-                <img [src]="i.url" />
-              </ion-card>
+            <ion-col col-4 *ngFor="let i of images;">
+              <attachments
+                [url]="i.url"
+                [extension]="i.extension"
+              ></attachments>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -46,46 +39,36 @@
         <ion-grid>
           <ion-row>
             <ion-col col-12>
-              <h5>Videos</h5>
+              <h5>{{'headings.videos' | translate}}</h5>
             </ion-col>
-            <ion-col col-4 *ngFor="let v of videos" (click)="playVideo(v.url)">
-              <ion-card class="thumbnail-card">
-                <ion-icon name="play"></ion-icon>
-                <p>Video 1</p>
-              </ion-card>
+            <ion-col col-4 *ngFor="let v of videos">
+              <attachments
+                [url]="v.url"
+                [extension]="v.extension"
+              ></attachments>
             </ion-col>
-
           </ion-row>
         </ion-grid>
       </div>
 
-
-      <!-- //for document -->
+      <!-- //for DOCUMENT -->
       <div>
         <ion-grid>
           <ion-row>
             <ion-col col-12>
-              <h5>Documents</h5>
-
-
+              <h5>{{'headings.documents' | translate}}</h5>
             </ion-col>
-            <ion-col col-4 *ngFor="let d of documents" (click)="openDocument(d.url)">
-              <ion-card class="thumbnail-card">
-                <ion-icon name="document"></ion-icon>
-                <p>document</p>
-              </ion-card>
+            <ion-col col-4 *ngFor="let d of documents">
+              <attachments
+                [url]="d.url"
+                [extension]="d.extension"
+              ></attachments>
             </ion-col>
-
           </ion-row>
         </ion-grid>
       </div>
     </div>
 
-    <div *ngSwitchCase="'remarks'">
-
-    </div>
+    <div *ngSwitchCase="'remarks'"></div>
   </div>
-
-
-
 </ion-content>

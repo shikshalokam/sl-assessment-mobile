@@ -1,0 +1,14 @@
+<!-- Generated template for the AttachmentsComponent component -->
+<ion-card class="thumbnail-card" [ngSwitch]="extension">
+  <img [src]="url" *ngSwitchCase="'jpg'" (click)="openImage(url)" />
+  <ion-icon
+    name="play"
+    *ngSwitchCase="'mp4'"
+    (click)="playVideo(url)"
+  ></ion-icon>
+  <ion-icon
+    name="document"
+    *ngSwitchCase="'pdf'"
+    (click)="openDocument(url)"
+  ></ion-icon>
+</ion-card>
