@@ -18,7 +18,6 @@
 </ion-col>
 <div class="_tip _flex-box">{{data?.tip}}</div>
 <div margin-top>
-  {{data.isEditable|json}}
   <ion-item text-center no-padding *ngIf="data?.responseType != 'text'">
     <ion-input
       type="{{data?.responseType}}"
