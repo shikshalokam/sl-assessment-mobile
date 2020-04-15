@@ -145,7 +145,6 @@ export class AssessmentServiceProvider {
 
       // console.log(programIndex + " " + assessmentIndex + " " + schoolIndex)
       this.utils.startLoader();
-      debugger;
       const url =
         AppConfigs.assessmentsList.detailsOfAssessment +
         programs[programIndex]._id +

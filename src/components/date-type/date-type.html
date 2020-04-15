@@ -19,7 +19,7 @@
   <ion-item>
     <ion-label floating>{{'ionLabel.date'| translate}}</ion-label>
     <ion-datetime
-      [disabled]="data?.autoCapture"
+      [disabled]="data?.autoCapture || (data.isEditable!=undefined && !data.isEditable)"
       displayFormat="{{data?.dateFormat}}"
       *ngIf="data?.validation.max && !data?.validation.min"
       [max]='data?.validation.max ? data?.validation.max : ""'
@@ -29,7 +29,7 @@
     ></ion-datetime>
 
     <ion-datetime
-      [disabled]="data?.autoCapture"
+      [disabled]="data?.autoCapture || (data.isEditable!=undefined && !data.isEditable)"
       displayFormat="{{data?.dateFormat}}"
       *ngIf="data?.validation.min && !data?.validation.max"
       [min]='(data?.validation.min) ? data?.validation.min : ""'

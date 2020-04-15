@@ -247,7 +247,6 @@ export class ObservationsPage {
   }
 
   getAssessmentDetails(event) {
-    debugger;
     this.assessmentService
       .getAssessmentDetails(event, this.programs, "observation")
       .then((program) => {
