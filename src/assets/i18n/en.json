@@ -119,7 +119,7 @@
         "undo": "Undo",
         "applyFilter": "Apply Filter",
         "filter": "Filter",
-        "evidence": "Evidence",
+        "evidences": "Evidences",
         "remarks": "Remarks"
     },
     "tabs": {
@@ -184,6 +184,7 @@
         "uplaod": "Upload",
         "images": "Images",
         "videos": "Videos",
+        "audios": "Audios",
         "documents": "Documents",
         "ratedCriterias": "Rated Criterias",
         "flagCriteria": "Flag Criteria",

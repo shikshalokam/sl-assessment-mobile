@@ -1,14 +1,33 @@
 <!-- Generated template for the AttachmentsComponent component -->
-<ion-card class="thumbnail-card" [ngSwitch]="extension">
-  <img [src]="url" *ngSwitchCase="'jpg'" (click)="openImage(url)" />
-  <ion-icon
-    name="play"
-    *ngSwitchCase="'mp4'"
+
+<ion-card class="thumbnail-card" [ngSwitch]="true">
+  <img
+    [src]="url"
+    *ngSwitchCase="extension==='jpg'
+    ||extension==='png'
+    ||extension==='jpeg'"
+    (click)="openImage(url)"
+  />
+  <fa
+    name="file-video-o"
+    class="attachmentIcon"
+    *ngSwitchCase="extension==='mp4'
+    ||extension==='m4v'
+    ||extension==='avi'
+    ||extension==='flv'"
     (click)="playVideo(url)"
-  ></ion-icon>
-  <ion-icon
-    name="document"
-    *ngSwitchCase="'pdf'"
+  ></fa>
+
+  <fa
+    *ngSwitchCase="extension==='mp3'"
+    name="file-audio-o"
+    class="attachmentIcon"
+    (click)="playAudio(url)"
+  ></fa>
+  <fa
+    class="attachmentIcon"
+    name="file-pdf-o"
+    *ngSwitchCase="extension==='pdf'"
     (click)="openDocument(url)"
-  ></ion-icon>
+  ></fa>
 </ion-card>

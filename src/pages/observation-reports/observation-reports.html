@@ -33,6 +33,7 @@
       <!-- <ion-icon name="options" class="filterIcon" (click)="openFilter()"></ion-icon> -->
     </div>
     <!-- Scores details bar ends here-->
+
     <div *ngFor="let element of reportObj?.response;let i = index">
       <ion-card [ngSwitch]="element?.responseType">
         <reports-text
@@ -73,11 +74,11 @@
       </ion-card>
       <ion-grid>
         <ion-row>
-          <ion-col col-4 *ngFor="let e of dummyData">
+          <ion-col col-4 *ngFor="let e of element.evidences">
             <attachments [url]="e.url" [extension]="e.extension"></attachments>
           </ion-col>
-          <ion-col col-12 *ngIf="dummyData.length>2">
-            <small class="pull-right text-ios-danger" (click)="allEvidence()"
+          <ion-col col-12 *ngIf="element.evidence_count>3">
+            <small class="pull-right text-ios-danger" (click)="allEvidence(i)"
               >{{'labels.viewAllEvidences' | translate}}</small
             >
           </ion-col>

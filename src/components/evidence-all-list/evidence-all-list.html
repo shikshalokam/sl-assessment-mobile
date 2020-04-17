@@ -7,7 +7,7 @@
   <div padding>
     <ion-segment [(ngModel)]="selectedTab">
       <ion-segment-button value="evidence" (click)="onTabChange('evidence')">
-        {{'buttons.evidence' | translate}}
+        {{'buttons.evidences' | translate}}
       </ion-segment-button>
       <ion-segment-button value="remarks" (click)="onTabChange('remarks')">
         {{'buttons.remarks' | translate}}
@@ -18,7 +18,7 @@
   <div [ngSwitch]="selectedTab">
     <div *ngSwitchCase="'evidence'">
       <!-- //for images -->
-      <div>
+      <div *ngIf="images?.length">
         <ion-grid>
           <ion-row>
             <ion-col col-12>
@@ -35,7 +35,7 @@
       </div>
 
       <!-- //for VIDEOS-->
-      <div>
+      <div *ngIf="videos?.length">
         <ion-grid>
           <ion-row>
             <ion-col col-12>
@@ -52,7 +52,7 @@
       </div>
 
       <!-- //for DOCUMENT -->
-      <div>
+      <div *ngIf="documents?.length">
         <ion-grid>
           <ion-row>
             <ion-col col-12>
@@ -67,8 +67,30 @@
           </ion-row>
         </ion-grid>
       </div>
+      <!-- //for Audio -->
+      <div *ngIf="audios?.length">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-12>
+              <h5>{{'headings.audios' | translate}}</h5>
+            </ion-col>
+            <ion-col col-4 *ngFor="let a of audios">
+              <attachments
+                [url]="a.url"
+                [extension]="a.extension"
+              ></attachments>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
     </div>
 
-    <div *ngSwitchCase="'remarks'"></div>
+    <div *ngSwitchCase="'remarks'">
+      <div *ngIf="remarks.length">
+        <ion-item text-wrap text-justify *ngFor="let r of remarks">
+          {{r}}
+        </ion-item>
+      </div>
+    </div>
   </div>
 </ion-content>

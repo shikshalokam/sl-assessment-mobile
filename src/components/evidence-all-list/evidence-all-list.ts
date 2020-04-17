@@ -8,6 +8,10 @@ import {
   StreamingMedia,
   StreamingVideoOptions,
 } from "@ionic-native/streaming-media";
+import { ApiProvider } from "../../providers/api/api";
+import { AppConfigs } from "../../providers/appConfig";
+import { UtilsProvider } from "../../providers/utils/utils";
+import { NavParams } from "ionic-angular";
 /**
  * Generated class for the EvidenceAllListComponent component.
  *
@@ -22,62 +26,112 @@ export class EvidenceAllListComponent {
   selectedTab;
 
   // test
-  images = [
-    {
-      url:
-        "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
-      extension: "jpg",
-    },
-    {
-      url:
-        "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
-      extension: "jpg",
-    },
-    {
-      url:
-        "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
-      extension: "jpg",
-    },
-    {
-      url:
-        "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
-      extension: "jpg",
-    },
-  ];
-  videos = [
-    {
-      url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
-      extension: "mp4",
-    },
-    {
-      url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
-      extension: "mp4",
-    },
-    {
-      url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
-      extension: "mp4",
-    },
-    {
-      url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
-      extension: "mp4",
-    },
-  ];
+  // images = [
+  //   {
+  //     url:
+  //       "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
+  //     extension: "jpg",
+  //   },
+  //   {
+  //     url:
+  //       "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
+  //     extension: "jpg",
+  //   },
+  //   {
+  //     url:
+  //       "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
+  //     extension: "jpg",
+  //   },
+  //   {
+  //     url:
+  //       "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
+  //     extension: "jpg",
+  //   },
+  // ];
+  // videos = [
+  //   {
+  //     url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
+  //     extension: "mp4",
+  //   },
+  //   {
+  //     url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
+  //     extension: "mp4",
+  //   },
+  //   {
+  //     url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
+  //     extension: "mp4",
+  //   },
+  //   {
+  //     url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
+  //     extension: "mp4",
+  //   },
+  // ];
 
-  documents = [
-    { url: "http://www.orimi.com/pdf-test.pdf", extension: "pdf" },
-    { url: "http://www.orimi.com/pdf-test.pdf", extension: "pdf" },
-    { url: "http://www.orimi.com/pdf-test.pdf", extension: "pdf" },
-  ];
+  // documents = [
+  //   { url: "http://www.orimi.com/pdf-test.pdf", extension: "pdf" },
+  //   { url: "http://www.orimi.com/pdf-test.pdf", extension: "pdf" },
+  //   { url: "http://www.orimi.com/pdf-test.pdf", extension: "pdf" },
+  // ];
+  payload: any;
+  remarks: any;
+  images: any;
+  videos: any;
+  documents: any;
+  audios: any;
 
   //-----
 
-  constructor() {}
+  constructor(
+    private apiService: ApiProvider,
+    private utils: UtilsProvider,
+    private navParams: NavParams
+  ) {}
 
   ionViewDidLoad() {
     this.selectedTab = "evidence";
+    const submissionId = this.navParams.get("submissionId");
+    const observationId = this.navParams.get("observationId");
+    const entityId = this.navParams.get("entityId");
+    const questionExternalId = this.navParams.get("questionExternalId");
+    this.payload = {
+      submissionId: submissionId,
+      questionId: questionExternalId,
+      observationId: observationId,
+      entityId: entityId,
+    };
+    this.getAllEvidence();
   }
 
   onTabChange(tabName) {
     this.selectedTab = tabName;
+  }
+
+  getAllEvidence() {
+    let url = AppConfigs.observationReports.allEvidence;
+
+    this.apiService.httpPost(
+      url,
+      this.payload,
+      (success) => {
+        this.utils.stopLoader();
+        console.log(JSON.stringify(success));
+
+        if (success.result === true && success.data) {
+          this.images = success.data.images;
+          this.videos = success.data.videos;
+          this.documents = success.data.documents;
+          this.remarks = success.data.remarks;
+          this.audios = success.data.audios;
+        } else {
+          this.utils.openToast(success.data);
+        }
+      },
+      (error) => {
+        this.utils.openToast(error.message);
+
+        this.utils.stopLoader();
+      },
+      { baseUrl: "dhiti", version: "v1" }
+    );
   }
 }

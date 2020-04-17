@@ -44,15 +44,29 @@ export class AttachmentsComponent {
     this.streamingMedia.playVideo(link, options);
   }
 
+  playAudio(link) {
+    let options: StreamingVideoOptions = {
+      successCallback: () => {
+        console.log("Video played");
+      },
+      errorCallback: (e) => {
+        console.log("Error streaming");
+      },
+      shouldAutoClose: true,
+      controls: true,
+    };
+
+    this.streamingMedia.playAudio(link, options);
+  }
+
   openImage(link) {
     this.photoViewer.show(link);
   }
 
   openDocument(link) {
-    debugger;
-    this.iab.create(
+    const browser = this.iab.create(
       "https://docs.google.com/viewer?url=" + encodeURIComponent(link),
-      "_self",
+      "",
       "location=no,toolbar=no"
     );
   }

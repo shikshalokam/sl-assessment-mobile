@@ -292,9 +292,13 @@ export class ObservationReportsPage {
     });
   }
 
-  allEvidence() {
+  allEvidence(index) {
+    console.log(this.allQuestions[index]);
     this.navCtrl.push(EvidenceAllListComponent, {
       submissionId: this.submissionId,
+      observationId: this.observationId,
+      entityId: this.entityId,
+      questionExternalId: this.allQuestions[index]["questionExternalId"],
     });
   }
 }
