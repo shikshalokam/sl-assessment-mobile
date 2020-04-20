@@ -14,12 +14,22 @@
     *ngSwitchCase="extension==='mp4'
     ||extension==='m4v'
     ||extension==='avi'
-    ||extension==='flv'"
+    ||extension==='flv'
+    ||extension==='3GP'
+    ||extension==='OGG'
+    ||extension==='WEBM'
+    ||extension==='WMV'"
     (click)="playVideo(url)"
   ></fa>
 
   <fa
-    *ngSwitchCase="extension==='mp3'"
+    *ngSwitchCase="extension==='mp3'
+    ||extension==='AIF'
+    ||extension==='cda'
+    ||extension==='mpa'
+    ||extension==='ogg'
+    ||extension==='wav'
+    ||extension==='wma'"
     name="file-audio-o"
     class="attachmentIcon"
     (click)="playAudio(url)"

@@ -25,53 +25,6 @@ import { NavParams } from "ionic-angular";
 export class EvidenceAllListComponent {
   selectedTab;
 
-  // test
-  // images = [
-  //   {
-  //     url:
-  //       "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
-  //     extension: "jpg",
-  //   },
-  //   {
-  //     url:
-  //       "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
-  //     extension: "jpg",
-  //   },
-  //   {
-  //     url:
-  //       "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
-  //     extension: "jpg",
-  //   },
-  //   {
-  //     url:
-  //       "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg",
-  //     extension: "jpg",
-  //   },
-  // ];
-  // videos = [
-  //   {
-  //     url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
-  //     extension: "mp4",
-  //   },
-  //   {
-  //     url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
-  //     extension: "mp4",
-  //   },
-  //   {
-  //     url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
-  //     extension: "mp4",
-  //   },
-  //   {
-  //     url: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
-  //     extension: "mp4",
-  //   },
-  // ];
-
-  // documents = [
-  //   { url: "http://www.orimi.com/pdf-test.pdf", extension: "pdf" },
-  //   { url: "http://www.orimi.com/pdf-test.pdf", extension: "pdf" },
-  //   { url: "http://www.orimi.com/pdf-test.pdf", extension: "pdf" },
-  // ];
   payload: any;
   remarks: any;
   images: any;
@@ -108,6 +61,7 @@ export class EvidenceAllListComponent {
 
   getAllEvidence() {
     let url = AppConfigs.observationReports.allEvidence;
+    this.utils.startLoader();
 
     this.apiService.httpPost(
       url,
