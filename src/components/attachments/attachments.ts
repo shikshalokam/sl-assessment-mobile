@@ -5,6 +5,7 @@ import {
 } from "@ionic-native/streaming-media";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { PhotoViewer } from "@ionic-native/photo-viewer";
+import { FileExtension } from "../../constants/fileExtesion";
 
 /**
  * Generated class for the AttachmentsComponent component.
@@ -19,6 +20,10 @@ import { PhotoViewer } from "@ionic-native/photo-viewer";
 export class AttachmentsComponent {
   @Input() url: string;
   @Input() extension: string;
+  imageFormats: string[] = FileExtension.imageFormats;
+  videoFormats: string[] = FileExtension.videoFormats;
+  audioFormats: string[] = FileExtension.audioFormats;
+  pdfFormats: string[] = FileExtension.pdfFormats;
 
   constructor(
     private iab: InAppBrowser,
@@ -26,8 +31,12 @@ export class AttachmentsComponent {
     private streamingMedia: StreamingMedia
   ) {
     console.log("Hello AttachmentsComponent Component");
+    console.log(FileExtension.imageFormats);
   }
 
+  // ionViewDidLoad() {
+  //   console.log(FileExtension.imageFormats);
+  // }
   playVideo(link) {
     let options: StreamingVideoOptions = {
       successCallback: () => {
