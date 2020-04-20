@@ -1,3 +1,4 @@
+
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule, HttpClient} from '@angular/common/http';
 import { HttpModule } from '@angular/http';
@@ -115,7 +116,10 @@ import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
 import { PipesModule } from '../pipes/pipes.module';
 import { QuestionListPage } from '../pages/question-list/question-list';
 import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutorial-video-listing';
-
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { EvidenceAllListComponent } from './../components/evidence-all-list/evidence-all-list';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
+import { StreamingMedia } from '@ionic-native/streaming-media';
 @NgModule({
   declarations: [
     MyApp,
@@ -149,7 +153,7 @@ import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutori
     ObservationEditPage,
     SettingsPage,
     QuestionListPage,
-    TutorialVideoListingPage
+    TutorialVideoListingPage,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -181,7 +185,11 @@ import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutori
     RegistryListPageModule,
     GeneralQuestionListPageModule,
     IonicStepperModule,
-    ObservationsPageModule  
+    ObservationsPageModule,
+    
+    
+    
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -216,7 +224,10 @@ import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutori
     ReportEntityListingPage,
     ObservationEditPage,
     QuestionListPage,
-    TutorialVideoListingPage
+    TutorialVideoListingPage,
+    EvidenceAllListComponent,
+    
+
   ],
   providers: [
     StatusBar,
@@ -278,6 +289,11 @@ import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutori
     AppVersion,
     SpinnerDialog,
     SidemenuProvider,
+    ScreenOrientation,
+    PhotoViewer,
+    StreamingMedia
+    
+    
     
   ]
 })

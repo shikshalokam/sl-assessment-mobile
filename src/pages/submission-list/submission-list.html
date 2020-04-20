@@ -1,8 +1,11 @@
+
+
 <ion-header>
   <header [title]="'headings.submissionListPage'|translate" [hideBack]="false">
   </header>
 </ion-header>
 <ion-content>
+ 
   <ion-card *ngIf="submissionList" class="cardWrapper submissionCard">
     <ion-card-content class="observationTitle">
       {{ submissionList[0] ? submissionList[0]['entityInformation']['name'] :""}}

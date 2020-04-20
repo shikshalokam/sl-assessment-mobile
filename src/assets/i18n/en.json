@@ -60,7 +60,7 @@
         "submitForm": "Submit the form",
         "previewForm": "Preview the form",
         "saveForm": "Save the form",
-        "userId":"User Id"
+        "userId": "User Id"
     },
     "buttons": {
         "observeAgain": "Observe Again",
@@ -117,8 +117,10 @@
         "loadMore": "Load More",
         "selectAll": "Select All Schools",
         "undo": "Undo",
-        "applyFilter":"Apply Filter",
-        "filter":"Filter"
+        "applyFilter": "Apply Filter",
+        "filter": "Filter",
+        "evidences": "Evidences",
+        "remarks": "Remarks"
     },
     "tabs": {
         "home": "Home",
@@ -139,7 +141,8 @@
         "inProgress": "In progress",
         "completed": "Completed",
         "setting": "Settings",
-        "tutorialvideo":"Tutorial Video",
+        "tutorialvideo": "Tutorial Video",
+        "evidences": "Evidences",
         "allObservation": "All Observation"
 
     },
@@ -180,6 +183,9 @@
         "rate": "Rate",
         "uplaod": "Upload",
         "images": "Images",
+        "videos": "Videos",
+        "audios": "Audios",
+        "documents": "Documents",
         "ratedCriterias": "Rated Criterias",
         "flagCriteria": "Flag Criteria",
         "questionMap": "Question Map",
@@ -204,8 +210,8 @@
         "notifications": "Notifications",
         "settings": "Settings",
         "solutionList": "Solution List",
-        "filter":"Filter",
-        "tutorialvideo":"Tutorial Video"
+        "filter": "Filter",
+        "tutorialvideo": "Tutorial Video"
     },
     "labels": {
         "welcome": "Welcome",
@@ -223,14 +229,15 @@
         "notApplicable": "NA",
         "readytoPublish": "Ready to Publish",
         "files": "Files",
-        "languages":"Languages",
-        "totalScore":"Total score",
-        "scoreAchieved":"Score achieved",
-        "totalObservations":"Total Observations",
-        "totalSchools":"Total schools",
-        "schoolsObserved":"Schools observed",
-        "selectState":"Select State *",
-        "instanceName":"Instance Name"
+        "languages": "Languages",
+        "totalScore": "Total score",
+        "scoreAchieved": "Score achieved",
+        "totalObservations": "Total Observations",
+        "totalSchools": "Total schools",
+        "schoolsObserved": "Schools observed",
+        "selectState": "Select State *",
+        "instanceName": "Instance Name",
+        "viewAllEvidences": "View All Evidences"
     },
     "languages": {
         "english": "English",
@@ -268,8 +275,8 @@
         "viewAll": "View all",
         "noUnreadNotifications": "You have no new Notifications!",
         "noObservationfound": "No observation found",
-        "selectFilter":"Select the questions to filter Reports",
-        "noVideo":"No videos available"
+        "selectFilter": "Select the questions to filter Reports",
+        "noVideo": "No videos available"
     },
     "toastMessage": {
         "selectSolution": "Select a Solution",
@@ -292,9 +299,9 @@
         "userNameMisMatch": "User Id did not match. Please try again.",
         "loactionForAction": "Location should be turned on for this action.",
         "questionResponseNotRequiredForCompleteAssessment": "This questions response is not required to complete the assessment.",
-        "unableToFetchGps":"Unable to fetch GPS location",
-        "enableGPS":"Please enable GPS to proceed.",
-        "reEnableGPS":"Unable to fetch your location. Please turn off and turn on your "
-        
+        "unableToFetchGps": "Unable to fetch GPS location",
+        "enableGPS": "Please enable GPS to proceed.",
+        "reEnableGPS": "Unable to fetch your location. Please turn off and turn on your "
+
     }
 }
