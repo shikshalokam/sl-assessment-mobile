@@ -31,12 +31,8 @@ export class AttachmentsComponent {
     private streamingMedia: StreamingMedia
   ) {
     console.log("Hello AttachmentsComponent Component");
-    console.log(FileExtension.imageFormats);
   }
 
-  // ionViewDidLoad() {
-  //   console.log(FileExtension.imageFormats);
-  // }
   playVideo(link) {
     let options: StreamingVideoOptions = {
       successCallback: () => {
