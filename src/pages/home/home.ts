@@ -19,6 +19,7 @@ import { ObservationDetailsPage } from '../observation-details/observation-detai
 import { GenericMenuPopOverComponent } from '../../components/generic-menu-pop-over/generic-menu-pop-over';
 import { ObservationProvider } from '../../providers/observation/observation';
 import { SidemenuProvider } from '../../providers/sidemenu/sidemenu';
+import { storageKeys } from '../../providers/storageKeys';
 
 declare var cordova: any;
 
@@ -116,7 +117,7 @@ export class HomePage {
       this.networkAvailable = true;
     }
 
-    this.localStorage.getLocalStorage('staticLinks').then(success => {
+    this.localStorage.getLocalStorage(storageKeys.staticLinks).then(success => {
       if (success) {
       } else {
         this.getStaticLinks();
@@ -244,9 +245,9 @@ export class HomePage {
 
   getStaticLinks() {
     this.apiService.httpGet(AppConfigs.externalLinks.getStaticLinks, success => {
-      this.localStorage.setLocalStorage('staticLinks', success.result);
+      this.localStorage.setLocalStorage(storageKeys.staticLinks, success.result);
     }, error => {
-    });
+    },{version:"v2"}); 
   }
 
   goToPage(index) {
