@@ -10,10 +10,20 @@
 </ion-header>
 <ion-content style="background-color: #fff !important;">
   <div *ngIf="!error">
+    <h3 *ngIf="reportObj?.schoolName" class="heading">
+      {{reportObj?.schoolName}}
+    </h3>
     <div padding style="text-transform: capitalize; border:1px solid #ccc; margin: 10px 10px;"
       *ngIf="reportObj?.observationName || reportObj?.observationName">
       <!-- {{reportObj?.observationName}} {{reportObj?.entityName ? ' > ' : ''}} {{reportObj?.entityName }} -->
-      {{reportObj?.observationName}} {{reportObj?.schoolName}}
+      {{reportObj?.observationName}}
+    </div>
+    <div *ngIf="allQuestions?.length">
+      <button ion-button icon-start (click)="openFilter()" margin style="float:right">
+        <ion-icon name="options"></ion-icon>
+        {{'buttons.filter'|translate}}
+      </button>
+      <!-- <ion-icon name="options" class="filterIcon" (click)="openFilter()"></ion-icon> -->
     </div>
     <!-- Scores details bar -->
     <ion-grid *ngIf="reportObj?.totalScore && reportObj?.scoreAchieved">
@@ -44,7 +54,7 @@
     </div>
   </div>
   <div class="_flex-box _justify-content-center _errorBox" *ngIf="!reportObj?.response">
-    {{reportObj?.data}}
+    {{error}}
   </div>
 
   <ion-fab bottom right *ngIf="reportObj?.response">
