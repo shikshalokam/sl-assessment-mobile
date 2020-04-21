@@ -116,7 +116,9 @@
         "observation": "Observation",
         "loadMore": "Load More",
         "selectAll": "Select All Schools",
-        "undo": "Undo"
+        "undo": "Undo",
+        "applyFilter":"Apply Filter",
+        "filter":"Filter"
     },
     "tabs": {
         "home": "Home",
@@ -137,7 +139,10 @@
         "inProgress": "In progress",
         "completed": "Completed",
         "setting":"Settings",
-        "resetPassword": "Reset Password"
+        "resetPassword": "Reset Password",
+        "tutorialvideo":"Tutorial Video",
+        "allObservation": "All Observation"
+
     },
     "headings": {
         "zone": "Zones",
@@ -200,7 +205,9 @@
         "notifications": "Notifications",
         "settings":"Settings",
         "solutionList":"Solution List",
-        "resetPassword": "Reset Password"
+        "resetPassword": "Reset Password",
+        "filter":"Filter",
+        "tutorialvideo":"Tutorial Video"
     },
     "labels": {
         "welcome": "Welcome",
@@ -218,13 +225,14 @@
         "notApplicable": "NA",
         "readytoPublish": "Ready to Publish",
         "files": "Files",
-        "languages": "Languages",
-        "totalScore": "Total score",
-        "scoreAchieved": "Score achieved",
-        "totalObservations": "Total Observations",
-        "totalSchools": "Total schools",
-        "schoolsObserved": "Schools observed",
-        "selectState": "Select State *"
+        "languages":"Languages",
+        "totalScore":"Total score",
+        "scoreAchieved":"Score achieved",
+        "totalObservations":"Total Observations",
+        "totalSchools":"Total schools",
+        "schoolsObserved":"Schools observed",
+        "selectState":"Select State *",
+        "instanceName":"Instance Name"
     },
     "languages": {
         "english": "English",
@@ -261,7 +269,9 @@
         "confirmDeleteObservation": "You will not see this observation anymore. Do you wish to delete?",
         "viewAll": "View all",
         "noUnreadNotifications": "You have no new Notifications!",
-        "noObservationfound": "No observation found"
+        "noObservationfound": "No observation found",
+        "selectFilter":"Select the questions to filter Reports",
+        "noVideo":"No videos available"
     },
     "toastMessage": {
         "selectSolution": "Select a Solution",
@@ -287,5 +297,6 @@
         "unableToFetchGps":"Unable to fetch GPS location",
         "enableGPS":"Please enable GPS to proceed.",
         "reEnableGPS":"Unable to fetch your location. Please turn off and turn on your "
+        
     }
 }

@@ -26,6 +26,7 @@ import { FcmProvider } from '../providers/fcm/fcm';
 import { SettingsPage } from '../pages/settings/settings';
 import { ApiProvider } from '../providers/api/api';
 import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
+import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutorial-video-listing';
 
 @Component({
   templateUrl: 'app.html'
@@ -87,6 +88,13 @@ export class MyApp {
       icon: "help",
       // component: FaqPage,
       externalLink: true,
+      active: false,
+      show: true
+    },
+    {
+      name: "tutorialvideo",
+      icon: "logo-youtube",
+      component: TutorialVideoListingPage,
       active: false,
       show: true
     },
@@ -306,6 +314,8 @@ export class MyApp {
 
   }
 
+
+
   registerBAckButtonAction(): void {
     this.platform.registerBackButtonAction(() => {
       let ready = true;
@@ -364,5 +374,8 @@ export class MyApp {
   closeModal() {
     this.appUpdateData = null;
   }
+
+
+
 
 }

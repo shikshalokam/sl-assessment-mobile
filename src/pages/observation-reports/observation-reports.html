@@ -10,11 +10,21 @@
 
 
 <ion-content >
-  <div *ngIf="!error">
-    <h4 padding style="text-transform: capitalize">
-      {{reportObj?.observationName}} {{reportObj?.solutionName}} {{reportObj?.entityName ? ' > ' : ''}} {{reportObj?.entityName }}
 
+  <div *ngIf="!error">
+    <h3 *ngIf="reportObj?.entityName" class="heading">
+      {{reportObj?.entityName }}
+    </h3>
+    <h4 class="reportName">
+      {{reportObj?.observationName}} {{reportObj?.solutionName}} 
     </h4>
+    <div *ngIf="allQuestions?.length">
+      <button ion-button icon-start (click)="openFilter()" margin style="float:right">
+        <ion-icon name="options"></ion-icon>
+        {{'buttons.filter'|translate}}
+      </button>
+      <!-- <ion-icon name="options" class="filterIcon" (click)="openFilter()"></ion-icon> -->
+    </div>
     <!-- Scores details bar ends here-->
     <div *ngFor="let element of reportObj?.response;let i = index">
       <ion-card [ngSwitch]="element?.responseType">
