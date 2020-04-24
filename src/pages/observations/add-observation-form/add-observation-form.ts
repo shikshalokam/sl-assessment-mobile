@@ -34,6 +34,7 @@ export class AddObservationFormPage {
   selectedFrameWork;
   selectedSchools = [];
   selectedState: string;
+  selectedEntity: string;
 
   index = 0;
   @ViewChild("stepper") stepper1: ElementRef;
@@ -84,6 +85,7 @@ export class AddObservationFormPage {
     private currentUser: CurrentUserProvider
   ) {
     this.editData = this.navParams.get("data");
+    if (this.editData) this.selectedEntity = this.editData.data.selectedEntity;
     this.editDataIndex = this.navParams.get("index");
     this.localStorage
       .getLocalStorage("profileRole")
@@ -121,12 +123,8 @@ export class AddObservationFormPage {
     this.getSolutionList();
     this.currentUser
       .getCurrentUserEntities()
-      .then((success) => {
-        debugger;
-      })
-      .catch((error) => {
-        debugger;
-      });
+      .then((success) => {})
+      .catch((error) => {});
     // this.utils.startLoader();
     // this.apiProviders.httpGet(AppConfigs.cro.getEntityListType, success => {
     //   this.entityTypeData = success.result;
@@ -156,6 +154,9 @@ export class AddObservationFormPage {
       .then((data) => {
         console.log(data);
         this.observableEntityList = data;
+      })
+      .catch((error) => {
+        this.observableEntityList = [];
       });
   }
 
@@ -314,8 +315,13 @@ export class AddObservationFormPage {
     event ? this.solutionPage++ : this.solutionPage;
     this.utils.startLoader();
     // this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType + "?search="+this.searchSolutionUrl+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
+
+    let url = AppConfigs.cro.getSolutionAccordingToType;
+    if (this.selectedEntity) {
+      url = AppConfigs.cro.getSolutionAccordingToType + this.selectedEntity;
+    }
     this.apiProviders.httpGet(
-      AppConfigs.cro.getSolutionAccordingToType +
+      url +
         "?search=" +
         encodeURIComponent(this.searchSolutionUrl) +
         "&limit=" +
@@ -625,6 +631,7 @@ export class AddObservationFormPage {
         : [];
     if (type === "draft") {
       payLoad["isComplete"] = false;
+      payLoad["selectedEntity"] = this.selectedEntity;
       payLoad["solutionId"] = this.selectedFrameWork
         ? this.selectedFrameWork
         : null;

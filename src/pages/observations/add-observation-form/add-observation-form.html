@@ -61,13 +61,16 @@
       <!-- <h4>Solution List</h4> -->
       <div class="fixBox" *ngIf="listOfSolution">
         <div class="_flex-box">
-          <ion-label>{{'ionLabel.selectSolution' | translate}}</ion-label>
+          <ion-label>{{'ionLabel.selectSolution' | translate}} </ion-label>
           <div>
             <ion-item>
-              <ion-label>Choose Entity</ion-label>
-              <ion-select [(ngModel)]="selectedEntity">
+              <ion-label>Choose Entity </ion-label>
+              <ion-select
+                [(ngModel)]="selectedEntity"
+                (ionChange)="getSolutionList();"
+              >
                 <ion-option
-                  [value]="e.value"
+                  [value]="e._id"
                   *ngFor="let e of observableEntityList"
                   >{{e.name}}</ion-option
                 >

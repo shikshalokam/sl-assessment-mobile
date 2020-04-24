@@ -126,7 +126,6 @@ export class HomePage {
       .catch((error) => {
         this.getStaticLinks();
       });
-    this.getEntityToObserve();
   }
 
   getIndividualAssessmentFromLocal() {
@@ -366,23 +365,5 @@ export class HomePage {
       entityDetails: aseessmemtData,
     };
     this.evdnsServ.openActionSheet(options);
-  }
-
-  getEntityToObserve() {
-    this.localStorage.getLocalStorage("profileRole").then((profile) => {
-      const stateId = profile._id;
-      this.apiProvider.httpGet(
-        AppConfigs.entity.entityToBeObserved + stateId,
-        (success) => {
-          console.log(success);
-          this.localStorage.setLocalStorage(
-            storageKeys.observableEntities,
-            success.result
-          );
-        },
-        (error) => {},
-        { version: "v1" }
-      );
-    });
   }
 }
