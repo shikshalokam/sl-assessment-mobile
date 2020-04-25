@@ -63,12 +63,13 @@
         <div class="_flex-box">
           <ion-label>{{'ionLabel.selectSolution' | translate}} </ion-label>
           <div>
-            <ion-item>
+            <ion-item *ngIf="observableEntityList.length">
               <ion-label>Choose Entity </ion-label>
               <ion-select
                 [(ngModel)]="selectedEntity"
-                (ionChange)="getSolutionList();"
+                (ionChange)="selectedFrameWork=null;getSolutionList();"
               >
+                <ion-option value="" selected>All</ion-option>
                 <ion-option
                   [value]="e._id"
                   *ngFor="let e of observableEntityList"

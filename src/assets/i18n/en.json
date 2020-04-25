@@ -120,7 +120,8 @@
         "applyFilter": "Apply Filter",
         "filter": "Filter",
         "evidences": "Evidences",
-        "remarks": "Remarks"
+        "remarks": "Remarks",
+        "viewDetails": "View Details"
     },
     "tabs": {
         "home": "Home",

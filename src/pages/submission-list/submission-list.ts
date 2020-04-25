@@ -332,6 +332,7 @@ export class SubmissionListPage {
     const payload = {
       entityId: this.submissionList[0].entityId,
       observationId: this.submissionList[0].observationId,
+      entityType: this.submissionList[0].entityType,
     };
     this.navCtrl.push(ObservationReportsPage, payload);
   }
@@ -421,6 +422,7 @@ export class SubmissionListPage {
           this.inProgressObservations,
           this.completedObservations
         );
+        console.log(this.submissions);
     }
   }
   openActions(submission) {
@@ -465,6 +467,8 @@ export class SubmissionListPage {
     let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
       observationId: this.submissionList[0].observationId,
       entityId: this.submissionList[0].entityId,
+
+      entityType: this.submissionList[0].entityType,
       showEntityActionsheet: "true",
       showSubmissionAction: "false",
     });

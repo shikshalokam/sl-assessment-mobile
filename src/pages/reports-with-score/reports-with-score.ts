@@ -84,6 +84,23 @@ export class ReportsWithScorePage {
   getObservationReports(download = false) {
     this.utils.startLoader();
     let url;
+    // if (this.solutionId) {
+    //   this.payload.solutionId = this.solutionId;
+    //   this.payload.entityType = this.entityType;
+    //   this.payload.reportType = this.reportType;
+    //   url = AppConfigs.observationReportsWithScore.solutionReport;
+    // } else if (this.submissionId) {
+    //   // view submission report
+    //   url = AppConfigs.observationReportsWithScore.instanceReport;
+    // } else if (this.observationId && this.entityId) {
+    //   // view entity report
+    //   url = AppConfigs.observationReportsWithScore.entityReport;
+    // } else {
+    //   url = AppConfigs.observationReportsWithScore.observationReport;
+    // }
+    // this.payload.filter = {
+    //   questionId: this.filteredQuestions,
+    // };
     if (this.solutionId) {
       this.payload.solutionId = this.solutionId;
       this.payload.entityType = this.entityType;
@@ -94,6 +111,7 @@ export class ReportsWithScorePage {
       url = AppConfigs.observationReportsWithScore.instanceReport;
     } else if (this.observationId && this.entityId) {
       // view entity report
+      this.payload.entityType = this.entityType;
       url = AppConfigs.observationReportsWithScore.entityReport;
     } else {
       url = AppConfigs.observationReportsWithScore.observationReport;
@@ -101,6 +119,7 @@ export class ReportsWithScorePage {
     this.payload.filter = {
       questionId: this.filteredQuestions,
     };
+
     this.apiService.httpPost(
       url,
       this.payload,

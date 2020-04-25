@@ -67,6 +67,7 @@ export class ObservationReportsPage {
       entityId: this.entityId,
       submissionId: this.submissionId,
       observationId: this.observationId,
+      entityType: this.entityType,
     };
     this.isIos = this.platform.is("ios") ? true : false;
     this.appFolderPath = this.isIos
@@ -78,7 +79,24 @@ export class ObservationReportsPage {
   getObservationReports(download = false) {
     this.utils.startLoader();
     let url;
-    if (this.entityType) {
+    // if (this.entityType) {
+    //   this.payload = {
+    //     entityId: this.entityId,
+    //     entityType: this.entityType,
+    //     solutionId: this.solutionId,
+    //     immediateChildEntityType: this.immediateChildEntityType,
+    //     reportType: this.reportType,
+    //   };
+    //   url = AppConfigs.observationReports.entitySolutionReport;
+    // } else if (this.submissionId) {
+    //   url = AppConfigs.observationReports.instanceReport;
+    // } else if (!this.submissionId && !this.entityId) {
+    //   url = AppConfigs.observationReports.observationReport;
+    // } else {
+    //   url = AppConfigs.observationReports.entityReport;
+    // }
+
+    if (this.entityType && this.reportType) {
       this.payload = {
         entityId: this.entityId,
         entityType: this.entityType,
@@ -94,6 +112,7 @@ export class ObservationReportsPage {
     } else {
       url = AppConfigs.observationReports.entityReport;
     }
+
     this.payload.filter = {
       questionId: this.filteredQuestions,
     };
@@ -119,7 +138,9 @@ export class ObservationReportsPage {
         this.error = "No data found";
         this.utils.stopLoader();
       },
-      { baseUrl: "dhiti", version: this.entityType ? "v2" : "v1" }
+      { baseUrl: "dhiti", version: this.entityType ? "v1" : "v1" }
+      //TODO original
+      // { baseUrl: "dhiti", version: this.entityType ? "v2" : "v1" }
     );
   }
 
