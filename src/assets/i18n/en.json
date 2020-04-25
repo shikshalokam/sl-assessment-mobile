@@ -115,7 +115,8 @@
         "edit": "Edit",
         "observation": "Observation",
         "loadMore": "Load More",
-        "selectAll": "Select All Schools",
+
+        "selectAll": "Select All",
         "undo": "Undo",
         "applyFilter": "Apply Filter",
         "filter": "Filter",
