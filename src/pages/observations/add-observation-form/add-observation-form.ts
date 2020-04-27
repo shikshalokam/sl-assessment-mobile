@@ -67,6 +67,7 @@ export class AddObservationFormPage {
   isProfileAssignedWithState: boolean;
   profileData: any;
   observableEntityList: any[];
+  selectedEntityName: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -120,7 +121,6 @@ export class AddObservationFormPage {
   ionViewDidLoad() {
     console.log("ionViewDidLoad AddObservationPage");
     this.getObservableEntity();
-    this.getSolutionList();
     this.currentUser
       .getCurrentUserEntities()
       .then((success) => {})
@@ -154,9 +154,11 @@ export class AddObservationFormPage {
       .then((data) => {
         console.log(data);
         this.observableEntityList = data;
+        this.getSolutionList();
       })
       .catch((error) => {
         this.observableEntityList = [];
+        this.getSolutionList();
       });
   }
 
@@ -317,7 +319,11 @@ export class AddObservationFormPage {
     // this.apiProviders.httpGet(AppConfigs.cro.getSolutionAccordingToType + this.entityType + "?search="+this.searchSolutionUrl+"&limit="+this.solutionLimit+"&page="+this.solutionPage, success => {
 
     let url = AppConfigs.cro.getSolutionAccordingToType;
+    this.selectedEntityName = "";
     if (this.selectedEntity) {
+      this.selectedEntityName = this.observableEntityList.filter(
+        (oe) => oe._id == this.selectedEntity
+      )[0].name;
       url = AppConfigs.cro.getSolutionAccordingToType + this.selectedEntity;
     }
     this.apiProviders.httpGet(

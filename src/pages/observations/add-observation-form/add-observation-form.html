@@ -63,12 +63,13 @@
         <div class="_flex-box">
           <ion-label>{{'ionLabel.selectSolution' | translate}} </ion-label>
           <div>
-            <ion-item>
+            <ion-item *ngIf="observableEntityList?.length">
               <ion-label>Choose Entity </ion-label>
               <ion-select
                 [(ngModel)]="selectedEntity"
-                (ionChange)="getSolutionList();"
+                (ionChange)="selectedFrameWork=null;getSolutionList();"
               >
+                <ion-option value="" selected>All</ion-option>
                 <ion-option
                   [value]="e._id"
                   *ngFor="let e of observableEntityList"
@@ -140,7 +141,9 @@
         ></dynamic-form>
       </div>
     </ion-step>
-    <ion-step label="Add Schools">
+    <ion-step
+      [label]="selectedEntityName?'Select ' +selectedEntityName:'Select Entities'"
+    >
       <div class="fixBox" *ngIf="entityList">
         <ion-label class="header _flex-box">
           <!-- {{'ionLabel.selectSchool' | translate}} -->
@@ -156,19 +159,20 @@
           </ion-select>
           <button
             ion-button
-            class="selectAll"
+            class="selectAll capitalize"
             (click)="selectUnselectAllEntity(selectAll ? false : true)"
             [ngClass]="{'undo': selectAll}"
           >
-            {{!selectAll ? ('buttons.selectAll' | translate) : ('buttons.undo' |
-            translate)}}
+            {{!selectAll ? ('buttons.selectAll' | translate) +' '+
+            selectedEntityName : ('buttons.undo' | translate)}}
           </button>
         </ion-label>
+        <!-- placeholder="{{'message.startSearchSchool' | translate}}" -->
         <div>
           <ion-searchbar
             debounce="500"
             (ionChange)="searchEntities($event ,'entity')"
-            placeholder="{{'message.startSearchSchool' | translate}}"
+            placeholder="{{'Search ' + selectedEntityName}}"
           >
           </ion-searchbar>
         </div>
