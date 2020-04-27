@@ -138,9 +138,10 @@ export class ObservationReportsPage {
         this.error = "No data found";
         this.utils.stopLoader();
       },
-      { baseUrl: "dhiti", version: this.entityType ? "v1" : "v1" }
-      //TODO original
-      // { baseUrl: "dhiti", version: this.entityType ? "v2" : "v1" }
+      {
+        baseUrl: "dhiti",
+        version: this.entityType && this.reportType ? "v2" : "v1",
+      }
     );
   }
 
