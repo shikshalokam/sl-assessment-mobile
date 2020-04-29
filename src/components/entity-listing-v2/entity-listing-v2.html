@@ -1,15 +1,15 @@
 <!-- Generated template for the EntityListingV2Component component -->
 <div *ngFor="let entiti of entityList; let i = index">
   <!-- <h3 padding class="bold">Program - {{program.name}} ({{program.externalId}})</h3> -->
-  <ion-card>
-    <ion-item
-      text-wrap
-      (click)="gotToSoluions(entity,i,j)"
-      *ngFor="let entity of entiti?.entities; let j = index"
-    >
-      <h4>{{entity.name}}</h4>
-      <hr />
-    </ion-item>
+  <ion-item-divider color="light">
+    <h4 class="bold" text-wrap>{{entiti.name}}</h4>
+  </ion-item-divider>
+  <ion-card *ngFor="let entity of entiti?.entities; let j = index">
+    <ion-card-content>
+      <ion-item text-wrap (click)="gotToSoluions(entity,i,j)">
+        <h4>{{entity.name}}</h4>
+      </ion-item>
+    </ion-card-content>
   </ion-card>
 </div>
 

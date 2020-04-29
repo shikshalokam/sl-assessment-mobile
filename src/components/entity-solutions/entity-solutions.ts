@@ -66,9 +66,9 @@ export class EntitySolutionsComponent {
     // this.assessmentDetailsEvent.emit(event)
   }
 
-  goToEcm(id, programName, ProgramId, EntityName, EntityId) {
+  goToEcm(id, programName, ProgramId) {
     let submissionId = id;
-    let heading = EntityName;
+    let heading = this.entity.name;
     let recentlyUpdatedEntity = {
       programName: programName,
       ProgramId: ProgramId,

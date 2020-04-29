@@ -29,9 +29,6 @@ export class EntityListingV2Component {
     console.log("Hello EntityListingV2Component Component");
     this.text = "Hello World";
   }
-  ionViewDidLoad() {
-    console.log(this.entityList);
-  }
 
   gotToSoluions(entity, i, j) {
     // console.log(entity);

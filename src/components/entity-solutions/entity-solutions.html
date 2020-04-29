@@ -19,12 +19,14 @@
               {{sol.name}}
             </div>
             <ion-icon
+              padding-right
               name="cloud-download"
               class="downloadIcon"
               (click)="getAssessmentDetails(k)"
               *ngIf="!sol?.downloaded"
             ></ion-icon>
             <ion-icon
+              padding-right
               name="more"
               class="menuIcon"
               (click)="openMenu($event,k , sol?.submissionId)"
