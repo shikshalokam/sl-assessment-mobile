@@ -20,7 +20,7 @@
   >
   </entity-listing> -->
 
-  <entity-listing-v2
+  <!-- <entity-listing-v2
     *ngIf="entityList"
     [entityList]="entityList"
     (refreshEvent)="refresh($event)"
@@ -32,5 +32,22 @@
     [programList]="programList"
     [assessmentType]="assessmentType"
   >
-  </entity-listing-v2>
+  </entity-listing-v2> -->
+
+  <ion-card *ngIf="programList?.length">
+    <ion-item-divider color="light">
+      <h4 class="bold" text-wrap>{{programList[programIndex].name}}</h4>
+    </ion-item-divider>
+
+    <ion-list>
+      <ion-item
+        *ngFor="let e of entityList;let entityIndex=index"
+        (click)="goToSolutionPage(entityIndex)"
+      >
+        <ion-label>
+          <p text-wrap>{{e.name}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 </ion-content>

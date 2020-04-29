@@ -17,15 +17,13 @@ import { EvidenceProvider } from "../../providers/evidence/evidence";
 })
 export class EntitySolutionsComponent {
   text: string;
-  entity: any;
-  solutions: any;
+  // entity: any;
   assessmentType: any;
-  i: any;
-  j: any;
-  programType: any;
   programIndex: any;
-  entityList: any[];
+  entityIndex: any;
   programList: any;
+  entityList: any[];
+  solutions: any;
 
   constructor(
     private navParams: NavParams,
@@ -37,30 +35,53 @@ export class EntitySolutionsComponent {
   ) {
     console.log("Hello EntitySolutionsComponent Component");
     this.text = "Hello World";
-    this.entity = this.navParams.get("entity");
-    this.i = this.navParams.get("i");
-    this.j = this.navParams.get("j");
+    this.entityIndex = this.navParams.get("entityIndex");
     this.assessmentType = this.navParams.get("assessmentType");
-    this.programType = this.navParams.get("programType");
     this.programIndex = this.navParams.get("programIndex");
-    this.programList = this.navParams.get("programList");
-    this.entityList = this.navParams.get("entityList");
-    console.log(this.entity);
-    this.solutions = this.entity.solutions.length ? this.entity.solutions : [];
+    this.assessmentType === "institutional"
+      ? this.getInstitutionalList()
+      : this.getIndividualList();
+  }
+
+  getInstitutionalList() {
+    this.localStorage
+      .getLocalStorage("institutionalList")
+      .then((programList) => {
+        this.programList = programList;
+        this.entityList = this.programList[this.programIndex]["entities"];
+        this.solutions = this.entityList[this.entityIndex].solutions.length
+          ? this.entityList[this.entityIndex].solutions
+          : [];
+      })
+      .catch((err) => {});
+  }
+
+  getIndividualList() {
+    this.localStorage
+      .getLocalStorage("individualList")
+      .then((programList) => {
+        this.programList = programList;
+        this.entityList = this.programList[this.programIndex]["entities"];
+        this.solutions = this.entityList[this.entityIndex].solutions.length
+          ? this.entityList[this.entityIndex].solutions
+          : [];
+      })
+      .catch((err) => {});
   }
 
   getAssessmentDetails(k) {
     let event = {
-      programIndex: this.i,
+      programIndex: this.programIndex,
+      entityIndex: this.entityIndex,
       assessmentIndex: k,
-      entityIndex: this.j,
     };
 
     event.programIndex = this.programIndex;
     this.assessmentService
       .getAssessmentDetailsV2(event, this.programList, this.assessmentType)
       .then((program) => {
-        this.entityList = [program[this.navParams.get("programIndex")]];
+        this.entityList =
+          program[this.navParams.get("programIndex")]["entities"];
       })
       .catch((error) => {});
     // this.assessmentDetailsEvent.emit(event)
@@ -68,12 +89,12 @@ export class EntitySolutionsComponent {
 
   goToEcm(id, programName, ProgramId) {
     let submissionId = id;
-    let heading = this.entity.name;
+    let heading = this.entityList[this.entityIndex].name;
     let recentlyUpdatedEntity = {
       programName: programName,
       ProgramId: ProgramId,
-      EntityName: this.entity.name,
-      EntityId: this.entity._id,
+      EntityName: this.entityList[this.entityIndex].name,
+      EntityId: this.entityList[this.entityIndex]._id,
       submissionId: id,
     };
     console.log("go to ecm called" + submissionId);
@@ -135,16 +156,15 @@ export class EntitySolutionsComponent {
   }
 
   openMenu(...params) {
-    const solutionId = this.entityList[this.i].entities[this.j].solutions[
-      params[1]
-    ]._id;
-    const parentEntityId = this.entityList[this.i].entities[this.j]._id;
-    const createdByProgramId = this.entityList[this.i]._id;
+    const solutionId = this.entityList[this.entityIndex].solutions[params[1]]
+      ._id;
+    const parentEntityId = this.entityList[this.entityIndex]._id;
+    const createdByProgramId = this.programList[this.programIndex]._id;
     let event = {
       event: params[0],
-      programIndex: this.i,
+      programIndex: this.programIndex,
       assessmentIndex: params[1],
-      entityIndex: this.j,
+      entityIndex: this.entityIndex,
       submissionId: params[2],
       solutionId: solutionId,
       parentEntityId: parentEntityId,
