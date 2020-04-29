@@ -1,0 +1,37 @@
+<!-- Generated template for the EntitySolutionsComponent component -->
+<ion-header>
+  <header
+    [title]="'headings.solutionList'|translate"
+    [hideBack]="false"
+  ></header>
+</ion-header>
+
+<ion-content>
+  <div>
+    <div *ngFor="let sol of solutions; let k = index">
+      <ion-card>
+        <ion-item text-wrap>
+          <div class="_flex-box">
+            <div
+              style="flex: 1;"
+              (click)="sol?.downloaded ? goToEcm(sol?.submissionId,sol?.name,sol?._id) : getAssessmentDetails(k) "
+            >
+              {{sol.name}}
+            </div>
+            <ion-icon
+              name="cloud-download"
+              class="downloadIcon"
+              (click)="getAssessmentDetails(k)"
+              *ngIf="!sol?.downloaded"
+            ></ion-icon>
+            <ion-icon
+              name="more"
+              class="menuIcon"
+              (click)="openMenu($event,k , sol?.submissionId)"
+              *ngIf="sol?.downloaded"
+            ></ion-icon>
+          </div>
+        </ion-item>
+      </ion-card>
+    </div></div
+></ion-content>

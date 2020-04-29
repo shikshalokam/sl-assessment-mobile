@@ -41,10 +41,10 @@ export class AssessmentServiceProvider {
           !noLoader ? this.utils.stopLoader() : null;
           // console.log(JSON.stringify(successData))
           for (const program of successData.result) {
-            for (const solution of program.solutions) {
-              for (const entity of solution.entities) {
-                entity.downloaded = false;
-                entity.submissionId = null;
+            for (const entity of program.entities) {
+              for (const solution of entity.solutions) {
+                solution.downloaded = false;
+                solution.submissionId = null;
               }
             }
           }
@@ -63,6 +63,9 @@ export class AssessmentServiceProvider {
           !noLoader ? this.utils.stopLoader() : null;
 
           reject();
+        },
+        {
+          version: "v2",
         }
       );
 
@@ -201,6 +204,70 @@ export class AssessmentServiceProvider {
     });
   }
 
+  getAssessmentDetailsV2(event, programs, assessmentType) {
+    return new Promise((resolve, reject) => {
+      let programIndex = event.programIndex;
+      let assessmentIndex = event.assessmentIndex;
+      let schoolIndex = event.entityIndex;
+
+      // console.log(programIndex + " " + assessmentIndex + " " + schoolIndex)
+      this.utils.startLoader();
+      const url =
+        AppConfigs.assessmentsList.detailsOfAssessment +
+        programs[programIndex]._id +
+        "?solutionId=" +
+        programs[programIndex].entities[schoolIndex].solutions[assessmentIndex]
+          ._id +
+        "&entityId=" +
+        programs[programIndex].entities[schoolIndex]._id;
+      //console.log(url);
+      this.apiService.httpGet(
+        url,
+        (success) => {
+          this.ulsdp.mapSubmissionDataToQuestion(success.result);
+          const generalQuestions = success.result["assessment"][
+            "generalQuestions"
+          ]
+            ? success.result["assessment"]["generalQuestions"]
+            : null;
+          this.localStorage.setLocalStorage(
+            "generalQuestions_" + success.result["assessment"]["submissionId"],
+            generalQuestions
+          );
+          this.localStorage.setLocalStorage(
+            "generalQuestionsCopy_" +
+              success.result["assessment"]["submissionId"],
+            generalQuestions
+          );
+          programs[programIndex].entities[schoolIndex].solutions[
+            assessmentIndex
+          ].downloaded = true;
+          programs[programIndex].entities[schoolIndex].solutions[
+            assessmentIndex
+          ].submissionId = success.result.assessment.submissionId;
+          this.localStorage.setLocalStorage(
+            this.utils.getAssessmentLocalStorageKey(
+              programs[programIndex].entities[schoolIndex].solutions[
+                assessmentIndex
+              ].submissionId
+            ),
+            success.result
+          );
+          this.localStorage.setLocalStorage(`${assessmentType}List`, programs);
+          this.utils.stopLoader();
+
+          resolve(programs);
+        },
+        (error) => {
+          //console.log("error details api")
+          this.utils.stopLoader();
+          reject();
+        },
+        { version: "v2" }
+      );
+    });
+  }
+
   getAssessmentDetailsOfCreatedObservation(event, programs, assessmentType) {
     return new Promise((resolve, reject) => {
       // let programIndex = event.programIndex;
@@ -310,6 +377,55 @@ export class AssessmentServiceProvider {
           name:
             programs[programIndex].solutions[assessmentIndex].entities[
               schoolIndex
+            ]["name"],
+          programId: programs[programIndex]._id,
+          showMenuArray: showMenuArray,
+          solutionId: solutionId,
+          parentEntityId: parentEntityId,
+          createdByProgramId: createdByProgramId,
+        });
+        popover.present({
+          ev: myEvent,
+        });
+      })
+      .catch((error) => {});
+  }
+  openMenuV2(event, programs, showMenu?: any) {
+    let myEvent = event.event;
+    let programIndex = event.programIndex;
+    let assessmentIndex = event.assessmentIndex;
+    let schoolIndex = event.entityIndex;
+    let submissionId = event.submissionId;
+    let showMenuArray;
+    let solutionId = event.solutionId;
+    let parentEntityId = event.parentEntityId;
+    let createdByProgramId = event.createdByProgramId;
+    //console.log(" id related to this page");
+    //console.log(solutionId);
+    //console.log(parentEntityId);
+    //console.log(createdByProgramId);
+
+    this.localStorage
+      .getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId))
+      .then((successData) => {
+        if (showMenu) {
+          showMenuArray = successData.solution.registry;
+        } else {
+          showMenuArray = [];
+        }
+
+        let popover = this.popoverCtrl.create(MenuItemComponent, {
+          submissionId:
+            programs[programIndex].entities[schoolIndex].solutions[
+              assessmentIndex
+            ].submissionId,
+          _id:
+            programs[programIndex].entities[schoolIndex].solutions[
+              assessmentIndex
+            ]["_id"],
+          name:
+            programs[programIndex].entities[schoolIndex].solutions[
+              assessmentIndex
             ]["name"],
           programId: programs[programIndex]._id,
           showMenuArray: showMenuArray,

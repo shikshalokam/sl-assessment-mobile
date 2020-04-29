@@ -48,6 +48,8 @@ import { EvidenceAllListComponent } from "./evidence-all-list/evidence-all-list"
 import { PlayVideoComponent } from "./play-video/play-video";
 import { AttachmentsComponent } from "./attachments/attachments";
 import { ViewDetailComponent } from "./view-detail/view-detail";
+import { EntityListingV2Component } from "./entity-listing-v2/entity-listing-v2";
+import { EntitySolutionsComponent } from "./entity-solutions/entity-solutions";
 
 @NgModule({
   declarations: [
@@ -90,6 +92,8 @@ import { ViewDetailComponent } from "./view-detail/view-detail";
     PlayVideoComponent,
     AttachmentsComponent,
     ViewDetailComponent,
+    EntityListingV2Component,
+    EntitySolutionsComponent,
   ],
   imports: [
     IonicModule,
@@ -139,6 +143,8 @@ import { ViewDetailComponent } from "./view-detail/view-detail";
     PlayVideoComponent,
     AttachmentsComponent,
     ViewDetailComponent,
+    EntityListingV2Component,
+    EntitySolutionsComponent,
   ],
   entryComponents: [
     InputTypeComponent,
@@ -146,12 +152,14 @@ import { ViewDetailComponent } from "./view-detail/view-detail";
     MatrixModalComponent,
     MenuItemComponent,
     EntityListingComponent,
+    EntityListingV2Component,
     GenericMenuPopOverComponent,
     NotificationCardComponent,
     ScoreReportMenusComponent,
     SubmissionActionsComponent,
     PlayVideoComponent,
     ViewDetailComponent,
+    EntitySolutionsComponent,
   ],
   providers: [Network, DatePipe, SlackProvider],
 })

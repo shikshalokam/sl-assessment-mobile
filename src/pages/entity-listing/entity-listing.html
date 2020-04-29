@@ -5,14 +5,11 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <header [title]="assessmentType|translate" [hideBack]="false">
-
-  </header>
+  <header [title]="assessmentType|translate" [hideBack]="false"></header>
 </ion-header>
 
-
-<ion-content >
-  <entity-listing *ngIf="entityList"
+<ion-content>
+  <!-- <entity-listing *ngIf="entityList"
   [entityList]="entityList"  
   (refreshEvent)="refresh($event)"
   [entityType]="'assessments'" 
@@ -21,6 +18,19 @@
   [showMenu]="true"
   (openMenuEvent)="openMenu($event)"
   >
-  </entity-listing>
+  </entity-listing> -->
 
+  <entity-listing-v2
+    *ngIf="entityList"
+    [entityList]="entityList"
+    (refreshEvent)="refresh($event)"
+    [entityType]="'assessments'"
+    [programIndex]="programIndex"
+    (getAssessmentDetailsEvent)="getAssessmentDetails($event)"
+    [showMenu]="true"
+    (openMenuEvent)="openMenu($event)"
+    [programList]="programList"
+    [assessmentType]="assessmentType"
+  >
+  </entity-listing-v2>
 </ion-content>

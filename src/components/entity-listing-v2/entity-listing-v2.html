@@ -1,0 +1,18 @@
+<!-- Generated template for the EntityListingV2Component component -->
+<div *ngFor="let entiti of entityList; let i = index">
+  <!-- <h3 padding class="bold">Program - {{program.name}} ({{program.externalId}})</h3> -->
+  <ion-card>
+    <ion-item
+      text-wrap
+      (click)="gotToSoluions(entity,i,j)"
+      *ngFor="let entity of entiti?.entities; let j = index"
+    >
+      <h4>{{entity.name}}</h4>
+      <hr />
+    </ion-item>
+  </ion-card>
+</div>
+
+<div class="_flex-box msgContainer" *ngIf="!entityList?.length">
+  {{'message.no' | translate}} {{entityType}}
+</div>
