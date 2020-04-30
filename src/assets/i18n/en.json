@@ -145,7 +145,8 @@
         "setting": "Settings",
         "tutorialvideo": "Tutorial Video",
         "evidences": "Evidences",
-        "allObservation": "All Observation"
+        "allObservation": "All Observation",
+        "improvementProjects": "Improvements Projects"
 
     },
     "headings": {
@@ -213,7 +214,9 @@
         "settings": "Settings",
         "solutionList": "Solution List",
         "filter": "Filter",
-        "tutorialvideo": "Tutorial Video"
+        "tutorialvideo": "Tutorial Video",
+        "improvementProjetcs": "Improvement Projects"
+
     },
     "labels": {
         "welcome": "Welcome",
