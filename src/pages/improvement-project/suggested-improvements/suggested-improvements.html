@@ -14,18 +14,77 @@
 <ion-content>
   <!-- if program presenet -->
   <div *ngIf="1">
+    <ion-item-divider color="light">
+      <h4 class="bold" text-wrap>{{solName}}</h4>
+    </ion-item-divider>
     <div>
       <ion-card>
-        <ion-item text-wrap (click)="alert(1)">
-          <div class="_flex-box">
-            <ion-icon name="video" class="logoIcon"></ion-icon>
+        <ion-item text-wrap>
+          <div class="_flex-box" (click)="item=0">
+            <!-- <ion-icon name="play" class="logoIcon"></ion-icon> -->
             <div style="flex: 1;">
-              abc
+              Criteria 1
             </div>
-            <ion-icon name="play" class="menuIcon"></ion-icon>
+            <div class="_flex-box _justify-content-center">
+              <p padding-right>Level 1</p>
+              <ion-icon name="md-arrow-dropdown"></ion-icon>
+            </div>
           </div>
         </ion-item>
       </ion-card>
+      <!-- Improvement list in drop-down -->
+      <div style="margin: 0 22px;" class="panel" [ngClass]="{hide: item!=0}">
+        <ion-item-group>
+          <ion-item-divider>
+            <ion-label>A</ion-label>
+          </ion-item-divider>
+
+          <ion-item>
+            <ion-label>Angola</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Argentina</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Armenia</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </div>
+    </div>
+
+    <div>
+      <ion-card>
+        <ion-item text-wrap>
+          <div class="_flex-box" (click)="item=1">
+            <!-- <ion-icon name="play" class="logoIcon"></ion-icon> -->
+            <div style="flex: 1;">
+              Criteria 1
+            </div>
+            <div class="_flex-box _justify-content-center">
+              <p padding-right>Level 1</p>
+              <ion-icon name="md-arrow-dropdown"></ion-icon>
+            </div>
+          </div>
+        </ion-item>
+      </ion-card>
+      <!-- Improvement list in drop-down -->
+      <div style="margin: 0 22px;" class="panel" [ngClass]="{hide: item !=1}">
+        <ion-item-group>
+          <ion-item-divider>
+            <ion-label>A</ion-label>
+          </ion-item-divider>
+
+          <ion-item>
+            <ion-label>Angola</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Argentina</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Armenia</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </div>
     </div>
   </div>
 

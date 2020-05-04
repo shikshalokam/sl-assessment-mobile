@@ -19,7 +19,7 @@
     </ion-item-divider>
     <div *ngFor="let s of programEntitySol; let i = index">
       <ion-card>
-        <ion-item text-wrap (click)="goToImpSugg(s.solutionId)">
+        <ion-item text-wrap (click)="goToImpSugg(s.solutionId,s.solutionName)">
           <div class="_flex-box">
             <ion-icon name="video" class="logoIcon"></ion-icon>
             <div style="flex: 1;">

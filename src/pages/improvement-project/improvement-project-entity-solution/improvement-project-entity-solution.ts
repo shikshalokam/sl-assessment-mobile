@@ -33,7 +33,7 @@ export class ImprovementProjectEntitySolutionPage {
     console.log("ionViewDidLoad ImprovementProjectEntitySolutionPage");
   }
 
-  goToImpSugg() {
-    this.navCtrl.push(SuggestedImprovementsPage);
+  goToImpSugg(solId, solName) {
+    this.navCtrl.push(SuggestedImprovementsPage, { heading: solName });
   }
 }
