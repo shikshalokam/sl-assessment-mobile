@@ -423,10 +423,7 @@ export class AssessmentServiceProvider {
             programs[programIndex].entities[schoolIndex].solutions[
               assessmentIndex
             ]["_id"],
-          name:
-            programs[programIndex].entities[schoolIndex].solutions[
-              assessmentIndex
-            ]["name"],
+          name: programs[programIndex].entities[schoolIndex]["name"],
           programId: programs[programIndex]._id,
           showMenuArray: showMenuArray,
           solutionId: solutionId,
