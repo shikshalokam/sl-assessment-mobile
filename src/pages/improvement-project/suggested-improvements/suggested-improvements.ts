@@ -22,4 +22,7 @@ export class SuggestedImprovementsPage {
   ionViewDidLoad() {
     console.log("ionViewDidLoad SuggestedImprovementsPage");
   }
+  openBodh(link) {
+    window.open(link, "_system");
+  }
 }
