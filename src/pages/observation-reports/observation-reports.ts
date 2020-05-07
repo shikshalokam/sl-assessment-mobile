@@ -38,6 +38,7 @@ export class ObservationReportsPage {
   reportType: string;
   allQuestions: Array<Object> = [];
   filteredQuestions: Array<any> = [];
+  selectedTab: any;
 
   constructor(
     public navCtrl: NavController,
@@ -54,6 +55,8 @@ export class ObservationReportsPage {
   ) {}
 
   ionViewDidLoad() {
+    this.selectedTab = "questionwise";
+
     this.submissionId = this.navParams.get("submissionId");
     this.observationId = this.navParams.get("observationId");
     this.solutionId = this.navParams.get("solutionId");
@@ -307,5 +310,9 @@ export class ObservationReportsPage {
       entityId: this.entityId,
       questionExternalId: this.allQuestions[index]["questionExternalId"],
     });
+  }
+
+  onTabChange(tabName) {
+    this.selectedTab = tabName;
   }
 }

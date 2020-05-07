@@ -122,7 +122,9 @@
         "filter": "Filter",
         "evidences": "Evidences",
         "remarks": "Remarks",
-        "viewDetails": "View Details"
+        "viewDetails": "View Details",
+        "questionWise": "Question Wise",
+        "criteriaWise": "Criteria Wise"
     },
     "tabs": {
         "home": "Home",
