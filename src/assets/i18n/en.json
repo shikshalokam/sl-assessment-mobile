@@ -122,7 +122,8 @@
         "filter": "Filter",
         "evidences": "Evidences",
         "remarks": "Remarks",
-        "viewDetails": "View Details"
+        "viewDetails": "View Details",
+        "clickHereToImprove": "Click Here To Improve"
     },
     "tabs": {
         "home": "Home",

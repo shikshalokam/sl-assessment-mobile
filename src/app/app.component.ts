@@ -105,7 +105,7 @@ export class MyApp {
     },
     {
       name: "improvementProjects",
-      icon: "clipboard",
+      image: "clipboard",
       component: ImprovementProjectPage,
       active: false,
       show: true,

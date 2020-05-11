@@ -1,6 +1,9 @@
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams } from "ionic-angular";
 import { ImprovementProjectEntityPage } from "./improvement-project-entity/improvement-project-entity";
+import { ApiProvider } from "../../providers/api/api";
+import { UtilsProvider } from "../../providers/utils/utils";
+import { AppConfigs } from "../../providers/appConfig";
 
 /**
  * Generated class for the ImprovementProjectPage page.
@@ -21,13 +24,48 @@ export class ImprovementProjectPage {
       programName: "NIQSA Self Assessment",
     },
   ];
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private apiService: ApiProvider,
+    private utils: UtilsProvider
+  ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad ImprovementProjectPage");
+    this.getAssessmentPrograms();
   }
 
   goToIpEntity(programId, programName) {
-    this.navCtrl.push(ImprovementProjectEntityPage, { heading: programName });
+    this.navCtrl.push(ImprovementProjectEntityPage, {
+      heading: programName,
+      programId: programId,
+    });
+  }
+
+  getAssessmentPrograms() {
+    let url = AppConfigs.improvementProject.listAssessmentPrograms;
+    let payload = {};
+    this.utils.startLoader();
+    this.apiService.httpPost(
+      url,
+      payload,
+      (success) => {
+        this.utils.stopLoader();
+        console.log(JSON.stringify(success));
+
+        if (success.result === true && success.data) {
+          this.programList = success.data;
+        } else {
+          this.utils.openToast(success.data);
+        }
+      },
+      (error) => {
+        this.utils.openToast(error.message);
+
+        this.utils.stopLoader();
+      },
+      { baseUrl: "dhiti", version: "v1" }
+    );
   }
 }

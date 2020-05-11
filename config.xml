@@ -204,6 +204,11 @@
     <allow-navigation href="http://192.168.1.2:8101" />
     <allow-navigation href="http://192.168.1.2:8102" />
     <allow-navigation href="http://192.168.1.2:8103" />
+    <allow-navigation href="http://192.168.1.2:8104" />
+    <allow-navigation href="http://192.168.1.2:8105" />
+    <allow-navigation href="http://192.168.1.2:8106" />
+    <allow-navigation href="http://192.168.1.2:8107" />
+    <allow-navigation href="http://192.168.1.2:8108" />
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="8.1.0" />
 </widget>

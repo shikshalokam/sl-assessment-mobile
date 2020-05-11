@@ -25,8 +25,15 @@ export class ImprovementProjectEntitySolutionPage {
     },
   ];
   entityName: any;
+  entityId: any;
+  programId: any;
+  entityType: any;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.entityName = this.navParams.get("heading");
+    this.entityId = this.navParams.get("entityId");
+    this.entityType = this.navParams.get("entityType");
+    this.programId = this.navParams.get("programId");
+    this.programEntitySol = this.navParams.get("solutions");
   }
 
   ionViewDidLoad() {
@@ -34,6 +41,12 @@ export class ImprovementProjectEntitySolutionPage {
   }
 
   goToImpSugg(solId, solName) {
-    this.navCtrl.push(SuggestedImprovementsPage, { heading: solName });
+    this.navCtrl.push(SuggestedImprovementsPage, {
+      heading: solName,
+      solutionId: solId,
+      entityId: this.entityId,
+      entityType: this.entityType,
+      programId: this.programId,
+    });
   }
 }

@@ -1,6 +1,9 @@
 import { Component } from "@angular/core";
 import { NavController, NavParams } from "ionic-angular";
 import { ImprovementProjectEntitySolutionPage } from "../improvement-project-entity-solution/improvement-project-entity-solution";
+import { ApiProvider } from "../../../providers/api/api";
+import { UtilsProvider } from "../../../providers/utils/utils";
+import { AppConfigs } from "../../../providers/appConfig";
 
 /**
  * Generated class for the ImprovementProjectEnityPage page.
@@ -15,8 +18,15 @@ import { ImprovementProjectEntitySolutionPage } from "../improvement-project-ent
 })
 export class ImprovementProjectEntityPage {
   programName: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  programId: any;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private apiService: ApiProvider,
+    private utils: UtilsProvider
+  ) {
     this.programName = this.navParams.get("heading");
+    this.programId = this.navParams.get("programId");
   }
   programEntity = [
     {
@@ -48,11 +58,42 @@ export class ImprovementProjectEntityPage {
   ];
   ionViewDidLoad() {
     console.log("ionViewDidLoad ImprovementProjectEnityPage");
+    this.getAssessmentEntity();
   }
 
-  goToIpEntitySol(entityId, entityName) {
+  goToIpEntitySol(entityId, entityName, solutions, entityType) {
     this.navCtrl.push(ImprovementProjectEntitySolutionPage, {
       heading: entityName,
+      solutions: solutions,
+      entityId: entityId,
+      entityType: entityType,
+      programId: this.programId,
     });
+  }
+
+  getAssessmentEntity() {
+    let url = AppConfigs.improvementProject.listAssessmentEntity;
+    let payload = { programId: this.programId };
+    this.utils.startLoader();
+    this.apiService.httpPost(
+      url,
+      payload,
+      (success) => {
+        this.utils.stopLoader();
+        console.log(JSON.stringify(success));
+
+        if (success.result === true && success.data) {
+          this.programEntity = success.data;
+        } else {
+          this.utils.openToast(success.data);
+        }
+      },
+      (error) => {
+        this.utils.openToast(error.message);
+
+        this.utils.stopLoader();
+      },
+      { baseUrl: "dhiti", version: "v1" }
+    );
   }
 }

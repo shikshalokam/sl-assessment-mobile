@@ -20,7 +20,10 @@
     </ion-item-divider>
     <div *ngFor="let e of programEntity; let i = index">
       <ion-card>
-        <ion-item text-wrap (click)="goToIpEntitySol(e.entityId,e.entityName)">
+        <ion-item
+          text-wrap
+          (click)="goToIpEntitySol(e.entityId,e.entityName,e.solutions,e.entityType)"
+        >
           <div class="_flex-box">
             <ion-icon name="video" class="logoIcon"></ion-icon>
             <div style="flex: 1;">
