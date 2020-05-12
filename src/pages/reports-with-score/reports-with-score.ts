@@ -225,7 +225,10 @@ export class ReportsWithScorePage {
   getObservationReportUrl() {
     this.utils.startLoader();
     // + "type=submission&"
-    let url = AppConfigs.observationReportsWithScore.getReportsPdfUrls;
+    let url =
+      this.selectedTab == "questionwise"
+        ? AppConfigs.observationReportsWithScore.getReportsPdfUrls
+        : AppConfigs.criteriaReportsWithScore.getReportsPdfUrls;
     const timeStamp =
       "_" + this.datepipe.transform(new Date(), "yyyy-MMM-dd-HH-mm-ss a");
     if (this.solutionId) {
@@ -256,7 +259,13 @@ export class ReportsWithScorePage {
       },
       {
         baseUrl: "dhiti",
-        version: this.observationId && this.entityId ? "v2" : "v1",
+        version:
+          this.selectedTab == "criteriawise"
+            ? "v1"
+            : this.observationId && this.entityId
+            ? "v2"
+            : "v1",
+        // version: this.observationId && this.entityId ? "v2" : "v1",
       }
     );
   }
