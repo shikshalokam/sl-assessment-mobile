@@ -48,7 +48,6 @@ import { EvidenceAllListComponent } from "./evidence-all-list/evidence-all-list"
 import { PlayVideoComponent } from "./play-video/play-video";
 import { AttachmentsComponent } from "./attachments/attachments";
 import { ViewDetailComponent } from "./view-detail/view-detail";
-import { ObservationReportHeaderFilterComponent } from "../pages/observation-reports/observation-report-header-filter/observation-report-header-filter";
 
 @NgModule({
   declarations: [
@@ -91,7 +90,6 @@ import { ObservationReportHeaderFilterComponent } from "../pages/observation-rep
     PlayVideoComponent,
     AttachmentsComponent,
     ViewDetailComponent,
-    ObservationReportHeaderFilterComponent,
   ],
   imports: [
     IonicModule,
@@ -141,7 +139,6 @@ import { ObservationReportHeaderFilterComponent } from "../pages/observation-rep
     PlayVideoComponent,
     AttachmentsComponent,
     ViewDetailComponent,
-    ObservationReportHeaderFilterComponent,
   ],
   entryComponents: [
     InputTypeComponent,

@@ -16,6 +16,7 @@ import { AndroidPermissions } from "@ionic-native/android-permissions";
 import { DatePipe } from "@angular/common";
 import { QuestionListPage } from "../question-list/question-list";
 import { EvidenceAllListComponent } from "../../components/evidence-all-list/evidence-all-list";
+import { CriteriaListPage } from "../criteria-list/criteria-list";
 
 declare var cordova: any;
 /**
@@ -46,6 +47,10 @@ export class ReportsWithScorePage {
   reportType: string;
   allQuestions: Array<Object> = [];
   filteredQuestions: Array<any> = [];
+  selectedTab: string;
+  filteredCriterias: any = [];
+  allCriterias: any = [];
+  reportObjCriteria: any;
 
   constructor(
     public navCtrl: NavController,
@@ -62,6 +67,8 @@ export class ReportsWithScorePage {
   ) {}
 
   ionViewDidEnter() {
+    this.selectedTab = "questionwise";
+
     this.submissionId = this.navParams.get("submissionId");
     this.observationId = this.navParams.get("observationId");
     this.entityId = this.navParams.get("entityId");
@@ -122,15 +129,72 @@ export class ReportsWithScorePage {
         }
         this.utils.stopLoader();
         !this.filteredQuestions.length ? this.markAllQuestionSelected() : null;
+        this.getObservationCriteriaReports();
       },
       (error) => {
         this.error = "No data found";
         this.utils.openToast(error.message);
         this.utils.stopLoader();
+        this.getObservationCriteriaReports();
       },
       {
         baseUrl: "dhiti",
         version: this.observationId && this.entityId ? "v2" : "v1",
+      }
+    );
+  }
+
+  getObservationCriteriaReports() {
+    this.utils.startLoader();
+    let url;
+
+    if (this.entityType && this.reportType) {
+      this.payload.solutionId = this.solutionId;
+      this.payload.entityType = this.entityType;
+      this.payload.reportType = this.reportType;
+      //  url = AppConfigs.observationReportsWithScore.solutionReport;
+      // url = AppConfigs.criteriaReports.entitySolutionReport;
+    } else if (this.submissionId) {
+      url = AppConfigs.criteriaReportsWithScore.instanceReport;
+    } else if (!this.submissionId && !this.entityId) {
+      url = AppConfigs.criteriaReportsWithScore.observationReport;
+    } else {
+      url = AppConfigs.criteriaReportsWithScore.entityReport;
+    }
+
+    this.payload.filter = {
+      criteriaId: this.filteredCriterias,
+    };
+
+    // this.payload.filter = {
+    //   questionId: this.filteredQuestions,
+    // };
+    // console.log(JSON.stringify(this.payload));
+    this.apiService.httpPost(
+      url,
+      this.payload,
+      (success) => {
+        //this will be initialized only on page load
+        this.allCriterias =
+          success.allCriterias && !this.allCriterias.length
+            ? success.allCriterias
+            : this.allCriterias;
+        if (success) {
+          this.reportObjCriteria = success;
+        } else {
+          this.error = "No data found";
+        }
+
+        this.utils.stopLoader();
+        !this.filteredCriterias.length ? this.markAllCriteriaSelected() : null;
+      },
+      (error) => {
+        this.error = "No data found";
+        this.utils.stopLoader();
+      },
+      {
+        baseUrl: "dhiti",
+        version: "v1",
       }
     );
   }
@@ -241,6 +305,12 @@ export class ReportsWithScorePage {
     }
   }
 
+  markAllCriteriaSelected() {
+    for (const criteria of this.allCriterias) {
+      this.filteredCriterias.push(criteria["criteriaId"]);
+    }
+  }
+
   openFilter() {
     const modal = this.modal.create(QuestionListPage, {
       allQuestions: this.allQuestions,
@@ -260,6 +330,25 @@ export class ReportsWithScorePage {
     });
   }
 
+  openCriteriaFilter() {
+    const modal = this.modal.create(CriteriaListPage, {
+      allCriterias: this.allCriterias,
+      filteredCriterias: JSON.parse(JSON.stringify(this.filteredCriterias)),
+    });
+    modal.present();
+    modal.onDidDismiss((response) => {
+      if (
+        response &&
+        response.action === "updated" &&
+        JSON.stringify(response.filter) !==
+          JSON.stringify(this.filteredCriterias)
+      ) {
+        this.filteredCriterias = response.filter;
+        this.getObservationReports();
+      }
+    });
+  }
+
   allEvidence(index) {
     console.log(this.allQuestions[index]);
     this.navCtrl.push(EvidenceAllListComponent, {
@@ -268,5 +357,9 @@ export class ReportsWithScorePage {
       entityId: this.entityId,
       questionExternalId: this.allQuestions[index]["questionExternalId"],
     });
+  }
+
+  onTabChange(tabName) {
+    this.selectedTab = tabName;
   }
 }
