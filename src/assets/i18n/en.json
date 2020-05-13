@@ -122,7 +122,9 @@
         "filter": "Filter",
         "evidences": "Evidences",
         "remarks": "Remarks",
-        "viewDetails": "View Details"
+        "viewDetails": "View Details",
+        "questionWise": "Question Wise",
+        "criteriaWise": "Criteria Wise"
     },
     "tabs": {
         "home": "Home",
@@ -278,7 +280,8 @@
         "noUnreadNotifications": "You have no new Notifications!",
         "noObservationfound": "No observation found",
         "selectFilter": "Select the questions to filter Reports",
-        "noVideo": "No videos available"
+        "noVideo": "No videos available",
+        "selectCriteraFilter": "Select the criterias to filter Reports"
     },
     "toastMessage": {
         "selectSolution": "Select a Solution",
