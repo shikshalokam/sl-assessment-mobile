@@ -142,12 +142,10 @@ export class ObservationReportsPage {
         }
         this.utils.stopLoader();
         !this.filteredQuestions.length ? this.markAllQuestionSelected() : null;
-        this.getObservationCriteriaReports();
       },
       (error) => {
         this.error = "No data found";
         this.utils.stopLoader();
-        this.getObservationCriteriaReports();
       },
       {
         baseUrl: "dhiti",
@@ -411,7 +409,7 @@ export class ObservationReportsPage {
 
   onTabChange(tabName) {
     this.fab.close();
-
     this.selectedTab = tabName;
+    !this.allCriterias.length ? this.getObservationCriteriaReports() : null;
   }
 }
