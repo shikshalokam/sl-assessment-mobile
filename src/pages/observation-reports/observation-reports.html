@@ -194,7 +194,7 @@
     {{reportObj?.data}}
   </div>
 
-  <ion-fab bottom right *ngIf="reportObj?.response">
+  <ion-fab bottom right *ngIf="reportObj?.response" #fab>
     <button ion-fab mini>
       <ion-icon name="more"></ion-icon>
     </button>

@@ -1,9 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   NavController,
   NavParams,
   Platform,
   ModalController,
+  FabContainer,
 } from "ionic-angular";
 import { ApiProvider } from "../../providers/api/api";
 import { AppConfigs } from "../../providers/appConfig";
@@ -43,6 +44,7 @@ export class ObservationReportsPage {
   reportObjCriteria: any;
   allCriterias: any = [];
   filteredCriterias: any = [];
+  @ViewChild(FabContainer) fab: FabContainer;
 
   constructor(
     public navCtrl: NavController,
@@ -408,6 +410,8 @@ export class ObservationReportsPage {
   }
 
   onTabChange(tabName) {
+    this.fab.close();
+
     this.selectedTab = tabName;
   }
 }
