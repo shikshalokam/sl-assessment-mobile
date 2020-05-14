@@ -176,7 +176,7 @@ export class ObservationReportsPage {
     }
 
     this.payload.filter = {
-      criteriaId: this.filteredCriterias,
+      criteria: this.filteredCriterias,
     };
 
     // this.payload.filter = {
@@ -220,7 +220,7 @@ export class ObservationReportsPage {
 
   markAllCriteriaSelected() {
     for (const criteria of this.allCriterias) {
-      this.filteredCriterias.push(criteria["criteriaId"]);
+      this.filteredCriterias.push(criteria["criteria"]);
     }
   }
 

@@ -163,7 +163,7 @@ export class ReportsWithScorePage {
     }
 
     this.payload.filter = {
-      criteriaId: this.filteredCriterias,
+      criteria: this.filteredCriterias,
     };
 
     // this.payload.filter = {
@@ -316,7 +316,7 @@ export class ReportsWithScorePage {
 
   markAllCriteriaSelected() {
     for (const criteria of this.allCriterias) {
-      this.filteredCriterias.push(criteria["criteriaId"]);
+      this.filteredCriterias.push(criteria["criteria"]);
     }
   }
 
