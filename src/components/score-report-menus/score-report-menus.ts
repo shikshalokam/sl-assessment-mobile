@@ -63,6 +63,7 @@ export class ScoreReportMenusComponent {
   viewObservationReportsWithoutScore() {
     const payload = {
       observationId: this.observationDetail.observationId,
+      entityType: this.entityType,
     };
     this.viewCtrl.dismiss();
     this.appCtrl.getRootNav().push(ObservationReportsPage, payload);
@@ -70,6 +71,7 @@ export class ScoreReportMenusComponent {
   viewObservationReportWithScore() {
     const payload = {
       observationId: this.observationDetail.observationId,
+      entityType: this.entityType,
     };
     this.viewCtrl.dismiss();
     this.appCtrl.getRootNav().push("ReportsWithScorePage", payload);

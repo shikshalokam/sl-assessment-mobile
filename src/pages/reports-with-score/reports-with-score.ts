@@ -107,6 +107,7 @@ export class ReportsWithScorePage {
       this.payload.entityType = this.entityType;
       url = AppConfigs.observationReportsWithScore.entityReport;
     } else {
+      this.payload.entityType = this.entityType;
       url = AppConfigs.observationReportsWithScore.observationReport;
     }
     this.payload.filter = {
@@ -157,6 +158,8 @@ export class ReportsWithScorePage {
     } else if (this.submissionId) {
       url = AppConfigs.criteriaReportsWithScore.instanceReport;
     } else if (!this.submissionId && !this.entityId) {
+      this.payload.entityType = this.entityType;
+
       url = AppConfigs.criteriaReportsWithScore.observationReport;
     } else {
       url = AppConfigs.criteriaReportsWithScore.entityReport;
@@ -316,7 +319,7 @@ export class ReportsWithScorePage {
 
   markAllCriteriaSelected() {
     for (const criteria of this.allCriterias) {
-      this.filteredCriterias.push(criteria["criteria"]);
+      this.filteredCriterias.push(criteria["criteriaId"]);
     }
   }
 
@@ -353,7 +356,7 @@ export class ReportsWithScorePage {
           JSON.stringify(this.filteredCriterias)
       ) {
         this.filteredCriterias = response.filter;
-        this.getObservationReports();
+        this.getObservationCriteriaReports();
       }
     });
   }

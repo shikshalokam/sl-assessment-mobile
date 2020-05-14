@@ -220,7 +220,7 @@ export class ObservationReportsPage {
 
   markAllCriteriaSelected() {
     for (const criteria of this.allCriterias) {
-      this.filteredCriterias.push(criteria["criteria"]);
+      this.filteredCriterias.push(criteria["criteriaId"]);
     }
   }
 
@@ -392,7 +392,7 @@ export class ObservationReportsPage {
           JSON.stringify(this.filteredCriterias)
       ) {
         this.filteredCriterias = response.filter;
-        this.getObservationReports();
+        this.getObservationCriteriaReports();
       }
     });
   }
@@ -404,6 +404,7 @@ export class ObservationReportsPage {
       observationId: this.observationId,
       entityId: this.entityId,
       questionExternalId: this.allQuestions[index]["questionExternalId"],
+      entityType: this.entityType,
     });
   }
 
