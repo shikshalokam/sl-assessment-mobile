@@ -19,11 +19,10 @@
         border: 1px solid #ccc;
         margin: 10px 10px;
       "
-      *ngIf="reportObj?.observationName || reportObj?.observationName"
+      *ngIf="reportObj?.observationName"
     >
       {{reportObj?.observationName}} {{reportObj?.entityName ? ' > ' : ''}}
-      {{reportObj?.entityName }} {{reportObj?.observationName}}
-      {{reportObj?.schoolName}}
+      {{reportObj.entityName?reportObj.entityName: reportObj?.schoolName}}
     </div>
 
     <!-- Scores details bar -->
@@ -52,16 +51,18 @@
         >
       </ion-row>
     </ion-grid>
-    <!-- *ngIf="reportObj?.entityType && reportObj?.totalEntities" -->
-    <ion-grid>
+
+    <ion-grid *ngIf="reportObj?.entityType && reportObj?.totalEntities">
       <ion-row style="text-align: center;">
         <ion-col>
-          {{reportObj?.entityType}} : {{reportObj?.totalEntities}}</ion-col
+          {{'Total ' + reportObj?.entityType}} :
+          {{reportObj?.totalEntities}}</ion-col
         >
-        <!-- <ion-col>
-          {{'labels.schoolsObserved' | translate}} :
-          {{reportObj?.schoolsObserved}}</ion-col
-        >-->
+        <ion-col>
+          {{ reportObj?.entityType + ' observed' }} :
+          {{reportObj.schoolsObserved ?
+          reportObj.schoolsObserved:reportObj.entitiesObserved}}</ion-col
+        >
       </ion-row>
     </ion-grid>
     <ion-grid *ngIf="reportObj?.totalObservations">

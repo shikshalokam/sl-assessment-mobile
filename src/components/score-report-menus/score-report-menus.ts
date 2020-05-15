@@ -79,16 +79,18 @@ export class ScoreReportMenusComponent {
   actionsWithScore() {
     this.viewCtrl.dismiss();
     this.showActionsheet = false;
-    this.appCtrl
-      .getRootNav()
-      .push("ReportsWithScorePage", { submissionId: this.submission._id });
+    this.appCtrl.getRootNav().push("ReportsWithScorePage", {
+      submissionId: this.submission._id,
+      entityType: this.entityType,
+    });
   }
   actions() {
     this.viewCtrl.dismiss();
     this.showActionsheet = false;
-    this.appCtrl
-      .getRootNav()
-      .push(ObservationReportsPage, { submissionId: this.submission._id });
+    this.appCtrl.getRootNav().push(ObservationReportsPage, {
+      submissionId: this.submission._id,
+      entityType: this.entityType,
+    });
   }
   viewEntityReportsWithScore() {
     this.viewCtrl.dismiss();

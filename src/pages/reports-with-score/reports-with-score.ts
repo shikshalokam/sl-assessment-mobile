@@ -368,6 +368,7 @@ export class ReportsWithScorePage {
       observationId: this.observationId,
       entityId: this.entityId,
       questionExternalId: this.allQuestions[index]["questionExternalId"],
+      entityType: this.entityType,
     });
   }
 
