@@ -95,6 +95,21 @@
 
     <div [ngSwitch]="selectedTab">
       <div *ngSwitchCase="'questionwise'">
+        <div
+          *ngIf="allQuestions?.length"
+          class="_flex-box _justify-content-end"
+        >
+          <button
+            ion-button
+            icon-start
+            (click)="openFilter()"
+            margin
+            style="float: right;"
+          >
+            <ion-icon name="options"></ion-icon>
+            {{'buttons.filter'|translate}}
+          </button>
+        </div>
         <div *ngFor="let element of reportObj?.response;let i = index">
           <ion-card>
             <pie-chart
