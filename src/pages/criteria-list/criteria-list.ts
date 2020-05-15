@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { NavController, NavParams, ViewController } from "ionic-angular";
+import { UtilsProvider } from "../../providers/utils/utils";
 
 /**
  * Generated class for the CriteriaListPage page.
@@ -19,7 +20,8 @@ export class CriteriaListPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private viewCntrl: ViewController
+    private viewCntrl: ViewController,
+    private utils: UtilsProvider
   ) {}
 
   ionViewDidLoad() {
@@ -41,10 +43,12 @@ export class CriteriaListPage {
   }
 
   applyFilter() {
-    this.viewCntrl.dismiss({
-      filter: this.filteredCriterias,
-      action: "updated",
-    });
+    !this.filteredCriterias.length
+      ? this.utils.openToast("Select at least one criteria")
+      : this.viewCntrl.dismiss({
+          filter: this.filteredCriterias,
+          action: "updated",
+        });
   }
 
   close() {
