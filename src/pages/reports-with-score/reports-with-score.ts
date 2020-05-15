@@ -107,6 +107,7 @@ export class ReportsWithScorePage {
       this.payload.entityType = this.entityType;
       url = AppConfigs.observationReportsWithScore.entityReport;
     } else {
+      this.payload.entityType = this.entityType;
       url = AppConfigs.observationReportsWithScore.observationReport;
     }
     this.payload.filter = {
@@ -157,13 +158,15 @@ export class ReportsWithScorePage {
     } else if (this.submissionId) {
       url = AppConfigs.criteriaReportsWithScore.instanceReport;
     } else if (!this.submissionId && !this.entityId) {
+      this.payload.entityType = this.entityType;
+
       url = AppConfigs.criteriaReportsWithScore.observationReport;
     } else {
       url = AppConfigs.criteriaReportsWithScore.entityReport;
     }
 
     this.payload.filter = {
-      criteriaId: this.filteredCriterias,
+      criteria: this.filteredCriterias,
     };
 
     // this.payload.filter = {
@@ -353,7 +356,7 @@ export class ReportsWithScorePage {
           JSON.stringify(this.filteredCriterias)
       ) {
         this.filteredCriterias = response.filter;
-        this.getObservationReports();
+        this.getObservationCriteriaReports();
       }
     });
   }
@@ -365,6 +368,7 @@ export class ReportsWithScorePage {
       observationId: this.observationId,
       entityId: this.entityId,
       questionExternalId: this.allQuestions[index]["questionExternalId"],
+      entityType: this.entityType,
     });
   }
 

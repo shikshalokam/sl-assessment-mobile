@@ -176,7 +176,7 @@ export class ObservationReportsPage {
     }
 
     this.payload.filter = {
-      criteriaId: this.filteredCriterias,
+      criteria: this.filteredCriterias,
     };
 
     // this.payload.filter = {
@@ -392,7 +392,7 @@ export class ObservationReportsPage {
           JSON.stringify(this.filteredCriterias)
       ) {
         this.filteredCriterias = response.filter;
-        this.getObservationReports();
+        this.getObservationCriteriaReports();
       }
     });
   }
@@ -404,6 +404,7 @@ export class ObservationReportsPage {
       observationId: this.observationId,
       entityId: this.entityId,
       questionExternalId: this.allQuestions[index]["questionExternalId"],
+      entityType: this.entityType,
     });
   }
 
