@@ -119,8 +119,9 @@ import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { EvidenceAllListComponent } from "./../components/evidence-all-list/evidence-all-list";
 import { PhotoViewer } from "@ionic-native/photo-viewer";
 import { StreamingMedia } from "@ionic-native/streaming-media";
-import { ImprovementProjectPage } from "../pages/improvement-project/improvement-project";
 import { ImprovementProjectPageModule } from "../pages/improvement-project/improvement-project.module";
+import { AppAvailability } from "@ionic-native/app-availability";
+
 @NgModule({
   declarations: [
     MyApp,
@@ -286,6 +287,7 @@ import { ImprovementProjectPageModule } from "../pages/improvement-project/impro
     ScreenOrientation,
     PhotoViewer,
     StreamingMedia,
+    AppAvailability,
   ],
 })
 export class AppModule {}

@@ -18,11 +18,9 @@
       <ion-card>
         <ion-item text-wrap (click)="goToIpEntity(p.programId,p.programName)">
           <div class="_flex-box">
-            <ion-icon name="video" class="logoIcon"></ion-icon>
             <div style="flex: 1;">
               {{p.programName}}
             </div>
-            <ion-icon name="play" class="menuIcon"></ion-icon>
           </div>
         </ion-item>
       </ion-card>
@@ -32,7 +30,7 @@
   <!-- if program not present -->
   <div *ngIf="!programList?.length">
     <div class="ion-diagnostics-sheet-title">
-      <h3>{{'message.noVideo' | translate}}</h3>
+      <h3>{{'message.noProgramsFound' | translate}}</h3>
     </div>
   </div>
 </ion-content>

@@ -14,16 +14,7 @@ import { SuggestedImprovementsPage } from "../suggested-improvements/suggested-i
   templateUrl: "improvement-project-entity-solution.html",
 })
 export class ImprovementProjectEntitySolutionPage {
-  programEntitySol = [
-    {
-      solutionId: "5e33d0efc41ba34cd568869d",
-      solutionName: "NIQSA Self Assessment",
-    },
-    {
-      solutionId: "5e33d0efc41ba34cd568869f",
-      solutionName: "NIQSA Self Assessment - 2",
-    },
-  ];
+  programEntitySol: any;
   entityName: any;
   entityId: any;
   programId: any;

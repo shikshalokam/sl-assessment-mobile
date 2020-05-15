@@ -1,8 +1,10 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { NavController, NavParams, Platform } from "ionic-angular";
 import { ApiProvider } from "../../../providers/api/api";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { AppConfigs } from "../../../providers/appConfig";
+import { AppAvailability } from "@ionic-native/app-availability";
+import { Market } from "@ionic-native/market";
 
 /**
  * Generated class for the SuggestedImprovementsPage page.
@@ -27,7 +29,10 @@ export class SuggestedImprovementsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private apiService: ApiProvider,
-    private utils: UtilsProvider
+    private utils: UtilsProvider,
+    private platform: Platform,
+    private appAvailability: AppAvailability,
+    private market: Market
   ) {
     this.solName = this.navParams.get("heading");
     this.solutionId = this.navParams.get("solutionId");
@@ -72,7 +77,37 @@ export class SuggestedImprovementsPage {
     );
   }
 
-  openBodh(link) {
-    window.open(link, "_system");
+  openUnnati(id) {
+    let app;
+    const unnati = AppConfigs.unnatiPackage;
+
+    if (this.platform.is("ios")) {
+      app = unnati + "://";
+    } else if (this.platform.is("android")) {
+      app = "org.shikshalokam." + unnati;
+    }
+
+    this.appAvailability.check(app).then(
+      (yes: boolean) => {
+        console.log(
+          "unnati://shikshalokam.org/project-view/template-view/" + id
+        );
+        window.open(
+          "unnati://shikshalokam.org/project-view/template-view/" + id,
+          "_system"
+        );
+      },
+      (no: boolean) => {
+        // if (this.platform.is("ios")) {
+        //   // app = unnati + "://";
+        // } else if (this.platform.is("android")) {
+        //   window.open(
+        //     `https://play.google.com/store/apps/details?id=org.shikshalokam.${unnati}&hl=en`,
+        //     "_system"
+        //   );
+        // }
+        this.market.open("org.shikshalokam.unnati");
+      }
+    );
   }
 }

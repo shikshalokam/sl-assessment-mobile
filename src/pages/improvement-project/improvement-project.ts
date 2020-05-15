@@ -18,12 +18,7 @@ import { AppConfigs } from "../../providers/appConfig";
   templateUrl: "improvement-project.html",
 })
 export class ImprovementProjectPage {
-  programList = [
-    {
-      programId: "5e33d0c44296d89fbde17456",
-      programName: "NIQSA Self Assessment",
-    },
-  ];
+  programList: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,

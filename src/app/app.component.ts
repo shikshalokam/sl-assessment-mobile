@@ -89,6 +89,13 @@ export class MyApp {
       show: false,
     },
     {
+      name: "improvementProjects",
+      image: "clipboard",
+      component: ImprovementProjectPage,
+      active: false,
+      show: false,
+    },
+    {
       name: "faqs",
       icon: "help",
       // component: FaqPage,
@@ -103,13 +110,7 @@ export class MyApp {
       active: false,
       show: true,
     },
-    {
-      name: "improvementProjects",
-      image: "clipboard",
-      component: ImprovementProjectPage,
-      active: false,
-      show: true,
-    },
+
     {
       name: "about",
       icon: "information-circle",
@@ -162,7 +163,10 @@ export class MyApp {
     this.sideMenuSubscription = this.sideMenuProvide.$showDashboard.subscribe(
       (showDashboard) => {
         for (const page of this.allPages) {
-          if (page["name"] === "dashboard") {
+          if (
+            page["name"] === "dashboard" ||
+            page["name"] === "improvementProjects"
+          ) {
             page["show"] = showDashboard;
           }
         }
