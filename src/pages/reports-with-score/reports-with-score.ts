@@ -53,6 +53,7 @@ export class ReportsWithScorePage {
   allCriterias: any = [];
   reportObjCriteria: any;
   @ViewChild(FabContainer) fab: FabContainer;
+  from: any;
 
   constructor(
     public navCtrl: NavController,
@@ -77,6 +78,8 @@ export class ReportsWithScorePage {
     this.solutionId = this.navParams.get("solutionId");
     this.entityType = this.navParams.get("entityType");
     this.reportType = this.navParams.get("reportType");
+    this.from = this.navParams.get("from");
+
     this.payload = {
       entityId: this.entityId,
       submissionId: this.submissionId,
