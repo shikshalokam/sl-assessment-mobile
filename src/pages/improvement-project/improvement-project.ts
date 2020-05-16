@@ -18,7 +18,7 @@ import { AppConfigs } from "../../providers/appConfig";
   templateUrl: "improvement-project.html",
 })
 export class ImprovementProjectPage {
-  programList: any;
+  programList: any[];
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -27,8 +27,8 @@ export class ImprovementProjectPage {
   ) {}
 
   ionViewDidLoad() {
-    console.log("ionViewDidLoad ImprovementProjectPage");
     this.getAssessmentPrograms();
+    console.log("ionViewDidLoad ImprovementProjectPage");
   }
 
   goToIpEntity(programId, programName) {
@@ -52,10 +52,12 @@ export class ImprovementProjectPage {
         if (success.result === true && success.data) {
           this.programList = success.data;
         } else {
+          this.programList = [];
           this.utils.openToast(success.data);
         }
       },
       (error) => {
+        this.programList = [];
         this.utils.openToast(error.message);
 
         this.utils.stopLoader();

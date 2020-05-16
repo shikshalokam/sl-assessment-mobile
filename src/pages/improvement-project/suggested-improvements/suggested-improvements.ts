@@ -66,9 +66,11 @@ export class SuggestedImprovementsPage {
           this.improvementProject = success.data;
         } else {
           this.utils.openToast(success.data);
+          this.improvementProject = [];
         }
       },
       (error) => {
+        this.improvementProject = [];
         this.utils.openToast(error.message);
 
         this.utils.stopLoader();

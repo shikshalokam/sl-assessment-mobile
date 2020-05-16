@@ -51,7 +51,7 @@
   </div>
 
   <!-- if program not present -->
-  <div *ngIf="!improvementProject?.length">
+  <div *ngIf="improvementProject && !improvementProject?.length">
     <div class="ion-diagnostics-sheet-title">
       <h3>{{'message.noImpovementProjectFound' | translate}}</h3>
     </div>

@@ -58,10 +58,12 @@ export class ImprovementProjectEntityPage {
         if (success.result === true && success.data) {
           this.programEntity = success.data;
         } else {
+          this.programEntity = [];
           this.utils.openToast(success.data);
         }
       },
       (error) => {
+        this.programEntity = [];
         this.utils.openToast(error.message);
 
         this.utils.stopLoader();

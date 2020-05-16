@@ -5,10 +5,7 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <header
-    [title]="'headings.improvementProjetcs'|translate"
-    [hideBack]="false"
-  ></header>
+  <header [title]="'headings.entityList'|translate" [hideBack]="false"></header>
 </ion-header>
 
 <ion-content>
@@ -36,7 +33,7 @@
   </div>
 
   <!-- if program not present -->
-  <div *ngIf="!programEntity?.length">
+  <div *ngIf="programEntity && !programEntity?.length">
     <div class="ion-diagnostics-sheet-title">
       <h3>{{'message.noEntity' | translate}}</h3>
     </div>
