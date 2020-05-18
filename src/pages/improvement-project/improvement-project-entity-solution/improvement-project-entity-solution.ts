@@ -20,11 +20,12 @@ export class ImprovementProjectEntitySolutionPage {
   programId: any;
   entityType: any;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.entityName = this.navParams.get("heading");
-    this.entityId = this.navParams.get("entityId");
-    this.entityType = this.navParams.get("entityType");
-    this.programId = this.navParams.get("programId");
-    this.programEntitySol = this.navParams.get("solutions");
+    let dataObj = this.navParams.get("dataObj");
+    this.entityName = dataObj.heading;
+    this.entityId = dataObj.entityId;
+    this.entityType = dataObj.entityType;
+    this.programId = dataObj.programId;
+    this.programEntitySol = dataObj.solutions;
   }
 
   ionViewDidLoad() {
@@ -32,12 +33,13 @@ export class ImprovementProjectEntitySolutionPage {
   }
 
   goToImpSugg(solId, solName) {
-    this.navCtrl.push(SuggestedImprovementsPage, {
+    let dataObj = {
       heading: solName,
       solutionId: solId,
       entityId: this.entityId,
       entityType: this.entityType,
       programId: this.programId,
-    });
+    };
+    this.navCtrl.push(SuggestedImprovementsPage, { dataObj });
   }
 }

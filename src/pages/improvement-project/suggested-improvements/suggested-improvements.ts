@@ -34,11 +34,12 @@ export class SuggestedImprovementsPage {
     private appAvailability: AppAvailability,
     private market: Market
   ) {
-    this.solName = this.navParams.get("heading");
-    this.solutionId = this.navParams.get("solutionId");
-    this.entityId = this.navParams.get("entityId");
-    this.entityType = this.navParams.get("entityType");
-    this.programId = this.navParams.get("programId");
+    const dataObj = this.navParams.get("dataObj");
+    this.solName = dataObj.heading;
+    this.solutionId = dataObj.solutionId;
+    this.entityId = dataObj.entityId;
+    this.entityType = dataObj.entityType;
+    this.programId = dataObj.programId;
   }
 
   ionViewDidLoad() {

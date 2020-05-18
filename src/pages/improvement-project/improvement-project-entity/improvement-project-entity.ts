@@ -35,13 +35,14 @@ export class ImprovementProjectEntityPage {
   }
 
   goToIpEntitySol(entityId, entityName, solutions, entityType) {
-    this.navCtrl.push(ImprovementProjectEntitySolutionPage, {
+    let dataObj = {
       heading: entityName,
       solutions: solutions,
       entityId: entityId,
       entityType: entityType,
       programId: this.programId,
-    });
+    };
+    this.navCtrl.push(ImprovementProjectEntitySolutionPage, { dataObj });
   }
 
   getAssessmentEntity() {
