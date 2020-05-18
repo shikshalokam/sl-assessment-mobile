@@ -1,9 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   NavController,
   NavParams,
   Platform,
   ModalController,
+  FabContainer,
 } from "ionic-angular";
 import { ApiProvider } from "../../providers/api/api";
 import { AppConfigs } from "../../providers/appConfig";
@@ -15,6 +16,7 @@ import { AndroidPermissions } from "@ionic-native/android-permissions";
 import { DatePipe } from "@angular/common";
 import { QuestionListPage } from "../question-list/question-list";
 import { EvidenceAllListComponent } from "../../components/evidence-all-list/evidence-all-list";
+import { CriteriaListPage } from "../criteria-list/criteria-list";
 
 declare var cordova: any;
 @Component({
@@ -38,6 +40,11 @@ export class ObservationReportsPage {
   reportType: string;
   allQuestions: Array<Object> = [];
   filteredQuestions: Array<any> = [];
+  selectedTab: any;
+  reportObjCriteria: any;
+  allCriterias: any = [];
+  filteredCriterias: any = [];
+  @ViewChild(FabContainer) fab: FabContainer;
 
   constructor(
     public navCtrl: NavController,
@@ -54,6 +61,8 @@ export class ObservationReportsPage {
   ) {}
 
   ionViewDidLoad() {
+    this.selectedTab = "questionwise";
+
     this.submissionId = this.navParams.get("submissionId");
     this.observationId = this.navParams.get("observationId");
     this.solutionId = this.navParams.get("solutionId");
@@ -145,9 +154,73 @@ export class ObservationReportsPage {
     );
   }
 
+  getObservationCriteriaReports() {
+    this.utils.startLoader();
+    let url;
+
+    if (this.entityType && this.reportType) {
+      this.payload = {
+        entityId: this.entityId,
+        entityType: this.entityType,
+        solutionId: this.solutionId,
+        immediateChildEntityType: this.immediateChildEntityType,
+        reportType: this.reportType,
+      };
+      // url = AppConfigs.criteriaReports.entitySolutionReport;
+    } else if (this.submissionId) {
+      url = AppConfigs.criteriaReports.instanceReport;
+    } else if (!this.submissionId && !this.entityId) {
+      url = AppConfigs.criteriaReports.observationReport;
+    } else {
+      url = AppConfigs.criteriaReports.entityReport;
+    }
+
+    this.payload.filter = {
+      criteria: this.filteredCriterias,
+    };
+
+    // this.payload.filter = {
+    //   questionId: this.filteredQuestions,
+    // };
+    // console.log(JSON.stringify(this.payload));
+    this.apiService.httpPost(
+      url,
+      this.payload,
+      (success) => {
+        //this will be initialized only on page load
+        this.allCriterias =
+          success.allCriterias && !this.allCriterias.length
+            ? success.allCriterias
+            : this.allCriterias;
+        if (success) {
+          this.reportObjCriteria = success;
+        } else {
+          this.error = "No data found";
+        }
+
+        this.utils.stopLoader();
+        !this.filteredCriterias.length ? this.markAllCriteriaSelected() : null;
+      },
+      (error) => {
+        this.error = "No data found";
+        this.utils.stopLoader();
+      },
+      {
+        baseUrl: "dhiti",
+        version: "v1",
+      }
+    );
+  }
+
   markAllQuestionSelected() {
     for (const question of this.allQuestions) {
       this.filteredQuestions.push(question["questionExternalId"]);
+    }
+  }
+
+  markAllCriteriaSelected() {
+    for (const criteria of this.allCriterias) {
+      this.filteredCriterias.push(criteria["criteriaId"]);
     }
   }
 
@@ -187,7 +260,10 @@ export class ObservationReportsPage {
   getObservationReportUrl() {
     this.utils.startLoader();
     // + "type=submission&"
-    let url = AppConfigs.observationReports.getReportsPdfUrls;
+    let url =
+      this.selectedTab == "questionwise"
+        ? AppConfigs.observationReports.getReportsPdfUrls
+        : AppConfigs.criteriaReports.getReportsPdfUrls;
     const timeStamp =
       "_" + this.datepipe.transform(new Date(), "yyyy-MMM-dd-HH-mm-ss a");
     if (this.entityType) {
@@ -228,7 +304,10 @@ export class ObservationReportsPage {
 
         this.utils.stopLoader();
       },
-      { baseUrl: "dhiti", version: "v2" }
+      {
+        baseUrl: "dhiti",
+        version: this.selectedTab == "questionwise" ? "v2" : "v1",
+      }
     );
   }
 
@@ -299,6 +378,25 @@ export class ObservationReportsPage {
     });
   }
 
+  openCriteriaFilter() {
+    const modal = this.modal.create(CriteriaListPage, {
+      allCriterias: this.allCriterias,
+      filteredCriterias: JSON.parse(JSON.stringify(this.filteredCriterias)),
+    });
+    modal.present();
+    modal.onDidDismiss((response) => {
+      if (
+        response &&
+        response.action === "updated" &&
+        JSON.stringify(response.filter) !==
+          JSON.stringify(this.filteredCriterias)
+      ) {
+        this.filteredCriterias = response.filter;
+        this.getObservationCriteriaReports();
+      }
+    });
+  }
+
   allEvidence(index) {
     console.log(this.allQuestions[index]);
     this.navCtrl.push(EvidenceAllListComponent, {
@@ -306,6 +404,13 @@ export class ObservationReportsPage {
       observationId: this.observationId,
       entityId: this.entityId,
       questionExternalId: this.allQuestions[index]["questionExternalId"],
+      entityType: this.entityType,
     });
+  }
+
+  onTabChange(tabName) {
+    this.fab.close();
+    this.selectedTab = tabName;
+    !this.allCriterias.length ? this.getObservationCriteriaReports() : null;
   }
 }

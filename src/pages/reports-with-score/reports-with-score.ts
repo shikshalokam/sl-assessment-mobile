@@ -1,10 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild, ElementRef } from "@angular/core";
 import {
   IonicPage,
   NavController,
   NavParams,
   Platform,
   ModalController,
+  FabContainer,
 } from "ionic-angular";
 import { ApiProvider } from "../../providers/api/api";
 import { AppConfigs } from "../../providers/appConfig";
@@ -16,6 +17,7 @@ import { AndroidPermissions } from "@ionic-native/android-permissions";
 import { DatePipe } from "@angular/common";
 import { QuestionListPage } from "../question-list/question-list";
 import { EvidenceAllListComponent } from "../../components/evidence-all-list/evidence-all-list";
+import { CriteriaListPage } from "../criteria-list/criteria-list";
 
 declare var cordova: any;
 /**
@@ -46,6 +48,11 @@ export class ReportsWithScorePage {
   reportType: string;
   allQuestions: Array<Object> = [];
   filteredQuestions: Array<any> = [];
+  selectedTab: string;
+  filteredCriterias: any = [];
+  allCriterias: any = [];
+  reportObjCriteria: any;
+  @ViewChild(FabContainer) fab: FabContainer;
 
   constructor(
     public navCtrl: NavController,
@@ -62,6 +69,8 @@ export class ReportsWithScorePage {
   ) {}
 
   ionViewDidEnter() {
+    this.selectedTab = "questionwise";
+
     this.submissionId = this.navParams.get("submissionId");
     this.observationId = this.navParams.get("observationId");
     this.entityId = this.navParams.get("entityId");
@@ -98,6 +107,7 @@ export class ReportsWithScorePage {
       this.payload.entityType = this.entityType;
       url = AppConfigs.observationReportsWithScore.entityReport;
     } else {
+      this.payload.entityType = this.entityType;
       url = AppConfigs.observationReportsWithScore.observationReport;
     }
     this.payload.filter = {
@@ -135,6 +145,63 @@ export class ReportsWithScorePage {
     );
   }
 
+  getObservationCriteriaReports() {
+    this.utils.startLoader();
+    let url;
+
+    if (this.entityType && this.reportType) {
+      this.payload.solutionId = this.solutionId;
+      this.payload.entityType = this.entityType;
+      this.payload.reportType = this.reportType;
+      //  url = AppConfigs.observationReportsWithScore.solutionReport;
+      // url = AppConfigs.criteriaReports.entitySolutionReport;
+    } else if (this.submissionId) {
+      url = AppConfigs.criteriaReportsWithScore.instanceReport;
+    } else if (!this.submissionId && !this.entityId) {
+      this.payload.entityType = this.entityType;
+
+      url = AppConfigs.criteriaReportsWithScore.observationReport;
+    } else {
+      url = AppConfigs.criteriaReportsWithScore.entityReport;
+    }
+
+    this.payload.filter = {
+      criteria: this.filteredCriterias,
+    };
+
+    // this.payload.filter = {
+    //   questionId: this.filteredQuestions,
+    // };
+    // console.log(JSON.stringify(this.payload));
+    this.apiService.httpPost(
+      url,
+      this.payload,
+      (success) => {
+        //this will be initialized only on page load
+        this.allCriterias =
+          success.allCriterias && !this.allCriterias.length
+            ? success.allCriterias
+            : this.allCriterias;
+        if (success) {
+          this.reportObjCriteria = success;
+        } else {
+          this.error = "No data found";
+        }
+
+        this.utils.stopLoader();
+        !this.filteredCriterias.length ? this.markAllCriteriaSelected() : null;
+      },
+      (error) => {
+        this.error = "No data found";
+        this.utils.stopLoader();
+      },
+      {
+        baseUrl: "dhiti",
+        version: "v1",
+      }
+    );
+  }
+
   downloadSharePdf(action) {
     this.action = action;
     this.androidPermissions
@@ -161,7 +228,10 @@ export class ReportsWithScorePage {
   getObservationReportUrl() {
     this.utils.startLoader();
     // + "type=submission&"
-    let url = AppConfigs.observationReportsWithScore.getReportsPdfUrls;
+    let url =
+      this.selectedTab == "questionwise"
+        ? AppConfigs.observationReportsWithScore.getReportsPdfUrls
+        : AppConfigs.criteriaReportsWithScore.getReportsPdfUrls;
     const timeStamp =
       "_" + this.datepipe.transform(new Date(), "yyyy-MMM-dd-HH-mm-ss a");
     if (this.solutionId) {
@@ -192,7 +262,13 @@ export class ReportsWithScorePage {
       },
       {
         baseUrl: "dhiti",
-        version: this.observationId && this.entityId ? "v2" : "v1",
+        version:
+          this.selectedTab == "criteriawise"
+            ? "v1"
+            : this.observationId && this.entityId
+            ? "v2"
+            : "v1",
+        // version: this.observationId && this.entityId ? "v2" : "v1",
       }
     );
   }
@@ -241,6 +317,12 @@ export class ReportsWithScorePage {
     }
   }
 
+  markAllCriteriaSelected() {
+    for (const criteria of this.allCriterias) {
+      this.filteredCriterias.push(criteria["criteriaId"]);
+    }
+  }
+
   openFilter() {
     const modal = this.modal.create(QuestionListPage, {
       allQuestions: this.allQuestions,
@@ -260,6 +342,25 @@ export class ReportsWithScorePage {
     });
   }
 
+  openCriteriaFilter() {
+    const modal = this.modal.create(CriteriaListPage, {
+      allCriterias: this.allCriterias,
+      filteredCriterias: JSON.parse(JSON.stringify(this.filteredCriterias)),
+    });
+    modal.present();
+    modal.onDidDismiss((response) => {
+      if (
+        response &&
+        response.action === "updated" &&
+        JSON.stringify(response.filter) !==
+          JSON.stringify(this.filteredCriterias)
+      ) {
+        this.filteredCriterias = response.filter;
+        this.getObservationCriteriaReports();
+      }
+    });
+  }
+
   allEvidence(index) {
     console.log(this.allQuestions[index]);
     this.navCtrl.push(EvidenceAllListComponent, {
@@ -267,6 +368,13 @@ export class ReportsWithScorePage {
       observationId: this.observationId,
       entityId: this.entityId,
       questionExternalId: this.allQuestions[index]["questionExternalId"],
+      entityType: this.entityType,
     });
+  }
+
+  onTabChange(tabName) {
+    this.fab.close();
+    this.selectedTab = tabName;
+    !this.allCriterias.length ? this.getObservationCriteriaReports() : null;
   }
 }

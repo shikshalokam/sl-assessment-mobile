@@ -46,11 +46,13 @@ export class EvidenceAllListComponent {
     const observationId = this.navParams.get("observationId");
     const entityId = this.navParams.get("entityId");
     const questionExternalId = this.navParams.get("questionExternalId");
+    const entityType = this.navParams.get("entityType");
     this.payload = {
       submissionId: submissionId,
       questionId: questionExternalId,
       observationId: observationId,
       entityId: entityId,
+      entityType: entityType,
     };
     this.getAllEvidence();
   }

@@ -122,6 +122,8 @@
     "filter": "Filter",
     "evidences": "Evidences",
     "remarks": "Remarks",
+    "questionWise": "Question Wise",
+    "criteriaWise": "Criteria Wise",
     "viewDetails": "View Details",
     "clickHereToImprove": "Click Here To Improve"
   },
@@ -282,7 +284,9 @@
     "noUnreadNotifications": "You have no new Notifications!",
     "noObservationfound": "No observation found",
     "selectFilter": "Select the questions to filter Reports",
-    "noVideo": "No videos available"
+    "noVideo": "No videos available",
+    "selectCriteraFilter": "Select the criterias to filter Reports"
+
   },
   "toastMessage": {
     "selectSolution": "Select a Solution",
@@ -309,4 +313,5 @@
     "enableGPS": "Please enable GPS to proceed.",
     "reEnableGPS": "Unable to fetch your location. Please turn off and turn on your "
   }
+
 }

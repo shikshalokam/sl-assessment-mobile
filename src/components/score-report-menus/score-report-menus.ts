@@ -63,6 +63,7 @@ export class ScoreReportMenusComponent {
   viewObservationReportsWithoutScore() {
     const payload = {
       observationId: this.observationDetail.observationId,
+      entityType: this.entityType,
     };
     this.viewCtrl.dismiss();
     this.appCtrl.getRootNav().push(ObservationReportsPage, payload);
@@ -70,6 +71,7 @@ export class ScoreReportMenusComponent {
   viewObservationReportWithScore() {
     const payload = {
       observationId: this.observationDetail.observationId,
+      entityType: this.entityType,
     };
     this.viewCtrl.dismiss();
     this.appCtrl.getRootNav().push("ReportsWithScorePage", payload);
@@ -77,16 +79,18 @@ export class ScoreReportMenusComponent {
   actionsWithScore() {
     this.viewCtrl.dismiss();
     this.showActionsheet = false;
-    this.appCtrl
-      .getRootNav()
-      .push("ReportsWithScorePage", { submissionId: this.submission._id });
+    this.appCtrl.getRootNav().push("ReportsWithScorePage", {
+      submissionId: this.submission._id,
+      entityType: this.entityType,
+    });
   }
   actions() {
     this.viewCtrl.dismiss();
     this.showActionsheet = false;
-    this.appCtrl
-      .getRootNav()
-      .push(ObservationReportsPage, { submissionId: this.submission._id });
+    this.appCtrl.getRootNav().push(ObservationReportsPage, {
+      submissionId: this.submission._id,
+      entityType: this.entityType,
+    });
   }
   viewEntityReportsWithScore() {
     this.viewCtrl.dismiss();

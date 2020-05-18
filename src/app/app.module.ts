@@ -122,6 +122,7 @@ import { StreamingMedia } from "@ionic-native/streaming-media";
 import { ImprovementProjectPageModule } from "../pages/improvement-project/improvement-project.module";
 import { AppAvailability } from "@ionic-native/app-availability";
 
+import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
 @NgModule({
   declarations: [
     MyApp,
@@ -156,6 +157,7 @@ import { AppAvailability } from "@ionic-native/app-availability";
     SettingsPage,
     QuestionListPage,
     TutorialVideoListingPage,
+    CriteriaListPage,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -223,6 +225,7 @@ import { AppAvailability } from "@ionic-native/app-availability";
     QuestionListPage,
     TutorialVideoListingPage,
     EvidenceAllListComponent,
+    CriteriaListPage,
   ],
   providers: [
     StatusBar,

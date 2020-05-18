@@ -452,6 +452,7 @@ export class SubmissionListPage {
     if (submission.ratingCompletedAt) {
       let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
         submission: submission,
+        entityType: submission.entityType,
         // showEntityActionsheet:"false",
         // showSubmissionAction:'true'
       });
@@ -459,6 +460,7 @@ export class SubmissionListPage {
     } else {
       this.navCtrl.push(ObservationReportsPage, {
         submissionId: submission._id,
+        entityType: submission.entityType,
       });
     }
   }
