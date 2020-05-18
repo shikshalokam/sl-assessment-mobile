@@ -5,22 +5,33 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <header [title]="'headings.dashboard'|translate" [hideBack]="false">
-  </header>
+  <header [title]="'headings.dashboard'|translate" [hideBack]="false"></header>
 </ion-header>
 
 <ion-content padding>
   <h2>{{data?.title}}</h2>
   <div *ngFor="let item of data?.reportSections">
-    <percentage-column-charts [chartData]="item" *ngIf="item.chart.type != 'expansion'"
-      (clickOnGraphEventEmit)="clickOnGraphEventEmit($event)"></percentage-column-charts>
-    <expansion-panel [datas]="item" *ngIf="item.chart.type == 'expansion'"></expansion-panel>
+    <percentage-column-charts
+      [chartData]="item"
+      *ngIf="item.chart.type != 'expansion'"
+      (clickOnGraphEventEmit)="clickOnGraphEventEmit($event)"
+    ></percentage-column-charts>
+    <expansion-panel
+      [datas]="item"
+      *ngIf="item.chart.type == 'expansion'"
+    ></expansion-panel>
   </div>
-  <div *ngIf="!(data?.reportSections)" class="_flex-box _justify-content-center">
+  <div class="_flex-box _justify-content-center" *ngIf="data">
+    <button ion-button round class="viewReportBtn" (click)="goToImpSugg()">
+      {{'buttons.clickHereToImprove' | translate}}
+    </button>
+  </div>
+  <div
+    *ngIf="!(data?.reportSections)"
+    class="_flex-box _justify-content-center"
+  >
     {{ 'message.noReportsFound' | translate}}
   </div>
-
-
 
   <ion-fab bottom right *ngIf="data?.reportSections">
     <button ion-fab mini>

@@ -119,6 +119,9 @@ import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { EvidenceAllListComponent } from "./../components/evidence-all-list/evidence-all-list";
 import { PhotoViewer } from "@ionic-native/photo-viewer";
 import { StreamingMedia } from "@ionic-native/streaming-media";
+import { ImprovementProjectPageModule } from "../pages/improvement-project/improvement-project.module";
+import { AppAvailability } from "@ionic-native/app-availability";
+
 import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
 @NgModule({
   declarations: [
@@ -185,6 +188,7 @@ import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
     GeneralQuestionListPageModule,
     IonicStepperModule,
     ObservationsPageModule,
+    ImprovementProjectPageModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -286,6 +290,7 @@ import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
     ScreenOrientation,
     PhotoViewer,
     StreamingMedia,
+    AppAvailability,
   ],
 })
 export class AppModule {}
