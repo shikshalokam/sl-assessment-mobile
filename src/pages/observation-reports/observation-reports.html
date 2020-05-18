@@ -21,7 +21,7 @@
     </h4>
 
     <!-- ------------------------------------------ -->
-    <div padding>
+    <div padding *ngIf="!from">
       <ion-segment [(ngModel)]="selectedTab">
         <ion-segment-button
           value="questionwise"
@@ -39,7 +39,7 @@
     </div>
     <div [ngSwitch]="selectedTab">
       <div *ngSwitchCase="'questionwise'">
-        <div *ngIf="allQuestions?.length">
+        <div *ngIf="allQuestions?.length && !from">
           <button
             ion-button
             icon-start

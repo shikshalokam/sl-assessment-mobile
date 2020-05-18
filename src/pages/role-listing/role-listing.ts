@@ -19,6 +19,7 @@ export class RoleListingPage {
   roles = [];
   entityType: any;
   assessmentType;
+  from: any;
 
   constructor(
     public navCtrl: NavController,
@@ -29,6 +30,7 @@ export class RoleListingPage {
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad RoleListingPage");
+    this.from = this.navParams.get("from");
     this.utils.startLoader();
     this.localStorageProvider
       .getLocalStorage("profileRole")
@@ -49,6 +51,7 @@ export class RoleListingPage {
       data: role.entities,
       entityType: role.entities[0].immediateSubEntityType,
       assessmentType: this.assessmentType,
+      from: this.from,
     });
   }
 }

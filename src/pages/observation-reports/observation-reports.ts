@@ -45,6 +45,7 @@ export class ObservationReportsPage {
   allCriterias: any = [];
   filteredCriterias: any = [];
   @ViewChild(FabContainer) fab: FabContainer;
+  from: any;
 
   constructor(
     public navCtrl: NavController,
@@ -68,6 +69,7 @@ export class ObservationReportsPage {
     this.solutionId = this.navParams.get("solutionId");
     this.entityId = this.navParams.get("entityId");
     this.entityType = this.navParams.get("entityType");
+    this.from = this.navParams.get("from");
     this.immediateChildEntityType = this.navParams.get(
       "immediateChildEntityType"
     );

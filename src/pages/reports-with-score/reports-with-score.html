@@ -76,7 +76,7 @@
     <!-- Scores details bar ends here-->
 
     <!-- ....................................... -->
-    <div padding>
+    <div padding *ngIf="!from">
       <ion-segment [(ngModel)]="selectedTab">
         <ion-segment-button
           value="questionwise"
@@ -96,7 +96,7 @@
     <div [ngSwitch]="selectedTab">
       <div *ngSwitchCase="'questionwise'">
         <div
-          *ngIf="allQuestions?.length"
+          *ngIf="allQuestions?.length && !from"
           class="_flex-box _justify-content-end"
         >
           <button
