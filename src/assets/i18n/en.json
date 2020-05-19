@@ -244,7 +244,9 @@
     "schoolsObserved": "Schools observed",
     "selectState": "Select State *",
     "instanceName": "Instance Name",
-    "viewAllEvidences": "View All Evidences"
+    "viewAllEvidences": "View All Evidences",
+    "suggestedIMPs": "Suggested IMP's",
+    "noSuggestedIMPs": "No IMP's Found"
   },
   "languages": {
     "english": "English",

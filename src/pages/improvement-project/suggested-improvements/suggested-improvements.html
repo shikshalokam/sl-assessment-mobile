@@ -36,7 +36,12 @@
       <div style="margin: 0 22px;" class="panel" [ngClass]="{hide: item!=i}">
         <ion-item-group>
           <ion-item-divider>
-            <ion-label>Suggested IMP's</ion-label>
+            <ion-label *ngIf="Ip.improvementProjects.length"
+              >{{'labels.suggestedIMPs'|translate}}</ion-label
+            >
+            <ion-label *ngIf="!Ip.improvementProjects.length"
+              >{{'labels.noSuggestedIMPs'|translate}}</ion-label
+            >
           </ion-item-divider>
 
           <ion-item *ngFor="let project of Ip.improvementProjects">
