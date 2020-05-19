@@ -268,16 +268,17 @@ export class ObservationReportsPage {
         : AppConfigs.criteriaReports.getReportsPdfUrls;
     const timeStamp =
       "_" + this.datepipe.transform(new Date(), "yyyy-MMM-dd-HH-mm-ss a");
-    if (this.entityType) {
-      // url = url + "entityId=" + this.entityId + "&solutionId=" + this.solutionId + '&reportType=' + this.reportType + '&entityType=' + this.entityType + (this.immediateChildEntityType ? ('&immediateChildEntityType=' + this.immediateChildEntityType) : "");
-      this.fileName =
-        this.solutionId +
-        "_" +
-        this.entityId +
-        "_" +
-        this.immediateChildEntityType +
-        ".pdf";
-    } else if (this.submissionId) {
+    // if (this.entityType) {
+    //   // url = url + "entityId=" + this.entityId + "&solutionId=" + this.solutionId + '&reportType=' + this.reportType + '&entityType=' + this.entityType + (this.immediateChildEntityType ? ('&immediateChildEntityType=' + this.immediateChildEntityType) : "");
+    //   this.fileName =
+    //     this.solutionId +
+    //     "_" +
+    //     this.entityId +
+    //     "_" +
+    //     this.immediateChildEntityType +
+    //     ".pdf";
+    // } else
+    if (this.submissionId) {
       // url = url + "submissionId=" + this.submissionId;
       this.fileName = this.submissionId + timeStamp + ".pdf";
     } else if (!this.submissionId && !this.entityId) {

@@ -87,12 +87,15 @@ export class DashboardPage {
   }
 
   goToImpSugg() {
-    this.navCtrl.push(SuggestedImprovementsPage, {
+    let dataObj = {
       heading: this.solutionName,
       solutionId: this.solutionId,
       entityId: this.entity._id,
       entityType: this.entity.entityType,
       programId: this.programId,
+    };
+    this.navCtrl.push(SuggestedImprovementsPage, {
+      dataObj,
     });
   }
 
