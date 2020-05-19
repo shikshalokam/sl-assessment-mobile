@@ -34,6 +34,7 @@ import { ApiProvider } from "../providers/api/api";
 import { SidemenuProvider } from "../providers/sidemenu/sidemenu";
 import { TutorialVideoListingPage } from "../pages/tutorial-video-listing/tutorial-video-listing";
 import { ImprovementProjectPage } from "../pages/improvement-project/improvement-project";
+import { ProgramsPage } from "../pages/programs/programs";
 
 @Component({
   templateUrl: "app.html",
@@ -58,6 +59,13 @@ export class MyApp {
       component: HomePage,
       active: true,
       show: false,
+    },
+    {
+      name: "programs",
+      icon: "list-box",
+      component: ProgramsPage,
+      active: false,
+      show: true,
     },
     {
       name: "institutional",
