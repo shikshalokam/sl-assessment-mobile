@@ -32,5 +32,9 @@
   <ion-card-content>
     <h5>{{submission?.title}}</h5>
     <p>Created On : {{submission?.createdAt | date}}</p>
+    <p *ngIf="submission?.evidencesStatus[0]?.submissions[0]?.submissionDate">
+      Submitted On :
+      {{submission?.evidencesStatus[0]?.submissions[0]?.submissionDate | date}}
+    </p>
   </ion-card-content>
 </ion-content>
