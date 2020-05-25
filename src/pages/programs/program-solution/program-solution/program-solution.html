@@ -1,0 +1,17 @@
+<!-- Generated template for the ProgramSolutionComponent component -->
+<div>
+  <ion-card (click)="goToProgramSolEntity(i)">
+    <ion-item text-wrap>
+      <div class="_flex-box">
+        <div style="flex: 1;">
+          {{solution.name}}
+        </div>
+        <ion-icon
+          name="arrow-forward"
+          class="menuIcon"
+          *ngIf="!homePage"
+        ></ion-icon>
+      </div>
+    </ion-item>
+  </ion-card>
+</div>

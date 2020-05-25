@@ -48,6 +48,7 @@ import { EvidenceAllListComponent } from "./evidence-all-list/evidence-all-list"
 import { PlayVideoComponent } from "./play-video/play-video";
 import { AttachmentsComponent } from "./attachments/attachments";
 import { ViewDetailComponent } from "./view-detail/view-detail";
+import { ProgramSolutionComponent } from "../pages/programs/program-solution/program-solution/program-solution";
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { ViewDetailComponent } from "./view-detail/view-detail";
     PlayVideoComponent,
     AttachmentsComponent,
     ViewDetailComponent,
+    ProgramSolutionComponent,
   ],
   imports: [
     IonicModule,
@@ -139,6 +141,7 @@ import { ViewDetailComponent } from "./view-detail/view-detail";
     PlayVideoComponent,
     AttachmentsComponent,
     ViewDetailComponent,
+    ProgramSolutionComponent,
   ],
   entryComponents: [
     InputTypeComponent,
