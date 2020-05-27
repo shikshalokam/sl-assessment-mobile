@@ -4,6 +4,9 @@ import { ApiProvider } from "../../providers/api/api";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 import { UtilsProvider } from "../../providers/utils/utils";
 import { AppConfigs } from "../../providers/appConfig";
+import { UpdateLocalSchoolDataProvider } from "../../providers/update-local-school-data/update-local-school-data";
+import { MenuItemComponent } from "../../components/menu-item/menu-item";
+import { PopoverController } from "ionic-angular";
 
 /*
   Generated class for the ProgramProvider provider.
@@ -17,7 +20,9 @@ export class ProgramServiceProvider {
     public http: HttpClient,
     private apiService: ApiProvider,
     private localStorage: LocalStorageProvider,
-    private utils: UtilsProvider
+    private utils: UtilsProvider,
+    private ulsdp: UpdateLocalSchoolDataProvider,
+    private popoverCtrl: PopoverController
   ) {
     console.log("Hello ProgramProvider Provider");
   }
@@ -52,55 +57,182 @@ export class ProgramServiceProvider {
           // this.utils.stopLoader();
           !noLoader ? this.utils.stopLoader() : null;
 
-          //TODO Delete this below
-          const successData = {};
-          successData["result"] = [
-            {
-              _id: "5cfa4ebcfc7cae61da9add8b",
-              externalId: "Test-Program",
-              name: "Test",
-              description: "Test",
-              solutions: [
-                {
-                  _id: "5ebcd4b01fd0ae7608286605",
-                  externalId: "Test-solutions",
-                  name: "Test",
-                  description: "Test",
-                  type: "assessment",
-                  subType: "institutional",
-                  entities: [
-                    {
-                      _id: "5cfe1f29f5fcff1170088cf3",
-                      submissionId: "5ec3a24b2ac20b6825930d8a",
-                      submissionStatus: "completed",
-                      externalId: "3020509002",
-                      name: "Test-school",
-                      city: "KOTLI DHOLE SHAH",
-                      state: "Punjab",
-                    },
-                  ],
-                },
-              ],
-            },
-          ];
-          for (const program of successData["result"]) {
-            for (const solution of program.solutions) {
-              for (const entity of solution.entities) {
-                entity.downloaded = false;
-                entity.submissionId = null;
-              }
-            }
-          }
-          this.localStorage.setLocalStorage(
-            `programList`,
-            successData["result"]
-          );
-
-          //TODO delete above
-
           reject();
         }
       );
     });
   }
+
+  getAssessmentDetails(event, programs) {
+    return new Promise((resolve, reject) => {
+      let programIndex = event.programIndex;
+      let assessmentIndex = event.assessmentIndex;
+      let schoolIndex = event.entityIndex;
+
+      // console.log(programIndex + " " + assessmentIndex + " " + schoolIndex)
+      this.utils.startLoader();
+      const url =
+        AppConfigs.assessmentsList.detailsOfAssessment +
+        programs[programIndex]._id +
+        "?solutionId=" +
+        programs[programIndex].solutions[assessmentIndex]._id +
+        "&entityId=" +
+        programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]
+          ._id;
+      //console.log(url);
+      this.apiService.httpGet(
+        url,
+        (success) => {
+          this.ulsdp.mapSubmissionDataToQuestion(success.result);
+          const generalQuestions = success.result["assessment"][
+            "generalQuestions"
+          ]
+            ? success.result["assessment"]["generalQuestions"]
+            : null;
+          this.localStorage.setLocalStorage(
+            "generalQuestions_" + success.result["assessment"]["submissionId"],
+            generalQuestions
+          );
+          this.localStorage.setLocalStorage(
+            "generalQuestionsCopy_" +
+              success.result["assessment"]["submissionId"],
+            generalQuestions
+          );
+          programs[programIndex].solutions[assessmentIndex].entities[
+            schoolIndex
+          ].downloaded = true;
+          programs[programIndex].solutions[assessmentIndex].entities[
+            schoolIndex
+          ].submissionId = success.result.assessment.submissionId;
+          this.localStorage.setLocalStorage(
+            this.utils.getAssessmentLocalStorageKey(
+              programs[programIndex].solutions[assessmentIndex].entities[
+                schoolIndex
+              ].submissionId
+            ),
+            success.result
+          );
+          this.localStorage.setLocalStorage(`programList`, programs);
+          this.utils.stopLoader();
+
+          resolve(programs);
+        },
+        (error) => {
+          //console.log("error details api")
+          this.utils.stopLoader();
+          reject();
+        },
+        { version: "v2" }
+      );
+    });
+  }
+
+  openMenu(event, programs, showMenu?: any) {
+    let myEvent = event.event;
+    let programIndex = event.programIndex;
+    let assessmentIndex = event.assessmentIndex;
+    let schoolIndex = event.entityIndex;
+    let submissionId = event.submissionId;
+    let showMenuArray;
+    let solutionId = event.solutionId;
+    let parentEntityId = event.parentEntityId;
+    let createdByProgramId = event.createdByProgramId;
+
+    this.localStorage
+      .getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId))
+      .then((successData) => {
+        if (showMenu) {
+          showMenuArray = successData.solution.registry;
+        } else {
+          showMenuArray = [];
+        }
+
+        let popover = this.popoverCtrl.create(MenuItemComponent, {
+          submissionId:
+            programs[programIndex].solutions[assessmentIndex].entities[
+              schoolIndex
+            ].submissionId,
+          _id:
+            programs[programIndex].solutions[assessmentIndex].entities[
+              schoolIndex
+            ]["_id"],
+          name:
+            programs[programIndex].solutions[assessmentIndex].entities[
+              schoolIndex
+            ]["name"],
+          programId: programs[programIndex]._id,
+          showMenuArray: showMenuArray,
+          solutionId: solutionId,
+          parentEntityId: parentEntityId,
+          createdByProgramId: createdByProgramId,
+        });
+        popover.present({
+          ev: myEvent,
+        });
+      })
+      .catch((error) => {});
+  }
+
+  /* 
+    only for migration purpose to make downloaded = true for already downloaded entities in 
+    previous app version before flow change 
+  */
+
+  // pass the program list and check for institutional,individual list
+  migrationFuntion(program) {
+    let intstitutionalList = this.localStorageGetfn("institutionalList");
+    intstitutionalList
+      .then((list) => {
+        console.log(list);
+        this.migrate(list, program, "institutionalList");
+      })
+      .catch((err) => {});
+  }
+
+  // if individual,institutional list present get the data
+  async localStorageGetfn(assessmentType) {
+    return await this.localStorage.getLocalStorage(assessmentType);
+  }
+
+  // run migratation by providing previous list,current program list and the key in which previous list is stored
+  migrate(prevlist, currList, key) {
+    prevlist.map((prevprogram) =>
+      prevprogram.solutions.map((prevsolution) =>
+        prevsolution.entities.map((preventity) => {
+          if (preventity.downloaded) {
+            let programIndex = currList.findIndex(
+              (currProgram) => currProgram._id == prevprogram._id
+            );
+            let solutionIndex = currList[programIndex].solutions.findIndex(
+              (currSolution) => currSolution._id == prevsolution._id
+            );
+            let entityIndex = currList[programIndex].solutions[
+              solutionIndex
+            ].entities.findIndex(
+              (currEnitity) => currEnitity._id == preventity._id
+            );
+            currList[programIndex].solutions[solutionIndex].entities[
+              entityIndex
+            ].downloaded = true;
+            currList[programIndex].solutions[solutionIndex].entities[
+              entityIndex
+            ].submissionId = preventity.submissionId;
+          }
+        })
+      )
+    );
+    console.log(currList);
+    this.localStoragePutFn(currList, key);
+  }
+
+  /* 
+    update the current list i.e program list
+    delete the previous list i.e institutional,individual lists
+  */
+  localStoragePutFn(currList: any, key) {
+    this.localStorage.setLocalStorage("programList", currList);
+    this.localStorage.deleteOneStorage(key);
+  }
+
+  /*----------------- migration steps end------------- */
 }

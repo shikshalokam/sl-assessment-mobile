@@ -68,6 +68,7 @@ export class ProgramsPage {
       .then((data) => {
         if (data) {
           this.programList = data;
+          this.programService.migrationFuntion(data);
         } else {
           this.getprograms();
         }
@@ -83,6 +84,7 @@ export class ProgramsPage {
       .getProgramApi()
       .then((programs) => {
         this.programList = programs;
+        this.programService.migrationFuntion(programs);
       })
       .catch((error) => {});
   }

@@ -68,8 +68,11 @@
 
   <div>
     <h2 margin>{{'headings.myActiveAssessment' | translate}}</h2>
+    <!-- 
+      flow changed below
+     -->
     <!--institutional assessment  List -->
-
+    <!-- 
     <program-listing
       *ngIf="institutionalAssessments?.length"
       [programList]="institutionalAssessments"
@@ -78,22 +81,22 @@
       [entityType]="'institutional'"
       (refreshEvent)="refresh($event)"
     >
-    </program-listing>
+    </program-listing> -->
 
     <!--Individual assessment Listing -->
 
-    <program-listing
+    <!--   <program-listing
       *ngIf="individualAssessments?.length"
       [programList]="individualAssessments"
       [homePage]="true"
       [assessmentlocalStorageName]="'individualList'"
       [entityType]="'individual'"
     >
-    </program-listing>
+    </program-listing> -->
 
     <!-- Observation List-->
 
-    <div style="padding: 0 0 60px 0;">
+    <!-- <div style="padding: 0 0 60px 0;">
       <span *ngFor="let observation of observations; let i=index">
         <ion-card
           *ngIf="observation.status !== 'completed'"
@@ -117,6 +120,17 @@
           ></ion-icon>
         </ion-card>
       </span>
+    </div> -->
+    <!-- flow change till above -->
+  </div>
+  <div *ngFor="let program of programList; let programIndex = index">
+    <div *ngFor="let solution of program?.solutions; let solutionIndex = index">
+      <program-solution
+        [solutionMeta]="solution"
+        [solutionIndex]="solutionIndex"
+        [programIndex]="programIndex"
+        [showProgram]="true"
+      ></program-solution>
     </div>
   </div>
 </ion-content>
