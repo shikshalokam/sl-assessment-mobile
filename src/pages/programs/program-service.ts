@@ -185,10 +185,19 @@ export class ProgramServiceProvider {
     let intstitutionalList = this.localStorageGetfn(
       storageKeys.institutionalList
     );
+    let individualList = this.localStorageGetfn(storageKeys.individualList);
+
     intstitutionalList
       .then((list) => {
         console.log(list);
         this.migrate(list, program, "institutionalList");
+      })
+      .catch((err) => {});
+
+    individualList
+      .then((list) => {
+        console.log(list);
+        this.migrate(list, program, "individualList");
       })
       .catch((err) => {});
   }
@@ -226,14 +235,14 @@ export class ProgramServiceProvider {
       )
     );
     console.log(currList);
-    this.localStoragePutFn(currList, key);
+    this.localStorageUpdateFn(currList, key);
   }
 
   /* 
     update the current list i.e program list
     delete the previous list i.e institutional,individual lists
   */
-  localStoragePutFn(currList: any, key) {
+  localStorageUpdateFn(currList: any, key) {
     this.localStorage.setLocalStorage(storageKeys.programList, currList);
     this.localStorage.deleteOneStorage(key);
   }
