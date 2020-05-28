@@ -45,16 +45,6 @@ export class ProgramServiceProvider {
       });
   }
 
-  // getprograms() {
-  //   let url = AppConfigs.programs.programList;
-  //   return this.getProgramApi()
-  //     .then((programs) => {
-  //       this.migrationFuntion(programs);
-  //       return programs;
-  //     })
-  //     .catch((error) => error);
-  // }
-
   getProgramApi(noLoader?: boolean) {
     return new Promise((resolve, reject) => {
       const url = AppConfigs.programs.programList;
