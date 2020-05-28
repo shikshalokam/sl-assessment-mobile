@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { NavController, NavParams } from "ionic-angular";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
 import { UtilsProvider } from "../../../providers/utils/utils";
+import { storageKeys } from "../../../providers/storageKeys";
 
 /**
  * Generated class for the ProgramSolutionPage page.
@@ -35,7 +36,7 @@ export class ProgramSolutionPage {
     this.utils.startLoader();
 
     this.localStorage
-      .getLocalStorage("programList")
+      .getLocalStorage(storageKeys.programList)
       .then((data) => {
         if (data) {
           this.program = data[this.programIndex];

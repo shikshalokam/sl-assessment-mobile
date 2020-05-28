@@ -1,8 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { ProgramSolutionEntityPage } from "../../program-solution-entity/program-solution-entity";
 import { NavController } from "ionic-angular";
-import { LocalStorageProvider } from "../../../../providers/local-storage/local-storage";
-import { UtilsProvider } from "../../../../providers/utils/utils";
 
 /**
  * Generated class for the ProgramSolutionComponent component.

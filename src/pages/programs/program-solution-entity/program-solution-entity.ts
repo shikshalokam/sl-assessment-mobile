@@ -5,6 +5,7 @@ import { AssessmentServiceProvider } from "../../../providers/assessment-service
 import { ProgramServiceProvider } from "../program-service";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { EvidenceProvider } from "../../../providers/evidence/evidence";
+import { storageKeys } from "../../../providers/storageKeys";
 
 /**
  * Generated class for the ProgramSolutionEntityPage page.
@@ -43,7 +44,7 @@ export class ProgramSolutionEntityPage {
   getProgramFromStorage() {
     this.utils.startLoader();
     this.localStorage
-      .getLocalStorage("programList")
+      .getLocalStorage(storageKeys.programList)
       .then((data) => {
         if (data) {
           this.program = data[this.programIndex];

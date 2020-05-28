@@ -6,6 +6,7 @@ import { AppConfigs } from "../../providers/appConfig";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 import { ProgramServiceProvider } from "./program-service";
 import { ProgramSolutionPage } from "./program-solution/program-solution";
+import { error } from "highcharts";
 
 /**
  * Generated class for the ProgramsPage page.
@@ -31,36 +32,46 @@ export class ProgramsPage {
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad ProgramsPage");
-    this.getProgramFromStorage();
-  }
-  getProgramFromStorage() {
     this.utils.startLoader();
-    this.localStorage
-      .getLocalStorage("programList")
-      .then((data) => {
-        if (data) {
-          this.programList = data;
-          this.programService.migrationFuntion(data);
-        } else {
-          this.getprograms();
-        }
+    this.programService
+      .getProgramFromStorage()
+      .then((programs) => {
+        this.programList = programs;
         this.utils.stopLoader();
       })
       .catch((error) => {
-        this.getprograms();
+        this.programList = null;
+        this.utils.stopLoader();
       });
   }
+  // getProgramFromStorage() {
+  //   this.utils.startLoader();
+  //   this.localStorage
+  //     .getLocalStorage("programList")
+  //     .then((data) => {
+  //       if (data) {
+  //         this.programList = data;
+  //         this.programService.migrationFuntion(data);
+  //       } else {
+  //         this.getprograms();
+  //       }
+  //       this.utils.stopLoader();
+  //     })
+  //     .catch((error) => {
+  //       this.getprograms();
+  //     });
+  // }
 
-  getprograms() {
-    let url = AppConfigs.programs.programList;
-    this.programService
-      .getProgramApi()
-      .then((programs) => {
-        this.programList = programs;
-        this.programService.migrationFuntion(programs);
-      })
-      .catch((error) => {});
-  }
+  // getprograms() {
+  //   let url = AppConfigs.programs.programList;
+  //   this.programService
+  //     .getProgramApi()
+  //     .then((programs) => {
+  //       this.programList = programs;
+  //       this.programService.migrationFuntion(programs);
+  //     })
+  //     .catch((error) => {});
+  // }
 
   goToProgramSol(programIndex) {
     this.navCtrl.push(ProgramSolutionPage, {

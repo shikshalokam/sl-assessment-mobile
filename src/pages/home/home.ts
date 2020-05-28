@@ -26,6 +26,7 @@ import { ObservationProvider } from "../../providers/observation/observation";
 import { SidemenuProvider } from "../../providers/sidemenu/sidemenu";
 import { storageKeys } from "../../providers/storageKeys";
 import { ProgramServiceProvider } from "../programs/program-service";
+import { error } from "highcharts";
 
 declare var cordova: any;
 
@@ -374,31 +375,15 @@ export class HomePage {
   // for new flow
   getProgramFromStorage() {
     this.utils.startLoader();
-    this.localStorage
-      .getLocalStorage("programList")
-      .then((data) => {
-        if (data) {
-          this.programList = data;
-          this.programService.migrationFuntion(data);
-        } else {
-          this.getprograms();
-        }
+    this.programService
+      .getProgramFromStorage()
+      .then((programs) => {
+        this.programList = programs;
         this.utils.stopLoader();
       })
       .catch((error) => {
+        this.programList = null;
         this.utils.stopLoader();
-        this.getprograms();
       });
-  }
-
-  getprograms() {
-    let url = AppConfigs.programs.programList;
-    this.programService
-      .getProgramApi()
-      .then((programs) => {
-        this.programList = programs;
-        this.programService.migrationFuntion(this.programList);
-      })
-      .catch((error) => {});
   }
 }
