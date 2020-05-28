@@ -44,34 +44,6 @@ export class ProgramsPage {
         this.utils.stopLoader();
       });
   }
-  // getProgramFromStorage() {
-  //   this.utils.startLoader();
-  //   this.localStorage
-  //     .getLocalStorage("programList")
-  //     .then((data) => {
-  //       if (data) {
-  //         this.programList = data;
-  //         this.programService.migrationFuntion(data);
-  //       } else {
-  //         this.getprograms();
-  //       }
-  //       this.utils.stopLoader();
-  //     })
-  //     .catch((error) => {
-  //       this.getprograms();
-  //     });
-  // }
-
-  // getprograms() {
-  //   let url = AppConfigs.programs.programList;
-  //   this.programService
-  //     .getProgramApi()
-  //     .then((programs) => {
-  //       this.programList = programs;
-  //       this.programService.migrationFuntion(programs);
-  //     })
-  //     .catch((error) => {});
-  // }
 
   goToProgramSol(programIndex) {
     this.navCtrl.push(ProgramSolutionPage, {
