@@ -1,5 +1,11 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { Component } from "@angular/core";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  ViewController,
+} from "ionic-angular";
+import { UtilsProvider } from "../../providers/utils/utils";
 
 /**
  * Generated class for the QuestionListPage page.
@@ -9,21 +15,24 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
  */
 
 @Component({
-  selector: 'page-question-list',
-  templateUrl: 'question-list.html',
+  selector: "page-question-list",
+  templateUrl: "question-list.html",
 })
 export class QuestionListPage {
-
   allQuestions;
   filteredQuestions;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private viewCntrl: ViewController) {
-  }
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private viewCntrl: ViewController,
+    private utils: UtilsProvider
+  ) {}
 
   ionViewDidLoad() {
-    this.allQuestions = this.navParams.get('allQuestions');
-    this.filteredQuestions = this.navParams.get('filteredQuestions');
-    console.log('ionViewDidLoad QuestionListPage');
+    this.allQuestions = this.navParams.get("allQuestions");
+    this.filteredQuestions = this.navParams.get("filteredQuestions");
+    console.log("ionViewDidLoad QuestionListPage");
   }
 
   onQuestionClick(externalId) {
@@ -37,11 +46,15 @@ export class QuestionListPage {
   }
 
   applyFilter() {
-    this.viewCntrl.dismiss({filter:this.filteredQuestions, action:"updated" })
+    !this.filteredQuestions.length
+      ? this.utils.openToast("Select at least one question")
+      : this.viewCntrl.dismiss({
+          filter: this.filteredQuestions,
+          action: "updated",
+        });
   }
 
   close() {
-    this.viewCntrl.dismiss({action:"cancelled"});
+    this.viewCntrl.dismiss({ action: "cancelled" });
   }
-
 }
