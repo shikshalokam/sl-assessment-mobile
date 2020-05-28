@@ -373,6 +373,7 @@ export class HomePage {
 
   // for new flow
   getProgramFromStorage() {
+    this.utils.startLoader();
     this.localStorage
       .getLocalStorage("programList")
       .then((data) => {
@@ -382,8 +383,10 @@ export class HomePage {
         } else {
           this.getprograms();
         }
+        this.utils.stopLoader();
       })
       .catch((error) => {
+        this.utils.stopLoader();
         this.getprograms();
       });
   }

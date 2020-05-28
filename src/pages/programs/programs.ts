@@ -25,44 +25,16 @@ export class ProgramsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private localStorage: LocalStorageProvider,
-    private programService: ProgramServiceProvider
+    private programService: ProgramServiceProvider,
+    private utils: UtilsProvider
   ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad ProgramsPage");
-    // this.getprograms();
     this.getProgramFromStorage();
-    // this.programList = [
-    //   {
-    //     _id: "5ec227d4df3511bcf7b047a7",
-    //     externalId: "Test-Program",
-    //     name: "Test",
-    //     description: "Test",
-    //     solutions: [
-    //       {
-    //         _id: "5ec397a9df3511bcf7b26f9a",
-    //         externalId: "Test-solutions",
-    //         name: "Test",
-    //         description: "Test",
-    //         type: "assessment",
-    //         subType: "institutional",
-    //         entities: [
-    //           {
-    //             _id: "5da70ff54c67d63cca1b8ee2",
-    //             submissionId: "5ec3a24b2ac20b6825930d8a",
-    //             submissionStatus: "completed",
-    //             externalId: "3020509002",
-    //             name: "Test-school",
-    //             city: "KOTLI DHOLE SHAH",
-    //             state: "Punjab",
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    // ];
   }
   getProgramFromStorage() {
+    this.utils.startLoader();
     this.localStorage
       .getLocalStorage("programList")
       .then((data) => {
@@ -72,6 +44,7 @@ export class ProgramsPage {
         } else {
           this.getprograms();
         }
+        this.utils.stopLoader();
       })
       .catch((error) => {
         this.getprograms();

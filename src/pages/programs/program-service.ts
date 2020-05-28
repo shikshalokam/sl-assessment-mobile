@@ -7,6 +7,7 @@ import { AppConfigs } from "../../providers/appConfig";
 import { UpdateLocalSchoolDataProvider } from "../../providers/update-local-school-data/update-local-school-data";
 import { MenuItemComponent } from "../../components/menu-item/menu-item";
 import { PopoverController } from "ionic-angular";
+import { storageKeys } from "../../providers/storageKeys";
 
 /*
   Generated class for the ProgramProvider provider.
@@ -48,8 +49,10 @@ export class ProgramServiceProvider {
             }
           }
 
-          this.localStorage.setLocalStorage(`programList`, successData.result);
-          // console.log(JSON.stringify(programs))
+          this.localStorage.setLocalStorage(
+            storageKeys.programList,
+            successData.result
+          );
           resolve(successData.result);
         },
         (error) => {
@@ -67,9 +70,8 @@ export class ProgramServiceProvider {
     return new Promise((resolve, reject) => {
       let programIndex = event.programIndex;
       let assessmentIndex = event.assessmentIndex;
-      let schoolIndex = event.entityIndex;
+      let entityIndex = event.entityIndex;
 
-      // console.log(programIndex + " " + assessmentIndex + " " + schoolIndex)
       this.utils.startLoader();
       const url =
         AppConfigs.assessmentsList.detailsOfAssessment +
@@ -77,7 +79,7 @@ export class ProgramServiceProvider {
         "?solutionId=" +
         programs[programIndex].solutions[assessmentIndex]._id +
         "&entityId=" +
-        programs[programIndex].solutions[assessmentIndex].entities[schoolIndex]
+        programs[programIndex].solutions[assessmentIndex].entities[entityIndex]
           ._id;
       //console.log(url);
       this.apiService.httpGet(
@@ -99,20 +101,20 @@ export class ProgramServiceProvider {
             generalQuestions
           );
           programs[programIndex].solutions[assessmentIndex].entities[
-            schoolIndex
+            entityIndex
           ].downloaded = true;
           programs[programIndex].solutions[assessmentIndex].entities[
-            schoolIndex
+            entityIndex
           ].submissionId = success.result.assessment.submissionId;
           this.localStorage.setLocalStorage(
             this.utils.getAssessmentLocalStorageKey(
               programs[programIndex].solutions[assessmentIndex].entities[
-                schoolIndex
+                entityIndex
               ].submissionId
             ),
             success.result
           );
-          this.localStorage.setLocalStorage(`programList`, programs);
+          this.localStorage.setLocalStorage(storageKeys.programList, programs);
           this.utils.stopLoader();
 
           resolve(programs);
@@ -131,7 +133,7 @@ export class ProgramServiceProvider {
     let myEvent = event.event;
     let programIndex = event.programIndex;
     let assessmentIndex = event.assessmentIndex;
-    let schoolIndex = event.entityIndex;
+    let entityIndex = event.entityIndex;
     let submissionId = event.submissionId;
     let showMenuArray;
     let solutionId = event.solutionId;
@@ -150,15 +152,15 @@ export class ProgramServiceProvider {
         let popover = this.popoverCtrl.create(MenuItemComponent, {
           submissionId:
             programs[programIndex].solutions[assessmentIndex].entities[
-              schoolIndex
+              entityIndex
             ].submissionId,
           _id:
             programs[programIndex].solutions[assessmentIndex].entities[
-              schoolIndex
+              entityIndex
             ]["_id"],
           name:
             programs[programIndex].solutions[assessmentIndex].entities[
-              schoolIndex
+              entityIndex
             ]["name"],
           programId: programs[programIndex]._id,
           showMenuArray: showMenuArray,
@@ -180,7 +182,9 @@ export class ProgramServiceProvider {
 
   // pass the program list and check for institutional,individual list
   migrationFuntion(program) {
-    let intstitutionalList = this.localStorageGetfn("institutionalList");
+    let intstitutionalList = this.localStorageGetfn(
+      storageKeys.institutionalList
+    );
     intstitutionalList
       .then((list) => {
         console.log(list);
@@ -230,7 +234,7 @@ export class ProgramServiceProvider {
     delete the previous list i.e institutional,individual lists
   */
   localStoragePutFn(currList: any, key) {
-    this.localStorage.setLocalStorage("programList", currList);
+    this.localStorage.setLocalStorage(storageKeys.programList, currList);
     this.localStorage.deleteOneStorage(key);
   }
 

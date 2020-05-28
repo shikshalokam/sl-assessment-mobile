@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { NavController, NavParams } from "ionic-angular";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
-import { ProgramSolutionEntityPage } from "../program-solution-entity/program-solution-entity";
+import { UtilsProvider } from "../../../providers/utils/utils";
 
 /**
  * Generated class for the ProgramSolutionPage page.
@@ -17,10 +17,12 @@ import { ProgramSolutionEntityPage } from "../program-solution-entity/program-so
 export class ProgramSolutionPage {
   programIndex: any;
   program: any;
+  programList: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private localStorage: LocalStorageProvider
+    private localStorage: LocalStorageProvider,
+    private utils: UtilsProvider
   ) {}
 
   ionViewDidLoad() {
@@ -30,24 +32,22 @@ export class ProgramSolutionPage {
   }
 
   getProgramFromStorage() {
+    this.utils.startLoader();
+
     this.localStorage
       .getLocalStorage("programList")
       .then((data) => {
         if (data) {
           this.program = data[this.programIndex];
+          this.programList = data;
         } else {
           this.program = null;
         }
+        this.utils.stopLoader();
       })
       .catch((error) => {
+        this.utils.stopLoader();
         this.program = null;
       });
-  }
-
-  goToProgramSolEntity(solutionIndex) {
-    this.navCtrl.push(ProgramSolutionEntityPage, {
-      programIndex: this.programIndex,
-      solutionIndex: solutionIndex,
-    });
   }
 }

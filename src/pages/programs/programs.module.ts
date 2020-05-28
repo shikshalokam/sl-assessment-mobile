@@ -21,6 +21,5 @@ import { ProgramSolutionComponent } from "./program-solution/program-solution/pr
     ProgramSolutionPage,
     ProgramSolutionEntityPage,
   ],
-  // exports: [ProgramSolutionComponent],
 })
 export class ProgramsPageModule {}

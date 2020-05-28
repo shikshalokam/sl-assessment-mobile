@@ -35,4 +35,12 @@
       </ion-item>
     </ion-card>
   </div>
+
+  <div
+    *ngIf="program?.solutions[solutionIndex]?.entities && !program?.solutions[solutionIndex]?.entities.length"
+  >
+    <div class="ion-diagnostics-sheet-title">
+      <h3>{{'message.noEntity' | translate}}</h3>
+    </div>
+  </div>
 </ion-content>

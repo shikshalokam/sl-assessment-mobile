@@ -2,6 +2,7 @@ import { Component, Input } from "@angular/core";
 import { ProgramSolutionEntityPage } from "../../program-solution-entity/program-solution-entity";
 import { NavController } from "ionic-angular";
 import { LocalStorageProvider } from "../../../../providers/local-storage/local-storage";
+import { UtilsProvider } from "../../../../providers/utils/utils";
 
 /**
  * Generated class for the ProgramSolutionComponent component.
@@ -18,28 +19,10 @@ export class ProgramSolutionComponent {
   @Input("programIndex") programIndex: any;
   @Input("solutionIndex") solutionIndex: any;
   @Input("showProgram") showProgram: boolean;
+  @Input("programList") programList: any;
   program: any;
-  constructor(
-    public navCtrl: NavController,
-    private localStorage: LocalStorageProvider
-  ) {
+  constructor(public navCtrl: NavController) {
     console.log("Hello ProgramSolutionComponent Component");
-    this.getProgramFromStorage();
-  }
-
-  getProgramFromStorage() {
-    this.localStorage
-      .getLocalStorage("programList")
-      .then((data) => {
-        if (data) {
-          this.program = data[this.programIndex];
-        } else {
-          this.program = null;
-        }
-      })
-      .catch((error) => {
-        this.program = null;
-      });
   }
 
   goToProgramSolEntity() {

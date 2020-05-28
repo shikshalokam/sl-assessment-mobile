@@ -41,6 +41,7 @@ export class ProgramSolutionEntityPage {
   }
 
   getProgramFromStorage() {
+    this.utils.startLoader();
     this.localStorage
       .getLocalStorage("programList")
       .then((data) => {
@@ -50,8 +51,10 @@ export class ProgramSolutionEntityPage {
         } else {
           this.program = null;
         }
+        this.utils.stopLoader();
       })
       .catch((error) => {
+        this.utils.stopLoader();
         this.program = null;
       });
   }

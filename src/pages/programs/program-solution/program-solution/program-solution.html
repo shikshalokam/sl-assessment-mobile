@@ -1,10 +1,10 @@
 <!-- Generated template for the ProgramSolutionComponent component -->
 <div>
-  <ion-card (click)="goToProgramSolEntity(i)">
+  <ion-card (click)="goToProgramSolEntity()">
     <ion-item text-wrap>
       <div class="_flex-box">
         <div style="flex: 1;">
-          <h2 *ngIf="showProgram">{{program?.name}}</h2>
+          <h2 *ngIf="showProgram">{{programList[programIndex]?.name}}</h2>
           <p>
             {{solution.name}}
           </p>
