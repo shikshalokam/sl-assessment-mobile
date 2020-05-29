@@ -25,6 +25,8 @@ import { GenericMenuPopOverComponent } from "../../components/generic-menu-pop-o
 import { ObservationProvider } from "../../providers/observation/observation";
 import { SidemenuProvider } from "../../providers/sidemenu/sidemenu";
 import { storageKeys } from "../../providers/storageKeys";
+import { ProgramServiceProvider } from "../programs/program-service";
+import { error } from "highcharts";
 
 declare var cordova: any;
 
@@ -82,6 +84,7 @@ export class HomePage {
   individualAssessments;
   observations;
   observationSubscription;
+  programList: any;
   constructor(
     public navCtrl: NavController,
     private currentUser: CurrentUserProvider,
@@ -101,7 +104,8 @@ export class HomePage {
     private utils: UtilsProvider,
     private assessmentService: AssessmentServiceProvider,
     private observationService: ObservationProvider,
-    private sidemenuProvider: SidemenuProvider
+    private sidemenuProvider: SidemenuProvider,
+    private programService: ProgramServiceProvider
   ) {
     this.isIos = this.platform.is("ios") ? true : false;
   }
@@ -110,6 +114,7 @@ export class HomePage {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
     this.sidemenuProvider.getUserRoles();
+    this.getProgramFromStorage();
 
     if (this.network.type != "none") {
       this.networkAvailable = true;
@@ -365,5 +370,20 @@ export class HomePage {
       entityDetails: aseessmemtData,
     };
     this.evdnsServ.openActionSheet(options);
+  }
+
+  // for new flow
+  getProgramFromStorage() {
+    this.utils.startLoader();
+    this.programService
+      .getProgramFromStorage()
+      .then((programs) => {
+        this.programList = programs;
+        this.utils.stopLoader();
+      })
+      .catch((error) => {
+        this.programList = null;
+        this.utils.stopLoader();
+      });
   }
 }

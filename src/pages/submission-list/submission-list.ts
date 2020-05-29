@@ -7,6 +7,7 @@ import {
   AlertController,
   ActionSheetController,
   PopoverController,
+  ModalController,
 } from "ionic-angular";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 import { ApiProvider } from "../../providers/api/api";
@@ -21,6 +22,7 @@ import { ObservationReportsPage } from "../observation-reports/observation-repor
 import { Content } from "ionic-angular";
 import { ScoreReportMenusComponent } from "../../components/score-report-menus/score-report-menus";
 import { SubmissionActionsComponent } from "../../components/submission-actions/submission-actions";
+import { ViewDetailComponent } from "../../components/view-detail/view-detail";
 
 /**
  * Generated class for the SubmissionListPage page.
@@ -67,7 +69,8 @@ export class SubmissionListPage {
     private translate: TranslateService,
     private observationService: ObservationServiceProvider,
     private assessmentService: AssessmentServiceProvider,
-    public actionSheetCtrl: ActionSheetController
+    public actionSheetCtrl: ActionSheetController,
+    private modalCtrl: ModalController
   ) {
     this.events.subscribe("updateSubmissionStatus", (refresh) => {
       // this.utils.startLoader();
@@ -463,6 +466,13 @@ export class SubmissionListPage {
         entityType: submission.entityType,
       });
     }
+  }
+  //open info menu
+  openInfo(submission) {
+    const modal = this.modalCtrl.create(ViewDetailComponent, {
+      submission: submission,
+    });
+    modal.present();
   }
   // Menu for Entity reports
   openEntityReportMenu(event) {

@@ -149,7 +149,8 @@
     "tutorialvideo": "Tutorial Video",
     "evidences": "Evidences",
     "allObservation": "All Observation",
-    "improvementProjects": "Improvements Projects"
+    "improvementProjects": "Improvements Projects",
+    "programs": "Programs"
   },
   "headings": {
     "zone": "Zones",
@@ -170,6 +171,9 @@
     "mySchool": "My Schools",
     "faqs": "FAQs",
     "programList": "Program List",
+    "myPrograms": "My Programs",
+    "mySolutions": "My Solutions",
+    "myEntities": "My Entities",
     "about": "About",
     "school": "School",
     "profile": "Profile",
