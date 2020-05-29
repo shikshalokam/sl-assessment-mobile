@@ -107,8 +107,9 @@ export class NotificationProvider {
     }, error => {
       this.notificationsData = {};
       this.$notificationSubject.next({});
-    },
-      { baseUrl: "kendra" })
+    },{ baseUrl: "kendra" }
+      )
+
   }
 
   internalNotificationsHandler(notifications) {
