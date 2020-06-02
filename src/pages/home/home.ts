@@ -114,7 +114,6 @@ export class HomePage {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
     this.sidemenuProvider.getUserRoles();
-    this.getProgramFromStorage();
 
     if (this.network.type != "none") {
       this.networkAvailable = true;
@@ -257,6 +256,7 @@ export class HomePage {
     this.getInstitutionalAssessmentsFromLocal();
     this.getIndividualAssessmentFromLocal();
     this.getObservationListFromLocal();
+    this.getProgramFromStorage();
   }
 
   socialSharingInApp() {

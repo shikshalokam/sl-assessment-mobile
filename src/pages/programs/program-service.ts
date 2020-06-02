@@ -37,11 +37,11 @@ export class ProgramServiceProvider {
           this.migrationFuntion(data);
           return data;
         } else {
-          return this.getProgramApi();
+          return this.getProgramApi(true);
         }
       })
       .catch((error) => {
-        return this.getProgramApi();
+        return this.getProgramApi(true);
       });
   }
 
@@ -59,9 +59,23 @@ export class ProgramServiceProvider {
           // console.log(JSON.stringify(successData))
           for (const program of successData.result) {
             for (const solution of program.solutions) {
-              for (const entity of solution.entities) {
-                entity.downloaded = false;
-                entity.submissionId = null;
+              //TODO Checking type here as the api structure is changed
+              /* 
+              for type=observation entities will come inside observations array
+              else it will come directly as entities
+               */
+              if (solution.type === "observation") {
+                for (const observation of solution.observations) {
+                  for (const entity of observation.entities) {
+                    entity.downloaded = false;
+                    entity.submissionId = null;
+                  }
+                }
+              } else {
+                for (const entity of solution.entities) {
+                  entity.downloaded = false;
+                  entity.submissionId = null;
+                }
               }
             }
           }

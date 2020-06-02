@@ -6,10 +6,15 @@ import { TranslateModule } from "@ngx-translate/core";
 import { ProgramServiceProvider } from "./program-service";
 import { ProgramSolutionPage } from "./program-solution/program-solution";
 import { ProgramSolutionEntityPage } from "./program-solution-entity/program-solution-entity";
-import { ProgramSolutionComponent } from "./program-solution/program-solution/program-solution";
+import { ProgramSolutionObservationDetailPage } from "./program-solution-observation-detail/program-solution-observation-detail";
 
 @NgModule({
-  declarations: [ProgramsPage, ProgramSolutionPage, ProgramSolutionEntityPage],
+  declarations: [
+    ProgramsPage,
+    ProgramSolutionPage,
+    ProgramSolutionEntityPage,
+    ProgramSolutionObservationDetailPage,
+  ],
   imports: [
     IonicPageModule.forChild(ProgramsPage),
     ComponentsModule,
@@ -20,6 +25,7 @@ import { ProgramSolutionComponent } from "./program-solution/program-solution/pr
     ProgramsPage,
     ProgramSolutionPage,
     ProgramSolutionEntityPage,
+    ProgramSolutionObservationDetailPage,
   ],
 })
 export class ProgramsPageModule {}

@@ -1,0 +1,57 @@
+<ion-header>
+  <header
+    [title]="'headings.observationDetails'|translate"
+    [hideBack]="false"
+  ></header>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar
+    (ionInput)="fileterList($event)"
+    [(ngModel)]="search"
+    placeholder="Search for schools"
+  ></ion-searchbar>
+  <observation-entity-listing
+    [entityList]="observationDetails"
+    [entityType]="'observations'"
+    [observationList]="observationList"
+    (refreshEvent)="refresh($event)"
+    [selectedObservationIndex]="programIndex"
+    (openMenuEvent)="openMenu($event)"
+    #entityComponent
+  >
+  </observation-entity-listing>
+  <!-- <observation-entity-listing
+    *ngIf="selectedObservationIndex >= 0"
+    [entityList]="observationDetails"
+    [entityType]="'observations'"
+    [observationList]="observationList"
+    (refreshEvent)="refresh($event)"
+    [selectedObservationIndex]="selectedObservationIndex"
+    (openMenuEvent)="openMenu($event)"
+    #entityComponent
+  >
+  </observation-entity-listing> -->
+</ion-content>
+
+<ion-footer no-shadow *ngIf="submissionCount">
+  <ion-toolbar position="bottom">
+    <ion-row>
+      <button ion-button full (click)="openObservationMenu($event)">
+        {{'buttons.viewObservationReport'|translate}}
+      </button>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
+<!-- <ion-footer no-shadow  *ngIf="enableCompleteBtn">
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col *ngIf="observationDetails[0]?.status !== 'completed' && observationDetails[0]?.entities?.length ">
+        <button ion-button full (click)="markAsComplete()" class="btnText">
+          <ion-icon name="refresh" margin-right></ion-icon>
+          {{'buttons.markAsComplete' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer> -->

@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { ProgramSolutionEntityPage } from "../../program-solution-entity/program-solution-entity";
 import { NavController } from "ionic-angular";
+import { ProgramSolutionObservationDetailPage } from "../../program-solution-observation-detail/program-solution-observation-detail";
 
 /**
  * Generated class for the ProgramSolutionComponent component.
@@ -23,8 +24,23 @@ export class ProgramSolutionComponent {
     console.log("Hello ProgramSolutionComponent Component");
   }
 
+  //Redirect on solution click based on sol type,observation individual or institutional
+
+  redirectOnSoluctionClick() {
+    this.solution.type == "observation"
+      ? this.goToProgSolObservationDetails()
+      : this.goToProgramSolEntity();
+  }
+
   goToProgramSolEntity() {
     this.navCtrl.push(ProgramSolutionEntityPage, {
+      programIndex: this.programIndex,
+      solutionIndex: this.solutionIndex,
+    });
+  }
+
+  goToProgSolObservationDetails() {
+    this.navCtrl.push(ProgramSolutionObservationDetailPage, {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
     });
