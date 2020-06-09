@@ -35,6 +35,7 @@ import { SidemenuProvider } from "../providers/sidemenu/sidemenu";
 import { TutorialVideoListingPage } from "../pages/tutorial-video-listing/tutorial-video-listing";
 import { ImprovementProjectPage } from "../pages/improvement-project/improvement-project";
 import { ProgramsPage } from "../pages/programs/programs";
+import { InstitutionPage } from "../pages/institution/institution";
 
 @Component({
   templateUrl: "app.html",

@@ -1,0 +1,19 @@
+<!-- Generated template for the BottomNavComponent component -->
+<ion-footer class="ion-no-border">
+  <ion-toolbar color="primary">
+    <div class="_flex-box _justify-content-space-between" style="color: #fff;">
+      <ion-buttons
+        *ngFor="let menu of bottomMenu;let selectedMenuIndex=index"
+        [ngClass]="{'bottom-menu-border-bottom': selectedBottomMenu==menu.name}"
+        (click)="goToBottomMenu(selectedMenuIndex)"
+      >
+        <div class="_flex-box _flex-direction-column">
+          <button ion-button icon-only>
+            <ion-icon name="{{menu.icon}}"></ion-icon>
+          </button>
+          <span>{{menu.name}}</span>
+        </div>
+      </ion-buttons>
+    </div>
+  </ion-toolbar>
+</ion-footer>

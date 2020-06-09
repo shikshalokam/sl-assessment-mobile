@@ -88,20 +88,23 @@ export class ProgramServiceProvider {
       let programIndex = event.programIndex;
       let assessmentIndex = event.assessmentIndex;
       let entityIndex = event.entityIndex;
+      let solutionId = programs[programIndex].solutions[assessmentIndex]._id;
+      let entityId =
+        programs[programIndex].solutions[assessmentIndex].entities[entityIndex]
+          ._id;
 
       this.utils.startLoader();
       const url =
         AppConfigs.assessmentsList.detailsOfAssessment +
         programs[programIndex]._id +
         "?solutionId=" +
-        programs[programIndex].solutions[assessmentIndex]._id +
+        solutionId +
         "&entityId=" +
-        programs[programIndex].solutions[assessmentIndex].entities[entityIndex]
-          ._id;
+        entityId;
       //console.log(url);
       this.apiService.httpGet(
         url,
-        (success) => {
+        async (success) => {
           this.ulsdp.mapSubmissionDataToQuestion(success.result);
           const generalQuestions = success.result["assessment"][
             "generalQuestions"
@@ -123,6 +126,11 @@ export class ProgramServiceProvider {
           programs[programIndex].solutions[assessmentIndex].entities[
             entityIndex
           ].submissionId = success.result.assessment.submissionId;
+          await this.ulsdp.updateSubmissionIdArr(
+            success.result.assessment.submissionId,
+            solutionId,
+            entityId
+          );
           this.localStorage.setLocalStorage(
             this.utils.getAssessmentLocalStorageKey(
               programs[programIndex].solutions[assessmentIndex].entities[

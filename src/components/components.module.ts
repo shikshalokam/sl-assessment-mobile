@@ -49,6 +49,7 @@ import { PlayVideoComponent } from "./play-video/play-video";
 import { AttachmentsComponent } from "./attachments/attachments";
 import { ViewDetailComponent } from "./view-detail/view-detail";
 import { ProgramSolutionComponent } from "../pages/programs/program-solution/program-solution/program-solution";
+import { BottomNavComponent } from './bottom-nav/bottom-nav';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { ProgramSolutionComponent } from "../pages/programs/program-solution/pro
     AttachmentsComponent,
     ViewDetailComponent,
     ProgramSolutionComponent,
+    BottomNavComponent,
   ],
   imports: [
     IonicModule,
@@ -142,6 +144,7 @@ import { ProgramSolutionComponent } from "../pages/programs/program-solution/pro
     AttachmentsComponent,
     ViewDetailComponent,
     ProgramSolutionComponent,
+    BottomNavComponent,
   ],
   entryComponents: [
     InputTypeComponent,
