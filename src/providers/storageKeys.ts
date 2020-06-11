@@ -6,4 +6,6 @@ export const storageKeys = {
   programList: "programList", // stores all programs list with solution and entities nested inside
   institutionalList: "institutionalList", // list of intitutional assessment // old flow
   individualList: "individualList", // list of individual assessment // old flow
+  createdObservationList: "createdObservationList", // list of observational assessment // old flow
+  observationSubmissionIdArr: "observationSubmissionIdArr",
 };

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { NavController, NavParams, Events } from "ionic-angular";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
 
@@ -15,10 +15,12 @@ import { LocalStorageProvider } from "../../../providers/local-storage/local-sto
 })
 export class ProgramSolutionObservationDetailPage {
   // programs: any;
+  @ViewChild("entityComponent") childEntityList;
   programIndex: any;
   solutionIndex: any;
   observationDetails: any[];
   observationList: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -37,28 +39,30 @@ export class ProgramSolutionObservationDetailPage {
   }
 
   ionViewDidEnter() {
-    this.getLocalStorageData();
+    // this.getLocalStorageData();
   }
 
-  getLocalStorageData() {
-    this.observationDetails = [];
-    this.localStorage
-      .getLocalStorage("programList")
-      .then((data) => {
-        // this.programs = data;
-        this.observationList = data[this.programIndex].solutions;
-        /* this.observationDetails.push(
-          data[this.programIndex].solutions[this.solutionIndex].observations
-        ); */
-        this.observationDetails =
-          data[this.programIndex].solutions[this.solutionIndex].observations;
-        console.log(this.observationDetails);
-        // this.checkForAnySubmissionsMade();
-        // this.enableCompleteBtn = this.isAllEntitysCompleted();
-        // this.firstVisit = false;
-      })
-      .catch((error) => {
-        // this.firstVisit = false;
-      });
+  fileterList(event) {
+    this.childEntityList.fileterList(event);
   }
+
+  // getLocalStorageData() {
+  //   this.observationDetails = [];
+  //   this.localStorage
+  //     .getLocalStorage("programList")
+  //     .then((data) => {
+  //       // this.programs = data;
+  //       this.observationList = data[this.programIndex].solutions;
+  //       this.observationDetails.push(
+  //         data[this.programIndex].solutions[this.solutionIndex]
+  //       );
+  //       console.log(this.observationDetails);
+  //       // this.checkForAnySubmissionsMade();
+  //       // this.enableCompleteBtn = this.isAllEntitysCompleted();
+  //       // this.firstVisit = false;
+  //     })
+  //     .catch((error) => {
+  //       // this.firstVisit = false;
+  //     });
+  // }
 }

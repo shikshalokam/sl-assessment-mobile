@@ -6,21 +6,27 @@
 </ion-header>
 
 <ion-content>
+  <!-- (ionInput)="fileterList($event)" -->
   <ion-searchbar
-    (ionInput)="fileterList($event)"
     [(ngModel)]="search"
     placeholder="Search for schools"
   ></ion-searchbar>
-  <observation-entity-listing
+  <prog-observation-entity-listing
+    [programIndex]="programIndex"
+    [solutionIndex]="solutionIndex"
+    [search]="search"
+  >
+  </prog-observation-entity-listing>
+  <!-- <prog-observation-entity-listing
     [entityList]="observationDetails"
     [entityType]="'observations'"
     [observationList]="observationList"
     (refreshEvent)="refresh($event)"
-    [selectedObservationIndex]="programIndex"
+    [selectedObservationIndex]="solutionIndex"
     (openMenuEvent)="openMenu($event)"
     #entityComponent
   >
-  </observation-entity-listing>
+  </prog-observation-entity-listing> -->
   <!-- <observation-entity-listing
     *ngIf="selectedObservationIndex >= 0"
     [entityList]="observationDetails"
