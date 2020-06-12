@@ -57,14 +57,14 @@ export class ProgramServiceProvider {
           // console.log("success data")
           !noLoader ? this.utils.stopLoader() : null;
           // console.log(JSON.stringify(successData))
-          for (const program of successData.result) {
+          /*  for (const program of successData.result) {
             for (const solution of program.solutions) {
               for (const entity of solution.entities) {
                 entity.downloaded = false;
                 entity.submissionId = null;
               }
             }
-          }
+          } */
 
           this.localStorage.setLocalStorage(
             storageKeys.programList,

@@ -5,6 +5,18 @@
   ></header>
 </ion-header>
 <ion-content>
+  <ion-refresher
+    slot="fixed"
+    (ionRefresh)="refreshLocalObservationList($event)"
+  >
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-card *ngIf="submissionList" class="cardWrapper submissionCard">
     <ion-card-content class="observationTitle">
       {{selectedSolution.entities[ this.entityIndex ].name}}
@@ -73,6 +85,11 @@
   >
     {{'message.noSubmission'|translate}}
   </div>
+  <ion-fab bottom right>
+    <button ion-fab mini (click)="refreshLocalObservationList()">
+      <ion-icon name="refresh"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>
 <ion-footer no-shadow>
   <ion-toolbar position="bottom">

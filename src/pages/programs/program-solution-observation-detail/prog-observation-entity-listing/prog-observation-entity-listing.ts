@@ -51,11 +51,15 @@ export class ProgObservationEntityListingComponent {
     public alertCntrl: AlertController,
     private utils: UtilsProvider,
     private programService: ProgramServiceProvider
-  ) {}
-
-  ngOnInit() {
+  ) {
     this.getLocalStorageData();
+    console.log("called");
   }
+
+  // ionViewWillEnter() {
+  //   this.getLocalStorageData();
+  //   console.log("called");
+  // }
 
   getLocalStorageData() {
     this.localStorage

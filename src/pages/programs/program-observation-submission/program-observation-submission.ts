@@ -347,7 +347,6 @@ export class ProgramObservationSubmissionPage {
       },
       (error) => {
         this.utils.stopLoader();
-        // console.log(error, "error here")
       }
     );
   }
@@ -383,7 +382,6 @@ export class ProgramObservationSubmissionPage {
     this.programService
       .getAssessmentDetailsForObservation(event, this.programList)
       .then(async (programList) => {
-        // this.programList = programList;
         await this.getProgramFromStorage();
         this.goToEcm(submission);
       })
@@ -425,8 +423,6 @@ export class ProgramObservationSubmissionPage {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    // console.log(JSON.stringify(assessment))
-
     this.utils.setCurrentimageFolderName(
       aseessmemtData.assessment.evidences[evidenceIndex].externalId,
       assessment._id
@@ -442,21 +438,19 @@ export class ProgramObservationSubmissionPage {
     this.evdnsServ.openActionSheet(options, "Observation");
   }
 
-  refreshLocalObservationList() {
+  refreshLocalObservationList(refreshEvent?) {
     let event = {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
       entityIndex: this.entityIndex,
     };
 
-    // this.getProgramFromStorage();
-    // return;
     this.programService
       .refreshObservationList(this.programList, event)
       .then((data) => {
-        // this.programList = programList;
         this.utils.stopLoader();
         this.getProgramFromStorage();
+        if (refreshEvent) refreshEvent.complete();
         this.selectedSolution.entities[this.entityIndex].submissions.length > 0
           ? null
           : this.navCtrl.pop();

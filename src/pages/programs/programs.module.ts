@@ -8,6 +8,7 @@ import { ProgramSolutionPage } from "./program-solution/program-solution";
 import { ProgramSolutionEntityPage } from "./program-solution-entity/program-solution-entity";
 import { ProgramSolutionObservationDetailPage } from "./program-solution-observation-detail/program-solution-observation-detail";
 import { ProgramObservationSubmissionPage } from "./program-observation-submission/program-observation-submission";
+import { PipesModule } from "../../pipes/pipes.module";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ProgramObservationSubmissionPage } from "./program-observation-submissi
     IonicPageModule.forChild(ProgramsPage),
     ComponentsModule,
     TranslateModule,
+    PipesModule,
   ],
   providers: [ProgramServiceProvider],
   entryComponents: [
