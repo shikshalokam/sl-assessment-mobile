@@ -89,7 +89,7 @@ export class ProgramObservationSubmissionPage {
 
     this.utils.startLoader();
 
-    this.localStorage
+    await this.localStorage
       .getLocalStorage(storageKeys.programList)
       .then((data) => {
         if (data) {
@@ -447,9 +447,9 @@ export class ProgramObservationSubmissionPage {
 
     this.programService
       .refreshObservationList(this.programList, event)
-      .then((data) => {
+      .then(async (data) => {
         this.utils.stopLoader();
-        this.getProgramFromStorage();
+        await this.getProgramFromStorage();
         if (refreshEvent) refreshEvent.complete();
         this.selectedSolution.entities[this.entityIndex].submissions.length > 0
           ? null
