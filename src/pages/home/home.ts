@@ -253,9 +253,9 @@ export class HomePage {
     //   console.log("LAST MODEFIED AT ARRAY IS BLANK")
     // });
 
-    this.getInstitutionalAssessmentsFromLocal();
-    this.getIndividualAssessmentFromLocal();
-    this.getObservationListFromLocal();
+    // this.getInstitutionalAssessmentsFromLocal();
+    // this.getIndividualAssessmentFromLocal();
+    // this.getObservationListFromLocal();
     this.getProgramFromStorage();
   }
 
