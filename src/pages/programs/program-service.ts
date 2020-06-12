@@ -37,11 +37,11 @@ export class ProgramServiceProvider {
           this.migrationFuntion(data);
           return data;
         } else {
-          return this.getProgramApi();
+          return this.getProgramApi(true);
         }
       })
       .catch((error) => {
-        return this.getProgramApi();
+        return this.getProgramApi(true);
       });
   }
 
@@ -57,14 +57,14 @@ export class ProgramServiceProvider {
           // console.log("success data")
           !noLoader ? this.utils.stopLoader() : null;
           // console.log(JSON.stringify(successData))
-          for (const program of successData.result) {
+          /*  for (const program of successData.result) {
             for (const solution of program.solutions) {
               for (const entity of solution.entities) {
                 entity.downloaded = false;
                 entity.submissionId = null;
               }
             }
-          }
+          } */
 
           this.localStorage.setLocalStorage(
             storageKeys.programList,
@@ -82,6 +82,7 @@ export class ProgramServiceProvider {
       );
     });
   }
+  //  for individual and instituional
 
   getAssessmentDetails(event, programs) {
     return new Promise((resolve, reject) => {
@@ -143,6 +144,144 @@ export class ProgramServiceProvider {
         },
         { version: "v2" }
       );
+    });
+  }
+
+  // for observation
+
+  getAssessmentDetailsForObservation(event, programs) {
+    return new Promise((resolve, reject) => {
+      // let programIndex = event.programIndex;
+      let programIndex = event.programIndex;
+      let solutionIndex = event.solutionIndex;
+      let entityIndex = event.entityIndex;
+      // let schoolIndex = event.entityIndex;
+      let submissionNumber = event.submission.submissionNumber;
+      // let submissionId = event.submission.submissionId;
+      let observationId = event.submission.observationId;
+
+      this.utils.startLoader();
+      const url =
+        AppConfigs.cro.observationDetails +
+        observationId +
+        "?entityId=" +
+        programs[programIndex].solutions[solutionIndex].entities[entityIndex]
+          ._id +
+        "&submissionNumber=" +
+        submissionNumber;
+      console.log(url);
+      this.apiService.httpGet(
+        url,
+        (success) => {
+          this.ulsdp.mapSubmissionDataToQuestion(success.result, true);
+          const generalQuestions = success.result["assessment"][
+            "generalQuestions"
+          ]
+            ? success.result["assessment"]["generalQuestions"]
+            : null;
+          this.localStorage.setLocalStorage(
+            "generalQuestions_" + success.result["assessment"]["submissionId"],
+            generalQuestions
+          );
+          this.localStorage.setLocalStorage(
+            "generalQuestionsCopy_" +
+              success.result["assessment"]["submissionId"],
+            generalQuestions
+          );
+
+          /* programs[programIndex].solutions[assessmentIndex].entities[
+            entityIndex
+          ].submissions.map((s) => {
+            s.submissionNumber == submissionNumber
+              ? (s.downloaded = true)
+              : null;
+          }); */
+
+          this.ulsdp.storeObsevationSubmissionId(
+            success.result["assessment"]["submissionId"]
+          );
+
+          this.localStorage.setLocalStorage(
+            this.utils.getAssessmentLocalStorageKey(
+              success.result.assessment.submissionId
+            ),
+            success.result
+          );
+          this.localStorage.setLocalStorage(storageKeys.programList, programs);
+          this.utils.stopLoader();
+          resolve(programs);
+        },
+        (error) => {
+          //console.log("error details api")
+          this.utils.stopLoader();
+          reject();
+        },
+        { version: "v2" }
+      );
+    });
+  }
+
+  refreshObservationList(programs?: any, event?) {
+    return new Promise((resolve, reject) => {
+      /*  let programIndex = event.programIndex;
+      let solutionIndex = event.solutionIndex;
+      let entityIndex = event.entityIndex; */
+      /* let prevlist = programs[programIndex].solutions[solutionIndex].entities[
+        entityIndex
+      ].submissions.filter((s) => s.downloaded); */
+
+      //
+      this.apiService.httpGet(
+        AppConfigs.programs.programList,
+        (success) => {
+          let currList = success.result;
+
+          /*  if (prevlist.length > 0) {
+            prevlist.map((prevprogram) =>
+              prevprogram.solutions.map((prevsolution) =>
+                prevsolution.entities.map((preventity) => {
+                  if (preventity.submissions.length) {
+                    preventity.submissions.map((prevSubmission) => {
+                      let programIndex = currList.findIndex(
+                        (currProgram) => currProgram._id == prevprogram._id
+                      );
+                      let solutionIndex = currList[
+                        programIndex
+                      ].solutions.findIndex(
+                        (currSolution) => currSolution._id == prevsolution._id
+                      );
+                      let entityIndex = currList[programIndex].solutions[
+                        solutionIndex
+                      ].entities.findIndex(
+                        (currEnitity) => currEnitity._id == preventity._id
+                      );
+                      let submissionIndex = currList[programIndex].solutions[
+                        solutionIndex
+                      ].entities[entityIndex].submissions.findIndex(
+                        (currSubmission) =>
+                          currSubmission.submissionNumber ==
+                          prevSubmission.submissionNumber
+                      );
+                      currList[programIndex].solutions[solutionIndex].entities[
+                        entityIndex
+                      ].submissions[submissionIndex].downloaded = true;
+                    });
+                  }
+                })
+              )
+            );
+          } */
+          // event ? event.complete() : "";
+
+          this.localStorage.setLocalStorage(storageKeys.programList, currList);
+          resolve(currList);
+        },
+        (error) => {
+          // event ? event.complete() : "";
+          reject();
+        }
+      );
+      //
     });
   }
 
@@ -217,6 +356,25 @@ export class ProgramServiceProvider {
         this.migrate(list, program, "individualList");
       })
       .catch((err) => {});
+    this.runObservationMigration();
+  }
+
+  runObservationMigration() {
+    let idsArr = [];
+    this.localStorageGetfn(storageKeys.createdObservationList)
+      .then((list) => {
+        console.log(list);
+        list.map((program) =>
+          program.entities.map((entity) =>
+            entity.submissions.map((submission) => {
+              submission.downloaded ? idsArr.push(submission._id) : null;
+            })
+          )
+        );
+        idsArr.length ? this.ulsdp.storeObsevationSubmissionId(idsArr) : null;
+        this.localStorage.deleteOneStorage(storageKeys.createdObservationList);
+      })
+      .catch((err) => console.log(err));
   }
 
   // if individual,institutional list present get the data

@@ -114,7 +114,6 @@ export class HomePage {
     this.userData = this.currentUser.getCurrentUserData();
     this.navCtrl.id = "HomePage";
     this.sidemenuProvider.getUserRoles();
-    this.getProgramFromStorage();
 
     if (this.network.type != "none") {
       this.networkAvailable = true;
@@ -254,9 +253,10 @@ export class HomePage {
     //   console.log("LAST MODEFIED AT ARRAY IS BLANK")
     // });
 
-    this.getInstitutionalAssessmentsFromLocal();
-    this.getIndividualAssessmentFromLocal();
-    this.getObservationListFromLocal();
+    // this.getInstitutionalAssessmentsFromLocal();
+    // this.getIndividualAssessmentFromLocal();
+    // this.getObservationListFromLocal();
+    this.getProgramFromStorage();
   }
 
   socialSharingInApp() {

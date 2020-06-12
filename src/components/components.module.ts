@@ -49,6 +49,7 @@ import { PlayVideoComponent } from "./play-video/play-video";
 import { AttachmentsComponent } from "./attachments/attachments";
 import { ViewDetailComponent } from "./view-detail/view-detail";
 import { ProgramSolutionComponent } from "../pages/programs/program-solution/program-solution/program-solution";
+import { ProgObservationEntityListingComponent } from "../pages/programs/program-solution-observation-detail/prog-observation-entity-listing/prog-observation-entity-listing";
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { ProgramSolutionComponent } from "../pages/programs/program-solution/pro
     AttachmentsComponent,
     ViewDetailComponent,
     ProgramSolutionComponent,
+    ProgObservationEntityListingComponent,
   ],
   imports: [
     IonicModule,
@@ -142,6 +144,7 @@ import { ProgramSolutionComponent } from "../pages/programs/program-solution/pro
     AttachmentsComponent,
     ViewDetailComponent,
     ProgramSolutionComponent,
+    ProgObservationEntityListingComponent,
   ],
   entryComponents: [
     InputTypeComponent,
