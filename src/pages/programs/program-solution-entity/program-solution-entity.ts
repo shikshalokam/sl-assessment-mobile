@@ -85,44 +85,11 @@ export class ProgramSolutionEntityPage {
     this.programList[this.programIndex].solutions[
       this.solutionIndex
     ].entities.map((e, entityIndex) => {
-      // let tempArr = this.submissionArr.filter(
-      //   (arr) => arr.solutionId == solutionId && arr.entityId == e._id
-      // );
-      // if (tempArr.length) {
-      //   this.programList[this.programIndex].solutions[
-      //     this.solutionIndex
-      //   ].entities[entityIndex].submissionId = tempArr[0].submissionId;
-      //   this.programList[this.programIndex].solutions[
-      //     this.solutionIndex
-      //   ].entities[entityIndex].downloaded = true;
-      // }
       this.submissionArr.includes(e.submissionId)
         ? (e.downloaded = true)
         : null;
     });
   }
-
-  // checkDownload(submissionId, entityIndex) {
-  //   let solutionId = this.programList[this.programIndex].solutions[
-  //     this.solutionIndex
-  //   ]._id;
-  //   let entityId = this.programList[this.programIndex].solutions[
-  //     this.solutionIndex
-  //   ].entities[entityIndex]._id;
-  //   if (!this.submissionArr || !this.submissionArr.length) return false;
-  //   return this.submissionArr.some(
-  //     (d) => d.solutionId == solutionId && d.entityId == entityId
-  //   );
-  //   // return this.localStorage
-  //   //   .getLocalStorage(storageKeys.submissionIdArray)
-  //   //   .then((allId) => {
-  //   //     return allId.includes(submissionId);
-  //   //   })
-  //   //   .catch((err) => {
-  //   //     this.getAssessmentDetails(entityIndex);
-  //   //     return false;
-  //   //   });
-  // }
 
   getAssessmentDetails(entityIndex) {
     let event = {
