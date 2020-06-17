@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { ProgramSolutionEntityPage } from "../../program-solution-entity/program-solution-entity";
-import { NavController } from "ionic-angular";
+import { NavController, App } from "ionic-angular";
 import { ProgramSolutionObservationDetailPage } from "../../program-solution-observation-detail/program-solution-observation-detail";
 
 /**
@@ -20,7 +20,7 @@ export class ProgramSolutionComponent {
   @Input("showProgram") showProgram: boolean;
   @Input("programList") programList: any;
   program: any;
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, public app: App) {
     console.log("Hello ProgramSolutionComponent Component");
   }
 
@@ -33,14 +33,23 @@ export class ProgramSolutionComponent {
   }
 
   goToProgramSolEntity() {
-    this.navCtrl.push(ProgramSolutionEntityPage, {
+    /* this.navCtrl.push(ProgramSolutionEntityPage, {
+      programIndex: this.programIndex,
+      solutionIndex: this.solutionIndex,
+    }); */
+    this.app.getRootNav().push(ProgramSolutionEntityPage, {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
     });
   }
 
   goToProgSolObservationDetails() {
+    /*   
     this.navCtrl.push(ProgramSolutionObservationDetailPage, {
+      programIndex: this.programIndex,
+      solutionIndex: this.solutionIndex,
+    }); */
+    this.app.getRootNav().push(ProgramSolutionObservationDetailPage, {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
     });
