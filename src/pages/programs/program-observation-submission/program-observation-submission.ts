@@ -77,7 +77,7 @@ export class ProgramObservationSubmissionPage {
     this.getProgramFromStorage();
   }
 
-  async getProgramFromStorage() {
+  async getProgramFromStorage(stopLoader?) {
     await this.localStorage
       .getLocalStorage(storageKeys.observationSubmissionIdArr)
       .then((ids) => {
@@ -87,7 +87,7 @@ export class ProgramObservationSubmissionPage {
         this.submissionIdArr = [];
       });
 
-    this.utils.startLoader();
+    stopLoader ? null : this.utils.startLoader();
 
     await this.localStorage
       .getLocalStorage(storageKeys.programList)
@@ -328,8 +328,8 @@ export class ProgramObservationSubmissionPage {
   }
   observeAgain() {
     this.utils.startLoader("Creating an Obseravation");
-    let submissionNumber =
-      this.submissionList[this.submissionList.length - 1].submissionNumber + 1;
+    // let submissionNumber =
+    //   this.submissionList[this.submissionList.length - 1].submissionNumber + 1;
 
     const entityId = this.selectedSolution.entities[this.entityIndex]._id;
     const observationId = this.selectedSolution.entities[this.entityIndex]
@@ -448,8 +448,8 @@ export class ProgramObservationSubmissionPage {
     this.programService
       .refreshObservationList(this.programList, event)
       .then(async (data) => {
-        this.utils.stopLoader();
-        await this.getProgramFromStorage();
+        // this.utils.stopLoader();
+        await this.getProgramFromStorage("stopLoader");
         if (refreshEvent) refreshEvent.complete();
         this.selectedSolution.entities[this.entityIndex].submissions.length > 0
           ? null

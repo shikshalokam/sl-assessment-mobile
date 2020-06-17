@@ -35,6 +35,7 @@ import { SidemenuProvider } from "../providers/sidemenu/sidemenu";
 import { TutorialVideoListingPage } from "../pages/tutorial-video-listing/tutorial-video-listing";
 import { ImprovementProjectPage } from "../pages/improvement-project/improvement-project";
 import { ProgramsPage } from "../pages/programs/programs";
+import { BottomTabPage } from "../pages/bottom-tab/bottom-tab";
 
 @Component({
   templateUrl: "app.html",
@@ -305,7 +306,8 @@ export class MyApp {
           this.splashScreen.hide();
         } else {
           this.notifctnService.startNotificationPooling();
-          this.rootPage = HomePage;
+          // this.rootPage = HomePage;
+          this.rootPage = BottomTabPage;
           for (const page of this.allPages) {
             page["active"] = false;
           }

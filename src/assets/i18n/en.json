@@ -222,7 +222,14 @@
     "filter": "Filter",
     "tutorialvideo": "Tutorial Video",
     "improvementProjetcs": "Improvement Projects",
-    "entityList": "Entity List"
+    "entityList": "Entity List",
+    "solutions": "Solutions"
+  },
+  "bottomNav": {
+    "institution": "Institution",
+    "home": "Home",
+    "reports": "Reports",
+    "library": "Library"
   },
   "labels": {
     "welcome": "Welcome",

@@ -223,6 +223,27 @@ export class UpdateLocalSchoolDataProvider {
     }
   }
 
+  async updateSubmissionIdArr(submissionId) {
+    await this.localStorage
+      .getLocalStorage(storageKeys.submissionIdArray)
+      .then(async (arr) => {
+        Array.isArray(submissionId)
+          ? arr.concat(submissionId)
+          : arr.push(submissionId);
+        await this.localStorage.setLocalStorage(
+          storageKeys.submissionIdArray,
+          arr
+        );
+      })
+      .catch((err) => {
+        let arr;
+        Array.isArray(submissionId)
+          ? (arr = submissionId)
+          : (arr = [submissionId]);
+        this.localStorage.setLocalStorage(storageKeys.submissionIdArray, arr);
+      });
+  }
+
   storeObsevationSubmissionId(obsevationSubmissionId) {
     // obsevationSubmissionId can be array(only when migration is run) or string (single value)
     this.localStorage

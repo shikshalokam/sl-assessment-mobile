@@ -23,6 +23,7 @@ export class ProgramSolutionEntityPage {
   solutionIndex: any;
   programIndex: any;
   programList: any;
+  submissionArr: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -49,6 +50,7 @@ export class ProgramSolutionEntityPage {
         if (data) {
           this.program = data[this.programIndex];
           this.programList = data;
+          this.getSubmissionArr();
         } else {
           this.program = null;
         }
@@ -58,6 +60,35 @@ export class ProgramSolutionEntityPage {
         this.utils.stopLoader();
         this.program = null;
       });
+  }
+
+  getSubmissionArr() {
+    this.localStorage
+      .getLocalStorage(storageKeys.submissionIdArray)
+      .then((allId) => {
+        // return allId.includes(submissionId);
+        this.submissionArr = allId;
+        this.applySubmission();
+      })
+      .catch((err) => {
+        // this.getAssessmentDetails(entityIndex);
+        // return false;
+      });
+  }
+
+  applySubmission() {
+    // this.program.solutions[this.solutionIndex].
+    let solutionId = this.programList[this.programIndex].solutions[
+      this.solutionIndex
+    ]._id;
+
+    this.programList[this.programIndex].solutions[
+      this.solutionIndex
+    ].entities.map((e, entityIndex) => {
+      this.submissionArr.includes(e.submissionId)
+        ? (e.downloaded = true)
+        : null;
+    });
   }
 
   getAssessmentDetails(entityIndex) {
@@ -73,6 +104,7 @@ export class ProgramSolutionEntityPage {
       .getAssessmentDetails(event, this.programList)
       .then((program) => {
         this.program = program[this.programIndex];
+        this.getSubmissionArr();
       })
       .catch((error) => {});
   }

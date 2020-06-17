@@ -89,20 +89,23 @@ export class ProgramServiceProvider {
       let programIndex = event.programIndex;
       let assessmentIndex = event.assessmentIndex;
       let entityIndex = event.entityIndex;
+      let solutionId = programs[programIndex].solutions[assessmentIndex]._id;
+      let entityId =
+        programs[programIndex].solutions[assessmentIndex].entities[entityIndex]
+          ._id;
 
       this.utils.startLoader();
       const url =
         AppConfigs.assessmentsList.detailsOfAssessment +
         programs[programIndex]._id +
         "?solutionId=" +
-        programs[programIndex].solutions[assessmentIndex]._id +
+        solutionId +
         "&entityId=" +
-        programs[programIndex].solutions[assessmentIndex].entities[entityIndex]
-          ._id;
+        entityId;
       //console.log(url);
       this.apiService.httpGet(
         url,
-        (success) => {
+        async (success) => {
           this.ulsdp.mapSubmissionDataToQuestion(success.result);
           const generalQuestions = success.result["assessment"][
             "generalQuestions"
@@ -124,6 +127,14 @@ export class ProgramServiceProvider {
           programs[programIndex].solutions[assessmentIndex].entities[
             entityIndex
           ].submissionId = success.result.assessment.submissionId;
+          /*   await this.ulsdp.updateSubmissionIdArr(
+            success.result.assessment.submissionId,
+            solutionId,
+            entityId
+          ); */
+          await this.ulsdp.updateSubmissionIdArr(
+            success.result.assessment.submissionId
+          );
           this.localStorage.setLocalStorage(
             this.utils.getAssessmentLocalStorageKey(
               programs[programIndex].solutions[assessmentIndex].entities[
@@ -236,43 +247,6 @@ export class ProgramServiceProvider {
         (success) => {
           let currList = success.result;
 
-          /*  if (prevlist.length > 0) {
-            prevlist.map((prevprogram) =>
-              prevprogram.solutions.map((prevsolution) =>
-                prevsolution.entities.map((preventity) => {
-                  if (preventity.submissions.length) {
-                    preventity.submissions.map((prevSubmission) => {
-                      let programIndex = currList.findIndex(
-                        (currProgram) => currProgram._id == prevprogram._id
-                      );
-                      let solutionIndex = currList[
-                        programIndex
-                      ].solutions.findIndex(
-                        (currSolution) => currSolution._id == prevsolution._id
-                      );
-                      let entityIndex = currList[programIndex].solutions[
-                        solutionIndex
-                      ].entities.findIndex(
-                        (currEnitity) => currEnitity._id == preventity._id
-                      );
-                      let submissionIndex = currList[programIndex].solutions[
-                        solutionIndex
-                      ].entities[entityIndex].submissions.findIndex(
-                        (currSubmission) =>
-                          currSubmission.submissionNumber ==
-                          prevSubmission.submissionNumber
-                      );
-                      currList[programIndex].solutions[solutionIndex].entities[
-                        entityIndex
-                      ].submissions[submissionIndex].downloaded = true;
-                    });
-                  }
-                })
-              )
-            );
-          } */
-          // event ? event.complete() : "";
-
           this.localStorage.setLocalStorage(storageKeys.programList, currList);
           resolve(currList);
         },
@@ -346,14 +320,16 @@ export class ProgramServiceProvider {
     intstitutionalList
       .then((list) => {
         console.log(list);
-        this.migrate(list, program, "institutionalList");
+        // this.migrate(list, program, "institutionalList");
+        this.migrate(list, "institutionalList");
       })
       .catch((err) => {});
 
     individualList
       .then((list) => {
         console.log(list);
-        this.migrate(list, program, "individualList");
+        // this.migrate(list, program, "individualList");
+        this.migrate(list, "individualList");
       })
       .catch((err) => {});
     this.runObservationMigration();
@@ -383,42 +359,31 @@ export class ProgramServiceProvider {
   }
 
   // run migratation by providing previous list,current program list and the key in which previous list is stored
-  migrate(prevlist, currList, key) {
-    prevlist.map((prevprogram) =>
-      prevprogram.solutions.map((prevsolution) =>
-        prevsolution.entities.map((preventity) => {
-          if (preventity.downloaded) {
-            let programIndex = currList.findIndex(
-              (currProgram) => currProgram._id == prevprogram._id
-            );
-            let solutionIndex = currList[programIndex].solutions.findIndex(
-              (currSolution) => currSolution._id == prevsolution._id
-            );
-            let entityIndex = currList[programIndex].solutions[
-              solutionIndex
-            ].entities.findIndex(
-              (currEnitity) => currEnitity._id == preventity._id
-            );
-            currList[programIndex].solutions[solutionIndex].entities[
-              entityIndex
-            ].downloaded = true;
-            currList[programIndex].solutions[solutionIndex].entities[
-              entityIndex
-            ].submissionId = preventity.submissionId;
-          }
+  // migrate(prevlist, currList, key) {
+  migrate(list, key) {
+    let idsArr = [];
+
+    list.map((program) =>
+      program.solutions.map((solution) =>
+        solution.entities.map((entity) => {
+          entity.downloaded ? idsArr.push(entity.submissionId) : null;
         })
       )
     );
-    console.log(currList);
-    this.localStorageUpdateFn(currList, key);
+    console.log(idsArr);
+    idsArr.length ? this.ulsdp.updateSubmissionIdArr(idsArr) : null;
+
+    // this.localStorageUpdateFn(currList, key);
+    this.localStorageUpdateFn(key);
   }
 
   /* 
     update the current list i.e program list
     delete the previous list i.e institutional,individual lists
   */
-  localStorageUpdateFn(currList: any, key) {
-    this.localStorage.setLocalStorage(storageKeys.programList, currList);
+  // localStorageUpdateFn(currList: any, key) {
+  localStorageUpdateFn(key) {
+    // this.localStorage.setLocalStorage(storageKeys.programList, currList);
     this.localStorage.deleteOneStorage(key);
   }
 
