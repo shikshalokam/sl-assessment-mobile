@@ -81,7 +81,7 @@ export class InstitutionServiceProvider {
         ]._id;
       let entityId = institutionList.entities[entityType][entityIndex]._id;
 
-      this.utils.startLoader();
+      // this.utils.startLoader();
       const url =
         AppConfigs.assessmentsList.detailsOfAssessment +
         programId +
@@ -140,7 +140,7 @@ export class InstitutionServiceProvider {
         },
         (error) => {
           //console.log("error details api")
-          this.utils.stopLoader();
+          // this.utils.stopLoader();
           reject();
         },
         { version: "v2" }

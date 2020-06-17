@@ -5,7 +5,6 @@ import { UtilsProvider } from "../../../providers/utils/utils";
 import { EvidenceProvider } from "../../../providers/evidence/evidence";
 import { InstitutionServiceProvider } from "../institution-service";
 import { storageKeys } from "../../../providers/storageKeys";
-import { ProgramSolutionObservationDetailPage } from "../../programs/program-solution-observation-detail/program-solution-observation-detail";
 import { ProgramObservationSubmissionPage } from "../../programs/program-observation-submission/program-observation-submission";
 import { ProgramServiceProvider } from "../../programs/program-service";
 
@@ -45,8 +44,8 @@ export class InstitutionSolutionPage {
     this.getInstituionFromStorage();
   }
 
-  getInstituionFromStorage() {
-    this.utils.startLoader();
+  getInstituionFromStorage(stopLoader?) {
+    stopLoader ? null : this.utils.startLoader();
     this.institutionService
       .getInstituionFromStorage()
       .then((institutions) => {
@@ -165,6 +164,7 @@ export class InstitutionSolutionPage {
   }
 
   getAssessmentDetails(solutionIndex) {
+    this.utils.startLoader();
     let event = {
       // programIndex: this.programIndex,
       // assessmentIndex: this.solutionIndex,
@@ -176,9 +176,11 @@ export class InstitutionSolutionPage {
     this.institutionService
       .getAssessmentDetails(event, this.institutionList)
       .then((institutions) => {
-        this.getInstituionFromStorage();
+        this.getInstituionFromStorage("stopLoader");
       })
-      .catch((error) => {});
+      .catch((error) => {
+        this.utils.stopLoader();
+      });
   }
 
   /* goToObservationDetails(programId, observationId) {

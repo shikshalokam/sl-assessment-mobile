@@ -234,6 +234,14 @@ export class ProgramServiceProvider {
 
   refreshObservationList(programs?: any, event?) {
     return new Promise((resolve, reject) => {
+      /*  let programIndex = event.programIndex;
+      let solutionIndex = event.solutionIndex;
+      let entityIndex = event.entityIndex; */
+      /* let prevlist = programs[programIndex].solutions[solutionIndex].entities[
+        entityIndex
+      ].submissions.filter((s) => s.downloaded); */
+
+      //
       this.apiService.httpGet(
         AppConfigs.programs.programList,
         (success) => {
@@ -353,31 +361,6 @@ export class ProgramServiceProvider {
   // run migratation by providing previous list,current program list and the key in which previous list is stored
   // migrate(prevlist, currList, key) {
   migrate(list, key) {
-    /* prevlist.map((prevprogram) =>
-      prevprogram.solutions.map((prevsolution) =>
-        prevsolution.entities.map((preventity) => {
-          if (preventity.downloaded) {
-            let programIndex = currList.findIndex(
-              (currProgram) => currProgram._id == prevprogram._id
-            );
-            let solutionIndex = currList[programIndex].solutions.findIndex(
-              (currSolution) => currSolution._id == prevsolution._id
-            );
-            let entityIndex = currList[programIndex].solutions[
-              solutionIndex
-            ].entities.findIndex(
-              (currEnitity) => currEnitity._id == preventity._id
-            );
-            currList[programIndex].solutions[solutionIndex].entities[
-              entityIndex
-            ].downloaded = true;
-            currList[programIndex].solutions[solutionIndex].entities[
-              entityIndex
-            ].submissionId = preventity.submissionId;
-          }
-        })
-      )
-    ); */
     let idsArr = [];
 
     list.map((program) =>

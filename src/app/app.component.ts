@@ -68,7 +68,7 @@ export class MyApp {
       active: false,
       show: true,
     },
-    {
+    /*  {
       name: "institutional",
       icon: "book",
       component: InstitutionsEntityList,
@@ -88,7 +88,7 @@ export class MyApp {
       component: ObservationsPage,
       active: false,
       show: true,
-    },
+    }, */
     {
       name: "dashboard",
       icon: "analytics",

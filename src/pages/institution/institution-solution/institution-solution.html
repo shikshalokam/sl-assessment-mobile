@@ -29,7 +29,7 @@
               name="cloud-download"
               class="downloadIcon"
               (click)="getAssessmentDetails(solutionIndex)"
-              *ngIf="!sol?.downloaded"
+              *ngIf="!sol?.downloaded && sol?.type!='observation'"
             ></ion-icon>
           </div>
         </ion-item>
