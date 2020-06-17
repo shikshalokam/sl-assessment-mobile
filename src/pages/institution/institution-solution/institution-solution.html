@@ -14,7 +14,7 @@
       <ion-card>
         <ion-item
           text-wrap
-          (click)="(sol?.type=='observation')? goToObservationDetails():sol?.downloaded ? goToEcm(solutionIndex,sol?.submissionId) : getAssessmentDetails(solutionIndex)"
+          (click)="(sol?.type=='observation')? goToObservationSubmission(sol.programId,sol._id):sol?.downloaded ? goToEcm(solutionIndex,sol?.submissionId) : getAssessmentDetails(solutionIndex)"
         >
           <div class="_flex-box">
             <div style="flex: 1;">

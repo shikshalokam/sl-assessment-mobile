@@ -85,6 +85,7 @@ export class HomePage {
   observations;
   observationSubscription;
   programList: any;
+
   constructor(
     public navCtrl: NavController,
     private currentUser: CurrentUserProvider,

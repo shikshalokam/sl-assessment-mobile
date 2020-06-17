@@ -80,7 +80,9 @@ export class ScoreReportMenusComponent {
     this.viewCtrl.dismiss();
     this.showActionsheet = false;
     this.appCtrl.getRootNav().push("ReportsWithScorePage", {
-      submissionId: this.submission._id,
+      //in place of _id getting submissionId in new
+      //TODO:remove _id
+      submissionId: this.submission._id || this.submission.submissionId,
       entityType: this.entityType,
     });
   }
@@ -88,7 +90,9 @@ export class ScoreReportMenusComponent {
     this.viewCtrl.dismiss();
     this.showActionsheet = false;
     this.appCtrl.getRootNav().push(ObservationReportsPage, {
-      submissionId: this.submission._id,
+      //in place of _id getting submissionId in new
+      //TODO:remove _id
+      submissionId: this.submission._id || this.submission.submissionId,
       entityType: this.entityType,
     });
   }

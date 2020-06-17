@@ -40,7 +40,6 @@ export class ProgramSolutionEntityPage {
     this.solutionIndex = this.navParams.get("solutionIndex");
 
     this.getProgramFromStorage();
-    this.getSubmissionArr();
   }
 
   getProgramFromStorage() {
@@ -51,6 +50,7 @@ export class ProgramSolutionEntityPage {
         if (data) {
           this.program = data[this.programIndex];
           this.programList = data;
+          this.getSubmissionArr();
         } else {
           this.program = null;
         }
@@ -85,17 +85,20 @@ export class ProgramSolutionEntityPage {
     this.programList[this.programIndex].solutions[
       this.solutionIndex
     ].entities.map((e, entityIndex) => {
-      let tempArr = this.submissionArr.filter(
-        (arr) => arr.solutionId == solutionId && arr.entityId == e._id
-      );
-      if (tempArr.length) {
-        this.programList[this.programIndex].solutions[
-          this.solutionIndex
-        ].entities[entityIndex].submissionId = tempArr[0].submissionId;
-        this.programList[this.programIndex].solutions[
-          this.solutionIndex
-        ].entities[entityIndex].downloaded = true;
-      }
+      // let tempArr = this.submissionArr.filter(
+      //   (arr) => arr.solutionId == solutionId && arr.entityId == e._id
+      // );
+      // if (tempArr.length) {
+      //   this.programList[this.programIndex].solutions[
+      //     this.solutionIndex
+      //   ].entities[entityIndex].submissionId = tempArr[0].submissionId;
+      //   this.programList[this.programIndex].solutions[
+      //     this.solutionIndex
+      //   ].entities[entityIndex].downloaded = true;
+      // }
+      this.submissionArr.includes(e.submissionId)
+        ? (e.downloaded = true)
+        : null;
     });
   }
 

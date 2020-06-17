@@ -8,4 +8,6 @@ export const storageKeys = {
   individualList: "individualList", // list of individual assessment // old flow
   institutionFlowList: "instituionFlowList ", //new institution flow data
   submissionIdArray: "submissionIdArray", //to store all downloaded submissionIds
+  createdObservationList: "createdObservationList", // list of observational assessment // old flow
+  observationSubmissionIdArr: "observationSubmissionIdArr",
 };

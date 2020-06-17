@@ -5,6 +5,9 @@ import { UtilsProvider } from "../../../providers/utils/utils";
 import { EvidenceProvider } from "../../../providers/evidence/evidence";
 import { InstitutionServiceProvider } from "../institution-service";
 import { storageKeys } from "../../../providers/storageKeys";
+import { ProgramSolutionObservationDetailPage } from "../../programs/program-solution-observation-detail/program-solution-observation-detail";
+import { ProgramObservationSubmissionPage } from "../../programs/program-observation-submission/program-observation-submission";
+import { ProgramServiceProvider } from "../../programs/program-service";
 
 /**
  * Generated class for the InstitutionSolutionPage page.
@@ -30,13 +33,13 @@ export class InstitutionSolutionPage {
     public localStorage: LocalStorageProvider,
     public utils: UtilsProvider,
     public evdnsServ: EvidenceProvider,
-    public institutionService: InstitutionServiceProvider
+    public institutionService: InstitutionServiceProvider,
+    public programService: ProgramServiceProvider
   ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad InstitutionSolutionPage");
     let navData = this.navParams.get("navData");
-    // this.entity = this.navParams.get("entity");
     this.entityType = navData.entityType;
     this.entityIndex = navData.entityIndex;
     this.getInstituionFromStorage();
@@ -64,71 +67,23 @@ export class InstitutionSolutionPage {
     this.localStorage
       .getLocalStorage(storageKeys.submissionIdArray)
       .then((allId) => {
-        // return allId.includes(submissionId);
         this.submissionArr = allId;
         this.applySubmission();
       })
-      .catch((err) => {
-        // this.getAssessmentDetails(entityIndex);
-        // return false;
-      });
+      .catch((err) => {});
   }
 
-  // checkDownload(solutionIndex, submissionId) {
-  //   let solutionId = this.institutionList.entities[this.entityType][
-  //     this.entityIndex
-  //   ].solutions[solutionIndex]._id;
-  //   let entityId = this.institutionList.entities[this.entityType][
-  //     this.entityIndex
-  //   ]._id;
-
-  //   this.localStorage
-  //     .getLocalStorage(storageKeys.submissionIdArray)
-  //     .then((allId) => {
-  //       allId.some((d) => d.solutionId == solutionId && d.entityId == entityId)
-  //         ? this.goToEcm(solutionIndex, submissionId)
-  //         : this.getAssessmentDetails(solutionIndex);
-  //     })
-  //     .catch((err) => {
-  //       this.getAssessmentDetails(solutionIndex);
-  //     });
-  // }
-
   applySubmission() {
-    // this.program.solutions[this.solutionIndex].
     let entityId = this.institutionList.entities[this.entityType][
       this.entityIndex
     ]._id;
 
-    // this.programList[this.programIndex].solutions[
-    //   this.solutionIndex
-    // ].entities.map((e, entityIndex) => {
-    //   let tempArr = this.submissionArr.filter(
-    //     (arr) => arr.solutionId == solutionId && arr.entityId == e._id
-    //   );
-    //   if (tempArr.length) {
-    //     this.programList[this.programIndex].solutions[
-    //       this.solutionIndex
-    //     ].entities[entityIndex].submissionId = tempArr[0].submissionId;
-    //     this.programList[this.programIndex].solutions[
-    //       this.solutionIndex
-    //     ].entities[entityIndex].downloaded = true;
-    //   }
-    // });
     this.institutionList.entities[this.entityType][
       this.entityIndex
     ].solutions.map((sol, solutionIndex) => {
-      let tempArr = this.submissionArr.filter(
-        (arr) => arr.solutionId == sol._id && arr.entityId == entityId
-      );
-      if (tempArr.length) {
-        //  this.institutionList.entities[this.entityType][
-        //    this.entityIndex
-        //  ].solutions[solutionIndex] = tempArr[0].submissionId;
-        this.institutionList.entities[this.entityType][
-          this.entityIndex
-        ].solutions[solutionIndex].downloaded = true;
-      }
+      this.submissionArr.includes(sol.submissionId)
+        ? (sol.downloaded = true)
+        : null;
     });
   }
 
@@ -221,11 +176,89 @@ export class InstitutionSolutionPage {
     this.institutionService
       .getAssessmentDetails(event, this.institutionList)
       .then((institutions) => {
-        this.institutionList = institutions;
-        this.getSubmissionArr();
+        this.getInstituionFromStorage();
       })
       .catch((error) => {});
   }
 
-  goToObservationDetails() {}
+  /* goToObservationDetails(programId, observationId) {
+    let EntityId = this.institutionList.entities[this.entityType][
+      this.entityIndex
+    ]._id;
+
+    this.localStorage
+      .getLocalStorage(storageKeys.programList)
+      .then((programs) => {
+        let programIndex = programs.map((p) => p._id).indexOf(programId);
+        let solutionIndex = programs[programIndex].solutions
+          .map((s) => s._id)
+          .indexOf(observationId);
+        let entityIndex = programs[programIndex].solutions[
+          solutionIndex
+        ].entities
+          .map((e) => e._id)
+          .indexOf(EntityId);
+        console.log(programIndex);
+        console.log(solutionIndex);
+        console.log(entityIndex);
+        this.navCtrl.push(ProgramSolutionObservationDetailPage, {
+          programIndex: programIndex,
+          solutionIndex: solutionIndex,
+        });
+      })
+      .catch((err) => {});
+  }
+ */
+  goToObservationSubmission(programId, observationId) {
+    let EntityId = this.institutionList.entities[this.entityType][
+      this.entityIndex
+    ]._id;
+
+    this.localStorage
+      .getLocalStorage(storageKeys.programList)
+      .then((programs) => {
+        let programIndex = programs.map((p) => p._id).indexOf(programId);
+        let solutionIndex = programs[programIndex].solutions
+          .map((s) => s._id)
+          .indexOf(observationId);
+        let entityIndex = programs[programIndex].solutions[
+          solutionIndex
+        ].entities
+          .map((e) => e._id)
+          .indexOf(EntityId);
+
+        let data = {
+          programIndex: programIndex,
+          solutionIndex: solutionIndex,
+          entityIndex: entityIndex,
+        };
+        if (
+          programs[programIndex].solutions[solutionIndex].entities[entityIndex]
+            .submissions &&
+          programs[programIndex].solutions[solutionIndex].entities[entityIndex]
+            .submissions.length
+        ) {
+          this.navCtrl.push(ProgramObservationSubmissionPage, { data });
+        } else {
+          let event = {
+            programIndex: programIndex,
+            solutionIndex: solutionIndex,
+            entityIndex: entityIndex,
+            submission: {
+              submissionNumber: 1,
+              observationId:
+                programs[programIndex].solutions[solutionIndex]._id,
+            },
+          };
+
+          this.programService
+            .getAssessmentDetailsForObservation(event, programs)
+            .then(async (programs) => {
+              await this.programService.refreshObservationList();
+              this.navCtrl.push(ProgramObservationSubmissionPage, { data });
+            });
+        }
+      })
+      .catch((err) => {});
+  }
 }

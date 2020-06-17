@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { IonicPage, NavController, NavParams, App } from "ionic-angular";
 import { AppConfigs } from "../../providers/appConfig";
 import { ApiProvider } from "../../providers/api/api";
 import { UtilsProvider } from "../../providers/utils/utils";
@@ -29,7 +29,8 @@ export class InstitutionPage {
     private apiService: ApiProvider,
     private utils: UtilsProvider,
     private institutionService: InstitutionServiceProvider,
-    private localStorage: LocalStorageProvider
+    private localStorage: LocalStorageProvider,
+    private app: App
   ) {}
 
   ionViewDidLoad() {
@@ -53,6 +54,7 @@ export class InstitutionPage {
 
   goToInstitutionSol(entityType, entityIndex) {
     let navData = { entityType: entityType, entityIndex: entityIndex };
-    this.navCtrl.push(InstitutionSolutionPage, { navData });
+    // this.navCtrl.push(InstitutionSolutionPage, { navData });
+    this.app.getRootNav().push(InstitutionSolutionPage, { navData });
   }
 }

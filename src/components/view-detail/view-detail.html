@@ -25,16 +25,17 @@
 <ion-content>
   <ion-card class="observationTitle">
     <ion-card-content>
-      {{submission?.entityInformation.name}}
+      {{submission?.entityName}}
     </ion-card-content>
   </ion-card>
 
   <ion-card-content>
     <h5>{{submission?.title}}</h5>
     <p>Created On : {{submission?.createdAt | date}}</p>
-    <p *ngIf="submission?.evidencesStatus[0]?.submissions[0]?.submissionDate">
+    <p *ngIf="submission?.submissionDate">
       Submitted On :
-      {{submission?.evidencesStatus[0]?.submissions[0]?.submissionDate | date}}
+      <!-- {{submission?.evidencesStatus[0]?.submissions[0]?.submissionDate | date}} -->
+      {{submission?.submissionDate | date}}
     </p>
   </ion-card-content>
 </ion-content>

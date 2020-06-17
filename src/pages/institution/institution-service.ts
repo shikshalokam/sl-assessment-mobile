@@ -47,14 +47,9 @@ export class InstitutionServiceProvider {
     return new Promise((resolve, reject) => {
       const url = AppConfigs.institutionsFlow.institutions;
 
-      //  !noLoader ? this.utils.startLoader() : null;
-
       this.apiService.httpGet(
         url,
         (successData) => {
-          // console.log("success data")
-          //  !noLoader ? this.utils.stopLoader() : null;
-
           this.localStorage.setLocalStorage(
             storageKeys.institutionFlowList,
             successData.result
@@ -62,8 +57,6 @@ export class InstitutionServiceProvider {
           resolve(successData.result);
         },
         (error) => {
-          //  !noLoader ? this.utils.stopLoader() : null;
-
           reject();
         }
       );
@@ -115,16 +108,19 @@ export class InstitutionServiceProvider {
               success.result["assessment"]["submissionId"],
             generalQuestions
           );
-          institutionList.entities[entityType][entityIndex].solutions[
-            solutionIndex
-          ].downloaded = true;
-          institutionList.entities[entityType][entityIndex].solutions[
-            solutionIndex
-          ].submissionId = success.result.assessment.submissionId;
+          // institutionList.entities[entityType][entityIndex].solutions[
+          //   solutionIndex
+          // ].downloaded = true;
+          // institutionList.entities[entityType][entityIndex].solutions[
+          //   solutionIndex
+          // ].submissionId = success.result.assessment.submissionId;
+          // this.ulsdp.updateSubmissionIdArr(
+          //   success.result.assessment.submissionId,
+          //   solutionId,
+          //   entityId
+          // );
           this.ulsdp.updateSubmissionIdArr(
-            success.result.assessment.submissionId,
-            solutionId,
-            entityId
+            success.result.assessment.submissionId
           );
           this.localStorage.setLocalStorage(
             this.utils.getAssessmentLocalStorageKey(

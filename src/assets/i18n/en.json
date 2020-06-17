@@ -225,6 +225,12 @@
     "entityList": "Entity List",
     "solutions": "Solutions"
   },
+  "bottomNav": {
+    "institution": "Institution",
+    "home": "Home",
+    "report": "Report",
+    "library": "Library"
+  },
   "labels": {
     "welcome": "Welcome",
     "assessments": "Assessments",

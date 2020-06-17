@@ -125,6 +125,9 @@ import { AppAvailability } from "@ionic-native/app-availability";
 import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
 import { ProgramsPageModule } from "../pages/programs/programs.module";
 import { InstitutionPageModule } from "../pages/institution/institution.module";
+import { BottomTabPageModule } from "../pages/bottom-tab/bottom-tab.module";
+import { ReportsPageModule } from "../pages/reports/reports.module";
+import { LibraryPageModule } from "../pages/library/library.module";
 @NgModule({
   declarations: [
     MyApp,
@@ -193,6 +196,9 @@ import { InstitutionPageModule } from "../pages/institution/institution.module";
     ImprovementProjectPageModule,
     ProgramsPageModule,
     InstitutionPageModule,
+    BottomTabPageModule,
+    ReportsPageModule,
+    LibraryPageModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

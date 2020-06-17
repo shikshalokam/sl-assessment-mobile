@@ -49,7 +49,7 @@ import { PlayVideoComponent } from "./play-video/play-video";
 import { AttachmentsComponent } from "./attachments/attachments";
 import { ViewDetailComponent } from "./view-detail/view-detail";
 import { ProgramSolutionComponent } from "../pages/programs/program-solution/program-solution/program-solution";
-import { BottomNavComponent } from './bottom-nav/bottom-nav';
+import { ProgObservationEntityListingComponent } from "../pages/programs/program-solution-observation-detail/prog-observation-entity-listing/prog-observation-entity-listing";
 
 @NgModule({
   declarations: [
@@ -93,7 +93,7 @@ import { BottomNavComponent } from './bottom-nav/bottom-nav';
     AttachmentsComponent,
     ViewDetailComponent,
     ProgramSolutionComponent,
-    BottomNavComponent,
+    ProgObservationEntityListingComponent,
   ],
   imports: [
     IonicModule,
@@ -144,7 +144,7 @@ import { BottomNavComponent } from './bottom-nav/bottom-nav';
     AttachmentsComponent,
     ViewDetailComponent,
     ProgramSolutionComponent,
-    BottomNavComponent,
+    ProgObservationEntityListingComponent,
   ],
   entryComponents: [
     InputTypeComponent,

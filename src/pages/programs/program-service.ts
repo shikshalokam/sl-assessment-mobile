@@ -37,11 +37,11 @@ export class ProgramServiceProvider {
           this.migrationFuntion(data);
           return data;
         } else {
-          return this.getProgramApi();
+          return this.getProgramApi(true);
         }
       })
       .catch((error) => {
-        return this.getProgramApi();
+        return this.getProgramApi(true);
       });
   }
 
@@ -57,14 +57,14 @@ export class ProgramServiceProvider {
           // console.log("success data")
           !noLoader ? this.utils.stopLoader() : null;
           // console.log(JSON.stringify(successData))
-          for (const program of successData.result) {
+          /*  for (const program of successData.result) {
             for (const solution of program.solutions) {
               for (const entity of solution.entities) {
                 entity.downloaded = false;
                 entity.submissionId = null;
               }
             }
-          }
+          } */
 
           this.localStorage.setLocalStorage(
             storageKeys.programList,
@@ -82,6 +82,7 @@ export class ProgramServiceProvider {
       );
     });
   }
+  //  for individual and instituional
 
   getAssessmentDetails(event, programs) {
     return new Promise((resolve, reject) => {
@@ -126,10 +127,13 @@ export class ProgramServiceProvider {
           programs[programIndex].solutions[assessmentIndex].entities[
             entityIndex
           ].submissionId = success.result.assessment.submissionId;
-          await this.ulsdp.updateSubmissionIdArr(
+          /*   await this.ulsdp.updateSubmissionIdArr(
             success.result.assessment.submissionId,
             solutionId,
             entityId
+          ); */
+          await this.ulsdp.updateSubmissionIdArr(
+            success.result.assessment.submissionId
           );
           this.localStorage.setLocalStorage(
             this.utils.getAssessmentLocalStorageKey(
@@ -151,6 +155,99 @@ export class ProgramServiceProvider {
         },
         { version: "v2" }
       );
+    });
+  }
+
+  // for observation
+
+  getAssessmentDetailsForObservation(event, programs) {
+    return new Promise((resolve, reject) => {
+      // let programIndex = event.programIndex;
+      let programIndex = event.programIndex;
+      let solutionIndex = event.solutionIndex;
+      let entityIndex = event.entityIndex;
+      // let schoolIndex = event.entityIndex;
+      let submissionNumber = event.submission.submissionNumber;
+      // let submissionId = event.submission.submissionId;
+      let observationId = event.submission.observationId;
+
+      this.utils.startLoader();
+      const url =
+        AppConfigs.cro.observationDetails +
+        observationId +
+        "?entityId=" +
+        programs[programIndex].solutions[solutionIndex].entities[entityIndex]
+          ._id +
+        "&submissionNumber=" +
+        submissionNumber;
+      console.log(url);
+      this.apiService.httpGet(
+        url,
+        (success) => {
+          this.ulsdp.mapSubmissionDataToQuestion(success.result, true);
+          const generalQuestions = success.result["assessment"][
+            "generalQuestions"
+          ]
+            ? success.result["assessment"]["generalQuestions"]
+            : null;
+          this.localStorage.setLocalStorage(
+            "generalQuestions_" + success.result["assessment"]["submissionId"],
+            generalQuestions
+          );
+          this.localStorage.setLocalStorage(
+            "generalQuestionsCopy_" +
+              success.result["assessment"]["submissionId"],
+            generalQuestions
+          );
+
+          /* programs[programIndex].solutions[assessmentIndex].entities[
+            entityIndex
+          ].submissions.map((s) => {
+            s.submissionNumber == submissionNumber
+              ? (s.downloaded = true)
+              : null;
+          }); */
+
+          this.ulsdp.storeObsevationSubmissionId(
+            success.result["assessment"]["submissionId"]
+          );
+
+          this.localStorage.setLocalStorage(
+            this.utils.getAssessmentLocalStorageKey(
+              success.result.assessment.submissionId
+            ),
+            success.result
+          );
+          this.localStorage.setLocalStorage(storageKeys.programList, programs);
+          this.utils.stopLoader();
+          resolve(programs);
+        },
+        (error) => {
+          //console.log("error details api")
+          this.utils.stopLoader();
+          reject();
+        },
+        { version: "v2" }
+      );
+    });
+  }
+
+  refreshObservationList(programs?: any, event?) {
+    return new Promise((resolve, reject) => {
+      this.apiService.httpGet(
+        AppConfigs.programs.programList,
+        (success) => {
+          let currList = success.result;
+
+          this.localStorage.setLocalStorage(storageKeys.programList, currList);
+          resolve(currList);
+        },
+        (error) => {
+          // event ? event.complete() : "";
+          reject();
+        }
+      );
+      //
     });
   }
 
@@ -215,16 +312,37 @@ export class ProgramServiceProvider {
     intstitutionalList
       .then((list) => {
         console.log(list);
-        this.migrate(list, program, "institutionalList");
+        // this.migrate(list, program, "institutionalList");
+        this.migrate(list, "institutionalList");
       })
       .catch((err) => {});
 
     individualList
       .then((list) => {
         console.log(list);
-        this.migrate(list, program, "individualList");
+        // this.migrate(list, program, "individualList");
+        this.migrate(list, "individualList");
       })
       .catch((err) => {});
+    this.runObservationMigration();
+  }
+
+  runObservationMigration() {
+    let idsArr = [];
+    this.localStorageGetfn(storageKeys.createdObservationList)
+      .then((list) => {
+        console.log(list);
+        list.map((program) =>
+          program.entities.map((entity) =>
+            entity.submissions.map((submission) => {
+              submission.downloaded ? idsArr.push(submission._id) : null;
+            })
+          )
+        );
+        idsArr.length ? this.ulsdp.storeObsevationSubmissionId(idsArr) : null;
+        this.localStorage.deleteOneStorage(storageKeys.createdObservationList);
+      })
+      .catch((err) => console.log(err));
   }
 
   // if individual,institutional list present get the data
@@ -233,8 +351,9 @@ export class ProgramServiceProvider {
   }
 
   // run migratation by providing previous list,current program list and the key in which previous list is stored
-  migrate(prevlist, currList, key) {
-    prevlist.map((prevprogram) =>
+  // migrate(prevlist, currList, key) {
+  migrate(list, key) {
+    /* prevlist.map((prevprogram) =>
       prevprogram.solutions.map((prevsolution) =>
         prevsolution.entities.map((preventity) => {
           if (preventity.downloaded) {
@@ -258,17 +377,30 @@ export class ProgramServiceProvider {
           }
         })
       )
+    ); */
+    let idsArr = [];
+
+    list.map((program) =>
+      program.solutions.map((solution) =>
+        solution.entities.map((entity) => {
+          entity.downloaded ? idsArr.push(entity.submissionId) : null;
+        })
+      )
     );
-    console.log(currList);
-    this.localStorageUpdateFn(currList, key);
+    console.log(idsArr);
+    idsArr.length ? this.ulsdp.updateSubmissionIdArr(idsArr) : null;
+
+    // this.localStorageUpdateFn(currList, key);
+    this.localStorageUpdateFn(key);
   }
 
   /* 
     update the current list i.e program list
     delete the previous list i.e institutional,individual lists
   */
-  localStorageUpdateFn(currList: any, key) {
-    this.localStorage.setLocalStorage(storageKeys.programList, currList);
+  // localStorageUpdateFn(currList: any, key) {
+  localStorageUpdateFn(key) {
+    // this.localStorage.setLocalStorage(storageKeys.programList, currList);
     this.localStorage.deleteOneStorage(key);
   }
 
