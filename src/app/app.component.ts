@@ -36,6 +36,8 @@ import { TutorialVideoListingPage } from "../pages/tutorial-video-listing/tutori
 import { ImprovementProjectPage } from "../pages/improvement-project/improvement-project";
 import { ProgramsPage } from "../pages/programs/programs";
 import { BottomTabPage } from "../pages/bottom-tab/bottom-tab";
+import { RoleListingPage } from "../pages/role-listing/role-listing";
+import { ReportEntityListingPage } from "../pages/reports/report-entity-listing/report-entity-listing";
 
 @Component({
   templateUrl: "app.html",
@@ -242,6 +244,8 @@ export class MyApp {
         page["active"] = false;
       }
       this.allPages[0]["active"] = true;
+      if (this.allPages[index]["name"] == "dashboard")
+        return this.onDashboardClick();
       if (this.allPages[index]["name"] !== "home") {
         this.nav.push(this.allPages[index]["component"]);
       }
@@ -405,5 +409,32 @@ export class MyApp {
 
   closeModal() {
     this.appUpdateData = null;
+  }
+
+  onDashboardClick() {
+    this.localStorage
+      .getLocalStorage("profileRole")
+      .then((success) => {
+        let roles = success;
+
+        this.utils.stopLoader();
+        if (roles.roles.length > 1) {
+          this.nav.push(RoleListingPage, {
+            // assessmentType: type,
+            from: "dashboard",
+          });
+        } else {
+          this.nav.push(ReportEntityListingPage, {
+            currentEntityType: roles.roles[0].immediateSubEntityType,
+            data: roles.roles[0].entities,
+            entityType: roles.roles[0].entities[0].immediateSubEntityType,
+            // assessmentType: type,
+            from: "dashboard",
+          });
+        }
+      })
+      .catch((error) => {
+        this.utils.stopLoader();
+      });
   }
 }

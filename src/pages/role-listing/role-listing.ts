@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { NavController, NavParams, App } from "ionic-angular";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
-import { ReportEntityListingPage } from "../report-entity-listing/report-entity-listing";
 import { UtilsProvider } from "../../providers/utils/utils";
+import { ReportEntityListingPage } from "../reports/report-entity-listing/report-entity-listing";
 
 /**
  * Generated class for the RoleDashboardPage page.
@@ -25,7 +25,8 @@ export class RoleListingPage {
     public navCtrl: NavController,
     private utils: UtilsProvider,
     private localStorageProvider: LocalStorageProvider,
-    public navParams: NavParams
+    public navParams: NavParams,
+    public app: App
   ) {}
 
   ionViewDidLoad() {
@@ -46,7 +47,7 @@ export class RoleListingPage {
       });
   }
   roleSelected(role) {
-    this.navCtrl.push(ReportEntityListingPage, {
+    this.app.getRootNav().push(ReportEntityListingPage, {
       currentEntityType: role.immediateSubEntityType,
       data: role.entities,
       entityType: role.entities[0].immediateSubEntityType,

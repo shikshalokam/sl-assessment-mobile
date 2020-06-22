@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { NavController, NavParams } from "ionic-angular";
-import { ApiProvider } from "../../providers/api/api";
-import { AppConfigs } from "../../providers/appConfig";
-import { UtilsProvider } from "../../providers/utils/utils";
+import { ApiProvider } from "../../../providers/api/api";
+import { AppConfigs } from "../../../providers/appConfig";
+import { UtilsProvider } from "../../../providers/utils/utils";
 import { ProgramListingPage } from "../program-listing/program-listing";
 
 /**

@@ -5,13 +5,18 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <header [title]="'headings.'+ currentEntityType |translate" [hideBack]="false">
-  </header>
+  <header
+    [title]="'headings.'+ currentEntityType |translate"
+    [hideBack]="false"
+  ></header>
 </ion-header>
 
-
 <ion-content>
-    <report-entity-list [entities]="entities" (selectEntityEvent)="selectEntity($event)" (viewInstanceReportEvent)="viewInstanceReport($event)" ></report-entity-list>
+  <report-entity-list
+    [entities]="entities"
+    (selectEntityEvent)="selectEntity($event)"
+    (viewInstanceReportEvent)="viewInstanceReport($event)"
+  ></report-entity-list>
 </ion-content>
 <!-- <ion-footer no-shadow>
   <ion-toolbar position="bottom">

@@ -95,11 +95,10 @@ import { ObservationReportsPage } from "../pages/observation-reports/observation
 import { HighchartsChartModule } from "highcharts-angular";
 import { UpdateTrackerProvider } from "../providers/update-tracker/update-tracker";
 import { RoleListingPage } from "../pages/role-listing/role-listing";
-import { ReportEntityListingPage } from "../pages/report-entity-listing/report-entity-listing";
+
 import { DashboardPage } from "../pages/dashboard/dashboard";
 import { TextToSpeech } from "@ionic-native/text-to-speech";
 import { TextToSpeechProvider } from "../providers/text-to-speech/text-to-speech";
-import { ProgramListingPage } from "../pages/program-listing/program-listing";
 import { ObservationEditPage } from "../pages/observation-edit/observation-edit";
 import { NotificationProvider } from "../providers/notification/notification";
 import { Badge } from "@ionic-native/badge";
@@ -135,7 +134,6 @@ import { LibraryPageModule } from "../pages/library/library.module";
     HomePage,
     AssessmentAboutPage,
     WelcomePage,
-    ProgramListingPage,
     InstitutionsEntityList,
     FaqPage,
     EntityProfileEditPage,
@@ -156,7 +154,6 @@ import { LibraryPageModule } from "../pages/library/library.module";
     SubmissionListPage,
     ObservationReportsPage,
     RoleListingPage,
-    ReportEntityListingPage,
     DashboardPage,
     ObservationEditPage,
     SettingsPage,
@@ -226,11 +223,9 @@ import { LibraryPageModule } from "../pages/library/library.module";
     PreviewPage,
     SubmissionListPage,
     DashboardPage,
-    ProgramListingPage,
     SettingsPage,
     ObservationReportsPage,
     RoleListingPage,
-    ReportEntityListingPage,
     ObservationEditPage,
     QuestionListPage,
     TutorialVideoListingPage,
