@@ -25,7 +25,7 @@ export class SidemenuProvider {
 
   getUserRoles() {
     this.localStorage
-      .getLocalStorage("profileRole")
+      .getLocalStorage(storageKeys.profileRole)
       .then((success) => {
         this.profileRoles = success;
         this.$showDashboard.next(success.roles.length > 0 ? true : false);

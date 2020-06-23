@@ -13,6 +13,7 @@ import { CurrentUserProvider } from "../../providers/current-user/current-user";
 import { ApiProvider } from "../../providers/api/api";
 import { AppConfigs } from "../../providers/appConfig";
 import { Subject } from "rxjs/Subject";
+import { storageKeys } from "../../providers/storageKeys";
 
 /**
  * Generated class for the BottomTabPage tabs.
@@ -59,7 +60,7 @@ export class BottomTabPage {
 
   getProfileroles() {
     this.localStorage
-      .getLocalStorage("profileRole")
+      .getLocalStorage(storageKeys.profileRole)
       .then((success) => {
         let roles = success;
 

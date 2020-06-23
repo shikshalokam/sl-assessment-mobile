@@ -38,6 +38,7 @@ import { ProgramsPage } from "../pages/programs/programs";
 import { BottomTabPage } from "../pages/bottom-tab/bottom-tab";
 import { RoleListingPage } from "../pages/role-listing/role-listing";
 import { ReportEntityListingPage } from "../pages/reports/report-entity-listing/report-entity-listing";
+import { storageKeys } from "../providers/storageKeys";
 
 @Component({
   templateUrl: "app.html",
@@ -413,7 +414,7 @@ export class MyApp {
 
   onDashboardClick() {
     this.localStorage
-      .getLocalStorage("profileRole")
+      .getLocalStorage(storageKeys.profileRole)
       .then((success) => {
         let roles = success;
 
