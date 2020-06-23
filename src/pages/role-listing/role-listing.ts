@@ -37,7 +37,8 @@ export class RoleListingPage {
       .getLocalStorage("profileRole")
       .then((success) => {
         this.roles = success.roles;
-        this.assessmentType = this.navParams.get("assessmentType");
+        console.log(this.roles);
+        // this.assessmentType = this.navParams.get("assessmentType");
         // this.entityType = success.result.roles.entityType
         console.log(JSON.stringify(success));
         this.utils.stopLoader();
@@ -51,7 +52,7 @@ export class RoleListingPage {
       currentEntityType: role.immediateSubEntityType,
       data: role.entities,
       entityType: role.entities[0].immediateSubEntityType,
-      assessmentType: this.assessmentType,
+      // assessmentType: this.assessmentType,
       from: this.from,
     });
   }

@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { NavController, NavParams, App } from "ionic-angular";
 import { ApiProvider } from "../../../providers/api/api";
 import { AppConfigs } from "../../../providers/appConfig";
 import { UtilsProvider } from "../../../providers/utils/utils";
@@ -27,7 +27,8 @@ export class ReportEntityListingPage {
     public navCtrl: NavController,
     private utils: UtilsProvider,
     private apiProvider: ApiProvider,
-    public navParams: NavParams
+    public navParams: NavParams,
+    public app: App
   ) {}
 
   ionViewDidLoad() {
@@ -35,7 +36,7 @@ export class ReportEntityListingPage {
     this.entities = this.navParams.get("data");
     this.entityType = this.navParams.get("entityType");
     this.currentEntityType = this.navParams.get("currentEntityType");
-    this.assessmentType = this.navParams.get("assessmentType");
+    // this.assessmentType = this.navParams.get("assessmentType");
     this.currentEntityType = this.currentEntityType
       ? this.currentEntityType
       : this.entityType;
@@ -60,11 +61,20 @@ export class ReportEntityListingPage {
         url,
         (success) => {
           console.log(success.result[0].entityType);
-          this.navCtrl.push(ReportEntityListingPage, {
-            data: success.result,
-            entityType: entity.immediateSubEntityType,
-            assessmentType: this.assessmentType,
-          });
+          if (this.from == "bottomTab") {
+            this.app.getRootNav().push(ReportEntityListingPage, {
+              data: success.result,
+              entityType: entity.immediateSubEntityType,
+              assessmentType: this.assessmentType,
+            });
+          } else {
+            this.navCtrl.push(ReportEntityListingPage, {
+              data: success.result,
+              entityType: entity.immediateSubEntityType,
+              assessmentType: this.assessmentType,
+            });
+          }
+
           this.utils.stopLoader();
         },
         (error) => {
@@ -75,7 +85,14 @@ export class ReportEntityListingPage {
       );
     }
   }
-  viewReport() {}
+
+  viewInstanceReportNew(entity) {
+    this.navCtrl.push(ProgramListingPage, {
+      entity: entity,
+    });
+  }
+
+  //TODO:this function is not used now
   viewInstanceReport(entity) {
     console.log(JSON.stringify(entity));
     // console.log("api called")
@@ -85,13 +102,13 @@ export class ReportEntityListingPage {
     if (this.assessmentType !== "observation") {
       this.navCtrl.push(ProgramListingPage, {
         entity: entity,
-        assessmentType: this.assessmentType,
+        // assessmentType: this.assessmentType,
       });
     } else {
       this.navCtrl.push("ObservationListingPage", {
         entity: entity,
-        assessmentType: this.assessmentType,
-        from: this.from,
+        // assessmentType: this.assessmentType,
+        // from: this.from,
       });
     }
     //   console.log(JSON.stringify(success))

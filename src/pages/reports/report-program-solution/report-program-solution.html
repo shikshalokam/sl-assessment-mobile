@@ -28,7 +28,7 @@
         *ngFor="let solution of solutionList?.mySolutions;let solutionIndex = index"
       >
         <ion-item
-          (click)="getReportsAccordingToSolution(solution.solutionId, solution.solutionName)"
+          (click)="getReportsAccordingToSolution(solution.solutionId, solution.solutionName,solution.type,solution.scoring)"
         >
           <h3>
             <ion-icon name="list-box" margin-right></ion-icon>
@@ -56,7 +56,7 @@
         *ngFor="let solution of solutionList?.allSolutions;let solutionIndex = index"
       >
         <ion-item
-          (click)="getReportsAccordingToSolution(solution.solutionId, solution.solutionName)"
+          (click)="getReportsAccordingToSolution(solution.solutionId, solution.solutionName,solution.type,solution.scoring)"
         >
           <h3>
             <ion-icon name="list-box" margin-right></ion-icon>

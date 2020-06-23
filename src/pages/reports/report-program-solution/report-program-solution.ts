@@ -1,9 +1,11 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { NavController, NavParams, ActionSheetController } from "ionic-angular";
 import { DashboardPage } from "../../dashboard/dashboard";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { ApiProvider } from "../../../providers/api/api";
 import { AppConfigs } from "../../../providers/appConfig";
+import { ObservationListingPage } from "../../observation-listing/observation-listing";
+import { ObservationReportsPage } from "../../observation-reports/observation-reports";
 
 /**
  * Generated class for the ReportProgramSolutionPage page.
@@ -27,7 +29,8 @@ export class ReportProgramSolutionPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public utils: UtilsProvider,
-    private apiProvider: ApiProvider
+    private apiProvider: ApiProvider,
+    public actionSheetCtrl: ActionSheetController
   ) {}
 
   ionViewDidLoad() {
@@ -69,12 +72,70 @@ export class ReportProgramSolutionPage {
     );
   }
 
-  getReportsAccordingToSolution(solutionId, solutionName) {
-    this.navCtrl.push(DashboardPage, {
-      entity: this.entity,
-      programId: this.programId,
-      solutionId: solutionId,
-      solutionName: solutionName,
+  getReportsAccordingToSolution(
+    solutionId,
+    solutionName,
+    solutionType,
+    scoring
+  ) {
+    if (solutionType != "observation") {
+      this.navCtrl.push(DashboardPage, {
+        entity: this.entity,
+        programId: this.programId,
+        solutionId: solutionId,
+        solutionName: solutionName,
+      });
+    } else {
+      const payload = {
+        entityType: this.entity.entityType,
+        entityId: this.entity._id,
+        solutionId: solutionId,
+        immediateChildEntityType: this.entity.immediateChildEntityType,
+        reportType: solutionType,
+        from: "dashboard",
+      };
+
+      scoring
+        ? this.presentActionSheet(payload)
+        : this.goToReportsOfSolution(payload);
+    }
+  }
+
+  presentActionSheet(payload) {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: "Select report type",
+      buttons: [
+        {
+          text: "Report with score",
+          role: "destructive",
+          handler: () => {
+            this.goToScoringReportOfSolution(payload);
+          },
+        },
+        {
+          text: "Report without score",
+          handler: () => {
+            this.goToReportsOfSolution(payload);
+          },
+        },
+        {
+          text: "Cancel",
+          role: "cancel",
+          handler: () => {
+            console.log("Cancel clicked");
+          },
+        },
+      ],
     });
+
+    actionSheet.present();
+  }
+
+  goToReportsOfSolution(payload) {
+    this.navCtrl.push(ObservationReportsPage, payload);
+  }
+
+  goToScoringReportOfSolution(payload) {
+    this.navCtrl.push("ReportsWithScorePage", payload);
   }
 }

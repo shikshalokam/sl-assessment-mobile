@@ -64,14 +64,14 @@ export class BottomTabPage {
         let roles = success;
 
         if (roles.roles.length > 1) {
-          this.data = { from: "dashboard" };
+          // this.data = { from: "dashboard" };
           this.reportsRoot = RoleListingPage;
         } else {
           this.data = {
             currentEntityType: roles.roles[0].immediateSubEntityType,
             data: roles.roles[0].entities,
             entityType: roles.roles[0].entities[0].immediateSubEntityType,
-            from: "dashboard",
+            from: "bottomTab",
           };
           this.reportsRoot = ReportEntityListingPage;
         }
