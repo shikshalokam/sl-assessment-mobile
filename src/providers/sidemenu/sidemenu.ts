@@ -25,7 +25,7 @@ export class SidemenuProvider {
 
   getUserRoles() {
     this.localStorage
-      .getLocalStorage("profileRole")
+      .getLocalStorage(storageKeys.profileRole)
       .then((success) => {
         this.profileRoles = success;
         this.$showDashboard.next(success.roles.length > 0 ? true : false);
@@ -39,9 +39,12 @@ export class SidemenuProvider {
     let currentUser = this.currentUser.getCurrentUserData();
     this.apiProvider.httpGet(
       AppConfigs.roles.getProfile + currentUser.sub,
-      (success) => {
+      async (success) => {
         this.profileRoles = success.result;
-        this.localStorage.setLocalStorage("profileRole", this.profileRoles);
+        await this.localStorage.setLocalStorage(
+          "profileRole",
+          this.profileRoles
+        );
         this.$showDashboard.next(
           success.result.roles && success.result.roles.length > 0 ? true : false
         );

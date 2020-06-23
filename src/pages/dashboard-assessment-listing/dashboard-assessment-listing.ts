@@ -2,8 +2,8 @@ import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams } from "ionic-angular";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 import { UtilsProvider } from "../../providers/utils/utils";
-import { ReportEntityListingPage } from "../report-entity-listing/report-entity-listing";
 import { RoleListingPage } from "../role-listing/role-listing";
+import { ReportEntityListingPage } from "../reports/report-entity-listing/report-entity-listing";
 
 @IonicPage()
 @Component({

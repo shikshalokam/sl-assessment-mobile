@@ -150,7 +150,9 @@
     "evidences": "Evidences",
     "allObservation": "All Observation",
     "improvementProjects": "Improvements Projects",
-    "programs": "Programs"
+    "programs": "Programs",
+    "mySolutions": "My Solutions",
+    "allSolutions": "All Solutions"
   },
   "headings": {
     "zone": "Zones",
