@@ -1,0 +1,79 @@
+<ion-header>
+  <header
+    [title]="'headings.observationSolutions'|translate"
+    [hideBack]="false"
+  ></header>
+</ion-header>
+
+<ion-content padding>
+  <dynamic-form
+    [formFields]="metaForm"
+    [form]="addObservationForm"
+  ></dynamic-form>
+  <div>
+    <ion-item>
+      <ion-label>Create New Program</ion-label>
+      <ion-toggle [(ngModel)]="createNew"></ion-toggle>
+    </ion-item>
+  </div>
+  <div *ngIf="!createNew">
+    <ion-item *ngIf="privateProgramList.length">
+      <ion-label color="primary" floating
+        >Choose Private Program <span class="_requiredClass">*</span></ion-label
+      >
+      <ion-select [(ngModel)]="selectedPrivate" interface="action-sheet">
+        <ion-option [value]="pp" *ngFor="let pp of privateProgramList"
+          >{{pp.name}}</ion-option
+        >
+      </ion-select>
+    </ion-item>
+  </div>
+  <div *ngIf="createNew">
+    <ion-item>
+      <ion-label stacked
+        >Program Name <span class="_requiredClass">*</span>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="obervationProgramName"></ion-input>
+    </ion-item>
+  </div>
+  <div>
+    <ion-item>
+      <button
+        ion-button
+        class="selectAll capitalize"
+        (click)="openEntityModel()"
+      >
+        Add Entity
+      </button>
+    </ion-item>
+  </div>
+
+  <div *ngFor="let item of entityList">
+    <ion-item *ngIf="item.selected">
+      {{item.name}}
+    </ion-item>
+  </div>
+</ion-content>
+
+<ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <button
+          ion-button
+          full
+          (click)="stepper1.previousStep()"
+          class="btnText"
+        >
+          {{'buttons.draft' | translate}}
+        </button>
+      </ion-col>
+
+      <ion-col>
+        <button ion-button full (click)="createObservation()" class="btnText">
+          {{'buttons.publish' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

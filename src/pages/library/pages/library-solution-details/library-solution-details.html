@@ -1,0 +1,35 @@
+<ion-header>
+  <header
+    [title]="'headings.observationSolutions'|translate"
+    [hideBack]="false"
+  ></header>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="template">
+    <ion-card>
+      <ion-card-content>
+        {{template.name}}
+      </ion-card-content>
+    </ion-card>
+    <p>
+      <span class="firstWord">Creator:</span>{{template.creator||'Not Found'}}
+    </p>
+    <p>
+      <span class="firstWord">Description:</span>{{template.description||'Not
+      Found'}}
+    </p>
+    <p>
+      <span class="firstWord">Questions:</span>
+    </p>
+    <p *ngFor="let q of template.questions;let i=index">
+      <span class="firstWord">Q.{{i+1}}:</span>
+      {{q}}
+    </p>
+    <div class="_flex-box _justify-content-center">
+      <button ion-button round (click)="goToUseTemplate()">
+        {{'buttons.useForm' | translate}}
+      </button>
+    </div>
+  </div>
+</ion-content>

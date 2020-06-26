@@ -125,7 +125,8 @@
     "questionWise": "Question Wise",
     "criteriaWise": "Criteria Wise",
     "viewDetails": "View Details",
-    "clickHereToImprove": "Click Here To Improve"
+    "clickHereToImprove": "Click Here To Improve",
+    "useForm": "Use Form"
   },
   "tabs": {
     "home": "Home",
@@ -225,7 +226,9 @@
     "tutorialvideo": "Tutorial Video",
     "improvementProjetcs": "Improvement Projects",
     "entityList": "Entity List",
-    "solutions": "Solutions"
+    "solutions": "Solutions",
+    "library": "Library",
+    "observationSolutions": "Observation Solutions"
   },
   "bottomNav": {
     "institution": "Institution",

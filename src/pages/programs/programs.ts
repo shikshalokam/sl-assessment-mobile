@@ -50,4 +50,18 @@ export class ProgramsPage {
       programIndex: programIndex,
     });
   }
+
+  refreshLocalObservationList(refreshEvent?) {
+    !refreshEvent ? this.utils.startLoader() : null;
+
+    this.programService
+      .refreshObservationList(this.programList, event)
+      .then((data) => {
+        if (refreshEvent) refreshEvent.complete();
+        else this.utils.stopLoader();
+      })
+      .catch((error) => {
+        this.utils.stopLoader();
+      });
+  }
 }
