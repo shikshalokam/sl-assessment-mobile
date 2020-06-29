@@ -1,10 +1,11 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams, ModalController } from "ionic-angular";
+import { NavController, NavParams, ModalController, App } from "ionic-angular";
 import { LibraryProvider } from "../../library-provider/library";
 import { FormGroup, FormControl } from "@angular/forms";
 import { LibrarayEntityListComponent } from "../../components/libraray-entity-list/libraray-entity-list";
 import { UtilsProvider } from "../../../../providers/utils/utils";
 import { ProgramServiceProvider } from "../../../programs/program-service";
+import { ProgramsPage } from "../../../programs/programs";
 
 /**
  * Generated class for the LibraryUseTemplatePage page.
@@ -37,7 +38,8 @@ export class LibraryUseTemplatePage {
     public libraryProvider: LibraryProvider,
     public modalCntrl: ModalController,
     public utils: UtilsProvider,
-    public programService: ProgramServiceProvider
+    public programService: ProgramServiceProvider,
+    public app: App
   ) {}
 
   ionViewDidLoad() {
@@ -106,9 +108,11 @@ export class LibraryUseTemplatePage {
 
     this.libraryProvider
       .createObservation(data, this.solutionId)
-      .then((res) => {
+      .then(async (res) => {
         console.log("observationCreated", res);
-        this.refreshLocalObservationList();
+        await this.refreshLocalObservationList();
+        this.navCtrl.popToRoot();
+        this.navCtrl.push(ProgramsPage);
       })
       .catch((err) => {
         console.log("observationCreationFailed", err);
@@ -150,8 +154,8 @@ export class LibraryUseTemplatePage {
       });
   }
 
-  refreshLocalObservationList() {
-    this.programService
+  async refreshLocalObservationList() {
+    await this.programService
       .refreshObservationList()
       .then((data) => {})
       .catch((error) => {});

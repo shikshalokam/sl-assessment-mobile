@@ -5,25 +5,33 @@
   ></header>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <div *ngIf="template">
     <ion-card>
       <ion-card-content>
         {{template.name}}
       </ion-card-content>
     </ion-card>
-    <p><span class="firstWord">Creator:</span>{{template.creator||'__'}}</p>
-    <p>
-      <span class="firstWord">Description:</span>{{template.description||'Not
-      Found'}}
-    </p>
-    <p>
-      <span class="firstWord">Questions:</span>
-    </p>
-    <p *ngFor="let q of template.questions;let i=index">
-      <span class="firstWord">Q.{{i+1}}:</span>
-      {{q}}
-    </p>
+    <div class="questionBlock">
+      <p class="_tip">
+        <span class="firstWord">Creator:</span>
+        <span> {{template.creator||'__'}}</span>
+      </p>
+      <p class="_tip">
+        <span class="firstWord">Description:</span>
+        <span> {{template.description||'Not Found'}}</span>
+      </p>
+      <p class="_tip">
+        <span class="firstWord">Questions:</span>
+      </p>
+      <p
+        *ngFor="let q of template.questions;let i=index"
+        class="_tip questions"
+      >
+        <span class="firstWord">Q.{{i+1}}:</span>
+        <span> {{q}}</span>
+      </p>
+    </div>
   </div>
 </ion-content>
 

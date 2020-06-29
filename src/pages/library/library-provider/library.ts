@@ -88,9 +88,9 @@ export class LibraryProvider {
         url,
         payload,
         (success) => {
-          this.utils.stopLoader();
           this.utils.openToast(success.message);
           resolve(success);
+          this.utils.stopLoader();
         },
         (error) => {
           this.utils.stopLoader();

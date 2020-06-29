@@ -246,10 +246,10 @@ export class ProgramServiceProvider {
       //
       this.apiService.httpGet(
         AppConfigs.programs.programList,
-        (success) => {
+        async (success) => {
           let currList = success.result;
           this.localStorage.setLocalStorage(storageKeys.programList, currList);
-          this.institutionService.getInstitutionsflowApi();
+          await this.institutionService.getInstitutionsflowApi();
           resolve(currList);
         },
         (error) => {
