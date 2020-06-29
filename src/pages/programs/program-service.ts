@@ -8,6 +8,7 @@ import { UpdateLocalSchoolDataProvider } from "../../providers/update-local-scho
 import { MenuItemComponent } from "../../components/menu-item/menu-item";
 import { PopoverController } from "ionic-angular";
 import { storageKeys } from "../../providers/storageKeys";
+import { InstitutionServiceProvider } from "../institution/institution-service";
 
 /*
   Generated class for the ProgramProvider provider.
@@ -23,7 +24,8 @@ export class ProgramServiceProvider {
     private localStorage: LocalStorageProvider,
     private utils: UtilsProvider,
     private ulsdp: UpdateLocalSchoolDataProvider,
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
+    private institutionService: InstitutionServiceProvider
   ) {
     console.log("Hello ProgramProvider Provider");
   }
@@ -246,8 +248,8 @@ export class ProgramServiceProvider {
         AppConfigs.programs.programList,
         (success) => {
           let currList = success.result;
-
           this.localStorage.setLocalStorage(storageKeys.programList, currList);
+          this.institutionService.getInstitutionsflowApi();
           resolve(currList);
         },
         (error) => {
