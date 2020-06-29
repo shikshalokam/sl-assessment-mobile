@@ -12,9 +12,7 @@
         {{template.name}}
       </ion-card-content>
     </ion-card>
-    <p>
-      <span class="firstWord">Creator:</span>{{template.creator||'Not Found'}}
-    </p>
+    <p><span class="firstWord">Creator:</span>{{template.creator||'__'}}</p>
     <p>
       <span class="firstWord">Description:</span>{{template.description||'Not
       Found'}}
@@ -26,10 +24,15 @@
       <span class="firstWord">Q.{{i+1}}:</span>
       {{q}}
     </p>
+  </div>
+</ion-content>
+
+<ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
     <div class="_flex-box _justify-content-center">
       <button ion-button round (click)="goToUseTemplate()">
         {{'buttons.useForm' | translate}}
       </button>
     </div>
-  </div>
-</ion-content>
+  </ion-toolbar>
+</ion-footer>

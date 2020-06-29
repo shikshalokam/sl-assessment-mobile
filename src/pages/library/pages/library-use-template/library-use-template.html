@@ -70,10 +70,17 @@
       </ion-col>
 
       <ion-col>
-        <button ion-button full (click)="createObservation()" class="btnText">
+        <button
+          ion-button
+          full
+          (click)="createObservation()"
+          class="btnText"
+          [disabled]="!addObservationForm?.valid || !entityList?.length || !(obervationProgramName ||selectedPrivate?.name) "
+        >
           {{'buttons.publish' | translate}}
         </button>
       </ion-col>
     </ion-row>
   </ion-toolbar>
 </ion-footer>
+<!-- !(!obervationProgramName || !selectedPrivate -->

@@ -89,6 +89,7 @@ export class LibraryUseTemplatePage {
   createObservation() {
     let data = this.createPayload();
     data["status"] = "published";
+    console.log(this.addObservationForm);
     if (this.createNew) {
       data["program"] = {
         id: "",
@@ -125,6 +126,11 @@ export class LibraryUseTemplatePage {
 
     console.log(payLoad);
     return payLoad;
+  }
+
+  checkFormvalid() {
+    if (this.addObservationForm) return this.addObservationForm.valid;
+    else return false;
   }
   getSelectedEntities() {
     return this.entityList.filter((e) => e.selected).map((e) => e._id);
