@@ -111,7 +111,7 @@ export class LibraryProvider {
           resolve(successData.result);
         },
         (error) => {
-          reject();
+          reject(error);
         }
       );
     });

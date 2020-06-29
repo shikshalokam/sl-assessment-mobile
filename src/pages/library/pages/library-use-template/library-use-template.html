@@ -10,7 +10,7 @@
     [formFields]="metaForm"
     [form]="addObservationForm"
   ></dynamic-form>
-  <div>
+  <div *ngIf="privateProgramList?.length">
     <ion-item>
       <ion-label>Create New Program</ion-label>
       <ion-toggle [(ngModel)]="createNew"></ion-toggle>
@@ -36,7 +36,7 @@
       <ion-input type="text" [(ngModel)]="obervationProgramName"></ion-input>
     </ion-item>
   </div>
-  <div>
+  <div *ngIf="addObservationForm">
     <ion-item>
       <button
         ion-button

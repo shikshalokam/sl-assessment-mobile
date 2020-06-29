@@ -10,8 +10,8 @@
   ></header>
 </ion-header>
 <ion-content padding>
-  <div class="fixBox" *ngIf="entityList">
-    <!-- <div class="fixBox" *ngIf="1"> -->
+  <!-- <div class="fixBox" *ngIf="entityList"> -->
+  <div *ngIf="allStates">
     <ion-label class="header _flex-box">
       <!-- {{'ionLabel.selectSchool' | translate}} -->
       <ion-select
@@ -35,26 +35,31 @@
       </button>
     </ion-label>
     <!-- placeholder="{{'message.startSearchSchool' | translate}}" -->
-    <div>
-      <ion-searchbar
-        debounce="500"
-        (ionChange)="searchEntities($event ,'entity')"
-        placeholder="{{'Search ' + selectedEntityName}}"
-      >
-      </ion-searchbar>
+    <div *ngIf="entityList?.length">
+      <div>
+        <ion-searchbar
+          debounce="500"
+          (ionChange)="searchEntities($event ,'entity')"
+          placeholder="{{'Search ' + selectedEntityName}}"
+        >
+        </ion-searchbar>
+      </div>
+      <ion-list margin-top *ngFor="let entity of entityList">
+        <ion-item>
+          <ion-label text-wrap>{{entity.name}}</ion-label>
+          <ion-checkbox
+            color="dark"
+            [checked]="entity.selected"
+            (click)="countEntity(entity);entity.selected = !entity.selected"
+          ></ion-checkbox>
+        </ion-item>
+      </ion-list>
     </div>
 
-    <ion-list margin-top *ngFor="let entity of entityList">
-      <ion-item>
-        <ion-label text-wrap>{{entity.name}}</ion-label>
-        <ion-checkbox
-          color="dark"
-          [checked]="entity.selected"
-          (click)="countEntity(entity);entity.selected = !entity.selected"
-        ></ion-checkbox>
-      </ion-item>
-    </ion-list>
-    <div *ngIf="entityList?.length == 0" class="_flex-box msgContainer">
+    <div
+      *ngIf="!entityList||entityList?.length == 0"
+      class="_flex-box msgContainer"
+    >
       {{'message.noSchoolFound' | translate}}
     </div>
     <div

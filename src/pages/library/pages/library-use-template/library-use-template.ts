@@ -140,6 +140,7 @@ export class LibraryUseTemplatePage {
       .catch((err) => {
         this.privateProgramList = [];
         console.log("getPrivateProgram", err);
+        this.createNew = true;
       });
   }
 
