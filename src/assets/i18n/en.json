@@ -4,7 +4,8 @@
     "generalQuestions": "General Questions",
     "selectObservationType": "Select a observation Type",
     "selectSolution": "Select a Solution",
-    "selectSchool": "Select All Schools"
+    "selectSchool": "Select All Schools",
+    "programName": "Program Name"
   },
   "actionSheet": {
     "confirmLeave": "Are you sure to leave.",
@@ -125,7 +126,8 @@
     "questionWise": "Question Wise",
     "criteriaWise": "Criteria Wise",
     "viewDetails": "View Details",
-    "clickHereToImprove": "Click Here To Improve"
+    "clickHereToImprove": "Click Here To Improve",
+    "useForm": "Use Form"
   },
   "tabs": {
     "home": "Home",
@@ -225,7 +227,9 @@
     "tutorialvideo": "Tutorial Video",
     "improvementProjetcs": "Improvement Projects",
     "entityList": "Entity List",
-    "solutions": "Solutions"
+    "solutions": "Solutions",
+    "library": "Library",
+    "observationSolutions": "Observation Solutions"
   },
   "bottomNav": {
     "institution": "Institution",

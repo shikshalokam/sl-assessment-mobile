@@ -111,7 +111,6 @@ import { AppVersion } from "@ionic-native/app-version";
 import { SettingsPage } from "../pages/settings/settings";
 import { SpinnerDialog } from "@ionic-native/spinner-dialog";
 import { SidemenuProvider } from "../providers/sidemenu/sidemenu";
-import { PipesModule } from "../pipes/pipes.module";
 import { QuestionListPage } from "../pages/question-list/question-list";
 import { TutorialVideoListingPage } from "../pages/tutorial-video-listing/tutorial-video-listing";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
@@ -182,7 +181,6 @@ import { LibraryPageModule } from "../pages/library/library.module";
     QuestionerPageModule,
     ComponentsModule,
     DirectivesModule,
-    PipesModule,
     RatingCriteriaListingPageModule,
     RatingPageModule,
     RatedCriteriaListPageModule,

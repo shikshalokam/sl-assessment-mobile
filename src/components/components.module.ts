@@ -145,6 +145,7 @@ import { ReportEntityListComponent } from "../pages/reports/component/report-ent
     ViewDetailComponent,
     ProgramSolutionComponent,
     ProgObservationEntityListingComponent,
+    PipesModule,
   ],
   entryComponents: [
     InputTypeComponent,

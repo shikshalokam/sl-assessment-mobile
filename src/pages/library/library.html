@@ -1,15 +1,25 @@
-<!--
-  Generated template for the LibraryPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-  <ion-navbar>
-    <ion-title>library</ion-title>
-  </ion-navbar>
+  <header [title]="'headings.library'|translate" [hideBack]="false"></header>
 </ion-header>
 
 <ion-content padding>
-  <p>Coming soon !</p>
+  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+  <ion-grid>
+    <ion-row>
+      <ion-col
+        col-6
+        *ngFor="let item of libraryComponents"
+        (click)="goToComponent(item?.type)"
+      >
+        <div class="card-container">
+          <ion-card>
+            <ion-card-content>
+              <img [src]="item?.url" alt="" />
+            </ion-card-content>
+          </ion-card>
+          <p class="iconName">{{item?.name}}</p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

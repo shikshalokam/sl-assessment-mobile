@@ -33,7 +33,7 @@ export class InstitutionPage {
     private app: App
   ) {}
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     console.log("ionViewDidLoad InstitutionPage");
     this.getProgramFromStorage();
   }

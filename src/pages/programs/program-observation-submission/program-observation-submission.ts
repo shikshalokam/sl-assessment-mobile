@@ -5,6 +5,7 @@ import {
   ModalController,
   PopoverController,
   AlertController,
+  Events,
 } from "ionic-angular";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
@@ -64,20 +65,20 @@ export class ProgramObservationSubmissionPage {
     private alertCntrl: AlertController,
     private apiProvider: ApiProvider,
     private programService: ProgramServiceProvider,
-    private evdnsServ: EvidenceProvider
+    private evdnsServ: EvidenceProvider,
+    private events: Events
   ) {}
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     console.log("ionViewDidLoad ProgramObservationSubmissionPage");
     let data = this.navParams.get("data");
     this.programIndex = data.programIndex;
     this.solutionIndex = data.solutionIndex;
     this.entityIndex = data.entityIndex;
-
     this.getProgramFromStorage();
   }
 
-  async getProgramFromStorage(stopLoader?) {
+  async getProgramFromStorage(stopLoader?, noLoader?) {
     await this.localStorage
       .getLocalStorage(storageKeys.observationSubmissionIdArr)
       .then((ids) => {
@@ -87,7 +88,7 @@ export class ProgramObservationSubmissionPage {
         this.submissionIdArr = [];
       });
 
-    stopLoader ? null : this.utils.startLoader();
+    stopLoader ? null : noLoader ? null : this.utils.startLoader();
 
     await this.localStorage
       .getLocalStorage(storageKeys.programList)
@@ -109,10 +110,10 @@ export class ProgramObservationSubmissionPage {
         } else {
           this.submissionList = null;
         }
-        this.utils.stopLoader();
+        noLoader ? null : this.utils.stopLoader();
       })
       .catch((error) => {
-        this.utils.stopLoader();
+        noLoader ? null : this.utils.stopLoader();
         this.submissionList = null;
       });
   }
