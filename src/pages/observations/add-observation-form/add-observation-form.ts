@@ -367,7 +367,7 @@ export class AddObservationFormPage {
     return solutionFlag;
   }
 
-  getObservationMetaForm() {
+  getSolutionMetaForm() {
     this.utils.startLoader();
     this.apiProviders.httpGet(
       AppConfigs.cro.getCreateObservationMeta + this.selectedFrameWork,
@@ -422,11 +422,11 @@ export class AddObservationFormPage {
       //   actionFlag = this.entityType ? this.getSolutionList() : false;
       //   break;
       // case 1:
-      //   actionFlag = this.selectedFrameWork ? this.getObservationMetaForm() : false;
+      //   actionFlag = this.selectedFrameWork ? this.getSolutionMetaForm() : false;
       //   break;
       case 0:
         actionFlag = this.selectedFrameWork
-          ? this.getObservationMetaForm()
+          ? this.getSolutionMetaForm()
           : false;
         break;
       case 1:

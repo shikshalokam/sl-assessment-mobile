@@ -52,7 +52,7 @@ export class LibraryUseTemplatePage {
 
   generateTemplateForm(solutionId) {
     this.libraryProvider
-      .getObservationMetaForm(solutionId)
+      .getSolutionMetaForm(solutionId)
       .then((res) => {
         console.log("solutionTemplateMeta", solutionId, res);
         this.metaForm = res;

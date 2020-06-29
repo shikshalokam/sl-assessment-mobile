@@ -31,7 +31,8 @@
   <div *ngIf="createNew">
     <ion-item>
       <ion-label stacked
-        >Program Name <span class="_requiredClass">*</span>
+        >{{'ionLabel.programName' | translate}}
+        <span class="_requiredClass">*</span>
       </ion-label>
       <ion-input type="text" [(ngModel)]="obervationProgramName"></ion-input>
     </ion-item>
@@ -43,7 +44,7 @@
         class="selectAll capitalize"
         (click)="openEntityModel()"
       >
-        Add Entity
+        {{'buttons.addEntity' | translate}}
       </button>
     </ion-item>
   </div>

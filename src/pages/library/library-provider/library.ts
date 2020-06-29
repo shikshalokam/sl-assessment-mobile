@@ -58,7 +58,7 @@ export class LibraryProvider {
     });
   }
 
-  getObservationMetaForm(solutionId) {
+  getSolutionMetaForm(solutionId) {
     this.utils.startLoader();
 
     return new Promise((resolve, reject) => {

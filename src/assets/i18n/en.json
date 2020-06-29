@@ -4,7 +4,8 @@
     "generalQuestions": "General Questions",
     "selectObservationType": "Select a observation Type",
     "selectSolution": "Select a Solution",
-    "selectSchool": "Select All Schools"
+    "selectSchool": "Select All Schools",
+    "programName": "Program Name"
   },
   "actionSheet": {
     "confirmLeave": "Are you sure to leave.",
