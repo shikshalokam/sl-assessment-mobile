@@ -11,4 +11,5 @@ export const storageKeys = {
   createdObservationList: "createdObservationList", // list of observational assessment // old flow
   observationSubmissionIdArr: "observationSubmissionIdArr",
   profileRole: "profileRole", //give all roles of current user
+  libraryDraft: "libraryDraft", //draft(library) in localStorage
 };

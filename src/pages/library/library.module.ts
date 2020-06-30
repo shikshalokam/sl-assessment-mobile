@@ -8,6 +8,7 @@ import { LibraryProvider } from "./library-provider/library";
 import { LibrarySolutionDetailsPage } from "./pages/library-solution-details/library-solution-details";
 import { LibraryUseTemplatePage } from "./pages/library-use-template/library-use-template";
 import { LibrarayEntityListComponent } from "./components/libraray-entity-list/libraray-entity-list";
+import { LibraryDraftPage } from "./pages/library-draft/library-draft";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { LibrarayEntityListComponent } from "./components/libraray-entity-list/l
     LibrarySolutionDetailsPage,
     LibraryUseTemplatePage,
     LibrarayEntityListComponent,
+    LibraryDraftPage,
   ],
   imports: [
     IonicPageModule.forChild(LibraryPage),
@@ -28,6 +30,7 @@ import { LibrarayEntityListComponent } from "./components/libraray-entity-list/l
     LibrarySolutionDetailsPage,
     LibraryUseTemplatePage,
     LibrarayEntityListComponent,
+    LibraryDraftPage,
   ],
   providers: [LibraryProvider],
 })
