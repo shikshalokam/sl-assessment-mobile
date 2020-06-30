@@ -3,6 +3,8 @@ import { Injectable } from "@angular/core";
 import { AppConfigs } from "../../../providers/appConfig";
 import { ApiProvider } from "../../../providers/api/api";
 import { UtilsProvider } from "../../../providers/utils/utils";
+import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
+import { storageKeys } from "../../../providers/storageKeys";
 
 /*
   Generated class for the LibraryProvider provider.
@@ -15,7 +17,8 @@ export class LibraryProvider {
   constructor(
     public http: HttpClient,
     public apiService: ApiProvider,
-    public utils: UtilsProvider
+    public utils: UtilsProvider,
+    public localStorage: LocalStorageProvider
   ) {
     console.log("Hello LibraryProvider Provider");
   }
@@ -115,5 +118,28 @@ export class LibraryProvider {
         }
       );
     });
+  }
+
+  getLibraryDraft() {
+    return this.localStorage
+      .getLocalStorage(storageKeys.libraryDraft)
+      .then((items) => {
+        return items;
+      })
+      .catch((err) => {
+        this.localStorage.setLocalStorage(storageKeys.libraryDraft, []);
+        return [];
+      });
+  }
+
+  saveLibraryDraft(value) {
+    return this.localStorage.setLocalStorage(storageKeys.libraryDraft, value);
+  }
+
+  deleteDraft(draftTime: any) {
+    return this.getLibraryDraft()
+      .then((allDraft) => allDraft.filter((d) => d.time !== draftTime))
+      .then((allDraft) => this.saveLibraryDraft(allDraft))
+      .catch((err) => {});
   }
 }

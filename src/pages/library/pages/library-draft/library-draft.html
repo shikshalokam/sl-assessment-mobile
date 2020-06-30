@@ -1,0 +1,34 @@
+<ion-header>
+  <header
+    [title]="'headings.observationSolutions'|translate"
+    [hideBack]="false"
+  ></header>
+  |
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="allDrafts?.length">
+    <ion-card
+      *ngFor="let draft of allDrafts;let draftIndex=index "
+      (click)="goToUseTemplate(draft)"
+    >
+      <ion-item text-wrap>
+        <div class="_flex-box">
+          <div style="flex: 1;">
+            <p>
+              {{draft.name}}
+            </p>
+            <p>
+              {{draft.time|date:'short'}}
+            </p>
+          </div>
+          <ion-icon
+            name="trash"
+            class="menuIcon"
+            (click)="$event.stopPropagation();removeDraft(draft.time)"
+          ></ion-icon>
+        </div>
+      </ion-item>
+    </ion-card>
+  </div>
+</ion-content>

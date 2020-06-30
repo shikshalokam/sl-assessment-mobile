@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams, App } from "ionic-angular";
 import { LibrarySolutionPage } from "./pages/library-solution/library-solution";
+import { LibraryDraftPage } from "./pages/library-draft/library-draft";
 
 /**
  * Generated class for the LibraryPage page.
@@ -32,6 +33,12 @@ export class LibraryPage {
         "http://sl-dev-storage.storage.googleapis.com/library/individualAssessments.png",
       type: "observation",
     },
+    {
+      name: "Drafts",
+      url:
+        "http://sl-dev-storage.storage.googleapis.com/library/individualAssessments.png",
+      type: "draft",
+    },
   ];
 
   constructor(
@@ -48,6 +55,9 @@ export class LibraryPage {
     switch (type) {
       case "observation":
         this.app.getRootNav().push(LibrarySolutionPage, { type: type });
+        break;
+      case "draft":
+        this.app.getRootNav().push(LibraryDraftPage, { type: type });
         break;
 
       default:

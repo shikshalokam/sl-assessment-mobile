@@ -6,6 +6,7 @@ import { LibrarayEntityListComponent } from "../../components/libraray-entity-li
 import { UtilsProvider } from "../../../../providers/utils/utils";
 import { ProgramServiceProvider } from "../../../programs/program-service";
 import { ProgramsPage } from "../../../programs/programs";
+import { LibraryPage } from "../../library";
 
 /**
  * Generated class for the LibraryUseTemplatePage page.
@@ -31,6 +32,7 @@ export class LibraryUseTemplatePage {
   privateProgramList: any[] = [];
   createNew: any;
   selectedPrivate: any;
+  draft: any;
 
   constructor(
     public navCtrl: NavController,
@@ -46,6 +48,8 @@ export class LibraryUseTemplatePage {
     console.log("ionViewDidLoad LibraryUseTemplatePage");
     this.template = this.navParams.get("selectedTemplate");
     this.solutionId = this.navParams.get("solutionId");
+    this.draft = this.navParams.get("draft"); // if coming from draft
+    this.solutionId ? null : (this.solutionId = this.draft.solutionId);
     this.generateTemplateForm(this.solutionId);
     this.getPrivateProgram();
   }
@@ -59,10 +63,12 @@ export class LibraryUseTemplatePage {
         this.metaForm.forEach((element) => {
           switch (element.field) {
             case "name":
-              element.value = this.template.name;
+              element.value = this.draft ? this.draft.name : this.template.name;
               break;
             case "description":
-              element.value = this.template.name;
+              element.value = this.draft
+                ? this.draft.description
+                : this.template.name;
           }
         });
 
@@ -92,18 +98,7 @@ export class LibraryUseTemplatePage {
     let data = this.createPayload();
     data["status"] = "published";
     console.log(this.addObservationForm);
-    if (this.createNew) {
-      data["program"] = {
-        id: "",
-        name: this.obervationProgramName,
-      };
-    } else {
-      data["program"] = {
-        id: this.selectedPrivate._id,
-        name: this.selectedPrivate.name,
-      };
-    }
-
+    data["program"] = this.createProgramPayload();
     console.log(data);
 
     this.libraryProvider
@@ -111,6 +106,7 @@ export class LibraryUseTemplatePage {
       .then(async (res) => {
         console.log("observationCreated", res);
         await this.refreshLocalObservationList();
+        this.draft ? await this.saveToDraft("delete") : null;
         this.navCtrl.popToRoot();
         this.navCtrl.push(ProgramsPage);
       })
@@ -131,6 +127,19 @@ export class LibraryUseTemplatePage {
     console.log(payLoad);
     return payLoad;
   }
+  createProgramPayload() {
+    if (this.createNew) {
+      return {
+        id: "",
+        name: this.obervationProgramName,
+      };
+    } else {
+      return {
+        id: this.selectedPrivate ? this.selectedPrivate._id : null,
+        name: this.selectedPrivate ? this.selectedPrivate.name : null,
+      };
+    }
+  }
 
   checkFormvalid() {
     if (this.addObservationForm) return this.addObservationForm.valid;
@@ -146,6 +155,13 @@ export class LibraryUseTemplatePage {
       .then((res: any[]) => {
         console.log("getPrivateProgram", res);
         this.privateProgramList = res;
+        this.draft
+          ? this.draft.program.id
+            ? (this.selectedPrivate = this.draft.program)
+            : ((this.obervationProgramName = this.draft.program.name),
+              (this.createNew = true))
+          : null;
+        this.draft ? (this.entityList = this.draft.entityList) : null;
       })
       .catch((err) => {
         this.privateProgramList = [];
@@ -159,5 +175,36 @@ export class LibraryUseTemplatePage {
       .refreshObservationList()
       .then((data) => {})
       .catch((error) => {});
+  }
+
+  saveToDraft(deleteDraft?) {
+    let draft = this.addObservationForm.getRawValue();
+    draft.entityList = this.entityList;
+    draft["program"] = this.createProgramPayload();
+    draft["time"] = new Date().toUTCString();
+    draft["solutionId"] = this.solutionId;
+
+    this.utils.startLoader();
+    this.libraryProvider
+      .getLibraryDraft()
+      .then((items) => {
+        this.draft
+          ? (items = items.filter((i) => i.time !== this.draft.time))
+          : null;
+        deleteDraft ? null : items.push(draft);
+        return items;
+      })
+      .then((items) => {
+        console.log(items);
+        this.libraryProvider.saveLibraryDraft(items);
+      })
+      .then((res) => {
+        this.navCtrl.push(LibraryPage);
+        this.utils.stopLoader();
+      })
+      .catch((err) => {
+        console.log(err);
+        this.utils.stopLoader();
+      });
   }
 }
