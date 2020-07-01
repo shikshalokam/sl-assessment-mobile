@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { NavController, NavParams, ModalController, App } from "ionic-angular";
 import { LibraryProvider } from "../../library-provider/library";
-import { FormGroup, FormControl } from "@angular/forms";
 import { LibrarayEntityListComponent } from "../../components/libraray-entity-list/libraray-entity-list";
 import { UtilsProvider } from "../../../../providers/utils/utils";
 import { ProgramServiceProvider } from "../../../programs/program-service";
@@ -23,7 +22,6 @@ export class LibraryUseTemplatePage {
   template: any;
   name: string;
   description: any;
-  program = { id: "", name: "" };
   solutionId: any;
   metaForm: any;
   entityList: any = [];
@@ -31,8 +29,9 @@ export class LibraryUseTemplatePage {
   obervationProgramName;
   privateProgramList: any[] = [];
   createNew: any;
-  selectedPrivate: any;
+  selectedPrivate: any = { _id: null, name: null };
   draft: any;
+  type: any;
 
   constructor(
     public navCtrl: NavController,
@@ -48,15 +47,20 @@ export class LibraryUseTemplatePage {
     console.log("ionViewDidLoad LibraryUseTemplatePage");
     this.template = this.navParams.get("selectedTemplate");
     this.solutionId = this.navParams.get("solutionId");
+    this.type = this.navParams.get("type");
+
     this.draft = this.navParams.get("draft"); // if coming from draft
-    this.solutionId ? null : (this.solutionId = this.draft.solutionId);
+    this.solutionId
+      ? null
+      : ((this.solutionId = this.draft.solutionId),
+        (this.type = this.draft.type));
     this.generateTemplateForm(this.solutionId);
     this.getPrivateProgram();
   }
 
   generateTemplateForm(solutionId) {
     this.libraryProvider
-      .getSolutionMetaForm(solutionId)
+      .getSolutionMetaForm(solutionId, this.type)
       .then((res) => {
         console.log("solutionTemplateMeta", solutionId, res);
         this.metaForm = res;
@@ -84,6 +88,7 @@ export class LibraryUseTemplatePage {
     let editData = {
       entities: this.entityList.filter((e) => e.selected).map((e) => e._id),
       solutionId: this.solutionId,
+      entityType: this.draft ? this.draft.entityType : this.template.entityType,
     };
     let matrixModal = this.modalCntrl.create(LibrarayEntityListComponent, {
       editData,
@@ -94,7 +99,8 @@ export class LibraryUseTemplatePage {
     matrixModal.present();
   }
 
-  createObservation() {
+  /* OA-Observation and assessment (individual and institutional) */
+  createOA() {
     let data = this.createPayload();
     data["status"] = "published";
     console.log(this.addObservationForm);
@@ -102,7 +108,7 @@ export class LibraryUseTemplatePage {
     console.log(data);
 
     this.libraryProvider
-      .createObservation(data, this.solutionId)
+      .createOA(data, this.solutionId, this.type)
       .then(async (res) => {
         console.log("observationCreated", res);
         await this.refreshLocalObservationList();
@@ -119,10 +125,12 @@ export class LibraryUseTemplatePage {
     let payLoad = this.addObservationForm
       ? this.addObservationForm.getRawValue()
       : {};
-    payLoad["entities"] =
-      this.addObservationForm && this.addObservationForm.valid
-        ? this.getSelectedEntities()
-        : [];
+    this.type != "individual"
+      ? (payLoad["entities"] =
+          this.addObservationForm && this.addObservationForm.valid
+            ? this.getSelectedEntities()
+            : [])
+      : null;
 
     console.log(payLoad);
     return payLoad;
@@ -130,12 +138,12 @@ export class LibraryUseTemplatePage {
   createProgramPayload() {
     if (this.createNew) {
       return {
-        id: "",
+        _id: "",
         name: this.obervationProgramName,
       };
     } else {
       return {
-        id: this.selectedPrivate ? this.selectedPrivate._id : null,
+        _id: this.selectedPrivate ? this.selectedPrivate._id : null,
         name: this.selectedPrivate ? this.selectedPrivate.name : null,
       };
     }
@@ -156,8 +164,9 @@ export class LibraryUseTemplatePage {
         console.log("getPrivateProgram", res);
         this.privateProgramList = res;
         this.draft
-          ? this.draft.program.id
-            ? (this.selectedPrivate = this.draft.program)
+          ? this.draft.program._id != ""
+            ? ((this.selectedPrivate._id = this.draft.program._id),
+              (this.selectedPrivate.name = this.draft.program.name))
             : ((this.obervationProgramName = this.draft.program.name),
               (this.createNew = true))
           : null;
@@ -177,12 +186,26 @@ export class LibraryUseTemplatePage {
       .catch((error) => {});
   }
 
+  /*  compareFn(e) {
+    console.log(this.draft);
+    return this.draft.program._id == e._id;
+  } */
+
+  ionChange(name) {
+    // console.log("doSome");
+    this.selectedPrivate.name = name;
+  }
+
   saveToDraft(deleteDraft?) {
     let draft = this.addObservationForm.getRawValue();
     draft.entityList = this.entityList;
     draft["program"] = this.createProgramPayload();
     draft["time"] = new Date().toUTCString();
     draft["solutionId"] = this.solutionId;
+    draft["type"] = this.type;
+    draft["entityType"] = this.draft
+      ? this.draft.entityType
+      : this.template.entityType;
 
     this.utils.startLoader();
     this.libraryProvider

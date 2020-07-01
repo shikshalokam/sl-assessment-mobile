@@ -1,8 +1,9 @@
 <ion-header>
   <header
-    [title]="'headings.observationSolutions'|translate"
+    [title]="type!='observation'?('headings.assessmentForm'|translate):'headings.observationSolutions'|translate"
     [hideBack]="false"
   ></header>
+
   |
 </ion-header>
 

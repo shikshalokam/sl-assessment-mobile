@@ -21,11 +21,13 @@ export class LibraryPage {
       name: "Individual Assessments",
       url:
         "http://sl-dev-storage.storage.googleapis.com/library/individualAssessments.png",
+      type: "individual",
     },
     {
       name: "Institutional Assessments",
       url:
         "http://sl-dev-storage.storage.googleapis.com/library/individualAssessments.png",
+      type: "institutional",
     },
     {
       name: "Observation Solutions",
@@ -52,11 +54,13 @@ export class LibraryPage {
   }
 
   goToComponent(type) {
-    switch (type) {
-      case "observation":
+    switch (true) {
+      case type == "observation" ||
+        type == "institutional" ||
+        type == "individual":
         this.app.getRootNav().push(LibrarySolutionPage, { type: type });
         break;
-      case "draft":
+      case type == "draft":
         this.app.getRootNav().push(LibraryDraftPage, { type: type });
         break;
 

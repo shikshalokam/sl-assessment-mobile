@@ -22,12 +22,29 @@ export class LibraryProvider {
   ) {
     console.log("Hello LibraryProvider Provider");
   }
+  getUrl(type, list?) {
+    switch (type) {
+      case "observation":
+        return list
+          ? AppConfigs.library.observationSolutionsList
+          : AppConfigs.library.observationTemplateDetail;
+      case "individual":
+        return list
+          ? AppConfigs.library.individualSolutionsList
+          : AppConfigs.library.individualTemplateDetail;
+      case "institutional":
+        return list
+          ? AppConfigs.library.institutionalSolutionsList
+          : AppConfigs.library.institutionalTemplateDetail;
 
-  getObservationSolutionsList() {
+      default:
+        break;
+    }
+  }
+  getObservationSolutionsList(type) {
     this.utils.startLoader();
+    const url = this.getUrl(type, "list");
     return new Promise((resolve, reject) => {
-      const url = AppConfigs.library.observationSolutionsList;
-
       this.apiService.httpGet(
         url,
         (successData) => {
@@ -42,11 +59,10 @@ export class LibraryProvider {
     });
   }
 
-  getSolutiontemplate(solutionId) {
+  getSolutiontemplate(solutionId, type) {
     this.utils.startLoader();
+    const url = this.getUrl(type) + solutionId;
     return new Promise((resolve, reject) => {
-      const url = AppConfigs.library.solutionTemplateDetail + solutionId;
-
       this.apiService.httpGet(
         url,
         (successData) => {
@@ -61,12 +77,14 @@ export class LibraryProvider {
     });
   }
 
-  getSolutionMetaForm(solutionId) {
+  getSolutionMetaForm(solutionId, type) {
     this.utils.startLoader();
+    const url =
+      type == "observation"
+        ? AppConfigs.cro.getCreateObservationMeta + solutionId
+        : AppConfigs.library.assessmentMeta + solutionId;
 
     return new Promise((resolve, reject) => {
-      const url = AppConfigs.cro.getCreateObservationMeta + solutionId;
-
       this.apiService.httpGet(
         url,
         (successData) => {
@@ -81,12 +99,15 @@ export class LibraryProvider {
     });
   }
 
-  createObservation(payload, solutionId) {
+  /* OA-Observation and assessment (individual and institutional) */
+  createOA(payload, solutionId, type) {
     this.utils.startLoader();
+    const url =
+      type == "observation"
+        ? AppConfigs.cro.createObservation + solutionId
+        : AppConfigs.library.createAssessment + solutionId;
 
     return new Promise((resolve, reject) => {
-      const url = AppConfigs.cro.createObservation + solutionId;
-
       this.apiService.httpPost(
         url,
         payload,
@@ -99,7 +120,7 @@ export class LibraryProvider {
           this.utils.stopLoader();
           reject();
         },
-        { version: "v2" }
+        type == "observation" ? { version: "v2" } : { version: "v1" }
       );
     });
   }

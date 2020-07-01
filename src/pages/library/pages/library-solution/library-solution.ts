@@ -32,7 +32,7 @@ export class LibrarySolutionPage {
   }
   getSolution() {
     this.libraryProvider
-      .getObservationSolutionsList()
+      .getObservationSolutionsList(this.type)
       .then((res) => {
         this.solutionList = res["data"];
         console.log("observationSolution", res);
@@ -43,6 +43,9 @@ export class LibrarySolutionPage {
   }
 
   goToSolutionDetails(solutionId) {
-    this.navCtrl.push(LibrarySolutionDetailsPage, { solutionId: solutionId });
+    this.navCtrl.push(LibrarySolutionDetailsPage, {
+      solutionId: solutionId,
+      type: this.type,
+    });
   }
 }
