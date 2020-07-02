@@ -219,9 +219,11 @@ export class LibraryUseTemplatePage {
       .then((items) => {
         console.log(items);
         this.libraryProvider.saveLibraryDraft(items);
+        this.utils.openToast("Saved Draft");
       })
       .then((res) => {
-        this.navCtrl.push(LibraryPage);
+        // this.navCtrl.push(LibraryPage);
+        this.navCtrl.popToRoot();
         this.utils.stopLoader();
       })
       .catch((err) => {
