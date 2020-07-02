@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { NavController, NavParams, AlertController } from "ionic-angular";
 import { LibraryProvider } from "../../library-provider/library";
 import { LibraryUseTemplatePage } from "../library-use-template/library-use-template";
 import { UtilsProvider } from "../../../../providers/utils/utils";
@@ -21,7 +21,8 @@ export class LibraryDraftPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public libraryProvider: LibraryProvider,
-    public utils: UtilsProvider
+    public utils: UtilsProvider,
+    public alertCtrl: AlertController
   ) {}
 
   ionViewDidLoad() {
@@ -53,5 +54,28 @@ export class LibraryDraftPage {
         this.getDrafts();
       })
       .catch((err) => {});
+  }
+
+  showConfirm(draftTime, name) {
+    const confirm = this.alertCtrl.create({
+      title: "Delete Draft Item?",
+      message: `Do you agree to delete ${name} from drafts?`,
+      buttons: [
+        {
+          text: "Cancel",
+          handler: () => {
+            console.log("Cancel clicked");
+          },
+        },
+        {
+          text: "Delete",
+          handler: () => {
+            console.log("Delte clicked");
+            this.removeDraft(draftTime);
+          },
+        },
+      ],
+    });
+    confirm.present();
   }
 }

@@ -48,7 +48,7 @@ export class RoleListingPage {
       });
   }
   roleSelected(role) {
-    this.app.getRootNav().push(ReportEntityListingPage, {
+    this.navCtrl.push(ReportEntityListingPage, {
       currentEntityType: role.immediateSubEntityType,
       data: role.entities,
       entityType: role.entities[0].immediateSubEntityType,

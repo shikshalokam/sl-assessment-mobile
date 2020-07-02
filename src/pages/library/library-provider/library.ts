@@ -41,18 +41,19 @@ export class LibraryProvider {
         break;
     }
   }
-  getObservationSolutionsList(type) {
-    this.utils.startLoader();
-    const url = this.getUrl(type, "list");
+  getObservationSolutionsList(type, search, page) {
+    search.length ? null : this.utils.startLoader();
+    const url =
+      this.getUrl(type, "list") + `?search=${search}&page=${page}&limit=10`;
     return new Promise((resolve, reject) => {
       this.apiService.httpGet(
         url,
         (successData) => {
-          this.utils.stopLoader();
+          search.length ? null : this.utils.stopLoader();
           resolve(successData.result);
         },
         (error) => {
-          this.utils.stopLoader();
+          search.length ? null : this.utils.stopLoader();
           reject();
         }
       );
@@ -101,7 +102,6 @@ export class LibraryProvider {
 
   /* OA-Observation and assessment (individual and institutional) */
   createOA(payload, solutionId, type) {
-    this.utils.startLoader();
     const url =
       type == "observation"
         ? AppConfigs.cro.createObservation + solutionId
@@ -114,10 +114,8 @@ export class LibraryProvider {
         (success) => {
           this.utils.openToast(success.message);
           resolve(success);
-          this.utils.stopLoader();
         },
         (error) => {
-          this.utils.stopLoader();
           reject();
         },
         type == "observation" ? { version: "v2" } : { version: "v1" }

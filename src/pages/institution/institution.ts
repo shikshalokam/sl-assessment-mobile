@@ -54,7 +54,7 @@ export class InstitutionPage {
 
   goToInstitutionSol(entityType, entityIndex) {
     let navData = { entityType: entityType, entityIndex: entityIndex };
-    // this.navCtrl.push(InstitutionSolutionPage, { navData });
-    this.app.getRootNav().push(InstitutionSolutionPage, { navData });
+    this.navCtrl.push(InstitutionSolutionPage, { navData });
+    // this.app.getRootNav().push(InstitutionSolutionPage, { navData });
   }
 }

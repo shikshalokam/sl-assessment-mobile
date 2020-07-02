@@ -106,17 +106,21 @@ export class LibraryUseTemplatePage {
     console.log(this.addObservationForm);
     data["program"] = this.createProgramPayload();
     console.log(data);
+    this.utils.startLoader();
 
     this.libraryProvider
       .createOA(data, this.solutionId, this.type)
       .then(async (res) => {
         console.log("observationCreated", res);
         await this.refreshLocalObservationList();
-        this.draft ? await this.saveToDraft("delete") : null;
+        this.draft ? this.saveToDraft("delete") : null;
         this.navCtrl.popToRoot();
-        this.navCtrl.push(ProgramsPage);
+        this.app.getRootNav().push(ProgramsPage);
+        this.utils.stopLoader();
       })
       .catch((err) => {
+        this.utils.stopLoader();
+
         console.log("observationCreationFailed", err);
       });
   }
@@ -163,20 +167,21 @@ export class LibraryUseTemplatePage {
       .then((res: any[]) => {
         console.log("getPrivateProgram", res);
         this.privateProgramList = res;
-        this.draft
-          ? this.draft.program._id != ""
-            ? ((this.selectedPrivate._id = this.draft.program._id),
-              (this.selectedPrivate.name = this.draft.program.name))
-            : ((this.obervationProgramName = this.draft.program.name),
-              (this.createNew = true))
-          : null;
-        this.draft ? (this.entityList = this.draft.entityList) : null;
       })
       .catch((err) => {
         this.privateProgramList = [];
         console.log("getPrivateProgram", err);
         this.createNew = true;
       });
+
+    this.draft
+      ? this.draft.program._id != ""
+        ? ((this.selectedPrivate._id = this.draft.program._id),
+          (this.selectedPrivate.name = this.draft.program.name))
+        : ((this.obervationProgramName = this.draft.program.name),
+          (this.createNew = true))
+      : null;
+    this.draft ? (this.entityList = this.draft.entityList) : null;
   }
 
   async refreshLocalObservationList() {
@@ -186,13 +191,7 @@ export class LibraryUseTemplatePage {
       .catch((error) => {});
   }
 
-  /*  compareFn(e) {
-    console.log(this.draft);
-    return this.draft.program._id == e._id;
-  } */
-
   ionChange(name) {
-    // console.log("doSome");
     this.selectedPrivate.name = name;
   }
 

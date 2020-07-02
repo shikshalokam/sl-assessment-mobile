@@ -58,10 +58,11 @@ export class LibraryPage {
       case type == "observation" ||
         type == "institutional" ||
         type == "individual":
-        this.app.getRootNav().push(LibrarySolutionPage, { type: type });
+        // this.app.getRootNav().push(LibrarySolutionPage, { type: type });
+        this.navCtrl.push(LibrarySolutionPage, { type: type });
         break;
       case type == "draft":
-        this.app.getRootNav().push(LibraryDraftPage, { type: type });
+        this.navCtrl.push(LibraryDraftPage, { type: type });
         break;
 
       default:

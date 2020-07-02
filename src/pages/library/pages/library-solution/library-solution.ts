@@ -16,8 +16,10 @@ import { LibrarySolutionDetailsPage } from "../library-solution-details/library-
 })
 export class LibrarySolutionPage {
   type: any;
-  solutionList: any;
-  search;
+  solutionList: any = [];
+  search = "";
+  page = 1;
+  count: any;
 
   constructor(
     public navCtrl: NavController,
@@ -32,9 +34,10 @@ export class LibrarySolutionPage {
   }
   getSolution() {
     this.libraryProvider
-      .getObservationSolutionsList(this.type)
+      .getObservationSolutionsList(this.type, this.search, this.page++)
       .then((res) => {
-        this.solutionList = res["data"];
+        this.solutionList = [...this.solutionList, ...res["data"]];
+        this.count = res["count"];
         console.log("observationSolution", res);
       })
       .catch((err) => {
@@ -47,5 +50,21 @@ export class LibrarySolutionPage {
       solutionId: solutionId,
       type: this.type,
     });
+  }
+
+  onInput(searchEvent) {
+    this.solutionList = [];
+    this.page = 1;
+    this.getSolution();
+  }
+
+  doInfinite(infiniteScroll) {
+    console.log("Begin async operation");
+
+    setTimeout(() => {
+      this.getSolution();
+      console.log("Async operation has ended");
+      infiniteScroll.complete();
+    }, 500);
   }
 }
