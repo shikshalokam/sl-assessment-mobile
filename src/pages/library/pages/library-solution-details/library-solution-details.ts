@@ -28,7 +28,7 @@ export class LibrarySolutionDetailsPage {
     public transfer: FileTransfer,
     public platform: Platform,
     public file: File,
-    public fileOpener: FileOpener // public document: Documen
+    public fileOpener: FileOpener
   ) {}
 
   ionViewDidLoad() {
@@ -56,22 +56,6 @@ export class LibrarySolutionDetailsPage {
       type: this.type,
     });
   }
-
-  // downloadPdf(link = "") {}
-
-  /*  openRemoteFileByUrl(fileUrl, content_type = "application/pdf") {
-    const transfer = this.transfer.create();
-    let path = null;
-    if (this.platform.is("ios")) {
-      path = this.file.documentsDirectory;
-    } else if (this.platform.is("android")) {
-      path = this.file.dataDirectory;
-    }
-    transfer.download(fileUrl, path + "myfile.pdf").then((entry) => {
-      let url = entry.toURL();
-      this.document.viewDocument(url, content_type, {});
-    });
-  } */
 
   downloadPdf() {
     const fileTransfer: FileTransferObject = this.transfer.create();

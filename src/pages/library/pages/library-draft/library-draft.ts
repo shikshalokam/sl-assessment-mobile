@@ -3,6 +3,7 @@ import { NavController, NavParams, AlertController } from "ionic-angular";
 import { LibraryProvider } from "../../library-provider/library";
 import { LibraryUseTemplatePage } from "../library-use-template/library-use-template";
 import { UtilsProvider } from "../../../../providers/utils/utils";
+import { TranslateService } from "@ngx-translate/core";
 
 /**
  * Generated class for the LibraryDraftPage page.
@@ -22,7 +23,8 @@ export class LibraryDraftPage {
     public navParams: NavParams,
     public libraryProvider: LibraryProvider,
     public utils: UtilsProvider,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public translate: TranslateService
   ) {}
 
   ionViewDidLoad() {
@@ -57,20 +59,26 @@ export class LibraryDraftPage {
   }
 
   showConfirm(draftTime, name) {
+    let translateObject;
+    this.translate
+      .get(["actionSheet.deleteDraft", "actionSheet.yes", "actionSheet.no"])
+      .subscribe((translations) => {
+        translateObject = translations;
+      });
     const confirm = this.alertCtrl.create({
-      title: "Delete Draft Item?",
+      title: translateObject["actionSheet.deleteDraft"],
       message: `Do you agree to delete ${name} from drafts?`,
       buttons: [
         {
-          text: "Cancel",
+          text: translateObject["actionSheet.no"],
           handler: () => {
             console.log("Cancel clicked");
           },
         },
         {
-          text: "Delete",
+          text: translateObject["actionSheet.yes"],
           handler: () => {
-            console.log("Delte clicked");
+            console.log("Delete clicked");
             this.removeDraft(draftTime);
           },
         },

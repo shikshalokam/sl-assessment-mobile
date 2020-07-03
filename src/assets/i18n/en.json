@@ -61,7 +61,8 @@
     "submitForm": "Submit the form",
     "previewForm": "Preview the form",
     "saveForm": "Save the form",
-    "userId": "User Id"
+    "userId": "User Id",
+    "deleteDraft": "Delete Draft Item"
   },
   "buttons": {
     "observeAgain": "Observe Again",
