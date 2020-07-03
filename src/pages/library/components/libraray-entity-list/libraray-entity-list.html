@@ -1,7 +1,7 @@
 <!-- Generated template for the LibrarayEntityListComponent component -->
 <ion-header>
   <header
-    [title]="'headings.addSchools'|translate"
+    [title]="'Add '+editData?.entityType"
     [hideBack]="false"
     [showMenu]="false"
     [showClose]="true"
@@ -31,7 +31,7 @@
         [ngClass]="{'undo': selectAll}"
       >
         {{!selectAll ? ('buttons.selectAll' | translate) +' '+
-        selectedEntityName : ('buttons.undo' | translate)}}
+        editData?.entityType : ('buttons.undo' | translate)}}
       </button>
     </ion-label>
     <!-- placeholder="{{'message.startSearchSchool' | translate}}" -->
@@ -40,7 +40,7 @@
         <ion-searchbar
           debounce="500"
           (ionChange)="searchEntities($event ,'entity')"
-          placeholder="{{'Search ' + selectedEntityName}}"
+          placeholder="{{'Search ' + editData?.entityType}}"
         >
         </ion-searchbar>
       </div>

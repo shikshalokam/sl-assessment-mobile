@@ -1,6 +1,6 @@
 <ion-header>
   <header
-    [title]="'headings.observationSolutions'|translate"
+    [title]="type!='observation'?('headings.assessmentForm'|translate):'headings.observationSolutions'|translate"
     [hideBack]="false"
   ></header>
 </ion-header>
@@ -21,7 +21,7 @@
         <span class="firstWord">Description:</span>
         <span> {{template.description||'Not Found'}}</span>
       </p>
-      <p class="_tip">
+      <p class="_tip" *ngIf="type=='observation'">
         <span class="firstWord">Questions:</span>
       </p>
       <p
@@ -31,6 +31,20 @@
         <span class="firstWord">Q.{{i+1}}:</span>
         <span> {{q}}</span>
       </p>
+      <div *ngFor="let ecm of template.ecmQuestions;let ecmIndex=index">
+        <p class="_tip">
+          <span class="firstWord">{{ecmIndex+1+'.'+ecm.name}}</span>
+        </p>
+        <p *ngFor="let q of ecm.questions;let i=index" class="_tip questions">
+          <span class="firstWord">Q.{{i+1}}:</span>
+          <span> {{q}}</span>
+        </p>
+      </div>
+      <div *ngIf="type!='observation'&&template.linkTitle.length">
+        <button ion-button round color="light" full (click)="downloadPdf()">
+          {{template.linkTitle}}
+        </button>
+      </div>
     </div>
   </div>
 </ion-content>

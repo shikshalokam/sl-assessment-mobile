@@ -33,25 +33,24 @@ export class ProgramSolutionComponent {
   }
 
   goToProgramSolEntity() {
-    /* this.navCtrl.push(ProgramSolutionEntityPage, {
-      programIndex: this.programIndex,
-      solutionIndex: this.solutionIndex,
-    }); */
-    this.app.getRootNav().push(ProgramSolutionEntityPage, {
+    this.navCtrl.push(ProgramSolutionEntityPage, {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
     });
+    // this.app.getRootNav().push(ProgramSolutionEntityPage, {
+    //   programIndex: this.programIndex,
+    //   solutionIndex: this.solutionIndex,
+    // });
   }
 
   goToProgSolObservationDetails() {
-    /*   
     this.navCtrl.push(ProgramSolutionObservationDetailPage, {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
-    }); */
-    this.app.getRootNav().push(ProgramSolutionObservationDetailPage, {
+    });
+    /* this.app.getRootNav().push(ProgramSolutionObservationDetailPage, {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
-    });
+    }); */
   }
 }

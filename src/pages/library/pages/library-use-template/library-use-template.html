@@ -1,6 +1,6 @@
 <ion-header>
   <header
-    [title]="'headings.observationSolutions'|translate"
+    [title]="type!='observation'?('headings.assessmentForm'|translate):'headings.observationSolutions'|translate"
     [hideBack]="false"
   ></header>
 </ion-header>
@@ -21,13 +21,17 @@
       <ion-label color="primary" floating
         >Choose Private Program <span class="_requiredClass">*</span></ion-label
       >
-      <ion-select [(ngModel)]="selectedPrivate" interface="action-sheet">
-        <ion-option [value]="pp" *ngFor="let pp of privateProgramList"
+      <ion-select [(ngModel)]="selectedPrivate._id" interface="action-sheet">
+        <ion-option
+          [value]="pp._id"
+          *ngFor="let pp of privateProgramList"
+          (ionSelect)="ionChange(pp.name)"
           >{{pp.name}}</ion-option
         >
       </ion-select>
     </ion-item>
   </div>
+
   <div *ngIf="createNew">
     <ion-item>
       <ion-label stacked
@@ -37,7 +41,7 @@
       <ion-input type="text" [(ngModel)]="obervationProgramName"></ion-input>
     </ion-item>
   </div>
-  <div *ngIf="addObservationForm">
+  <div *ngIf="addObservationForm&&type!='individual'">
     <ion-item>
       <button
         ion-button
@@ -69,9 +73,9 @@
         <button
           ion-button
           full
-          (click)="createObservation()"
+          (click)="createOA()"
           class="btnText"
-          [disabled]="!addObservationForm?.valid || !entityList?.length || !(obervationProgramName ||selectedPrivate?.name) "
+          [disabled]="!addObservationForm?.valid || !(entityList?.length ||type=='individual')|| !(obervationProgramName ||selectedPrivate?.name) "
         >
           {{'buttons.publish' | translate}}
         </button>

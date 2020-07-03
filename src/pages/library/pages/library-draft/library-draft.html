@@ -1,9 +1,5 @@
 <ion-header>
-  <header
-    [title]="'headings.observationSolutions'|translate"
-    [hideBack]="false"
-  ></header>
-  |
+  <header [title]="'headings.draft'|translate" [hideBack]="false"></header>
 </ion-header>
 
 <ion-content padding>
@@ -25,10 +21,15 @@
           <ion-icon
             name="trash"
             class="menuIcon"
-            (click)="$event.stopPropagation();removeDraft(draft.time)"
+            (click)="$event.stopPropagation();showConfirm(draft.time,draft.name)"
           ></ion-icon>
         </div>
       </ion-item>
     </ion-card>
+  </div>
+  <div *ngIf="allDrafts && !allDrafts?.length">
+    <div class="ion-diagnostics-sheet-title">
+      <h3>{{'message.noDraft' | translate}}</h3>
+    </div>
   </div>
 </ion-content>
