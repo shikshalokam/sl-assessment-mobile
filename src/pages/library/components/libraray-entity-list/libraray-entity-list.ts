@@ -102,6 +102,7 @@ export class LibrarayEntityListComponent {
             : this.allStates[0]["_id"];
         }
         this.localStorage.setLocalStorage("allStates", this.allStates);
+        this.getEntityList();
       },
       (error) => {
         this.allStates = [];

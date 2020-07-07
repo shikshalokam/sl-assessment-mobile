@@ -2,6 +2,8 @@ import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams, App } from "ionic-angular";
 import { LibrarySolutionPage } from "./pages/library-solution/library-solution";
 import { LibraryDraftPage } from "./pages/library-draft/library-draft";
+import { LibraryProvider } from "./library-provider/library";
+import { LibrarySolutionsSearchPage } from "./pages/library-solutions-search/library-solutions-search";
 
 /**
  * Generated class for the LibraryPage page.
@@ -16,41 +18,34 @@ import { LibraryDraftPage } from "./pages/library-draft/library-draft";
   templateUrl: "library.html",
 })
 export class LibraryPage {
-  libraryComponents = [
-    {
-      name: "Individual Assessments",
-      url:
-        "http://sl-dev-storage.storage.googleapis.com/library/individualAssessments.png",
-      type: "individual",
-    },
-    {
-      name: "Institutional Assessments",
-      url:
-        "http://sl-dev-storage.storage.googleapis.com/library/individualAssessments.png",
-      type: "institutional",
-    },
-    {
-      name: "Observation Solutions",
-      url:
-        "http://sl-dev-storage.storage.googleapis.com/library/individualAssessments.png",
-      type: "observation",
-    },
-    {
-      name: "Drafts",
-      url:
-        "http://sl-dev-storage.storage.googleapis.com/library/individualAssessments.png",
-      type: "draft",
-    },
-  ];
+  searchText: any;
+  libraryComponents: any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public app: App
+    public app: App,
+    public libraryProvider: LibraryProvider
   ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad LibraryPage");
+    this.getLibraryCategories();
+  }
+  ionViewDidEnter() {
+    this.searchText = null;
+  }
+
+  getLibraryCategories() {
+    this.libraryProvider
+      .getLibraryCategories()
+      .then((res: any) => {
+        console.log("LibraryPage -> getLibraryCategories -> res", res);
+        this.libraryComponents = res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   goToComponent(type) {
@@ -61,12 +56,16 @@ export class LibraryPage {
         // this.app.getRootNav().push(LibrarySolutionPage, { type: type });
         this.navCtrl.push(LibrarySolutionPage, { type: type });
         break;
-      case type == "draft":
+      case type == "drafts":
         this.navCtrl.push(LibraryDraftPage, { type: type });
         break;
 
       default:
         break;
     }
+  }
+
+  checkFocus() {
+    this.navCtrl.push(LibrarySolutionsSearchPage);
   }
 }

@@ -232,7 +232,8 @@
     "library": "Library",
     "observationSolutions": "Observation Solutions",
     "assessmentForm": "Assessment Form",
-    "draft": "Drafts"
+    "draft": "Drafts",
+    "search": "Search"
   },
   "bottomNav": {
     "institution": "Institution",

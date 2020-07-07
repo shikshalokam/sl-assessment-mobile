@@ -114,9 +114,9 @@ export class LibraryUseTemplatePage {
         console.log("observationCreated", res);
         await this.refreshLocalObservationList();
         this.draft ? this.saveToDraft("delete") : null;
+        this.utils.stopLoader();
         this.navCtrl.popToRoot();
         this.app.getRootNav().push(ProgramsPage);
-        this.utils.stopLoader();
       })
       .catch((err) => {
         this.utils.stopLoader();
@@ -206,7 +206,7 @@ export class LibraryUseTemplatePage {
       ? this.draft.entityType
       : this.template.entityType;
 
-    this.utils.startLoader();
+    deleteDraft ? null : this.utils.startLoader();
     this.libraryProvider
       .getLibraryDraft()
       .then((items) => {
@@ -219,16 +219,16 @@ export class LibraryUseTemplatePage {
       .then((items) => {
         console.log(items);
         this.libraryProvider.saveLibraryDraft(items);
-        this.utils.openToast("Saved Draft");
+        deleteDraft ? null : this.utils.openToast("Saved Draft");
       })
       .then((res) => {
         // this.navCtrl.push(LibraryPage);
         this.navCtrl.popToRoot();
-        this.utils.stopLoader();
+        deleteDraft ? null : this.utils.stopLoader();
       })
       .catch((err) => {
         console.log(err);
-        this.utils.stopLoader();
+        deleteDraft ? null : this.utils.stopLoader();
       });
   }
 }

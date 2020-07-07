@@ -5,6 +5,8 @@ import { ApiProvider } from "../../../providers/api/api";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
 import { storageKeys } from "../../../providers/storageKeys";
+import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
+import { File } from "@ionic-native/file";
 
 /*
   Generated class for the LibraryProvider provider.
@@ -14,11 +16,15 @@ import { storageKeys } from "../../../providers/storageKeys";
 */
 @Injectable()
 export class LibraryProvider {
+  private win: any = window;
+
   constructor(
     public http: HttpClient,
     public apiService: ApiProvider,
     public utils: UtilsProvider,
-    public localStorage: LocalStorageProvider
+    public localStorage: LocalStorageProvider,
+    public transfer: FileTransfer,
+    public file: File
   ) {
     console.log("Hello LibraryProvider Provider");
   }
@@ -61,6 +67,7 @@ export class LibraryProvider {
   }
 
   getSolutiontemplate(solutionId, type) {
+    this.localStorage.deleteOneStorage(storageKeys.libraryCategories);
     this.utils.startLoader();
     const url = this.getUrl(type) + solutionId;
     return new Promise((resolve, reject) => {
@@ -160,5 +167,82 @@ export class LibraryProvider {
       .then((allDraft) => allDraft.filter((d) => d.time !== draftTime))
       .then((allDraft) => this.saveLibraryDraft(allDraft))
       .catch((err) => {});
+  }
+
+  getLibraryCategories() {
+    return new Promise((resolve, reject) => {
+      this.localStorage
+        .getLocalStorage(storageKeys.libraryCategories)
+        .then((categories) => {
+          resolve(categories);
+        })
+        .catch((err) => {
+          return this.getLibraryCategoryApi();
+        })
+        .then((res) => {
+          this.localStorage.setLocalStorage(storageKeys.libraryCategories, res);
+          return res;
+        })
+        .then((res: any) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  getLibraryCategoryApi() {
+    const url = AppConfigs.library.categories;
+    return new Promise((resolve, reject) => {
+      this.apiService.httpGet(
+        url,
+        async (successData) => {
+          for (const element of successData["result"]) {
+            await this.download(element.url, element.type).then(
+              (safeurl) => (element.localUrl = safeurl)
+            );
+          }
+          resolve(successData.result);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+
+  download(url, name) {
+    const fileTransfer: FileTransferObject = this.transfer.create();
+
+    return fileTransfer
+      .download(url, this.file.dataDirectory + name + ".png")
+      .then(
+        (entry) => {
+          return this.win.Ionic.WebView.convertFileSrc(entry.nativeURL);
+        },
+        (error) => {
+          console.log("error!");
+        }
+      );
+  }
+
+  getLibrarySearchSolutions(solutionName, page) {
+    return new Promise((resolve, reject) => {
+      const url =
+        AppConfigs.library.searchSolutions +
+        solutionName +
+        `&page=${page}&limit=10`;
+
+      this.apiService.httpGet(
+        url,
+        (successData) => {
+          resolve(successData.result);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
   }
 }
