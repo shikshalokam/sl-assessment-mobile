@@ -3,7 +3,13 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+  <ion-searchbar
+    [(ngModel)]="searchText"
+    (ionInput)="redirectToSearch()"
+    [debounce]="500"
+  ></ion-searchbar>
+  <!-- <search-library-solutions></search-library-solutions> -->
+
   <ion-grid>
     <ion-row>
       <ion-col
@@ -14,7 +20,7 @@
         <div class="card-container">
           <ion-card>
             <ion-card-content>
-              <img [src]="item?.url" alt="" />
+              <img [src]="item?.localUrl" alt="" />
             </ion-card-content>
           </ion-card>
           <p class="iconName">{{item?.name}}</p>
@@ -22,4 +28,9 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-fab bottom right>
+    <button ion-fab mini (click)="getLibraryCategories()">
+      <ion-icon name="refresh"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>
