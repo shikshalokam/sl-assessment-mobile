@@ -39,7 +39,6 @@ export class LibrarySolutionsSearchPage {
     this.localStorage
       .getLocalStorage(storageKeys.libraryCategories)
       .then((data) => {
-        console.log("LibrarySolutionsSearchPage -> getIcons -> data", data);
         let object = Object.assign(
           {},
           ...data.map((object) => ({ [object.type]: object.localUrl }))
@@ -55,14 +54,12 @@ export class LibrarySolutionsSearchPage {
     this.libraryProvider
       .getLibrarySearchSolutions(this.searchText, this.page)
       .then((res) => {
-        console.log("LibraryPage -> getLibraryCategories -> res", res);
         Array.isArray(this.solutionsList)
           ? (this.solutionsList = [...this.solutionsList, ...res["data"]])
           : (this.solutionsList = res["data"]);
         this.count = res["count"];
       })
       .catch((err) => {
-        console.log("SearchLibrarySolutionsComponent -> onInput -> err", err);
         this.solutionsList = [];
       });
   }
@@ -74,16 +71,14 @@ export class LibrarySolutionsSearchPage {
   }
 
   doInfinite(infiniteScroll) {
-    console.log("Begin async operation");
     this.page = this.page + 1;
     setTimeout(() => {
       this.searchSolutions();
-      console.log("Async operation has ended");
       infiniteScroll.complete();
     }, 500);
   }
 
-  goToSolutionDetails(solutionId, type = "observation") {
+  goToSolutionDetails(solutionId, type) {
     this.navCtrl.push(LibrarySolutionDetailsPage, {
       solutionId: solutionId,
       type: type,

@@ -206,7 +206,7 @@ export class LibraryUseTemplatePage {
       ? this.draft.entityType
       : this.template.entityType;
 
-    this.utils.startLoader();
+    deleteDraft ? null : this.utils.startLoader();
     this.libraryProvider
       .getLibraryDraft()
       .then((items) => {
@@ -224,11 +224,11 @@ export class LibraryUseTemplatePage {
       .then((res) => {
         // this.navCtrl.push(LibraryPage);
         this.navCtrl.popToRoot();
-        this.utils.stopLoader();
+        deleteDraft ? null : this.utils.stopLoader();
       })
       .catch((err) => {
         console.log(err);
-        this.utils.stopLoader();
+        deleteDraft ? null : this.utils.stopLoader();
       });
   }
 }
