@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { Component, ViewChild } from "@angular/core";
+import { NavController, NavParams, Searchbar } from "ionic-angular";
 import { LibraryProvider } from "../../library-provider/library";
 import { LibrarySolutionDetailsPage } from "../library-solution-details/library-solution-details";
 import { storageKeys } from "../../../../providers/storageKeys";
@@ -18,11 +18,12 @@ import { isArray } from "ionic-angular/umd/util/util";
   templateUrl: "library-solutions-search.html",
 })
 export class LibrarySolutionsSearchPage {
-  searchText: any;
+  searchText: any = "";
   solutionsList: any = null;
   page: number = 1;
   count: any;
   iconData: any;
+  @ViewChild("searchbar") searchbar: Searchbar;
 
   constructor(
     public navCtrl: NavController,
@@ -31,7 +32,6 @@ export class LibrarySolutionsSearchPage {
     public localStorage: LocalStorageProvider
   ) {}
   ionViewDidEnter() {
-    this.searchText = this.navParams.get("searchText");
     this.getIcons();
   }
 
@@ -45,7 +45,12 @@ export class LibrarySolutionsSearchPage {
         );
         console.log(object);
         this.iconData = object;
+      })
+      .then((res) => {
         this.searchSolutions();
+        setTimeout(() => {
+          this.searchbar.setFocus();
+        }, 500);
       })
       .catch((err) => {});
   }

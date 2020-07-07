@@ -18,32 +18,6 @@ import { LibrarySolutionsSearchPage } from "./pages/library-solutions-search/lib
   templateUrl: "library.html",
 })
 export class LibraryPage {
-  // libraryComponents = [
-  //   {
-  //     name: "Individual Assessments",
-  //     url:
-  //       "https://storage.googleapis.com/download/storage/v1/b/sl-dev-storage/o/static%2Flibrary%2Fcategories%2FindividualAssessments.png?generation=1593694445292104&alt=media",
-  //     type: "individual",
-  //   },
-  //   {
-  //     name: "Institutional Assessments",
-  //     url:
-  //       "https://storage.googleapis.com/download/storage/v1/b/sl-dev-storage/o/static%2Flibrary%2Fcategories%2FinstitutionalAssessments.png?generation=1593694446262158&alt=media",
-  //     type: "institutional",
-  //   },
-  //   {
-  //     name: "Observation Solutions",
-  //     url:
-  //       "https://storage.googleapis.com/download/storage/v1/b/sl-dev-storage/o/static%2Flibrary%2Fcategories%2FindividualAssessments.png?generation=1593694445292104&alt=media",
-  //     type: "observation",
-  //   },
-  //   {
-  //     name: "Drafts",
-  //     url:
-  //       "https://storage.googleapis.com/download/storage/v1/b/sl-dev-storage/o/static%2Flibrary%2Fcategories%2Fdrafts.png?generation=1593694447711792&alt=media",
-  //     type: "draft",
-  //   },
-  // ];
   searchText: any;
   libraryComponents: any;
 
@@ -91,9 +65,7 @@ export class LibraryPage {
     }
   }
 
-  redirectToSearch() {
-    this.navCtrl.push(LibrarySolutionsSearchPage, {
-      searchText: this.searchText,
-    });
+  checkFocus() {
+    this.navCtrl.push(LibrarySolutionsSearchPage);
   }
 }

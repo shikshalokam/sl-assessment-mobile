@@ -5,8 +5,7 @@
 <ion-content padding>
   <ion-searchbar
     [(ngModel)]="searchText"
-    (ionInput)="redirectToSearch()"
-    [debounce]="500"
+    (ionFocus)="checkFocus()"
   ></ion-searchbar>
 
   <ion-grid>
