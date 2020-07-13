@@ -95,6 +95,7 @@ export class ProgramServiceProvider {
       let entityId =
         programs[programIndex].solutions[assessmentIndex].entities[entityIndex]
           ._id;
+      let submissionNumber = event.submissionNumber || 1;
 
       this.utils.startLoader();
       const url =
@@ -103,7 +104,9 @@ export class ProgramServiceProvider {
         "?solutionId=" +
         solutionId +
         "&entityId=" +
-        entityId;
+        entityId +
+        "&submissionNumber=" +
+        submissionNumber;
       //console.log(url);
       this.apiService.httpGet(
         url,
@@ -123,12 +126,12 @@ export class ProgramServiceProvider {
               success.result["assessment"]["submissionId"],
             generalQuestions
           );
-          programs[programIndex].solutions[assessmentIndex].entities[
+          // programs[programIndex].solutions[assessmentIndex].entities[
+          //   entityIndex
+          // ].downloaded = true;
+          /* programs[programIndex].solutions[assessmentIndex].entities[
             entityIndex
-          ].downloaded = true;
-          programs[programIndex].solutions[assessmentIndex].entities[
-            entityIndex
-          ].submissionId = success.result.assessment.submissionId;
+          ].submissionId = success.result.assessment.submissionId; */
           /*   await this.ulsdp.updateSubmissionIdArr(
             success.result.assessment.submissionId,
             solutionId,
@@ -258,6 +261,23 @@ export class ProgramServiceProvider {
         }
       );
       //
+    });
+  }
+
+  submissionListAll(solutionId, entityId) {
+    return new Promise((resolve, reject) => {
+      this.apiService.httpGet(
+        AppConfigs.assessmentsList.submissionList +
+          solutionId +
+          "?entityId=" +
+          entityId,
+        (success) => {
+          resolve(success.result);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
     });
   }
 

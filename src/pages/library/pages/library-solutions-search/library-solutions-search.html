@@ -24,7 +24,12 @@
         *ngFor="let solution of solutionsList"
         (click)="goToSolutionDetails(solution._id,solution.type)"
       >
-        <img width="16" height="16" [src]="iconData[solution.type]" />
+        <img
+          width="16"
+          height="16"
+          [src]="iconData[solution.type]"
+          *ngIf="iconData"
+        />
 
         <div padding>
           <p>

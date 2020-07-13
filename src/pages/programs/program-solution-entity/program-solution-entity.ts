@@ -6,6 +6,7 @@ import { ProgramServiceProvider } from "../program-service";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { EvidenceProvider } from "../../../providers/evidence/evidence";
 import { storageKeys } from "../../../providers/storageKeys";
+import { ProgramAssessmentSubmissionPage } from "../program-assessment-submission/program-assessment-submission";
 
 /**
  * Generated class for the ProgramSolutionEntityPage page.
@@ -85,9 +86,15 @@ export class ProgramSolutionEntityPage {
     this.programList[this.programIndex].solutions[
       this.solutionIndex
     ].entities.map((e, entityIndex) => {
-      this.submissionArr.includes(e.submissionId)
-        ? (e.downloaded = true)
+      e.allowMultipleAssessemts
+        ? null
+        : this.submissionArr.includes(e.submissions[0].submissionId)
+        ? (e.submissions[0].downloaded = true)
         : null;
+      console.log(
+        "ProgramSolutionEntityPage -> applySubmission -> program",
+        this.program
+      );
     });
   }
 
@@ -190,5 +197,14 @@ export class ProgramSolutionEntityPage {
       createdByProgramId: this.programList[this.programIndex]._id,
     };
     this.programService.openMenu(event, this.programList, true);
+  }
+
+  goToAssessmentSubmission(entityIndex) {
+    let navData = {
+      programIndex: this.programIndex,
+      solutionIndex: this.solutionIndex,
+      entityIndex: entityIndex,
+    };
+    this.navCtrl.push(ProgramAssessmentSubmissionPage, { navData });
   }
 }

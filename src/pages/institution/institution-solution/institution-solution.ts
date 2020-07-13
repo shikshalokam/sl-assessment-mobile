@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { NavController, NavParams, App } from "ionic-angular";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { EvidenceProvider } from "../../../providers/evidence/evidence";
@@ -7,6 +7,7 @@ import { InstitutionServiceProvider } from "../institution-service";
 import { storageKeys } from "../../../providers/storageKeys";
 import { ProgramObservationSubmissionPage } from "../../programs/program-observation-submission/program-observation-submission";
 import { ProgramServiceProvider } from "../../programs/program-service";
+import { ProgramAssessmentSubmissionPage } from "../../programs/program-assessment-submission/program-assessment-submission";
 
 /**
  * Generated class for the InstitutionSolutionPage page.
@@ -33,7 +34,8 @@ export class InstitutionSolutionPage {
     public utils: UtilsProvider,
     public evdnsServ: EvidenceProvider,
     public institutionService: InstitutionServiceProvider,
-    public programService: ProgramServiceProvider
+    public programService: ProgramServiceProvider,
+    public appCtrl: App
   ) {}
 
   ionViewDidLoad() {
@@ -80,8 +82,10 @@ export class InstitutionSolutionPage {
     this.institutionList.entities[this.entityType][
       this.entityIndex
     ].solutions.map((sol, solutionIndex) => {
-      this.submissionArr.includes(sol.submissionId)
-        ? (sol.downloaded = true)
+      sol.allowMultipleAssessemts
+        ? null
+        : this.submissionArr.includes(sol.submissions[0].submissionId)
+        ? (sol.submissions[0].downloaded = true)
         : null;
     });
   }
@@ -128,7 +132,13 @@ export class InstitutionSolutionPage {
               successData.assessment.evidences[0].externalId,
               submissionId
             );
-            this.navCtrl.push("SectionListPage", {
+            /* this.navCtrl.push("SectionListPage", {
+              _id: submissionId,
+              name: heading,
+              selectedEvidence: 0,
+              recentlyUpdatedEntity: recentlyUpdatedEntity,
+            }); */
+            this.appCtrl.getRootNav().push("SectionListPage", {
               _id: submissionId,
               name: heading,
               selectedEvidence: 0,
@@ -260,6 +270,34 @@ export class InstitutionSolutionPage {
               this.navCtrl.push(ProgramObservationSubmissionPage, { data });
             });
         }
+      })
+      .catch((err) => {});
+  }
+
+  goToAssessmentSubmission(programId, solutionId) {
+    let EntityId = this.institutionList.entities[this.entityType][
+      this.entityIndex
+    ]._id;
+
+    this.localStorage
+      .getLocalStorage(storageKeys.programList)
+      .then((programs) => {
+        let programIndex = programs.map((p) => p._id).indexOf(programId);
+        let solutionIndex = programs[programIndex].solutions
+          .map((s) => s._id)
+          .indexOf(solutionId);
+        let entityIndex = programs[programIndex].solutions[
+          solutionIndex
+        ].entities
+          .map((e) => e._id)
+          .indexOf(EntityId);
+
+        let navData = {
+          programIndex: programIndex,
+          solutionIndex: solutionIndex,
+          entityIndex: entityIndex,
+        };
+        this.navCtrl.push(ProgramAssessmentSubmissionPage, { navData });
       })
       .catch((err) => {});
   }

@@ -8,6 +8,7 @@ import { ProgramSolutionPage } from "./program-solution/program-solution";
 import { ProgramSolutionEntityPage } from "./program-solution-entity/program-solution-entity";
 import { ProgramSolutionObservationDetailPage } from "./program-solution-observation-detail/program-solution-observation-detail";
 import { ProgramObservationSubmissionPage } from "./program-observation-submission/program-observation-submission";
+import { ProgramAssessmentSubmissionPage } from "./program-assessment-submission/program-assessment-submission";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ProgramObservationSubmissionPage } from "./program-observation-submissi
     ProgramSolutionEntityPage,
     ProgramSolutionObservationDetailPage,
     ProgramObservationSubmissionPage,
+    ProgramAssessmentSubmissionPage,
   ],
   imports: [
     IonicPageModule.forChild(ProgramsPage),
@@ -29,6 +31,7 @@ import { ProgramObservationSubmissionPage } from "./program-observation-submissi
     ProgramSolutionEntityPage,
     ProgramSolutionObservationDetailPage,
     ProgramObservationSubmissionPage,
+    ProgramAssessmentSubmissionPage,
   ],
 })
 export class ProgramsPageModule {}

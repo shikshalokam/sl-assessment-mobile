@@ -52,7 +52,9 @@ export class LibrarySolutionsSearchPage {
           this.searchbar.setFocus();
         }, 500);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        this.searchSolutions();
+      });
   }
 
   searchSolutions() {

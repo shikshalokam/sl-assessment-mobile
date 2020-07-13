@@ -357,9 +357,10 @@ export class ImageListingPage {
         this.schoolData.observation
           ? this.events.publish("updateSubmissionStatus")
           : null;
-        this.programService.refreshObservationList();
-        this.navCtrl.remove(this.navCtrl.getActive().index - 1, 1);
-        this.navCtrl.pop();
+        this.programService.refreshObservationList().then(() => {
+          this.navCtrl.remove(this.navCtrl.getActive().index - 1, 1);
+          this.navCtrl.pop();
+        });
       },
       (error) => {
         this.utils.stopLoader();

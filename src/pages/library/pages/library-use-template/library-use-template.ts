@@ -167,6 +167,7 @@ export class LibraryUseTemplatePage {
       .then((res: any[]) => {
         console.log("getPrivateProgram", res);
         this.privateProgramList = res;
+        this.privateProgramList.length ? null : (this.createNew = true);
       })
       .catch((err) => {
         this.privateProgramList = [];
