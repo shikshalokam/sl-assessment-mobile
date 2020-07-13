@@ -25,7 +25,7 @@
       *ngIf="item.chart.type == 'expansion' && (multiAssessmentsReport||submissionId)"
     ></expansion-panel-2>
   </div>
-  <div class="_flex-box _justify-content-center" *ngIf="data">
+  <div class="_flex-box _justify-content-center" *ngIf="data?.reportSections">
     <button ion-button round class="viewReportBtn" (click)="goToImpSugg()">
       {{'buttons.clickHereToImprove' | translate}}
     </button>
