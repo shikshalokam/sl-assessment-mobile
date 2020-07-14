@@ -56,7 +56,8 @@ export class ProgramsPage {
 
     this.programService
       .refreshObservationList(this.programList, event)
-      .then((data) => {
+      .then((programs) => {
+        this.programList = programs;
         if (refreshEvent) refreshEvent.complete();
         else this.utils.stopLoader();
       })

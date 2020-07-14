@@ -95,6 +95,7 @@ export class ProgramServiceProvider {
       let entityId =
         programs[programIndex].solutions[assessmentIndex].entities[entityIndex]
           ._id;
+      let submissionNumber = event.submissionNumber || 1;
 
       this.utils.startLoader();
       const url =
@@ -103,8 +104,9 @@ export class ProgramServiceProvider {
         "?solutionId=" +
         solutionId +
         "&entityId=" +
-        entityId;
-      //console.log(url);
+        entityId +
+        "&submissionNumber=" +
+        submissionNumber;
       this.apiService.httpGet(
         url,
         async (success) => {
@@ -123,21 +125,27 @@ export class ProgramServiceProvider {
               success.result["assessment"]["submissionId"],
             generalQuestions
           );
-          programs[programIndex].solutions[assessmentIndex].entities[
+          // programs[programIndex].solutions[assessmentIndex].entities[
+          //   entityIndex
+          // ].downloaded = true;
+          /* programs[programIndex].solutions[assessmentIndex].entities[
             entityIndex
-          ].downloaded = true;
-          programs[programIndex].solutions[assessmentIndex].entities[
-            entityIndex
-          ].submissionId = success.result.assessment.submissionId;
+          ].submissionId = success.result.assessment.submissionId; */
           /*   await this.ulsdp.updateSubmissionIdArr(
             success.result.assessment.submissionId,
             solutionId,
             entityId
           ); */
+          /* if (submissionNumber) {
+          } else {
+            programs[programIndex].solutions[assessmentIndex].entities[
+              entityIndex
+            ].submissions[0].downloaded = true;
+          } */
           await this.ulsdp.updateSubmissionIdArr(
             success.result.assessment.submissionId
           );
-          this.localStorage.setLocalStorage(
+          await this.localStorage.setLocalStorage(
             this.utils.getAssessmentLocalStorageKey(
               programs[programIndex].solutions[assessmentIndex].entities[
                 entityIndex
@@ -145,13 +153,15 @@ export class ProgramServiceProvider {
             ),
             success.result
           );
-          this.localStorage.setLocalStorage(storageKeys.programList, programs);
+          await this.localStorage.setLocalStorage(
+            storageKeys.programList,
+            programs
+          );
           this.utils.stopLoader();
 
           resolve(programs);
         },
         (error) => {
-          //console.log("error details api")
           this.utils.stopLoader();
           reject();
         },
@@ -236,14 +246,6 @@ export class ProgramServiceProvider {
 
   refreshObservationList(programs?: any, event?) {
     return new Promise((resolve, reject) => {
-      /*  let programIndex = event.programIndex;
-      let solutionIndex = event.solutionIndex;
-      let entityIndex = event.entityIndex; */
-      /* let prevlist = programs[programIndex].solutions[solutionIndex].entities[
-        entityIndex
-      ].submissions.filter((s) => s.downloaded); */
-
-      //
       this.apiService.httpGet(
         AppConfigs.programs.programList,
         async (success) => {
@@ -253,11 +255,26 @@ export class ProgramServiceProvider {
           resolve(currList);
         },
         (error) => {
-          // event ? event.complete() : "";
           reject();
         }
       );
-      //
+    });
+  }
+
+  submissionListAll(solutionId, entityId) {
+    return new Promise((resolve, reject) => {
+      this.apiService.httpGet(
+        AppConfigs.assessmentsList.submissionList +
+          solutionId +
+          "?entityId=" +
+          entityId,
+        (success) => {
+          resolve(success.result);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
     });
   }
 

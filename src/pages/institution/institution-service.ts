@@ -65,8 +65,6 @@ export class InstitutionServiceProvider {
 
   getAssessmentDetails(event, institutionList) {
     return new Promise((resolve, reject) => {
-      // let programIndex = event.programIndex;
-      // let assessmentIndex = event.assessmentIndex;
       let entityIndex = event.entityIndex;
       let entityType = event.entityType;
       let solutionIndex = event.solutionIndex;
@@ -81,7 +79,6 @@ export class InstitutionServiceProvider {
         ]._id;
       let entityId = institutionList.entities[entityType][entityIndex]._id;
 
-      // this.utils.startLoader();
       const url =
         AppConfigs.assessmentsList.detailsOfAssessment +
         programId +
@@ -89,10 +86,9 @@ export class InstitutionServiceProvider {
         solutionId +
         "&entityId=" +
         entityId;
-      //console.log(url);
       this.apiService.httpGet(
         url,
-        (success) => {
+        async (success) => {
           this.ulsdp.mapSubmissionDataToQuestion(success.result);
           const generalQuestions = success.result["assessment"][
             "generalQuestions"
@@ -108,21 +104,10 @@ export class InstitutionServiceProvider {
               success.result["assessment"]["submissionId"],
             generalQuestions
           );
-          // institutionList.entities[entityType][entityIndex].solutions[
-          //   solutionIndex
-          // ].downloaded = true;
-          // institutionList.entities[entityType][entityIndex].solutions[
-          //   solutionIndex
-          // ].submissionId = success.result.assessment.submissionId;
-          // this.ulsdp.updateSubmissionIdArr(
-          //   success.result.assessment.submissionId,
-          //   solutionId,
-          //   entityId
-          // );
-          this.ulsdp.updateSubmissionIdArr(
+          await this.ulsdp.updateSubmissionIdArr(
             success.result.assessment.submissionId
           );
-          this.localStorage.setLocalStorage(
+          await this.localStorage.setLocalStorage(
             this.utils.getAssessmentLocalStorageKey(
               institutionList.entities[entityType][entityIndex].solutions[
                 solutionIndex
@@ -130,7 +115,7 @@ export class InstitutionServiceProvider {
             ),
             success.result
           );
-          this.localStorage.setLocalStorage(
+          await this.localStorage.setLocalStorage(
             storageKeys.institutionFlowList,
             institutionList
           );
@@ -139,8 +124,6 @@ export class InstitutionServiceProvider {
           resolve(institutionList);
         },
         (error) => {
-          //console.log("error details api")
-          // this.utils.stopLoader();
           reject();
         },
         { version: "v2" }

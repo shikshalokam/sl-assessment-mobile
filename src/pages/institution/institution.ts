@@ -22,6 +22,7 @@ import { storageKeys } from "../../providers/storageKeys";
 })
 export class InstitutionPage {
   institutionsList: any;
+  entityKeySelected: any;
 
   constructor(
     public navCtrl: NavController,
@@ -44,6 +45,7 @@ export class InstitutionPage {
       .getInstituionFromStorage()
       .then((institutions) => {
         this.institutionsList = institutions;
+        this.entityKeySelected = this.institutionsList.entityTypes[0].key;
         this.utils.stopLoader();
       })
       .catch((error) => {

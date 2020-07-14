@@ -18,10 +18,14 @@
     ></percentage-column-charts>
     <expansion-panel
       [datas]="item"
-      *ngIf="item.chart.type == 'expansion'"
+      *ngIf="item.chart.type == 'expansion' && !(multiAssessmentsReport||submissionId)"
     ></expansion-panel>
+    <expansion-table
+      [datas]="item"
+      *ngIf="item.chart.type == 'expansion' && (multiAssessmentsReport||submissionId)"
+    ></expansion-table>
   </div>
-  <div class="_flex-box _justify-content-center" *ngIf="data">
+  <div class="_flex-box _justify-content-center" *ngIf="data?.reportSections">
     <button ion-button round class="viewReportBtn" (click)="goToImpSugg()">
       {{'buttons.clickHereToImprove' | translate}}
     </button>
@@ -33,7 +37,11 @@
     {{ 'message.noReportsFound' | translate}}
   </div>
 
-  <ion-fab bottom right *ngIf="data?.reportSections">
+  <ion-fab
+    bottom
+    right
+    *ngIf="data?.reportSections && !multiAssessmentsReport  && !submissionId"
+  >
     <button ion-fab mini>
       <ion-icon name="more"></ion-icon>
     </button>

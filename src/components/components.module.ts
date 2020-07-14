@@ -50,6 +50,7 @@ import { ViewDetailComponent } from "./view-detail/view-detail";
 import { ProgramSolutionComponent } from "../pages/programs/program-solution/program-solution/program-solution";
 import { ProgObservationEntityListingComponent } from "../pages/programs/program-solution-observation-detail/prog-observation-entity-listing/prog-observation-entity-listing";
 import { ReportEntityListComponent } from "../pages/reports/component/report-entity-list/report-entity-list";
+import { ExpansionTableComponent } from "./expansion-table/expansion-table";
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { ReportEntityListComponent } from "../pages/reports/component/report-ent
     ViewDetailComponent,
     ProgramSolutionComponent,
     ProgObservationEntityListingComponent,
+    ExpansionTableComponent,
   ],
   imports: [
     IonicModule,
@@ -146,6 +148,7 @@ import { ReportEntityListComponent } from "../pages/reports/component/report-ent
     ProgramSolutionComponent,
     ProgObservationEntityListingComponent,
     PipesModule,
+    ExpansionTableComponent,
   ],
   entryComponents: [
     InputTypeComponent,
