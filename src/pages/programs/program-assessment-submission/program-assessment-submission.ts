@@ -131,8 +131,9 @@ export class ProgramAssessmentSubmissionPage {
     this.programService
       .getAssessmentDetails(event, this.programList)
       .then((program) => {
-        this.program = program[this.programIndex];
-        this.getSubmissionArr();
+        // this.program = program[this.programIndex];
+        // this.getSubmissionArr();
+        this.getProgramFromStorage();
       })
       .catch((error) => {});
   }

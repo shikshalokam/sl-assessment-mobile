@@ -86,15 +86,11 @@ export class ProgramSolutionEntityPage {
     this.programList[this.programIndex].solutions[
       this.solutionIndex
     ].entities.map((e, entityIndex) => {
-      e.allowMultipleAssessemts
-        ? null
-        : this.submissionArr.includes(e.submissions[0].submissionId)
-        ? (e.submissions[0].downloaded = true)
-        : null;
-      console.log(
-        "ProgramSolutionEntityPage -> applySubmission -> program",
-        this.program
-      );
+      if (!e.allowMultipleAssessemts) {
+        this.submissionArr.includes(e.submissions[0].submissionId)
+          ? (e.submissions[0].downloaded = true)
+          : null;
+      }
     });
   }
 
@@ -109,9 +105,18 @@ export class ProgramSolutionEntityPage {
     ].subType;
     this.programService
       .getAssessmentDetails(event, this.programList)
-      .then((program) => {
-        this.program = program[this.programIndex];
-        this.getSubmissionArr();
+      .then(async (program) => {
+        if (
+          this.programList[this.programIndex].solutions[this.solutionIndex]
+            .entities[entityIndex].submissions.length
+        ) {
+          // this.getProgramFromStorage();
+          this.program = program[this.programIndex];
+          this.getSubmissionArr();
+        } else {
+          await this.programService.refreshObservationList();
+          await this.getProgramFromStorage();
+        }
       })
       .catch((error) => {});
   }
@@ -187,7 +192,7 @@ export class ProgramSolutionEntityPage {
       entityIndex: entityIndex,
       submissionId: this.programList[this.programIndex].solutions[
         this.solutionIndex
-      ].entities[entityIndex].submissionId,
+      ].entities[entityIndex].submissions[0].submissionId,
       solutionId: this.programList[this.programIndex].solutions[
         this.solutionIndex
       ]._id,
@@ -205,6 +210,25 @@ export class ProgramSolutionEntityPage {
       solutionIndex: this.solutionIndex,
       entityIndex: entityIndex,
     };
-    this.navCtrl.push(ProgramAssessmentSubmissionPage, { navData });
+    if (
+      !this.programList[this.programIndex].solutions[this.solutionIndex]
+        .entities[entityIndex].submissions.length
+    ) {
+      let event = {
+        programIndex: this.programIndex,
+        assessmentIndex: this.solutionIndex,
+        entityIndex: entityIndex,
+      };
+      this.programService
+        .getAssessmentDetails(event, this.programList)
+        .then(async (programs) => {
+          await this.programService.refreshObservationList();
+          await this.getProgramFromStorage();
+          this.navCtrl.push(ProgramAssessmentSubmissionPage, { navData });
+        })
+        .catch((err) => {});
+    } else {
+      this.navCtrl.push(ProgramAssessmentSubmissionPage, { navData });
+    }
   }
 }
