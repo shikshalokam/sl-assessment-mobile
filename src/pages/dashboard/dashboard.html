@@ -20,10 +20,10 @@
       [datas]="item"
       *ngIf="item.chart.type == 'expansion' && !(multiAssessmentsReport||submissionId)"
     ></expansion-panel>
-    <expansion-panel-2
+    <expansion-table
       [datas]="item"
       *ngIf="item.chart.type == 'expansion' && (multiAssessmentsReport||submissionId)"
-    ></expansion-panel-2>
+    ></expansion-table>
   </div>
   <div class="_flex-box _justify-content-center" *ngIf="data?.reportSections">
     <button ion-button round class="viewReportBtn" (click)="goToImpSugg()">

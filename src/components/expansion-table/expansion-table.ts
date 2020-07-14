@@ -7,16 +7,16 @@ import { Component, Input } from "@angular/core";
  * Components.
  */
 @Component({
-  selector: "expansion-panel-2",
-  templateUrl: "expansion-panel-2.html",
+  selector: "expansion-table",
+  templateUrl: "expansion-table.html",
 })
-export class ExpansionPanel_2Component {
+export class ExpansionTableComponent {
   @Input() datas;
 
   text: string;
 
   constructor() {
-    console.log("Hello ExpansionPanel_2Component Component");
+    console.log("Hello ExpansionTable Component");
     this.text = "Hello World";
   }
 }
