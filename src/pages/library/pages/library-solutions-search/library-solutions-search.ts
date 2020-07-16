@@ -24,6 +24,7 @@ export class LibrarySolutionsSearchPage {
   count: any;
   iconData: any;
   @ViewChild("searchbar") searchbar: Searchbar;
+  libraryCategories: any;
 
   constructor(
     public navCtrl: NavController,
@@ -32,29 +33,21 @@ export class LibrarySolutionsSearchPage {
     public localStorage: LocalStorageProvider
   ) {}
   ionViewDidEnter() {
+    this.libraryCategories = this.navParams.get("libraryCategories");
     this.getIcons();
   }
 
   getIcons() {
-    this.localStorage
-      .getLocalStorage(storageKeys.libraryCategories)
-      .then((data) => {
-        let object = Object.assign(
-          {},
-          ...data.map((object) => ({ [object.type]: object.localUrl }))
-        );
-        console.log(object);
-        this.iconData = object;
-      })
-      .then((res) => {
-        this.searchSolutions();
-        setTimeout(() => {
-          this.searchbar.setFocus();
-        }, 500);
-      })
-      .catch((err) => {
-        this.searchSolutions();
-      });
+    this.iconData = Object.assign(
+      {},
+      ...this.libraryCategories.map((object) => ({
+        [object.type]: object.localUrl,
+      }))
+    );
+    this.searchSolutions();
+    setTimeout(() => {
+      this.searchbar.setFocus();
+    }, 500);
   }
 
   searchSolutions() {

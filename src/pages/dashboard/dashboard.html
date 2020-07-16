@@ -9,32 +9,38 @@
 </ion-header>
 
 <ion-content padding>
-  <h2>{{data?.title}}</h2>
+  <h2>{{data?.title ? data?.title : data?.solutionName}}</h2>
   <div *ngFor="let item of data?.reportSections">
     <percentage-column-charts
       [chartData]="item"
-      *ngIf="item.chart.type != 'expansion'"
+      *ngIf="item.chart.type != 'expansion' && item.chart.type != 'expansion-table'"
       (clickOnGraphEventEmit)="clickOnGraphEventEmit($event)"
     ></percentage-column-charts>
     <expansion-panel
       [datas]="item"
-      *ngIf="item.chart.type == 'expansion' && !(multiAssessmentsReport||submissionId)"
+      *ngIf="item.chart.type == 'expansion'"
     ></expansion-panel>
     <expansion-table
       [datas]="item"
-      *ngIf="item.chart.type == 'expansion' && (multiAssessmentsReport||submissionId)"
+      *ngIf="item.chart.type == 'expansion-table'"
     ></expansion-table>
   </div>
-  <div class="_flex-box _justify-content-center" *ngIf="data?.reportSections">
-    <button ion-button round class="viewReportBtn" (click)="goToImpSugg()">
-      {{'buttons.clickHereToImprove' | translate}}
-    </button>
+  <div
+    *ngIf="data?.reportSections && !(data?.reportSections.length)"
+    class="_flex-box _justify-content-center"
+  >
+    {{data?.message ? data.message : 'message.ratingPending' | translate}}
   </div>
   <div
-    *ngIf="!(data?.reportSections)"
+    *ngIf="data && !data?.reportSections"
     class="_flex-box _justify-content-center"
   >
     {{ 'message.noReportsFound' | translate}}
+  </div>
+  <div class="_flex-box _justify-content-center" *ngIf="data">
+    <button ion-button round class="viewReportBtn" (click)="goToImpSugg()">
+      {{'buttons.clickHereToImprove' | translate}}
+    </button>
   </div>
 
   <ion-fab

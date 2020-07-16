@@ -277,6 +277,22 @@ export class ProgramServiceProvider {
       );
     });
   }
+  submissionListAllObs(observationId, entityId) {
+    return new Promise((resolve, reject) => {
+      this.apiService.httpGet(
+        AppConfigs.cro.observationSubmissionAll +
+          observationId +
+          "?entityId=" +
+          entityId,
+        (success) => {
+          resolve(success.result);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
 
   openMenu(event, programs, showMenu?: any) {
     let myEvent = event.event;

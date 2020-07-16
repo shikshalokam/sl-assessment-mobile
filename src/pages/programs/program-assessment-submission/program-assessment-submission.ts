@@ -108,9 +108,7 @@ export class ProgramAssessmentSubmissionPage {
     let solutionId = this.programList[this.programIndex].solutions[
       this.solutionIndex
     ]._id;
-    this.programList[this.programIndex].solutions[this.solutionIndex].entities[
-      this.entityIndex
-    ].submissions.map((s) => {
+    this.submissionList.map((s) => {
       this.submissionArr.includes(s.submissionId)
         ? (s.downloaded = true)
         : null;
@@ -367,6 +365,7 @@ export class ProgramAssessmentSubmissionPage {
       .submissionListAll(solutionId, entityId)
       .then((list) => {
         this.submissionList = list;
+        this.applySubmission();
         console.log(list);
       })
       .then(() => {

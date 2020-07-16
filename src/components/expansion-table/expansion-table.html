@@ -1,9 +1,13 @@
 <!-- Generated template for the ExpansionPanel_2Component component -->
 <!-- Generated template for the ExpansionPanelComponent component -->
-<h2 *ngIf="datas?.chart" padding-left padding-right padding-top>
-  {{datas?.chart?.title}}
-</h2>
 <div *ngIf="datas?.chart">
+  <h2 padding-left padding-right padding-top>
+    {{datas?.chart?.title}}
+  </h2>
+  <p padding-left padding-right>
+    {{'message.numberOfAssessmentsDone' | translate}}-{{
+    datas?.chart?.totalSubmissions}}
+  </p>
   <!-- <div *ngFor="let entity of datas?.chart?.entities"> -->
 
   <!-- <h4 text-wrap margin-left margin-top>{{entity.entityName}}</h4> -->

@@ -5,7 +5,7 @@ import { ApiProvider } from "../api/api";
 import { AppConfigs } from "../appConfig";
 import { LocalStorageProvider } from "../local-storage/local-storage";
 import { ObservationServiceProvider } from "../observation-service/observation-service";
-import { App } from "ionic-angular";
+import { App, NavController } from "ionic-angular";
 import { UtilsProvider } from "../utils/utils";
 import { AssessmentServiceProvider } from "../assessment-service/assessment-service";
 import { EntityListingPage } from "../../pages/entity-listing/entity-listing";
@@ -14,6 +14,10 @@ import { EvidenceProvider } from "../evidence/evidence";
 import { AppIconBadgeProvider } from "../app-icon-badge/app-icon-badge";
 import { SubmissionListPage } from "../../pages/submission-list/submission-list";
 import { AppVersion } from "@ionic-native/app-version";
+import { storageKeys } from "../storageKeys";
+import { ProgramSolutionEntityPage } from "../../pages/programs/program-solution-entity/program-solution-entity";
+import { ProgramSolutionObservationDetailPage } from "../../pages/programs/program-solution-observation-detail/program-solution-observation-detail";
+import { ProgramServiceProvider } from "../../pages/programs/program-service";
 
 @Injectable()
 export class NotificationProvider {
@@ -42,7 +46,8 @@ export class NotificationProvider {
     private evindenceProvider: EvidenceProvider,
     private appBadge: AppIconBadgeProvider,
     private appVersion: AppVersion,
-    private assessmentService: AssessmentServiceProvider
+    private assessmentService: AssessmentServiceProvider,
+    private programService: ProgramServiceProvider
   ) {
     console.log("Hello NotificationProvider Provider");
     //offline event
@@ -179,7 +184,7 @@ export class NotificationProvider {
   }
 
   getMappedAssessment(notificationMeta) {
-    switch (notificationMeta.payload.type) {
+    /*  switch (notificationMeta.payload.type) {
       case "observation":
         this.getMappedObservation(notificationMeta);
         break;
@@ -188,11 +193,22 @@ export class NotificationProvider {
       case "individual":
         this.getMappedInstitutionalAssessment(notificationMeta);
         break;
-    }
+    } */
+    this.utils.startLoader();
+    this.programService
+      .refreshObservationList()
+      .then((res) => {
+        // this.utils.stopLoader();
+        this.goToDetails(notificationMeta);
+      })
+      .catch((err) => {
+        this.utils.stopLoader();
+      });
   }
 
   goToDetails(notificationMeta) {
-    switch (notificationMeta.payload.type) {
+    this.goToAssessmentDetails(notificationMeta, "noLoader");
+    /*  switch (notificationMeta.payload.type) {
       case "observation":
         // this.getMappedObservation(notificationMeta);
         this.goToAssessmentDetails(notificationMeta);
@@ -202,7 +218,7 @@ export class NotificationProvider {
       case "individual":
         this.goToAssessmentDetails(notificationMeta);
         break;
-    }
+    } */
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
@@ -220,10 +236,10 @@ export class NotificationProvider {
     this.evindenceProvider.openActionSheet(options);
   }
 
-  goToAssessmentDetails(notificationMeta) {
+  goToAssessmentDetails(notificationMeta, noLoader?) {
     let submissionId = notificationMeta.payload.submission_id;
     let heading = notificationMeta.payload.entity_name;
-    this.utils.startLoader();
+    noLoader ? null : this.utils.startLoader();
     this.localStorage
       .getLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId))
       .then((successData) => {
@@ -257,14 +273,15 @@ export class NotificationProvider {
         }
       })
       .catch((error) => {
-        this.utils.stopLoader();
+        /*  this.utils.stopLoader();
         // this.utils.openToast("No assessment available.")
         if (notificationMeta.payload.type === "observation") {
           // this.getMappedObservation(notificationMeta);
           this.getMappedObservation(notificationMeta);
         } else {
           this.getMappedInstitutionalAssessment(notificationMeta);
-        }
+        } */
+        this.goToMappedAO(notificationMeta);
       });
   }
 
@@ -273,12 +290,50 @@ export class NotificationProvider {
     console.log(JSON.stringify(notificationMeta));
     console.log("===============================================");
   }
+
+  //?AO-Assessment or obseravtion
+  goToMappedAO(notificationMeta) {
+    let { payload } = notificationMeta;
+    this.localStorage
+      .getLocalStorage(storageKeys.programList)
+      .then((programs) => {
+        let programIndex = programs
+          .map((p) => p._id)
+          .indexOf(payload.program_id);
+        let solutionIndex = programs[programIndex].solutions
+          .map((s) => (payload.type == "observation" ? s.solutionId : s._id))
+          .indexOf(payload.solution_id);
+
+        /* 
+          !going till programSolutionEntitypage if assessment
+          !if observation observationDetailpage
+        */
+
+        let navData = {
+          programIndex: programIndex,
+          solutionIndex: solutionIndex,
+        };
+        this.utils.stopLoader();
+        payload.type == "observation"
+          ? this.app
+              .getRootNav()
+              .push(ProgramSolutionObservationDetailPage, navData)
+          : this.app.getRootNav().push(ProgramSolutionEntityPage, navData);
+        let entityIndex = programs[programIndex].solutions[
+          solutionIndex
+        ].entities
+          .map((e) => e._id)
+          .indexOf(payload.entity_id);
+      })
+      .catch((err) => {
+        this.utils.stopLoader();
+      });
+  }
+
   /*
-  TODO:check the  getMappedInstitutionalAssessment and getMappedObservation
-    !make new notification changes for current list (program flow)
-    ?old flow is changed so following list will not exist.
-   */
-  getMappedInstitutionalAssessment(notificationMeta) {
+    //TODO not required in new flow for new flow(programs or intitutions)
+  */
+  /* getMappedInstitutionalAssessment(notificationMeta) {
     this.utils.startLoader();
     this.localStorage
       .getLocalStorage(
@@ -316,7 +371,7 @@ export class NotificationProvider {
         this.utils.stopLoader();
       });
   }
-
+  
   getMappedObservation(notificationMeta) {
     this.utils.startLoader();
     this.localStorage
@@ -365,9 +420,9 @@ export class NotificationProvider {
       .catch((error) => {
         this.utils.stopLoader();
       });
-  }
+  } */
 
-  checkForSubmissionAvailable(params, observationList) {
+  /* checkForSubmissionAvailable(params, observationList) {
     const submissions =
       observationList[params.selectedObservationIndex]["entities"][
         params.entityIndex
@@ -400,7 +455,7 @@ export class NotificationProvider {
           this.utils.stopLoader();
         });
     }
-  }
+  } */
 
   stopNotificationPooling() {
     clearInterval(this.timeInterval);

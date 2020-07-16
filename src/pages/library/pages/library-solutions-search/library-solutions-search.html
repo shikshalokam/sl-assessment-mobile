@@ -27,8 +27,8 @@
         <img
           width="16"
           height="16"
-          [src]="iconData[solution.type]"
-          *ngIf="iconData"
+          [src]="iconData[solution?.type]"
+          *ngIf="iconData && iconData[solution?.type]"
         />
 
         <div padding>

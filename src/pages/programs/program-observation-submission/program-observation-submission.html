@@ -80,6 +80,13 @@
     </ion-card-content>
   </ion-card>
   <div
+    *ngIf="selectedSolution?.entities[ this.entityIndex ].totalSubmissionCount!=submissionList?.length"
+  >
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+  <div
     *ngIf="!(submissions?.length > 0)"
     class="_flex-box _justify-content-center"
   >

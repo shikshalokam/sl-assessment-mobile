@@ -4,6 +4,9 @@ import { LibrarySolutionPage } from "./pages/library-solution/library-solution";
 import { LibraryDraftPage } from "./pages/library-draft/library-draft";
 import { LibraryProvider } from "./library-provider/library";
 import { LibrarySolutionsSearchPage } from "./pages/library-solutions-search/library-solutions-search";
+import { storageKeys } from "../../providers/storageKeys";
+import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
+import { UtilsProvider } from "../../providers/utils/utils";
 
 /**
  * Generated class for the LibraryPage page.
@@ -25,16 +28,18 @@ export class LibraryPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public app: App,
-    public libraryProvider: LibraryProvider
+    public libraryProvider: LibraryProvider,
+    public localStorage: LocalStorageProvider,
+    public utils: UtilsProvider
   ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad LibraryPage");
     this.getLibraryCategories();
   }
-  ionViewDidEnter() {
+  /* ionViewDidEnter() {
     this.searchText = null;
-  }
+  } */
 
   getLibraryCategories() {
     this.libraryProvider
@@ -66,6 +71,25 @@ export class LibraryPage {
   }
 
   checkFocus() {
-    this.navCtrl.push(LibrarySolutionsSearchPage);
+    this.navCtrl.push(LibrarySolutionsSearchPage, {
+      libraryCategories: this.libraryComponents,
+    });
+  }
+
+  refreshCategories() {
+    this.utils.startLoader();
+    this.libraryProvider
+      .getLibraryCategoryApi()
+      .then((res) => {
+        this.localStorage.setLocalStorage(storageKeys.libraryCategories, res);
+        return res;
+      })
+      .then((res) => {
+        this.libraryComponents = res;
+        this.utils.stopLoader();
+      })
+      .catch((err) => {
+        this.utils.stopLoader();
+      });
   }
 }
