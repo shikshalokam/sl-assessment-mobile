@@ -3,7 +3,7 @@
     <name>Samiksha</name>
     <description>A survey app for school development</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.43.61:8100" />
+    <content original-src="index.html" src="http://192.168.43.62:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -220,6 +220,7 @@
     <allow-navigation href="http://192.168.43.61:8101" />
     <allow-navigation href="http://192.168.43.61:8102" />
     <allow-navigation href="http://192.168.43.61:8103" />
+    <allow-navigation href="http://192.168.43.62:8100" />
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="8.1.0" />
 </widget>

@@ -412,7 +412,7 @@ export class ObservationReportsPage {
   }
 
   onTabChange(tabName) {
-    this.fab.close();
+    this.fab ? this.fab.close() : null;
     this.selectedTab = tabName;
     !this.allCriterias.length ? this.getObservationCriteriaReports() : null;
   }

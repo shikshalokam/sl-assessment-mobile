@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   IonicPage,
   NavController,
@@ -6,6 +6,7 @@ import {
   ModalController,
   PopoverController,
   AlertController,
+  Content,
 } from "ionic-angular";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
 import { AssessmentServiceProvider } from "../../../providers/assessment-service/assessment-service";
@@ -40,6 +41,8 @@ export class ProgramAssessmentSubmissionPage {
   programList: any;
   submissionArr: any;
   submissionList: any;
+  @ViewChild(Content) pageTop: Content;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -328,6 +331,7 @@ export class ProgramAssessmentSubmissionPage {
           .submissions.length > 0
           ? null
           : this.navCtrl.pop();
+        this.pageTop.scrollToTop();
       })
       .catch((error) => {
         this.utils.stopLoader();

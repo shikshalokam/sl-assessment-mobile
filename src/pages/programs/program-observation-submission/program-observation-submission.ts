@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   NavController,
   NavParams,
@@ -6,6 +6,7 @@ import {
   PopoverController,
   AlertController,
   Events,
+  Content,
 } from "ionic-angular";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
@@ -53,6 +54,7 @@ export class ProgramObservationSubmissionPage {
     isObservation: boolean;
   };
   submissionIdArr: any;
+  @ViewChild(Content) pageTop: Content;
 
   constructor(
     public navCtrl: NavController,
@@ -454,6 +456,8 @@ export class ProgramObservationSubmissionPage {
         this.selectedSolution.entities[this.entityIndex].submissions.length > 0
           ? null
           : this.navCtrl.pop();
+
+        this.pageTop.scrollToTop();
       })
       .catch((error) => {
         this.utils.stopLoader();
