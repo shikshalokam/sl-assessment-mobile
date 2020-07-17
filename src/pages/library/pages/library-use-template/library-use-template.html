@@ -12,14 +12,15 @@
   ></dynamic-form>
   <div *ngIf="privateProgramList?.length">
     <ion-item>
-      <ion-label>Create New Program</ion-label>
+      <ion-label>{{'labels.createNewProgram'| translate}}</ion-label>
       <ion-toggle [(ngModel)]="createNew"></ion-toggle>
     </ion-item>
   </div>
   <div *ngIf="!createNew">
     <ion-item *ngIf="privateProgramList.length">
-      <ion-label color="primary" floating
-        >Choose Private Program <span class="_requiredClass">*</span></ion-label
+      <ion-label color="primary" floating>
+        {{'labels.chooseExistingProgram'| translate}}
+        <span class="_requiredClass">*</span></ion-label
       >
       <ion-select [(ngModel)]="selectedPrivate._id" interface="action-sheet">
         <ion-option
