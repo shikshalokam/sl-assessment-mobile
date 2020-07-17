@@ -309,7 +309,9 @@
     "noObservationfound": "No observation found",
     "selectFilter": "Select the questions to filter Reports",
     "noVideo": "No videos available",
-    "selectCriteraFilter": "Select the criterias to filter Reports"
+    "selectCriteraFilter": "Select the criterias to filter Reports",
+    "numberOfAssessmentsDone": "Number Of assessments done",
+    "ratingPending": "Rating is pending, please check later."
 
   },
   "toastMessage": {

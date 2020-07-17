@@ -70,7 +70,7 @@
     </ion-card-content>
   </ion-card>
   <div
-    *ngIf="program?.solutions[solutionIndex].entities[ this.entityIndex ].totalSubmissionCount>10"
+    *ngIf="program?.solutions[solutionIndex].entities[ this.entityIndex ].totalSubmissionCount!=submissionList?.length"
   >
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>

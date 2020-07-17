@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   IonicPage,
   NavController,
@@ -6,6 +6,7 @@ import {
   ModalController,
   PopoverController,
   AlertController,
+  Content,
 } from "ionic-angular";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
 import { AssessmentServiceProvider } from "../../../providers/assessment-service/assessment-service";
@@ -40,6 +41,8 @@ export class ProgramAssessmentSubmissionPage {
   programList: any;
   submissionArr: any;
   submissionList: any;
+  @ViewChild(Content) pageTop: Content;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -108,9 +111,7 @@ export class ProgramAssessmentSubmissionPage {
     let solutionId = this.programList[this.programIndex].solutions[
       this.solutionIndex
     ]._id;
-    this.programList[this.programIndex].solutions[this.solutionIndex].entities[
-      this.entityIndex
-    ].submissions.map((s) => {
+    this.submissionList.map((s) => {
       this.submissionArr.includes(s.submissionId)
         ? (s.downloaded = true)
         : null;
@@ -330,6 +331,7 @@ export class ProgramAssessmentSubmissionPage {
           .submissions.length > 0
           ? null
           : this.navCtrl.pop();
+        this.pageTop.scrollToTop();
       })
       .catch((error) => {
         this.utils.stopLoader();
@@ -367,6 +369,7 @@ export class ProgramAssessmentSubmissionPage {
       .submissionListAll(solutionId, entityId)
       .then((list) => {
         this.submissionList = list;
+        this.applySubmission();
         console.log(list);
       })
       .then(() => {

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   NavController,
   NavParams,
@@ -6,6 +6,7 @@ import {
   PopoverController,
   AlertController,
   Events,
+  Content,
 } from "ionic-angular";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
@@ -53,6 +54,7 @@ export class ProgramObservationSubmissionPage {
     isObservation: boolean;
   };
   submissionIdArr: any;
+  @ViewChild(Content) pageTop: Content;
 
   constructor(
     public navCtrl: NavController,
@@ -95,13 +97,13 @@ export class ProgramObservationSubmissionPage {
       .then((data) => {
         if (data) {
           this.programList = data;
-          this.applyDownloadedflag();
           this.selectedSolution = this.programList[this.programIndex].solutions[
             this.solutionIndex
           ];
           this.submissionList = this.programList[this.programIndex].solutions[
             this.solutionIndex
           ].entities[this.entityIndex].submissions;
+          this.applyDownloadedflag();
 
           this.splitCompletedAndInprogressObservations();
           this.recentlyUpdatedEntityFn();
@@ -119,9 +121,7 @@ export class ProgramObservationSubmissionPage {
   }
 
   applyDownloadedflag() {
-    this.programList[this.programIndex].solutions[this.solutionIndex].entities[
-      this.entityIndex
-    ].submissions.map((s) => {
+    this.submissionList.map((s) => {
       this.submissionIdArr.includes(s.submissionId)
         ? (s.downloaded = true)
         : null;
@@ -142,7 +142,8 @@ export class ProgramObservationSubmissionPage {
     this.completedObservations = [];
     this.inProgressObservations = [];
     for (const submission of this.submissionList) {
-      submission.submissionStatus === "completed"
+      submission.submissionStatus === "completed" ||
+      submission.status === "completed"
         ? this.completedObservations.push(submission)
         : this.inProgressObservations.push(submission);
     }
@@ -455,9 +456,36 @@ export class ProgramObservationSubmissionPage {
         this.selectedSolution.entities[this.entityIndex].submissions.length > 0
           ? null
           : this.navCtrl.pop();
+
+        this.pageTop.scrollToTop();
       })
       .catch((error) => {
         this.utils.stopLoader();
+      });
+  }
+
+  doInfinite(infiniteScroll) {
+    let observationId = this.programList[this.programIndex].solutions[
+      this.solutionIndex
+    ]._id;
+    let entityId = this.programList[this.programIndex].solutions[
+      this.solutionIndex
+    ].entities[this.entityIndex]._id;
+    this.programService
+      .submissionListAllObs(observationId, entityId)
+      .then((list) => {
+        this.submissionList = list;
+        this.splitCompletedAndInprogressObservations();
+        this.tabChange(this.currentTab ? this.currentTab : "all");
+
+        this.recentlyUpdatedEntityFn();
+        console.log(list);
+      })
+      .then(() => {
+        infiniteScroll.complete();
+      })
+      .catch((err) => {
+        infiniteScroll.complete();
       });
   }
 }
