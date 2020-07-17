@@ -199,7 +199,8 @@ export class NotificationProvider {
       .refreshObservationList()
       .then((res) => {
         // this.utils.stopLoader();
-        this.goToDetails(notificationMeta);
+        // this.goToDetails(notificationMeta);
+        this.goToMappedAO(notificationMeta);
       })
       .catch((err) => {
         this.utils.stopLoader();
