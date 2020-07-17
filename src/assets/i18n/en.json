@@ -268,7 +268,10 @@
     "instanceName": "Instance Name",
     "viewAllEvidences": "View All Evidences",
     "suggestedIMPs": "Suggested IMP's",
-    "noSuggestedIMPs": "No IMP's Found"
+    "noSuggestedIMPs": "No IMP's Found",
+    "createNewProgram": " Create New Program",
+    "chooseExistingProgram": " Choose Existing Program"
+
   },
   "languages": {
     "english": "English",
