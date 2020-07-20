@@ -1,10 +1,11 @@
 <ion-content padding class="mainConatiner">
   <div class="container _flex-box">
     <div class="_flex-box _justify-content-center imageConatiner">
-      <img src="assets/imgs/image1.jpg" class="imageAdj">
+      <img src="assets/imgs/image1.jpg" class="imageAdj" />
     </div>
     <div class="innerContainer">
-      <form [formGroup]="signIn" (ngSubmit)="encryptParams()">
+      <!-- <form [formGroup]="signIn" (ngSubmit)="encryptParams()"> -->
+      <form [formGroup]="signIn" (ngSubmit)="loginNew()">
         <ion-list>
           <ion-item>
             <ion-label floating>Username</ion-label>
@@ -19,14 +20,16 @@
         </ion-list>
 
         <div class="_flex-box _justify-content-center">
-          <button ion-button full type="submit" [disabled]="!signIn.valid">Log in</button>
+          <button ion-button full type="submit" [disabled]="!signIn.valid">
+            Log in
+          </button>
         </div>
-
       </form>
-      <div class="_flex-box alignRight" >
-        <button ion-button clear (click)="goToForgotPassword()" >Forgot password?</button>
+      <div class="_flex-box alignRight">
+        <button ion-button clear (click)="goToForgotPassword()">
+          Forgot password?
+        </button>
       </div>
     </div>
   </div>
-
 </ion-content>
