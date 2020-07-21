@@ -1,10 +1,5 @@
 import { Component } from "@angular/core";
-import {
-  NavController,
-  Events,
-  Platform,
-  PopoverController,
-} from "ionic-angular";
+import { NavController, Events, Platform, PopoverController } from "ionic-angular";
 import { CurrentUserProvider } from "../../providers/current-user/current-user";
 import { Network } from "@ionic-native/network";
 import { InstitutionsEntityList } from "../institutions-entity-list/institutions-entity-list";
@@ -219,10 +214,7 @@ export class HomePage {
             });
           }
         });
-        this.localStorage.setLocalStorage(
-          "createdObservationList",
-          this.observations
-        );
+        this.localStorage.setLocalStorage("createdObservationList", this.observations);
       },
       (error) => {},
       { version: "v1" }
@@ -268,10 +260,7 @@ export class HomePage {
     this.apiService.httpGet(
       AppConfigs.externalLinks.getStaticLinks,
       (success) => {
-        this.localStorage.setLocalStorage(
-          storageKeys.staticLinks,
-          success.result
-        );
+        this.localStorage.setLocalStorage(storageKeys.staticLinks, success.result);
       },
       (error) => {},
       { version: "v2" }
@@ -279,18 +268,13 @@ export class HomePage {
   }
 
   goToPage(index) {
-    this.events.publish(
-      "navigateTab",
-      index >= 0 ? this.allPages[index]["name"] : "dashboard"
-    );
+    this.events.publish("navigateTab", index >= 0 ? this.allPages[index]["name"] : "dashboard");
   }
 
   ionViewWillLeave() {
     console.log("inside will leave");
     this.events.unsubscribe("multipleRole");
-    this.observationSubscription
-      ? this.observationSubscription.unsubscribe()
-      : null;
+    this.observationSubscription ? this.observationSubscription.unsubscribe() : null;
   }
 
   ionViewWillEnter() {
@@ -334,10 +318,7 @@ export class HomePage {
         } else {
           if (successData.assessment.evidences[0].startTime) {
             //console.log("if loop " + successData.assessment.evidences[0].externalId)
-            this.utils.setCurrentimageFolderName(
-              successData.assessment.evidences[0].externalId,
-              submissionId
-            );
+            this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId);
             this.navCtrl.push("SectionListPage", {
               _id: submissionId,
               name: heading,
@@ -359,10 +340,7 @@ export class HomePage {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(
-      aseessmemtData.assessment.evidences[evidenceIndex].externalId,
-      assessment._id
-    );
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id);
     const options = {
       _id: assessment._id,
       name: assessment.name,
@@ -384,6 +362,19 @@ export class HomePage {
       })
       .catch((error) => {
         this.programList = null;
+        this.utils.stopLoader();
+      });
+  }
+
+  refreshLists(): void {
+    this.utils.startLoader();
+    this.programService
+      .refreshObservationList()
+      .then((list) => {
+        this.programList = list;
+        this.utils.stopLoader();
+      })
+      .catch(() => {
         this.utils.stopLoader();
       });
   }

@@ -41,19 +41,12 @@ export class SidemenuProvider {
       AppConfigs.roles.getProfile + currentUser.sub,
       async (success) => {
         this.profileRoles = success.result;
-        await this.localStorage.setLocalStorage(
-          "profileRole",
-          this.profileRoles
-        );
-        this.$showDashboard.next(
-          success.result.roles && success.result.roles.length > 0 ? true : false
-        );
+        await this.localStorage.setLocalStorage("profileRole", this.profileRoles);
+        this.$showDashboard.next(success.result.roles && success.result.roles.length > 0 ? true : false);
 
-        if (this.profileRoles.relatedEntities.length) {
+        if (this.profileRoles.relatedEntities && this.profileRoles.relatedEntities.length) {
           let relatedEntities = this.profileRoles.relatedEntities;
-          let stateEntry = relatedEntities.filter(
-            (e) => (e.entityType = "state")
-          );
+          let stateEntry = relatedEntities.filter((e) => (e.entityType = "state"));
           this.getEntityToObserve(stateEntry[0]._id);
         }
       },
@@ -69,10 +62,7 @@ export class SidemenuProvider {
       AppConfigs.entity.entityToBeObserved + stateId,
       (success) => {
         console.log(success);
-        this.localStorage.setLocalStorage(
-          storageKeys.observableEntities,
-          success.result
-        );
+        this.localStorage.setLocalStorage(storageKeys.observableEntities, success.result);
       },
       (error) => {},
       { version: "v1" }
