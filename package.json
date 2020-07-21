@@ -123,6 +123,9 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.2.4",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^7.5.0",
     "typescript": "2.6.2"
   },
   "description": "An Ionic project",
