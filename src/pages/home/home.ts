@@ -370,8 +370,8 @@ export class HomePage {
     this.utils.startLoader();
     this.programService
       .refreshObservationList()
-      .then(() => {
-        console.log("Done Refreshing");
+      .then((list) => {
+        this.programList = list;
         this.utils.stopLoader();
       })
       .catch(() => {
