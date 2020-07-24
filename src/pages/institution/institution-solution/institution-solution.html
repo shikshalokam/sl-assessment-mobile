@@ -14,7 +14,7 @@
       <ion-card *ngIf="!sol?.allowMultipleAssessemts">
         <ion-item
           text-wrap
-          (click)="(sol?.type=='observation')? goToObservationSubmission(sol.programId,sol._id):sol?.submissions[0]?.downloaded ? goToEcm(solutionIndex,sol?.submissions[0].submissionId) : getAssessmentDetails(solutionIndex)"
+          (click)="(sol?.type=='observation')? goToObservationSubmission(sol.programId,sol._id):sol?.submissions[0]?.downloaded ? goToEcm(solutionIndex,sol?.submissions[0]._id) : getAssessmentDetails(solutionIndex)"
         >
           <div class="_flex-box">
             <div style="flex: 1;">
@@ -31,22 +31,14 @@
               (click)="getAssessmentDetails(solutionIndex)"
               *ngIf="!sol?.submissions[0]?.downloaded && sol?.type!='observation'"
             ></ion-icon>
-            <ion-icon
-              padding-right
-              padding-left
-              name="arrow-forward"
-              *ngIf="sol?.type=='observation'"
-            ></ion-icon>
+            <ion-icon padding-right padding-left name="arrow-forward" *ngIf="sol?.type=='observation'"></ion-icon>
           </div>
         </ion-item>
       </ion-card>
 
       <!-- if type =assessment and allowMultipleAssessemts=true  -->
       <ion-card *ngIf="sol?.allowMultipleAssessemts">
-        <ion-item
-          text-wrap
-          (click)="goToAssessmentSubmission(sol.programId,sol._id)"
-        >
+        <ion-item text-wrap (click)="goToAssessmentSubmission(sol.programId,sol._id)">
           <div class="_flex-box">
             <div style="flex: 1;">
               <h3>
@@ -54,11 +46,7 @@
               </h3>
               <p>{{sol.programName}}</p>
             </div>
-            <ion-icon
-              padding-right
-              padding-left
-              name="arrow-forward"
-            ></ion-icon>
+            <ion-icon padding-right padding-left name="arrow-forward"></ion-icon>
           </div>
         </ion-item>
       </ion-card>

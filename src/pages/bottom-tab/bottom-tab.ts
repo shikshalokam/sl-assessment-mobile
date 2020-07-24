@@ -1,17 +1,13 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { IonicPage, NavController, NavParams, App } from "ionic-angular";
 import { HomePage } from "../home/home";
 import { InstitutionPage } from "../institution/institution";
 import { LibraryPage } from "../library/library";
-import { ReportsPage } from "../reports/reports";
 import { SidemenuProvider } from "../../providers/sidemenu/sidemenu";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 import { UtilsProvider } from "../../providers/utils/utils";
 import { RoleListingPage } from "../role-listing/role-listing";
 import { ReportEntityListingPage } from "../reports/report-entity-listing/report-entity-listing";
-import { CurrentUserProvider } from "../../providers/current-user/current-user";
-import { ApiProvider } from "../../providers/api/api";
-import { AppConfigs } from "../../providers/appConfig";
 import { Subject } from "rxjs/Subject";
 import { storageKeys } from "../../providers/storageKeys";
 
@@ -37,26 +33,23 @@ export class BottomTabPage {
   data: any;
   $showDashboard = new Subject<boolean>();
   profileRoles: any;
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public sideMenuProvide: SidemenuProvider,
     public localStorage: LocalStorageProvider,
     public utils: UtilsProvider,
-    private currentUser: CurrentUserProvider,
-    private apiProvider: ApiProvider
+    private app: App
   ) {
     /* 
     show report and dashboard is same page only name is different
      */
-    this.sideMenuSubscription = this.sideMenuProvide.$showDashboard.subscribe(
-      (showDashboard) => {
-        this.showReport = showDashboard;
-        this.getProfileroles();
-      }
-    );
+    this.sideMenuSubscription = this.sideMenuProvide.$showDashboard.subscribe((showDashboard) => {
+      this.showReport = showDashboard;
+      this.getProfileroles();
+    });
   }
+  ionViewDidLoad() {}
 
   getProfileroles() {
     this.localStorage
@@ -78,5 +71,9 @@ export class BottomTabPage {
         }
       })
       .catch((error) => {});
+  }
+
+  selectedTab() {
+    this.app.getActiveNav().popToRoot();
   }
 }

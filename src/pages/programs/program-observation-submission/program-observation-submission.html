@@ -1,14 +1,8 @@
 <ion-header>
-  <header
-    [title]="'headings.submissionListPage'|translate"
-    [hideBack]="false"
-  ></header>
+  <header [title]="'headings.submissionListPage'|translate" [hideBack]="false"></header>
 </ion-header>
 <ion-content>
-  <ion-refresher
-    slot="fixed"
-    (ionRefresh)="refreshLocalObservationList($event)"
-  >
+  <ion-refresher slot="fixed" (ionRefresh)="refreshLocalObservationList($event)">
     <ion-refresher-content
       pullingIcon="arrow-dropdown"
       pullingText="Pull to refresh"
@@ -33,10 +27,7 @@
       {{'tabs.completed'|translate}}
     </ion-segment-button>
   </ion-segment>
-  <ion-card
-    *ngFor="let submission of submissions ; let i = index"
-    class="submissionCard"
-  >
+  <ion-card *ngFor="let submission of submissions ; let i = index" class="submissionCard">
     <ion-card-content style="position: relative;">
       <div
         class="_flex-box"
@@ -51,14 +42,14 @@
             <ion-icon
               padding-left
               name="information-circle"
-              *ngIf="(submission?.submissionStatus === 'completed') || (submission?.submissionStatus === 'ratingPending')"
+              *ngIf="(submission?.status === 'completed') || (submission?.status === 'ratingPending')"
               (click)="$event.stopPropagation() ; openInfo(submission)"
             ></ion-icon>
           </div>
         </div>
 
         <button
-          *ngIf="(submission?.submissionStatus === 'completed') || (submission?.submissionStatus === 'ratingPending')"
+          *ngIf="(submission?.status === 'completed') || (submission?.status === 'ratingPending')"
           class="viewReport"
           ion-button
           round
@@ -71,7 +62,7 @@
           icon-only
           color="light"
           class="basicButton"
-          *ngIf="(submission.submissionStatus !== 'completed' && submission?.submissionStatus !== 'ratingPending')"
+          *ngIf="(submission.status !== 'completed' && submission?.status !== 'ratingPending')"
           (click)="$event.stopPropagation();openActionMenu($event,submission, i)"
         >
           <ion-icon name="more"></ion-icon>
@@ -79,17 +70,12 @@
       </div>
     </ion-card-content>
   </ion-card>
-  <div
-    *ngIf="selectedSolution?.entities[ this.entityIndex ].totalSubmissionCount!=submissionList?.length"
-  >
+  <div *ngIf="selectedSolution?.entities[ this.entityIndex ].totalSubmissionCount!=submissionList?.length">
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
   </div>
-  <div
-    *ngIf="!(submissions?.length > 0)"
-    class="_flex-box _justify-content-center"
-  >
+  <div *ngIf="!(submissions?.length > 0)" class="_flex-box _justify-content-center">
     {{'message.noSubmission'|translate}}
   </div>
   <ion-fab bottom right>
@@ -107,12 +93,7 @@
         </button>
       </ion-col>
       <ion-col>
-        <button
-          ion-button
-          full
-          (click)="entityActions($event)"
-          class="footerButton"
-        >
+        <button ion-button full (click)="entityActions($event)" class="footerButton">
           {{'buttons.viewEntityReport'|translate}}
         </button>
       </ion-col>

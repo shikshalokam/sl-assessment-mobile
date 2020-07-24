@@ -97,12 +97,10 @@ export class ProgramObservationSubmissionPage {
       .then((data) => {
         if (data) {
           this.programList = data;
-          this.selectedSolution = this.programList[this.programIndex].solutions[
-            this.solutionIndex
-          ];
-          this.submissionList = this.programList[this.programIndex].solutions[
-            this.solutionIndex
-          ].entities[this.entityIndex].submissions;
+          this.selectedSolution = this.programList[this.programIndex].solutions[this.solutionIndex];
+          this.submissionList = this.programList[this.programIndex].solutions[this.solutionIndex].entities[
+            this.entityIndex
+          ].submissions;
           this.applyDownloadedflag();
 
           this.splitCompletedAndInprogressObservations();
@@ -122,9 +120,7 @@ export class ProgramObservationSubmissionPage {
 
   applyDownloadedflag() {
     this.submissionList.map((s) => {
-      this.submissionIdArr.includes(s.submissionId)
-        ? (s.downloaded = true)
-        : null;
+      this.submissionIdArr.includes(s._id) ? (s.downloaded = true) : null;
     });
   }
 
@@ -142,7 +138,6 @@ export class ProgramObservationSubmissionPage {
     this.completedObservations = [];
     this.inProgressObservations = [];
     for (const submission of this.submissionList) {
-      submission.submissionStatus === "completed" ||
       submission.status === "completed"
         ? this.completedObservations.push(submission)
         : this.inProgressObservations.push(submission);
@@ -162,25 +157,17 @@ export class ProgramObservationSubmissionPage {
         this.submissions = this.completedObservations;
         break;
       case "all":
-        this.submissions = this.submissions.concat(
-          this.inProgressObservations,
-          this.completedObservations
-        );
+        this.submissions = this.submissions.concat(this.inProgressObservations, this.completedObservations);
         break;
       default:
-        this.submissions = this.submissions.concat(
-          this.inProgressObservations,
-          this.completedObservations
-        );
+        this.submissions = this.submissions.concat(this.inProgressObservations, this.completedObservations);
         console.log(this.submissions);
     }
   }
 
   //open info menu
   openInfo(submission) {
-    submission.entityName = this.selectedSolution.entities[
-      this.entityIndex
-    ].name;
+    submission.entityName = this.selectedSolution.entities[this.entityIndex].name;
     const modal = this.modalCtrl.create(ViewDetailComponent, {
       submission: submission,
     });
@@ -199,7 +186,7 @@ export class ProgramObservationSubmissionPage {
       popover.present({ ev: event });
     } else {
       this.navCtrl.push(ObservationReportsPage, {
-        submissionId: submission.submissionId,
+        submissionId: submission._id,
         entityType: this.selectedSolution.entities[this.entityIndex].entityType,
       });
     }
@@ -224,8 +211,7 @@ export class ProgramObservationSubmissionPage {
   // Menu for Entity reports
   openEntityReportMenu(event) {
     let popover = this.popoverCtrl.create(ScoreReportMenusComponent, {
-      observationId: this.selectedSolution.entities[this.entityIndex]
-        .submissions[0].observationId,
+      observationId: this.selectedSolution.entities[this.entityIndex].submissions[0].observationId,
       entityId: this.selectedSolution.entities[this.entityIndex]._id,
 
       entityType: this.selectedSolution.entities[this.entityIndex].entityType,
@@ -240,8 +226,7 @@ export class ProgramObservationSubmissionPage {
     this.showActionsheet = false;
     const payload = {
       entityId: this.selectedSolution.entities[this.entityIndex]._id,
-      observationId: this.selectedSolution.entities[this.entityIndex]
-        .submissions[0].observationId,
+      observationId: this.selectedSolution.entities[this.entityIndex].submissions[0].observationId,
       entityType: this.selectedSolution.entities[this.entityIndex].entityType,
     };
     this.navCtrl.push(ObservationReportsPage, payload);
@@ -249,21 +234,19 @@ export class ProgramObservationSubmissionPage {
 
   // Actions on submissions
   openActionMenu(event, submission, index) {
-    submission.entityName = this.selectedSolution.entities[
-      this.entityIndex
-    ].name;
+    submission.entityName = this.selectedSolution.entities[this.entityIndex].name;
     let popover = this.popoverCtrl.create(SubmissionActionsComponent, {
       submission: submission,
     });
     popover.onDidDismiss((data) => {
       if (data && data.action === "update") {
         const payload = {
-          submissionId: submission.submissionId,
+          submissionId: submission._id,
           title: data.name,
         };
         this.ediSubmissionName(payload, index);
       } else if (data && data.action === "delete") {
-        this.deleteSubmission(submission.submissionId);
+        this.deleteSubmission(submission._id);
       }
     });
     popover.present({ ev: event });
@@ -272,12 +255,7 @@ export class ProgramObservationSubmissionPage {
   deleteSubmission(submissionId) {
     let translateObject;
     this.translate
-      .get([
-        "actionSheet.confirm",
-        "actionSheet.deleteSubmission",
-        "actionSheet.no",
-        "actionSheet.yes",
-      ])
+      .get(["actionSheet.confirm", "actionSheet.deleteSubmission", "actionSheet.no", "actionSheet.yes"])
       .subscribe((translations) => {
         translateObject = translations;
       });
@@ -334,14 +312,10 @@ export class ProgramObservationSubmissionPage {
     //   this.submissionList[this.submissionList.length - 1].submissionNumber + 1;
 
     const entityId = this.selectedSolution.entities[this.entityIndex]._id;
-    const observationId = this.selectedSolution.entities[this.entityIndex]
-      .submissions[0].observationId;
+    const observationId = this.selectedSolution.entities[this.entityIndex].submissions[0].observationId;
 
     this.apiProvider.httpPost(
-      AppConfigs.cro.observationSubmissionCreate +
-        observationId +
-        "?entityId=" +
-        entityId,
+      AppConfigs.cro.observationSubmissionCreate + observationId + "?entityId=" + entityId,
       {},
       (success) => {
         console.log(success);
@@ -358,9 +332,7 @@ export class ProgramObservationSubmissionPage {
     this.showEntityActionsheet = false;
 
     this.localStorage
-      .getLocalStorage(
-        this.utils.getAssessmentLocalStorageKey(submission.submissionId)
-      )
+      .getLocalStorage(this.utils.getAssessmentLocalStorageKey(submission._id))
       .then((data) => {
         if (!data) {
           this.getAssessmentDetailsApi(submission);
@@ -391,7 +363,7 @@ export class ProgramObservationSubmissionPage {
   }
 
   goToEcm(submission) {
-    let submissionId = submission.submissionId;
+    let submissionId = submission._id;
     let heading = this.selectedSolution.entities[this.entityIndex].name;
 
     this.localStorage
@@ -405,10 +377,7 @@ export class ProgramObservationSubmissionPage {
           });
         } else {
           if (successData.assessment.evidences[0].startTime) {
-            this.utils.setCurrentimageFolderName(
-              successData.assessment.evidences[0].externalId,
-              submissionId
-            );
+            this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId);
             this.navCtrl.push("SectionListPage", {
               _id: submissionId,
               name: heading,
@@ -425,10 +394,7 @@ export class ProgramObservationSubmissionPage {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(
-      aseessmemtData.assessment.evidences[evidenceIndex].externalId,
-      assessment._id
-    );
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id);
     const options = {
       _id: assessment._id,
       name: assessment.name,
@@ -453,9 +419,7 @@ export class ProgramObservationSubmissionPage {
         // this.utils.stopLoader();
         await this.getProgramFromStorage("stopLoader");
         if (refreshEvent) refreshEvent.complete();
-        this.selectedSolution.entities[this.entityIndex].submissions.length > 0
-          ? null
-          : this.navCtrl.pop();
+        this.selectedSolution.entities[this.entityIndex].submissions.length > 0 ? null : this.navCtrl.pop();
 
         this.pageTop.scrollToTop();
       })
@@ -465,12 +429,8 @@ export class ProgramObservationSubmissionPage {
   }
 
   doInfinite(infiniteScroll) {
-    let observationId = this.programList[this.programIndex].solutions[
-      this.solutionIndex
-    ]._id;
-    let entityId = this.programList[this.programIndex].solutions[
-      this.solutionIndex
-    ].entities[this.entityIndex]._id;
+    let observationId = this.programList[this.programIndex].solutions[this.solutionIndex]._id;
+    let entityId = this.programList[this.programIndex].solutions[this.solutionIndex].entities[this.entityIndex]._id;
     this.programService
       .submissionListAllObs(observationId, entityId)
       .then((list) => {

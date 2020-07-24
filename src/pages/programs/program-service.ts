@@ -36,7 +36,6 @@ export class ProgramServiceProvider {
       .getLocalStorage("programList")
       .then((data) => {
         if (data) {
-          this.migrationFuntion(data);
           return data;
         } else {
           return this.getProgramApi(true);
@@ -68,10 +67,7 @@ export class ProgramServiceProvider {
             }
           } */
 
-          this.localStorage.setLocalStorage(
-            storageKeys.programList,
-            successData.result
-          );
+          this.localStorage.setLocalStorage(storageKeys.programList, successData.result);
           resolve(successData.result);
         },
         (error) => {
@@ -92,9 +88,7 @@ export class ProgramServiceProvider {
       let assessmentIndex = event.assessmentIndex;
       let entityIndex = event.entityIndex;
       let solutionId = programs[programIndex].solutions[assessmentIndex]._id;
-      let entityId =
-        programs[programIndex].solutions[assessmentIndex].entities[entityIndex]
-          ._id;
+      let entityId = programs[programIndex].solutions[assessmentIndex].entities[entityIndex]._id;
       let submissionNumber = event.submissionNumber || 1;
 
       this.utils.startLoader();
@@ -111,9 +105,7 @@ export class ProgramServiceProvider {
         url,
         async (success) => {
           this.ulsdp.mapSubmissionDataToQuestion(success.result);
-          const generalQuestions = success.result["assessment"][
-            "generalQuestions"
-          ]
+          const generalQuestions = success.result["assessment"]["generalQuestions"]
             ? success.result["assessment"]["generalQuestions"]
             : null;
           this.localStorage.setLocalStorage(
@@ -121,8 +113,7 @@ export class ProgramServiceProvider {
             generalQuestions
           );
           this.localStorage.setLocalStorage(
-            "generalQuestionsCopy_" +
-              success.result["assessment"]["submissionId"],
+            "generalQuestionsCopy_" + success.result["assessment"]["submissionId"],
             generalQuestions
           );
           // programs[programIndex].solutions[assessmentIndex].entities[
@@ -142,21 +133,13 @@ export class ProgramServiceProvider {
               entityIndex
             ].submissions[0].downloaded = true;
           } */
-          await this.ulsdp.updateSubmissionIdArr(
-            success.result.assessment.submissionId
-          );
+          await this.ulsdp.updateSubmissionIdArr(success.result.assessment.submissionId);
+
           await this.localStorage.setLocalStorage(
-            this.utils.getAssessmentLocalStorageKey(
-              programs[programIndex].solutions[assessmentIndex].entities[
-                entityIndex
-              ].submissionId
-            ),
+            this.utils.getAssessmentLocalStorageKey(success.result.assessment.submissionId),
             success.result
           );
-          await this.localStorage.setLocalStorage(
-            storageKeys.programList,
-            programs
-          );
+          await this.localStorage.setLocalStorage(storageKeys.programList, programs);
           this.utils.stopLoader();
 
           resolve(programs);
@@ -188,8 +171,7 @@ export class ProgramServiceProvider {
         AppConfigs.cro.observationDetails +
         observationId +
         "?entityId=" +
-        programs[programIndex].solutions[solutionIndex].entities[entityIndex]
-          ._id +
+        programs[programIndex].solutions[solutionIndex].entities[entityIndex]._id +
         "&submissionNumber=" +
         submissionNumber;
       console.log(url);
@@ -197,9 +179,7 @@ export class ProgramServiceProvider {
         url,
         (success) => {
           this.ulsdp.mapSubmissionDataToQuestion(success.result, true);
-          const generalQuestions = success.result["assessment"][
-            "generalQuestions"
-          ]
+          const generalQuestions = success.result["assessment"]["generalQuestions"]
             ? success.result["assessment"]["generalQuestions"]
             : null;
           this.localStorage.setLocalStorage(
@@ -207,8 +187,7 @@ export class ProgramServiceProvider {
             generalQuestions
           );
           this.localStorage.setLocalStorage(
-            "generalQuestionsCopy_" +
-              success.result["assessment"]["submissionId"],
+            "generalQuestionsCopy_" + success.result["assessment"]["submissionId"],
             generalQuestions
           );
 
@@ -220,14 +199,10 @@ export class ProgramServiceProvider {
               : null;
           }); */
 
-          this.ulsdp.storeObsevationSubmissionId(
-            success.result["assessment"]["submissionId"]
-          );
+          this.ulsdp.storeObsevationSubmissionId(success.result["assessment"]["submissionId"]);
 
           this.localStorage.setLocalStorage(
-            this.utils.getAssessmentLocalStorageKey(
-              success.result.assessment.submissionId
-            ),
+            this.utils.getAssessmentLocalStorageKey(success.result.assessment.submissionId),
             success.result
           );
           this.localStorage.setLocalStorage(storageKeys.programList, programs);
@@ -264,10 +239,7 @@ export class ProgramServiceProvider {
   submissionListAll(solutionId, entityId) {
     return new Promise((resolve, reject) => {
       this.apiService.httpGet(
-        AppConfigs.assessmentsList.submissionList +
-          solutionId +
-          "?entityId=" +
-          entityId,
+        AppConfigs.assessmentsList.submissionList + solutionId + "?entityId=" + entityId,
         (success) => {
           resolve(success.result);
         },
@@ -280,10 +252,7 @@ export class ProgramServiceProvider {
   submissionListAllObs(observationId, entityId) {
     return new Promise((resolve, reject) => {
       this.apiService.httpGet(
-        AppConfigs.cro.observationSubmissionAll +
-          observationId +
-          "?entityId=" +
-          entityId,
+        AppConfigs.cro.observationSubmissionAll + observationId + "?entityId=" + entityId,
         (success) => {
           resolve(success.result);
         },
@@ -315,18 +284,14 @@ export class ProgramServiceProvider {
         }
 
         let popover = this.popoverCtrl.create(MenuItemComponent, {
-          submissionId:
+          /*   submissionId:
             programs[programIndex].solutions[assessmentIndex].entities[
               entityIndex
             ].submissionId,
-          _id:
-            programs[programIndex].solutions[assessmentIndex].entities[
-              entityIndex
-            ]["_id"],
-          name:
-            programs[programIndex].solutions[assessmentIndex].entities[
-              entityIndex
-            ]["name"],
+          _id: */
+          submissionId: submissionId,
+          _id: programs[programIndex].solutions[assessmentIndex].entities[entityIndex]["_id"],
+          name: programs[programIndex].solutions[assessmentIndex].entities[entityIndex]["name"],
           programId: programs[programIndex]._id,
           showMenuArray: showMenuArray,
           solutionId: solutionId,
@@ -343,36 +308,57 @@ export class ProgramServiceProvider {
   /* 
     only for migration purpose to make downloaded = true for already downloaded entities in 
     previous app version before flow change 
+
+    TODO :make migration more simpler and redable
+    TODO :Use one array to store submissionIds for observations and assessments(individual and instituional) 
   */
 
-  // pass the program list and check for institutional,individual list
-  migrationFuntion(program) {
-    let intstitutionalList = this.localStorageGetfn(
-      storageKeys.institutionalList
-    );
-    let individualList = this.localStorageGetfn(storageKeys.individualList);
-
-    intstitutionalList
-      .then((list) => {
-        console.log(list);
-        // this.migrate(list, program, "institutionalList");
-        this.migrate(list, "institutionalList");
+  migrationFuntion() {
+    let idsArr = [];
+    this.localStorage
+      .getLocalStorage(storageKeys.institutionalList)
+      .then(
+        (list) => {
+          list.map((program) =>
+            program.solutions.map((solution) =>
+              solution.entities.map((entity) => {
+                entity.downloaded ? idsArr.push(entity.submissionId) : null;
+              })
+            )
+          );
+          return this.localStorage.getLocalStorage(storageKeys.individualList);
+        },
+        (noList) => {
+          return this.localStorage.getLocalStorage(storageKeys.individualList);
+        }
+      )
+      .then(
+        (list) => {
+          list.map((program) =>
+            program.solutions.map((solution) =>
+              solution.entities.map((entity) => {
+                entity.downloaded ? idsArr.push(entity.submissionId) : null;
+              })
+            )
+          );
+        },
+        (noList) => {}
+      )
+      .then(() => {
+        idsArr.length ? this.ulsdp.updateSubmissionIdArr(idsArr) : null;
       })
-      .catch((err) => {});
-
-    individualList
-      .then((list) => {
-        console.log(list);
-        // this.migrate(list, program, "individualList");
-        this.migrate(list, "individualList");
+      .then(() => {
+        this.localStorage.deleteOneStorage(storageKeys.institutionalList);
+        this.localStorage.deleteOneStorage(storageKeys.individualList);
+        this.runObservationMigration();
       })
-      .catch((err) => {});
-    this.runObservationMigration();
+      .catch(() => {});
   }
 
   runObservationMigration() {
     let idsArr = [];
-    this.localStorageGetfn(storageKeys.createdObservationList)
+    this.localStorage
+      .getLocalStorage(storageKeys.createdObservationList)
       .then((list) => {
         console.log(list);
         list.map((program) =>
@@ -386,40 +372,6 @@ export class ProgramServiceProvider {
         this.localStorage.deleteOneStorage(storageKeys.createdObservationList);
       })
       .catch((err) => console.log(err));
-  }
-
-  // if individual,institutional list present get the data
-  async localStorageGetfn(assessmentType) {
-    return await this.localStorage.getLocalStorage(assessmentType);
-  }
-
-  // run migratation by providing previous list,current program list and the key in which previous list is stored
-  // migrate(prevlist, currList, key) {
-  migrate(list, key) {
-    let idsArr = [];
-
-    list.map((program) =>
-      program.solutions.map((solution) =>
-        solution.entities.map((entity) => {
-          entity.downloaded ? idsArr.push(entity.submissionId) : null;
-        })
-      )
-    );
-    console.log(idsArr);
-    idsArr.length ? this.ulsdp.updateSubmissionIdArr(idsArr) : null;
-
-    // this.localStorageUpdateFn(currList, key);
-    this.localStorageUpdateFn(key);
-  }
-
-  /* 
-    update the current list i.e program list
-    delete the previous list i.e institutional,individual lists
-  */
-  // localStorageUpdateFn(currList: any, key) {
-  localStorageUpdateFn(key) {
-    // this.localStorage.setLocalStorage(storageKeys.programList, currList);
-    this.localStorage.deleteOneStorage(key);
   }
 
   /*----------------- migration steps end------------- */
