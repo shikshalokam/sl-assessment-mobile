@@ -52,9 +52,7 @@ export class InstitutionSolutionPage {
       .getInstituionFromStorage()
       .then((institutions) => {
         this.institutionList = institutions;
-        this.entity = this.institutionList.entities[this.entityType][
-          this.entityIndex
-        ];
+        this.entity = this.institutionList.entities[this.entityType][this.entityIndex];
         this.getSubmissionArr();
         this.utils.stopLoader();
       })
@@ -75,33 +73,21 @@ export class InstitutionSolutionPage {
   }
 
   applySubmission() {
-    this.institutionList.entities[this.entityType][
-      this.entityIndex
-    ].solutions.map((sol) => {
+    this.institutionList.entities[this.entityType][this.entityIndex].solutions.map((sol) => {
       if (!sol.allowMultipleAssessemts) {
-        this.submissionArr.includes(sol.submissions[0].submissionId)
-          ? (sol.submissions[0].downloaded = true)
-          : null;
+        this.submissionArr.includes(sol.submissions[0]._id) ? (sol.submissions[0].downloaded = true) : null;
       }
     });
   }
 
   goToEcm(solutionIndex, submissionId) {
-    let heading = this.institutionList.entities[this.entityType][
-      this.entityIndex
-    ].name;
+    let heading = this.institutionList.entities[this.entityType][this.entityIndex].name;
     let recentlyUpdatedEntity = {
-      programName: this.institutionList.entities[this.entityType][
-        this.entityIndex
-      ].solutions[solutionIndex].programName,
-      ProgramId: this.institutionList.entities[this.entityType][
-        this.entityIndex
-      ].solutions[solutionIndex].programId,
-      EntityName: this.institutionList.entities[this.entityType][
-        this.entityIndex
-      ].name,
-      EntityId: this.institutionList.entities[this.entityType][this.entityIndex]
-        ._id,
+      programName: this.institutionList.entities[this.entityType][this.entityIndex].solutions[solutionIndex]
+        .programName,
+      ProgramId: this.institutionList.entities[this.entityType][this.entityIndex].solutions[solutionIndex].programId,
+      EntityName: this.institutionList.entities[this.entityType][this.entityIndex].name,
+      EntityId: this.institutionList.entities[this.entityType][this.entityIndex]._id,
       submissionId: submissionId,
     };
     console.log("go to ecm called" + submissionId);
@@ -119,10 +105,7 @@ export class InstitutionSolutionPage {
           });
         } else {
           if (successData.assessment.evidences[0].startTime) {
-            this.utils.setCurrentimageFolderName(
-              successData.assessment.evidences[0].externalId,
-              submissionId
-            );
+            this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId);
 
             this.appCtrl.getRootNav().push("SectionListPage", {
               _id: submissionId,
@@ -144,10 +127,7 @@ export class InstitutionSolutionPage {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(
-      aseessmemtData.assessment.evidences[evidenceIndex].externalId,
-      assessment._id
-    );
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id);
     const options = {
       _id: assessment._id,
       name: assessment.name,
@@ -170,8 +150,7 @@ export class InstitutionSolutionPage {
       .getAssessmentDetails(event, this.institutionList)
       .then(async (institutions) => {
         if (
-          this.institutionList.entities[this.entityType][this.entityIndex]
-            .solutions[solutionIndex].submissions.length
+          this.institutionList.entities[this.entityType][this.entityIndex].solutions[solutionIndex].submissions.length
         ) {
           this.getSubmissionArr();
         } else {
@@ -185,22 +164,14 @@ export class InstitutionSolutionPage {
   }
 
   goToObservationSubmission(programId, observationId) {
-    let EntityId = this.institutionList.entities[this.entityType][
-      this.entityIndex
-    ]._id;
+    let EntityId = this.institutionList.entities[this.entityType][this.entityIndex]._id;
 
     this.localStorage
       .getLocalStorage(storageKeys.programList)
       .then((programs) => {
         let programIndex = programs.map((p) => p._id).indexOf(programId);
-        let solutionIndex = programs[programIndex].solutions
-          .map((s) => s._id)
-          .indexOf(observationId);
-        let entityIndex = programs[programIndex].solutions[
-          solutionIndex
-        ].entities
-          .map((e) => e._id)
-          .indexOf(EntityId);
+        let solutionIndex = programs[programIndex].solutions.map((s) => s._id).indexOf(observationId);
+        let entityIndex = programs[programIndex].solutions[solutionIndex].entities.map((e) => e._id).indexOf(EntityId);
 
         let data = {
           programIndex: programIndex,
@@ -208,10 +179,8 @@ export class InstitutionSolutionPage {
           entityIndex: entityIndex,
         };
         if (
-          programs[programIndex].solutions[solutionIndex].entities[entityIndex]
-            .submissions &&
-          programs[programIndex].solutions[solutionIndex].entities[entityIndex]
-            .submissions.length
+          programs[programIndex].solutions[solutionIndex].entities[entityIndex].submissions &&
+          programs[programIndex].solutions[solutionIndex].entities[entityIndex].submissions.length
         ) {
           this.navCtrl.push(ProgramObservationSubmissionPage, { data });
         } else {
@@ -221,49 +190,35 @@ export class InstitutionSolutionPage {
             entityIndex: entityIndex,
             submission: {
               submissionNumber: 1,
-              observationId:
-                programs[programIndex].solutions[solutionIndex]._id,
+              observationId: programs[programIndex].solutions[solutionIndex]._id,
             },
           };
 
-          this.programService
-            .getAssessmentDetailsForObservation(event, programs)
-            .then(async (programs) => {
-              await this.programService.refreshObservationList();
-              this.navCtrl.push(ProgramObservationSubmissionPage, { data });
-            });
+          this.programService.getAssessmentDetailsForObservation(event, programs).then(async (programs) => {
+            await this.programService.refreshObservationList();
+            this.navCtrl.push(ProgramObservationSubmissionPage, { data });
+          });
         }
       })
       .catch((err) => {});
   }
 
   goToAssessmentSubmission(programId, solutionId) {
-    let EntityId = this.institutionList.entities[this.entityType][
-      this.entityIndex
-    ]._id;
+    let EntityId = this.institutionList.entities[this.entityType][this.entityIndex]._id;
 
     this.localStorage
       .getLocalStorage(storageKeys.programList)
       .then((programs) => {
         let programIndex = programs.map((p) => p._id).indexOf(programId);
-        let solutionIndex = programs[programIndex].solutions
-          .map((s) => s._id)
-          .indexOf(solutionId);
-        let entityIndex = programs[programIndex].solutions[
-          solutionIndex
-        ].entities
-          .map((e) => e._id)
-          .indexOf(EntityId);
+        let solutionIndex = programs[programIndex].solutions.map((s) => s._id).indexOf(solutionId);
+        let entityIndex = programs[programIndex].solutions[solutionIndex].entities.map((e) => e._id).indexOf(EntityId);
 
         let navData = {
           programIndex: programIndex,
           solutionIndex: solutionIndex,
           entityIndex: entityIndex,
         };
-        if (
-          !programs[programIndex].solutions[solutionIndex].entities[entityIndex]
-            .submissions.length
-        ) {
+        if (!programs[programIndex].solutions[solutionIndex].entities[entityIndex].submissions.length) {
           let event = {
             programIndex: programIndex,
             assessmentIndex: solutionIndex,

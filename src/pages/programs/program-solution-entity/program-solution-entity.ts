@@ -79,17 +79,11 @@ export class ProgramSolutionEntityPage {
 
   applySubmission() {
     // this.program.solutions[this.solutionIndex].
-    let solutionId = this.programList[this.programIndex].solutions[
-      this.solutionIndex
-    ]._id;
+    let solutionId = this.programList[this.programIndex].solutions[this.solutionIndex]._id;
 
-    this.programList[this.programIndex].solutions[
-      this.solutionIndex
-    ].entities.map((e, entityIndex) => {
+    this.programList[this.programIndex].solutions[this.solutionIndex].entities.map((e, entityIndex) => {
       if (!e.allowMultipleAssessemts) {
-        this.submissionArr.includes(e.submissions[0].submissionId)
-          ? (e.submissions[0].downloaded = true)
-          : null;
+        this.submissionArr.includes(e.submissions[0]._id) ? (e.submissions[0].downloaded = true) : null;
       }
     });
   }
@@ -100,15 +94,12 @@ export class ProgramSolutionEntityPage {
       assessmentIndex: this.solutionIndex,
       entityIndex: entityIndex,
     };
-    const assessmentType = this.programList[this.programIndex].solutions[
-      this.solutionIndex
-    ].subType;
+    const assessmentType = this.programList[this.programIndex].solutions[this.solutionIndex].subType;
     this.programService
       .getAssessmentDetails(event, this.programList)
       .then(async (program) => {
         if (
-          this.programList[this.programIndex].solutions[this.solutionIndex]
-            .entities[entityIndex].submissions.length
+          this.programList[this.programIndex].solutions[this.solutionIndex].entities[entityIndex].submissions.length
         ) {
           // this.getProgramFromStorage();
           this.program = program[this.programIndex];
@@ -145,10 +136,7 @@ export class ProgramSolutionEntityPage {
           });
         } else {
           if (successData.assessment.evidences[0].startTime) {
-            this.utils.setCurrentimageFolderName(
-              successData.assessment.evidences[0].externalId,
-              submissionId
-            );
+            this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId);
             this.navCtrl.push("SectionListPage", {
               _id: submissionId,
               name: heading,
@@ -169,10 +157,7 @@ export class ProgramSolutionEntityPage {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(
-      aseessmemtData.assessment.evidences[evidenceIndex].externalId,
-      assessment._id
-    );
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id);
     const options = {
       _id: assessment._id,
       name: assessment.name,
@@ -190,15 +175,10 @@ export class ProgramSolutionEntityPage {
       assessmentIndex: this.solutionIndex,
       schoolIndex: entityIndex,
       entityIndex: entityIndex,
-      submissionId: this.programList[this.programIndex].solutions[
-        this.solutionIndex
-      ].entities[entityIndex].submissions[0].submissionId,
-      solutionId: this.programList[this.programIndex].solutions[
-        this.solutionIndex
-      ]._id,
-      parentEntityId: this.programList[this.programIndex].solutions[
-        this.solutionIndex
-      ].entities[entityIndex]._id,
+      submissionId: this.programList[this.programIndex].solutions[this.solutionIndex].entities[entityIndex]
+        .submissions[0]._id,
+      solutionId: this.programList[this.programIndex].solutions[this.solutionIndex]._id,
+      parentEntityId: this.programList[this.programIndex].solutions[this.solutionIndex].entities[entityIndex]._id,
       createdByProgramId: this.programList[this.programIndex]._id,
     };
     this.programService.openMenu(event, this.programList, true);
@@ -210,10 +190,7 @@ export class ProgramSolutionEntityPage {
       solutionIndex: this.solutionIndex,
       entityIndex: entityIndex,
     };
-    if (
-      !this.programList[this.programIndex].solutions[this.solutionIndex]
-        .entities[entityIndex].submissions.length
-    ) {
+    if (!this.programList[this.programIndex].solutions[this.solutionIndex].entities[entityIndex].submissions.length) {
       let event = {
         programIndex: this.programIndex,
         assessmentIndex: this.solutionIndex,

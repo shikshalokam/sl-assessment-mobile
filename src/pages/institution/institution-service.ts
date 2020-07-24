@@ -50,10 +50,7 @@ export class InstitutionServiceProvider {
       this.apiService.httpGet(
         url,
         (successData) => {
-          this.localStorage.setLocalStorage(
-            storageKeys.institutionFlowList,
-            successData.result
-          );
+          this.localStorage.setLocalStorage(storageKeys.institutionFlowList, successData.result);
           resolve(successData.result);
         },
         (error) => {
@@ -69,14 +66,8 @@ export class InstitutionServiceProvider {
       let entityType = event.entityType;
       let solutionIndex = event.solutionIndex;
 
-      let programId =
-        institutionList.entities[entityType][entityIndex].solutions[
-          solutionIndex
-        ].programId;
-      let solutionId =
-        institutionList.entities[entityType][entityIndex].solutions[
-          solutionIndex
-        ]._id;
+      let programId = institutionList.entities[entityType][entityIndex].solutions[solutionIndex].programId;
+      let solutionId = institutionList.entities[entityType][entityIndex].solutions[solutionIndex]._id;
       let entityId = institutionList.entities[entityType][entityIndex]._id;
 
       const url =
@@ -90,9 +81,7 @@ export class InstitutionServiceProvider {
         url,
         async (success) => {
           this.ulsdp.mapSubmissionDataToQuestion(success.result);
-          const generalQuestions = success.result["assessment"][
-            "generalQuestions"
-          ]
+          const generalQuestions = success.result["assessment"]["generalQuestions"]
             ? success.result["assessment"]["generalQuestions"]
             : null;
           this.localStorage.setLocalStorage(
@@ -100,25 +89,12 @@ export class InstitutionServiceProvider {
             generalQuestions
           );
           this.localStorage.setLocalStorage(
-            "generalQuestionsCopy_" +
-              success.result["assessment"]["submissionId"],
+            "generalQuestionsCopy_" + success.result["assessment"]["submissionId"],
             generalQuestions
           );
-          await this.ulsdp.updateSubmissionIdArr(
-            success.result.assessment.submissionId
-          );
-          await this.localStorage.setLocalStorage(
-            this.utils.getAssessmentLocalStorageKey(
-              institutionList.entities[entityType][entityIndex].solutions[
-                solutionIndex
-              ].submissionId
-            ),
-            success.result
-          );
-          await this.localStorage.setLocalStorage(
-            storageKeys.institutionFlowList,
-            institutionList
-          );
+          await this.ulsdp.updateSubmissionIdArr(success.result.assessment.submissionId);
+          await this.localStorage.setLocalStorage(success.result["assessment"]["submissionId"], success.result);
+          await this.localStorage.setLocalStorage(storageKeys.institutionFlowList, institutionList);
           this.utils.stopLoader();
 
           resolve(institutionList);
