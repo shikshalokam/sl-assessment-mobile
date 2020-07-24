@@ -7,6 +7,8 @@ import { LocalStorageProvider } from "../../../providers/local-storage/local-sto
 import { storageKeys } from "../../../providers/storageKeys";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 import { File } from "@ionic-native/file";
+import { Platform } from "ionic-angular";
+import { DomSanitizer } from "@angular/platform-browser";
 
 /*
   Generated class for the LibraryProvider provider.
@@ -17,6 +19,8 @@ import { File } from "@ionic-native/file";
 @Injectable()
 export class LibraryProvider {
   private win: any = window;
+  isIos: boolean = false;
+  filePath: any;
 
   constructor(
     public http: HttpClient,
@@ -24,10 +28,20 @@ export class LibraryProvider {
     public utils: UtilsProvider,
     public localStorage: LocalStorageProvider,
     public transfer: FileTransfer,
-    public file: File
+    public file: File,
+    private platform: Platform,
+    private sanitizer: DomSanitizer
+
   ) {
     console.log("Hello LibraryProvider Provider");
+    this.isIos = this.platform.is("ios") ? true : false;
+    this.filePath = this.isIos ? this.file.documentsDirectory : this.file.externalDataDirectory;
   }
+
+  getImgContent(file) {
+    return this.sanitizer.bypassSecurityTrustUrl(file);
+  }
+
   getUrl(type, list?) {
     switch (type) {
       case "observation":
@@ -166,7 +180,7 @@ export class LibraryProvider {
     return this.getLibraryDraft()
       .then((allDraft) => allDraft.filter((d) => d.time !== draftTime))
       .then((allDraft) => this.saveLibraryDraft(allDraft))
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   getLibraryCategories() {
@@ -216,7 +230,7 @@ export class LibraryProvider {
     const fileTransfer: FileTransferObject = this.transfer.create();
 
     return fileTransfer
-      .download(url, this.file.dataDirectory + name + ".png")
+      .download(url, this.filePath + name + ".png")
       .then(
         (entry) => {
           return this.win.Ionic.WebView.convertFileSrc(entry.nativeURL);
@@ -232,7 +246,7 @@ export class LibraryProvider {
       const url =
         AppConfigs.library.searchSolutions +
         solutionName +
-        `&page=${page}&limit=10`;
+        `&page=${page}&limit=15`;
 
       this.apiService.httpGet(
         url,

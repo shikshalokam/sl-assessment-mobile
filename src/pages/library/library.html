@@ -16,9 +16,9 @@
         (click)="goToComponent(item?.type)"
       >
         <div class="card-container">
-          <ion-card>
-            <ion-card-content>
-              <img [src]="item?.localUrl" alt="" />
+          <ion-card class="ionCard">
+            <ion-card-content class="cardDetails">
+              <img [src]="libraryProvider?.getImgContent(item?.localUrl)" alt=""  style="width: 100%;" />
             </ion-card-content>
           </ion-card>
           <p class="iconName">{{item?.name}}</p>

@@ -5,6 +5,7 @@ import { LibrarySolutionDetailsPage } from "../library-solution-details/library-
 import { storageKeys } from "../../../../providers/storageKeys";
 import { LocalStorageProvider } from "../../../../providers/local-storage/local-storage";
 import { isArray } from "ionic-angular/umd/util/util";
+import { UtilsProvider } from "../../../../providers/utils/utils";
 
 /**
  * Generated class for the LibrarySolutionsSearchPage page.
@@ -30,8 +31,9 @@ export class LibrarySolutionsSearchPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public libraryProvider: LibraryProvider,
-    public localStorage: LocalStorageProvider
-  ) {}
+    public localStorage: LocalStorageProvider,
+    private utils: UtilsProvider
+  ) { }
   ionViewDidEnter() {
     this.libraryCategories = this.navParams.get("libraryCategories");
     this.getIcons();
@@ -44,22 +46,25 @@ export class LibrarySolutionsSearchPage {
         [object.type]: object.localUrl,
       }))
     );
-    this.searchSolutions();
+    this.searchSolutions(true);
     setTimeout(() => {
       this.searchbar.setFocus();
     }, 500);
   }
 
-  searchSolutions() {
+  searchSolutions(showLoader?: boolean) {
+    showLoader ? this.utils.startLoader(): null;
     this.libraryProvider
       .getLibrarySearchSolutions(this.searchText, this.page)
       .then((res) => {
+        showLoader ? this.utils.stopLoader() : null;
         Array.isArray(this.solutionsList)
           ? (this.solutionsList = [...this.solutionsList, ...res["data"]])
           : (this.solutionsList = res["data"]);
         this.count = res["count"];
       })
       .catch((err) => {
+        showLoader ? this.utils.stopLoader() : null;
         this.solutionsList = [];
       });
   }
@@ -67,7 +72,7 @@ export class LibrarySolutionsSearchPage {
   onInput() {
     this.page = 1;
     this.solutionsList = null;
-    this.searchSolutions();
+    this.searchSolutions(true);
   }
 
   doInfinite(infiniteScroll) {

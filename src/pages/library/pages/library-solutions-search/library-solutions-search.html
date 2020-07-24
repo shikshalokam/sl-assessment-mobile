@@ -9,6 +9,7 @@
 </ion-header>
 
 <ion-content padding>
+  <!-- TODO - Search to be fixed -->
   <ion-searchbar
     [(ngModel)]="searchText"
     placeholder="Search for solutions"
@@ -27,7 +28,7 @@
         <img
           width="16"
           height="16"
-          [src]="iconData[solution?.type]"
+          [src]="libraryProvider?.getImgContent(iconData[solution?.type])"
           *ngIf="iconData && iconData[solution?.type]"
         />
 
