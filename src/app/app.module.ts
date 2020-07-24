@@ -95,11 +95,10 @@ import { ObservationReportsPage } from "../pages/observation-reports/observation
 import { HighchartsChartModule } from "highcharts-angular";
 import { UpdateTrackerProvider } from "../providers/update-tracker/update-tracker";
 import { RoleListingPage } from "../pages/role-listing/role-listing";
-import { ReportEntityListingPage } from "../pages/report-entity-listing/report-entity-listing";
+
 import { DashboardPage } from "../pages/dashboard/dashboard";
 import { TextToSpeech } from "@ionic-native/text-to-speech";
 import { TextToSpeechProvider } from "../providers/text-to-speech/text-to-speech";
-import { ProgramListingPage } from "../pages/program-listing/program-listing";
 import { ObservationEditPage } from "../pages/observation-edit/observation-edit";
 import { NotificationProvider } from "../providers/notification/notification";
 import { Badge } from "@ionic-native/badge";
@@ -112,7 +111,6 @@ import { AppVersion } from "@ionic-native/app-version";
 import { SettingsPage } from "../pages/settings/settings";
 import { SpinnerDialog } from "@ionic-native/spinner-dialog";
 import { SidemenuProvider } from "../providers/sidemenu/sidemenu";
-import { PipesModule } from "../pipes/pipes.module";
 import { QuestionListPage } from "../pages/question-list/question-list";
 import { TutorialVideoListingPage } from "../pages/tutorial-video-listing/tutorial-video-listing";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
@@ -123,6 +121,11 @@ import { ImprovementProjectPageModule } from "../pages/improvement-project/impro
 import { AppAvailability } from "@ionic-native/app-availability";
 
 import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
+import { ProgramsPageModule } from "../pages/programs/programs.module";
+import { InstitutionPageModule } from "../pages/institution/institution.module";
+import { BottomTabPageModule } from "../pages/bottom-tab/bottom-tab.module";
+import { ReportsPageModule } from "../pages/reports/reports.module";
+import { LibraryPageModule } from "../pages/library/library.module";
 @NgModule({
   declarations: [
     MyApp,
@@ -130,7 +133,6 @@ import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
     HomePage,
     AssessmentAboutPage,
     WelcomePage,
-    ProgramListingPage,
     InstitutionsEntityList,
     FaqPage,
     EntityProfileEditPage,
@@ -151,7 +153,6 @@ import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
     SubmissionListPage,
     ObservationReportsPage,
     RoleListingPage,
-    ReportEntityListingPage,
     DashboardPage,
     ObservationEditPage,
     SettingsPage,
@@ -180,7 +181,6 @@ import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
     QuestionerPageModule,
     ComponentsModule,
     DirectivesModule,
-    PipesModule,
     RatingCriteriaListingPageModule,
     RatingPageModule,
     RatedCriteriaListPageModule,
@@ -189,6 +189,11 @@ import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
     IonicStepperModule,
     ObservationsPageModule,
     ImprovementProjectPageModule,
+    ProgramsPageModule,
+    InstitutionPageModule,
+    BottomTabPageModule,
+    ReportsPageModule,
+    LibraryPageModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -216,11 +221,9 @@ import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
     PreviewPage,
     SubmissionListPage,
     DashboardPage,
-    ProgramListingPage,
     SettingsPage,
     ObservationReportsPage,
     RoleListingPage,
-    ReportEntityListingPage,
     ObservationEditPage,
     QuestionListPage,
     TutorialVideoListingPage,

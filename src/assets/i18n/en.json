@@ -4,7 +4,8 @@
     "generalQuestions": "General Questions",
     "selectObservationType": "Select a observation Type",
     "selectSolution": "Select a Solution",
-    "selectSchool": "Select All Schools"
+    "selectSchool": "Select All Schools",
+    "programName": "Program Name"
   },
   "actionSheet": {
     "confirmLeave": "Are you sure to leave.",
@@ -60,10 +61,12 @@
     "submitForm": "Submit the form",
     "previewForm": "Preview the form",
     "saveForm": "Save the form",
-    "userId": "User Id"
+    "userId": "User Id",
+    "deleteDraft": "Delete Draft Item"
   },
   "buttons": {
     "observeAgain": "Observe Again",
+    "assessAgain": "Assess Again",
     "view": "View",
     "and": "and",
     "addNew": "Add New",
@@ -125,7 +128,8 @@
     "questionWise": "Question Wise",
     "criteriaWise": "Criteria Wise",
     "viewDetails": "View Details",
-    "clickHereToImprove": "Click Here To Improve"
+    "clickHereToImprove": "Click Here To Improve",
+    "useForm": "Use Form"
   },
   "tabs": {
     "home": "Home",
@@ -149,7 +153,10 @@
     "tutorialvideo": "Tutorial Video",
     "evidences": "Evidences",
     "allObservation": "All Observation",
-    "improvementProjects": "Improvements Projects"
+    "improvementProjects": "Improvements Projects",
+    "programs": "Programs",
+    "mySolutions": "My Solutions",
+    "allSolutions": "All Solutions"
   },
   "headings": {
     "zone": "Zones",
@@ -170,6 +177,9 @@
     "mySchool": "My Schools",
     "faqs": "FAQs",
     "programList": "Program List",
+    "myPrograms": "My Programs",
+    "mySolutions": "My Solutions",
+    "myEntities": "My Entities",
     "about": "About",
     "school": "School",
     "profile": "Profile",
@@ -218,7 +228,19 @@
     "filter": "Filter",
     "tutorialvideo": "Tutorial Video",
     "improvementProjetcs": "Improvement Projects",
-    "entityList": "Entity List"
+    "entityList": "Entity List",
+    "solutions": "Solutions",
+    "library": "Library",
+    "observationSolutions": "Observation Solutions",
+    "assessmentForm": "Assessment Form",
+    "draft": "Drafts",
+    "search": "Search"
+  },
+  "bottomNav": {
+    "institution": "Institution",
+    "home": "Home",
+    "reports": "Reports",
+    "library": "Library"
   },
   "labels": {
     "welcome": "Welcome",
@@ -246,7 +268,10 @@
     "instanceName": "Instance Name",
     "viewAllEvidences": "View All Evidences",
     "suggestedIMPs": "Suggested IMP's",
-    "noSuggestedIMPs": "No IMP's Found"
+    "noSuggestedIMPs": "No IMP's Found",
+    "createNewProgram": " Create New Program",
+    "chooseExistingProgram": " Choose Existing Program"
+
   },
   "languages": {
     "english": "English",
@@ -287,7 +312,9 @@
     "noObservationfound": "No observation found",
     "selectFilter": "Select the questions to filter Reports",
     "noVideo": "No videos available",
-    "selectCriteraFilter": "Select the criterias to filter Reports"
+    "selectCriteraFilter": "Select the criterias to filter Reports",
+    "numberOfAssessmentsDone": "Number Of assessments done",
+    "ratingPending": "Rating is pending, please check later."
 
   },
   "toastMessage": {

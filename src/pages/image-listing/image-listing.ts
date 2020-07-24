@@ -14,6 +14,7 @@ import { SlackProvider } from "../../providers/slack/slack";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 import { ObservationProvider } from "../../providers/observation/observation";
 import { TranslateService } from "@ngx-translate/core";
+import { ProgramServiceProvider } from "../programs/program-service";
 
 declare var cordova: any;
 
@@ -35,7 +36,8 @@ export class ImageListingPage {
     private slack: SlackProvider,
     private events: Events,
     private translate: TranslateService,
-    private observetionProvider: ObservationProvider
+    private observetionProvider: ObservationProvider,
+    private programService: ProgramServiceProvider
   ) {}
 
   uploadImages: any;
@@ -355,9 +357,10 @@ export class ImageListingPage {
         this.schoolData.observation
           ? this.events.publish("updateSubmissionStatus")
           : null;
-
-        this.navCtrl.remove(this.navCtrl.getActive().index - 1, 1);
-        this.navCtrl.pop();
+        this.programService.refreshObservationList().then(() => {
+          this.navCtrl.remove(this.navCtrl.getActive().index - 1, 1);
+          this.navCtrl.pop();
+        });
       },
       (error) => {
         this.utils.stopLoader();
