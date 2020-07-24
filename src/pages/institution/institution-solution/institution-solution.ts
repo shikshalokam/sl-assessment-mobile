@@ -182,7 +182,7 @@ export class InstitutionSolutionPage {
           programs[programIndex].solutions[solutionIndex].entities[entityIndex].submissions &&
           programs[programIndex].solutions[solutionIndex].entities[entityIndex].submissions.length
         ) {
-          this.navCtrl.push(ProgramObservationSubmissionPage, { data });
+          this.appCtrl.getRootNav().push(ProgramObservationSubmissionPage, { data });
         } else {
           let event = {
             programIndex: programIndex,
@@ -196,7 +196,7 @@ export class InstitutionSolutionPage {
 
           this.programService.getAssessmentDetailsForObservation(event, programs).then(async (programs) => {
             await this.programService.refreshObservationList();
-            this.navCtrl.push(ProgramObservationSubmissionPage, { data });
+            this.appCtrl.getRootNav().push(ProgramObservationSubmissionPage, { data });
           });
         }
       })
@@ -229,11 +229,11 @@ export class InstitutionSolutionPage {
             .then(async () => {
               await this.programService.refreshObservationList();
               await this.getInstituionFromStorage();
-              this.navCtrl.push(ProgramAssessmentSubmissionPage, { navData });
+              this.appCtrl.getRootNav().push(ProgramAssessmentSubmissionPage, { navData });
             })
             .catch((err) => {});
         } else {
-          this.navCtrl.push(ProgramAssessmentSubmissionPage, { navData });
+          this.appCtrl.getRootNav().push(ProgramAssessmentSubmissionPage, { navData });
         }
       })
       .catch((err) => {});
