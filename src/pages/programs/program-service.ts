@@ -311,7 +311,6 @@ export class ProgramServiceProvider {
   */
 
   migrationFuntion() {
-    console.log("migration called");
     let idsArr = [];
     this.localStorage
       .getLocalStorage(storageKeys.institutionalList)
@@ -324,7 +323,6 @@ export class ProgramServiceProvider {
               })
             )
           );
-          console.log(idsArr);
           return this.localStorage.getLocalStorage(storageKeys.individualList);
         },
         (noList) => {

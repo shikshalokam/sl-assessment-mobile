@@ -33,7 +33,6 @@ export class BottomTabPage {
   data: any;
   $showDashboard = new Subject<boolean>();
   profileRoles: any;
-  first: boolean = false;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -50,11 +49,7 @@ export class BottomTabPage {
       this.getProfileroles();
     });
   }
-  ionViewDidLoad() {
-    setTimeout(() => {
-      this.first = true;
-    }, 1000);
-  }
+  ionViewDidLoad() {}
 
   getProfileroles() {
     this.localStorage
