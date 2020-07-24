@@ -308,6 +308,9 @@ export class ProgramServiceProvider {
   /* 
     only for migration purpose to make downloaded = true for already downloaded entities in 
     previous app version before flow change 
+
+    TODO :make migration more simpler and redable
+    TODO :Use one array to store submissionIds for observations and assessments(individual and instituional) 
   */
 
   migrationFuntion() {
