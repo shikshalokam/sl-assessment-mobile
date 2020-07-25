@@ -156,7 +156,8 @@
     "improvementProjects": "Improvements Projects",
     "programs": "Programs",
     "mySolutions": "My Solutions",
-    "allSolutions": "All Solutions"
+    "allSolutions": "All Solutions",
+    "resetPassword":"Reset Password"
   },
   "headings": {
     "zone": "Zones",
