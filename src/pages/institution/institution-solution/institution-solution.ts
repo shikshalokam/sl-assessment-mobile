@@ -98,7 +98,7 @@ export class InstitutionSolutionPage {
         console.log(JSON.stringify(successData));
         console.log("after modification");
         if (successData.assessment.evidences.length > 1) {
-          this.navCtrl.push("EvidenceListPage", {
+          this.appCtrl.getRootNav().push("EvidenceListPage", {
             _id: submissionId,
             name: heading,
             recentlyUpdatedEntity: recentlyUpdatedEntity,
@@ -195,7 +195,9 @@ export class InstitutionSolutionPage {
           };
 
           this.programService.getAssessmentDetailsForObservation(event, programs).then(async (programs) => {
+            this.utils.startLoader();
             await this.programService.refreshObservationList();
+            this.utils.stopLoader();
             this.appCtrl.getRootNav().push(ProgramObservationSubmissionPage, { data });
           });
         }
