@@ -1,3 +1,4 @@
+<ion-nav [root]="rootPage" #content swipeBackEnabled="true"></ion-nav>
 <ion-menu side="start" swipeGesture="true" [content]="content">
   <ion-header>
     <ion-toolbar color="primary">
@@ -53,7 +54,6 @@
     </ion-list>
   </ion-content>
 </ion-menu>
-<ion-nav [root]="rootPage" #content swipeBackEnabled="true"></ion-nav>
 <alert-modal
   *ngIf="appUpdateData"
   [notificationMeta]="appUpdateData"
