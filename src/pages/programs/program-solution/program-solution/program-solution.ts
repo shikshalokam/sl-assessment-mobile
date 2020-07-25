@@ -27,13 +27,11 @@ export class ProgramSolutionComponent {
   //Redirect on solution click based on sol type,observation individual or institutional
 
   redirectOnSoluctionClick() {
-    this.solution.type == "observation"
-      ? this.goToProgSolObservationDetails()
-      : this.goToProgramSolEntity();
+    this.solution.type == "observation" ? this.goToProgSolObservationDetails() : this.goToProgramSolEntity();
   }
 
   goToProgramSolEntity() {
-    this.navCtrl.push(ProgramSolutionEntityPage, {
+    this.app.getRootNav().push(ProgramSolutionEntityPage, {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
     });
@@ -44,7 +42,7 @@ export class ProgramSolutionComponent {
   }
 
   goToProgSolObservationDetails() {
-    this.navCtrl.push(ProgramSolutionObservationDetailPage, {
+    this.app.getRootNav().push(ProgramSolutionObservationDetailPage, {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
     });

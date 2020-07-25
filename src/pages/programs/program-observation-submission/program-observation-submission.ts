@@ -406,12 +406,13 @@ export class ProgramObservationSubmissionPage {
     this.evdnsServ.openActionSheet(options, "Observation");
   }
 
-  refreshLocalObservationList(refreshEvent?) {
+  refreshLocalObservationList(refreshEvent?, startLoader?) {
     let event = {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
       entityIndex: this.entityIndex,
     };
+    startLoader ? this.utils.startLoader() : null;
 
     this.programService
       .refreshObservationList(this.programList, event)

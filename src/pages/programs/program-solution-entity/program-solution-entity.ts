@@ -181,6 +181,7 @@ export class ProgramSolutionEntityPage {
       parentEntityId: this.programList[this.programIndex].solutions[this.solutionIndex].entities[entityIndex]._id,
       createdByProgramId: this.programList[this.programIndex]._id,
     };
+    console.log(event);
     this.programService.openMenu(event, this.programList, true);
   }
 
