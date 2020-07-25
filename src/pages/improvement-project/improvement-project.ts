@@ -53,7 +53,7 @@ export class ImprovementProjectPage {
           this.programList = success.data;
         } else {
           this.programList = [];
-          this.utils.openToast(success.data);
+          // this.utils.openToast(success.data);
         }
       },
       (error) => {

@@ -35,6 +35,8 @@ export class DashboardPage {
   fileName;
   payload;
   solutionName;
+  multiAssessmentsReport: any;
+  submissionId: any;
   constructor(
     public navCtrl: NavController,
     public utils: UtilsProvider,
@@ -57,6 +59,8 @@ export class DashboardPage {
     this.programId = this.navParams.get("programId");
     this.solutionId = this.navParams.get("solutionId");
     this.solutionName = this.navParams.get("solutionName");
+    this.multiAssessmentsReport = this.navParams.get("multiAssessmentsReport"); // for multi assessment get entity report
+    this.submissionId = this.navParams.get("submissionId"); // for multi assessmetn get instance report
     this.getEntityRequestObject();
     this.appFolderPath = this.isIos
       ? cordova.file.documentsDirectory + "/Download/"
@@ -75,6 +79,7 @@ export class DashboardPage {
         ? this.entity.immediateChildEntityType
         : "",
     };
+    this.submissionId ? (this.payload.submissionId = this.submissionId) : null;
     this.fileName =
       "submissionDoc_" +
       this.payload.programId +
@@ -100,6 +105,13 @@ export class DashboardPage {
   }
 
   clickOnGraphEventEmit(event) {
+    if (this.multiAssessmentsReport || this.submissionId) {
+      /* 
+        if intance and entity level reports for multiAssessmentsReport = true solution
+        then click event on graph is not required
+       */
+      return;
+    }
     console.log(JSON.stringify(event));
     let entityObj = {
       _id: event.entityId,
@@ -115,8 +127,19 @@ export class DashboardPage {
   getEntityReports(obj) {
     console.log(JSON.stringify(obj));
     this.utils.startLoader();
+
+    /*
+      for solution having multiAssessmentsReport = false use old api to get report;
+      for solution having multiAssessmentsReport = true use new api to get cummulative report for entity
+      for solution having multiAssessmentsReport = true get instance report by passing submissionId to the new api
+    */
+    let url = this.multiAssessmentsReport
+      ? AppConfigs.assessmentsList.assessmentReport
+      : this.submissionId
+      ? AppConfigs.assessmentsList.assessmentReport
+      : AppConfigs.roles.instanceReport;
     this.apiProvider.httpPost(
-      AppConfigs.roles.instanceReport,
+      url,
       obj,
       (success) => {
         this.data = success;
