@@ -65,6 +65,7 @@
     "cordova": "^8.1.2",
     "cordova-android": "8.1.0",
     "cordova-android-play-services-gradle-release": "^1.4.6",
+    "cordova-android-support-gradle-release": "~3.0.1",
     "cordova-browser": "5.0.4",
     "cordova-plugin-add-swift-support": "^1.7.2",
     "cordova-plugin-advanced-http": "^2.4.1",
@@ -88,7 +89,6 @@
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-inappbrowser": "^3.2.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
-    "cordova-plugin-ionic-webview": "^4.1.3",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
     "cordova-plugin-market": "^1.2.0",
     "cordova-plugin-media": "^5.0.3",
@@ -123,6 +123,9 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.2.4",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^7.5.0",
     "typescript": "2.6.2"
   },
   "description": "An Ionic project",
@@ -213,16 +216,14 @@
       "cordova-plugin-market": {},
       "cordova-plugin-app-version": {},
       "cordova-plugin-native-spinner": {},
-      "cordova-plugin-ionic-webview": {
-        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      },
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-screen-orientation": {},
       "com-sarriaroman-photoviewer": {},
       "cordova-plugin-compat": {},
       "cordova-plugin-androidx": {},
       "cordova-plugin-streaming-media": {},
-      "cordova-plugin-appavailability": {}
+      "cordova-plugin-appavailability": {},
+      "cordova-android-support-gradle-release": {}
     },
     "platforms": [
       "browser",

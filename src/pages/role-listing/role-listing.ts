@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { NavController, NavParams, App } from "ionic-angular";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
-import { ReportEntityListingPage } from "../report-entity-listing/report-entity-listing";
 import { UtilsProvider } from "../../providers/utils/utils";
+import { ReportEntityListingPage } from "../reports/report-entity-listing/report-entity-listing";
 
 /**
  * Generated class for the RoleDashboardPage page.
@@ -25,7 +25,8 @@ export class RoleListingPage {
     public navCtrl: NavController,
     private utils: UtilsProvider,
     private localStorageProvider: LocalStorageProvider,
-    public navParams: NavParams
+    public navParams: NavParams,
+    public app: App
   ) {}
 
   ionViewDidLoad() {
@@ -36,7 +37,8 @@ export class RoleListingPage {
       .getLocalStorage("profileRole")
       .then((success) => {
         this.roles = success.roles;
-        this.assessmentType = this.navParams.get("assessmentType");
+        console.log(this.roles);
+        // this.assessmentType = this.navParams.get("assessmentType");
         // this.entityType = success.result.roles.entityType
         console.log(JSON.stringify(success));
         this.utils.stopLoader();
@@ -50,7 +52,7 @@ export class RoleListingPage {
       currentEntityType: role.immediateSubEntityType,
       data: role.entities,
       entityType: role.entities[0].immediateSubEntityType,
-      assessmentType: this.assessmentType,
+      // assessmentType: this.assessmentType,
       from: this.from,
     });
   }

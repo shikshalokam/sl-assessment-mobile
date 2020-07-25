@@ -34,7 +34,6 @@ import { ReportsTextComponent } from "./reports-text/reports-text";
 import { PieChartComponent } from "./pie-chart/pie-chart";
 import { HighchartsChartModule } from "highcharts-angular";
 import { BarChartComponent } from "./bar-chart/bar-chart";
-import { ReportEntityListComponent } from "./report-entity-list/report-entity-list";
 import { PercentageColumnChartsComponent } from "./percentage-column-charts/percentage-column-charts";
 import { ExpansionPanelComponent } from "./expansion-panel/expansion-panel";
 import { PageQuestionComponent } from "./page-question/page-question";
@@ -48,6 +47,10 @@ import { EvidenceAllListComponent } from "./evidence-all-list/evidence-all-list"
 import { PlayVideoComponent } from "./play-video/play-video";
 import { AttachmentsComponent } from "./attachments/attachments";
 import { ViewDetailComponent } from "./view-detail/view-detail";
+import { ProgramSolutionComponent } from "../pages/programs/program-solution/program-solution/program-solution";
+import { ProgObservationEntityListingComponent } from "../pages/programs/program-solution-observation-detail/prog-observation-entity-listing/prog-observation-entity-listing";
+import { ReportEntityListComponent } from "../pages/reports/component/report-entity-list/report-entity-list";
+import { ExpansionTableComponent } from "./expansion-table/expansion-table";
 
 @NgModule({
   declarations: [
@@ -90,6 +93,9 @@ import { ViewDetailComponent } from "./view-detail/view-detail";
     PlayVideoComponent,
     AttachmentsComponent,
     ViewDetailComponent,
+    ProgramSolutionComponent,
+    ProgObservationEntityListingComponent,
+    ExpansionTableComponent,
   ],
   imports: [
     IonicModule,
@@ -139,6 +145,10 @@ import { ViewDetailComponent } from "./view-detail/view-detail";
     PlayVideoComponent,
     AttachmentsComponent,
     ViewDetailComponent,
+    ProgramSolutionComponent,
+    ProgObservationEntityListingComponent,
+    PipesModule,
+    ExpansionTableComponent,
   ],
   entryComponents: [
     InputTypeComponent,
