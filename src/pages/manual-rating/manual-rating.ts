@@ -6,6 +6,7 @@ import { EvidenceAllListComponent } from "../../components/evidence-all-list/evi
 import { ManualRatingProvider } from "./manual-rating-provider/manual-rating";
 import { UtilsProvider } from "../../providers/utils/utils";
 import { ProgramServiceProvider } from "../programs/program-service";
+import { TranslateService } from "@ngx-translate/core";
 
 /**
  * Generated class for the ManualRatingPage page.
@@ -50,7 +51,8 @@ export class ManualRatingPage {
     private manualRatingProvider: ManualRatingProvider,
     private utils: UtilsProvider,
     private alertCtrl: AlertController,
-    private programService: ProgramServiceProvider
+    private programService: ProgramServiceProvider,
+    private translate: TranslateService
   ) {}
 
   ionViewDidLoad(): void {
@@ -163,16 +165,23 @@ export class ManualRatingPage {
   }
 
   presentConfirm(): void {
+    let translateObject;
+    this.translate
+      .get(["actionSheet.confirmLeave", "actionSheet.ratingNotSaved", "actionSheet.no", "actionSheet.yes"])
+      .subscribe((translations) => {
+        translateObject = translations;
+        console.log(JSON.stringify(translations));
+      });
     const alert = this.alertCtrl.create({
-      title: "Rating not saved",
-      message: "Do you want to go back?",
+      title: translateObject["actionSheet.ratingNotSaved"],
+      message: translateObject["actionSheet.confirmLeave"],
       buttons: [
         {
-          text: "Cancel",
+          text: translateObject["actionSheet.cancel"],
           role: "cancel",
         },
         {
-          text: "Yes",
+          text: translateObject["actionSheet.yes"],
           handler: () => {
             this.canLeave = true;
             this.navCtrl.pop();

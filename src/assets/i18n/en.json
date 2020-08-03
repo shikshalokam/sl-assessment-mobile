@@ -63,7 +63,8 @@
     "previewForm": "Preview the form",
     "saveForm": "Save the form",
     "userId": "User Id",
-    "deleteDraft": "Delete Draft Item"
+    "deleteDraft": "Delete Draft Item",
+    "ratingNotSaved": "Rating not saved "
   },
   "buttons": {
     "observeAgain": "Observe Again",
