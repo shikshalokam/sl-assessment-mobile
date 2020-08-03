@@ -5,7 +5,8 @@
     "selectObservationType": "Select a observation Type",
     "selectSolution": "Select a Solution",
     "selectSchool": "Select All Schools",
-    "programName": "Program Name"
+    "programName": "Program Name",
+    "manualRating": "Manual Rating"
   },
   "actionSheet": {
     "confirmLeave": "Are you sure to leave.",
@@ -129,7 +130,8 @@
     "criteriaWise": "Criteria Wise",
     "viewDetails": "View Details",
     "clickHereToImprove": "Click Here To Improve",
-    "useForm": "Use Form"
+    "useForm": "Use Form",
+    "submitRating": "Submit Rating"
   },
   "tabs": {
     "home": "Home",
@@ -234,7 +236,8 @@
     "observationSolutions": "Observation Solutions",
     "assessmentForm": "Assessment Form",
     "draft": "Drafts",
-    "search": "Search"
+    "search": "Search",
+    "manualRating": "Manual Rating"
   },
   "bottomNav": {
     "institution": "Institution",
