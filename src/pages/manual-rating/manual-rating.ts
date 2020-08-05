@@ -167,7 +167,7 @@ export class ManualRatingPage {
   presentConfirm(): void {
     let translateObject;
     this.translate
-      .get(["actionSheet.confirmLeave", "actionSheet.ratingNotSaved", "actionSheet.no", "actionSheet.yes"])
+      .get(["actionSheet.confirmLeave", "actionSheet.ratingNotSaved", "actionSheet.cancel", "actionSheet.yes"])
       .subscribe((translations) => {
         translateObject = translations;
         console.log(JSON.stringify(translations));
