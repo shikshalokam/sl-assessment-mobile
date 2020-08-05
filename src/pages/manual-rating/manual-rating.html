@@ -86,10 +86,17 @@
         </ion-item>
       </ion-card>
     </div>
-    <div class="_flex-box _justify-content-center">
-      <button ion-button round class="viewReportBtn" (click)="submitRating()">
-        {{'buttons.submitRating' | translate}}
-      </button>
-    </div>
   </div>
 </ion-content>
+
+<ion-footer no-shadow>
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col>
+        <button ion-button full class="viewReportBtn" (click)="submitRating()">
+          {{'buttons.submitRating' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
