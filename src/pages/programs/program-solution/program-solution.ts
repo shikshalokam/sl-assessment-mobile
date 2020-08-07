@@ -39,6 +39,7 @@ export class ProgramSolutionPage {
       .getLocalStorage(storageKeys.programList)
       .then((data) => {
         if (data) {
+          console.log(JSON.stringify(data))
           this.program = data[this.programIndex];
           this.programList = data;
         } else {

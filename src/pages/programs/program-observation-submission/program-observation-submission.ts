@@ -312,7 +312,8 @@ export class ProgramObservationSubmissionPage {
     //   this.submissionList[this.submissionList.length - 1].submissionNumber + 1;
 
     const entityId = this.selectedSolution.entities[this.entityIndex]._id;
-    const observationId = this.selectedSolution.entities[this.entityIndex].submissions[0].observationId;
+    // const observationId = this.selectedSolution.entities[this.entityIndex].submissions[0].observationId;
+    const observationId = this.selectedSolution._id;
 
     this.apiProvider.httpPost(
       AppConfigs.cro.observationSubmissionCreate + observationId + "?entityId=" + entityId,
@@ -406,12 +407,13 @@ export class ProgramObservationSubmissionPage {
     this.evdnsServ.openActionSheet(options, "Observation");
   }
 
-  refreshLocalObservationList(refreshEvent?) {
+  refreshLocalObservationList(refreshEvent?, startLoader?) {
     let event = {
       programIndex: this.programIndex,
       solutionIndex: this.solutionIndex,
       entityIndex: this.entityIndex,
     };
+    startLoader ? this.utils.startLoader() : null;
 
     this.programService
       .refreshObservationList(this.programList, event)
