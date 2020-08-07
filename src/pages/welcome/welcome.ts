@@ -5,6 +5,7 @@ import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
+import { UserLoginPage } from '../user-login/user-login';
 import { AppConfigs } from '../../providers/appConfig';
 
 @Component({
@@ -20,7 +21,7 @@ export class WelcomePage {
   slidesList = [
     {
       // title: "Slide 1",
-      image: "assets/imgs/just-logo.png"
+      image: "assets/imgs/image1.jpg"
     },
     // { title: "Slide 2" },
     // { title: "Slide 3" }
@@ -50,6 +51,10 @@ export class WelcomePage {
 
     });
     this.subscription.add(connectSubscription);
+  }
+
+  goToLogin() {
+    this.navCtrl.push(UserLoginPage)
   }
 
   ionViewWillLeave() {
@@ -101,7 +106,7 @@ export class WelcomePage {
   gotToLastSlide() {
     this.slides.slideNext();
     this.slides.slideNext();
-
+    this.slides.slideNext();
   }
 
   gotToNextSlide() {

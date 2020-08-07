@@ -53,7 +53,7 @@ export class AboutPage {
     this.aboutContent = [
       //   {
       //   heading: "Message from Dy CM",
-      //   content: `<p>Three and a half years ago, I began with a dream, simple but overwhelming. A dream to build our nation on strong democratic values. But this is only possible when we have schools that are joyful, inclusive and learning spaces. Today, that dream looks like a possibility.</p> <p> Samiksha  is an effort to understand our schools better, to celebrate the strengths and to commit to working on the weakness. It is here that I see your role as crucial. Your honest, objective and credible evaluation will guide us to prepare improvement plan that enables our schools, and changes our children’s lives.</p>
+      //   content: `<p>Three and a half years ago, I began with a dream, simple but overwhelming. A dream to build our nation on strong democratic values. But this is only possible when we have schools that are joyful, inclusive and learning spaces. Today, that dream looks like a possibility.</p> <p> Darpan  is an effort to understand our schools better, to celebrate the strengths and to commit to working on the weakness. It is here that I see your role as crucial. Your honest, objective and credible evaluation will guide us to prepare improvement plan that enables our schools, and changes our children’s lives.</p>
       //   <p>My dear friends, I am very appreciative of your commitment for this work, and assure you that my government will do all that it takes to make our nation something to be truly proud of.</p>
       //   <p>Let’s build our nation together. I and You, together.</p>
       //   <br>
@@ -75,8 +75,8 @@ export class AboutPage {
       //     {path:"assets/imgs/DCPCR_logo.jpg", title: "", position: "top"}
       //   ]
       // }, {
-      //   heading: "About Samiksha",
-      //   content: `<p> Samiksha  is envisaged as a method to improve the quality of learning in schools of Delhi. A comprehensive school evaluation across the themes of ‘Safety & Security’, ‘Teaching and Learning’, and ‘Social Inclusion and Community Participation’ is being conducted to achieve the vision of Samiksha.</p>
+      //   heading: "About Darpan",
+      //   content: `<p> Darpan  is envisaged as a method to improve the quality of learning in schools of Delhi. A comprehensive school evaluation across the themes of ‘Safety & Security’, ‘Teaching and Learning’, and ‘Social Inclusion and Community Participation’ is being conducted to achieve the vision of Darpan.</p>
       //   <p>The data collected will help us in the following ways-
       //   <ul>
       //   <li>The parents can make informed decisions</li>
@@ -121,7 +121,7 @@ export class AboutPage {
       <p>User Id : ${this.currentUSer.getCurrentUserData().preferred_username}
       <p>Network type: ${this.network.type}</p>`,
         images: [
-          { path: "assets/imgs/just-logo.png", position: "top" }
+          { path: "assets/imgs/image1.jpg", position: "top" }
         ],
         link: null
       },

@@ -16,7 +16,7 @@
     <button ion-item *ngFor="let role of roles" (click)="roleSelected(role)">
       <div class="_flex-box _justify-content-space-between">
         <div style="flex:1">
-          {{ role.title }}
+          {{ role?.title }}
         </div>
         <ion-icon name="arrow-round-forward" ></ion-icon>
       </div>

@@ -88,6 +88,7 @@
     "cordova-plugin-filechooser": "^1.2.0",
     "cordova-plugin-filepath": "^1.5.8",
     "cordova-plugin-filepicker": "^1.1.6",
+    "cordova-plugin-firebase": "^2.0.5",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-inappbrowser": "^3.2.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
@@ -102,7 +103,7 @@
     "cordova-plugin-screen-orientation": "^3.0.2",
     "cordova-plugin-splashscreen": "^5.0.4",
     "cordova-plugin-statusbar": "^2.4.3",
-    "cordova-plugin-streaming-media": "^2.2.0",
+    "cordova-plugin-streaming-media": "^2.3.0",
     "cordova-plugin-telerik-imagepicker": "^2.3.3",
     "cordova-plugin-tts": "^0.2.3",
     "cordova-plugin-whitelist": "^1.3.4",
@@ -124,6 +125,7 @@
     "zone.js": "0.8.26"
   },
   "devDependencies": {
+    "@ionic/app-scripts": "3.2.3",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "eslint": "^7.5.0",
@@ -222,11 +224,13 @@
       "cordova-plugin-androidx": {},
       "cordova-plugin-streaming-media": {},
       "cordova-plugin-appavailability": {},
-      "cordova-android-support-gradle-release": {},
+      "cordova-android-support-gradle-release": {
+        "ANDROID_SUPPORT_VERSION": "27.+"
+      },
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
-      "cordova.plugins.diagnostic": {}
+      "cordova-plugin-firebase": {}
     },
     "platforms": [
       "browser",

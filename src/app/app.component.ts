@@ -1,38 +1,33 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
-import {
-  Platform,
-  AlertController,
-  Nav,
-  App,
-  MenuController,
-  Events,
-} from "ionic-angular";
-import { StatusBar } from "@ionic-native/status-bar";
-import { SplashScreen } from "@ionic-native/splash-screen";
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { Platform, AlertController, Nav, App, MenuController, Events } from 'ionic-angular';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { CurrentUserProvider } from "../providers/current-user/current-user";
-import { WelcomePage } from "../pages/welcome/welcome";
-import { TranslateService } from "@ngx-translate/core";
-import { Network } from "@ionic-native/network";
-import { NetworkGpsProvider } from "../providers/network-gps/network-gps";
-import { HomePage } from "../pages/home/home";
-import { AppConfigs } from "../providers/appConfig";
-import { InstitutionsEntityList } from "../pages/institutions-entity-list/institutions-entity-list";
-import { FaqPage } from "../pages/faq/faq";
-import { AboutPage } from "../pages/about/about";
-import { IndividualListingPage } from "../pages/individual-listing/individual-listing";
-import { UtilsProvider } from "../providers/utils/utils";
-import { ObservationsPage } from "../pages/observations/observations";
-import { Deeplinks } from "@ionic-native/deeplinks";
-import { IonicApp } from "ionic-angular";
-import { LocalStorageProvider } from "../providers/local-storage/local-storage";
-import * as Highcharts from "highcharts";
-import { NotificationProvider } from "../providers/notification/notification";
-import { FcmProvider } from "../providers/fcm/fcm";
-import { SettingsPage } from "../pages/settings/settings";
-import { ApiProvider } from "../providers/api/api";
-import { SidemenuProvider } from "../providers/sidemenu/sidemenu";
-import { TutorialVideoListingPage } from "../pages/tutorial-video-listing/tutorial-video-listing";
+import { CurrentUserProvider } from '../providers/current-user/current-user';
+import { WelcomePage } from '../pages/welcome/welcome';
+import { TranslateService } from '@ngx-translate/core';
+import { Network } from '@ionic-native/network';
+import { NetworkGpsProvider } from '../providers/network-gps/network-gps';
+import { HomePage } from '../pages/home/home';
+import { AppConfigs } from '../providers/appConfig';
+import { InstitutionsEntityList } from '../pages/institutions-entity-list/institutions-entity-list';
+import { FaqPage } from '../pages/faq/faq';
+import { AboutPage } from '../pages/about/about';
+import { IndividualListingPage } from '../pages/individual-listing/individual-listing';
+import { UtilsProvider } from '../providers/utils/utils';
+import { ObservationsPage } from '../pages/observations/observations';
+import { Deeplinks } from '@ionic-native/deeplinks';
+import { ResetPasswordPage } from '../pages/reset-password/reset-password';
+import { IonicApp } from 'ionic-angular';
+import { LocalStorageProvider } from '../providers/local-storage/local-storage';
+import * as Highcharts from 'highcharts';
+import { NotificationProvider } from '../providers/notification/notification';
+import { FcmProvider } from '../providers/fcm/fcm';
+import { SettingsPage } from '../pages/settings/settings';
+import { ApiProvider } from '../providers/api/api';
+import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
+import { TutorialVideoListingPage } from '../pages/tutorial-video-listing/tutorial-video-listing';
+
 import { ImprovementProjectPage } from "../pages/improvement-project/improvement-project";
 import { ProgramsPage } from "../pages/programs/programs";
 import { BottomTabPage } from "../pages/bottom-tab/bottom-tab";
@@ -129,6 +124,13 @@ export class MyApp {
       component: AboutPage,
       active: false,
       show: true,
+    },
+    {
+      name: "resetPassword",
+      icon: "refresh",
+      component: ResetPasswordPage,
+      active: false,
+      show: true
     },
     {
       name: "setting",

@@ -26,6 +26,28 @@
       <h2 class="slide-title" [innerHTML]="slide?.title"></h2>
     </ion-slide> -->
 
+    <ion-slide>
+      <!-- <ion-toolbar>
+            <ion-buttons end>
+              <button ion-button color="primary" (click)="gotToNextSlide()">{{'buttons.skip'|translate}}</button>
+            </ion-buttons>
+          </ion-toolbar> -->
+      <div class="mainContainer">
+        <div class="conatiner">
+          <img src="assets/imgs/image1.jpg" class="maxSize" />
+        </div>
+        <div class="_flex-box _justify-content-center conatiner">
+          <h4 >Version {{appVersion}}</h4>
+          <!-- <p class="alignLeft content">
+            Observe and assess individuals or institutions to plan areas of improvements.
+          </p> -->
+        </div>
+      </div>
+      <!-- <div class="bottomFooter" (click)="gotToNextSlide()">
+        <button ion-button full class="skipBtn">{{'buttons.skip'|translate}}</button>
+      </div> -->
+    </ion-slide>
+
 
     <ion-slide>
       <!-- <ion-toolbar>
@@ -73,7 +95,7 @@
           <img src="assets/imgs/login.png" class="imageAdj" />
         </div>
 
-        <button ion-button large clear icon-end color="primary" (click)="signIn()">
+        <button ion-button large clear icon-end color="primary" (click)="goToLogin()">
           Login
           <ion-icon name="arrow-forward"></ion-icon>
         </button>
@@ -83,6 +105,6 @@
 </ion-content>
 
 <ion-footer class="_flex-box _justify-content-center">
-  <button ion-button full class="skipBtn" (click)="gotToLastSlide()" *ngIf="activeSlide === 0">{{'buttons.skip'|translate}}</button>
-  <button ion-button class="getstarted" (click)="gotToLastSlide()" *ngIf="activeSlide === 1">Get Started</button>
+  <button ion-button full class="skipBtn" (click)="gotToLastSlide()" *ngIf="activeSlide === 0 || activeSlide === 1">{{'buttons.skip'|translate}}</button>
+  <button ion-button class="getstarted" (click)="gotToLastSlide()" *ngIf="activeSlide === 2">Get Started</button>
 </ion-footer>
