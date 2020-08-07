@@ -37,9 +37,8 @@ export class SidemenuProvider {
 
   getUserRolesApi() {
     let currentUser = this.currentUser.getCurrentUserData();
-    currentUser = currentUser ? currentUser.sub.split(":").pop() : null;
     this.apiProvider.httpGet(
-      AppConfigs.roles.getProfile + currentUser,
+      AppConfigs.roles.getProfile + currentUser.sub,
       async (success) => {
         this.profileRoles = success.result;
         await this.localStorage.setLocalStorage("profileRole", this.profileRoles);

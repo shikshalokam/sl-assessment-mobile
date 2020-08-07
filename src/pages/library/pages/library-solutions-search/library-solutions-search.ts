@@ -47,7 +47,9 @@ export class LibrarySolutionsSearchPage {
       }))
     );
     this.searchSolutions(true);
-
+    setTimeout(() => {
+      this.searchbar.setFocus();
+    }, 500);
   }
 
   searchSolutions(showLoader?: boolean) {
@@ -56,9 +58,6 @@ export class LibrarySolutionsSearchPage {
       .getLibrarySearchSolutions(this.searchText, this.page)
       .then((res) => {
         showLoader ? this.utils.stopLoader() : null;
-        setTimeout(() => {
-          this.searchbar.setFocus();
-        }, 500);
         Array.isArray(this.solutionsList)
           ? (this.solutionsList = [...this.solutionsList, ...res["data"]])
           : (this.solutionsList = res["data"]);

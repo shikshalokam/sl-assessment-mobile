@@ -5,8 +5,7 @@
     "selectObservationType": "Select a observation Type",
     "selectSolution": "Select a Solution",
     "selectSchool": "Select All Schools",
-    "programName": "Program Name",
-    "manualRating": "Manual Rating"
+    "programName": "Program Name"
   },
   "actionSheet": {
     "confirmLeave": "Are you sure to leave.",
@@ -63,8 +62,7 @@
     "previewForm": "Preview the form",
     "saveForm": "Save the form",
     "userId": "User Id",
-    "deleteDraft": "Delete Draft Item",
-    "ratingNotSaved": "Rating not saved "
+    "deleteDraft": "Delete Draft Item"
   },
   "buttons": {
     "observeAgain": "Observe Again",
@@ -131,8 +129,7 @@
     "criteriaWise": "Criteria Wise",
     "viewDetails": "View Details",
     "clickHereToImprove": "Click Here To Improve",
-    "useForm": "Use Form",
-    "submitRating": "Submit Rating"
+    "useForm": "Use Form"
   },
   "tabs": {
     "home": "Home",
@@ -238,8 +235,7 @@
     "observationSolutions": "Observation Solutions",
     "assessmentForm": "Assessment Form",
     "draft": "Drafts",
-    "search": "Search",
-    "manualRating": "Manual Rating"
+    "search": "Search"
   },
   "bottomNav": {
     "institution": "Institution",

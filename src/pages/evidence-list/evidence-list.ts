@@ -1,13 +1,16 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, App, Platform } from "ionic-angular";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  App,
+  Platform,
+} from "ionic-angular";
 import { UtilsProvider } from "../../providers/utils/utils";
 import { FeedbackProvider } from "../../providers/feedback/feedback";
 import { EvidenceProvider } from "../../providers/evidence/evidence";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 import { UpdateTrackerProvider } from "../../providers/update-tracker/update-tracker";
-import { ManualRatingPage } from "../manual-rating/manual-rating";
-import { NetworkGpsProvider } from "../../providers/network-gps/network-gps";
-import { ManualRatingProvider } from "../manual-rating/manual-rating-provider/manual-rating";
 
 @IonicPage()
 @Component({
@@ -24,7 +27,6 @@ export class EvidenceListPage {
   generalQuestions: any;
   submissionId: any;
   recentlyUpdatedEntity: any;
-  canShowManualRating: boolean;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -34,9 +36,7 @@ export class EvidenceListPage {
     private localStorage: LocalStorageProvider,
     private feedback: FeedbackProvider,
     private evdnsServ: EvidenceProvider,
-    private platform: Platform,
-    private ngps: NetworkGpsProvider,
-    private manualRatingProvider: ManualRatingProvider
+    private platform: Platform
   ) {
     this.entityId = this.navParams.get("_id");
     this.entityName = this.navParams.get("name");
@@ -54,8 +54,6 @@ export class EvidenceListPage {
       .then((successData) => {
         this.utils.stopLoader();
         this.entityData = successData;
-
-        this.checkAllEvidenceSubmitted();
         console.log("123124124134");
         console.log(JSON.stringify(successData));
         this.entityEvidences = this.updateTracker.getLastModifiedInEvidences(
@@ -84,7 +82,9 @@ export class EvidenceListPage {
         totalQuestions = totalQuestions + section.totalQuestions;
         completedQuestions = completedQuestions + section.completedQuestions;
       }
-      let percentage = totalQuestions ? (completedQuestions / totalQuestions) * 100 : 0;
+      let percentage = totalQuestions
+        ? (completedQuestions / totalQuestions) * 100
+        : 0;
       if (!completedQuestions) {
         percentage = 0;
       }
@@ -93,10 +93,12 @@ export class EvidenceListPage {
   }
 
   goToGeneralQuestionList(): void {
-    this.appCtrl.getRootNav().push("GeneralQuestionListPage", {
-      _id: this.entityId,
-      name: this.entityName,
-    });
+    this.appCtrl
+      .getRootNav()
+      .push("GeneralQuestionListPage", {
+        _id: this.entityId,
+        name: this.entityName,
+      });
   }
 
   checkForProgressStatus() {
@@ -108,7 +110,10 @@ export class EvidenceListPage {
       } else {
         evidence.progressStatus = "completed";
         for (const section of evidence.sections) {
-          if (section.progressStatus === "inProgress" || !section.progressStatus) {
+          if (
+            section.progressStatus === "inProgress" ||
+            !section.progressStatus
+          ) {
             evidence.progressStatus = "inProgress";
           }
         }
@@ -117,7 +122,10 @@ export class EvidenceListPage {
   }
 
   openAction(assessment, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(this.entityEvidences[evidenceIndex].externalId, assessment._id);
+    this.utils.setCurrentimageFolderName(
+      this.entityEvidences[evidenceIndex].externalId,
+      assessment._id
+    );
     const options = {
       _id: assessment._id,
       name: assessment.name,
@@ -129,7 +137,10 @@ export class EvidenceListPage {
 
   navigateToEvidence(index): void {
     if (this.entityEvidences[index].startTime) {
-      this.utils.setCurrentimageFolderName(this.entityEvidences[index].externalId, this.entityId);
+      this.utils.setCurrentimageFolderName(
+        this.entityEvidences[index].externalId,
+        this.entityId
+      );
       this.navCtrl.push("SectionListPage", {
         _id: this.entityId,
         name: this.entityName,
@@ -145,28 +156,5 @@ export class EvidenceListPage {
 
   feedBack() {
     this.feedback.sendFeedback();
-  }
-  goToManualRating(): void {
-    const navParams = {
-      entityName: this.entityName,
-      submissionId: this.entityData["assessment"].submissionId,
-    };
-    this.navCtrl.push(ManualRatingPage, { navParams });
-  }
-
-  checkAllEvidenceSubmitted(): null {
-    if (!this.ngps.getNetworkStatus() || this.entityData.solution.scoringSystem != "manual") {
-      console.log("No network");
-      this.canShowManualRating = false;
-      return;
-    }
-    const submissionId = this.entityData["assessment"].submissionId;
-    this.manualRatingProvider
-      .checkAllECMStatus(submissionId)
-      .then((res) => {
-        console.log(res);
-        res.status == "ratingPending" ? (this.canShowManualRating = true) : (this.canShowManualRating = false);
-      })
-      .catch(() => (this.canShowManualRating = false));
   }
 }

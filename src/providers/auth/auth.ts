@@ -11,7 +11,10 @@ import { NotificationProvider } from "../notification/notification";
 import { FcmProvider } from "../fcm/fcm";
 
 import { DomSanitizer } from "@angular/platform-browser";
-import { InAppBrowser, InAppBrowserOptions } from "@ionic-native/in-app-browser";
+import {
+  InAppBrowser,
+  InAppBrowserOptions,
+} from "@ionic-native/in-app-browser";
 import { HTTP } from "@ionic-native/http";
 import { SpinnerDialog } from "@ionic-native/spinner-dialog";
 import { BottomTabPage } from "../../pages/bottom-tab/bottom-tab";
@@ -62,7 +65,11 @@ export class AuthProvider {
         hideurlbar: "yes",
         clearcache: "yes",
       };
-      this.browserReference = this.iab.create(this.auth_url, "_target", options);
+      this.browserReference = this.iab.create(
+        this.auth_url,
+        "_target",
+        options
+      );
       this.browserReference.show();
 
       this.browserReference.on("loadstart").subscribe((event) => {
@@ -117,13 +124,12 @@ export class AuthProvider {
   }
 
   checkForCurrentUserLocalData(tokens) {
-    let loggedinUserId = this.currentUser.getDecodedAccessToken(tokens.access_token).sub;
-
-    let currentUserId = this.currentUser.getCurrentUserData() ? this.currentUser.getCurrentUserData().sub : null;
-    //2.10 fix - get last part from sub
-    loggedinUserId = loggedinUserId.split(":").pop();
-    currentUserId = currentUserId ? currentUserId.split(":").pop() : currentUserId;
-
+    const loggedinUserId = this.currentUser.getDecodedAccessToken(
+      tokens.access_token
+    ).sub;
+    const currentUserId = this.currentUser.getCurrentUserData()
+      ? this.currentUser.getCurrentUserData().sub
+      : null;
     if (loggedinUserId === currentUserId || !currentUserId) {
       let userTokens = {
         accessToken: tokens.access_token,
@@ -142,14 +148,22 @@ export class AuthProvider {
 
       // this.confirmPreviousUserName('as1@shikshalokamdev', tokens);
     } else {
-      this.confirmPreviousUserName(this.currentUser.getCurrentUserData().preferred_username, tokens);
+      this.confirmPreviousUserName(
+        this.currentUser.getCurrentUserData().preferred_username,
+        tokens
+      );
     }
   }
 
   confirmPreviousUserName(previousUserEmail, tokens): void {
     let translateObject;
     this.translate
-      .get(["actionSheet.previousUserName", "actionSheet.userId", "actionSheet.cancel", "actionSheet.send"])
+      .get([
+        "actionSheet.previousUserName",
+        "actionSheet.userId",
+        "actionSheet.cancel",
+        "actionSheet.send",
+      ])
       .subscribe((translations) => {
         translateObject = translations;
       });
@@ -174,15 +188,23 @@ export class AuthProvider {
           text: translateObject["actionSheet.send"],
           role: "role",
           handler: (data) => {
-            if (data.userName && previousUserEmail.toLowerCase() === data.userName.toLowerCase()) {
+            if (
+              data.userName &&
+              previousUserEmail.toLowerCase() === data.userName.toLowerCase()
+            ) {
               this.confirmDataClear(tokens);
             } else {
               this.currentUser.deactivateActivateSession(true);
 
               this.doLogout();
-              this.translate.get(["toastMessage.userNameMisMatch", "toastMessage.ok"]).subscribe((translations) => {
-                this.utils.openToast(translations["toastMessage.userNameMisMatch"], translations["toastMessage.ok"]);
-              });
+              this.translate
+                .get(["toastMessage.userNameMisMatch", "toastMessage.ok"])
+                .subscribe((translations) => {
+                  this.utils.openToast(
+                    translations["toastMessage.userNameMisMatch"],
+                    translations["toastMessage.ok"]
+                  );
+                });
             }
           },
         },
@@ -194,7 +216,11 @@ export class AuthProvider {
   confirmDataClear(tokens): void {
     let translateObject;
     this.translate
-      .get(["actionSheet.dataLooseConfirm", "actionSheet.no", "actionSheet.yes"])
+      .get([
+        "actionSheet.dataLooseConfirm",
+        "actionSheet.no",
+        "actionSheet.yes",
+      ])
       .subscribe((translations) => {
         translateObject = translations;
       });
@@ -210,9 +236,14 @@ export class AuthProvider {
             this.currentUser.deactivateActivateSession(true);
 
             this.doLogout();
-            this.translate.get(["toastMessage.loginAgain", "toastMessage.ok"]).subscribe((translations) => {
-              this.utils.openToast(translations["toastMessage.loginAgain"], translations["toastMessage.ok"]);
-            });
+            this.translate
+              .get(["toastMessage.loginAgain", "toastMessage.ok"])
+              .subscribe((translations) => {
+                this.utils.openToast(
+                  translations["toastMessage.loginAgain"],
+                  translations["toastMessage.ok"]
+                );
+              });
           },
         },
         {
@@ -247,22 +278,24 @@ export class AuthProvider {
       body.set("refresh_token", this.currentUser.curretUser.refreshToken);
       // body.set('scope', "offline_access");
 
-      this.http.post(AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken, body).subscribe(
-        (data: any) => {
-          let parsedData = JSON.parse(data._body);
+      this.http
+        .post(AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken, body)
+        .subscribe(
+          (data: any) => {
+            let parsedData = JSON.parse(data._body);
 
-          let userTokens = {
-            accessToken: parsedData.access_token,
-            refreshToken: parsedData.refresh_token,
-            idToken: parsedData.id_token,
-          };
-          this.currentUser.setCurrentUserDetails(userTokens);
-          resolve(userTokens);
-        },
-        (error) => {
-          reject();
-        }
-      );
+            let userTokens = {
+              accessToken: parsedData.access_token,
+              refreshToken: parsedData.refresh_token,
+              idToken: parsedData.id_token,
+            };
+            this.currentUser.setCurrentUserDetails(userTokens);
+            resolve(userTokens);
+          },
+          (error) => {
+            reject();
+          }
+        );
     });
   }
 
@@ -270,7 +303,9 @@ export class AuthProvider {
     return new Promise((resolve) => {
       let logout_redirect_url = AppConfigs.keyCloak.logout_redirect_url;
       let logout_url =
-        AppConfigs.app_url + "/auth/realms/sunbird/protocol/openid-connect/logout?redirect_uri=" + logout_redirect_url;
+        AppConfigs.app_url +
+        "/auth/realms/sunbird/protocol/openid-connect/logout?redirect_uri=" +
+        logout_redirect_url;
       const options: InAppBrowserOptions = {
         hidden: "yes",
         hideurlbar: "yes",

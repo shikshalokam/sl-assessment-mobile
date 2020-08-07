@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams, App } from "ionic-angular";
+import { NavController, NavParams } from "ionic-angular";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
 import { AssessmentServiceProvider } from "../../../providers/assessment-service/assessment-service";
 import { ProgramServiceProvider } from "../program-service";
@@ -32,8 +32,7 @@ export class ProgramSolutionEntityPage {
     public assessmentService: AssessmentServiceProvider,
     public programService: ProgramServiceProvider,
     private utils: UtilsProvider,
-    private evdnsServ: EvidenceProvider,
-    private app: App
+    private evdnsServ: EvidenceProvider
   ) {}
 
   ionViewDidLoad() {
@@ -130,7 +129,7 @@ export class ProgramSolutionEntityPage {
       .then((successData) => {
         console.log(JSON.stringify(successData));
         if (successData.assessment.evidences.length > 1) {
-          this.app.getRootNav().push("EvidenceListPage", {
+          this.navCtrl.push("EvidenceListPage", {
             _id: submissionId,
             name: heading,
             recentlyUpdatedEntity: recentlyUpdatedEntity,
@@ -138,7 +137,7 @@ export class ProgramSolutionEntityPage {
         } else {
           if (successData.assessment.evidences[0].startTime) {
             this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId);
-            this.app.getRootNav().push("SectionListPage", {
+            this.navCtrl.push("SectionListPage", {
               _id: submissionId,
               name: heading,
               selectedEvidence: 0,
@@ -182,7 +181,6 @@ export class ProgramSolutionEntityPage {
       parentEntityId: this.programList[this.programIndex].solutions[this.solutionIndex].entities[entityIndex]._id,
       createdByProgramId: this.programList[this.programIndex]._id,
     };
-    console.log(event);
     this.programService.openMenu(event, this.programList, true);
   }
 
@@ -203,11 +201,11 @@ export class ProgramSolutionEntityPage {
         .then(async (programs) => {
           await this.programService.refreshObservationList();
           await this.getProgramFromStorage();
-          this.app.getRootNav().push(ProgramAssessmentSubmissionPage, { navData });
+          this.navCtrl.push(ProgramAssessmentSubmissionPage, { navData });
         })
         .catch((err) => {});
     } else {
-      this.app.getRootNav().push(ProgramAssessmentSubmissionPage, { navData });
+      this.navCtrl.push(ProgramAssessmentSubmissionPage, { navData });
     }
   }
 }
