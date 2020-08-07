@@ -31,7 +31,7 @@ export class LibraryPage {
     public libraryProvider: LibraryProvider,
     public localStorage: LocalStorageProvider,
     public utils: UtilsProvider
-  ) { }
+  ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad LibraryPage");
@@ -42,16 +42,13 @@ export class LibraryPage {
   } */
 
   getLibraryCategories() {
-    this.utils.startLoader();
     this.libraryProvider
       .getLibraryCategories()
       .then((res: any) => {
-        this.utils.stopLoader();
         console.log("LibraryPage -> getLibraryCategories -> res", res);
         this.libraryComponents = res;
       })
       .catch((err) => {
-        this.utils.stopLoader();
         console.log(err);
       });
   }

@@ -22,7 +22,9 @@ export class UpdateLocalSchoolDataProvider {
   ) {}
 
   getSubmissionStatus(): void {
-    const url = AppConfigs.survey.getSubmissionStatus + this.currentSchool.assessment.submissionId;
+    const url =
+      AppConfigs.survey.getSubmissionStatus +
+      this.currentSchool.assessment.submissionId;
     this.apiService.httpGet(
       url,
       (success) => {
@@ -37,17 +39,19 @@ export class UpdateLocalSchoolDataProvider {
   }
 
   getLocalData(obj, submissionStatus?: any): void {
-    this.localStorage.getLocalStorage(this.utils.getAssessmentLocalStorageKey(obj._id)).then((data) => {
-      this.schoolDetails = data;
-      this.currentSchool = this.schoolDetails;
-      if (submissionStatus) {
-        this.updatedSubmissionStatus = submissionStatus;
-        this.updateSubmissionsOnLogin(obj._id);
-      } else {
-        this.utils.startLoader();
-        this.getSubmissionStatus();
-      }
-    });
+    this.localStorage
+      .getLocalStorage(this.utils.getAssessmentLocalStorageKey(obj._id))
+      .then((data) => {
+        this.schoolDetails = data;
+        this.currentSchool = this.schoolDetails;
+        if (submissionStatus) {
+          this.updatedSubmissionStatus = submissionStatus;
+          this.updateSubmissionsOnLogin(obj._id);
+        } else {
+          this.utils.startLoader();
+          this.getSubmissionStatus();
+        }
+      });
     // this.storage.get('schoolsDetails').then(details => {
     //   this.schoolDetails = JSON.parse(details);
     //   this.currentSchool = this.schoolDetails[obj._id];
@@ -74,7 +78,9 @@ export class UpdateLocalSchoolDataProvider {
     }
 
     this.localStorage.setLocalStorage(
-      this.utils.getAssessmentLocalStorageKey(schoolDetails.assessment.submissionId),
+      this.utils.getAssessmentLocalStorageKey(
+        schoolDetails.assessment.submissionId
+      ),
       mappedData
     );
     // this.storage.set('schoolsDetails', JSON.stringify(schoolObj));
@@ -95,14 +101,26 @@ export class UpdateLocalSchoolDataProvider {
                 questions.value =
                   questions.responseType !== "matrix"
                     ? validSubmission.answers[questions._id].value
-                    : this.constructMatrixValue(validSubmission, questions, evidence.externalId);
-                questions.remarks = validSubmission.answers[questions._id].remarks;
+                    : this.constructMatrixValue(
+                        validSubmission,
+                        questions,
+                        evidence.externalId
+                      );
+                questions.remarks =
+                  validSubmission.answers[questions._id].remarks;
               }
-            } else if (validSubmission.answers && validSubmission.answers[question._id]) {
+            } else if (
+              validSubmission.answers &&
+              validSubmission.answers[question._id]
+            ) {
               question.value =
                 question.responseType !== "matrix"
                   ? validSubmission.answers[question._id].value
-                  : this.constructMatrixValue(validSubmission, question, evidence.externalId);
+                  : this.constructMatrixValue(
+                      validSubmission,
+                      question,
+                      evidence.externalId
+                    );
               question.remarks = validSubmission.answers[question._id].remarks;
             }
           }
@@ -114,29 +132,40 @@ export class UpdateLocalSchoolDataProvider {
 
   checkForLocalDataUpdate(): void {
     for (const evidence of this.currentSchool.assessment.evidences) {
-      const validSubmission = this.getValidSubmissionForEvidenceMethod(evidence.externalId);
+      const validSubmission = this.getValidSubmissionForEvidenceMethod(
+        evidence.externalId
+      );
       evidence.isSubmitted = validSubmission.submittedBy ? true : false;
       evidence.startTime = validSubmission.startTime;
       evidence.endTime = validSubmission.endTime;
       if (
         (validSubmission &&
-          validSubmission.submittedBy !== this.currentUser.getCurrentUserData().sub.split(":").pop() &&
+          validSubmission.submittedBy !==
+            this.currentUser.getCurrentUserData().sub &&
           !evidence.startTime) ||
-        (validSubmission && validSubmission.submittedBy === this.currentUser.getCurrentUserData().sub.split(":").pop())
+        (validSubmission &&
+          validSubmission.submittedBy ===
+            this.currentUser.getCurrentUserData().sub)
       ) {
         for (const section of evidence.sections) {
           for (const question of section.questions) {
             question.value =
               question.responseType !== "matrix"
                 ? validSubmission.answers[question._id].value
-                : this.constructMatrixValue(validSubmission, question, evidence.externalId);
+                : this.constructMatrixValue(
+                    validSubmission,
+                    question,
+                    evidence.externalId
+                  );
             question.remarks = validSubmission.answers[question._id].remarks;
           }
         }
       }
     }
     this.localStorage.setLocalStorage(
-      this.utils.getAssessmentLocalStorageKey(this.currentSchool.assessment.submissionId),
+      this.utils.getAssessmentLocalStorageKey(
+        this.currentSchool.assessment.submissionId
+      ),
       this.schoolDetails
     );
     // this.storage.set('schoolsDetails', JSON.stringify(this.schoolDetails));
@@ -151,16 +180,26 @@ export class UpdateLocalSchoolDataProvider {
       validSubmission.answers[matrixQuestion._id].value
     ) {
       for (const answer of validSubmission.answers[matrixQuestion._id].value) {
-        matrixQuestion.value.push(JSON.parse(JSON.stringify(matrixQuestion.instanceQuestions)));
+        matrixQuestion.value.push(
+          JSON.parse(JSON.stringify(matrixQuestion.instanceQuestions))
+        );
       }
       matrixQuestion.value.forEach((instance, index) => {
         instance.forEach((question) => {
           if (
             validSubmission.answers[matrixQuestion._id] &&
-            validSubmission.answers[matrixQuestion._id].value[index][question._id]
+            validSubmission.answers[matrixQuestion._id].value[index][
+              question._id
+            ]
           ) {
-            question.value = validSubmission.answers[matrixQuestion._id].value[index][question._id].value;
-            question.remarks = validSubmission.answers[matrixQuestion._id].value[index][question._id].remarks;
+            question.value =
+              validSubmission.answers[matrixQuestion._id].value[index][
+                question._id
+              ].value;
+            question.remarks =
+              validSubmission.answers[matrixQuestion._id].value[index][
+                question._id
+              ].remarks;
           }
         });
       });
@@ -172,7 +211,8 @@ export class UpdateLocalSchoolDataProvider {
 
   getValidSubmissionForEvidenceMethod(ECMexternalId): any {
     if (this.updatedSubmissionStatus[ECMexternalId].isSubmitted) {
-      for (const submission of this.updatedSubmissionStatus[ECMexternalId].submissions) {
+      for (const submission of this.updatedSubmissionStatus[ECMexternalId]
+        .submissions) {
         if (submission.isValid) {
           return submission;
         }
@@ -187,12 +227,19 @@ export class UpdateLocalSchoolDataProvider {
     await this.localStorage
       .getLocalStorage(storageKeys.submissionIdArray)
       .then(async (arr) => {
-        Array.isArray(submissionId) ? arr.concat(submissionId) : arr.push(submissionId);
-        await this.localStorage.setLocalStorage(storageKeys.submissionIdArray, arr);
+        Array.isArray(submissionId)
+          ? arr.concat(submissionId)
+          : arr.push(submissionId);
+        await this.localStorage.setLocalStorage(
+          storageKeys.submissionIdArray,
+          arr
+        );
       })
       .catch((err) => {
         let arr;
-        Array.isArray(submissionId) ? (arr = submissionId) : (arr = [submissionId]);
+        Array.isArray(submissionId)
+          ? (arr = submissionId)
+          : (arr = [submissionId]);
         this.localStorage.setLocalStorage(storageKeys.submissionIdArray, arr);
       });
   }
@@ -202,13 +249,23 @@ export class UpdateLocalSchoolDataProvider {
     this.localStorage
       .getLocalStorage(storageKeys.observationSubmissionIdArr)
       .then((arr) => {
-        Array.isArray(obsevationSubmissionId) ? arr.concat(obsevationSubmissionId) : arr.push(obsevationSubmissionId);
-        this.localStorage.setLocalStorage(storageKeys.observationSubmissionIdArr, arr);
+        Array.isArray(obsevationSubmissionId)
+          ? arr.concat(obsevationSubmissionId)
+          : arr.push(obsevationSubmissionId);
+        this.localStorage.setLocalStorage(
+          storageKeys.observationSubmissionIdArr,
+          arr
+        );
       })
       .catch((err) => {
         let arr;
-        Array.isArray(obsevationSubmissionId) ? (arr = obsevationSubmissionId) : (arr = [obsevationSubmissionId]);
-        this.localStorage.setLocalStorage(storageKeys.observationSubmissionIdArr, arr);
+        Array.isArray(obsevationSubmissionId)
+          ? (arr = obsevationSubmissionId)
+          : (arr = [obsevationSubmissionId]);
+        this.localStorage.setLocalStorage(
+          storageKeys.observationSubmissionIdArr,
+          arr
+        );
       });
   }
 }
