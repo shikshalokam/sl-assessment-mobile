@@ -1,7 +1,13 @@
 import { Component } from "@angular/core";
-import { InAppBrowser, InAppBrowserOptions } from "@ionic-native/in-app-browser";
+import {
+  InAppBrowser,
+  InAppBrowserOptions,
+} from "@ionic-native/in-app-browser";
 import { PhotoViewer } from "@ionic-native/photo-viewer";
-import { StreamingMedia, StreamingVideoOptions } from "@ionic-native/streaming-media";
+import {
+  StreamingMedia,
+  StreamingVideoOptions,
+} from "@ionic-native/streaming-media";
 import { ApiProvider } from "../../providers/api/api";
 import { AppConfigs } from "../../providers/appConfig";
 import { UtilsProvider } from "../../providers/utils/utils";
@@ -25,9 +31,14 @@ export class EvidenceAllListComponent {
   videos: any;
   documents: any;
   audios: any;
-  data: any;
 
-  constructor(private apiService: ApiProvider, private utils: UtilsProvider, private navParams: NavParams) {}
+  //-----
+
+  constructor(
+    private apiService: ApiProvider,
+    private utils: UtilsProvider,
+    private navParams: NavParams
+  ) {}
 
   ionViewDidLoad() {
     this.selectedTab = "evidence";
@@ -36,7 +47,6 @@ export class EvidenceAllListComponent {
     const entityId = this.navParams.get("entityId");
     const questionExternalId = this.navParams.get("questionExternalId");
     const entityType = this.navParams.get("entityType");
-    this.data = this.navParams.get("data");
     this.payload = {
       submissionId: submissionId,
       questionId: questionExternalId,
@@ -44,20 +54,11 @@ export class EvidenceAllListComponent {
       entityId: entityId,
       entityType: entityType,
     };
-    this.data ? this.setAllEvidence() : this.getAllEvidence();
+    this.getAllEvidence();
   }
 
   onTabChange(tabName) {
     this.selectedTab = tabName;
-  }
-
-  setAllEvidence() {
-    console.log(this.data);
-    this.images = this.data.images;
-    this.videos = this.data.videos;
-    this.documents = this.data.documents;
-    this.remarks = this.data.remarks;
-    this.audios = this.data.audios;
   }
 
   getAllEvidence() {

@@ -79,7 +79,7 @@
     {{'message.noSubmission'|translate}}
   </div>
   <ion-fab bottom right>
-    <button ion-fab mini (click)="refreshLocalObservationList(null,true)">
+    <button ion-fab mini (click)="refreshLocalObservationList()">
       <ion-icon name="refresh"></ion-icon>
     </button>
   </ion-fab>
@@ -93,7 +93,7 @@
         </button>
       </ion-col>
       <ion-col>
-        <button ion-button full (click)="entityActions($event)" class="footerButton" [disabled]="!submissions?.length">
+        <button ion-button full (click)="entityActions($event)" class="footerButton">
           {{'buttons.viewEntityReport'|translate}}
         </button>
       </ion-col>
