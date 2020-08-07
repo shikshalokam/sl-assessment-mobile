@@ -64,7 +64,7 @@
     "angular-font-awesome": "^3.1.2",
     "com-sarriaroman-photoviewer": "^1.2.4",
     "cordova": "^8.1.2",
-    "cordova-android": "8.1.0",
+    "cordova-android": "^8.1.0",
     "cordova-android-play-services-gradle-release": "^1.4.6",
     "cordova-android-support-gradle-release": "^3.0.1",
     "cordova-browser": "5.0.4",
@@ -88,7 +88,6 @@
     "cordova-plugin-filechooser": "^1.2.0",
     "cordova-plugin-filepath": "^1.5.8",
     "cordova-plugin-filepicker": "^1.1.6",
-    "cordova-plugin-firebase": "^2.0.5",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-inappbrowser": "^3.2.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
@@ -224,7 +223,6 @@
       "cordova-plugin-streaming-media": {},
       "cordova-plugin-appavailability": {},
       "cordova-android-support-gradle-release": {},
-      "cordova-plugin-firebase": {},
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
@@ -232,8 +230,8 @@
     },
     "platforms": [
       "browser",
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }
