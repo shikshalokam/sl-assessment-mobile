@@ -1,51 +1,51 @@
-import { NgModule, ErrorHandler } from '@angular/core';
-import { HttpClientModule, HttpClient} from '@angular/common/http';
-import { HttpModule } from '@angular/http';
+import { NgModule, ErrorHandler } from "@angular/core";
+import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { HttpModule } from "@angular/http";
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { IonicStorageModule } from '@ionic/storage';
-import { Network} from '@ionic-native/network';
-import { MyApp } from './app.component';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
+import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { IonicStorageModule } from "@ionic/storage";
+import { Network } from "@ionic-native/network";
+import { MyApp } from "./app.component";
 
-import { AboutPage } from '../pages/about/about';
-import { HomePage } from '../pages/home/home';
+import { AboutPage } from "../pages/about/about";
+import { HomePage } from "../pages/home/home";
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { LoginPageModule } from '../pages/login/login.module';
-import { AuthProvider } from '../providers/auth/auth';
-import { CurrentUserProvider } from '../providers/current-user/current-user';
-import { WelcomePage } from '../pages/welcome/welcome';
-import { SchoolListProvider } from '../providers/school-list/school-list';
-import { UtilsProvider } from '../providers/utils/utils';
-import { ApiProvider } from '../providers/api/api';
-import { AndroidPermissions } from '@ionic-native/android-permissions';
-import { Geolocation } from '@ionic-native/geolocation';
-import { Diagnostic } from '@ionic-native/diagnostic';
-import { EvidenceListPageModule } from '../pages/evidence-list/evidence-list.module';
-import { SectionListPageModule } from '../pages/section-list/section-list.module';
-import { QuestionerPageModule } from '../pages/questioner/questioner.module';
-import { ComponentsModule } from '../components/components.module';
-import { DirectivesModule } from '../directives/directives.module';
+import { StatusBar } from "@ionic-native/status-bar";
+import { SplashScreen } from "@ionic-native/splash-screen";
+import { LoginPageModule } from "../pages/login/login.module";
+import { AuthProvider } from "../providers/auth/auth";
+import { CurrentUserProvider } from "../providers/current-user/current-user";
+import { WelcomePage } from "../pages/welcome/welcome";
+import { SchoolListProvider } from "../providers/school-list/school-list";
+import { UtilsProvider } from "../providers/utils/utils";
+import { ApiProvider } from "../providers/api/api";
+import { AndroidPermissions } from "@ionic-native/android-permissions";
+import { Geolocation } from "@ionic-native/geolocation";
+import { Diagnostic } from "@ionic-native/diagnostic";
+import { EvidenceListPageModule } from "../pages/evidence-list/evidence-list.module";
+import { SectionListPageModule } from "../pages/section-list/section-list.module";
+import { QuestionerPageModule } from "../pages/questioner/questioner.module";
+import { ComponentsModule } from "../components/components.module";
+import { DirectivesModule } from "../directives/directives.module";
 
-import { FaqPage } from '../pages/faq/faq';
-import { SocialSharing } from '@ionic-native/social-sharing';
+import { FaqPage } from "../pages/faq/faq";
+import { SocialSharing } from "@ionic-native/social-sharing";
 
-import { EntityProfileEditPage } from '../pages/entity-profile-edit/entity-profile-edit';
-import { Camera } from '@ionic-native/camera';
-import { File } from '@ionic-native/file';
-import { FilePath } from '@ionic-native/file-path';
-import { FileTransfer} from '@ionic-native/file-transfer';
-import { ImagePicker } from '@ionic-native/image-picker';
-import { FileChooser } from '@ionic-native/file-chooser';
-import { IOSFilePicker } from '@ionic-native/file-picker';
-import { FileOpener } from '@ionic-native/file-opener';
+import { EntityProfileEditPage } from "../pages/entity-profile-edit/entity-profile-edit";
+import { Camera } from "@ionic-native/camera";
+import { File } from "@ionic-native/file";
+import { FilePath } from "@ionic-native/file-path";
+import { FileTransfer } from "@ionic-native/file-transfer";
+import { ImagePicker } from "@ionic-native/image-picker";
+import { FileChooser } from "@ionic-native/file-chooser";
+import { IOSFilePicker } from "@ionic-native/file-picker";
+import { FileOpener } from "@ionic-native/file-opener";
 
-import { ImageListingPage } from '../pages/image-listing/image-listing';
-import { MatrixActionModalPage } from '../pages/matrix-action-modal/matrix-action-modal';
-import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { ImageListingPage } from "../pages/image-listing/image-listing";
+import { MatrixActionModalPage } from "../pages/matrix-action-modal/matrix-action-modal";
+import { LocationAccuracy } from "@ionic-native/location-accuracy";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { RatingProvider } from '../providers/rating/rating';
@@ -95,11 +95,9 @@ import { ObservationReportsPage } from '../pages/observation-reports/observation
 import { HighchartsChartModule } from 'highcharts-angular';
 import { UpdateTrackerProvider } from '../providers/update-tracker/update-tracker';
 import { RoleListingPage } from '../pages/role-listing/role-listing';
-import { ReportEntityListingPage } from '../pages/report-entity-listing/report-entity-listing';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { TextToSpeechProvider } from '../providers/text-to-speech/text-to-speech';
-import { ProgramListingPage } from '../pages/program-listing/program-listing';
 import { ObservationEditPage } from '../pages/observation-edit/observation-edit';
 import { AccessActionsProvider } from '../providers/access-actions/access-actions';
 import { NotificationProvider } from '../providers/notification/notification';
@@ -115,6 +113,24 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { SidemenuProvider } from '../providers/sidemenu/sidemenu';
 import { PipesModule } from '../pipes/pipes.module';
 
+import { QuestionListPage } from "../pages/question-list/question-list";
+import { TutorialVideoListingPage } from "../pages/tutorial-video-listing/tutorial-video-listing";
+import { ScreenOrientation } from "@ionic-native/screen-orientation";
+import { EvidenceAllListComponent } from "./../components/evidence-all-list/evidence-all-list";
+import { PhotoViewer } from "@ionic-native/photo-viewer";
+import { StreamingMedia } from "@ionic-native/streaming-media";
+import { ImprovementProjectPageModule } from "../pages/improvement-project/improvement-project.module";
+import { AppAvailability } from "@ionic-native/app-availability";
+
+import { CriteriaListPage } from "../pages/criteria-list/criteria-list";
+import { ProgramsPageModule } from "../pages/programs/programs.module";
+import { InstitutionPageModule } from "../pages/institution/institution.module";
+import { BottomTabPageModule } from "../pages/bottom-tab/bottom-tab.module";
+import { ReportsPageModule } from "../pages/reports/reports.module";
+import { LibraryPageModule } from "../pages/library/library.module";
+import { ManualRatingPageModule } from "../pages/manual-rating/manual-rating.module";
+import { ReportEntityListingPage } from "../pages/reports/report-entity-listing/report-entity-listing";
+import { ProgramListingPage } from "../pages/reports/program-listing/program-listing";
 @NgModule({
   declarations: [
     MyApp,
@@ -122,7 +138,6 @@ import { PipesModule } from '../pipes/pipes.module';
     HomePage,
     AssessmentAboutPage,
     WelcomePage,
-    ProgramListingPage,
     InstitutionsEntityList,
     FaqPage,
     EntityProfileEditPage,
@@ -143,25 +158,25 @@ import { PipesModule } from '../pipes/pipes.module';
     SubmissionListPage,
     ObservationReportsPage,
     RoleListingPage,
-    ReportEntityListingPage,
     DashboardPage,
     ObservationEditPage,
-    SettingsPage
+    SettingsPage,
+    QuestionListPage,
+    TutorialVideoListingPage,
+    CriteriaListPage,
   ],
   imports: [
     BrowserAnimationsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     HighchartsChartModule,
-    TranslateModule.forRoot(
-      {
-        loader: {
-         provide: TranslateLoader,
-         useFactory: (setTranslateLoader),
-         deps: [HttpClient]
-       }
-      }
-    ),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: setTranslateLoader,
+        deps: [HttpClient],
+      },
+    }),
     LoginPageModule,
     HttpModule,
     HttpClientModule,
@@ -171,14 +186,20 @@ import { PipesModule } from '../pipes/pipes.module';
     QuestionerPageModule,
     ComponentsModule,
     DirectivesModule,
-    PipesModule,
     RatingCriteriaListingPageModule,
     RatingPageModule,
     RatedCriteriaListPageModule,
     RegistryListPageModule,
     GeneralQuestionListPageModule,
     IonicStepperModule,
-    ObservationsPageModule  
+    ObservationsPageModule,
+    ImprovementProjectPageModule,
+    ProgramsPageModule,
+    InstitutionPageModule,
+    BottomTabPageModule,
+    ReportsPageModule,
+    LibraryPageModule,
+    ManualRatingPageModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -206,12 +227,14 @@ import { PipesModule } from '../pipes/pipes.module';
     PreviewPage,
     SubmissionListPage,
     DashboardPage,
-    ProgramListingPage,
     SettingsPage,
     ObservationReportsPage,
     RoleListingPage,
-    ReportEntityListingPage,
     ObservationEditPage,
+    QuestionListPage,
+    TutorialVideoListingPage,
+    EvidenceAllListComponent,
+    CriteriaListPage,
   ],
   providers: [
     StatusBar,
@@ -267,17 +290,21 @@ import { PipesModule } from '../pipes/pipes.module';
     AccessActionsProvider,
     NotificationProvider,
     Badge,
-    AppIconBadgeProvider, 
+    AppIconBadgeProvider,
     FCM,
     FcmProvider,
     LocalNotifications,
     Market,
     AppVersion,
     SpinnerDialog,
-    SidemenuProvider
-  ]
+    SidemenuProvider,
+    ScreenOrientation,
+    PhotoViewer,
+    StreamingMedia,
+    AppAvailability,
+  ],
 })
-export class AppModule { }
+export class AppModule {}
 export function setTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
- }
+  return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
+}
