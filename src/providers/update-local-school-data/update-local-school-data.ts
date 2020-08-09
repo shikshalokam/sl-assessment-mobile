@@ -141,11 +141,11 @@ export class UpdateLocalSchoolDataProvider {
       if (
         (validSubmission &&
           validSubmission.submittedBy !==
-            this.currentUser.getCurrentUserData().sub &&
+          this.currentUser.getCurrentUserData().sub.split(":").pop() &&
           !evidence.startTime) ||
         (validSubmission &&
           validSubmission.submittedBy ===
-            this.currentUser.getCurrentUserData().sub)
+            this.currentUser.getCurrentUserData().sub.split(":").pop())
       ) {
         for (const section of evidence.sections) {
           for (const question of section.questions) {

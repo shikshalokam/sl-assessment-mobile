@@ -44,7 +44,7 @@ export class AuthProvider {
     private iab: InAppBrowser,
     private spinnerModal: SpinnerDialog,
     private utils: UtilsProvider
-  ) {}
+  ) { }
 
   sanitizeUrl(url) {
     return this.samnitizer.bypassSecurityTrustUrl;
@@ -124,12 +124,14 @@ export class AuthProvider {
   }
 
   checkForCurrentUserLocalData(tokens) {
-    const loggedinUserId = this.currentUser.getDecodedAccessToken(
+    let loggedinUserId = this.currentUser.getDecodedAccessToken(
       tokens.access_token
     ).sub;
-    const currentUserId = this.currentUser.getCurrentUserData()
+    let currentUserId = this.currentUser.getCurrentUserData()
       ? this.currentUser.getCurrentUserData().sub
       : null;
+    loggedinUserId = loggedinUserId.split(":").pop();
+    currentUserId = currentUserId ? currentUserId.split(":").pop() : currentUserId;
     if (loggedinUserId === currentUserId || !currentUserId) {
       let userTokens = {
         accessToken: tokens.access_token,
