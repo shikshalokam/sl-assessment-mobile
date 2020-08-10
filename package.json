@@ -64,7 +64,7 @@
     "angular-font-awesome": "^3.1.2",
     "com-sarriaroman-photoviewer": "^1.2.4",
     "cordova": "^8.1.2",
-    "cordova-android": "^8.1.0",
+    "cordova-android": "^9.0.0",
     "cordova-android-play-services-gradle-release": "^1.4.6",
     "cordova-android-support-gradle-release": "^3.0.1",
     "cordova-browser": "5.0.4",
@@ -226,7 +226,9 @@
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
-      "cordova.plugins.diagnostic": {}
+      "cordova.plugins.diagnostic": {
+        "ANDROID_SUPPORT_VERSION": "28.+"
+      }
     },
     "platforms": [
       "browser",
