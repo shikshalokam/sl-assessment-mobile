@@ -225,4 +225,7 @@
     <engine name="browser" spec="5.0.4" />
     <engine name="ios" spec="^5.1.0" />
     <engine name="android" spec="^9.0.0" />
+    <plugin name="cordova.plugins.diagnostic" spec="^5.0.2" />
+    <engine name="browser" spec="5.0.4" />
+    <engine name="ios" spec="^5.1.0" />
 </widget>
