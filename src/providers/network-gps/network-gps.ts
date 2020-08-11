@@ -78,19 +78,23 @@ export class NetworkGpsProvider {
           this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
             const options = {
               enableHighAccuracy: true,
-              timeout: 20000,
-              maximumAge: 0
+              timeout: 10000,
+              maximumAge: 30000
             }
             this.geolocation.getCurrentPosition(options).then((resp) => {
               const location = `${resp.coords.latitude},${resp.coords.longitude}`;
               // this.utils.openToast(location)
               resolve(location)
             }).catch((error) => {
-              this.translate.get(['toastMessage.unableToFetchGps']).subscribe(translations => {
-                this.utils.openToast(translations.unableToFetchGps);
-              });
+              // this.translate.get(['toastMessage.unableToFetchGps']).subscribe(translations => {
+              //   this.utils.openToast(translations.unableToFetchGps);
+              // });
               this.errorObj.text = `getCurrentPosition error. ${JSON.stringify(error)}`;
+              this.translate.get(['toastMessage.reEnableGPS']).subscribe(translations => {
+                this.utils.openToast(translations['toastMessage.reEnableGPS']);
+              })
               this.slackService.pushException(this.errorObj);
+              // this.getGpsStatus();
               // this.utils.openToast("Something went wrnog. Please try again.")
               reject()
             });
@@ -112,7 +116,7 @@ export class NetworkGpsProvider {
                 const options = {
                   enableHighAccuracy: true,
                   timeout: 20000,
-                  maximumAge: 0
+                  maximumAge: 300000
                 }
                 this.geolocation.getCurrentPosition(options).then((resp) => {
                   const location = `${resp.coords.latitude},${resp.coords.longitude}`;

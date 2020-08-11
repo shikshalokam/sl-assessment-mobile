@@ -30,9 +30,13 @@ www/
 $RECYCLE.BIN/
 src/providers/appConfig.ts
 google-services.json
+GoogleService*.plist
+package-lock.json
+.eslintrc.json
 
 .sourcemaps/
 
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+
