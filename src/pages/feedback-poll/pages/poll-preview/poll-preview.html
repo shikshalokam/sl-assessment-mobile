@@ -1,0 +1,38 @@
+<ion-header>
+  <header [title]="'headings.createPoll'|translate" [hideBack]="false"></header>
+</ion-header>
+
+<ion-content padding>
+  <ion-item-divider color="light" *ngIf="question">
+    <ion-row>
+      <ion-col>
+        <h2>{{question}}</h2>
+      </ion-col>
+    </ion-row>
+    <div></div>
+  </ion-item-divider>
+
+  <poll-option
+    [selectedResponseType]="selectedResponseType"
+    [options]="options"
+    [canSubmit]="true"
+    (response)="response=$event"
+  ></poll-option>
+  <div class="_flex-box _flex-direction-column padding">
+    <button ion-button round (click)="submitResponse()">Submit Response</button>
+  </div>
+</ion-content>
+
+<ion-footer no-shadow *ngIf="type==='create'">
+  <ion-toolbar class="_toolbar-background-md" position="bottom">
+    <ion-row>
+      <ion-col> </ion-col>
+
+      <ion-col>
+        <button ion-button full (click)="showConfirm()" class="btnText">
+          {{'buttons.share' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

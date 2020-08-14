@@ -132,7 +132,8 @@
     "viewDetails": "View Details",
     "clickHereToImprove": "Click Here To Improve",
     "useForm": "Use Form",
-    "submitRating": "Submit Rating"
+    "submitRating": "Submit Rating",
+    "share": "Share"
   },
   "tabs": {
     "home": "Home",
@@ -159,7 +160,8 @@
     "improvementProjects": "Improvements Projects",
     "programs": "Programs",
     "mySolutions": "My Solutions",
-    "allSolutions": "All Solutions"
+    "allSolutions": "All Solutions",
+    "feedback": "Feedback"
   },
   "headings": {
     "zone": "Zones",
@@ -238,7 +240,9 @@
     "assessmentForm": "Assessment Form",
     "draft": "Drafts",
     "search": "Search",
-    "manualRating": "Manual Rating"
+    "manualRating": "Manual Rating",
+    "createPoll": "Create Poll",
+    "myCreations": "My Creations"
   },
   "bottomNav": {
     "institution": "Institution",

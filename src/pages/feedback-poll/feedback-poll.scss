@@ -1,0 +1,18 @@
+page-feedback-poll {
+  ._flex-box {
+    text-align: center;
+  }
+  ion-card {
+    width: 100px !important;
+    height: 100px;
+  }
+
+  ion-card-header {
+    padding-bottom: 0 !important;
+    font-size: 3.6rem !important;
+  }
+  ion-card-content {
+    padding: 0 !important;
+    font-weight: bold;
+  }
+}

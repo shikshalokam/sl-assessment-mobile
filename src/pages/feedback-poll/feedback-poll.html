@@ -1,0 +1,38 @@
+<ion-header>
+  <header [title]="'headings.feedback'|translate" [hideBack]="false"></header>
+</ion-header>
+
+<ion-content padding>
+  <div class="_flex-box _noWrap _justify-content-space-between">
+    <div>
+      <ion-card (click)="goToPage('create')">
+        <ion-card-header>
+          <ion-icon color="primary" name="add-circle"></ion-icon>
+        </ion-card-header>
+        <ion-card-content>
+          Create
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div>
+      <ion-card (click)="goToPage('myCreations')">
+        <ion-card-header>
+          <ion-icon color="primary" name="briefcase"></ion-icon>
+        </ion-card-header>
+        <ion-card-content>
+          My creations
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div>
+      <ion-card>
+        <ion-card-header>
+          <ion-icon color="primary" name="stats"></ion-icon>
+        </ion-card-header>
+        <ion-card-content>
+          My results
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

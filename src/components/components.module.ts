@@ -51,6 +51,7 @@ import { ProgramSolutionComponent } from "../pages/programs/program-solution/pro
 import { ProgObservationEntityListingComponent } from "../pages/programs/program-solution-observation-detail/prog-observation-entity-listing/prog-observation-entity-listing";
 import { ReportEntityListComponent } from "../pages/reports/component/report-entity-list/report-entity-list";
 import { ExpansionTableComponent } from "./expansion-table/expansion-table";
+import { PollOptionComponent } from "../pages/feedback-poll/component/poll-option/poll-option";
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { ExpansionTableComponent } from "./expansion-table/expansion-table";
     ProgramSolutionComponent,
     ProgObservationEntityListingComponent,
     ExpansionTableComponent,
+    PollOptionComponent,
   ],
   imports: [
     IonicModule,
@@ -149,6 +151,7 @@ import { ExpansionTableComponent } from "./expansion-table/expansion-table";
     ProgObservationEntityListingComponent,
     PipesModule,
     ExpansionTableComponent,
+    PollOptionComponent,
   ],
   entryComponents: [
     InputTypeComponent,
