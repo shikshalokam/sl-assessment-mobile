@@ -84,7 +84,10 @@ export class CreatePollPage {
     console.log("ionViewDidLoad CreatePollPage");
 
     this.draft = this.navParams.get("draft");
-    console.log(this.draft);
+    if (this.draft) {
+      this.options = this.draft.options;
+      this.selectedResponseType = this.draft.selectedResponseType;
+    }
     this.metaForm.forEach((element) => {
       switch (element.field) {
         case "name":
@@ -100,7 +103,6 @@ export class CreatePollPage {
           element.value = this.draft ? this.draft.question : element.value;
       }
     });
-    console.log(this.metaForm);
     this.pollForm = this.utils.createFormGroup(this.metaForm);
   }
 
