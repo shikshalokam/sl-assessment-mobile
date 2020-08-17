@@ -33,6 +33,7 @@ import { RoleListingPage } from "../pages/role-listing/role-listing";
 import { ReportEntityListingPage } from "../pages/reports/report-entity-listing/report-entity-listing";
 import { storageKeys } from "../providers/storageKeys";
 import { FeedbackPollPage } from "../pages/feedback-poll/feedback-poll";
+import { PollPreviewPage } from "../pages/feedback-poll/pages/poll-preview/poll-preview";
 
 @Component({
   templateUrl: "app.html",
@@ -312,10 +313,13 @@ export class MyApp {
             "/individual": IndividualListingPage,
             "/institutional": InstitutionsEntityList,
             "/faq": FaqPage,
+            "/take-poll": PollPreviewPage,
           };
           this.deepLinks.route(paths).subscribe(
             (match) => {
-              this.rootPage = paths[match["$link"]["path"]];
+              // this.rootPage = paths[match["$link"]["path"]];
+              let path = paths[match["$link"]["path"]];
+              this.nav.push(path);
               console.log(JSON.stringify(match));
               console.log("Successfully matched route", match);
             },

@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams, AlertController } from "ionic-angular";
+import { NavController, NavParams, AlertController, ModalController } from "ionic-angular";
+import { ThanksComponent } from "../../../../components/thanks/thanks";
 
 @Component({
   selector: "page-poll-preview",
@@ -12,7 +13,12 @@ export class PollPreviewPage {
   type: string; // create or submit poll
   response: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {}
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public alertCtrl: AlertController,
+    public modalCtrl: ModalController
+  ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad PollPreviewPage");
@@ -47,5 +53,11 @@ export class PollPreviewPage {
 
   submitResponse() {
     console.log(this.response);
+    this.showThanks();
+  }
+
+  showThanks(): void {
+    const thanksModal = this.modalCtrl.create(ThanksComponent, { userId: 8675309 });
+    thanksModal.present();
   }
 }

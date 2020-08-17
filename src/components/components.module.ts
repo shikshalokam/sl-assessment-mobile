@@ -52,6 +52,7 @@ import { ProgObservationEntityListingComponent } from "../pages/programs/program
 import { ReportEntityListComponent } from "../pages/reports/component/report-entity-list/report-entity-list";
 import { ExpansionTableComponent } from "./expansion-table/expansion-table";
 import { PollOptionComponent } from "../pages/feedback-poll/component/poll-option/poll-option";
+import { ThanksComponent } from "./thanks/thanks";
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { PollOptionComponent } from "../pages/feedback-poll/component/poll-optio
     ProgObservationEntityListingComponent,
     ExpansionTableComponent,
     PollOptionComponent,
+    ThanksComponent,
   ],
   imports: [
     IonicModule,
@@ -152,6 +154,7 @@ import { PollOptionComponent } from "../pages/feedback-poll/component/poll-optio
     PipesModule,
     ExpansionTableComponent,
     PollOptionComponent,
+    ThanksComponent,
   ],
   entryComponents: [
     InputTypeComponent,
@@ -165,6 +168,7 @@ import { PollOptionComponent } from "../pages/feedback-poll/component/poll-optio
     SubmissionActionsComponent,
     PlayVideoComponent,
     ViewDetailComponent,
+    ThanksComponent,
   ],
   providers: [Network, DatePipe, SlackProvider],
 })

@@ -233,5 +233,10 @@
       "ios",
       "android"
     ]
-  }
+  },
+  "platforms": [
+    "browser",
+    "ios",
+    "android"
+  ]
 }
