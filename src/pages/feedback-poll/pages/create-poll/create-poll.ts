@@ -39,15 +39,44 @@ export class CreatePollPage {
     },
     {
       field: "endDate",
-      label: "endDate",
+      label: "End Date",
       value: "",
       visible: true,
       editable: true,
       validation: {
         required: true,
       },
-      input: "date",
-      dateformat: "DD-MM-YYYY",
+      input: "radio",
+      options: [
+        {
+          value: 1,
+          label: "one day",
+        },
+        {
+          value: 2,
+          label: "two day",
+        },
+        {
+          value: 3,
+          label: "",
+        },
+        {
+          value: 4,
+          label: "",
+        },
+        {
+          value: 5,
+          label: "",
+        },
+        {
+          value: 6,
+          label: "",
+        },
+        {
+          value: 7,
+          label: "",
+        },
+      ],
     },
     {
       field: "question",
