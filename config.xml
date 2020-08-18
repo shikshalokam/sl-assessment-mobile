@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.shikshalokam.samiksha.darpan" version="2.1.12" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.shikshalokam.samiksha.darpan" version="3.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Darpan</name>
     <description>A survey app for school development</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.43.62:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -235,6 +235,6 @@
     <allow-navigation href="http://192.168.43.61:8103" />
     <allow-navigation href="http://192.168.43.62:8100" />
     <engine name="browser" spec="5.0.4" />
-    <engine name="ios" spec="^5.1.1" />
-    <engine name="android" spec="^8.1.0" />
+    <engine name="ios" spec="^5.1.0" />
+    <engine name="android" spec="~8.1.0" />
 </widget>
