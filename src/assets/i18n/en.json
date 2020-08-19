@@ -235,7 +235,8 @@
     "observationSolutions": "Observation Solutions",
     "assessmentForm": "Assessment Form",
     "draft": "Drafts",
-    "search": "Search"
+    "search": "Search",
+    "resetPassword": "Reset Password"
   },
   "bottomNav": {
     "institution": "Institution",

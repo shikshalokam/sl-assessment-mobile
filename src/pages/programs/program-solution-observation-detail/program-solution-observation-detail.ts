@@ -6,6 +6,7 @@ import {
   ModalController,
   AlertController,
   PopoverController,
+  App,
 } from "ionic-angular";
 import { LocalStorageProvider } from "../../../providers/local-storage/local-storage";
 import { ApiProvider } from "../../../providers/api/api";
@@ -50,7 +51,8 @@ export class ProgramSolutionObservationDetailPage {
     public alertCntrl: AlertController,
     private utils: UtilsProvider,
     private programService: ProgramServiceProvider,
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
+    private app: App
   ) {
     // this.events.subscribe("observationLocalstorageUpdated", (success) => {
     //   this.getLocalStorageData();
@@ -72,8 +74,7 @@ export class ProgramSolutionObservationDetailPage {
       .getLocalStorage("programList")
       .then((data) => {
         this.programs = data;
-        this.selectedSolution =
-          data[this.programIndex].solutions[this.solutionIndex];
+        this.selectedSolution = data[this.programIndex].solutions[this.solutionIndex];
         this.checkForAnySubmissionsMade();
       })
       .catch((error) => {
@@ -91,7 +92,7 @@ export class ProgramSolutionObservationDetailPage {
       this.selectedSolution.entities[entityIndex].submissions &&
       this.selectedSolution.entities[entityIndex].submissions.length
     ) {
-      this.navCtrl.push(ProgramObservationSubmissionPage, { data });
+      this.app.getRootNav().push(ProgramObservationSubmissionPage, { data });
     } else {
       let event = {
         programIndex: this.programIndex,
@@ -108,7 +109,7 @@ export class ProgramSolutionObservationDetailPage {
         .then(async (programs) => {
           await this.programService.refreshObservationList();
           await this.getLocalStorageData();
-          this.navCtrl.push(ProgramObservationSubmissionPage, { data });
+          this.app.getRootNav().push(ProgramObservationSubmissionPage, { data });
         })
         .catch((err) => {});
     }
@@ -162,12 +163,7 @@ export class ProgramSolutionObservationDetailPage {
     console.log("remove entity called");
     let translateObject;
     this.translate
-      .get([
-        "actionSheet.confirm",
-        "actionSheet.deleteEntity",
-        "actionSheet.no",
-        "actionSheet.yes",
-      ])
+      .get(["actionSheet.confirm", "actionSheet.deleteEntity", "actionSheet.no", "actionSheet.yes"])
       .subscribe((translations) => {
         translateObject = translations;
         console.log(JSON.stringify(translations));
@@ -189,18 +185,15 @@ export class ProgramSolutionObservationDetailPage {
             };
             this.utils.startLoader();
             this.apiProviders.httpPost(
-              AppConfigs.cro.unMapEntityToObservation +
-                this.selectedSolution._id,
+              AppConfigs.cro.unMapEntityToObservation + this.selectedSolution._id,
               obj,
               async (success) => {
                 let okMessage;
-                this.translate
-                  .get("toastMessage.ok")
-                  .subscribe((translations) => {
-                    //  console.log(JSON.stringify(translations))
+                this.translate.get("toastMessage.ok").subscribe((translations) => {
+                  //  console.log(JSON.stringify(translations))
 
-                    okMessage = translations;
-                  });
+                  okMessage = translations;
+                });
                 this.utils.openToast(success.message);
 
                 this.utils.stopLoader();

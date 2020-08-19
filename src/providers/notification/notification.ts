@@ -18,6 +18,7 @@ import { storageKeys } from "../storageKeys";
 import { ProgramSolutionEntityPage } from "../../pages/programs/program-solution-entity/program-solution-entity";
 import { ProgramSolutionObservationDetailPage } from "../../pages/programs/program-solution-observation-detail/program-solution-observation-detail";
 import { ProgramServiceProvider } from "../../pages/programs/program-service";
+import { CurrentUserProvider } from "../current-user/current-user";
 
 @Injectable()
 export class NotificationProvider {
@@ -47,7 +48,8 @@ export class NotificationProvider {
     private appBadge: AppIconBadgeProvider,
     private appVersion: AppVersion,
     private assessmentService: AssessmentServiceProvider,
-    private programService: ProgramServiceProvider
+    private programService: ProgramServiceProvider,
+    private user: CurrentUserProvider,
   ) {
     console.log("Hello NotificationProvider Provider");
     //offline event
@@ -67,7 +69,7 @@ export class NotificationProvider {
   startNotificationPooling() {
     this.timeInterval = setInterval(() => {
       if (this.networkAvailable) {
-        this.checkForNotificationApi();
+        this.user.curretUser.isDeactivated?null:this.checkForNotificationApi();
       }
       // else {
       //   console.log("no internet");
