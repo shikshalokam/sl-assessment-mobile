@@ -1,5 +1,8 @@
 <ion-header>
-  <header [title]="'headings.createPoll'|translate" [hideBack]="false"></header>
+  <header
+    [title]="type=='create'?('headings.createPoll'|translate): 'headings.takePoll'|translate"
+    [hideBack]="false"
+  ></header>
 </ion-header>
 
 <ion-content padding>
@@ -18,7 +21,7 @@
     [canSubmit]="true"
     (response)="response=$event"
   ></poll-option>
-  <div class="_flex-box _flex-direction-column padding">
+  <div class="_flex-box _flex-direction-column padding" *ngIf="type==='submit'">
     <button ion-button round (click)="submitResponse()">Submit Response</button>
   </div>
 </ion-content>
@@ -29,9 +32,7 @@
       <ion-col> </ion-col>
 
       <ion-col>
-        <button ion-button full (click)="showConfirm()" class="btnText">
-          {{'buttons.share' | translate}}
-        </button>
+        <button ion-button full (click)="showConfirm()" class="btnText">{{'buttons.share' | translate}}</button>
       </ion-col>
     </ion-row>
   </ion-toolbar>

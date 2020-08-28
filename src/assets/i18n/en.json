@@ -64,7 +64,9 @@
     "saveForm": "Save the form",
     "userId": "User Id",
     "deleteDraft": "Delete Draft Item",
-    "ratingNotSaved": "Rating not saved "
+    "ratingNotSaved": "Rating not saved ",
+    "deletePreviosOptions": "Previous options will be erased",
+    "sharePoll": "Do you want to share the poll?"
   },
   "buttons": {
     "observeAgain": "Observe Again",
@@ -133,7 +135,12 @@
     "clickHereToImprove": "Click Here To Improve",
     "useForm": "Use Form",
     "submitRating": "Submit Rating",
-    "share": "Share"
+    "share": "Share",
+    "create": "Create",
+    "myCreation": "My Creations",
+    "myResults": "My Results"
+
+
   },
   "tabs": {
     "home": "Home",
@@ -242,7 +249,9 @@
     "search": "Search",
     "manualRating": "Manual Rating",
     "createPoll": "Create Poll",
-    "myCreations": "My Creations"
+    "takePoll": "Take Poll",
+    "myCreations": "My Creations",
+    "result": "Result"
   },
   "bottomNav": {
     "institution": "Institution",
@@ -278,7 +287,13 @@
     "suggestedIMPs": "Suggested IMP's",
     "noSuggestedIMPs": "No IMP's Found",
     "createNewProgram": " Create New Program",
-    "chooseExistingProgram": " Choose Existing Program"
+    "chooseExistingProgram": " Choose Existing Program",
+    "addNew": "Add New",
+    "selectEmoticon": "Select Emoticon",
+    "selectGesture": "Select Gesture",
+    "drafts": "Drafts",
+    "published": "Published",
+    "poll": "poll"
 
   },
   "languages": {
@@ -322,7 +337,9 @@
     "noVideo": "No videos available",
     "selectCriteraFilter": "Select the criterias to filter Reports",
     "numberOfAssessmentsDone": "Number Of assessments done",
-    "ratingPending": "Rating is pending, please check later."
+    "ratingPending": "Rating is pending, please check later.",
+    "noPolls": "No Polls",
+    "noFeedbacks": "No Feedbacks"
 
   },
   "toastMessage": {

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { NavParams, ModalController } from "ionic-angular";
+import { ResultGraphComponent } from "../../pages/feedback-poll/component/result-graph/result-graph";
 
 /**
  * Generated class for the ThanksComponent component.
@@ -7,16 +9,24 @@ import { Component } from '@angular/core';
  * Components.
  */
 @Component({
-  selector: 'thanks',
-  templateUrl: 'thanks.html'
+  selector: "thanks",
+  templateUrl: "thanks.html",
 })
 export class ThanksComponent {
-
   text: string;
+  pollId: any;
 
-  constructor() {
-    console.log('Hello ThanksComponent Component');
-    this.text = 'Hello World';
+  constructor(public params: NavParams, public modalCntrl: ModalController) {
+    console.log("Hello ThanksComponent Component");
+
+    this.pollId = this.params.get("pollId");
   }
 
+  goToResult() {
+    const resultModal = this.modalCntrl.create(ResultGraphComponent, {
+      pollId: this.pollId,
+    });
+    resultModal.onDidDismiss((result) => {});
+    resultModal.present();
+  }
 }

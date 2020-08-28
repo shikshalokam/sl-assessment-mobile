@@ -53,6 +53,7 @@ import { ReportEntityListComponent } from "../pages/reports/component/report-ent
 import { ExpansionTableComponent } from "./expansion-table/expansion-table";
 import { PollOptionComponent } from "../pages/feedback-poll/component/poll-option/poll-option";
 import { ThanksComponent } from "./thanks/thanks";
+import { ResultGraphComponent } from '../pages/feedback-poll/component/result-graph/result-graph';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { ThanksComponent } from "./thanks/thanks";
     ExpansionTableComponent,
     PollOptionComponent,
     ThanksComponent,
+    ResultGraphComponent,
   ],
   imports: [
     IonicModule,
@@ -155,6 +157,7 @@ import { ThanksComponent } from "./thanks/thanks";
     ExpansionTableComponent,
     PollOptionComponent,
     ThanksComponent,
+    ResultGraphComponent,
   ],
   entryComponents: [
     InputTypeComponent,
@@ -169,6 +172,7 @@ import { ThanksComponent } from "./thanks/thanks";
     PlayVideoComponent,
     ViewDetailComponent,
     ThanksComponent,
+    ResultGraphComponent
   ],
   providers: [Network, DatePipe, SlackProvider],
 })

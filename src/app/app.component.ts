@@ -307,19 +307,31 @@ export class MyApp {
             page["active"] = false;
           }
           this.allPages[0]["active"] = true;
-          const paths = {
-            "/about-us": AboutPage,
-            "/home": HomePage,
-            "/individual": IndividualListingPage,
-            "/institutional": InstitutionsEntityList,
-            "/faq": FaqPage,
-            "/take-poll": PollPreviewPage,
-          };
+          let appName = AppConfigs.appName;
+          appName = appName.toLowerCase().replace(/([^a-zA-Z])/g, "");
+          const paths = {};
+          paths[`/${appName}/about-us`] = AboutPage;
+          paths[`/${appName}/faq`] = FaqPage;
+          paths[`/${appName}/take-poll/:pollId`] = PollPreviewPage;
+          // const paths = {
+          //   "/about-us": AboutPage,
+          //   "/home": HomePage,
+          //   "/individual": IndividualListingPage,
+          //   "/institutional": InstitutionsEntityList,
+          //   "/faq": FaqPage,
+          //   "/take-poll/:pollId": PollPreviewPage,
+          //   // "/appLink/take-poll/:pollId": PollPreviewPage,
+          // };
           this.deepLinks.route(paths).subscribe(
             (match) => {
               // this.rootPage = paths[match["$link"]["path"]];
-              let path = paths[match["$link"]["path"]];
-              this.nav.push(path);
+              const argkey = Object.keys(match.$args)[0];
+              const matchPath = argkey
+                ? match["$link"]["path"].replace(match.$args[argkey], `:${argkey}`)
+                : match["$link"]["path"];
+              const path = paths[matchPath];
+
+              this.nav.push(path, match.$args);
               console.log(JSON.stringify(match));
               console.log("Successfully matched route", match);
             },

@@ -3,6 +3,8 @@ import { NavController, NavParams, AlertController } from "ionic-angular";
 import { PollProvider } from "../../providers/poll/poll";
 import { TranslateService } from "@ngx-translate/core";
 import { CreatePollPage } from "../create-poll/create-poll";
+import { PollPreviewPage } from "../poll-preview/poll-preview";
+import { UtilsProvider } from "../../../../providers/utils/utils";
 
 /**
  * Generated class for the MyCreationsPage page.
@@ -18,18 +20,34 @@ import { CreatePollPage } from "../create-poll/create-poll";
 export class MyCreationsPage {
   selectedTab: any;
   allDrafts: any;
+  polls: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public pollProvider: PollProvider,
     public alertCtrl: AlertController,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public utils: UtilsProvider
   ) {}
 
   ionViewDidEnter() {
     console.log("ionViewDidLoad MyCreationsPage");
     this.getDrafts();
     this.onTabChange("draft");
+    this.getPollList();
+  }
+
+  getPollList() {
+    this.utils.startLoader();
+    this.pollProvider
+      .getPollList()
+      .then((res: any) => {
+        this.polls = res;
+        this.utils.stopLoader();
+      })
+      .catch(() => {
+        this.utils.stopLoader();
+      });
   }
 
   onTabChange(tabName) {
@@ -47,7 +65,6 @@ export class MyCreationsPage {
         this.allDrafts = [];
       });
   }
-
   removeDraft(draftTime) {
     this.pollProvider
       .deleteDraft(draftTime)
@@ -85,5 +102,20 @@ export class MyCreationsPage {
   }
   goToCreatePoll(draft) {
     this.navCtrl.push(CreatePollPage, { draft });
+  }
+
+  openPollPreview(pollId) {
+    this.utils.startLoader();
+    this.pollProvider
+      .getPolQuestions(pollId)
+      .then((data) => {
+        this.utils.stopLoader();
+        this.navCtrl.push(PollPreviewPage, data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+        this.allDrafts = [];
+        this.utils.stopLoader();
+      });
   }
 }

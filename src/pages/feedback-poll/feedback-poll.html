@@ -10,7 +10,7 @@
           <ion-icon color="primary" name="add-circle"></ion-icon>
         </ion-card-header>
         <ion-card-content>
-          Create
+          {{'buttons.create'| translate}}
         </ion-card-content>
       </ion-card>
     </div>
@@ -20,17 +20,17 @@
           <ion-icon color="primary" name="briefcase"></ion-icon>
         </ion-card-header>
         <ion-card-content>
-          My creations
+          {{'buttons.myCreation'| translate}}
         </ion-card-content>
       </ion-card>
     </div>
     <div>
-      <ion-card>
+      <ion-card (click)="goToPage('results')">
         <ion-card-header>
           <ion-icon color="primary" name="stats"></ion-icon>
         </ion-card-header>
         <ion-card-content>
-          My results
+          {{'buttons.myResults'| translate}}
         </ion-card-content>
       </ion-card>
     </div>

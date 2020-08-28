@@ -3,7 +3,7 @@ import { NavController, NavParams, AlertController, ViewController } from "ionic
 import { UtilsProvider } from "../../../../providers/utils/utils";
 import { PollPreviewPage } from "../poll-preview/poll-preview";
 import { PollProvider } from "../../providers/poll/poll";
-import { FeedbackPollPage } from "../../feedback-poll";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "page-create-poll",
@@ -14,135 +14,54 @@ export class CreatePollPage {
   options: any = [];
   selectedResponseType: string;
   draft: any;
-  metaForm: any = [
-    {
-      field: "name",
-      label: "Name of the Poll",
-      value: "",
-      visible: true,
-      editable: true,
-      validation: {
-        required: true,
-      },
-      input: "text",
-    },
-    {
-      field: "creator",
-      label: "Name of the Creator",
-      value: "",
-      visible: true,
-      editable: true,
-      validation: {
-        required: true,
-      },
-      input: "text",
-    },
-    {
-      field: "endDate",
-      label: "End Date",
-      value: "",
-      visible: true,
-      editable: true,
-      validation: {
-        required: true,
-      },
-      input: "radio",
-      options: [
-        {
-          value: 1,
-          label: "one day",
-        },
-        {
-          value: 2,
-          label: "two day",
-        },
-        {
-          value: 3,
-          label: "",
-        },
-        {
-          value: 4,
-          label: "",
-        },
-        {
-          value: 5,
-          label: "",
-        },
-        {
-          value: 6,
-          label: "",
-        },
-        {
-          value: 7,
-          label: "",
-        },
-      ],
-    },
-    {
-      field: "question",
-      label: "Question",
-      value: "",
-      visible: true,
-      editable: true,
-      validation: {
-        required: true,
-      },
-      input: "text",
-    },
-  ];
-  emoticons: any = [
-    {
-      unicode: "\u{1F44D}",
-      description: "Happy",
-    },
-    {
-      unicode: "\u{1F600}",
-      description: "Happy",
-    },
-  ];
+  metaForm: any;
+  emoticons: any = [];
+  gestures: any = [];
+  translateObject: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private utils: UtilsProvider,
     public alertCtrl: AlertController,
     public pollProvider: PollProvider,
-    public viewCntl: ViewController
+    public viewCntl: ViewController,
+    public translateService: TranslateService
   ) {}
 
-  ionViewDidLoad() {
+  ionViewDidLoad(): void {
     console.log("ionViewDidLoad CreatePollPage");
+    this.translateService
+      .get([
+        "buttons.save",
+        "buttons.cancel",
+        "buttons.delete",
+        "labels.addNew",
+        "labels.selectEmoticon",
+        "labels.selectGesture",
+        "actionSheet.deletePreviosOptions",
+        "actionSheet.ok",
+      ])
+      .subscribe((translations) => {
+        this.translateObject = translations;
+      });
 
     this.draft = this.navParams.get("draft");
     if (this.draft) {
       this.options = this.draft.options;
       this.selectedResponseType = this.draft.selectedResponseType;
     }
-    this.metaForm.forEach((element) => {
-      switch (element.field) {
-        case "name":
-          element.value = this.draft ? this.draft.name : element.value;
-          break;
-        case "creator":
-          element.value = this.draft ? this.draft.creator : element.value;
-          break;
-        case "endDate":
-          element.value = this.draft ? this.draft.endDate : element.value;
-          break;
-        case "question":
-          element.value = this.draft ? this.draft.question : element.value;
-      }
-    });
-    this.pollForm = this.utils.createFormGroup(this.metaForm);
+
+    this.getPollMeta();
   }
 
-  addOption() {
+  addOption(): void {
     if (this.selectedResponseType == "emoticons" || this.selectedResponseType == "gestures") {
       this.addEGOption();
       return;
     }
 
     const prompt = this.alertCtrl.create({
-      title: "Add New Option",
+      title: this.translateObject["labels.addNew"] + " Option",
       inputs: [
         {
           name: "option",
@@ -151,43 +70,45 @@ export class CreatePollPage {
       ],
       buttons: [
         {
-          text: "Cancel",
+          text: this.translateObject["buttons.cancel"],
         },
         {
-          text: "Save",
+          text: this.translateObject["buttons.save"],
           handler: (data) => {
-            console.log(data);
-            this.options.includes(data.option) ? null : this.options.push(data.option);
-            console.log("Saved clicked");
+            if (data.option) {
+              const tempOption = { value: "", label: data.option };
+              this.options.includes(tempOption) ? null : this.options.push(tempOption);
+              console.log("Saved clicked");
+            }
           },
         },
       ],
     });
     prompt.present();
   }
-  editOption(option) {
+  editOption(option): void {
     const prompt = this.alertCtrl.create({
       title: "Edit Option",
       inputs: [
         {
-          name: "option",
+          name: "label",
           placeholder: "Option...",
-          value: option.description ? option.description : option,
+          value: option.label,
         },
       ],
       buttons: [
         {
-          text: "Cancel",
+          text: this.translateObject["buttons.cancel"],
         },
         {
-          text: "Save",
+          text: this.translateObject["buttons.save"],
           handler: (data) => {
             const i = this.options.indexOf(option);
-            option.description ? (this.options[i].description = data.option) : (this.options[i] = data.option);
+            this.options[i].label = data.label;
           },
         },
         {
-          text: "Delete",
+          text: this.translateObject["buttons.delete"],
           handler: () => {
             this.options = this.options.filter((opt) => opt != option);
           },
@@ -197,28 +118,32 @@ export class CreatePollPage {
     prompt.present();
   }
 
-  addEGOption() {
-    let arr: any = [];
-    this.emoticons.map((e, index) => {
-      let x = {};
+  addEGOption(): void {
+    const tempArr: any = [];
+    this[this.selectedResponseType].map((e, index) => {
+      const x = {};
       x["type"] = "radio";
-      x["label"] = e.unicode + " " + e.description;
-      x["value"] = { unicode: e.unicode, description: e.description };
-      x["description"] = e.description;
-      arr[index] = x;
+      x["label"] = e.unicode + " " + e.name;
+      x["value"] = { value: e.unicode, label: e.name };
+      tempArr[index] = x;
     });
     const alert = this.alertCtrl.create({
-      title: "Select emoticon",
-      inputs: arr,
+      title:
+        this.selectedResponseType == "emoticons"
+          ? this.translateObject["labels.selectEmoticon"]
+          : this.translateObject["labels.selectGesture"],
+      inputs: tempArr,
       buttons: [
         {
-          text: "Cancel",
+          text: this.translateObject["buttons.cancel"],
         },
         {
-          text: "Ok",
+          text: this.translateObject["actionSheet.ok"],
           handler: (data) => {
             console.log(data);
-            this.options.some((opt) => opt.unicode == data.unicode) ? null : this.options.push(data);
+            if (data) {
+              this.options.some((opt) => opt.value == data.value) ? null : this.options.push(data);
+            }
           },
         },
       ],
@@ -226,19 +151,17 @@ export class CreatePollPage {
     alert.present();
   }
 
-  share() {
+  share(): void {
     const form = this.pollForm.getRawValue();
+    form.options = this.options;
+    form.selectedResponseType = this.selectedResponseType;
+    form.type = "create";
+    form.time = this.draft ? this.draft.time : null;
     console.log(form);
-    const navData = {
-      options: this.options,
-      question: form.question,
-      selectedResponseType: this.selectedResponseType,
-      type: "create",
-    };
-    this.navCtrl.push(PollPreviewPage, navData);
+    this.navCtrl.push(PollPreviewPage, form);
   }
 
-  responseTypeChange(type) {
+  responseTypeChange(type: string): void {
     if (this.selectedResponseType == type) {
       return;
     } else if (this.selectedResponseType == null || !this.options.length) {
@@ -247,18 +170,14 @@ export class CreatePollPage {
     }
     const confirm = this.alertCtrl.create({
       title: "",
-      message: "Previous options will be erased",
+      message: this.translateObject["actionSheet.deletePreviosOptions"],
       buttons: [
         {
-          text: "Cancel",
-          handler: () => {
-            console.log("Disagree clicked");
-          },
+          text: this.translateObject["buttons.cancel"],
         },
         {
-          text: "Ok",
+          text: this.translateObject["actionSheet.ok"],
           handler: () => {
-            console.log("Agree clicked");
             this.options = [];
             this.selectedResponseType = type;
           },
@@ -268,7 +187,7 @@ export class CreatePollPage {
     confirm.present();
   }
 
-  saveToDraft(deleteDraft?): void {
+  saveToDraft(deleteDraft?: any): void {
     console.log("draft");
     const draft = this.pollForm.getRawValue();
     draft["options"] = this.options;
@@ -288,10 +207,39 @@ export class CreatePollPage {
         this.pollProvider.savePollDraft(items);
         deleteDraft ? null : this.utils.openToast("Saved Draft");
       })
-      .then((res) => {
-        console.log("called");
+      .then(() => {
         this.navCtrl.pop();
         deleteDraft ? null : this.utils.stopLoader();
       });
+  }
+
+  getPollMeta(): void {
+    this.utils.startLoader();
+    this.pollProvider
+      .getPollMetaField()
+      .then((res) => {
+        this.metaForm = res["form"];
+        this.emoticons = res["emoticons"];
+        this.gestures = res["gestures"];
+
+        this.metaForm.forEach((element) => {
+          switch (element.field) {
+            case "name":
+              element.value = this.draft ? this.draft.name : element.value;
+              break;
+            case "creator":
+              element.value = this.draft ? this.draft.creator : element.value;
+              break;
+            case "endDate":
+              element.value = this.draft ? this.draft.endDate : element.value;
+              break;
+            case "question":
+              element.value = this.draft ? this.draft.question : element.value;
+          }
+        });
+        this.pollForm = this.utils.createFormGroup(this.metaForm);
+        this.utils.stopLoader();
+      })
+      .catch(() => this.utils.stopLoader());
   }
 }

@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams } from "ionic-angular";
 import { CreatePollPage } from "./pages/create-poll/create-poll";
 import { MyCreationsPage } from "./pages/my-creations/my-creations";
+import { PollFeedbackResultPage } from "./pages/poll-feedback-result/poll-feedback-result";
 
 @IonicPage()
 @Component({
@@ -22,6 +23,9 @@ export class FeedbackPollPage {
         break;
       case "myCreations":
         this.navCtrl.push(MyCreationsPage);
+        break;
+      case "results":
+        this.navCtrl.push(PollFeedbackResultPage);
         break;
 
       default:

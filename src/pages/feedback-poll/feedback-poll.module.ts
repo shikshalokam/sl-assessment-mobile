@@ -7,11 +7,20 @@ import { CreatePollPage } from "./pages/create-poll/create-poll";
 import { PollPreviewPage } from "./pages/poll-preview/poll-preview";
 import { MyCreationsPage } from "./pages/my-creations/my-creations";
 import { PollProvider } from "./providers/poll/poll";
+import { HighchartsChartModule } from "highcharts-angular";
+import { PollFeedbackResultPage } from "./pages/poll-feedback-result/poll-feedback-result";
+import { DirectivesModule } from "../../directives/directives.module";
 
 @NgModule({
-  declarations: [FeedbackPollPage, CreatePollPage, PollPreviewPage, MyCreationsPage],
-  imports: [IonicPageModule.forChild(FeedbackPollPage), ComponentsModule, TranslateModule],
-  entryComponents: [FeedbackPollPage, CreatePollPage, PollPreviewPage, MyCreationsPage],
+  declarations: [FeedbackPollPage, CreatePollPage, PollPreviewPage, MyCreationsPage, PollFeedbackResultPage],
+  imports: [
+    IonicPageModule.forChild(FeedbackPollPage),
+    ComponentsModule,
+    TranslateModule,
+    HighchartsChartModule,
+    DirectivesModule,
+  ],
+  entryComponents: [FeedbackPollPage, CreatePollPage, PollPreviewPage, MyCreationsPage, PollFeedbackResultPage],
   providers: [PollProvider],
 })
 export class FeedbackPollPageModule {}

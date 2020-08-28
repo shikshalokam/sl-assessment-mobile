@@ -58,6 +58,37 @@
         👍 Gestures
       </button>
     </div>
+    <!-- <div padding>
+      <ion-segment [(ngModel)]="pet">
+        <ion-segment-button value="multiselect">
+          <ion-icon name="checkbox"></ion-icon> Multi Select
+        </ion-segment-button>
+        <ion-segment-button value=""> <ion-icon name="radio-button-on"></ion-icon> Single Select </ion-segment-button>
+        <ion-segment-button value="emoticons"> 😀 Emoticons </ion-segment-button>
+        <ion-segment-button value="puppies"> 👍 Gestures </ion-segment-button>
+      </ion-segment>
+    </div>
+ -->
+    <!--  <div [ngSwitch]="true">
+      <ion-list *ngSwitchCase="pet=='multiselect'||pet=='singleselet'||pet=='emoticons'">
+        <ion-item>
+          <button ion-button icon-end (click)="addOption()">
+            {{'buttons.addNew' | translate}}
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+        </ion-item>
+      </ion-list>
+
+      <ion-list *ngSwitchCase="'kittens'">
+        <ion-item>
+          <ion-thumbnail item-start>
+            <img src="img/thumbnail-kitten-1.jpg" />
+          </ion-thumbnail>
+          <h2>Luna</h2>
+        </ion-item>
+        ...
+      </ion-list>
+    </div> -->
   </div>
 
   <!-- add options -->
@@ -70,7 +101,7 @@
     ></poll-option>
     <ion-item>
       <button ion-button icon-end (click)="addOption()">
-        Add option
+        {{'buttons.addNew' | translate}}
         <ion-icon name="add-circle"></ion-icon>
       </button>
     </ion-item>
@@ -81,13 +112,11 @@
   <ion-toolbar class="_toolbar-background-md" position="bottom">
     <ion-row>
       <ion-col>
-        <button ion-button full (click)="saveToDraft()" class="btnText">
-          {{'buttons.draft' | translate}}
-        </button>
+        <button ion-button full (click)="saveToDraft()" class="btnText">{{'buttons.draft' | translate}}</button>
       </ion-col>
 
       <ion-col>
-        <button ion-button full (click)="share()" class="btnText">
+        <button ion-button full (click)="share()" class="btnText" [disabled]="!pollForm?.valid || !options?.length">
           {{'buttons.share' | translate}}
         </button>
       </ion-col>
