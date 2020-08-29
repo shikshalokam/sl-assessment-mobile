@@ -1,8 +1,11 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { IonicPage, NavController, NavParams, ModalController } from "ionic-angular";
 import { CreatePollPage } from "./pages/create-poll/create-poll";
 import { MyCreationsPage } from "./pages/my-creations/my-creations";
 import { PollFeedbackResultPage } from "./pages/poll-feedback-result/poll-feedback-result";
+import { UtilsProvider } from "../../providers/utils/utils";
+import { PollProvider } from "./providers/poll/poll";
+import { ResultGraphComponent } from "./component/result-graph/result-graph";
 
 @IonicPage()
 @Component({
@@ -10,10 +13,18 @@ import { PollFeedbackResultPage } from "./pages/poll-feedback-result/poll-feedba
   templateUrl: "feedback-poll.html",
 })
 export class FeedbackPollPage {
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  allPolls: any;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public utils: UtilsProvider,
+    public pollProvider: PollProvider,
+    public modalCntrl: ModalController
+  ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad FeedbackPollPage");
+    this.getPollList();
   }
 
   goToPage(page: string): void {
@@ -31,5 +42,24 @@ export class FeedbackPollPage {
       default:
         break;
     }
+  }
+
+  getPollList() {
+    this.utils.startLoader();
+    this.pollProvider
+      .getAllPollList()
+      .then((res: any) => {
+        this.allPolls = res;
+        this.utils.stopLoader();
+      })
+      .catch(() => this.utils.stopLoader());
+  }
+
+  openResultModel(pollId): void {
+    const resultModal = this.modalCntrl.create(ResultGraphComponent, {
+      pollId: pollId,
+    });
+    // resultModal.onDidDismiss((result) => {});
+    resultModal.present();
   }
 }

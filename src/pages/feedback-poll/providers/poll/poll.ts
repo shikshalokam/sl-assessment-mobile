@@ -17,20 +17,34 @@ export class PollProvider {
     console.log("Hello PollProvider Provider");
   }
 
+  getAllPollList() {
+    const url = AppConfigs.poll.allPollList;
+    return new Promise((resolve, reject) => {
+      this.apiService.httpGet(
+        url,
+        (successData) => {
+          resolve(successData.result);
+        },
+        () => {
+          reject();
+        }
+      );
+    });
+  }
 
   getPolQuestions(pollId) {
-     const url = AppConfigs.poll.pollQuestion + pollId;
-     return new Promise((resolve, reject) => {
-       this.apiService.httpGet(
-         url,
-         (successData) => {
-           resolve(successData.result);
-         },
-         (err) => {
-           reject(err);
-         }
-       );
-     });
+    const url = AppConfigs.poll.pollQuestion + pollId;
+    return new Promise((resolve, reject) => {
+      this.apiService.httpGet(
+        url,
+        (successData) => {
+          resolve(successData.result);
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+    });
   }
 
   getPollResult(pollId: string) {
@@ -70,7 +84,7 @@ export class PollProvider {
       this.apiService.httpGet(
         url,
         (successData) => {
-          resolve(successData.result);
+          resolve(successData);
         },
         () => {
           reject();

@@ -22,6 +22,7 @@ export class PollPreviewPage {
   pollId: any;
   generatedLink: string;
   translateObject: any;
+  linkExpired: any;
 
   constructor(
     public navCtrl: NavController,
@@ -53,11 +54,16 @@ export class PollPreviewPage {
   }
 
   getPollQUestionByLink(): void {
-    this.utils.startLoader();
+    // this.utils.startLoader();
     this.pollProvider
       .getPollQUestionByLink(this.pollId)
       .then((res) => {
-        this.utils.stopLoader();
+        // this.utils.stopLoader();
+        if (!res["result"]) {
+          this.linkExpired = res["message"];
+          return;
+        }
+        res = res["result"];
 
         const data = res["questions"][0];
         this.pollId = res["pollId"];

@@ -103,7 +103,7 @@ export class MyApp {
       show: false,
     },
     {
-      name: "feedback",
+      name: "polls",
       icon: "repeat",
       component: FeedbackPollPage,
       externalLink: false,

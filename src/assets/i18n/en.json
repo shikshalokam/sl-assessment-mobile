@@ -168,7 +168,8 @@
     "programs": "Programs",
     "mySolutions": "My Solutions",
     "allSolutions": "All Solutions",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "polls": "Polls"
   },
   "headings": {
     "zone": "Zones",
@@ -251,7 +252,9 @@
     "createPoll": "Create Poll",
     "takePoll": "Take Poll",
     "myCreations": "My Creations",
-    "result": "Result"
+    "result": "Result",
+    "myResults": "My Results",
+    "polls": "Polls"
   },
   "bottomNav": {
     "institution": "Institution",
@@ -293,7 +296,12 @@
     "selectGesture": "Select Gesture",
     "drafts": "Drafts",
     "published": "Published",
-    "poll": "poll"
+    "poll": "poll",
+    "singleSelect": "Single Select",
+    "multiSelect": "Multi Select",
+    "emoticons": "Emoticons",
+    "gestures": "Gestures",
+    "selectedResponseType": "Select Response Type"
 
   },
   "languages": {

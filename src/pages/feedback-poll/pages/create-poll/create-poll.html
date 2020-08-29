@@ -8,7 +8,8 @@
   </div>
   <div>
     <h5 (click)="showResponseType=!showResponseType">
-      Select Response Type
+      {{'labels.selectedResponseType'|translate}}
+
       <span padding>
         <ion-icon *ngIf="!showResponseType" name="arrow-dropdown"></ion-icon>
         <ion-icon *ngIf="showResponseType" name="arrow-dropup"></ion-icon>
@@ -24,7 +25,8 @@
         [ngClass]="{highlight: selectedResponseType=='checkbox'}"
       >
         <ion-icon name="checkbox"></ion-icon>
-        Multi Select
+
+        {{'labels.multiSelect'|translate}}
       </button>
       <button
         ion-button
@@ -35,7 +37,7 @@
         [ngClass]="{highlight: selectedResponseType=='radio'}"
       >
         <ion-icon name="radio-button-on"></ion-icon>
-        Single Select
+        {{'labels.singleSelect'|translate}}
       </button>
       <button
         ion-button
@@ -45,7 +47,7 @@
         (click)="responseTypeChange('emoticons')"
         [ngClass]="{highlight: selectedResponseType=='emoticons'}"
       >
-        😀 Emoticons
+        😀 {{'labels.emoticons'|translate}}
       </button>
       <button
         ion-button
@@ -55,40 +57,9 @@
         (click)="responseTypeChange('gestures') "
         [ngClass]="{highlight: selectedResponseType=='gestures'}"
       >
-        👍 Gestures
+        👍 {{'labels.gestures'|translate}}
       </button>
     </div>
-    <!-- <div padding>
-      <ion-segment [(ngModel)]="pet">
-        <ion-segment-button value="multiselect">
-          <ion-icon name="checkbox"></ion-icon> Multi Select
-        </ion-segment-button>
-        <ion-segment-button value=""> <ion-icon name="radio-button-on"></ion-icon> Single Select </ion-segment-button>
-        <ion-segment-button value="emoticons"> 😀 Emoticons </ion-segment-button>
-        <ion-segment-button value="puppies"> 👍 Gestures </ion-segment-button>
-      </ion-segment>
-    </div>
- -->
-    <!--  <div [ngSwitch]="true">
-      <ion-list *ngSwitchCase="pet=='multiselect'||pet=='singleselet'||pet=='emoticons'">
-        <ion-item>
-          <button ion-button icon-end (click)="addOption()">
-            {{'buttons.addNew' | translate}}
-            <ion-icon name="add-circle"></ion-icon>
-          </button>
-        </ion-item>
-      </ion-list>
-
-      <ion-list *ngSwitchCase="'kittens'">
-        <ion-item>
-          <ion-thumbnail item-start>
-            <img src="img/thumbnail-kitten-1.jpg" />
-          </ion-thumbnail>
-          <h2>Luna</h2>
-        </ion-item>
-        ...
-      </ion-list>
-    </div> -->
   </div>
 
   <!-- add options -->

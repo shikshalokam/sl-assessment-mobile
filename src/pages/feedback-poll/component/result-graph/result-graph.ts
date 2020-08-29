@@ -34,6 +34,10 @@ export class ResultGraphComponent {
       .getPollResult(pollId)
       .then((res: any) => {
         res ? (this.chartObj = res[0]) : (this.chartObj = null);
+        if (this.chartObj) {
+          this.chartObj["yAxis"] = { max: 100 };
+          console.log(this.chartObj);
+        }
         this.utils.stopLoader();
       })
 
