@@ -8,11 +8,10 @@ import { PollPreviewPage } from "./pages/poll-preview/poll-preview";
 import { MyCreationsPage } from "./pages/my-creations/my-creations";
 import { PollProvider } from "./providers/poll/poll";
 import { HighchartsChartModule } from "highcharts-angular";
-import { PollFeedbackResultPage } from "./pages/poll-feedback-result/poll-feedback-result";
 import { DirectivesModule } from "../../directives/directives.module";
 
 @NgModule({
-  declarations: [FeedbackPollPage, CreatePollPage, PollPreviewPage, MyCreationsPage, PollFeedbackResultPage],
+  declarations: [FeedbackPollPage, CreatePollPage, PollPreviewPage, MyCreationsPage],
   imports: [
     IonicPageModule.forChild(FeedbackPollPage),
     ComponentsModule,
@@ -20,7 +19,7 @@ import { DirectivesModule } from "../../directives/directives.module";
     HighchartsChartModule,
     DirectivesModule,
   ],
-  entryComponents: [FeedbackPollPage, CreatePollPage, PollPreviewPage, MyCreationsPage, PollFeedbackResultPage],
+  entryComponents: [FeedbackPollPage, CreatePollPage, PollPreviewPage, MyCreationsPage],
   providers: [PollProvider],
 })
 export class FeedbackPollPageModule {}

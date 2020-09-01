@@ -35,10 +35,6 @@ export class FeedbackPollPage {
       case "myCreations":
         this.navCtrl.push(MyCreationsPage);
         break;
-      case "results":
-        this.navCtrl.push(PollFeedbackResultPage);
-        break;
-
       default:
         break;
     }
@@ -59,7 +55,6 @@ export class FeedbackPollPage {
     const resultModal = this.modalCntrl.create(ResultGraphComponent, {
       pollId: pollId,
     });
-    // resultModal.onDidDismiss((result) => {});
     resultModal.present();
   }
 }
