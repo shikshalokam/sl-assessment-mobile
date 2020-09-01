@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams, ModalController } from "ionic-angular";
 import { CreatePollPage } from "./pages/create-poll/create-poll";
 import { MyCreationsPage } from "./pages/my-creations/my-creations";
-import { PollFeedbackResultPage } from "./pages/poll-feedback-result/poll-feedback-result";
 import { UtilsProvider } from "../../providers/utils/utils";
 import { PollProvider } from "./providers/poll/poll";
 import { ResultGraphComponent } from "./component/result-graph/result-graph";
