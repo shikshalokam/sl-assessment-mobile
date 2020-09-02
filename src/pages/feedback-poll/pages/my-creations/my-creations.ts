@@ -33,8 +33,10 @@ export class MyCreationsPage {
   ionViewDidEnter() {
     console.log("ionViewDidLoad MyCreationsPage");
     this.getDrafts();
-    this.onTabChange("draft");
     this.getPollList();
+  }
+  ionViewDidLoad() {
+    this.onTabChange("draft");
   }
 
   getPollList() {
@@ -109,8 +111,9 @@ export class MyCreationsPage {
     this.pollProvider
       .getPolQuestions(pollId)
       .then((data) => {
+        const navData = { pollLink: data["pollLink"], form: data["questions"][0] };
         this.utils.stopLoader();
-        this.navCtrl.push(PollPreviewPage, data[0]);
+        this.navCtrl.push(PollPreviewPage, navData);
       })
       .catch((err) => {
         console.log(err);

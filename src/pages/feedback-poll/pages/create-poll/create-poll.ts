@@ -158,7 +158,7 @@ export class CreatePollPage {
     form.type = "create";
     form.time = this.draft ? this.draft.time : null;
     console.log(form);
-    this.navCtrl.push(PollPreviewPage, form);
+    this.navCtrl.push(PollPreviewPage, { form: form });
   }
 
   responseTypeChange(type: string): void {

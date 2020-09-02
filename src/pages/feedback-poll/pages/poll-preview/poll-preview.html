@@ -25,6 +25,12 @@
     <div class="_flex-box _flex-direction-column padding" *ngIf="type==='submit'">
       <button ion-button round (click)="submitResponse()">Submit Response</button>
     </div>
+    <div class="_flex-box _flex-direction-column padding" *ngIf="pollLink">
+      <button ion-button round (click)="socialSharing()">Share Poll</button>
+    </div>
+    <div class="_flex-box _flex-direction-column padding" *ngIf="!pollLink && (type!='submit' && type!='create')">
+      <button ion-button round *ngIf="question">Poll Expired</button>
+    </div>
   </div>
   <div *ngIf="linkExpired">
     <p class="_flex-box _justify-content-center">{{linkExpired}}</p>

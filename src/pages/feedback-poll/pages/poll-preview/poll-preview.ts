@@ -23,6 +23,7 @@ export class PollPreviewPage {
   generatedLink: string;
   translateObject: any;
   linkExpired: any;
+  pollLink: any;
 
   constructor(
     public navCtrl: NavController,
@@ -45,20 +46,21 @@ export class PollPreviewPage {
     console.log("ionViewDidLoad PollPreviewPage");
     this.pollId = this.navParams.get("pollId"); // from deeplink
     this.pollId ? this.getPollQUestionByLink() : null;
-    this.form = this.navParams.data;
-    this.question = this.form.question;
-    this.options = this.form.options;
-    this.selectedResponseType = this.form.selectedResponseType || this.form.responseType;
-    this.type = this.form.type;
-    this.time = this.form.time;
+    this.form = this.navParams.get("form");
+    this.pollLink = this.navParams.get("pollLink");
+    if (this.form) {
+      this.question = this.form.question;
+      this.options = this.form.options;
+      this.selectedResponseType = this.form.selectedResponseType || this.form.responseType;
+      this.type = this.form.type;
+      this.time = this.form.time;
+    }
   }
 
   getPollQUestionByLink(): void {
-    // this.utils.startLoader();
     this.pollProvider
       .getPollQUestionByLink(this.pollId)
       .then((res) => {
-        // this.utils.stopLoader();
         if (!res["result"]) {
           this.linkExpired = res["message"];
           return;
@@ -145,6 +147,7 @@ export class PollPreviewPage {
   }
 
   socialSharing(): void {
+    this.pollLink ? (this.generatedLink = this.pollLink) : null;
     if (this.generatedLink) {
       this.socialShare.regularShare(this.generatedLink);
       return;

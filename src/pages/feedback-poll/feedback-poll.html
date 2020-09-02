@@ -3,8 +3,8 @@
 </ion-header>
 
 <ion-content padding>
-  <div class="_flex-box _noWrap _justify-content-space-between homeIcons">
-    <div>
+  <div class="_flex-box" style="text-align: center">
+    <div style="flex: 1">
       <ion-card (click)="goToPage('create')">
         <ion-card-header>
           <ion-icon color="primary" name="add-circle"></ion-icon>
@@ -12,7 +12,7 @@
         <ion-card-content> {{'buttons.create'| translate}} </ion-card-content>
       </ion-card>
     </div>
-    <div>
+    <div style="flex: 1">
       <ion-card (click)="goToPage('myCreations')">
         <ion-card-header>
           <ion-icon color="primary" name="briefcase"></ion-icon>
@@ -20,15 +20,6 @@
         <ion-card-content> {{'buttons.myCreation'| translate}} </ion-card-content>
       </ion-card>
     </div>
-    <!-- //TODO:Remove these components -->
-    <!--  <div>
-      <ion-card (click)="goToPage('results')">
-        <ion-card-header>
-          <ion-icon color="primary" name="stats"></ion-icon>
-        </ion-card-header>
-        <ion-card-content> {{'buttons.myResults'| translate}} </ion-card-content>
-      </ion-card>
-    </div> -->
   </div>
   <div *ngIf="allPolls?.length">
     <div margin>
