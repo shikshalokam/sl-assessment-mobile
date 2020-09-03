@@ -64,7 +64,7 @@
     "angular-font-awesome": "^3.1.2",
     "com-sarriaroman-photoviewer": "^1.2.4",
     "cordova": "^8.1.2",
-    "cordova-android": "^8.1.0",
+    "cordova-android": "^9.0.0",
     "cordova-android-play-services-gradle-release": "^1.4.6",
     "cordova-android-support-gradle-release": "^3.0.1",
     "cordova-browser": "5.0.4",
@@ -173,18 +173,18 @@
       "ionic-plugin-deeplinks": {
         "URL_SCHEME": "samiksha",
         "DEEPLINK_SCHEME": "https",
-        "DEEPLINK_HOST": "shikshalokam.org",
+        "DEEPLINK_HOST": "qa.apps.shikshalokam.org",
         "ANDROID_PATH_PREFIX": "/",
         "ANDROID_2_PATH_PREFIX": "/",
         "ANDROID_3_PATH_PREFIX": "/",
         "ANDROID_4_PATH_PREFIX": "/",
         "ANDROID_5_PATH_PREFIX": "/",
         "DEEPLINK_2_SCHEME": " ",
-        "DEEPLINK_2_HOST": " ",
+        "DEEPLINK_2_HOST": "qa.apps.shikshalokam.org",
         "DEEPLINK_3_SCHEME": " ",
-        "DEEPLINK_3_HOST": " ",
+        "DEEPLINK_3_HOST": "stagging.apps.shikshalokam.org",
         "DEEPLINK_4_SCHEME": " ",
-        "DEEPLINK_4_HOST": " ",
+        "DEEPLINK_4_HOST": "apps.shikshalokam.org",
         "DEEPLINK_5_SCHEME": " ",
         "DEEPLINK_5_HOST": " "
       },
@@ -233,5 +233,10 @@
       "ios",
       "android"
     ]
-  }
+  },
+  "platforms": [
+    "browser",
+    "ios",
+    "android"
+  ]
 }
