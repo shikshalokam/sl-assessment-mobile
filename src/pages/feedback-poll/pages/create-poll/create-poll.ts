@@ -18,6 +18,32 @@ export class CreatePollPage {
   emoticons: any = [];
   gestures: any = [];
   translateObject: any;
+  responseTypeArr = [
+    {
+      type: "checkbox",
+      label: "multiSelect",
+      icon: "",
+      ionicon: "checkbox",
+    },
+    {
+      type: "radio",
+      label: "singleSelect",
+      icon: "",
+      ionicon: "radio-button-on",
+    },
+    {
+      type: "emoticons",
+      label: "emoticons",
+      icon: "😀",
+      ionicon: "",
+    },
+    {
+      type: "gestures",
+      label: "gestures",
+      icon: "👍",
+      ionicon: "",
+    },
+  ];
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,

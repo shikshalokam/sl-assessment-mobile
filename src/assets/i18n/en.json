@@ -347,7 +347,9 @@
     "numberOfAssessmentsDone": "Number Of assessments done",
     "ratingPending": "Rating is pending, please check later.",
     "noPolls": "No Polls",
-    "noFeedbacks": "No Feedbacks"
+    "noFeedbacks": "No Feedbacks",
+    "thankyou": "Thank You !",
+    "responseSubmitted": "Your Response is submitted"
 
   },
   "toastMessage": {

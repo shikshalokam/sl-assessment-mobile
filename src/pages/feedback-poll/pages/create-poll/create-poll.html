@@ -17,47 +17,17 @@
     </h5>
     <div *ngIf="showResponseType">
       <button
+        *ngFor="let item of responseTypeArr"
         ion-button
         icon-start
         small
         clear
-        (click)="responseTypeChange('checkbox')"
-        [ngClass]="{highlight: selectedResponseType=='checkbox'}"
+        (click)="responseTypeChange(item.type)"
+        [ngClass]="{highlight: selectedResponseType==item.type}"
       >
-        <ion-icon name="checkbox"></ion-icon>
+        <ion-icon [name]="item.ionicon" *ngIf="item.ionicon"></ion-icon>
 
-        {{'labels.multiSelect'|translate}}
-      </button>
-      <button
-        ion-button
-        icon-start
-        small
-        clear
-        (click)="responseTypeChange('radio')"
-        [ngClass]="{highlight: selectedResponseType=='radio'}"
-      >
-        <ion-icon name="radio-button-on"></ion-icon>
-        {{'labels.singleSelect'|translate}}
-      </button>
-      <button
-        ion-button
-        icon-start
-        small
-        clear
-        (click)="responseTypeChange('emoticons')"
-        [ngClass]="{highlight: selectedResponseType=='emoticons'}"
-      >
-        😀 {{'labels.emoticons'|translate}}
-      </button>
-      <button
-        ion-button
-        icon-start
-        small
-        clear
-        (click)="responseTypeChange('gestures') "
-        [ngClass]="{highlight: selectedResponseType=='gestures'}"
-      >
-        👍 {{'labels.gestures'|translate}}
+        {{item.icon + " "}}{{'labels.'+item.label|translate}}
       </button>
     </div>
   </div>

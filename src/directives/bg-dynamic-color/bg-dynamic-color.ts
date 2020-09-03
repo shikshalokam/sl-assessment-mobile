@@ -6,6 +6,8 @@ import { Directive, ElementRef, Renderer } from "@angular/core";
 export class BgDynamicColorDirective {
   constructor(private el: ElementRef, private renderer: Renderer) {
     console.log("Hello BgDynamicColorDirective Directive");
+    renderer.setElementStyle(el.nativeElement, "height", "20px");
+    renderer.setElementStyle(el.nativeElement, "width", "20px");
     renderer.setElementStyle(el.nativeElement, "backgroundColor", this.getRandomColor());
     renderer.setElementStyle(el.nativeElement, "borderRadius", "6px");
     renderer.setElementStyle(el.nativeElement, "boxShadow", "#2b181842 1px 1px");

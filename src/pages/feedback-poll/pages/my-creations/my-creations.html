@@ -49,7 +49,7 @@
         <ion-card *ngFor="let poll of polls;let pollIndex=index " (click)="openPollPreview(poll._id)">
           <ion-item text-wrap>
             <div class="_flex-box">
-              <div style="width: 20px; height: 20px" margin bg-dynamic-color></div>
+              <div margin bg-dynamic-color></div>
               <div style="flex: 1">
                 <p class="capitalize">{{poll.name}}</p>
               </div>
