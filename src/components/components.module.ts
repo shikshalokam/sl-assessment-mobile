@@ -54,6 +54,7 @@ import { ExpansionTableComponent } from "./expansion-table/expansion-table";
 import { PollOptionComponent } from "../pages/feedback-poll/component/poll-option/poll-option";
 import { ThanksComponent } from "./thanks/thanks";
 import { ResultGraphComponent } from '../pages/feedback-poll/component/result-graph/result-graph';
+import { StateModalComponent } from './state-modal/state-modal';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { ResultGraphComponent } from '../pages/feedback-poll/component/result-gr
     PollOptionComponent,
     ThanksComponent,
     ResultGraphComponent,
+    StateModalComponent,
   ],
   imports: [
     IonicModule,
@@ -158,6 +160,7 @@ import { ResultGraphComponent } from '../pages/feedback-poll/component/result-gr
     PollOptionComponent,
     ThanksComponent,
     ResultGraphComponent,
+    StateModalComponent,
   ],
   entryComponents: [
     InputTypeComponent,
