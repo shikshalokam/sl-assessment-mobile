@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.shikshalokam.samiksha.darpan" version="3.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.shikshalokam.samiksha.darpan" version="3.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Darpan</name>
     <description>A survey app for school development</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -209,12 +209,10 @@
     <allow-navigation href="http://192.168.43.61:8102" />
     <allow-navigation href="http://192.168.43.61:8103" />
     <allow-navigation href="http://192.168.43.62:8100" />
-    <engine name="browser" spec="5.0.4" />
-    <engine name="ios" spec="^5.1.0" />
     <plugin name="ionic-plugin-deeplinks" spec="^1.0.20">
-        <variable name="URL_SCHEME" value="samiksha" />
+        <variable name="URL_SCHEME" value="darpan" />
         <variable name="DEEPLINK_SCHEME" value="https" />
-        <variable name="DEEPLINK_HOST" value="*.shikshalokam.org" />
+        <variable name="DEEPLINK_HOST" value="*shikshalokam.org" />
         <variable name="ANDROID_PATH_PREFIX" value="/" />
         <variable name="ANDROID_2_PATH_PREFIX" value="/" />
         <variable name="ANDROID_3_PATH_PREFIX" value="/" />
@@ -229,5 +227,7 @@
         <variable name="DEEPLINK_5_SCHEME" value=" " />
         <variable name="DEEPLINK_5_HOST" value=" " />
     </plugin>
-    <engine name="android" spec="latest" />
+    <engine name="browser" spec="5.0.4" />
+    <engine name="ios" spec="^5.1.0" />
+    <engine name="android" spec="^9.0.0" />
 </widget>

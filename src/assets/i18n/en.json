@@ -5,7 +5,8 @@
     "selectObservationType": "Select a observation Type",
     "selectSolution": "Select a Solution",
     "selectSchool": "Select All Schools",
-    "programName": "Program Name"
+    "programName": "Program Name",
+    "manualRating": "Manual Rating"
   },
   "actionSheet": {
     "confirmLeave": "Are you sure to leave.",
@@ -167,7 +168,7 @@
     "programs": "Programs",
     "mySolutions": "My Solutions",
     "allSolutions": "All Solutions",
-    "resetPassword":"Reset Password",
+    "resetPassword": "Reset Password",
     "feedback": "Feedback",
     "polls": "Polls"
   },
