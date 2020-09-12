@@ -27,9 +27,7 @@ export class ProgramSolutionComponent {
   //Redirect on solution click based on sol type,observation individual or institutional
 
   redirectOnSoluctionClick() {
-    this.solution.type == "observation"
-      ? this.goToProgSolObservationDetails()
-      : this.goToProgramSolEntity();
+    this.solution.type == "observation" ? this.goToProgSolObservationDetails() : this.goToProgramSolEntity();
   }
 
   goToProgramSolEntity() {

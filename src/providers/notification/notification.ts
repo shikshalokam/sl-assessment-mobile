@@ -18,7 +18,6 @@ import { storageKeys } from "../storageKeys";
 import { ProgramSolutionEntityPage } from "../../pages/programs/program-solution-entity/program-solution-entity";
 import { ProgramSolutionObservationDetailPage } from "../../pages/programs/program-solution-observation-detail/program-solution-observation-detail";
 import { ProgramServiceProvider } from "../../pages/programs/program-service";
-import { CurrentUserProvider } from "../current-user/current-user";
 
 @Injectable()
 export class NotificationProvider {
@@ -48,8 +47,7 @@ export class NotificationProvider {
     private appBadge: AppIconBadgeProvider,
     private appVersion: AppVersion,
     private assessmentService: AssessmentServiceProvider,
-    private programService: ProgramServiceProvider,
-    private user: CurrentUserProvider,
+    private programService: ProgramServiceProvider
   ) {
     console.log("Hello NotificationProvider Provider");
     //offline event
@@ -69,7 +67,7 @@ export class NotificationProvider {
   startNotificationPooling() {
     this.timeInterval = setInterval(() => {
       if (this.networkAvailable) {
-        this.user.curretUser.isDeactivated?null:this.checkForNotificationApi();
+        this.checkForNotificationApi();
       }
       // else {
       //   console.log("no internet");
@@ -88,9 +86,7 @@ export class NotificationProvider {
       AppConfigs.notification.getUnreadNotificationCount,
       (success) => {
         this.notificationsData = success.result;
-        success.result.count
-          ? this.appBadge.setBadge(success.result.count)
-          : this.appBadge.clearTheBadge();
+        success.result.count ? this.appBadge.setBadge(success.result.count) : this.appBadge.clearTheBadge();
         // success.result.data = [
         //   {
         //     "is_read": false,
@@ -133,10 +129,7 @@ export class NotificationProvider {
                 this.localStorage
                   .getLocalStorage("appUpdateVersions")
                   .then((statusObj) => {
-                    if (
-                      statusObj &&
-                      !statusObj[notification.payload.appVersion]
-                    ) {
+                    if (statusObj && !statusObj[notification.payload.appVersion]) {
                       this.$alertModalSubject.next(notification);
                     }
                   })
@@ -154,11 +147,7 @@ export class NotificationProvider {
   getAllNotifications(pageCount, limit) {
     return new Promise((resolve, reject) => {
       this.apiService.httpGet(
-        AppConfigs.notification.getAllNotifications +
-          "?page=" +
-          pageCount +
-          "&limit=" +
-          limit,
+        AppConfigs.notification.getAllNotifications + "?page=" + pageCount + "&limit=" + limit,
         (success) => {
           resolve(success.result);
         },
@@ -225,10 +214,7 @@ export class NotificationProvider {
   }
 
   openAction(assessment, aseessmemtData, evidenceIndex) {
-    this.utils.setCurrentimageFolderName(
-      aseessmemtData.assessment.evidences[evidenceIndex].externalId,
-      assessment._id
-    );
+    this.utils.setCurrentimageFolderName(aseessmemtData.assessment.evidences[evidenceIndex].externalId, assessment._id);
     const options = {
       _id: assessment._id,
       name: assessment.name,
@@ -248,18 +234,15 @@ export class NotificationProvider {
       .then((successData) => {
         this.utils.stopLoader();
         if (successData.assessment.evidences.length > 1) {
-          this.app.getActiveNav().push("EvidenceListPage", {
+          this.app.getRootNav().push("EvidenceListPage", {
             _id: submissionId,
             name: heading,
             recentlyUpdatedEntity: {},
           });
         } else {
           if (successData.assessment.evidences[0].startTime) {
-            this.utils.setCurrentimageFolderName(
-              successData.assessment.evidences[0].externalId,
-              submissionId
-            );
-            this.app.getActiveNav().push("SectionListPage", {
+            this.utils.setCurrentimageFolderName(successData.assessment.evidences[0].externalId, submissionId);
+            this.app.getRootNav().push("SectionListPage", {
               _id: submissionId,
               name: heading,
               selectedEvidence: 0,
@@ -300,9 +283,7 @@ export class NotificationProvider {
     this.localStorage
       .getLocalStorage(storageKeys.programList)
       .then((programs) => {
-        let programIndex = programs
-          .map((p) => p._id)
-          .indexOf(payload.program_id);
+        let programIndex = programs.map((p) => p._id).indexOf(payload.program_id);
         let solutionIndex = programs[programIndex].solutions
           .map((s) => (payload.type == "observation" ? s.solutionId : s._id))
           .indexOf(payload.solution_id);
@@ -318,13 +299,9 @@ export class NotificationProvider {
         };
         this.utils.stopLoader();
         payload.type == "observation"
-          ? this.app
-              .getRootNav()
-              .push(ProgramSolutionObservationDetailPage, navData)
+          ? this.app.getRootNav().push(ProgramSolutionObservationDetailPage, navData)
           : this.app.getRootNav().push(ProgramSolutionEntityPage, navData);
-        let entityIndex = programs[programIndex].solutions[
-          solutionIndex
-        ].entities
+        let entityIndex = programs[programIndex].solutions[solutionIndex].entities
           .map((e) => e._id)
           .indexOf(payload.entity_id);
       })

@@ -108,8 +108,10 @@ export class ProgramSolutionObservationDetailPage {
       this.programService
         .getAssessmentDetailsForObservation(event, this.programs)
         .then(async (programs) => {
+          this.utils.startLoader();
           await this.programService.refreshObservationList();
           await this.getLocalStorageData();
+          this.utils.stopLoader();
           this.app.getRootNav().push(ProgramObservationSubmissionPage, { data });
         })
         .catch((err) => {});
