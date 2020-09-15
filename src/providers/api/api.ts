@@ -51,9 +51,7 @@ export class ApiProvider {
        if (userDetails.exp <= Date.now() / 1000) {
          const url = AppConfigs.app_url + AppConfigs.keyCloak.getAccessToken;
          const header = {
-           grant_type: "refresh_token",
-           client_id: AppConfigs.clientId,
-           refresh_token: this.currentUser.curretUser.refreshToken,
+         
          };
          let body = {
            grant_type: "refresh_token",
