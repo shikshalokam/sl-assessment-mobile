@@ -57,7 +57,6 @@
     "@ionic-native/status-bar": "4.12.0",
     "@ionic-native/streaming-media": "^4.20.0",
     "@ionic-native/text-to-speech": "^4.20.0",
-    "@ionic/app-scripts": "3.2.3",
     "@ionic/storage": "2.1.3",
     "@ngx-translate/core": "9.1.1",
     "@ngx-translate/http-loader": "3.0.1",
@@ -112,11 +111,12 @@
     "es6-promise-plugin": "^4.2.2",
     "highcharts": "^7.2.0",
     "highcharts-angular": "^2.4.0",
-    "ionic-angular": "3.9.2",
+    "ionic-angular": "3.9.10",
     "ionic-plugin-deeplinks": "^1.0.20",
     "ionic-stepper": "1.1.0",
     "ionicons": "3.0.0",
     "jwt-decode": "2.2.0",
+    "lodash.clonedeep": "^4.5.0",
     "moment": "^2.24.0",
     "rxjs": "5.5.11",
     "save": "2.3.2",
@@ -124,10 +124,10 @@
     "zone.js": "0.8.26"
   },
   "devDependencies": {
+    "@ionic/app-scripts": "^3.2.4",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "eslint": "^7.5.0",
-    "ionic": "5.4.16",
     "typescript": "2.6.2"
   },
   "description": "An Ionic project",
@@ -171,22 +171,10 @@
       },
       "cordova-plugin-extended-device-information": {},
       "ionic-plugin-deeplinks": {
-        "URL_SCHEME": "samiksha",
+        "URL_SCHEME": "pallithalam",
         "DEEPLINK_SCHEME": "https",
-        "DEEPLINK_HOST": "shikshalokam.org",
-        "ANDROID_PATH_PREFIX": "/",
-        "ANDROID_2_PATH_PREFIX": "/",
-        "ANDROID_3_PATH_PREFIX": "/",
-        "ANDROID_4_PATH_PREFIX": "/",
-        "ANDROID_5_PATH_PREFIX": "/",
-        "DEEPLINK_2_SCHEME": " ",
-        "DEEPLINK_2_HOST": " ",
-        "DEEPLINK_3_SCHEME": " ",
-        "DEEPLINK_3_HOST": " ",
-        "DEEPLINK_4_SCHEME": " ",
-        "DEEPLINK_4_HOST": " ",
-        "DEEPLINK_5_SCHEME": " ",
-        "DEEPLINK_5_HOST": " "
+        "DEEPLINK_HOST": "*pps.shikshalokam.org",
+        "ANDROID_PATH_PREFIX": "/"
       },
       "cordova-plugin-x-socialsharing": {
         "ANDROID_SUPPORT_V4_VERSION": "24.1.1+",
@@ -235,5 +223,10 @@
       "ios",
       "android"
     ]
-  }
+  },
+  "platforms": [
+    "browser",
+    "ios",
+    "android"
+  ]
 }
