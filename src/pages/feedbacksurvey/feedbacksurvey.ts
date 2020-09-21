@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams, ModalController, ViewController } from "ionic-angular";
-import { SurveyQuestionPage } from "./survey-question/survey-question";
 import { SurveyProvider } from "./provider/survey/survey";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 import { storageKeys } from "../../providers/storageKeys";
@@ -36,7 +35,6 @@ export class FeedbacksurveyPage {
   ) {}
 
   ionViewDidLoad(): void {
-    console.log("ionViewDidLoad FeedbacksurveyPage");
     this.link = this.navParams.get("surveyId");
     this.link ? this.deepLinkRedirect() : this.getSurveyListing();
   }
@@ -80,8 +78,6 @@ export class FeedbacksurveyPage {
     this.surveyProvider
       .getDetailsByLink(this.link)
       .then((data) => {
-        // this.utils.stopLoader();
-
         if (data.result == false) {
           this.showMsg("surveyExpired", true);
           return;

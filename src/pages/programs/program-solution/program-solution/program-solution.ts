@@ -73,9 +73,8 @@ export class ProgramSolutionComponent {
   }
 
   goTosurvey() {
-    console.log(this.solution);
-    if (this.solution.entities && this.solution.entities.length) {
-      const submission = this.solution.entities[0].submissions[0];
+    if (this.solution.submissions && this.solution.submissions.length) {
+      const submission = this.solution.submissions[0];
       const t1 = new Date();
       const t2 = new Date(submission.endDate);
       if (t1 > t2) {
@@ -119,7 +118,7 @@ export class ProgramSolutionComponent {
   }
 
   /*
-  remove survey solution from home page if expired one, other solution can be shown.
+  remove survey solution from home page if expired , other solution can be shown.
   in program solution page that survey solution should be visible.
 */
   get showSurvey(): boolean {
@@ -127,8 +126,8 @@ export class ProgramSolutionComponent {
       return true;
     }
 
-    if (this.solution.entities && this.solution.entities.length) {
-      const submission = this.solution.entities[0].submissions[0];
+    if (this.solution.submissions && this.solution.submissions.length) {
+      const submission = this.solution.submissions[0];
       const t1 = new Date();
       const t2 = new Date(submission.endDate);
       if (t1 > t2) {

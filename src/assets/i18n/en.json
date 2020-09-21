@@ -257,7 +257,8 @@
     "result": "Result",
     "myResults": "My Results",
     "polls": "Polls",
-    "myForms": "My Forms"
+    "myForms": "My Forms",
+    "totalSubmissions": "Total Submissions"
   },
   "bottomNav": {
     "institution": "Institution",
