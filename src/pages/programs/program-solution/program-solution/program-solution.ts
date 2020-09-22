@@ -93,7 +93,7 @@ export class ProgramSolutionComponent {
 
   goToQuestionPage(submissionId) {
     const navParams = { _id: submissionId, selectedEvidence: 0, selectedSection: 0 };
-    this.navCtrl.push(QuestionerPage, navParams);
+    this.app.getRootNav().push(QuestionerPage, navParams);
   }
 
   downloadSurvey(submission) {

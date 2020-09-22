@@ -340,6 +340,7 @@ export class MyApp {
                 ? match["$link"]["path"].replace(match.$args[argkey], `:${argkey}`)
                 : match["$link"]["path"];
               const path = paths[matchPath];
+              // this.localStorage.setLocalStorage("deeplink", { path: path, args: match.$args });
 
               this.nav.push(path, match.$args);
               console.log(JSON.stringify(match));

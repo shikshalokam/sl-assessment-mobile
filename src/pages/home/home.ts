@@ -250,6 +250,7 @@ export class HomePage {
     // this.getIndividualAssessmentFromLocal();
     // this.getObservationListFromLocal();
     this.getProgramFromStorage();
+
     this.programService.migrationFuntion();
   }
 

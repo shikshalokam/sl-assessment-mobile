@@ -36,6 +36,8 @@ export class FeedbacksurveyPage {
 
   ionViewDidLoad(): void {
     this.link = this.navParams.get("surveyId");
+  }
+  ionViewWillEnter() {
     this.link ? this.deepLinkRedirect() : this.getSurveyListing();
   }
 
