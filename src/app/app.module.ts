@@ -128,6 +128,7 @@ import { ReportsPageModule } from "../pages/reports/reports.module";
 import { LibraryPageModule } from "../pages/library/library.module";
 import { ManualRatingPageModule } from "../pages/manual-rating/manual-rating.module";
 import { FeedbackPollPageModule } from "../pages/feedback-poll/feedback-poll.module";
+import { FeedbacksurveyPageModule } from "../pages/feedbacksurvey/feedbacksurvey.module";
 @NgModule({
   declarations: [
     MyApp,
@@ -198,6 +199,7 @@ import { FeedbackPollPageModule } from "../pages/feedback-poll/feedback-poll.mod
     LibraryPageModule,
     ManualRatingPageModule,
     FeedbackPollPageModule,
+    FeedbacksurveyPageModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

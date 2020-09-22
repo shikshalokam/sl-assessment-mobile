@@ -4,7 +4,16 @@
   <ion-item-divider color="light">
     <h4 *ngIf="questionNumber">{{ questionNumber+' )'}} {{data?.question}}</h4>
     <h4 *ngIf="!questionNumber">Responses</h4>
-
   </ion-item-divider>
-  <ion-item *ngFor="let answer of data?.answers">{{ answer}}</ion-item>
+  <div *ngIf="!showMore">
+    <ion-item *ngFor="let answer of data?.answers">{{ answer}}</ion-item>
+  </div>
+  <div *ngIf="showMore">
+    <ion-item *ngFor="let answer of data?.answers  | slice:0:count">{{ answer}}</ion-item>
+    <ion-col  *ngIf="data.answers.length>10 && count !=data.answers.length">
+      <small padding class="pull-right text-ios-danger" (click)="count=data.answers.length"
+        >{{'labels.viewAllResponses' | translate}}</small
+      >
+    </ion-col>
+  </div>
 </ion-item-group>

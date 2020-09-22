@@ -34,6 +34,7 @@ import { ReportEntityListingPage } from "../pages/reports/report-entity-listing/
 import { storageKeys } from "../providers/storageKeys";
 import { FeedbackPollPage } from "../pages/feedback-poll/feedback-poll";
 import { PollPreviewPage } from "../pages/feedback-poll/pages/poll-preview/poll-preview";
+import { FeedbacksurveyPage } from "../pages/feedbacksurvey/feedbacksurvey";
 
 @Component({
   templateUrl: "app.html",
@@ -106,6 +107,14 @@ export class MyApp {
       name: "polls",
       icon: "stats",
       component: FeedbackPollPage,
+      externalLink: false,
+      active: false,
+      show: true,
+    },
+    {
+      name: "feedbackSurveys",
+      icon: "text",
+      component: FeedbacksurveyPage,
       externalLink: false,
       active: false,
       show: true,
@@ -313,6 +322,7 @@ export class MyApp {
           paths[`/${appName}/about-us`] = AboutPage;
           paths[`/${appName}/faq`] = FaqPage;
           paths[`/${appName}/take-poll/:pollId`] = PollPreviewPage;
+          paths[`/${appName}/take-survey/:surveyId`] = FeedbacksurveyPage;
           // const paths = {
           //   "/about-us": AboutPage,
           //   "/home": HomePage,
@@ -330,6 +340,7 @@ export class MyApp {
                 ? match["$link"]["path"].replace(match.$args[argkey], `:${argkey}`)
                 : match["$link"]["path"];
               const path = paths[matchPath];
+              // this.localStorage.setLocalStorage("deeplink", { path: path, args: match.$args });
 
               this.nav.push(path, match.$args);
               console.log(JSON.stringify(match));

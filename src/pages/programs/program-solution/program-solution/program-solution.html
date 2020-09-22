@@ -1,13 +1,12 @@
 <!-- Generated template for the ProgramSolutionComponent component -->
-<div>
+<div *ngIf="(showSurvey&&showProgram )|| !showProgram">
+  <!-- <div> -->
   <ion-card (click)="redirectOnSoluctionClick()">
     <ion-item text-wrap>
       <div class="_flex-box">
-        <div style="flex: 1;">
-          <h2 >{{solution.name}}</h2>
-          <p *ngIf="showProgram">
-            {{programList[programIndex]?.name}}
-          </p>
+        <div style="flex: 1">
+          <h2>{{solution.name}}</h2>
+          <p *ngIf="showProgram">{{programList[programIndex]?.name}}</p>
         </div>
         <ion-icon name="arrow-forward" class="menuIcon" *ngIf="!homePage"></ion-icon>
       </div>

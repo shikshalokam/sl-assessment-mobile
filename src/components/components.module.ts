@@ -53,7 +53,9 @@ import { ReportEntityListComponent } from "../pages/reports/component/report-ent
 import { ExpansionTableComponent } from "./expansion-table/expansion-table";
 import { PollOptionComponent } from "../pages/feedback-poll/component/poll-option/poll-option";
 import { ThanksComponent } from "./thanks/thanks";
-import { ResultGraphComponent } from '../pages/feedback-poll/component/result-graph/result-graph';
+import { ResultGraphComponent } from "../pages/feedback-poll/component/result-graph/result-graph";
+import { SimpleListComponent } from "./simple-list/simple-list";
+import { SurveyMsgComponent } from "./survey-msg/survey-msg";
 
 @NgModule({
   declarations: [
@@ -102,6 +104,8 @@ import { ResultGraphComponent } from '../pages/feedback-poll/component/result-gr
     PollOptionComponent,
     ThanksComponent,
     ResultGraphComponent,
+    SimpleListComponent,
+    SurveyMsgComponent,
   ],
   imports: [
     IonicModule,
@@ -158,6 +162,8 @@ import { ResultGraphComponent } from '../pages/feedback-poll/component/result-gr
     PollOptionComponent,
     ThanksComponent,
     ResultGraphComponent,
+    SimpleListComponent,
+    SurveyMsgComponent,
   ],
   entryComponents: [
     InputTypeComponent,
@@ -172,7 +178,8 @@ import { ResultGraphComponent } from '../pages/feedback-poll/component/result-gr
     PlayVideoComponent,
     ViewDetailComponent,
     ThanksComponent,
-    ResultGraphComponent
+    ResultGraphComponent,
+    SurveyMsgComponent,
   ],
   providers: [Network, DatePipe, SlackProvider],
 })

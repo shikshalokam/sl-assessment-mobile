@@ -3,11 +3,7 @@ import { NavController, NavParams, Platform, Events } from "ionic-angular";
 import { UtilsProvider } from "../../providers/utils/utils";
 import { Storage } from "@ionic/storage";
 import { File } from "@ionic-native/file";
-import {
-  FileTransfer,
-  FileUploadOptions,
-  FileTransferObject,
-} from "@ionic-native/file-transfer";
+import { FileTransfer, FileUploadOptions, FileTransferObject } from "@ionic-native/file-transfer";
 import { ApiProvider } from "../../providers/api/api";
 import { AppConfigs } from "../../providers/appConfig";
 import { SlackProvider } from "../../providers/slack/slack";
@@ -72,17 +68,12 @@ export class ImageListingPage {
     // this.currentEvidenceId = this.navParams.get('selectedEvidenceId');
     // console.log(this.submissionId + "Image listing")
     this.localStorage
-      .getLocalStorage(
-        this.utils.getAssessmentLocalStorageKey(this.submissionId)
-      )
+      .getLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId))
       .then((data) => {
         this.schoolData = data;
         // console.log(this.submissionId + "Image listing  success")
-        this.currentEvidence = this.schoolData["assessment"]["evidences"][
-          this.selectedEvidenceIndex
-        ];
-        this.imageLocalCopyId =
-          "images_" + this.currentEvidence.externalId + "_" + this.submissionId;
+        this.currentEvidence = this.schoolData["assessment"]["evidences"][this.selectedEvidenceIndex];
+        this.imageLocalCopyId = "images_" + this.currentEvidence.externalId + "_" + this.submissionId;
         this.evidenceSections = this.currentEvidence["sections"];
         this.selectedEvidenceName = this.currentEvidence["name"];
         this.getAllImages();
@@ -100,16 +91,12 @@ export class ImageListingPage {
         if (question.responseType === "pageQuestions") {
           question.pageQuestions.forEach((element) => {
             questImage = this.utils.getImageNamesForQuestion(element);
-            const newArray = questImage.length
-              ? imageArray.concat(questImage)
-              : imageArray;
+            const newArray = questImage.length ? imageArray.concat(questImage) : imageArray;
             imageArray = newArray;
           });
         } else {
           questImage = this.utils.getImageNamesForQuestion(question);
-          const newArray = questImage.length
-            ? imageArray.concat(questImage)
-            : imageArray;
+          const newArray = questImage.length ? imageArray.concat(questImage) : imageArray;
           imageArray = newArray;
           // imageArray = questImage.length ? [...imageArray, ...questImage] : imageArray;
         }
@@ -123,7 +110,9 @@ export class ImageListingPage {
   checkIfEcmSumittedByUser() {
     this.utils.startLoader();
     const submissionId = this.submissionId;
-    const url = this.schoolData.observation
+    const url = this.schoolData.survey
+      ? AppConfigs.surveyFeedback.isSubmissionAllowed
+      : this.schoolData.observation
       ? AppConfigs.cro.isSubmissionAllowed
       : AppConfigs.survey.checkIfSubmitted;
     this.apiService.httpGet(
@@ -145,17 +134,13 @@ export class ImageListingPage {
           }
           // })
         } else {
-          this.translate
-            .get("toastMessage.submissionCompleted")
-            .subscribe((translations) => {
-              this.utils.openToast(translations);
-            });
+          this.translate.get("toastMessage.submissionCompleted").subscribe((translations) => {
+            this.utils.openToast(translations);
+          });
           // if (this.schoolData['assessments'][0]) {
           //   this.schoolData['assessments'][0]['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
           // } else {
-          this.schoolData["assessment"]["evidences"][
-            this.selectedEvidenceIndex
-          ].isSubmitted = true;
+          this.schoolData["assessment"]["evidences"][this.selectedEvidenceIndex].isSubmitted = true;
           // }
           this.localStorage.setLocalStorage(
             this.utils.getAssessmentLocalStorageKey(this.submissionId),
@@ -191,22 +176,16 @@ export class ImageListingPage {
         this.utils.stopLoader();
         for (let i = 0; i < success.result.length; i++) {
           this.imageList[i]["url"] = success.result[i].url;
-          this.imageList[i]["sourcePath"] =
-            success.result[i].payload.sourcePath;
-          success.result[i].cloudStorage
-            ? (this.imageList[i]["cloudStorage"] =
-                success.result[i].cloudStorage)
-            : null;
+          this.imageList[i]["sourcePath"] = success.result[i].payload.sourcePath;
+          success.result[i].cloudStorage ? (this.imageList[i]["cloudStorage"] = success.result[i].cloudStorage) : null;
         }
         this.checkForLocalFolder();
       },
       (error) => {
         this.utils.stopLoader();
-        this.translate
-          .get("toastMessage.enableToGetGoogleUrls")
-          .subscribe((translations) => {
-            this.utils.openToast(translations);
-          });
+        this.translate.get("toastMessage.enableToGetGoogleUrls").subscribe((translations) => {
+          this.utils.openToast(translations);
+        });
       }
     );
   }
@@ -248,8 +227,7 @@ export class ImageListingPage {
       headers: {
         "Content-Type": "multipart/form-data",
         "x-ms-blob-type":
-          this.imageList[this.uploadIndex].cloudStorage &&
-          this.imageList[this.uploadIndex].cloudStorage === "AZURE"
+          this.imageList[this.uploadIndex].cloudStorage && this.imageList[this.uploadIndex].cloudStorage === "AZURE"
             ? "BlockBlob"
             : null,
       },
@@ -260,9 +238,7 @@ export class ImageListingPage {
 
     this.file
       .checkFile(
-        (this.platform.is("ios")
-          ? this.file.documentsDirectory
-          : this.file.externalDataDirectory) + "images/",
+        (this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory) + "images/",
         this.imageList[this.uploadIndex].file
       )
       .then((success) => {
@@ -282,16 +258,10 @@ export class ImageListingPage {
             const errorObject = { ...this.errorObj };
             this.retryCount++;
             if (this.retryCount > 3) {
-              this.translate
-                .get("toastMessage.someThingWentWrongTryLater")
-                .subscribe((translations) => {
-                  this.utils.openToast(translations);
-                });
-              errorObject.text = `${
-                this.page
-              }: Cloud image upload failed.URL:  ${
-                this.imageList[this.uploadIndex].url
-              }.
+              this.translate.get("toastMessage.someThingWentWrongTryLater").subscribe((translations) => {
+                this.utils.openToast(translations);
+              });
+              errorObject.text = `${this.page}: Cloud image upload failed.URL:  ${this.imageList[this.uploadIndex].url}.
             Details: ${JSON.stringify(err)}`;
               this.slack.pushException(errorObject);
               this.navCtrl.pop();
@@ -315,9 +285,7 @@ export class ImageListingPage {
     if (img === null) {
       return "";
     } else {
-      const path = this.platform.is("ios")
-        ? cordova.file.documentsDirectory
-        : cordova.file.externalDataDirectory;
+      const path = this.platform.is("ios") ? cordova.file.documentsDirectory : cordova.file.externalDataDirectory;
       return path + "images/" + img;
     }
   }
@@ -329,11 +297,14 @@ export class ImageListingPage {
     // console.log(JSON.stringify(payload));
     const submissionId = this.submissionId;
     const url =
-      (this.schoolData.observation
+      (this.schoolData.survey
+        ? AppConfigs.surveyFeedback.makeSubmission
+        : this.schoolData.observation
         ? AppConfigs.cro.makeSubmission
         : AppConfigs.survey.submission) +
       submissionId +
       "/";
+
     this.apiService.httpPost(
       url,
       payload,
@@ -342,21 +313,14 @@ export class ImageListingPage {
           this.observetionProvider.markObservationAsCompleted(submissionId);
         }
         this.utils.openToast(response.message);
-        this.schoolData["assessment"]["evidences"][
-          this.selectedEvidenceIndex
-        ].isSubmitted = true;
-        this.localStorage.setLocalStorage(
-          this.utils.getAssessmentLocalStorageKey(this.submissionId),
-          this.schoolData
-        );
+        this.schoolData["assessment"]["evidences"][this.selectedEvidenceIndex].isSubmitted = true;
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
         const options = {
           _id: this.submissionId,
           name: this.schoolName,
         };
         this.utils.stopLoader();
-        this.schoolData.observation
-          ? this.events.publish("updateSubmissionStatus")
-          : null;
+        this.schoolData.observation ? this.events.publish("updateSubmissionStatus") : null;
         this.programService.refreshObservationList().then(() => {
           this.navCtrl.remove(this.navCtrl.getActive().index - 1, 1);
           this.navCtrl.pop();
@@ -396,10 +360,7 @@ export class ImageListingPage {
       for (const question of section.questions) {
         let obj = {
           qid: question._id,
-          value:
-            question.responseType === "matrix"
-              ? this.constructMatrixObject(question)
-              : question.value,
+          value: question.responseType === "matrix" ? this.constructMatrixObject(question) : question.value,
           remarks: question.remarks,
           fileName: [],
           gpsLocation: question.gpsLocation,
@@ -432,20 +393,14 @@ export class ImageListingPage {
         if (question.responseType === "multiselect") {
           for (const val of question.value) {
             for (const option of question.options) {
-              if (
-                val === option.value &&
-                obj.payload.labels.indexOf(option.label) <= 0
-              ) {
+              if (val === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
                 obj.payload.labels.push(option.label);
               }
             }
           }
         } else if (question.responseType === "radio") {
           for (const option of question.options) {
-            if (
-              obj.value === option.value &&
-              obj.payload.labels.indexOf(option.label) <= 0
-            ) {
+            if (obj.value === option.value && obj.payload.labels.indexOf(option.label) <= 0) {
               obj.payload.labels.push(option.label);
             }
           }
@@ -529,20 +484,14 @@ export class ImageListingPage {
         if (qst.responseType === "multiselect") {
           for (const val of qst.value) {
             for (const option of qst.options) {
-              if (
-                val === option.value &&
-                obj1.payload.labels.indexOf(option.label) <= 0
-              ) {
+              if (val === option.value && obj1.payload.labels.indexOf(option.label) <= 0) {
                 obj1.payload.labels.push(option.label);
               }
             }
           }
         } else if (qst.responseType === "radio") {
           for (const option of qst.options) {
-            if (
-              obj1.value === option.value &&
-              obj1.payload.labels.indexOf(option.label) <= 0
-            ) {
+            if (obj1.value === option.value && obj1.payload.labels.indexOf(option.label) <= 0) {
               obj1.payload.labels.push(option.label);
             }
           }

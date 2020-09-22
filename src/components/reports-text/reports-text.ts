@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from "@angular/core";
 
 /**
  * Generated class for the ReportsTextComponent component.
@@ -7,17 +7,16 @@ import { Component, Input } from '@angular/core';
  * Components.
  */
 @Component({
-  selector: 'reports-text',
-  templateUrl: 'reports-text.html'
+  selector: "reports-text",
+  templateUrl: "reports-text.html",
 })
 export class ReportsTextComponent {
-
   @Input() data;
   @Input() questionNumber;
+  @Input() showMore;
+  count = 10;
 
   constructor() {
-    console.log('Hello ReportsTextComponent Component');
-
+    console.log("Hello ReportsTextComponent Component");
   }
-
 }
