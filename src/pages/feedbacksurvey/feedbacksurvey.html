@@ -12,9 +12,10 @@
       [viewReport]="item?.status=='completed' || !item.submissionId"
       [status]="item?.status"
       (reportAction)="checkReport(item)"
-      (click)="item.status=='completed'? surveyProvider.showMsg('surveyCompleted'): item?.downloaded?redirect(item.submissionId):getSurveyById(item.surveyId)"
+      (click)="onSurveyClick(item)" 
     ></simple-list>
   </div>
+  <!-- item.status=='completed'? surveyProvider.showMsg('surveyCompleted'): item?.downloaded?redirect(item.submissionId):getSurveyById(item.surveyId)" -->
 
   <div *ngIf="surveyList && !surveyList?.length">
     <div class="_flex-box _justify-content-center">

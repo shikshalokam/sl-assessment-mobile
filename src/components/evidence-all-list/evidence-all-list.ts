@@ -47,7 +47,11 @@ export class EvidenceAllListComponent {
       entityType: entityType,
       solutionId: solutionId,
     };
-    this.data ? this.setAllEvidence() : surveyEvidence ? this.getSurveyEvidence() : this.getAllEvidence();
+    if (this.data) {
+      this.setAllEvidence();
+    } else {
+      surveyEvidence ? this.getSurveyEvidence() : this.getAllEvidence();
+    }
   }
 
   onTabChange(tabName) {

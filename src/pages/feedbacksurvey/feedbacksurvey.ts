@@ -86,7 +86,7 @@ export class FeedbacksurveyPage {
           return;
         }
         if (data.result.status && data.result.status == "completed") {
-          // this.showMsg("surveyCompleted", true); 
+          // this.showMsg("surveyCompleted", true);
           this.surveyProvider.showMsg("surveyCompleted", true);
 
           return;
@@ -137,5 +137,13 @@ export class FeedbacksurveyPage {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  onSurveyClick(survey) {
+    if (survey.status == "completed") {
+      this.surveyProvider.showMsg("surveyCompleted");
+      return
+    }
+    survey.downloaded ? this.redirect(survey.submissionId) : this.getSurveyById(survey.surveyId);
   }
 }
