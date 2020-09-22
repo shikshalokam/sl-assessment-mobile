@@ -108,15 +108,6 @@ export class ImageListingPage {
   }
 
   checkIfEcmSumittedByUser() {
-    /*  if (this.schoolData.survey) {
-      if (this.uploadImages.length) {
-        this.createImageFromName(this.uploadImages);
-      } else {
-        this.submitEvidence();
-      }
-      return;
-    } */
-
     this.utils.startLoader();
     const submissionId = this.submissionId;
     const url = this.schoolData.survey

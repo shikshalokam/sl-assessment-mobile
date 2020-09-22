@@ -50,7 +50,7 @@ export class LibraryProvider {
       case "institutional":
         return list ? AppConfigs.library.institutionalSolutionsList : AppConfigs.library.institutionalTemplateDetail;
       case "survey":
-        return list /* AppConfigs.library.institutionalSolutionsList : AppConfigs.library.institutionalTemplateDetail; */
+        return list 
           ? AppConfigs.library.surveySolutionsList
           : AppConfigs.library.surveyTemplateDetail;
 

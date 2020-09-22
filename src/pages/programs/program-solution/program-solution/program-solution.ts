@@ -78,11 +78,16 @@ export class ProgramSolutionComponent {
       const t1 = new Date();
       const t2 = new Date(submission.endDate);
       if (t1 > t2) {
-        this.utils.openToast("Survey expired");
+        // this.utils.openToast("Survey expired");
+
+        this.surveyProvider.showMsg("surveyExpired");
         return;
       }
       if (submission.status == "completed") {
-        this.utils.openToast("Survey already submitted");
+        // this.utils.openToast("Survey already submitted");
+
+        this.surveyProvider.showMsg("surveyCompleted");
+
         return;
       }
       this.submissionArr.includes(submission.submissionsId)

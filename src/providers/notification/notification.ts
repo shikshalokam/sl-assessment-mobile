@@ -324,8 +324,6 @@ export class NotificationProvider {
 
   goToSurvey(payload) {
     // this.utils.stopLoader();
-    console.log(payload);
-    // this.surveyService.getDetailsById("5f621bc207fff3361531b496").then((data) => {
     this.surveyService.getDetailsById(payload["survey_id"]).then((data) => {
       if (data.result == false) {
         this.showMsg("surveyExpired");
@@ -336,8 +334,6 @@ export class NotificationProvider {
         return;
       }
       this.surveyService.storeSurvey(data.result.assessment.submissionId, data.result).then((data) => {
-        console.log(data);
-        // this.app.getRootNav(). push(QuestionerPage, {
         this.app.getRootNav().push(QuestionerPage, {
           _id: data.assessment.submissionId,
           selectedEvidence: 0,

@@ -17,10 +17,6 @@
 
 <ion-footer no-shadow >
   <ion-toolbar position="bottom">
-    <!-- <div class="_flex-box _flex-direction-column fa-2x" *ngIf="completedQuestionCount==questionCount"  (click)="openAction()">
-     <ion-icon name="arrow-dropup-circle"></ion-icon>
-     <button ion-button round small >Submit   <ion-icon name="arrow-dropup-circle"></ion-icon></button>
-    </div> -->
     <ion-row>
       <ion-col>
         <button ion-button icon-start color="light" (click)="enableGps ? gpsFlowChecks('back') :back()" *ngIf="!isFirst">

@@ -81,11 +81,14 @@ export class FeedbacksurveyPage {
       .getDetailsByLink(this.link)
       .then((data) => {
         if (data.result == false) {
-          this.showMsg("surveyExpired", true);
+          // this.showMsg("surveyExpired", true);
+          this.surveyProvider.showMsg("surveyExpired", true);
           return;
         }
         if (data.result.status && data.result.status == "completed") {
-          this.showMsg("surveyCompleted", true);
+          // this.showMsg("surveyCompleted", true); 
+          this.surveyProvider.showMsg("surveyCompleted", true);
+
           return;
         }
         survey = data.result;
@@ -119,12 +122,6 @@ export class FeedbacksurveyPage {
       return;
     }
     this.navCtrl.push(SurveyReportPage, { solutionId: survey.solutionId });
-  }
-
-  showMsg(option, popToRoot = false): void {
-    popToRoot ? this.navCtrl.popToRoot() : null;
-    const modal = this.modalCtrl.create(SurveyMsgComponent, { option: option });
-    modal.present();
   }
 
   getSurveyById(surveyId) {

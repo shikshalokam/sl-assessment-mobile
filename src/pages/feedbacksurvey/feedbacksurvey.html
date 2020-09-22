@@ -12,7 +12,7 @@
       [viewReport]="item?.status=='completed' || !item.submissionId"
       [status]="item?.status"
       (reportAction)="checkReport(item)"
-      (click)="item.status=='completed'? showMsg('surveyCompleted'): item?.downloaded?redirect(item.submissionId):getSurveyById(item.surveyId)"
+      (click)="item.status=='completed'? surveyProvider.showMsg('surveyCompleted'): item?.downloaded?redirect(item.submissionId):getSurveyById(item.surveyId)"
     ></simple-list>
   </div>
 

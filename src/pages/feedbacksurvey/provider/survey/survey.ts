@@ -4,9 +4,9 @@ import { ApiProvider } from "../../../../providers/api/api";
 import { LocalStorageProvider } from "../../../../providers/local-storage/local-storage";
 import { UtilsProvider } from "../../../../providers/utils/utils";
 import { UpdateLocalSchoolDataProvider } from "../../../../providers/update-local-school-data/update-local-school-data";
-import { HomePage } from "../../../home/home";
 import { storageKeys } from "../../../../providers/storageKeys";
-import { NavController } from "ionic-angular";
+import { SurveyMsgComponent } from "../../../../components/survey-msg/survey-msg";
+import { ModalController, App } from "ionic-angular";
 
 /*
   Generated class for the SurveyProvider provider.
@@ -21,7 +21,9 @@ export class SurveyProvider {
     public apiProvider: ApiProvider,
     public localStorage: LocalStorageProvider,
     public utils: UtilsProvider,
-    public ulsdp: UpdateLocalSchoolDataProvider
+    public ulsdp: UpdateLocalSchoolDataProvider,
+    public app: App,
+    public modalCtrl: ModalController
   ) {
     console.log("Hello SurveyProvider Provider");
   }
@@ -74,7 +76,6 @@ export class SurveyProvider {
   }
 
   storeSurvey(submissionId, survey) {
-    // this.utils.stopLoader();
     return this.localStorage
       .getLocalStorage(storageKeys.submissionIdArray)
       .then((submissionArr) => {
@@ -86,7 +87,6 @@ export class SurveyProvider {
           this.ulsdp.updateSubmissionIdArr(submissionId);
           return survey;
         } else {
-          console.log("found");
           return survey;
         }
       })
@@ -95,8 +95,13 @@ export class SurveyProvider {
         survey["survey"] = true;
         this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(submissionId), survey);
         this.ulsdp.updateSubmissionIdArr(submissionId);
-        console.log(err);
         return survey;
       });
+  }
+
+  showMsg(option, popToRoot = false): void {
+    popToRoot ? this.app.getRootNav().popToRoot() : null;
+    const modal = this.modalCtrl.create(SurveyMsgComponent, { option: option });
+    modal.present();
   }
 }
