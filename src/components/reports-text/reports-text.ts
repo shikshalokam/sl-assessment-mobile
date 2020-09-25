@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { SurveyProvider } from "../../pages/feedbacksurvey/provider/survey/survey";
 
 /**
  * Generated class for the ReportsTextComponent component.
@@ -13,10 +14,20 @@ import { Component, Input, OnInit } from "@angular/core";
 export class ReportsTextComponent {
   @Input() data;
   @Input() questionNumber;
-  @Input() showMore;
-  count = 10;
+  @Input() isFeedBackSurvey;
+  @Input() solutionId;
 
-  constructor() {
+  constructor(public surveyProvider: SurveyProvider) {
     console.log("Hello ReportsTextComponent Component");
+  }
+
+  getAllResponse() {
+    let quesExternalId = this.data.order;
+    this.surveyProvider
+      .viewAllAns(quesExternalId,this.solutionId)
+      .then((res) => {
+        this.data.answer = res["result"];
+      })
+      .catch();
   }
 }

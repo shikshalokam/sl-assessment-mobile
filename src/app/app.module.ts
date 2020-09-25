@@ -129,6 +129,8 @@ import { LibraryPageModule } from "../pages/library/library.module";
 import { ManualRatingPageModule } from "../pages/manual-rating/manual-rating.module";
 import { FeedbackPollPageModule } from "../pages/feedback-poll/feedback-poll.module";
 import { FeedbacksurveyPageModule } from "../pages/feedbacksurvey/feedbacksurvey.module";
+import { DeepLinkRedirectPage } from "../pages/deep-link-redirect/deep-link-redirect";
+import { DeeplinkProvider } from '../providers/deeplink/deeplink';
 @NgModule({
   declarations: [
     MyApp,
@@ -162,6 +164,7 @@ import { FeedbacksurveyPageModule } from "../pages/feedbacksurvey/feedbacksurvey
     QuestionListPage,
     TutorialVideoListingPage,
     CriteriaListPage,
+    DeepLinkRedirectPage,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -235,6 +238,7 @@ import { FeedbacksurveyPageModule } from "../pages/feedbacksurvey/feedbacksurvey
     TutorialVideoListingPage,
     EvidenceAllListComponent,
     CriteriaListPage,
+    DeepLinkRedirectPage,
   ],
   providers: [
     StatusBar,
@@ -300,6 +304,7 @@ import { FeedbacksurveyPageModule } from "../pages/feedbacksurvey/feedbacksurvey
     PhotoViewer,
     StreamingMedia,
     AppAvailability,
+    DeeplinkProvider,
   ],
 })
 export class AppModule {}

@@ -104,4 +104,29 @@ export class SurveyProvider {
     const modal = this.modalCtrl.create(SurveyMsgComponent, { option: option });
     modal.present();
   }
+
+  viewAllAns(quesExternalId, solutionId) {
+    let url = AppConfigs.surveyFeedback.getAllAnswers;
+    let payload = {
+      questionExternalId: quesExternalId,
+      solutionId: solutionId,
+    };
+
+    return new Promise((resolve, reject) => {
+      this.apiProvider.httpPost(
+        url,
+        payload,
+        (success) => {
+          this.utils.stopLoader();
+          resolve(success);
+        },
+        (error) => {
+          this.utils.openToast(error.message);
+          this.utils.stopLoader();
+          reject();
+        },
+        { baseUrl: "dhiti" }
+      );
+    });
+  }
 }

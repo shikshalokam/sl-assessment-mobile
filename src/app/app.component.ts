@@ -35,6 +35,7 @@ import { storageKeys } from "../providers/storageKeys";
 import { FeedbackPollPage } from "../pages/feedback-poll/feedback-poll";
 import { PollPreviewPage } from "../pages/feedback-poll/pages/poll-preview/poll-preview";
 import { FeedbacksurveyPage } from "../pages/feedbacksurvey/feedbacksurvey";
+import { DeepLinkRedirectPage } from "../pages/deep-link-redirect/deep-link-redirect";
 
 @Component({
   templateUrl: "app.html",
@@ -323,6 +324,7 @@ export class MyApp {
           paths[`/${appName}/faq`] = FaqPage;
           paths[`/${appName}/take-poll/:pollId`] = PollPreviewPage;
           paths[`/${appName}/take-survey/:surveyId`] = FeedbacksurveyPage;
+          paths[`/${appName}/create-observation/:observationLink`] = DeepLinkRedirectPage;
           // const paths = {
           //   "/about-us": AboutPage,
           //   "/home": HomePage,
