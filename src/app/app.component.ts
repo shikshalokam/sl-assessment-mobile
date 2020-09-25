@@ -35,6 +35,7 @@ import { storageKeys } from "../providers/storageKeys";
 import { FeedbackPollPage } from "../pages/feedback-poll/feedback-poll";
 import { PollPreviewPage } from "../pages/feedback-poll/pages/poll-preview/poll-preview";
 import { FeedbacksurveyPage } from "../pages/feedbacksurvey/feedbacksurvey";
+import { SurveyProvider } from "../pages/feedbacksurvey/provider/survey/survey";
 
 @Component({
   templateUrl: "app.html",
@@ -94,14 +95,14 @@ export class MyApp {
       component: "DashboardAssessmentListingPage",
       extenalLink: false,
       active: false,
-      show: false,
+      show: true,
     },
     {
       name: "improvementProjects",
       image: "clipboard",
       component: ImprovementProjectPage,
       active: false,
-      show: false,
+      show: true,
     },
     {
       name: "polls",
@@ -171,7 +172,8 @@ export class MyApp {
     private currentUserProvider: CurrentUserProvider,
     private apiProvider: ApiProvider,
     private localStorage: LocalStorageProvider,
-    private sideMenuProvide: SidemenuProvider
+    private sideMenuProvide: SidemenuProvider,
+    private surveyProvider: SurveyProvider
   ) {
     this.subscription = this.notifctnService.$alertModalSubject.subscribe(
       (success) => {
@@ -184,13 +186,14 @@ export class MyApp {
       this.goToPage(index);
     });
 
+    /* // ? not required story 669-uniformity in design
     this.sideMenuSubscription = this.sideMenuProvide.$showDashboard.subscribe((showDashboard) => {
       for (const page of this.allPages) {
         if (page["name"] === "dashboard" || page["name"] === "improvementProjects") {
           page["show"] = showDashboard;
         }
       }
-    });
+    }); */
 
     this.events.subscribe("loginSuccess", (data) => {
       if (data == true) {
@@ -232,7 +235,12 @@ export class MyApp {
     if (this.networkSubscription) {
       this.networkSubscription.unsubscribe();
     }
-    this.sideMenuSubscription ? this.sideMenuSubscription.unsubscribe() : null;
+
+    /*
+      story#669 not reuired anymore
+     */
+
+    // this.sideMenuSubscription ? this.sideMenuSubscription.unsubscribe() : null;
   }
 
   goToPage(index) {
@@ -435,6 +443,10 @@ export class MyApp {
         let roles = success;
 
         this.utils.stopLoader();
+        if (!roles.roles.length) {
+          this.surveyProvider.showMsg("entityNotMapped");
+          return
+        }
         if (roles.roles.length > 1) {
           this.nav.push(RoleListingPage, {
             // assessmentType: type,

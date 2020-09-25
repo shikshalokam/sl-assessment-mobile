@@ -4,6 +4,7 @@ import { ImprovementProjectEntityPage } from "./improvement-project-entity/impro
 import { ApiProvider } from "../../providers/api/api";
 import { UtilsProvider } from "../../providers/utils/utils";
 import { AppConfigs } from "../../providers/appConfig";
+import { SurveyProvider } from "../feedbacksurvey/provider/survey/survey";
 
 /**
  * Generated class for the ImprovementProjectPage page.
@@ -23,7 +24,8 @@ export class ImprovementProjectPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private apiService: ApiProvider,
-    private utils: UtilsProvider
+    private utils: UtilsProvider,
+    private surveyProvider: SurveyProvider
   ) {}
 
   ionViewDidLoad() {
@@ -53,6 +55,8 @@ export class ImprovementProjectPage {
           this.programList = success.data;
         } else {
           this.programList = [];
+          this.surveyProvider.showMsg("entityNotMapped");
+          this.navCtrl.popToRoot();
           // this.utils.openToast(success.data);
         }
       },
