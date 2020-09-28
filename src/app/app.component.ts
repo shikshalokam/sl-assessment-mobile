@@ -324,51 +324,61 @@ export class MyApp {
             page["active"] = false;
           }
           this.allPages[0]["active"] = true;
-          let appName = AppConfigs.appName;
-          appName = appName.toLowerCase().replace(/([^a-zA-Z])/g, "");
-          const paths = {};
-          paths[`/${appName}/about-us`] = AboutPage;
-          paths[`/${appName}/faq`] = FaqPage;
-          paths[`/${appName}/take-poll/:pollId`] = PollPreviewPage;
-          paths[`/${appName}/take-survey/:surveyId`] = FeedbacksurveyPage;
-          // const paths = {
-          //   "/about-us": AboutPage,
-          //   "/home": HomePage,
-          //   "/individual": IndividualListingPage,
-          //   "/institutional": InstitutionsEntityList,
-          //   "/faq": FaqPage,
-          //   "/take-poll/:pollId": PollPreviewPage,
-          //   // "/appLink/take-poll/:pollId": PollPreviewPage,
-          // };
-          this.deepLinks.route(paths).subscribe(
-            (match) => {
-              // this.rootPage = paths[match["$link"]["path"]];
-              const argkey = Object.keys(match.$args)[0];
-              const matchPath = argkey
-                ? match["$link"]["path"].replace(match.$args[argkey], `:${argkey}`)
-                : match["$link"]["path"];
-              const path = paths[matchPath];
-              // this.localStorage.setLocalStorage("deeplink", { path: path, args: match.$args });
-
-              this.nav.push(path, match.$args);
-              console.log(JSON.stringify(match));
-              console.log("Successfully matched route", match);
-            },
-            (nomatch) => {
-              console.log(JSON.stringify(nomatch));
-              console.error("Got a deeplink that didn't match", nomatch);
-            }
-          );
+          this.deeplinkInit(true);
         }
         // this.notifctnService.checkForNotificationApi();
       })
       .catch((error) => {
+        this.deeplinkInit(false);
         this.rootPage = WelcomePage;
         // this.splashScreen.hide()
         // this.statusBar.overlaysWebView(false);
       });
     // this.statusBar.hide();
     // this.statusBar.overlaysWebView(false);
+  }
+
+  deeplinkInit(redirect) {
+    let appName = AppConfigs.appName;
+    appName = appName.toLowerCase().replace(/([^a-zA-Z])/g, "");
+    const paths = {};
+    paths[`/${appName}/about-us`] = AboutPage;
+    paths[`/${appName}/faq`] = FaqPage;
+    paths[`/${appName}/take-poll/:pollId`] = PollPreviewPage;
+    paths[`/${appName}/take-survey/:surveyId`] = FeedbacksurveyPage;
+    // const paths = {
+    //   "/about-us": AboutPage,
+    //   "/home": HomePage,
+    //   "/individual": IndividualListingPage,
+    //   "/institutional": InstitutionsEntityList,
+    //   "/faq": FaqPage,
+    //   "/take-poll/:pollId": PollPreviewPage,
+    //   // "/appLink/take-poll/:pollId": PollPreviewPage,
+    // };
+    this.deepLinks.route(paths).subscribe(
+      (match) => {
+        // this.rootPage = paths[match["$link"]["path"]];
+        const argkey = Object.keys(match.$args)[0];
+        const matchPath = argkey
+          ? match["$link"]["path"].replace(match.$args[argkey], `:${argkey}`)
+          : match["$link"]["path"];
+        const path = paths[matchPath];
+
+        if (redirect) {
+          this.nav.push(path, match.$args);
+        } else {
+          // if user is not logged save deeplink and use after login
+          this.localStorage.setLocalStorage("deeplink", { matchPath: matchPath, args: match.$args });
+        }
+
+        console.log(JSON.stringify(match));
+        console.log("Successfully matched route", match);
+      },
+      (nomatch) => {
+        console.log(JSON.stringify(nomatch));
+        console.error("Got a deeplink that didn't match", nomatch);
+      }
+    );
   }
 
   registerBAckButtonAction(): void {
@@ -445,7 +455,7 @@ export class MyApp {
         this.utils.stopLoader();
         if (!roles.roles.length) {
           this.surveyProvider.showMsg("entityNotMapped");
-          return
+          return;
         }
         if (roles.roles.length > 1) {
           this.nav.push(RoleListingPage, {
