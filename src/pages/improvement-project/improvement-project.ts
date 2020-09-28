@@ -5,6 +5,8 @@ import { ApiProvider } from "../../providers/api/api";
 import { UtilsProvider } from "../../providers/utils/utils";
 import { AppConfigs } from "../../providers/appConfig";
 import { SurveyProvider } from "../feedbacksurvey/provider/survey/survey";
+import { storageKeys } from "../../providers/storageKeys";
+import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 
 /**
  * Generated class for the ImprovementProjectPage page.
@@ -25,12 +27,17 @@ export class ImprovementProjectPage {
     public navParams: NavParams,
     private apiService: ApiProvider,
     private utils: UtilsProvider,
-    private surveyProvider: SurveyProvider
-  ) {}
+    private surveyProvider: SurveyProvider,
+    private localStorage: LocalStorageProvider,
+
+
+  ) { }
 
   ionViewDidLoad() {
+    this.checkRole()
     this.getAssessmentPrograms();
     console.log("ionViewDidLoad ImprovementProjectPage");
+
   }
 
   goToIpEntity(programId, programName) {
@@ -55,8 +62,7 @@ export class ImprovementProjectPage {
           this.programList = success.data;
         } else {
           this.programList = [];
-          this.surveyProvider.showMsg("entityNotMapped");
-          this.navCtrl.popToRoot();
+          
           // this.utils.openToast(success.data);
         }
       },
@@ -68,5 +74,22 @@ export class ImprovementProjectPage {
       },
       { baseUrl: "dhiti", version: "v1" }
     );
+  }
+
+  checkRole() {
+    this.localStorage
+      .getLocalStorage(storageKeys.profileRole)
+      .then((success) => {
+        let roles = success;
+
+        if (!roles.roles.length) {
+           this.surveyProvider.showMsg("entityNotMapped");
+            this.navCtrl.popToRoot();
+        
+        }
+      })
+      .catch((error) => {
+      });
+
   }
 }

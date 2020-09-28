@@ -47,14 +47,12 @@ export class BottomTabPage {
     /* 
     show report and dashboard is same page only name is different
      */
-    /*
-      not required story 669 -uniformity in design
-     */
-    /*  this.sideMenuSubscription = this.sideMenuProvide.$showDashboard.subscribe((showDashboard) => {
+    
+     this.sideMenuSubscription = this.sideMenuProvide.$showDashboard.subscribe((showDashboard) => {
       this.showReport = showDashboard;
       this.getProfileroles();
-    }); */
-    this.getProfileroles();
+    });
+    
   }
   ionViewDidLoad() {}
 
