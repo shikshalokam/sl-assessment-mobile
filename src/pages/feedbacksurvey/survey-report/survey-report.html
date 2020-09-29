@@ -15,13 +15,37 @@
 
     <div *ngFor="let element of reportObj?.response;let i = index">
       <ion-card [ngSwitch]="element?.responseType">
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'text'" [showMore]="true"></reports-text>
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'number'"></reports-text>
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchCase="'date'"></reports-text>
+        <reports-text
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchCase="'text'"
+          [isFeedBackSurvey]="true"
+          [solutionId]="solutionId"
+        ></reports-text>
+        <reports-text
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchCase="'number'"
+          [isFeedBackSurvey]="true"
+          [solutionId]="solutionId"
+        ></reports-text>
+        <reports-text
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchCase="'date'"
+          [isFeedBackSurvey]="true"
+          [solutionId]="solutionId"
+        ></reports-text>
         <pie-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'radio'"></pie-chart>
         <bar-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'multiselect'"></bar-chart>
         <matrix-chart [data]="element" [questionNumber]="i+1" *ngSwitchCase="'matrix'"></matrix-chart>
-        <reports-text [data]="element" [questionNumber]="i+1" *ngSwitchDefault></reports-text>
+        <reports-text
+          [data]="element"
+          [questionNumber]="i+1"
+          *ngSwitchDefault
+          [isFeedBackSurvey]="true"
+          [solutionId]="solutionId"
+        ></reports-text>
       </ion-card>
       <ion-grid>
         <ion-row>

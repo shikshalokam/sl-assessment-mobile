@@ -56,7 +56,6 @@ export class SurveyReportPage {
       payload,
 
       (success) => {
-        //this will be initialized only on page load
 
         this.allQuestions =
           success.allQuestions && !this.allQuestions.length ? success.allQuestions : this.allQuestions;
@@ -70,7 +69,6 @@ export class SurveyReportPage {
       },
       (error) => {
         this.error = "No data found";
-        // this.utils.stopLoader();
       },
       {
         baseUrl: "dhiti",

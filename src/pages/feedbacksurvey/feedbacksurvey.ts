@@ -6,7 +6,6 @@ import { storageKeys } from "../../providers/storageKeys";
 import { UtilsProvider } from "../../providers/utils/utils";
 import { QuestionerPage } from "../questioner/questioner";
 import { SurveyReportPage } from "./survey-report/survey-report";
-import { SurveyMsgComponent } from "../../components/survey-msg/survey-msg";
 
 /**
  * Generated class for the FeedbacksurveyPage page.
@@ -81,12 +80,10 @@ export class FeedbacksurveyPage {
       .getDetailsByLink(this.link)
       .then((data) => {
         if (data.result == false) {
-          // this.showMsg("surveyExpired", true);
           this.surveyProvider.showMsg("surveyExpired", true);
           return;
         }
         if (data.result.status && data.result.status == "completed") {
-          // this.showMsg("surveyCompleted", true);
           this.surveyProvider.showMsg("surveyCompleted", true);
 
           return;
@@ -118,7 +115,7 @@ export class FeedbacksurveyPage {
 
   checkReport(survey) {
     if (survey.submissionId) {
-      this.navCtrl.push(SurveyReportPage, { submissionId: survey.submissionId });
+      this.navCtrl.push(SurveyReportPage, { submissionId: survey.submissionId});
       return;
     }
     this.navCtrl.push(SurveyReportPage, { solutionId: survey.solutionId });
@@ -142,7 +139,7 @@ export class FeedbacksurveyPage {
   onSurveyClick(survey) {
     if (survey.status == "completed") {
       this.surveyProvider.showMsg("surveyCompleted");
-      return
+      return;
     }
     survey.downloaded ? this.redirect(survey.submissionId) : this.getSurveyById(survey.surveyId);
   }
