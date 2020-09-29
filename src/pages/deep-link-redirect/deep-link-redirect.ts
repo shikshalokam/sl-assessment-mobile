@@ -37,6 +37,6 @@ export class DeepLinkRedirectPage {
   }
 
   redirectObservation(link) {
-    this.deeplinkProvider.createObsFromLink()
+    // this.deeplinkProvider.createObsFromLink()
   }
 }
