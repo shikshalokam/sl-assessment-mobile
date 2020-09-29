@@ -35,12 +35,7 @@ import { storageKeys } from "../providers/storageKeys";
 import { FeedbackPollPage } from "../pages/feedback-poll/feedback-poll";
 import { PollPreviewPage } from "../pages/feedback-poll/pages/poll-preview/poll-preview";
 import { FeedbacksurveyPage } from "../pages/feedbacksurvey/feedbacksurvey";
-<<<<<<< HEAD
-import { DeepLinkRedirectPage } from "../pages/deep-link-redirect/deep-link-redirect";
 import { SurveyProvider } from "../pages/feedbacksurvey/provider/survey/survey";
-=======
-import { SurveyProvider } from "../pages/feedbacksurvey/provider/survey/survey";
->>>>>>> 092020-Sept-sprint
 
 @Component({
   templateUrl: "app.html",
