@@ -35,7 +35,12 @@ import { storageKeys } from "../providers/storageKeys";
 import { FeedbackPollPage } from "../pages/feedback-poll/feedback-poll";
 import { PollPreviewPage } from "../pages/feedback-poll/pages/poll-preview/poll-preview";
 import { FeedbacksurveyPage } from "../pages/feedbacksurvey/feedbacksurvey";
+<<<<<<< HEAD
 import { DeepLinkRedirectPage } from "../pages/deep-link-redirect/deep-link-redirect";
+import { SurveyProvider } from "../pages/feedbacksurvey/provider/survey/survey";
+=======
+import { SurveyProvider } from "../pages/feedbacksurvey/provider/survey/survey";
+>>>>>>> 092020-Sept-sprint
 
 @Component({
   templateUrl: "app.html",
@@ -95,14 +100,14 @@ export class MyApp {
       component: "DashboardAssessmentListingPage",
       extenalLink: false,
       active: false,
-      show: false,
+      show: true,
     },
     {
       name: "improvementProjects",
       image: "clipboard",
       component: ImprovementProjectPage,
       active: false,
-      show: false,
+      show: true,
     },
     {
       name: "polls",
@@ -172,7 +177,8 @@ export class MyApp {
     private currentUserProvider: CurrentUserProvider,
     private apiProvider: ApiProvider,
     private localStorage: LocalStorageProvider,
-    private sideMenuProvide: SidemenuProvider
+    private sideMenuProvide: SidemenuProvider,
+    private surveyProvider: SurveyProvider
   ) {
     this.subscription = this.notifctnService.$alertModalSubject.subscribe(
       (success) => {
@@ -185,13 +191,14 @@ export class MyApp {
       this.goToPage(index);
     });
 
+    /* // ? not required story 669-uniformity in design
     this.sideMenuSubscription = this.sideMenuProvide.$showDashboard.subscribe((showDashboard) => {
       for (const page of this.allPages) {
         if (page["name"] === "dashboard" || page["name"] === "improvementProjects") {
           page["show"] = showDashboard;
         }
       }
-    });
+    }); */
 
     this.events.subscribe("loginSuccess", (data) => {
       if (data == true) {
@@ -233,7 +240,12 @@ export class MyApp {
     if (this.networkSubscription) {
       this.networkSubscription.unsubscribe();
     }
-    this.sideMenuSubscription ? this.sideMenuSubscription.unsubscribe() : null;
+
+    /*
+      story#669 not reuired anymore
+     */
+
+    // this.sideMenuSubscription ? this.sideMenuSubscription.unsubscribe() : null;
   }
 
   goToPage(index) {
@@ -317,52 +329,61 @@ export class MyApp {
             page["active"] = false;
           }
           this.allPages[0]["active"] = true;
-          let appName = AppConfigs.appName;
-          appName = appName.toLowerCase().replace(/([^a-zA-Z])/g, "");
-          const paths = {};
-          paths[`/${appName}/about-us`] = AboutPage;
-          paths[`/${appName}/faq`] = FaqPage;
-          paths[`/${appName}/take-poll/:pollId`] = PollPreviewPage;
-          paths[`/${appName}/take-survey/:surveyId`] = FeedbacksurveyPage;
-          paths[`/${appName}/create-observation/:observationLink`] = DeepLinkRedirectPage;
-          // const paths = {
-          //   "/about-us": AboutPage,
-          //   "/home": HomePage,
-          //   "/individual": IndividualListingPage,
-          //   "/institutional": InstitutionsEntityList,
-          //   "/faq": FaqPage,
-          //   "/take-poll/:pollId": PollPreviewPage,
-          //   // "/appLink/take-poll/:pollId": PollPreviewPage,
-          // };
-          this.deepLinks.route(paths).subscribe(
-            (match) => {
-              // this.rootPage = paths[match["$link"]["path"]];
-              const argkey = Object.keys(match.$args)[0];
-              const matchPath = argkey
-                ? match["$link"]["path"].replace(match.$args[argkey], `:${argkey}`)
-                : match["$link"]["path"];
-              const path = paths[matchPath];
-              // this.localStorage.setLocalStorage("deeplink", { path: path, args: match.$args });
-
-              this.nav.push(path, match.$args);
-              console.log(JSON.stringify(match));
-              console.log("Successfully matched route", match);
-            },
-            (nomatch) => {
-              console.log(JSON.stringify(nomatch));
-              console.error("Got a deeplink that didn't match", nomatch);
-            }
-          );
+          this.deeplinkInit(true);
         }
         // this.notifctnService.checkForNotificationApi();
       })
       .catch((error) => {
+        this.deeplinkInit(false);
         this.rootPage = WelcomePage;
         // this.splashScreen.hide()
         // this.statusBar.overlaysWebView(false);
       });
     // this.statusBar.hide();
     // this.statusBar.overlaysWebView(false);
+  }
+
+  deeplinkInit(redirect) {
+    let appName = AppConfigs.appName;
+    appName = appName.toLowerCase().replace(/([^a-zA-Z])/g, "");
+    const paths = {};
+    paths[`/${appName}/about-us`] = AboutPage;
+    paths[`/${appName}/faq`] = FaqPage;
+    paths[`/${appName}/take-poll/:pollId`] = PollPreviewPage;
+    paths[`/${appName}/take-survey/:surveyId`] = FeedbacksurveyPage;
+    // const paths = {
+    //   "/about-us": AboutPage,
+    //   "/home": HomePage,
+    //   "/individual": IndividualListingPage,
+    //   "/institutional": InstitutionsEntityList,
+    //   "/faq": FaqPage,
+    //   "/take-poll/:pollId": PollPreviewPage,
+    //   // "/appLink/take-poll/:pollId": PollPreviewPage,
+    // };
+    this.deepLinks.route(paths).subscribe(
+      (match) => {
+        // this.rootPage = paths[match["$link"]["path"]];
+        const argkey = Object.keys(match.$args)[0];
+        const matchPath = argkey
+          ? match["$link"]["path"].replace(match.$args[argkey], `:${argkey}`)
+          : match["$link"]["path"];
+        const path = paths[matchPath];
+
+        if (redirect) {
+          this.nav.push(path, match.$args);
+        } else {
+          // if user is not logged save deeplink and use after login
+          this.localStorage.setLocalStorage("deeplink", { matchPath: matchPath, args: match.$args });
+        }
+
+        console.log(JSON.stringify(match));
+        console.log("Successfully matched route", match);
+      },
+      (nomatch) => {
+        console.log(JSON.stringify(nomatch));
+        console.error("Got a deeplink that didn't match", nomatch);
+      }
+    );
   }
 
   registerBAckButtonAction(): void {
@@ -437,6 +458,10 @@ export class MyApp {
         let roles = success;
 
         this.utils.stopLoader();
+        if (!roles.roles.length) {
+          this.surveyProvider.showMsg("entityNotMapped");
+          return;
+        }
         if (roles.roles.length > 1) {
           this.nav.push(RoleListingPage, {
             // assessmentType: type,
