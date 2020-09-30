@@ -170,7 +170,7 @@ export class ApiProvider {
       const obj = {
         "x-auth-token": this.currentUser.curretUser.accessToken,
         "x-authenticated-user-token": this.currentUser.curretUser.accessToken,
-        gpsLocation: gpsLocation ? gpsLocation : "0,0",
+        gpsLocation: gpsLocation ? gpsLocation : "",
         appVersion: AppConfigs.appVersion,
         appName: AppConfigs.appName.toLowerCase().replace(/([^a-zA-Z])/g, ""),
         appType: "assessment",
@@ -217,7 +217,7 @@ export class ApiProvider {
       const obj = {
         "x-auth-token": this.currentUser.curretUser.accessToken,
         "x-authenticated-user-token": this.currentUser.curretUser.accessToken,
-        gpsLocation: gpsLocation ? gpsLocation : "0,0",
+        gpsLocation: gpsLocation ? gpsLocation : "",
         appVersion: AppConfigs.appVersion,
         appName: AppConfigs.appName.toLowerCase().replace(/([^a-zA-Z])/g, ""),
         os: this.platform.is("ios") ? "ios" : "android",
