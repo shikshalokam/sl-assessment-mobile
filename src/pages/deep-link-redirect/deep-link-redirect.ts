@@ -1,8 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { NavController, NavParams, ViewController } from "ionic-angular";
 import { DeeplinkProvider } from "../../providers/deeplink/deeplink";
 import { ProgramServiceProvider } from "../programs/program-service";
 import { ProgramSolutionObservationDetailPage } from "../programs/program-solution-observation-detail/program-solution-observation-detail";
+import { UtilsProvider } from "../../providers/utils/utils";
+import { TranslateService } from "@ngx-translate/core";
 
 /**
  * Generated class for the DeepLinkRedirectPage page.
@@ -15,15 +17,18 @@ import { ProgramSolutionObservationDetailPage } from "../programs/program-soluti
   selector: "page-deep-link-redirect",
   templateUrl: "deep-link-redirect.html",
 })
-export class DeepLinkRedirectPage {
+export class DeepLinkRedirectPage  implements OnInit{
   data: any;
+  translateObject: any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public deeplinkProvider: DeeplinkProvider,
     public programSrvc: ProgramServiceProvider,
-    public viewCtrl: ViewController
+    public viewCtrl: ViewController,
+    public utils: UtilsProvider,
+    private translate: TranslateService
   ) {}
 
   ionViewDidLoad() {
@@ -31,6 +36,12 @@ export class DeepLinkRedirectPage {
     this.data = this.navParams.data;
     let key = Object.keys(this.data)[0];
     this.switch(key);
+   
+  }
+  ngOnInit() {
+     this.translate.get(["message.canNotOpenLink"]).subscribe((translations) => {
+       this.translateObject = translations;
+     });
   }
 
   switch(key) {
@@ -63,7 +74,6 @@ export class DeepLinkRedirectPage {
         const pIndex = data.findIndex((p) => p._id == pId);
         const solution = data[pIndex].solutions;
         const sIndex = solution.findIndex((s) => s.solutionId == sId);
-        // const pIndex = data.findIndex(p => p.id == pId);
         this.navCtrl
           .push(ProgramSolutionObservationDetailPage, {
             programIndex: pIndex,
@@ -72,6 +82,10 @@ export class DeepLinkRedirectPage {
           .then(() => {
             this.navCtrl.remove(1, 1);
           });
+      })
+      .catch(() => {
+        this.utils.openToast(this.translateObject["message.canNotOpenLink"]);
+        this.navCtrl.popToRoot();
       });
   }
 }
