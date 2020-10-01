@@ -16,14 +16,12 @@ export class DeeplinkProvider {
   }
 
   createObsFromLink(link) {
-    const url = AppConfigs.deeplink.createObservationByLink;
-    let body = {
-      link: link,
-    };
+    const url = AppConfigs.deeplink.verifyObservationLink + link ;
+    
 
     return new Promise((resolve, reject) => {
-      this.apiProvider.httpPost(
-        url,body,
+      this.apiProvider.httpGet(
+        url,
         (success) => {
           resolve(success);
         },
@@ -33,4 +31,5 @@ export class DeeplinkProvider {
       );
     });
   }
+
 }

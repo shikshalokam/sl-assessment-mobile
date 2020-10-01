@@ -355,7 +355,8 @@
     "noPolls": "No Polls",
     "noFeedbacks": "No Feedbacks",
     "thankyou": "Thank You !",
-    "responseSubmitted": "Your Response is submitted"
+    "responseSubmitted": "Your Response is submitted",
+     "canNotOpenLink": "Can not open link."
 
   },
   "toastMessage": {
