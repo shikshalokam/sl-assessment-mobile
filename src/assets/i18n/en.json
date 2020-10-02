@@ -170,7 +170,8 @@
     "allSolutions": "All Solutions",
     "feedback": "Feedback",
     "polls": "Polls",
-    "feedbackSurveys": "Feedback and Surveys"
+    "feedbackSurveys": "Feedback and Surveys",
+    "trash":"Trash"
   },
   "headings": {
     "zone": "Zones",
@@ -258,7 +259,8 @@
     "myResults": "My Results",
     "polls": "Polls",
     "myForms": "My Forms",
-    "totalSubmissions": "Total Submissions"
+    "totalSubmissions": "Total Submissions",
+    "trash": "Trash"
   },
   "bottomNav": {
     "institution": "Institution",
@@ -356,7 +358,8 @@
     "noFeedbacks": "No Feedbacks",
     "thankyou": "Thank You !",
     "responseSubmitted": "Your Response is submitted",
-     "canNotOpenLink": "Can not open link."
+     "canNotOpenLink": "Can not open link.",
+     "emptyTrash":"Empty"
 
   },
   "toastMessage": {

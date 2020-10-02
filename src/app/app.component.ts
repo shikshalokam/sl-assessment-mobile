@@ -37,6 +37,7 @@ import { PollPreviewPage } from "../pages/feedback-poll/pages/poll-preview/poll-
 import { FeedbacksurveyPage } from "../pages/feedbacksurvey/feedbacksurvey";
 import { SurveyProvider } from "../pages/feedbacksurvey/provider/survey/survey";
 import { DeepLinkRedirectPage } from "../pages/deep-link-redirect/deep-link-redirect";
+import { TrashPage } from "../pages/trash/trash";
 
 @Component({
   templateUrl: "app.html",
@@ -150,6 +151,13 @@ export class MyApp {
       component: SettingsPage,
       active: false,
       show: false,
+    },
+    {
+      name: "trash",
+      icon: "trash",
+      component: TrashPage,
+      active: false,
+      show: true,
     },
   ];
   profileRoles = [];

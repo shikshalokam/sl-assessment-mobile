@@ -1,12 +1,13 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ProgramSolutionEntityPage } from "../../program-solution-entity/program-solution-entity";
-import { NavController, App } from "ionic-angular";
+import { NavController, App, PopoverController } from "ionic-angular";
 import { ProgramSolutionObservationDetailPage } from "../../program-solution-observation-detail/program-solution-observation-detail";
 import { storageKeys } from "../../../../providers/storageKeys";
 import { LocalStorageProvider } from "../../../../providers/local-storage/local-storage";
 import { UtilsProvider } from "../../../../providers/utils/utils";
 import { QuestionerPage } from "../../../questioner/questioner";
 import { SurveyProvider } from "../../../feedbacksurvey/provider/survey/survey";
+import { SolutionActionPage } from "../solution-action/solution-action";
 
 /**
  * Generated class for the ProgramSolutionComponent component.
@@ -24,6 +25,7 @@ export class ProgramSolutionComponent {
   @Input("solutionIndex") solutionIndex: any;
   @Input("showProgram") showProgram: boolean;
   @Input("programList") programList: any;
+  @Output() rereshList = new EventEmitter();
   program: any;
   submissionArr: any;
   constructor(
@@ -31,7 +33,8 @@ export class ProgramSolutionComponent {
     public app: App,
     public localStorage: LocalStorageProvider,
     public utils: UtilsProvider,
-    public surveyProvider: SurveyProvider
+    public surveyProvider: SurveyProvider,
+    private popoverCtrl: PopoverController
   ) {
     this.getSubmissionArr();
   }
@@ -143,5 +146,24 @@ export class ProgramSolutionComponent {
     } else {
       return false;
     }
+  }
+
+  /*
+   solution deletion
+   */
+  openActionMenu(event) {
+    const solution = this.programList[this.programIndex].solutions[this.solutionIndex];
+    const type = solution.type;
+    const solutionId = type == "observation" ? solution.solutionId : solution._id;
+    const isAPrivateProgram = solution.isAPrivateProgram;
+    let popover = this.popoverCtrl.create(SolutionActionPage, { solutionId, isAPrivateProgram });
+    popover.onDidDismiss((data) => {
+      data == "refresh" ? this.refresh() : null;
+    });
+    popover.present({ ev: event });
+  }
+
+  refresh() {
+    this.rereshList.emit();
   }
 }
