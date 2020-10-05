@@ -3,7 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { TrashPage } from './trash';
 import { ComponentsModule } from '../../components/components.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { TrashProvider } from '../../providers/trash/trash';
+import { TrashProvider } from './trash/trash';
 import { TrashActionPage } from './trash-action/trash-action';
 
 @NgModule({

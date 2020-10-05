@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams, PopoverController } from "ionic-angular";
-import { ProgramServiceProvider } from "../programs/program-service";
-import { TrashProvider } from "../../providers/trash/trash";
+import { TrashProvider } from "./trash/trash";
 import { TrashActionPage } from "./trash-action/trash-action";
 import { UtilsProvider } from "../../providers/utils/utils";
 

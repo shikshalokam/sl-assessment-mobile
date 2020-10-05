@@ -26,9 +26,18 @@ export class SolutionActionPage {
     console.log("ionViewDidLoad SolutionActionPage");
     this.solutionId = this.navParams.get("solutionId");
     this.isAPrivateProgram = this.navParams.get("isAPrivateProgram");
-    this.translate.get(["actionSheet.solutionWillNotBeAccessible"]).subscribe((translations) => {
-      this.translateObject = translations;
-    });
+    this.translate
+      .get([
+        "actionSheet.solutionWillNotBeAccessible",
+        "actionSheet.solutionWillBeRemovedFromHome",
+        "buttons.moveToTrash",
+        "buttons.deletePermanently",
+        "buttons.cancel",
+        "buttons.continue"
+      ])
+      .subscribe((translations) => {
+        this.translateObject = translations;
+      });
   }
 
   removeSolFromHome() {
@@ -74,17 +83,17 @@ export class SolutionActionPage {
     if (deleteFlag) {
       alert = this.alertCtrl.create({
         // title: "Confirm purchase",
-        message: this.translateObject["actionSheet.solutionWillNotBeAccessible"],
+        message: this.translateObject["actionSheet.solutionWillBeRemovedFromHome"],
 
         buttons: [
           {
-            text: "Move To Trash",
+            text: this.translateObject["buttons.moveToTrash"],
             handler: () => {
               this.trash();
             },
           },
           {
-            text: "Delete Permanently",
+            text: this.translateObject["buttons.deletePermanently"],
             handler: () => {
               this.delete();
             },
@@ -94,17 +103,17 @@ export class SolutionActionPage {
     } else {
       alert = this.alertCtrl.create({
         // title: "Confirm purchase",
-        message: "The solution will no longer appear on the home screen",
+        message: this.translateObject["actionSheet.solutionWillNotBeAccessible"],
         buttons: [
           {
-            text: "Cancel",
+            text: this.translateObject["buttons.cancel"],
             role: "cancel",
             handler: () => {
               this.viewCtrl.dismiss();
             },
           },
           {
-            text: "Continue",
+            text: this.translateObject["buttons.continue"],
             handler: () => {
               this.removeSolFromHome();
             },

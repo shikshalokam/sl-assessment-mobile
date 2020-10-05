@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { NavController, NavParams, AlertController, ViewController } from "ionic-angular";
 import { ProgramServiceProvider } from "../../programs/program-service";
 import { UtilsProvider } from "../../../providers/utils/utils";
-import { TrashProvider } from "../../../providers/trash/trash";
+import { TrashProvider } from "../trash/trash";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -27,9 +27,11 @@ export class TrashActionPage {
     console.log("ionViewDidLoad TrashActionPage");
     this.solutionId = this.navParams.get("solutionId");
 
-    this.translate.get(["actionSheet.solutionWillNotBeAccessible"]).subscribe((translations) => {
-      this.translateObject = translations;
-    });
+    this.translate
+      .get(["actionSheet.solutionWillNotBeAccessible", "buttons.cancel", "buttons.continue"])
+      .subscribe((translations) => {
+        this.translateObject = translations;
+      });
   }
   presentConfirm() {
     let alert;
@@ -39,13 +41,13 @@ export class TrashActionPage {
 
       buttons: [
         {
-          text: "Cancel",
+          text: this.translateObject["buttons.cancel"],
           handler: () => {
             this.viewCtrl.dismiss();
           },
         },
         {
-          text: "Delete Permanently",
+          text: this.translateObject["buttons.deletePermanently"],
           handler: () => {
             this.deleteSolFromTrash();
           },

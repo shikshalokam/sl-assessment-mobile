@@ -7,7 +7,7 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item (click)="presentConfirm()">Remove from home</button>
-    <button ion-item (click)="presentConfirm(true)" *ngIf="isAPrivateProgram">Delete</button>
+    <button ion-item (click)="presentConfirm()"> {{'buttons.deletePermanently'| translate}}</button>
+    <button ion-item (click)="presentConfirm(true)" *ngIf="isAPrivateProgram"> {{'buttons.delete'| translate}}</button>
   </ion-list>
 </ion-content>

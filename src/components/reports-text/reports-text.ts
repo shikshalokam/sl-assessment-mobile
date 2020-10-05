@@ -11,7 +11,7 @@ import { SurveyProvider } from "../../pages/feedbacksurvey/provider/survey/surve
   selector: "reports-text",
   templateUrl: "reports-text.html",
 })
-export class ReportsTextComponent {
+export class ReportsTextComponent implements OnInit {
   @Input() data;
   @Input() questionNumber;
   @Input() isFeedBackSurvey;
@@ -19,19 +19,21 @@ export class ReportsTextComponent {
   completedDate: any; // for pagination purpose in survey answers if more then 10 ans
 
   constructor(public surveyProvider: SurveyProvider) {
-    console.log("Hello ReportsTextComponent Component");
+  }
+  ngOnInit(): void {
+    this.completedDate = this.data.completedDate;
   }
 
   getAllResponse() {
-    let quesExternalId = this.data.order;
+    let questionExternalId = this.data.order;
     let completedDate = this.completedDate;
     let solutionId = this.solutionId;
-    let Obj = { quesExternalId, completedDate, solutionId };
+    let Obj = { questionExternalId, completedDate, solutionId };
     this.surveyProvider
       .viewAllAns(Obj)
-      .then((res) => {
-        this.data.answer = [...this.data.answer, ...res["result"].answers];
-        this.completedDate = res["result"].completedDate;
+      .then((res: any) => {
+        this.data.answers = [...this.data.answers, ...res.answers];
+        this.completedDate = res.completedDate ? res.completedDate : this.completedDate;
       })
       .catch();
   }
