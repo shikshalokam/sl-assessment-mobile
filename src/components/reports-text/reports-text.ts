@@ -16,6 +16,7 @@ export class ReportsTextComponent {
   @Input() questionNumber;
   @Input() isFeedBackSurvey;
   @Input() solutionId;
+  completedDate: any; // for pagination purpose in survey answers if more then 10 ans
 
   constructor(public surveyProvider: SurveyProvider) {
     console.log("Hello ReportsTextComponent Component");
@@ -23,10 +24,14 @@ export class ReportsTextComponent {
 
   getAllResponse() {
     let quesExternalId = this.data.order;
+    let completedDate = this.completedDate;
+    let solutionId = this.solutionId;
+    let Obj = { quesExternalId, completedDate, solutionId };
     this.surveyProvider
-      .viewAllAns(quesExternalId,this.solutionId)
+      .viewAllAns(Obj)
       .then((res) => {
-        this.data.answer = res["result"];
+        this.data.answer = [...this.data.answer, ...res["result"].answers];
+        this.completedDate = res["result"].completedDate;
       })
       .catch();
   }
