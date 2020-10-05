@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { NavController, NavParams, AlertController, ViewController } from "ionic-angular";
 import { ProgramServiceProvider } from "../../program-service";
 import { UtilsProvider } from "../../../../providers/utils/utils";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "page-solution-action",
@@ -10,19 +11,24 @@ import { UtilsProvider } from "../../../../providers/utils/utils";
 export class SolutionActionPage {
   solutionId: any;
   isAPrivateProgram: any;
+  translateObject: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
     public viewCtrl: ViewController,
     public programSrvc: ProgramServiceProvider,
-    public utils: UtilsProvider
+    public utils: UtilsProvider,
+    private translate: TranslateService
   ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad SolutionActionPage");
     this.solutionId = this.navParams.get("solutionId");
     this.isAPrivateProgram = this.navParams.get("isAPrivateProgram");
+    this.translate.get(["actionSheet.solutionWillNotBeAccessible"]).subscribe((translations) => {
+      this.translateObject = translations;
+    });
   }
 
   removeSolFromHome() {
@@ -68,7 +74,7 @@ export class SolutionActionPage {
     if (deleteFlag) {
       alert = this.alertCtrl.create({
         // title: "Confirm purchase",
-        message: "The solution will no longer be accessible",
+        message: this.translateObject["actionSheet.solutionWillNotBeAccessible"],
 
         buttons: [
           {

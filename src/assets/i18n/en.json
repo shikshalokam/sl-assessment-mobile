@@ -138,7 +138,10 @@
     "share": "Share",
     "create": "Create",
     "myCreation": "My Creations",
-    "myResults": "My Results"
+    "myResults": "My Results",
+    "deletePermanently": "Delete Permanently",
+    "restore": "Restore",
+    "solutionWillNotBeAccessible": "The solution will no longer be accessible"
 
 
   },

@@ -3,6 +3,7 @@ import { NavController, NavParams, AlertController, ViewController } from "ionic
 import { ProgramServiceProvider } from "../../programs/program-service";
 import { UtilsProvider } from "../../../providers/utils/utils";
 import { TrashProvider } from "../../../providers/trash/trash";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "page-trash-action",
@@ -10,6 +11,7 @@ import { TrashProvider } from "../../../providers/trash/trash";
 })
 export class TrashActionPage {
   solutionId: any;
+  translateObject: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -17,18 +19,23 @@ export class TrashActionPage {
     public viewCtrl: ViewController,
     public programSrvc: ProgramServiceProvider,
     public utils: UtilsProvider,
-    public trashProvider: TrashProvider
+    public trashProvider: TrashProvider,
+    private translate: TranslateService
   ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad TrashActionPage");
     this.solutionId = this.navParams.get("solutionId");
+
+    this.translate.get(["actionSheet.solutionWillNotBeAccessible"]).subscribe((translations) => {
+      this.translateObject = translations;
+    });
   }
   presentConfirm() {
     let alert;
 
     alert = this.alertCtrl.create({
-      message: "The solution will no longer be accessible",
+      message: this.translateObject["actionSheet.solutionWillNotBeAccessible"],
 
       buttons: [
         {
@@ -48,7 +55,6 @@ export class TrashActionPage {
 
     alert.present();
   }
-
 
   deleteSolFromTrash() {
     this.programSrvc

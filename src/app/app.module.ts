@@ -132,7 +132,6 @@ import { FeedbacksurveyPageModule } from "../pages/feedbacksurvey/feedbacksurvey
 import { DeepLinkRedirectPage } from "../pages/deep-link-redirect/deep-link-redirect";
 import { DeeplinkProvider } from '../providers/deeplink/deeplink';
 import { TrashPageModule } from "../pages/trash/trash.module";
-import { TrashProvider } from '../providers/trash/trash';
 @NgModule({
   declarations: [
     MyApp,
@@ -309,7 +308,6 @@ import { TrashProvider } from '../providers/trash/trash';
     StreamingMedia,
     AppAvailability,
     DeeplinkProvider,
-    TrashProvider,
   ],
 })
 export class AppModule {}
