@@ -105,13 +105,9 @@ export class SurveyProvider {
     modal.present();
   }
 
-  viewAllAns(quesExternalId, solutionId) {
+  viewAllAns(payload) {
     let url = AppConfigs.surveyFeedback.getAllAnswers;
-    let payload = {
-      questionExternalId: quesExternalId,
-      solutionId: solutionId,
-    };
-
+   
     return new Promise((resolve, reject) => {
       this.apiProvider.httpPost(
         url,

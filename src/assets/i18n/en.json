@@ -66,7 +66,9 @@
     "deleteDraft": "Delete Draft Item",
     "ratingNotSaved": "Rating not saved ",
     "deletePreviosOptions": "Previous options will be erased",
-    "sharePoll": "Do you want to share the poll?"
+    "sharePoll": "Do you want to share the poll?",
+    "solutionWillNotBeAccessible": "The solution will no longer be accessible",
+    "solutionWillBeRemovedFromHome": "The solution will no longer appear on the home screen"
   },
   "buttons": {
     "observeAgain": "Observe Again",
@@ -138,7 +140,12 @@
     "share": "Share",
     "create": "Create",
     "myCreation": "My Creations",
-    "myResults": "My Results"
+    "myResults": "My Results",
+    "deletePermanently": "Delete Permanently",
+    "restore": "Restore",
+    "removeFromHome": "Remove from home",
+    "moveToTrash": "Move To Trash",
+    "continue": "Continue"
 
 
   },
@@ -170,7 +177,8 @@
     "allSolutions": "All Solutions",
     "feedback": "Feedback",
     "polls": "Polls",
-    "feedbackSurveys": "Feedback and Surveys"
+    "feedbackSurveys": "Feedback and Surveys",
+    "trash": "Trash"
   },
   "headings": {
     "zone": "Zones",
@@ -258,7 +266,8 @@
     "myResults": "My Results",
     "polls": "Polls",
     "myForms": "My Forms",
-    "totalSubmissions": "Total Submissions"
+    "totalSubmissions": "Total Submissions",
+    "trash": "Trash"
   },
   "bottomNav": {
     "institution": "Institution",
@@ -356,7 +365,8 @@
     "noFeedbacks": "No Feedbacks",
     "thankyou": "Thank You !",
     "responseSubmitted": "Your Response is submitted",
-     "canNotOpenLink": "Can not open link."
+    "canNotOpenLink": "Can not open link.",
+    "emptyTrash": "Empty"
 
   },
   "toastMessage": {

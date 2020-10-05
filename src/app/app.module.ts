@@ -131,6 +131,7 @@ import { FeedbackPollPageModule } from "../pages/feedback-poll/feedback-poll.mod
 import { FeedbacksurveyPageModule } from "../pages/feedbacksurvey/feedbacksurvey.module";
 import { DeepLinkRedirectPage } from "../pages/deep-link-redirect/deep-link-redirect";
 import { DeeplinkProvider } from '../providers/deeplink/deeplink';
+import { TrashPageModule } from "../pages/trash/trash.module";
 @NgModule({
   declarations: [
     MyApp,
@@ -203,6 +204,7 @@ import { DeeplinkProvider } from '../providers/deeplink/deeplink';
     ManualRatingPageModule,
     FeedbackPollPageModule,
     FeedbacksurveyPageModule,
+    TrashPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -239,6 +241,7 @@ import { DeeplinkProvider } from '../providers/deeplink/deeplink';
     EvidenceAllListComponent,
     CriteriaListPage,
     DeepLinkRedirectPage,
+  
   ],
   providers: [
     StatusBar,

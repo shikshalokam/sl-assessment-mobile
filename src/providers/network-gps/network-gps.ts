@@ -10,6 +10,7 @@ import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { SlackProvider } from '../slack/slack';
+import { AppConfigs } from '../appConfig';
 
 export enum ConnectionStatusEnum {
   Online,
@@ -178,6 +179,9 @@ export class NetworkGpsProvider {
   }
 
   getCurrentLocation() {
+     if (!AppConfigs.enableGps) {
+       return;
+     }
     console.log("Getting current location");
     const options = {
       timeout: 20000

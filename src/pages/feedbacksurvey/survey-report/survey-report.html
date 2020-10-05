@@ -4,14 +4,16 @@
 
 <ion-content padding>
   <div *ngIf="!error">
-    <div *ngIf="allQuestions?.length">
-      <button ion-button icon-start (click)="openFilter()" margin style="float: right">
+   
+    <h4 class="reportName">{{reportObj?.observationName}} {{reportObj?.solutionName}}</h4>
+    <p *ngIf="reportObj?.totalSubmissions">{{'headings.totalSubmissions'|translate}}:{{reportObj?.totalSubmissions}}</p>
+
+     <div *ngIf="allQuestions?.length" class="filterBtn">
+      <button ion-button icon-start (click)="openFilter()" margin >
         <ion-icon name="options"></ion-icon>
         {{'buttons.filter'|translate}}
       </button>
     </div>
-    <h4 class="reportName">{{reportObj?.observationName}} {{reportObj?.solutionName}}</h4>
-    <p *ngIf="reportObj?.totalSubmissions">{{'headings.totalSubmissions'|translate}}:{{reportObj?.totalSubmissions}}</p>
 
     <div *ngFor="let element of reportObj?.response;let i = index">
       <ion-card [ngSwitch]="element?.responseType">
