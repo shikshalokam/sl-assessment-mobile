@@ -28,7 +28,12 @@ export class TrashActionPage {
     this.solutionId = this.navParams.get("solutionId");
 
     this.translate
-      .get(["actionSheet.solutionWillNotBeAccessible", "buttons.cancel", "buttons.continue"])
+      .get([
+        "actionSheet.solutionWillNotBeAccessible",
+        "buttons.cancel",
+        "buttons.continue",
+        "buttons.deletePermanently",
+      ])
       .subscribe((translations) => {
         this.translateObject = translations;
       });
