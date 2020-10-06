@@ -83,7 +83,7 @@ export class SolutionActionPage {
     if (deleteFlag) {
       alert = this.alertCtrl.create({
         // title: "Confirm purchase",
-        message: this.translateObject["actionSheet.solutionWillBeRemovedFromHome"],
+        message: this.translateObject["actionSheet.solutionWillNotBeAccessible"],
 
         buttons: [
           {
@@ -103,7 +103,7 @@ export class SolutionActionPage {
     } else {
       alert = this.alertCtrl.create({
         // title: "Confirm purchase",
-        message: this.translateObject["actionSheet.solutionWillNotBeAccessible"],
+        message: this.translateObject["actionSheet.solutionWillBeRemovedFromHome"],
         buttons: [
           {
             text: this.translateObject["buttons.cancel"],
