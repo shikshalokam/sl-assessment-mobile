@@ -4,5 +4,14 @@ simple-list {
     width: 10px;
     border-radius: 50%;
     display: inline-block;
+    margin: 0 6.2px;
+  }
+
+  .item-md .item-button {
+    min-width: fit-content;
+  }
+
+  ._flex-box {
+    flex-wrap: nowrap;
   }
 }
