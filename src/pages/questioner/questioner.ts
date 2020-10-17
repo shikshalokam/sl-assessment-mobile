@@ -10,6 +10,7 @@ import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { TranslateService } from '@ngx-translate/core';
 import { Network } from '@ionic-native/network';
+import { AppConfigs } from '../../providers/appConfig';
 
 @IonicPage()
 @Component({
@@ -278,20 +279,33 @@ export class QuestionerPage {
 
   goToImageListing() {
     if (this.networkAvailable) {
-      this.diagnostic.isLocationEnabled().then(success => {
-        if (success) {
-          const params = {
-            _id: this.submissionId,
-            name: this.schoolName,
-            selectedEvidence: this.selectedEvidenceIndex,
+      this.diagnostic
+        .isLocationAuthorized()
+        .then((authorized) => {
+           if (!AppConfigs.enableGps) {
+             return true;
+           }
+          if (authorized) {
+            return this.diagnostic.isLocationEnabled();
+          } else {
+            this.utils.openToast("Please enable location permission to continue.");
           }
-          this.navCtrl.push(ImageListingPage, params);
-        } else {
+        })
+        .then((success) => {
+          if (success) {
+            const params = {
+              _id: this.submissionId,
+              name: this.schoolName,
+              selectedEvidence: this.selectedEvidenceIndex,
+            };
+            this.navCtrl.push(ImageListingPage, params);
+          } else {
+            this.ngps.checkForLocationPermissions();
+          }
+        })
+        .catch((error) => {
           this.ngps.checkForLocationPermissions();
-        }
-      }).catch(error => {
-        this.ngps.checkForLocationPermissions();
-      })
+        });
     } else {
       this.translate.get('toastMessage.connectToInternet').subscribe(translations => {
         this.utils.openToast(translations);

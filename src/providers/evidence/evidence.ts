@@ -48,8 +48,19 @@ export class EvidenceProvider {
           text: translateObject['actionSheet.start']+" "+type,
           icon: 'arrow-forward',
           handler: () => {
-            this.diagnostic.isLocationEnabled().then(success => {
-              if (success) {
+            this.diagnostic.isLocationAuthorized()
+              .then(authorized => {
+                if (!AppConfigs.enableGps) {
+                  return true
+                }
+                if (authorized) {
+                  return this.diagnostic.isLocationEnabled();
+                } else {
+                  this.utils.openToast("Please enable location permission to continue.");
+                }
+              })
+              .then(success => {
+                if (success) {
                 // if(params.entityDetails['assessment']) {
                 //   params.entityDetails['assessments']['evidences'][params.selectedEvidence].startTime = Date.now();
                 // } else {
