@@ -187,6 +187,9 @@ export class NetworkGpsProvider {
   }
 
   getCurrentLocation() {
+     if (!AppConfigs.enableGps) {
+       return;
+     }
     console.log("Getting current location");
     const options = {
       timeout: 20000
