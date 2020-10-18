@@ -49,6 +49,10 @@ export class NetworkGpsProvider {
   }
 
   checkForLocationPermissions(): void {
+    if (!AppConfigs.enableGps) {
+      return
+    }
+
     console.log('Check permissions');
     this.permissions.checkPermission(this.permissions.PERMISSION.ACCESS_FINE_LOCATION).then(
       result => {
@@ -73,6 +77,10 @@ export class NetworkGpsProvider {
 
   getGpsStatus() {
     return new Promise((resolve, reject) => {
+      if (!AppConfigs.enableGps) {
+        resolve(null)
+        return
+      }
       this.locationAccuracy.canRequest().then((canRequest: boolean) => {
         if (canRequest) {
           // the accuracy option will be ignored by iOS

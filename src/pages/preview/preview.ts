@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ImageListingPage } from '../image-listing/image-listing';
 import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { AppConfigs } from '../../providers/appConfig';
 
 @Component({
   selector: 'page-preview',
@@ -141,21 +142,34 @@ export class PreviewPage {
 
   goToImageListing() {
     if (this.networkAvailable) {
-      this.diagnostic.isLocationEnabled().then(success => {
-        if (success) {
-          const params = {
-            selectedEvidenceId: this.currentEvidence._id,
-            _id: this.submissionId,
-            name: this.entityName,
-            selectedEvidence: this.selectedEvidenceIndex,
+     this.diagnostic
+       .isLocationAuthorized()
+       .then((authorized) => {
+          if (!AppConfigs.enableGps) {
+            return true;
           }
-          this.navCtrl.push(ImageListingPage, params);
-        } else {
-          this.ngps.checkForLocationPermissions();
-        }
-      }).catch(error => {
-        this.ngps.checkForLocationPermissions();
-      })
+         if (authorized) {
+           return this.diagnostic.isLocationEnabled();
+         } else {
+           this.utils.openToast("Please enable location permission to continue.");
+         }
+       })
+       .then((success) => {
+         if (success) {
+           const params = {
+             selectedEvidenceId: this.currentEvidence._id,
+             _id: this.submissionId,
+             name: this.entityName,
+             selectedEvidence: this.selectedEvidenceIndex,
+           };
+           this.navCtrl.push(ImageListingPage, params);
+         } else {
+           this.ngps.checkForLocationPermissions();
+         }
+       })
+       .catch((error) => {
+         this.ngps.checkForLocationPermissions();
+       });
     } else {
       this.translate.get('toastMessage.connectToInternet').subscribe(translations => {
         this.utils.openToast(translations);

@@ -56,6 +56,7 @@ import { ThanksComponent } from "./thanks/thanks";
 import { ResultGraphComponent } from "../pages/feedback-poll/component/result-graph/result-graph";
 import { SimpleListComponent } from "./simple-list/simple-list";
 import { SurveyMsgComponent } from "./survey-msg/survey-msg";
+import { StateModalComponent } from './state-modal/state-modal';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { SurveyMsgComponent } from "./survey-msg/survey-msg";
     ResultGraphComponent,
     SimpleListComponent,
     SurveyMsgComponent,
+    StateModalComponent,
   ],
   imports: [
     IonicModule,
@@ -164,6 +166,7 @@ import { SurveyMsgComponent } from "./survey-msg/survey-msg";
     ResultGraphComponent,
     SimpleListComponent,
     SurveyMsgComponent,
+    StateModalComponent,
   ],
   entryComponents: [
     InputTypeComponent,
