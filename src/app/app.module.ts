@@ -128,6 +128,10 @@ import { ReportsPageModule } from "../pages/reports/reports.module";
 import { LibraryPageModule } from "../pages/library/library.module";
 import { ManualRatingPageModule } from "../pages/manual-rating/manual-rating.module";
 import { FeedbackPollPageModule } from "../pages/feedback-poll/feedback-poll.module";
+import { FeedbacksurveyPageModule } from "../pages/feedbacksurvey/feedbacksurvey.module";
+import { DeepLinkRedirectPage } from "../pages/deep-link-redirect/deep-link-redirect";
+import { DeeplinkProvider } from '../providers/deeplink/deeplink';
+import { TrashPageModule } from "../pages/trash/trash.module";
 @NgModule({
   declarations: [
     MyApp,
@@ -161,6 +165,7 @@ import { FeedbackPollPageModule } from "../pages/feedback-poll/feedback-poll.mod
     QuestionListPage,
     TutorialVideoListingPage,
     CriteriaListPage,
+    DeepLinkRedirectPage,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -198,6 +203,8 @@ import { FeedbackPollPageModule } from "../pages/feedback-poll/feedback-poll.mod
     LibraryPageModule,
     ManualRatingPageModule,
     FeedbackPollPageModule,
+    FeedbacksurveyPageModule,
+    TrashPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -233,6 +240,8 @@ import { FeedbackPollPageModule } from "../pages/feedback-poll/feedback-poll.mod
     TutorialVideoListingPage,
     EvidenceAllListComponent,
     CriteriaListPage,
+    DeepLinkRedirectPage,
+  
   ],
   providers: [
     StatusBar,
@@ -298,6 +307,7 @@ import { FeedbackPollPageModule } from "../pages/feedback-poll/feedback-poll.mod
     PhotoViewer,
     StreamingMedia,
     AppAvailability,
+    DeeplinkProvider,
   ],
 })
 export class AppModule {}
