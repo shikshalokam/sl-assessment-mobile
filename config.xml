@@ -62,6 +62,16 @@
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
             <string>This app requires constant access to your location in order to track whether the user is at the school location while conducting the survey.</string>
         </edit-config>
+        <config-file parent="com.apple.developer.associated-domains" target="*-Debug.plist">
+            <array>
+                <string>applinks:apps.shikshalokam.org</string>
+            </array>
+        </config-file>
+        <config-file parent="com.apple.developer.associated-domains" target="*-Release.plist">
+            <array>
+                <string>applinks:apps.shikshalokam.org</string>
+            </array>
+        </config-file>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />
@@ -209,10 +219,14 @@
     <allow-navigation href="http://192.168.43.61:8102" />
     <allow-navigation href="http://192.168.43.61:8103" />
     <allow-navigation href="http://192.168.43.62:8100" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^4.1.3">
+        <variable name="ANDROID_SUPPORT_ANNOTATIONS_VERSION" value="27.+" />
+    </plugin>
+    <plugin name="cordova.plugins.diagnostic" spec="^5.0.2" />
     <plugin name="ionic-plugin-deeplinks" spec="^1.0.20">
         <variable name="URL_SCHEME" value="darpan" />
         <variable name="DEEPLINK_SCHEME" value="https" />
-        <variable name="DEEPLINK_HOST" value="*shikshalokam.org" />
+        <variable name="DEEPLINK_HOST" value="*pps.shikshalokam.org" />
         <variable name="ANDROID_PATH_PREFIX" value="/" />
         <variable name="ANDROID_2_PATH_PREFIX" value="/" />
         <variable name="ANDROID_3_PATH_PREFIX" value="/" />
@@ -228,6 +242,6 @@
         <variable name="DEEPLINK_5_HOST" value=" " />
     </plugin>
     <engine name="browser" spec="5.0.4" />
-    <engine name="ios" spec="^5.1.0" />
     <engine name="android" spec="^9.0.0" />
+    <engine name="ios" spec="~5.1.0" />
 </widget>

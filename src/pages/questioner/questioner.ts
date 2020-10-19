@@ -10,6 +10,7 @@ import { NetworkGpsProvider } from '../../providers/network-gps/network-gps';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { TranslateService } from '@ngx-translate/core';
 import { Network } from '@ionic-native/network';
+import { AppConfigs } from '../../providers/appConfig';
 
 @IonicPage()
 @Component({
@@ -145,7 +146,7 @@ export class QuestionerPage {
     } else if (status === 'completed') {
       this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].sections[this.selectedSectionIndex].progressStatus = this.getSectionStatus();
       this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData).then(success => {
-        this.schoolData.observation ? this.checkForAllEcmCompletion() : this.navCtrl.pop();
+        this.schoolData.observation || this.schoolData.survey ? this.checkForAllEcmCompletion() : this.navCtrl.pop();
       })
     } else {
       this.next('completed')
@@ -281,6 +282,9 @@ export class QuestionerPage {
       this.diagnostic
         .isLocationAuthorized()
         .then((authorized) => {
+           if (!AppConfigs.enableGps) {
+             return true;
+           }
           if (authorized) {
             return this.diagnostic.isLocationEnabled();
           } else {
