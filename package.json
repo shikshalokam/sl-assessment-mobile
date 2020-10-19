@@ -177,11 +177,7 @@
       "ionic-plugin-deeplinks": {
         "URL_SCHEME": "darpan",
         "DEEPLINK_SCHEME": "https",
-<<<<<<< HEAD
-        "DEEPLINK_HOST": "*shikshalokam.org",
-=======
         "DEEPLINK_HOST": "*pps.shikshalokam.org",
->>>>>>> staging
         "ANDROID_PATH_PREFIX": "/",
         "ANDROID_2_PATH_PREFIX": "/",
         "ANDROID_3_PATH_PREFIX": "/",
