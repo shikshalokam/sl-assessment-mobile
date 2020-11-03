@@ -8,12 +8,12 @@
 <ion-content>
   <!-- (ionInput)="fileterList($event)" -->
   <ion-searchbar
-  *ngIf="selectedSolution?.entities[0].entityType!='state'"
+  *ngIf="selectedSolution?.entities[0]?.entityType!='state'"
     [(ngModel)]="search"
     placeholder="Search for schools"
   ></ion-searchbar>
   <ion-searchbar
-  *ngIf="selectedSolution?.entities[0].entityType=='state'"
+  *ngIf="selectedSolution?.entities[0]?.entityType=='state'"
     [(ngModel)]="search"
     placeholder="Search for state"
   ></ion-searchbar>
