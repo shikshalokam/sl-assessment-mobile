@@ -6,6 +6,8 @@ import { ProgramSolutionObservationDetailPage } from "../programs/program-soluti
 import { UtilsProvider } from "../../providers/utils/utils";
 import { TranslateService } from "@ngx-translate/core";
 import { ProgramSolutionEntityPage } from "../programs/program-solution-entity/program-solution-entity";
+import { ObservationReportsPage } from "../observation-reports/observation-reports";
+import { DashboardPage } from "../dashboard/dashboard";
 
 /**
  * Generated class for the DeepLinkRedirectPage page.
@@ -55,6 +57,12 @@ export class DeepLinkRedirectPage implements OnInit {
       case "assessmentParams":
         this.redirectWithParams(this.data[key], "assessment");
         break;
+      case "observationReportParams":
+        this.redirectReportWithParams(this.data[key], "observation");
+        break;
+      case "assessmentReportParams":
+        this.redirectReportWithParams(this.data[key], "assessment");
+        break;
 
       default:
         break;
@@ -66,7 +74,7 @@ export class DeepLinkRedirectPage implements OnInit {
     console.log(paramsArr);
     let pId = paramsArr[0];
     let sId = paramsArr[1];
-    let oId = paramsArr[2];
+    let eId = paramsArr[2];
     this.programSrvc
       .getProgramApi(true)
       .then((data: any) => {
@@ -131,5 +139,39 @@ export class DeepLinkRedirectPage implements OnInit {
         this.utils.openToast(this.translateObject["message.canNotOpenLink"]);
         this.navCtrl.popToRoot();
       });
+  }
+
+  redirectReportWithParams(params: string, type) {
+    let paramsArr = params.split("-");
+    console.log(paramsArr);
+    let pId = paramsArr[0];
+    let sId = paramsArr[1];
+    let eId = paramsArr[2];
+    let etype = paramsArr[3];
+
+
+    if ((type == "observation")) {
+      let payload = {
+        solutionId: sId,
+        entityId: eId,
+        entityType: etype,
+        reportType: type,
+      };
+      this.navCtrl.push(ObservationReportsPage, payload).then(() => {
+        this.navCtrl.remove(1, 1);
+      });
+    }
+
+    if ((type == "assessment")) {
+      let payload = {
+        programId:pId,
+        entityId: eId,
+        entityType: etype,
+        solutionId: sId,
+      };
+      this.navCtrl.push(DashboardPage, payload).then(() => {
+        this.navCtrl.remove(1, 1);
+      });
+    }
   }
 }

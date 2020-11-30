@@ -358,16 +358,9 @@ export class MyApp {
     paths[`/${appName}/create-observation/:observationLink`] = DeepLinkRedirectPage;
     paths[`/${appName}/observation/:observationParams`] = DeepLinkRedirectPage; /* observationParams="programId-solutionId-entityId" */
     paths[`/${appName}/assessment/:assessmentParams`] = DeepLinkRedirectPage; /* assessmentParams="programId-solutionId-entityId" */
+    paths[`/${appName}/observation/reports/:observationReportParams`] = DeepLinkRedirectPage; 
+    paths[`/${appName}/assessment/reports/:assessmentReportParams`] = DeepLinkRedirectPage; 
 
-    // const paths = {
-    //   "/about-us": AboutPage,
-    //   "/home": HomePage,
-    //   "/individual": IndividualListingPage,
-    //   "/institutional": InstitutionsEntityList,
-    //   "/faq": FaqPage,
-    //   "/take-poll/:pollId": PollPreviewPage,
-    //   // "/appLink/take-poll/:pollId": PollPreviewPage,
-    // };
     this.deepLinks.route(paths).subscribe(
       (match) => {
         // this.rootPage = paths[match["$link"]["path"]];
