@@ -355,8 +355,9 @@ export class MyApp {
     paths[`/${appName}/faq`] = FaqPage;
     paths[`/${appName}/take-poll/:pollId`] = PollPreviewPage;
     paths[`/${appName}/take-survey/:surveyId`] = FeedbacksurveyPage;
-    paths[`/${appName}/take-survey/:surveyId`] = FeedbacksurveyPage;
     paths[`/${appName}/create-observation/:observationLink`] = DeepLinkRedirectPage;
+    paths[`/${appName}/observation/:observationParams`] = DeepLinkRedirectPage; /* observationParams="programId-solutionId-entityId" */
+    paths[`/${appName}/assessment/:assessmentParams`] = DeepLinkRedirectPage; /* assessmentParams="programId-solutionId-entityId" */
 
     // const paths = {
     //   "/about-us": AboutPage,
@@ -375,7 +376,7 @@ export class MyApp {
           ? match["$link"]["path"].replace(match.$args[argkey], `:${argkey}`)
           : match["$link"]["path"];
         const path = paths[matchPath];
-
+        console.log(match)
         if (redirect) {
           this.nav.push(path, match.$args);
         } else {
