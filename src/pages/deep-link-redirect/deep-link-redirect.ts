@@ -166,7 +166,10 @@ export class DeepLinkRedirectPage implements OnInit {
     if (type == "assessment") {
       let payload = {
         programId: pId,
-        entityId: eId,
+        entity: {
+          _id: eId,
+          entityType:etype
+        },
         entityType: etype,
         solutionId: sId,
       };
