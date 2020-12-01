@@ -149,29 +149,32 @@ export class DeepLinkRedirectPage implements OnInit {
     let eId = paramsArr[2];
     let etype = paramsArr[3];
 
-
-    if ((type == "observation")) {
+    if (type == "observation") {
       let payload = {
         solutionId: sId,
         entityId: eId,
         entityType: etype,
         reportType: type,
       };
-      this.navCtrl.push(ObservationReportsPage, payload).then(() => {
-        this.navCtrl.remove(1, 1);
-      });
+      setTimeout(() => {
+        this.navCtrl.push(ObservationReportsPage, payload).then(() => {
+          this.navCtrl.remove(1, 1);
+        });
+      }, 1000);
     }
 
-    if ((type == "assessment")) {
+    if (type == "assessment") {
       let payload = {
-        programId:pId,
+        programId: pId,
         entityId: eId,
         entityType: etype,
         solutionId: sId,
       };
-      this.navCtrl.push(DashboardPage, payload).then(() => {
-        this.navCtrl.remove(1, 1);
-      });
+      setTimeout(() => {
+        this.navCtrl.push(DashboardPage, payload).then(() => {
+          this.navCtrl.remove(1, 1);
+        });
+      }, 1000);
     }
   }
 }
