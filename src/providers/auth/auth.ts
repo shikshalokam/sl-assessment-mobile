@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { URLSearchParams } from "@angular/http";
 import { AppConfigs } from "../appConfig";
 import { CurrentUserProvider } from "../current-user/current-user";
-import { App, AlertController } from "ionic-angular";
+import { App, AlertController, Platform } from "ionic-angular";
 
 import { UtilsProvider } from "../utils/utils";
 import { HomePage } from "../../pages/home/home";
@@ -18,6 +18,7 @@ import {
 import { HTTP } from "@ionic-native/http";
 import { SpinnerDialog } from "@ionic-native/spinner-dialog";
 import { BottomTabPage } from "../../pages/bottom-tab/bottom-tab";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Injectable()
 export class AuthProvider {
@@ -43,7 +44,9 @@ export class AuthProvider {
     private samnitizer: DomSanitizer,
     private iab: InAppBrowser,
     private spinnerModal: SpinnerDialog,
-    private utils: UtilsProvider
+    private utils: UtilsProvider,
+    private httpClient: HttpClient,
+    private platform: Platform
   ) { }
 
   sanitizeUrl(url) {
@@ -150,14 +153,11 @@ export class AuthProvider {
 
       // this.confirmPreviousUserName('as1@shikshalokamdev', tokens);
     } else {
-      this.confirmPreviousUserName(
-        this.currentUser.getCurrentUserData().preferred_username,
-        tokens
-      );
+      this.confirmPreviousUserName(currentUserId, tokens);
     }
   }
 
-  confirmPreviousUserName(previousUserEmail, tokens): void {
+  confirmPreviousUserName(currentUserId, tokens): void {
     let translateObject;
     this.translate
       .get([
@@ -190,29 +190,64 @@ export class AuthProvider {
           text: translateObject["actionSheet.send"],
           role: "role",
           handler: (data) => {
-            if (
-              data.userName &&
-              previousUserEmail.toLowerCase() === data.userName.toLowerCase()
-            ) {
-              this.confirmDataClear(tokens);
-            } else {
-              this.currentUser.deactivateActivateSession(true);
 
-              this.doLogout();
-              this.translate
-                .get(["toastMessage.userNameMisMatch", "toastMessage.ok"])
-                .subscribe((translations) => {
-                  this.utils.openToast(
-                    translations["toastMessage.userNameMisMatch"],
-                    translations["toastMessage.ok"]
-                  );
+            this.getUserData(data.userName.toLowerCase(), tokens).then(loggedInUser => {
+              if (loggedInUser && loggedInUser.identifier === currentUserId) {
+                this.confirmDataClear(tokens);
+              } else if (!loggedInUser.identifier) {
+                this.currentUser.deactivateActivateSession(true);
+                this.doLogout();
+                this.utils.openToast("User does not exist.");
+              } else {
+                this.currentUser.deactivateActivateSession(true);
+                this.doLogout();
+                this.translate.get(["toastMessage.userNameMisMatch", "toastMessage.ok"]).subscribe((translations) => {
+                  this.utils.openToast(translations["toastMessage.userNameMisMatch"], translations["toastMessage.ok"]);
                 });
-            }
+              }
+            }).catch(error => {
+
+              this.currentUser.deactivateActivateSession(true);
+              this.doLogout();
+            })
+            // if (data.userName && previousUserEmail.toLowerCase() === data.userName.toLowerCase()) {
+            //   this.confirmDataClear(tokens);
+            // } else {
+            //   this.currentUser.deactivateActivateSession(true);
+
+            // this.doLogout();
+            // this.translate.get(["toastMessage.userNameMisMatch", "toastMessage.ok"]).subscribe((translations) => {
+            //   this.utils.openToast(translations["toastMessage.userNameMisMatch"], translations["toastMessage.ok"]);
+            // });
+            // }
           },
         },
       ],
     });
     alert.present();
+  }
+
+  getUserData(userName, token): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // const appVersion:any = this.appDetails.getVersionNumber();
+      // const appName:any = this.appDetails.getAppName();
+      this.utils.startLoader();
+      let url = AppConfigs.kendra_base_url + AppConfigs.user.search + userName;
+      let options = {
+        headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('x-auth-token', token.access_token)
+          .set('x-authenticated-user-token', token.access_token)
+          .set('appType', 'assessment')
+          .set('os', this.platform.is('ios') ? 'ios' : 'android')
+      };
+      this.httpClient.get(url, options).subscribe((data: any) => {
+        this.utils.stopLoader();
+        data.result ? resolve(data.result) : reject();
+      }, error => {
+        this.utils.stopLoader();
+        reject()
+      })
+    })
   }
 
   confirmDataClear(tokens): void {
