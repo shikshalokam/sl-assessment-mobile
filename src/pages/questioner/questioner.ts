@@ -94,6 +94,10 @@ export class QuestionerPage {
         currentViewIndex: this.start
       }
       this.isCurrentEvidenceSubmitted = currentEvidences[this.selectedEvidenceIndex].isSubmitted
+      if (this.isCurrentEvidenceSubmitted || this.isViewOnly) {
+        document.getElementById('stop').style.pointerEvents = 'none';
+
+      }
       this.utils.stopLoader();
     }).catch(error => {
       this.utils.stopLoader();
@@ -376,5 +380,39 @@ export class QuestionerPage {
         this.dashbordData.currentViewIndex = data;
       }
     })
+  }
+
+  checkForEvidenceCompletion(): boolean {
+    let allAnswered;
+    let evidenceSections = this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex]['sections']
+     let currentEvidence = this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex];
+    for (const section of evidenceSections) {
+      allAnswered = true;
+      for (const question of section.questions) {
+        if (!question.isCompleted) {
+          allAnswered = false;
+          break;
+        }
+      }
+      if (currentEvidence.isSubmitted) {
+        section.progressStatus = 'submitted';
+      } else if (!currentEvidence.startTime) {
+        section.progressStatus = '';
+      } else if (allAnswered) {
+        section.progressStatus = 'completed';
+      } else if (!allAnswered && section.progressStatus) {
+        section.progressStatus = 'inProgress';
+      } else if (!section.progressStatus) {
+        section.progressStatus = '';
+      }
+    }
+    let allAnsweredForEvidence = true;
+    for (const section of evidenceSections) {
+      if (section.progressStatus !== 'completed') {
+        allAnsweredForEvidence = false;
+        break;
+      }
+    }
+    return allAnsweredForEvidence
   }
 }
