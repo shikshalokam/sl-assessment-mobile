@@ -34,6 +34,7 @@ export class FooterButtonsComponent implements OnChanges {
   @Input() questionCount = 0;
   @Input() isSubmitted;
   @Input() enableGps;
+  @Input() showSubmit;
 
   percentage: number = 0;
 
