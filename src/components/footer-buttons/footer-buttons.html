@@ -27,7 +27,7 @@
         <!-- {{completedQuestionCount}} {{questionCount}} -->
         <progress-bar [progress] = "percentage" [total]="questionCount" [showTracker]="true" [completed]="completedQuestionCount" class="_full-width"  *ngIf="completedQuestionCount!=questionCount"></progress-bar>
         <!-- *ngIf="completedQuestionCount==questionCount" -->
-        <button ion-button round small  *ngIf="showSubmit && completedQuestionCount==questionCount " (click)="openAction()">Submit<ion-icon name="arrow-dropup-circle" style="padding: 0 9px;"></ion-icon></button>
+        <button ion-button round small  *ngIf="showSubmit && completedQuestionCount==questionCount" (click)="next('completed')">Submit<ion-icon name="arrow-dropup-circle" style="padding: 0 9px;"></ion-icon></button>
       </ion-col>
       <ion-col>
         <button ion-button icon-end float-right color="light" (click)="enableGps ? gpsFlowChecks('next') : next()" *ngIf="!isLast">{{'buttons.next'|
