@@ -113,7 +113,7 @@
   [completedQuestionCount]="countCompletedQuestion"
   [questionCount]="questions?.length"
   [showSubmit]="checkForEvidenceCompletion()"
-  (nextAction)="next()"
+  (nextAction)="next($event)"
   (backAction)="back()"
   (openSheetAction)="openActionSheet()"
 >
