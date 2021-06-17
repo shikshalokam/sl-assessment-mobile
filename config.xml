@@ -47,6 +47,7 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="true" />
+            <application android:requestLegacyExternalStorage="true" />
         </edit-config>
         <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="21" />
     </platform>
