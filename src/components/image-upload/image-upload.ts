@@ -20,6 +20,7 @@ import { MediaObject, Media } from "@ionic-native/media";
 import { LocalStorageProvider } from "../../providers/local-storage/local-storage";
 import { AndroidPermissions } from "@ionic-native/android-permissions";
 import { Diagnostic } from "@ionic-native/diagnostic";
+import { Chooser } from '@ionic-native/chooser';
 
 declare var cordova: any;
 
@@ -88,7 +89,9 @@ export class ImageUploadComponent implements OnInit {
     private androidPermissions: AndroidPermissions,
     private diagnostic: Diagnostic,
     private media: Media,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private chooser: Chooser,
+
   ) {
     console.log("Hello ImageUploadComponent Component");
     this.text = "Hello World";
@@ -208,18 +211,33 @@ export class ImageUploadComponent implements OnInit {
   }
 
   // For android
-  openFilePicker() {
-    this.fileChooser
-      .open()
-      .then((filePath) => {
-        this.filePath
-          .resolveNativePath(filePath)
-          .then((data) => {
-            this.checkForLocalFolder(data);
-          })
-          .catch((err) => {});
-      })
-      .catch((e) => console.log(e));
+ async openFilePicker() {
+       try {
+       const file = await this.chooser.getFile('application/*,image/*,audio/*');
+       debugger
+      const pathToWrite = this.appFolderPath;
+      const newFileName = this.createFileName(file.name)
+      const writtenFile = await this.file.writeFile(pathToWrite, newFileName, file.data.buffer)
+      if (writtenFile.isFile) {
+        this.pushToFileList(newFileName);
+
+        
+      }
+    } catch (error) {
+       
+    }
+    
+    // this.fileChooser
+    //   .open()
+    //   .then((filePath) => {
+    //     this.filePath
+    //       .resolveNativePath(filePath)
+    //       .then((data) => {
+    //         this.checkForLocalFolder(data);
+    //       })
+    //       .catch((err) => {});
+    //   })
+    //   .catch((e) => console.log(e));
   }
 
   openCamera(): void {
@@ -284,10 +302,15 @@ export class ImageUploadComponent implements OnInit {
     }
   }
 
-  createFileName() {
-    let d = new Date(),
+  createFileName(filename) {
+    // let d = new Date(),
+    //   n = d.getTime(),
+    //   newFileName = n + ".jpg";
+    // return newFileName;
+     let d = new Date(),
       n = d.getTime(),
-      newFileName = n + ".jpg";
+      extension= filename.split('.').pop(),
+      newFileName = n + "." + extension;
     return newFileName;
   }
 

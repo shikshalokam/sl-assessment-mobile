@@ -132,6 +132,8 @@ import { FeedbacksurveyPageModule } from "../pages/feedbacksurvey/feedbacksurvey
 import { DeepLinkRedirectPage } from "../pages/deep-link-redirect/deep-link-redirect";
 import { DeeplinkProvider } from '../providers/deeplink/deeplink';
 import { TrashPageModule } from "../pages/trash/trash.module";
+import { Chooser } from '@ionic-native/chooser';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -308,6 +310,7 @@ import { TrashPageModule } from "../pages/trash/trash.module";
     StreamingMedia,
     AppAvailability,
     DeeplinkProvider,
+    Chooser
   ],
 })
 export class AppModule {}
